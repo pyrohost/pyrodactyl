@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
     # setup the synced folder and provision the VM
     config.vm.synced_folder ".", "/var/www/pterodactyl"
     config.vm.provision "shell", path: "provision.sh"
+    config.vm.post_up_message = "Pterodactyl is up and running at http://localhost:3000. Login with username: dev@pyro.host, password: 'password'."
 
     # allocated testing ports
     config.vm.network "forwarded_port", guest: 25565, host: 25565, host_ip: "0.0.0.0"
