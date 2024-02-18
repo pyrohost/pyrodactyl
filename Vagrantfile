@@ -10,4 +10,9 @@ Vagrant.configure("2") do |config|
     # setup the synced folder and provision the VM
     config.vm.synced_folder ".", "/var/www/pterodactyl"
     config.vm.provision "shell", path: "provision.sh"
+
+    # allocated testing ports
+    config.vm.network "forwarded_port", guest: 25565, host: 25565, host_ip: "0.0.0.0"
+    config.vm.network "forwarded_port", guest: 25575, host: 25566, host_ip: "0.0.0.0"
+    config.vm.network "forwarded_port", guest: 25585, host: 25567, host_ip: "0.0.0.0"
 end
