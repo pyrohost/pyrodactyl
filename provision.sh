@@ -118,7 +118,7 @@ php /usr/local/bin/composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
 php artisan key:generate --force
-php artisan p:environment:setup -n --author dev@pyro.host --url http://0.0.0.0 --cache redis --session redis --queue redis
+php artisan p:environment:setup -n --author dev@pyro.host --url http://0.0.0.0:3000 --cache redis --session redis --queue redis
 php artisan p:environment:database -n --host localhost --port 3306 --database panel --username pterodactyl --password password
 php artisan migrate --seed --force
 
