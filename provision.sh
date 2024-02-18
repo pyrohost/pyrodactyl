@@ -4,7 +4,7 @@
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-# Update the system 
+# Update the system
 dnf update -y
 
 # Install the EPEL and Remi repositories
@@ -19,7 +19,7 @@ systemctl enable --now redis
 # Install PHP 8.1 and configure PHP-FPM
 dnf -y module enable php:remi-8.1
 dnf -y install php php-{cli,gd,mysqlnd,mbstring,bcmath,xml,fpm,curl,zip,posix}
-cat > /etc/php-fpm.d/pterodactyl.conf << EOF
+cat >/etc/php-fpm.d/pterodactyl.conf <<EOF
 [pterodactyl]
 user = vagrant
 group = vagrant
@@ -41,7 +41,7 @@ systemctl enable --now php-fpm
 # Install Nginx and the panel configuration
 dnf -y install nginx
 sed -i 's/user nginx;/user vagrant;/' /etc/nginx/nginx.conf
-cat > /etc/nginx/conf.d/pterodactyl.conf << EOF
+cat >/etc/nginx/conf.d/pterodactyl.conf <<EOF
 server {
     listen 3000;
     server_name localhost;
@@ -98,7 +98,7 @@ systemctl enable --now mariadb
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Enter the web directory
-cd /var/www/pterodactyl
+cd /var/www/pterodactyl || exit
 chmod -R 755 storage/* bootstrap/cache/
 
 # Create the database for the panel
@@ -134,10 +134,13 @@ php artisan p:node:make -n --name local --description "Development Node" --locat
 mysql -u root -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
 
 # Set the crontab for the panel
-(crontab -l 2>/dev/null; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1") | crontab -
+(
+    crontab -l 2>/dev/null
+    echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"
+) | crontab -
 
 # Install the queue worker
-cat > /etc/systemd/system/pteroq.service << EOF 
+cat >/etc/systemd/system/pteroq.service <<EOF
 [Unit]
 Description=Pterodactyl Queue Worker
 After=redis-server.service
@@ -167,8 +170,8 @@ curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/l
 chmod u+x /usr/local/bin/wings
 
 # Configure wings
-php artisan p:node:configuration 1 > /etc/pterodactyl/config.yml
-cat > /etc/systemd/system/wings.service << EOF
+php artisan p:node:configuration 1 >/etc/pterodactyl/config.yml
+cat >/etc/systemd/system/wings.service <<EOF
 [Unit]
 Description=Pterodactyl Wings Daemon
 After=docker.service
