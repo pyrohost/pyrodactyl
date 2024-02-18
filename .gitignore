@@ -3,8 +3,8 @@
 !.env.ci
 !.env.example
 .env*
-.vagrant/*
-.vscode/*
+.vagrant/
+.vscode/
 storage/framework/*
 /.idea
 /nbproject
