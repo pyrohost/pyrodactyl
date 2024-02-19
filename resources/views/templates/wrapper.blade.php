@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: #000000">
     <head>
         <title>{{ config('app.name', 'Pterodactyl') }}</title>
 

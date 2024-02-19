@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components/macro';
 
 export default createGlobalStyle`
     html, body, #app {
-        ${tw`font-jakarta min-h-screen w-full overflow-x-hidden bg-black`};
+        ${tw`font-jakarta h-full w-full bg-black overflow-hidden`};
     }
 
     h1, h2, h3, h4, h5, h6 {

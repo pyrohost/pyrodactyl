@@ -46,7 +46,7 @@ export default () => {
     };
 
     return (
-        <div className={'w-full bg-zinc-900 shadow-md overflow-x-auto'}>
+        <header data-pyro-sidebar='' className={'w-[320px] bg-zinc-900 shadow-md overflow-x-auto rounded-xl'}>
             <SpinnerOverlay visible={isLoggingOut} />
             <div className={'mx-auto w-full flex items-center h-[3.5rem] max-w-[1200px]'}>
                 <div id={'logo'} className={'flex-1'}>
@@ -87,6 +87,6 @@ export default () => {
                     </Tooltip>
                 </RightNavigation>
             </div>
-        </div>
+        </header>
     );
 };

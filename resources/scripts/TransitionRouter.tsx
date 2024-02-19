@@ -18,9 +18,11 @@ const TransitionRouter: React.FC = ({ children }) => {
         <Route
             render={({ location }) => (
                 <StyledSwitchTransition>
-                    <Fade timeout={150} key={location.pathname + location.search} in appear unmountOnExit>
-                        <section>{children}</section>
-                    </Fade>
+                    {/* <Fade timeout={150} key={location.pathname + location.search} in appear unmountOnExit> */}
+                    <main data-pyro-transitionrouter='' className='w-full h-full overflow-y-auto rounded-xl'>
+                        {children}
+                    </main>
+                    {/* </Fade> */}
                 </StyledSwitchTransition>
             )}
         />

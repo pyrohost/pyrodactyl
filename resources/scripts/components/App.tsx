@@ -61,7 +61,10 @@ const App = () => {
             <GlobalStylesheet />
             <StoreProvider store={store}>
                 <ProgressBar />
-                <div css={tw`mx-auto w-auto`}>
+                <div
+                    data-pyro-routerwrap=''
+                    className='w-full h-full flex flex-row p-2 overflow-hidden rounded-xl gap-4'
+                >
                     <Router history={history}>
                         <Switch>
                             <Route path={'/auth'}>

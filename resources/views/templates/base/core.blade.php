@@ -4,5 +4,5 @@
 
 @section('container')
     <div id="modal-portal"></div>
-    <div id="app"></div>
+    <div data-pyro-app id="app"></div>
 @endsection
