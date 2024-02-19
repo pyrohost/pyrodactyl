@@ -118,7 +118,7 @@ php /usr/local/bin/composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
 php artisan key:generate --force
-php artisan p:environment:setup -n --author dev@pyro.host --url http://0.0.0.0:3000 --cache redis --session redis --queue redis
+php artisan p:environment:setup -n --author dev@pyro.host --url http://127.0.0.1:3000 --cache redis --session redis --queue redis
 php artisan p:environment:database -n --host localhost --port 3306 --database panel --username pterodactyl --password password
 php artisan migrate --seed --force
 
@@ -131,7 +131,7 @@ php artisan p:location:make -n --short local --long Local
 php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
 
 # Add some dummy allocations to the node
-mysql -u root -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+mysql -u root -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '127.0.0.1', 25565), (1, '127.0.0.1', 25566), (1, '127.0.0.1', 25567);"
 
 # Set the crontab for the panel
 (
