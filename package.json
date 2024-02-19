@@ -52,7 +52,8 @@
         "xterm-addon-search": "^0.9.0",
         "xterm-addon-search-bar": "^0.2.0",
         "xterm-addon-web-links": "^0.6.0",
-        "yup": "^0.29.1"
+        "yup": "^0.29.1",
+        "@vitejs/plugin-react": "^2.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.1",
@@ -127,7 +128,9 @@
         "webpack-bundle-analyzer": "^3.8.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0",
-        "yarn-deduplicate": "^1.1.1"
+        "yarn-deduplicate": "^1.1.1",
+        "vite": "^3.0.2",
+        "laravel-vite-plugin": "^0.6.0"
     },
     "scripts": {
         "clean": "cd public/assets && find . \\( -name \"*.js\" -o -name \"*.map\" \\) -type f -delete",
