@@ -10,8 +10,8 @@ interface CodeProps {
 export default ({ dark, className, children }: CodeProps) => (
     <code
         className={classNames('font-mono text-sm px-2 py-1 inline-block rounded', className, {
-            'bg-gray-700': !dark,
-            'bg-gray-900 text-gray-100': dark,
+            'bg-zinc-700': !dark,
+            'bg-zinc-900 text-zinc-100': dark,
         })}
     >
         {children}

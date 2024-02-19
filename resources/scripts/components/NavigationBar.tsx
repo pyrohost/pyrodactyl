@@ -17,11 +17,11 @@ const RightNavigation = styled.div`
     & > a,
     & > button,
     & > .navigation-link {
-        ${tw`flex items-center h-full no-underline text-gray-300 px-6 cursor-pointer transition-all duration-150`};
+        ${tw`flex items-center h-full no-underline text-zinc-300 px-6 cursor-pointer transition-all duration-150`};
 
         &:active,
         &:hover {
-            ${tw`text-gray-100 bg-black`};
+            ${tw`text-zinc-100 bg-black`};
         }
 
         &:active,
@@ -46,14 +46,14 @@ export default () => {
     };
 
     return (
-        <div className={'w-full bg-gray-900 shadow-md overflow-x-auto'}>
+        <div className={'w-full bg-zinc-900 shadow-md overflow-x-auto'}>
             <SpinnerOverlay visible={isLoggingOut} />
             <div className={'mx-auto w-full flex items-center h-[3.5rem] max-w-[1200px]'}>
                 <div id={'logo'} className={'flex-1'}>
                     <Link
                         to={'/'}
                         className={
-                            'text-2xl  px-4 no-underline text-gray-200 hover:text-gray-100 transition-colors duration-150'
+                            'text-2xl  px-4 no-underline text-zinc-200 hover:text-zinc-100 transition-colors duration-150'
                         }
                     >
                         {name}

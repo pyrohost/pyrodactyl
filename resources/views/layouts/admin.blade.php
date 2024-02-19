@@ -155,7 +155,7 @@
                 </section>
             </div>
             <footer class="main-footer">
-                <div class="pull-right small text-gray" style="margin-right:10px;margin-top:-7px;">
+                <div class="pull-right small text-zinc" style="margin-right:10px;margin-top:-7px;">
                     <strong><i class="fa fa-fw {{ $appIsGit ? 'fa-git-square' : 'fa-code-fork' }}"></i></strong> {{ $appVersion }}<br />
                     <strong><i class="fa fa-fw fa-clock-o"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s
                 </div>

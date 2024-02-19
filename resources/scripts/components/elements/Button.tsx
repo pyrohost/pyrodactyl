@@ -16,20 +16,20 @@ const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>`
     ${(props) =>
         ((!props.isSecondary && !props.color) || props.color === 'primary') &&
         css<Props>`
-            ${(props) => !props.isSecondary && tw`bg-gray-500 border-gray-600 border text-gray-50`};
+            ${(props) => !props.isSecondary && tw`bg-zinc-500 border-zinc-600 border text-zinc-50`};
 
             &:hover:not(:disabled) {
-                ${tw`bg-gray-600 border-gray-700`};
+                ${tw`bg-zinc-600 border-zinc-700`};
             }
         `};
 
     ${(props) =>
         props.color === 'grey' &&
         css`
-            ${tw`border-gray-600 bg-gray-500 text-gray-50`};
+            ${tw`border-zinc-600 bg-zinc-500 text-zinc-50`};
 
             &:hover:not(:disabled) {
-                ${tw`bg-gray-600 border-gray-700`};
+                ${tw`bg-zinc-600 border-zinc-700`};
             }
         `};
 
@@ -77,12 +77,12 @@ const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>`
     ${(props) =>
         props.isSecondary &&
         css<Props>`
-            ${tw`border-gray-600 bg-transparent text-gray-200`};
+            ${tw`border-zinc-600 bg-transparent text-zinc-200`};
 
             &:hover:not(:disabled) {
-                ${tw`border-gray-500 text-gray-100`};
+                ${tw`border-zinc-500 text-zinc-100`};
                 ${(props) => props.color === 'red' && tw`bg-red-500 border-red-600 text-red-50`};
-                ${(props) => props.color === 'primary' && tw`bg-gray-500 border-gray-600 text-gray-50`};
+                ${(props) => props.color === 'primary' && tw`bg-zinc-500 border-zinc-600 text-zinc-50`};
                 ${(props) => props.color === 'green' && tw`bg-green-500 border-green-600 text-green-50`};
             }
         `};

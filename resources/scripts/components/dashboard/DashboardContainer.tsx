@@ -52,7 +52,7 @@ export default () => {
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
             {rootAdmin && (
                 <div css={tw`mb-2 flex justify-end items-center`}>
-                    <p css={tw`uppercase text-xs text-gray-400 mr-2`}>
+                    <p css={tw`uppercase text-xs text-zinc-400 mr-2`}>
                         {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
                     </p>
                     <Switch
@@ -72,7 +72,7 @@ export default () => {
                                 <ServerRow key={server.uuid} server={server} css={index > 0 ? tw`mt-2` : undefined} />
                             ))
                         ) : (
-                            <p css={tw`text-center text-sm text-gray-400`}>
+                            <p css={tw`text-center text-sm text-zinc-400`}>
                                 {showOnlyAdmin
                                     ? 'There are no other servers to display.'
                                     : 'There are no servers associated with your account.'}

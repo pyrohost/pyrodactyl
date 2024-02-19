@@ -32,15 +32,17 @@
             @endif
         @show
         <style>
-            @import url('//fonts.googleapis.com/css?family=Rubik:300,400,500&display=swap');
-            @import url('//fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans:500&display=swap');
+            /* @import url('//fonts.googleapis.com/css?family=Rubik:300,400,500&display=swap');
+            @import url('//fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans:500&display=swap'); */
+
+            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap')
         </style>
 
         @yield('assets')
 
         @include('layouts.scripts')
     </head>
-    <body class="{{ $css['body'] ?? 'bg-gray-50' }}">
+    <body class="{{ $css['body'] ?? 'bg-zinc-50' }}">
         @section('content')
             @yield('above-container')
             @yield('container')

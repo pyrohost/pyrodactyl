@@ -20,7 +20,7 @@ export default ({ subuser }: Props) => {
     return (
         <GreyRowBox css={tw`mb-2`}>
             <EditSubuserModal subuser={subuser} visible={visible} onModalDismissed={() => setVisible(false)} />
-            <div css={tw`w-10 h-10 rounded-full bg-white border-2 border-gray-800 overflow-hidden hidden md:block`}>
+            <div css={tw`w-10 h-10 rounded-full bg-white border-2 border-zinc-800 overflow-hidden hidden md:block`}>
                 <img css={tw`w-full h-full`} src={`${subuser.image}?s=400`} />
             </div>
             <div css={tw`ml-4 flex-1 overflow-hidden`}>
@@ -36,13 +36,13 @@ export default ({ subuser }: Props) => {
                     />
                     &nbsp;
                 </p>
-                <p css={tw`text-xs text-gray-500 uppercase hidden md:block`}>2FA Enabled</p>
+                <p css={tw`text-xs text-zinc-500 uppercase hidden md:block`}>2FA Enabled</p>
             </div>
             <div css={tw`ml-4 hidden md:block`}>
                 <p css={tw`font-medium text-center`}>
                     {subuser.permissions.filter((permission) => permission !== 'websocket.connect').length}
                 </p>
-                <p css={tw`text-xs text-gray-500 uppercase`}>Permissions</p>
+                <p css={tw`text-xs text-zinc-500 uppercase`}>Permissions</p>
             </div>
             {subuser.uuid !== uuid && (
                 <>
@@ -50,7 +50,7 @@ export default ({ subuser }: Props) => {
                         <button
                             type={'button'}
                             aria-label={'Edit subuser'}
-                            css={tw`block text-sm p-1 md:p-2 text-gray-500 hover:text-gray-100 transition-colors duration-150 mx-4`}
+                            css={tw`block text-sm p-1 md:p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mx-4`}
                             onClick={() => setVisible(true)}
                         >
                             <FontAwesomeIcon icon={faPencilAlt} />

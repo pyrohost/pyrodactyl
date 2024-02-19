@@ -90,7 +90,7 @@ export default () => {
             ) : (
                 <>
                     {!files.length ? (
-                        <p css={tw`text-sm text-gray-400 text-center`}>This directory seems to be empty.</p>
+                        <p css={tw`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
                     ) : (
                         <CSSTransition classNames={'fade'} timeout={150} appear in>
                             <div>

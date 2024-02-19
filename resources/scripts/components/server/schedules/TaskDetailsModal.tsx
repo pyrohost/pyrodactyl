@@ -176,7 +176,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             </div>
                         )}
                     </div>
-                    <div css={tw`mt-6 bg-gray-700 border border-gray-800 shadow-inner p-4 rounded`}>
+                    <div css={tw`mt-6 bg-zinc-700 border border-zinc-800 shadow-inner p-4 rounded`}>
                         <FormikSwitch
                             name={'continueOnFailure'}
                             description={'Future tasks will be run when this task fails.'}

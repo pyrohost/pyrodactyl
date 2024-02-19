@@ -92,8 +92,8 @@ export default () => {
                 </div>
             </ErrorBoundary>
             {hash.replace(/^#/, '').endsWith('.pteroignore') && (
-                <div css={tw`mb-4 p-4 border-l-4 bg-gray-900 rounded border-blue-400`}>
-                    <p css={tw`text-gray-300 text-sm`}>
+                <div css={tw`mb-4 p-4 border-l-4 bg-zinc-900 rounded border-blue-400`}>
+                    <p css={tw`text-zinc-300 text-sm`}>
                         You&apos;re editing a <code css={tw`font-mono bg-black rounded py-px px-1`}>.pteroignore</code>{' '}
                         file. Any files or directories listed in here will be excluded from backups. Wildcards are
                         supported by using an asterisk (<code css={tw`font-mono bg-black rounded py-px px-1`}>*</code>).
@@ -130,7 +130,7 @@ export default () => {
                 />
             </div>
             <div css={tw`flex justify-end mt-4`}>
-                <div css={tw`flex-1 sm:flex-none rounded bg-gray-900 mr-4`}>
+                <div css={tw`flex-1 sm:flex-none rounded bg-zinc-900 mr-4`}>
                     <Select value={mode} onChange={(e) => setMode(e.currentTarget.value)}>
                         {modes.map((mode) => (
                             <option key={`${mode.name}_${mode.mime}`} value={mode.mime}>

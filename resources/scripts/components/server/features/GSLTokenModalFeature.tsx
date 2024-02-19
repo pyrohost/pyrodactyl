@@ -75,7 +75,7 @@ const GSLTokenModalFeature = () => {
             >
                 <FlashMessageRender key={'feature:gslToken'} css={tw`mb-4`} />
                 <Form>
-                    <h2 css={tw`text-2xl mb-4 text-gray-100`}>Invalid GSL token!</h2>
+                    <h2 css={tw`text-2xl mb-4 text-zinc-100`}>Invalid GSL token!</h2>
                     <p css={tw`mt-4`}>
                         It seems like your Gameserver Login Token (GSL token) is invalid or has expired.
                     </p>

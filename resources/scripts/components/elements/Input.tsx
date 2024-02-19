@@ -7,18 +7,18 @@ export interface Props {
 }
 
 const light = css<Props>`
-    ${tw`bg-white border-gray-200 text-gray-800`};
+    ${tw`bg-white border-zinc-200 text-zinc-800`};
     &:focus {
-        ${tw`border-gray-400`}
+        ${tw`border-zinc-400`}
     }
 
     &:disabled {
-        ${tw`bg-gray-100 border-gray-200`};
+        ${tw`bg-zinc-100 border-zinc-200`};
     }
 `;
 
 const checkboxStyle = css<Props>`
-    ${tw`bg-gray-500 cursor-pointer appearance-none inline-block align-middle select-none flex-shrink-0 w-4 h-4 text-gray-400 border border-gray-300 rounded-sm`};
+    ${tw`bg-zinc-500 cursor-pointer appearance-none inline-block align-middle select-none flex-shrink-0 w-4 h-4 text-zinc-400 border border-zinc-300 rounded-sm`};
     color-adjust: exact;
     background-origin: border-box;
     transition: all 75ms linear, box-shadow 25ms linear;
@@ -31,7 +31,7 @@ const checkboxStyle = css<Props>`
     }
 
     &:focus {
-        ${tw`outline-none border-gray-300`};
+        ${tw`outline-none border-zinc-300`};
         box-shadow: 0 0 0 1px rgba(9, 103, 210, 0.25);
     }
 `;
@@ -41,11 +41,11 @@ const inputStyle = css<Props>`
     resize: none;
     ${tw`appearance-none outline-none w-full min-w-0`};
     ${tw`p-3 border-2 rounded text-sm transition-all duration-150`};
-    ${tw`bg-gray-600 border-gray-500 hover:border-gray-400 text-gray-200 shadow-none focus:ring-0`};
+    ${tw`bg-zinc-600 border-zinc-500 hover:border-zinc-400 text-zinc-200 shadow-none focus:ring-0`};
 
     & + .input-help {
         ${tw`mt-1 text-xs`};
-        ${(props) => (props.hasError ? tw`text-red-200` : tw`text-gray-200`)};
+        ${(props) => (props.hasError ? tw`text-red-200` : tw`text-zinc-200`)};
     }
 
     &:required,
@@ -54,7 +54,7 @@ const inputStyle = css<Props>`
     }
 
     &:not(:disabled):not(:read-only):focus {
-        ${tw`shadow-md border-gray-300 ring-2 ring-gray-400 ring-opacity-50`};
+        ${tw`shadow-md border-zinc-300 ring-2 ring-zinc-400 ring-opacity-50`};
         ${(props) => props.hasError && tw`border-red-300 ring-red-200`};
     }
 

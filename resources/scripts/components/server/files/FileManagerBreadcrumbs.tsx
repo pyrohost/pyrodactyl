@@ -38,9 +38,9 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
             });
 
     return (
-        <div css={tw`flex flex-grow-0 items-center text-sm text-gray-500 overflow-x-hidden`}>
-            {renderLeft || <div css={tw`w-12`} />}/<span css={tw`px-1 text-gray-300`}>home</span>/
-            <NavLink to={`/server/${id}/files`} css={tw`px-1 text-gray-200 no-underline hover:text-gray-100`}>
+        <div css={tw`flex flex-grow-0 items-center text-sm text-zinc-500 overflow-x-hidden`}>
+            {renderLeft || <div css={tw`w-12`} />}/<span css={tw`px-1 text-zinc-300`}>home</span>/
+            <NavLink to={`/server/${id}/files`} css={tw`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
                 container
             </NavLink>
             /
@@ -49,21 +49,21 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
                     <React.Fragment key={index}>
                         <NavLink
                             to={`/server/${id}/files#${encodePathSegments(crumb.path)}`}
-                            css={tw`px-1 text-gray-200 no-underline hover:text-gray-100`}
+                            css={tw`px-1 text-zinc-200 no-underline hover:text-zinc-100`}
                         >
                             {crumb.name}
                         </NavLink>
                         /
                     </React.Fragment>
                 ) : (
-                    <span key={index} css={tw`px-1 text-gray-300`}>
+                    <span key={index} css={tw`px-1 text-zinc-300`}>
                         {crumb.name}
                     </span>
                 )
             )}
             {file && (
                 <React.Fragment>
-                    <span css={tw`px-1 text-gray-300`}>{file}</span>
+                    <span css={tw`px-1 text-zinc-300`}>{file}</span>
                 </React.Fragment>
             )}
         </div>

@@ -67,23 +67,23 @@ export default () => {
                         keys.map((key, index) => (
                             <GreyRowBox
                                 key={key.identifier}
-                                css={[tw`bg-gray-600 flex items-center`, index > 0 && tw`mt-2`]}
+                                css={[tw`bg-zinc-600 flex items-center`, index > 0 && tw`mt-2`]}
                             >
-                                <FontAwesomeIcon icon={faKey} css={tw`text-gray-300`} />
+                                <FontAwesomeIcon icon={faKey} css={tw`text-zinc-300`} />
                                 <div css={tw`ml-4 flex-1 overflow-hidden`}>
                                     <p css={tw`text-sm break-words`}>{key.description}</p>
-                                    <p css={tw`text-xs text-gray-300 uppercase`}>
+                                    <p css={tw`text-xs text-zinc-300 uppercase`}>
                                         Last used:&nbsp;
                                         {key.lastUsedAt ? format(key.lastUsedAt, 'MMM do, yyyy HH:mm') : 'Never'}
                                     </p>
                                 </div>
                                 <p css={tw`text-sm ml-4 hidden md:block`}>
-                                    <code css={tw`font-mono py-1 px-2 bg-gray-900 rounded`}>{key.identifier}</code>
+                                    <code css={tw`font-mono py-1 px-2 bg-zinc-900 rounded`}>{key.identifier}</code>
                                 </p>
                                 <button css={tw`ml-4 p-2 text-sm`} onClick={() => setDeleteIdentifier(key.identifier)}>
                                     <FontAwesomeIcon
                                         icon={faTrashAlt}
-                                        css={tw`text-gray-400 hover:text-red-400 transition-colors duration-150`}
+                                        css={tw`text-zinc-400 hover:text-red-400 transition-colors duration-150`}
                                     />
                                 </button>
                             </GreyRowBox>

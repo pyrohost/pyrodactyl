@@ -215,7 +215,7 @@ export default () => {
                     />
                     <div
                         className={classNames(
-                            'text-gray-100 peer-focus:text-gray-50 peer-focus:animate-pulse',
+                            'text-zinc-100 peer-focus:text-zinc-50 peer-focus:animate-pulse',
                             styles.command_icon
                         )}
                     >

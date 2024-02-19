@@ -10,7 +10,6 @@
         "@fortawesome/react-fontawesome": "^0.1.11",
         "@headlessui/react": "^1.6.4",
         "@heroicons/react": "^1.0.6",
-        "@hot-loader/react-dom": "^16.14.0",
         "@preact/signals-react": "^1.2.1",
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/line-clamp": "^0.4.0",
@@ -33,7 +32,7 @@
         "qrcode.react": "^1.0.1",
         "react": "^16.14.0",
         "react-chartjs-2": "^4.2.0",
-        "react-dom": "npm:@hot-loader/react-dom",
+        "react-dom": "^16.14.0",
         "react-fast-compare": "^3.2.0",
         "react-hot-loader": "^4.12.21",
         "react-i18next": "^11.2.1",
@@ -44,7 +43,7 @@
         "styled-components": "^5.2.1",
         "styled-components-breakpoint": "^3.0.0-preview.20",
         "swr": "^0.2.3",
-        "tailwindcss": "^3.0.24",
+        "tailwindcss": "^3.4.1",
         "use-fit-text": "^2.4.0",
         "uuid": "^8.3.2",
         "xterm": "^4.19.0",
@@ -153,5 +152,6 @@
             "displayName": true,
             "fileName": true
         }
-    }
+    },
+    "packageManager": "yarn@4.1.0"
 }

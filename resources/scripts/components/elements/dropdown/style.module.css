@@ -2,18 +2,18 @@
     @apply relative inline-block text-left;
 
     & .button {
-        @apply inline-flex justify-center items-center w-full py-2 text-gray-100 rounded-md;
+        @apply inline-flex justify-center items-center w-full py-2 text-zinc-100 rounded-md;
         @apply transition-all duration-100;
 
         &:hover,
         &[aria-expanded='true'] {
-            @apply bg-gray-600 text-white;
+            @apply bg-zinc-600 text-white;
         }
 
         &:focus,
         &:focus-within,
         &:active {
-            @apply ring-2 ring-opacity-50 ring-gray-300 text-white;
+            @apply ring-2 ring-opacity-50 ring-zinc-300 text-white;
         }
 
         & svg {
@@ -26,7 +26,7 @@
     }
 
     & .items_container {
-        @apply absolute right-0 mt-2 origin-top-right bg-gray-900 rounded z-10;
+        @apply absolute right-0 mt-2 origin-top-right bg-zinc-900 rounded z-10;
     }
 }
 
@@ -34,7 +34,7 @@
     @apply flex items-center rounded w-full px-2 py-2;
 
     & svg {
-        @apply w-4 h-4 mr-4 text-gray-300;
+        @apply w-4 h-4 mr-4 text-zinc-300;
     }
 
     &:hover,
@@ -58,6 +58,6 @@
     }
 
     &.disabled {
-        @apply cursor-not-allowed hover:bg-gray-800 opacity-30 focus:bg-transparent focus:hover:bg-gray-800;
+        @apply cursor-not-allowed hover:bg-zinc-800 opacity-30 focus:bg-transparent focus:hover:bg-zinc-800;
     }
 }

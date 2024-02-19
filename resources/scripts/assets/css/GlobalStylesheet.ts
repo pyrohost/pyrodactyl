@@ -2,17 +2,12 @@ import tw from 'twin.macro';
 import { createGlobalStyle } from 'styled-components/macro';
 
 export default createGlobalStyle`
-    body {
-        ${tw`font-sans bg-gray-800 text-gray-200`};
-        letter-spacing: 0.015em;
+    html, body, #app {
+        ${tw`font-jakarta min-h-screen w-full overflow-x-hidden bg-black`};
     }
 
     h1, h2, h3, h4, h5, h6 {
         ${tw`font-medium tracking-normal `};
-    }
-
-    p {
-        ${tw`text-gray-200 leading-snug font-sans`};
     }
 
     form {

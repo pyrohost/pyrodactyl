@@ -1,20 +1,20 @@
 .checkbox_input {
-    @apply w-4 h-4 rounded-sm border-gray-500 bg-gray-600 text-gray-500;
+    @apply w-4 h-4 rounded-sm border-zinc-500 bg-zinc-600 text-zinc-500;
 
     &:focus,
     &:active {
-        @apply ring-2 ring-gray-500 ring-offset-2 ring-offset-gray-700;
+        @apply ring-2 ring-zinc-500 ring-offset-2 ring-offset-zinc-700;
     }
 
     &.indeterminate:checked {
-        @apply text-gray-500/50 border border-gray-500;
+        @apply text-zinc-500/50 border border-zinc-500;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z' clip-rule='evenodd' /%3E%3C/svg%3E");
     }
 }
 
 .text_input {
     @apply transition-shadow duration-75;
-    @apply w-full bg-gray-800 rounded px-4 py-2 outline-none border-0;
+    @apply w-full bg-zinc-800 rounded px-4 py-2 outline-none border-0;
 
     &:focus,
     &:active {
