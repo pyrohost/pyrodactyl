@@ -18,7 +18,7 @@ const InputError = ({ errors, touched, name, children }: Props) =>
                 : capitalize((errors[name] as unknown as string[])[0])}
         </p>
     ) : (
-        <>{children ? <p css={tw`text-xs text-neutral-400 pt-2`}>{children}</p> : null}</>
+        <>{children ? <p css={tw`text-xs text-gray-400 pt-2`}>{children}</p> : null}</>
     );
 
 export default InputError;

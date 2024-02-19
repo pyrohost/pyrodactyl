@@ -7,7 +7,7 @@
 }
 
 .description {
-    @apply mt-1 text-sm break-words line-clamp-2 pr-4;
+    @apply mt-1 text-sm break-words  pr-4;
 
     & strong {
         @apply text-gray-50 font-semibold break-all;

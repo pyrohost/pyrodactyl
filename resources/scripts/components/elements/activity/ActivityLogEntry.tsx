@@ -59,7 +59,7 @@ export default ({ activity, children }: Props) => {
                         <span className={'text-gray-400'}>&nbsp;&mdash;&nbsp;</span>
                         <Link
                             to={`#${pathTo({ event: activity.event })}`}
-                            className={'transition-colors duration-75 active:text-cyan-400 hover:text-cyan-400'}
+                            className={'transition-colors duration-75 active:text-blue-400 hover:text-blue-400'}
                         >
                             {activity.event}
                         </Link>

@@ -15,7 +15,7 @@ const styling = (type?: FlashMessageType): TwStyle | string => {
         case 'error':
             return tw`bg-red-600 border-red-800`;
         case 'info':
-            return tw`bg-primary-600 border-primary-800`;
+            return tw`bg-gray-600 border-gray-800`;
         case 'success':
             return tw`bg-green-600 border-green-800`;
         case 'warning':
@@ -30,7 +30,7 @@ const getBackground = (type?: FlashMessageType): TwStyle | string => {
         case 'error':
             return tw`bg-red-500`;
         case 'info':
-            return tw`bg-primary-500`;
+            return tw`bg-gray-500`;
         case 'success':
             return tw`bg-green-500`;
         case 'warning':

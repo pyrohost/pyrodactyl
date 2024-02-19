@@ -76,7 +76,7 @@ const JavaVersionModalFeature = () => {
             showSpinnerOverlay={loading}
         >
             <FlashMessageRender key={'feature:javaVersion'} css={tw`mb-4`} />
-            <h2 css={tw`text-2xl mb-4 text-neutral-100`}>Unsupported Java Version</h2>
+            <h2 css={tw`text-2xl mb-4 text-gray-100`}>Unsupported Java Version</h2>
             <p css={tw`mt-4`}>
                 This server is currently running an unsupported version of Java and cannot be started.
                 <Can action={'startup.docker-image'}>

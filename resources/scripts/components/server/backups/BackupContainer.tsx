@@ -41,7 +41,7 @@ const BackupContainer = () => {
                         // Don't show any error messages if the server has no backups and the user cannot
                         // create additional ones for the server.
                         !backupLimit ? null : (
-                            <p css={tw`text-center text-sm text-neutral-300`}>
+                            <p css={tw`text-center text-sm text-gray-300`}>
                                 {page > 1
                                     ? "Looks like we've run out of backups to show you, try going back a page."
                                     : 'It looks like there are no backups currently stored for this server.'}
@@ -55,14 +55,14 @@ const BackupContainer = () => {
                 }
             </Pagination>
             {backupLimit === 0 && (
-                <p css={tw`text-center text-sm text-neutral-300`}>
+                <p css={tw`text-center text-sm text-gray-300`}>
                     Backups cannot be created for this server because the backup limit is set to 0.
                 </p>
             )}
             <Can action={'backup.create'}>
                 <div css={tw`mt-6 sm:flex items-center justify-end`}>
                     {backupLimit > 0 && backups.backupCount > 0 && (
-                        <p css={tw`text-sm text-neutral-300 mb-4 sm:mr-6 sm:mb-0`}>
+                        <p css={tw`text-sm text-gray-300 mb-4 sm:mr-6 sm:mb-0`}>
                             {backups.backupCount} of {backupLimit} backups have been created for this server.
                         </p>
                     )}

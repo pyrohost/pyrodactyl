@@ -13,7 +13,7 @@ export default ({ schedule }: { schedule: Schedule }) => (
         </div>
         <div css={tw`flex-1 md:ml-4`}>
             <p>{schedule.name}</p>
-            <p css={tw`text-xs text-neutral-400`}>
+            <p css={tw`text-xs text-gray-400`}>
                 Last run at: {schedule.lastRunAt ? format(schedule.lastRunAt, "MMM do 'at' h:mma") : 'never'}
             </p>
         </div>
@@ -21,7 +21,7 @@ export default ({ schedule }: { schedule: Schedule }) => (
             <p
                 css={[
                     tw`py-1 px-3 rounded text-xs uppercase text-white sm:hidden`,
-                    schedule.isActive ? tw`bg-green-600` : tw`bg-neutral-400`,
+                    schedule.isActive ? tw`bg-green-600` : tw`bg-gray-400`,
                 ]}
             >
                 {schedule.isActive ? 'Active' : 'Inactive'}
@@ -32,7 +32,7 @@ export default ({ schedule }: { schedule: Schedule }) => (
             <p
                 css={[
                     tw`py-1 px-3 rounded text-xs uppercase text-white hidden sm:block`,
-                    schedule.isActive && !schedule.isProcessing ? tw`bg-green-600` : tw`bg-neutral-400`,
+                    schedule.isActive && !schedule.isProcessing ? tw`bg-green-600` : tw`bg-gray-400`,
                 ]}
             >
                 {schedule.isProcessing ? 'Processing' : schedule.isActive ? 'Active' : 'Inactive'}
