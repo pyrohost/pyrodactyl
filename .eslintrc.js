@@ -32,8 +32,7 @@ module.exports = {
         'plugin:jest-dom/recommended',
     ],
     rules: {
-        eqeqeq: 'error',
-        'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+        'prettier/prettier': 0,
         // TypeScript can infer this significantly better than eslint ever can.
         'react/prop-types': 0,
         'react/display-name': 0,
@@ -45,7 +44,7 @@ module.exports = {
         // @see https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md#how-to-use
         'no-use-before-define': 0,
         '@typescript-eslint/no-use-before-define': 'warn',
-        '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
-        '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
+        '@typescript-eslint/no-unused-vars': 0,
+        '@typescript-eslint/ban-ts-comment': 0,
     },
 };

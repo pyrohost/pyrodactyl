@@ -4,6 +4,5 @@
 	"useTabs": false,
 	"semi": true,
 	"singleQuote": true,
-	"jsxSingleQuote": true,
-	"endOfLine": "lf"
+	"jsxSingleQuote": true
 }
