@@ -14,7 +14,7 @@ export default () => {
 
     return (
         <>
-            <NavigationBar />
+            {/* <NavigationBar /> */}
             {location.pathname.startsWith('/account') && (
                 <SubNavigation>
                     <div>
@@ -29,7 +29,7 @@ export default () => {
                 </SubNavigation>
             )}
             <TransitionRouter>
-                <React.Suspense fallback={<Spinner centered />}>
+                <React.Suspense fallback={null}>
                     <Switch location={location}>
                         <Route path={'/'} exact>
                             <DashboardContainer />

@@ -23,40 +23,23 @@ const ServerConsoleContainer = () => {
 
     return (
         <ServerContentBlock title={'Console'}>
-            {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
-                <Alert type={'warning'} className={'mb-4'}>
-                    {isNodeUnderMaintenance
-                        ? 'The node of this server is currently under maintenance and all actions are unavailable.'
-                        : isInstalling
-                        ? 'This server is currently running its installation process and most actions are unavailable.'
-                        : 'This server is currently being transferred to another node and all actions are unavailable.'}
-                </Alert>
-            )}
-            <div className={'grid grid-cols-4 gap-4 mb-4'}>
-                <div className={'hidden sm:block sm:col-span-2 lg:col-span-3 pr-4'}>
+            <div className='w-full h-full flex flex-col gap-2'>
+                {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
+                    <Alert type={'warning'} className={'mb-4'}>
+                        {isNodeUnderMaintenance
+                            ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                            : isInstalling
+                            ? 'This server is currently running its installation process and most actions are unavailable.'
+                            : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                    </Alert>
+                )}
+                <div className={'hidden sm:block'}>
                     <h1 className={' text-2xl text-zinc-50 leading-relaxed line-clamp-1'}>{name}</h1>
                     <p className={'text-sm '}>{description}</p>
                 </div>
-                <div className={'col-span-4 sm:col-span-2 lg:col-span-1 self-end'}>
-                    <Can action={['control.start', 'control.stop', 'control.restart']} matchAny>
-                        <PowerButtons className={'flex sm:justify-end space-x-2'} />
-                    </Can>
-                </div>
+                {/* i WANNA rebuild this so everything is gone for now :3 */}
+                <Features enabled={eggFeatures} />
             </div>
-            <div className={'grid grid-cols-4 gap-2 sm:gap-4 mb-4'}>
-                <div className={'flex col-span-4 lg:col-span-3'}>
-                    <Spinner.Suspense>
-                        <Console />
-                    </Spinner.Suspense>
-                </div>
-                <ServerDetailsBlock className={'col-span-4 lg:col-span-1 order-last lg:order-none'} />
-            </div>
-            <div className={'grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4'}>
-                <Spinner.Suspense>
-                    <StatGraphs />
-                </Spinner.Suspense>
-            </div>
-            <Features enabled={eggFeatures} />
         </ServerContentBlock>
     );
 };

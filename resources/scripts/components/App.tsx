@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader';
 import { Route, Router, Switch } from 'react-router-dom';
 import { StoreProvider } from 'easy-peasy';
 import { store } from '@/state';
@@ -63,7 +63,7 @@ const App = () => {
                 <ProgressBar />
                 <div
                     data-pyro-routerwrap=''
-                    className='w-full h-full flex flex-row p-2 overflow-hidden rounded-xl gap-4'
+                    className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg gap-2'
                 >
                     <Router history={history}>
                         <Switch>
@@ -95,4 +95,4 @@ const App = () => {
     );
 };
 
-export default hot(App);
+export default App;

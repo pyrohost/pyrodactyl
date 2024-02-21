@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-color: #000000">
+<html data-pyro-html style="background-color: #000000">
     <head>
         <title>{{ config('app.name', 'Pterodactyl') }}</title>
 
@@ -42,7 +42,7 @@
 
         @include('layouts.scripts')
     </head>
-    <body class="{{ $css['body'] ?? 'bg-zinc-50' }}">
+    <body data-pyro-body class="{{ $css['body'] ?? 'bg-zinc-50' }}">
         @section('content')
             @yield('above-container')
             @yield('container')

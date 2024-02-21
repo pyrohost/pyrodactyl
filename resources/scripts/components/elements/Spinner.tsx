@@ -59,7 +59,7 @@ Spinner.Size = {
 
 Spinner.Suspense = ({ children, centered = true, size = Spinner.Size.LARGE, ...props }) => (
     // <Spinner centered={centered} size={size} {...props} />
-    <Suspense fallback={<></>}>
+    <Suspense fallback={null}>
         <ErrorBoundary>{children}</ErrorBoundary>
     </Suspense>
 );

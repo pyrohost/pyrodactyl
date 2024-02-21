@@ -19,12 +19,12 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey
 
     return (
         // <CSSTransition timeout={150} classNames={'fade'} appear in>
-            <>
-                <ContentContainer css={tw`my-4 sm:my-10`} className={className}>
-                    {showFlashKey && <FlashMessageRender byKey={showFlashKey} css={tw`mb-4`} />}
-                    {children}
-                </ContentContainer>
-                {/* <ContentContainer css={tw`mb-4`}>
+        <>
+            <ContentContainer css={tw`py-4 sm:py-10`} className={className}>
+                {showFlashKey && <FlashMessageRender byKey={showFlashKey} css={tw`mb-4`} />}
+                {children}
+            </ContentContainer>
+            {/* <ContentContainer css={tw`mb-4`}>
                     <p css={tw`text-center text-zinc-500 text-xs`}>
                         <a
                             rel={'noopener nofollow noreferrer'}
@@ -37,7 +37,7 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey
                         &nbsp;&copy; 2015 - {new Date().getFullYear()}
                     </p>
                 </ContentContainer> */}
-            </>
+        </>
         // </CSSTransition>
     );
 };

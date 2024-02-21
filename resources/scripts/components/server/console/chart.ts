@@ -18,7 +18,10 @@ ChartJS.register(LineElement, PointElement, Filler, LinearScale);
 
 const options: ChartOptions<'line'> = {
     responsive: true,
-    animation: false,
+    // animation: {
+    //     duration: 50,
+    //     easing: 'easeInOutQuart',
+    // },
     plugins: {
         legend: { display: false },
         title: { display: false },
@@ -44,7 +47,7 @@ const options: ChartOptions<'line'> = {
             min: 0,
             type: 'linear',
             grid: {
-                display: true,
+                display: false,
                 color: theme('colors.gray.700'),
                 drawBorder: false,
             },
@@ -53,7 +56,7 @@ const options: ChartOptions<'line'> = {
                 count: 3,
                 color: theme('colors.gray.200'),
                 font: {
-                    family: theme('fontFamily.sans'),
+                    family: theme('fontFamily.jakarta'),
                     size: 11,
                     weight: '400',
                 },
@@ -91,8 +94,8 @@ function getEmptyData(label: string, sets = 1, callback?: ChartDatasetCallback |
                         fill: true,
                         label,
                         data: Array(20).fill(-5),
-                        // borderColor: theme('colors.cyan.400'),
-                        // backgroundColor: hexToRgba(theme('colors.cyan.700'), 0.5),
+                        borderColor: theme('colors.brand'),
+                        backgroundColor: hexToRgba(theme('colors.brand'), 0.09),
                     },
                     index
                 )

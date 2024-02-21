@@ -35,8 +35,9 @@ export default () => {
             return {
                 ...opts,
                 label: !index ? 'Network In' : 'Network Out',
-                // borderColor: !index ? theme('colors.cyan.400') : theme('colors.yellow.400'),
+                borderColor: !index ? theme('colors.brand') : theme('colors.brand'),
                 // backgroundColor: hexToRgba(!index ? theme('colors.cyan.700') : theme('colors.yellow.700'), 0.5),
+                backgroundColor: hexToRgba(!index ? theme('colors.brand') : theme('colors.brand'), 0.09),
             };
         },
     });
@@ -74,7 +75,7 @@ export default () => {
             <ChartBlock title={'Memory'}>
                 <Line {...memory.props} />
             </ChartBlock>
-            <ChartBlock
+            {/* <ChartBlock
                 title={'Network'}
                 legend={
                     <>
@@ -88,7 +89,7 @@ export default () => {
                 }
             >
                 <Line {...network.props} />
-            </ChartBlock>
+            </ChartBlock> */}
         </>
     );
 };

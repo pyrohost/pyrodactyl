@@ -6,9 +6,10 @@ import { CSSTransition } from 'react-transition-group';
 import tw from 'twin.macro';
 
 const BarFill = styled.div`
-    ${tw`h-full bg-blue-400`};
-    transition: 250ms ease-in-out;
-    box-shadow: 0 -2px 10px 2px hsl(178, 78%, 57%);
+    ${tw`h-full`};
+    transition: 100ms ease-in-out;
+    background-color: #ffffff;
+    background-image: linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5);
 `;
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -43,7 +44,7 @@ export default () => {
         }
 
         if (!progress || progress === 0) {
-            setProgress(randomInt(20, 30));
+            setProgress(randomInt(5, 20));
         }
     }, [continuous]);
 
@@ -60,7 +61,7 @@ export default () => {
 
     return (
         <div css={tw`w-full fixed`} style={{ height: '2px' }}>
-            <CSSTransition timeout={150} appear in={visible} unmountOnExit classNames={'fade'}>
+            <CSSTransition timeout={50} appear in={visible} unmountOnExit classNames={'fade'}>
                 <BarFill style={{ width: progress === undefined ? '100%' : `${progress}%` }} />
             </CSSTransition>
         </div>

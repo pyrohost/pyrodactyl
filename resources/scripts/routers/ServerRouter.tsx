@@ -20,6 +20,7 @@ import { useLocation } from 'react-router';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import routes from '@/routers/routes';
+import Logo from '@/components/elements/PyroLogo';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -64,18 +65,38 @@ export default () => {
 
     return (
         <React.Fragment key={'server-router'}>
-            <NavigationBar />
+            {/* <NavigationBar /> */}
             {!uuid || !id ? (
                 error ? (
                     <ServerError message={error} />
                 ) : (
-                    <Spinner size={'large'} centered />
+                    // <Spinner size={'large'} centered />
+                    <></>
                 )
             ) : (
                 <>
                     <CSSTransition timeout={150} classNames={'fade'} appear in>
                         <SubNavigation>
-                            <div>
+                            <div className='flex flex-row items-center justify-between h-8'>
+                                <div className='flex shrink-0 h-full w-fit'>
+                                    <Logo />
+                                </div>
+                                <div className='flex shrink-0 h-6 w-6 fill-white'>
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        width='32'
+                                        height='32'
+                                        fill='currentColor'
+                                        viewBox='0 0 256 256'
+                                        className='flex shrink-0 h-full w-full'
+                                    >
+                                        {/* @ts-ignore */}
+                                        <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className='mt-6 mb-4 bg-[#ffffff33] h-[1px] w-8'></div>
+                            <div className='pyro-subnav-routes-wrapper'>
                                 {routes.server
                                     .filter((route) => !!route.name)
                                     .map((route) =>

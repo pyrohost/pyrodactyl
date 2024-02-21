@@ -3,11 +3,11 @@ import { createGlobalStyle } from 'styled-components/macro';
 
 export default createGlobalStyle`
     html, body, #app {
-        ${tw`font-jakarta h-full w-full bg-black overflow-hidden`};
+        ${tw`font-jakarta h-full w-full bg-black overflow-hidden text-white relative`};
     }
 
     h1, h2, h3, h4, h5, h6 {
-        ${tw`font-medium tracking-normal `};
+        ${tw`font-medium tracking-normal`};
     }
 
     form {

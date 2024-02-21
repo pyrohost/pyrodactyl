@@ -17,13 +17,21 @@ const TransitionRouter: React.FC = ({ children }) => {
     return (
         <Route
             render={({ location }) => (
-                <StyledSwitchTransition>
-                    {/* <Fade timeout={150} key={location.pathname + location.search} in appear unmountOnExit> */}
-                    <main data-pyro-transitionrouter='' className='w-full h-full overflow-y-auto rounded-xl'>
+                <div
+                    className='w-full h-full rounded-md'
+                    style={{
+                        background:
+                            'linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                    }}
+                >
+                    <main
+                        data-pyro-main=''
+                        data-pyro-transitionrouter=''
+                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#080808]'
+                    >
                         {children}
                     </main>
-                    {/* </Fade> */}
-                </StyledSwitchTransition>
+                </div>
             )}
         />
     );
