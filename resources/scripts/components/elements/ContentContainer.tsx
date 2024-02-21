@@ -3,7 +3,7 @@ import { breakpoint } from '@/theme';
 import tw from 'twin.macro';
 
 const ContentContainer = styled.div`
-    ${tw`flex relative px-12 w-full h-full`};
+    ${tw`flex flex-col flex-1 relative px-12 w-full h-full`};
 `;
 ContentContainer.displayName = 'ContentContainer';
 

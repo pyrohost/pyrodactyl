@@ -10,7 +10,10 @@ const typeChecking = process.env.TYPE_CHECKING !== 'false';
 
 module.exports = {
     resolve: {
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
         fallback: {
+            fs: require.resolve('fs'),
+            os: require.resolve('os-browserify/browser'),
             path: require.resolve('path-browserify'),
         },
     },
@@ -41,10 +44,32 @@ module.exports = {
                     },
                 },
             },
+            // Doesn't work sadly cause our packages need to be polyfilled
+            // and webpack doesn't feel like doing that ???
+            // {
+            //     // Match `.js`, `.jsx`, `.ts` or `.tsx` files
+            //     test: /\.[jt]sx?$/,
+            //     exclude: /node_modules|\.spec\.tsx?$/,
+            //     loader: 'esbuild-loader',
+            //     options: {
+            //         // JavaScript version to compile to
+            //         target: 'es2015',
+            //     },
+            // },
+
+            // Why do we need to transpile node_modules? Removing this doesn't
+            // break builds for me, but I'll keep it just in case. Should be
+            // faster with swc
             {
                 test: /\.mjs$/,
                 include: /node_modules/,
                 type: 'javascript/auto',
+                use: {
+                    loader: 'swc-loader',
+                    options: {
+                        parseMap: true,
+                    },
+                },
             },
             {
                 test: /\.css$/,
