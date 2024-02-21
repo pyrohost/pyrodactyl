@@ -9,6 +9,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 const typeChecking = process.env.TYPE_CHECKING !== 'false';
 
 module.exports = {
+    resolve: {
+        fallback: {
+            path: require.resolve('path-browserify'),
+        },
+    },
     cache: true,
     target: 'web',
     mode: isProduction ? 'production' : 'development',
