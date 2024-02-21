@@ -2,15 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const AssetsManifestPlugin = require('webpack-assets-manifest');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
+const typeChecking = process.env.TYPE_CHECKING !== 'false';
 
 module.exports = {
     cache: true,
     target: 'web',
-    mode: process.env.NODE_ENV,
+    mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? false : process.env.DEVTOOL || 'eval-source-map',
     performance: {
         hints: false,
@@ -18,17 +19,22 @@ module.exports = {
     entry: ['react-hot-loader/patch', './resources/scripts/index.tsx'],
     output: {
         path: path.join(__dirname, '/public/assets'),
-        filename: isProduction ? 'bundle.[chunkhash:8].js' : 'bundle.[hash:8].js',
-        chunkFilename: isProduction ? '[name].[chunkhash:8].js' : '[name].[hash:8].js',
+        filename: 'bundle.js', // Simplify filename for development
         publicPath: process.env.WEBPACK_PUBLIC_PATH || '/assets/',
         crossOriginLoading: 'anonymous',
+        pathinfo: false,
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules|\.spec\.tsx?$/,
-                loader: 'babel-loader',
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                    },
+                },
             },
             {
                 test: /\.mjs$/,
@@ -37,25 +43,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                auto: true,
-                                localIdentName: isProduction ? '[name]_[hash:base64:8]' : '[path][name]__[local]',
-                                localIdentContext: path.join(__dirname, 'resources/scripts/components'),
-                            },
-                            sourceMap: !isProduction,
-                            importLoaders: 1,
-                        },
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: { sourceMap: !isProduction },
-                    },
-                ],
+                use: ['style-loader', 'css-loader', 'postcss-loader'], // Simplified CSS loader configuration
             },
             {
                 test: /\.(png|jp(e?)g|gif)$/,
@@ -68,17 +56,7 @@ module.exports = {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
             },
-            {
-                test: /\.js$/,
-                enforce: 'pre',
-                loader: 'source-map-loader',
-            },
         ],
-    },
-    stats: {
-        // Ignore warnings emitted by "source-map-loader" when trying to parse source maps from
-        // JS plugins we use, namely brace editor.
-        warningsFilter: [/Failed to parse source map/],
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -90,32 +68,32 @@ module.exports = {
         symlinks: false,
     },
     externals: {
-        // Mark moment as an external to exclude it from the Chart.js build since we don't need to use
-        // it for anything.
         moment: 'moment',
     },
     plugins: [
         new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development',
-            DEBUG: process.env.NODE_ENV !== 'production',
+            NODE_ENV: isProduction ? 'production' : 'development',
+            DEBUG: isProduction ? 'false' : 'true',
             WEBPACK_BUILD_HASH: Date.now().toString(16),
         }),
-        new webpack.HotModuleReplacementPlugin(),
+
         new AssetsManifestPlugin({ writeToDisk: true, publicPath: true, integrity: true, integrityHashes: ['sha384'] }),
-        new ForkTsCheckerWebpackPlugin({
-            typescript: {
-                mode: 'write-references',
-                diagnosticOptions: {
-                    semantic: true,
-                    syntactic: true,
-                },
-            },
-            eslint: isProduction
-                ? undefined
-                : {
+
+        typeChecking
+            ? new ForkTsCheckerWebpackPlugin({
+                  typescript: {
+                      mode: 'write-references',
+                      diagnosticOptions: {
+                          semantic: true,
+                          syntactic: true,
+                      },
+                  },
+                  eslint: {
                       files: `${path.join(__dirname, '/resources/scripts')}/**/*.{ts,tsx}`,
                   },
-        }),
+              })
+            : null,
+
         process.env.ANALYZE_BUNDLE
             ? new BundleAnalyzerPlugin({
                   analyzerHost: '0.0.0.0',
@@ -124,20 +102,19 @@ module.exports = {
             : null,
     ].filter((p) => p),
     optimization: {
-        usedExports: true,
-        sideEffects: false,
-        runtimeChunk: false,
-        removeEmptyChunks: true,
+        usedExports: isProduction,
+        sideEffects: isProduction,
+        removeEmptyChunks: isProduction,
+        mergeDuplicateChunks: isProduction,
+        providedExports: isProduction,
+        concatenateModules: isProduction,
         minimize: isProduction,
         minimizer: [
             new TerserPlugin({
-                cache: isProduction,
-                parallel: true,
                 extractComments: false,
                 terserOptions: {
-                    mangle: true,
-                    output: {
-                        comments: false,
+                    compress: {
+                        drop_console: true,
                     },
                 },
             }),
