@@ -64,12 +64,13 @@ module.exports = {
                 test: /\.mjs$/,
                 include: /node_modules/,
                 type: 'javascript/auto',
-                use: {
-                    loader: 'swc-loader',
-                    options: {
-                        parseMap: true,
-                    },
-                },
+                // fails on production, works on dev
+                // use: {
+                //     loader: 'swc-loader',
+                //     options: {
+                //         parseMap: true,
+                //     },
+                // },
             },
             {
                 test: /\.css$/,
