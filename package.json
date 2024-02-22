@@ -142,7 +142,7 @@
         "watch": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --watch --progress",
         "build": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --progress",
         "build:fast": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider TYPE_CHECKING=false ./node_modules/.bin/webpack --progress && echo \"\n[!] Type checking was disabled for this build, this may result in runtime errors.\n\"",
-        "build:production": "npm run clean && cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --mode production",
+        "build:production": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --mode production",
         "serve": "npm run clean && cross-env WEBPACK_PUBLIC_PATH=/webpack@hmr/ NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8080 --public https://pterodactyl.test --hot"
     },
     "browserslist": [
