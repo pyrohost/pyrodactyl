@@ -38,6 +38,7 @@ const ServerConsoleContainer = () => {
                     <p className={'text-sm '}>{description}</p>
                 </div>
                 {/* i WANNA rebuild this so everything is gone for now :3 */}
+                <Console />
                 <Features enabled={eggFeatures} />
             </div>
         </ServerContentBlock>
