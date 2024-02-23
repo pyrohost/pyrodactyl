@@ -64,7 +64,8 @@ export default () => {
                 </div>
             )}
             {!servers ? (
-                <Spinner centered size={'large'} />
+                // <Spinner centered size={'large'} />
+                <></>
             ) : (
                 <Pagination data={servers} onPageSelect={setPage}>
                     {({ items }) =>
