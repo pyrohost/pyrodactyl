@@ -9,6 +9,8 @@ import { useLocation } from 'react-router';
 import Spinner from '@/components/elements/Spinner';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
+import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import Avatar from '@/components/Avatar';
 
 export default () => {
     const location = useLocation();
@@ -36,8 +38,18 @@ export default () => {
                         </svg>
                     </div>
                 </div>
-                <div className='mt-6 mb-4 bg-[#ffffff33] h-[1px] w-8'></div>
+                <div className='mt-8 mb-4 bg-[#ffffff33] h-[1px] w-6'></div>
                 <div className='pyro-subnav-routes-wrapper'>
+                    <NavLink to={'/'} exact className='flex flex-row items-center'>
+                        <HugeIconsHome fill='currentColor' />
+                        <p>Your Servers</p>
+                    </NavLink>
+                    <NavLink to={'/account'} exact className='flex flex-row items-center'>
+                        <div className='flex items-center w-6 h-6'>
+                            <Avatar.User />
+                        </div>
+                        <p>You</p>
+                    </NavLink>
                     {/* Hidden for now until I add the dropdown component for these account routes. */}
                     {/* {routes.account
                             .filter((route) => !!route.name)

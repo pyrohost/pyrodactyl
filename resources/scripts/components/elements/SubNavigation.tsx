@@ -11,16 +11,43 @@ const SubNavigation = styled.nav`
 
         & > a,
         & > div {
-            ${tw`flex py-4 whitespace-nowrap font-bold text-sm`};
+            ${tw`relative flex py-4 gap-2 whitespace-nowrap font-bold text-sm`};
 
-            &:hover {
-                ${tw`text-zinc-100`};
+            &.active {
+                ${tw`text-brand fill-brand`};
             }
 
-            &:active,
-            &.active {
-                // ${tw`text-zinc-100`};
-                // box-shadow: inset 0 -2px;
+            &:before {
+                content: '';
+                position: absolute;
+                left: -32px;
+                height: 0px;
+                width: 0px;
+                // background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
+                //     radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
+                // border-radius: 8px;
+                transition: 80ms all ease-in-out;
+            }
+
+            &:hover:before {
+                content: '';
+                position: absolute;
+                left: -32px;
+                height: calc(100% - 36px);
+                width: 2px;
+                background: white;
+                border-radius: 8px;
+            }
+
+            &.active:before {
+                content: '';
+                position: absolute;
+                left: -32px;
+                height: calc(100% - 16px);
+                width: 3px;
+                background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
+                    radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
+                border-radius: 8px;
             }
         }
     }
