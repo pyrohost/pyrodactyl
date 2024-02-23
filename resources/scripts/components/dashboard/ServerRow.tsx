@@ -124,7 +124,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                 </div>
             </div>
             <div
-                css={tw`hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 text-sm`}
+                css={tw`hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 text-sm gap-4`}
             >
                 {!stats || isSuspended ? (
                     isSuspended ? (
@@ -152,24 +152,28 @@ export default ({ server, className }: { server: Server; className?: string }) =
                     )
                 ) : (
                     <React.Fragment>
-                        <div css={tw`flex-1 sm:block hidden`}>
-                            <div css={tw`flex justify-center gap-2`}>
-                                <span className='text-sm text-[#ffffff66] font-bold'>CPU</span>
-                                <span className='font-bold'>{stats.cpuUsagePercent.toFixed(2)}%</span>
+                        <div css={tw`sm:flex hidden`}>
+                            <div css={tw`flex justify-center gap-2 w-fit`}>
+                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>CPU</p>
+                                <p className='font-bold w-fit whitespace-nowrap'>{stats.cpuUsagePercent.toFixed(2)}%</p>
                             </div>
                             {/* <p css={tw`text-xs text-zinc-600 text-center mt-1`}>of {cpuLimit}</p> */}
                         </div>
-                        <div css={tw`flex-1 ml-4 sm:block hidden`}>
+                        <div css={tw`sm:flex hidden`}>
                             {/* <p css={tw`text-xs text-zinc-600 text-center mt-1`}>of {memoryLimit}</p> */}
-                            <div css={tw`flex justify-center gap-2`}>
-                                <span className='text-sm text-[#ffffff66] font-bold'>RAM</span>
-                                <span className='font-bold'>{bytesToString(stats.memoryUsageInBytes, 0)}</span>
+                            <div css={tw`flex justify-center gap-2 w-fit`}>
+                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>RAM</p>
+                                <p className='font-bold w-fit whitespace-nowrap'>
+                                    {bytesToString(stats.memoryUsageInBytes, 0)}
+                                </p>
                             </div>
                         </div>
-                        <div css={tw`flex-1 ml-4 sm:block hidden`}>
-                            <div css={tw`flex justify-center gap-2`}>
-                                <span className='text-sm text-[#ffffff66] font-bold'>Storage</span>
-                                <span className='font-bold'>{bytesToString(stats.diskUsageInBytes, 0)}</span>
+                        <div css={tw`sm:flex hidden`}>
+                            <div css={tw`flex justify-center gap-2 w-fit`}>
+                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>Storage</p>
+                                <p className='font-bold w-fit whitespace-nowrap'>
+                                    {bytesToString(stats.diskUsageInBytes, 0)}
+                                </p>
                             </div>
                             {/* Pyro has unlimited storage */}
                             {/* ░░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄░░░░░░░
