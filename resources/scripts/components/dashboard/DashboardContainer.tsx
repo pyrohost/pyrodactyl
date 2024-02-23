@@ -50,6 +50,7 @@ export default () => {
 
     return (
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Your Servers</h1>
             {rootAdmin && (
                 <div css={tw`mb-2 flex justify-end items-center`}>
                     <p css={tw`uppercase text-xs text-zinc-400 mr-2`}>

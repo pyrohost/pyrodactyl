@@ -21,13 +21,14 @@ const TransitionRouter: React.FC = ({ children }) => {
                     className='w-full h-full rounded-md'
                     style={{
                         background:
-                            'linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                            // 'linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #171717 0%, #000000 100%)',
                     }}
                 >
                     <main
                         data-pyro-main=''
                         data-pyro-transitionrouter=''
-                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#080808]'
+                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                     >
                         {children}
                     </main>
