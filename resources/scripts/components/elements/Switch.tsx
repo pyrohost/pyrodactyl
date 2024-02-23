@@ -21,7 +21,7 @@ const ToggleContainer = styled.div`
     }
 
     & > label {
-        ${tw`mb-0 block overflow-hidden cursor-pointer bg-zinc-400 border border-zinc-700 rounded-full h-6 shadow-inner`};
+        ${tw`mb-0 block overflow-hidden cursor-pointer bg-zinc-950 border border-zinc-700 rounded-full h-6 shadow-inner`};
         transition: all 75ms linear;
 
         &::before {

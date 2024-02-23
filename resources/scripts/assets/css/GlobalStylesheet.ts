@@ -2,6 +2,10 @@ import tw from 'twin.macro';
 import { createGlobalStyle } from 'styled-components/macro';
 
 export default createGlobalStyle`
+    * {
+        min-width: 0
+    }
+
     html, body, #app {
         ${tw`font-jakarta h-full w-full bg-black overflow-hidden text-white relative`};
     }
@@ -57,5 +61,24 @@ export default createGlobalStyle`
 
     ::-webkit-scrollbar-corner {
         background: transparent;
+    }
+
+
+    @keyframes list-anim {
+        0% {
+            transform: translateY(-22px) scale(0.98);
+            opacity: 0;
+        }
+
+        100% {
+            transform: none;
+            opacity: 1;
+        }
+    }
+
+
+    .skeleton-anim-2 {
+        animation: list-anim 1.5s both;
+        will-change: transform;
     }
 `;

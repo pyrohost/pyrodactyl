@@ -53,8 +53,8 @@ export default () => {
             <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Your Servers</h1>
             {rootAdmin && (
                 <div css={tw`mb-2 flex justify-end items-center`}>
-                    <p css={tw`uppercase text-xs text-zinc-400 mr-2`}>
-                        {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
+                    <p css={tw`text-xs text-zinc-400 mr-2`}>
+                        {showOnlyAdmin ? 'Staff: Viewing other servers' : 'Staff: Viewing personal servers'}
                     </p>
                     <Switch
                         name={'show_all_servers'}
@@ -71,7 +71,23 @@ export default () => {
                     {({ items }) =>
                         items.length > 0 ? (
                             items.map((server, index) => (
-                                <ServerRow key={server.uuid} server={server} css={index > 0 ? tw`mt-2` : undefined} />
+                                <div
+                                    key={server.uuid}
+                                    className='transform-gpu skeleton-anim-2'
+                                    style={{
+                                        // adjust for actual delays in fetching stats. idk the latency
+                                        // on prod.
+                                        animationDelay: `${index * 50 + 50}ms`,
+                                        animationTimingFunction:
+                                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                                    }}
+                                >
+                                    <ServerRow
+                                        key={server.uuid}
+                                        server={server}
+                                        css={index > 0 ? tw`mt-4` : undefined}
+                                    />
+                                </div>
                             ))
                         ) : (
                             <p css={tw`text-center text-sm text-zinc-400`}>

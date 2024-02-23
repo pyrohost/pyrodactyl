@@ -22,7 +22,7 @@ const TransitionRouter: React.FC = ({ children }) => {
                     style={{
                         background:
                             // 'linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #171717 0%, #000000 100%)',
+                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
                     }}
                 >
                     <main
