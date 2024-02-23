@@ -50,9 +50,8 @@ export default () => {
 
     return (
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
-            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Your Servers</h1>
             {rootAdmin && (
-                <div css={tw`mb-2 flex justify-end items-center`}>
+                <div css={tw`absolute top-12 right-12 flex justify-end items-center`}>
                     <p css={tw`text-xs text-zinc-400 mr-2`}>
                         {showOnlyAdmin ? 'Staff: Viewing other servers' : 'Staff: Viewing personal servers'}
                     </p>
@@ -63,6 +62,7 @@ export default () => {
                     />
                 </div>
             )}
+            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] mb-8'>Your Servers</h1>
             {!servers ? (
                 // <Spinner centered size={'large'} />
                 <></>
