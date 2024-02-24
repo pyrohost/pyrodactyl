@@ -20,7 +20,7 @@
         "classnames": "^2.3.1",
         "codemirror": "^5.57.0",
         "copy-to-clipboard": "^3.3.3",
-        "date-fns": "^2.28.0",
+        "date-fns": "^3.3.1",
         "debounce": "^1.2.0",
         "deepmerge-ts": "^4.2.1",
         "easy-peasy": "^4.0.1",
