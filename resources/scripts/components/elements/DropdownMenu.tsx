@@ -86,15 +86,19 @@ class DropdownMenu extends React.PureComponent<Props, State> {
         return (
             <>
                 {this.props.renderToggle(this.onClickHandler)}
-                <Fade timeout={150} in={this.state.visible} unmountOnExit>
+                <Fade timeout={75} in={this.state.visible} unmountOnExit>
                     <div
                         ref={this.menu}
                         onClick={(e) => {
                             e.stopPropagation();
                             this.setState({ visible: false });
                         }}
-                        style={{ width: '12rem' }}
-                        className='fixed backdrop-blur-xl bg-[#16161640] p-2 rounded-lg border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto'
+                        style={{
+                            width: '12rem',
+                            background:
+                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgba(46, 46, 46, 0.3) 0%, rgb(26, 26, 26, 0.2) 100%)',
+                        }}
+                        className='fixed backdrop-blur-xl p-2 rounded-xl border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto'
                     >
                         {this.props.children}
                     </div>
