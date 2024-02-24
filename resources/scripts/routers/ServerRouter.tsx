@@ -95,7 +95,7 @@ export default () => {
                                 </svg>
                             </div>
                         </div>
-                        <div className='mt-6 mb-4 bg-[#ffffff33] h-[1px] w-8'></div>
+                        <div className='mt-8 mb-4 bg-[#ffffff33] h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>
                             {routes.server
                                 .filter((route) => !!route.name)

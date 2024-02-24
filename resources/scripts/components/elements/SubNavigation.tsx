@@ -11,7 +11,7 @@ const SubNavigation = styled.nav`
 
         & > a,
         & > div {
-            ${tw`relative flex py-4 gap-2 whitespace-nowrap font-bold text-sm`};
+            ${tw`relative flex py-4 gap-2 whitespace-nowrap font-bold text-sm min-h-[56px]`};
 
             &.active {
                 ${tw`text-brand fill-brand`};
