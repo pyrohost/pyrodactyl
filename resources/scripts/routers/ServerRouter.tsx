@@ -102,7 +102,7 @@ export default () => {
                                 </svg>
                             </div>
                         </div>
-                        <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
+                        <div className='mt-8 mb-4 bg-[#ffffff33] min-   h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
                             <NavLink className='flex flex-row items-center' to={to('/', true)} exact>
@@ -185,8 +185,6 @@ export default () => {
                         <ConflictStateRenderer />
                     ) : (
                         <ErrorBoundary>
-                            {/* same reason as resources\scripts\routers\DashboardRouter.tsx */}
-                            {/* @ts-ignore */}
                             <TransitionRouter>
                                 <Switch location={location}>
                                     {routes.server.map(({ path, permission, component: Component }) => (

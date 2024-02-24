@@ -10,7 +10,6 @@ import StatGraphs from '@/components/server/console/StatGraphs';
 import PowerButtons from '@/components/server/console/PowerButtons';
 import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import { Alert } from '@/components/elements/alert';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -40,9 +39,7 @@ const ServerConsoleContainer = () => {
                 </div>
                 {/* i WANNA rebuild this so everything is gone for now :3 */}
                 <ServerDetailsBlock className={'col-span-4 lg:col-span-1 order-last lg:order-none'} />
-                <ErrorBoundary>
-                    <Console />
-                </ErrorBoundary>
+                <Console />
                 <div className={'grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4'}>
                     <Spinner.Suspense>
                         <StatGraphs />

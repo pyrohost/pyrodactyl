@@ -75,7 +75,6 @@ const options: ChartOptions<'line'> = {
 };
 
 function getOptions(opts?: DeepPartial<ChartOptions<'line'>> | undefined): ChartOptions<'line'> {
-    // @ts-ignore
     return deepmerge(options, opts || {});
 }
 

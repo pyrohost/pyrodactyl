@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Route } from 'react-router';
 import { SwitchTransition } from 'react-transition-group';
 import Fade from '@/components/elements/Fade';
@@ -13,7 +13,7 @@ const StyledSwitchTransition = styled(SwitchTransition)`
     }
 `;
 
-const TransitionRouter: React.FC = ({ children }: { children?: ReactNode }) => {
+const TransitionRouter: React.FC = ({ children }) => {
     return (
         <Route
             render={({ location }) => (

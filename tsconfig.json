@@ -9,7 +9,6 @@
         "noEmit": true,
         "sourceMap": true,
         "noImplicitReturns": true,
-        "noImplicitAny": false,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "esModuleInterop": true,

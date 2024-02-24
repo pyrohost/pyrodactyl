@@ -115,15 +115,13 @@ module.exports = {
                   typescript: {
                       mode: 'write-references',
                       diagnosticOptions: {
-                          // true by default
-                          // semantic: true,
+                          semantic: true,
                           syntactic: true,
                       },
                   },
-                  formatter: 'codeframe',
-                  //   eslint: {
-                  //       files: `${path.join(__dirname, '/resources/scripts')}/**/*.{ts,tsx}`,
-                  //   },
+                  eslint: {
+                      files: `${path.join(__dirname, '/resources/scripts')}/**/*.{ts,tsx}`,
+                  },
               })
             : null,
 

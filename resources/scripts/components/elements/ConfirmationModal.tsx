@@ -6,7 +6,6 @@ import ModalContext from '@/context/ModalContext';
 
 type Props = {
     title: string;
-    children?: React.ReactNode;
     buttonText: string;
     onConfirmed: () => void;
     showSpinnerOverlay?: boolean;

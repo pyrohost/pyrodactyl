@@ -72,7 +72,6 @@ function asModal<P extends {}>(
                 if (!this.state.render) return null;
 
                 return (
-                    // @ts-ignore
                     <PortaledModal
                         appear
                         onDismissed={() =>

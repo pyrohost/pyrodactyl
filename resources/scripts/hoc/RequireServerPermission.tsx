@@ -4,7 +4,6 @@ import { ServerError } from '@/components/elements/ScreenBlock';
 
 export interface RequireServerPermissionProps {
     permissions: string | string[];
-    children: React.ReactNode;
 }
 
 const RequireServerPermission: React.FC<RequireServerPermissionProps> = ({ children, permissions }) => {

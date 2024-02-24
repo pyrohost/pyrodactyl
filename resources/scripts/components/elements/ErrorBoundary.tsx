@@ -32,7 +32,7 @@ class ErrorBoundary extends React.Component<{}, State> {
                 </div>
             </div>
         ) : (
-            (this.props as { children: React.ReactNode }).children
+            this.props.children
         );
     }
 }

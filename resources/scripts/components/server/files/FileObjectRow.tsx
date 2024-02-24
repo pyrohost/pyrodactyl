@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAlt, faFileArchive, faFileImport, faFolder } from '@fortawesome/free-solid-svg-icons';
 import { encodePathSegments } from '@/helpers';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
-import React, { ReactNode, memo } from 'react';
+import React, { memo } from 'react';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
@@ -15,7 +15,7 @@ import { join } from 'pathe';
 import { bytesToString } from '@/lib/formatters';
 import styles from './style.module.css';
 
-const Clickable: React.FC<{ file: FileObject; children?: ReactNode }> = memo(({ file, children }) => {
+const Clickable: React.FC<{ file: FileObject }> = memo(({ file, children }) => {
     const [canRead] = usePermissions(['file.read']);
     const [canReadContents] = usePermissions(['file.read-content']);
     const directory = ServerContext.useStoreState((state) => state.files.directory);

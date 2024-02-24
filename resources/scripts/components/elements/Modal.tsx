@@ -8,7 +8,6 @@ import { createPortal } from 'react-dom';
 
 export interface RequiredModalProps {
     visible: boolean;
-    children?: React.ReactNode;
     onDismissed: () => void;
     appear?: boolean;
     top?: boolean;

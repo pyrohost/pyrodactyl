@@ -146,8 +146,7 @@ const findModeByFilename = (filename: string) => {
 export default ({ style, initialContent, filename, mode, fetchContent, onContentSaved, onModeChanged }: Props) => {
     const [editor, setEditor] = useState<CodeMirror.Editor>();
 
-    // I dont know what this type should be
-    const ref = useCallback((node: any) => {
+    const ref = useCallback((node) => {
         if (!node) return;
 
         const e = CodeMirror.fromTextArea(node, {
