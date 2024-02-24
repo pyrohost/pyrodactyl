@@ -60,10 +60,12 @@ export default () => {
     }, [progress, continuous]);
 
     return (
-        <div data-pyro-progressbar className='w-full fixed h-[2px]'>
-            <CSSTransition timeout={50} appear in={visible} unmountOnExit classNames={'fade'}>
-                <BarFill style={{ width: progress === undefined ? '100%' : `${progress}%` }} />
-            </CSSTransition>
-        </div>
+        // Making this a no-op because it makes things feel slow i think
+        <></>
+        // <div data-pyro-progressbar className='w-full fixed h-[2px]'>
+        //     <CSSTransition timeout={50} appear in={visible} unmountOnExit classNames={'fade'}>
+        //         <BarFill style={{ width: progress === undefined ? '100%' : `${progress}%` }} />
+        //     </CSSTransition>
+        // </div>
     );
 };
