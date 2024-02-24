@@ -38,7 +38,7 @@ export default () => {
                         </svg>
                     </div>
                 </div>
-                <div className='mt-8 mb-4 bg-[#ffffff33] h-[1px] w-6'></div>
+                <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <div className='pyro-subnav-routes-wrapper'>
                     <NavLink to={'/'} exact className='flex flex-row items-center'>
                         <HugeIconsHome fill='currentColor' />
