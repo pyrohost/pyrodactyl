@@ -110,7 +110,7 @@ export default () => {
                     save(name);
                 }}
             />
-            <div css={tw`relative`}>
+            <div css={tw`relative h-full w-full`}>
                 <SpinnerOverlay visible={loading} />
                 <CodemirrorEditor
                     mode={mode}

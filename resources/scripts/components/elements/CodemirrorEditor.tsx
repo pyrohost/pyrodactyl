@@ -81,7 +81,7 @@ require('codemirror/mode/yaml/yaml');
 
 const EditorContainer = styled.div`
     min-height: 16rem;
-    height: calc(100vh - 20rem);
+    height: calc(100vh - 8rem);
     ${tw`relative`};
 
     > div {
