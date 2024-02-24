@@ -27,6 +27,7 @@ import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
+import HugeIconsHome from '@/components/elements/hugeicons/Home';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -105,8 +106,8 @@ export default () => {
                         <div className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
                             <NavLink className='flex flex-row items-center' to={to('/', true)} exact>
-                                <HugeIconsConsole fill='currentColor' />
-                                <p>Console</p>
+                                <HugeIconsHome fill='currentColor' />
+                                <p>Home</p>
                             </NavLink>
                             <Can action={'file.*'} matchAny>
                                 <NavLink className='flex flex-row items-center' to={to('/files', true)} exact>

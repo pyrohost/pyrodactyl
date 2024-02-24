@@ -22,7 +22,7 @@ const ServerConsoleContainer = () => {
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
 
     return (
-        <ServerContentBlock title={'Console'}>
+        <ServerContentBlock title={'Home'}>
             <div className='w-full h-full flex flex-col gap-2'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
@@ -33,12 +33,11 @@ const ServerConsoleContainer = () => {
                             : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <div className={'hidden sm:block'}>
-                    <h1 className={' text-2xl text-zinc-50 leading-relaxed line-clamp-1'}>{name}</h1>
-                    <p className={'text-sm '}>{description}</p>
+                <div className={'flex flex-row justify-between items-center'}>
+                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
+                    <PowerButtons className='flex gap-1 items-center justify-center' />
                 </div>
                 {/* i WANNA rebuild this so everything is gone for now :3 */}
-                <PowerButtons />
                 <Console />
                 <Features enabled={eggFeatures} />
             </div>
