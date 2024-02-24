@@ -10,10 +10,11 @@ import Spinner from '@/components/elements/Spinner';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import Avatar from '@/components/Avatar';
 import http from '@/api/http';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import HugeIconsPeople from '@/components/elements/hugeicons/People';
+import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 
 export default () => {
     const location = useLocation();
@@ -54,10 +55,8 @@ export default () => {
                         <p>Your Servers</p>
                     </NavLink>
                     <NavLink to={'/account'} exact className='flex flex-row items-center'>
-                        <div className='flex items-center w-6 h-6'>
-                            <Avatar.User />
-                        </div>
-                        <p>You</p>
+                        <HugeIconsDashboardSettings fill='currentColor' />
+                        <p>Your Settings</p>
                     </NavLink>
                     <button className='flex flex-row items-center gap-2 py-4' onClick={onTriggerLogout}>
                         <FontAwesomeIcon size='lg' icon={faSignOutAlt} />
