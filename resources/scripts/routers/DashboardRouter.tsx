@@ -74,23 +74,28 @@ export default () => {
                 </div>
             </SubNavigation>
             {/* )} */}
-            <TransitionRouter>
-                <React.Suspense fallback={null}>
-                    <Switch location={location}>
-                        <Route path={'/'} exact>
-                            <DashboardContainer />
-                        </Route>
-                        {routes.account.map(({ path, component: Component }) => (
-                            <Route key={path} path={`/account/${path}`.replace('//', '/')} exact>
-                                <Component />
+            <>
+                {/* upgrading from react 16 to 18 changed how FC works, so until
+                    i figure out why, this will be here  */}
+                {/* @ts-ignore */}
+                <TransitionRouter>
+                    <React.Suspense fallback={null}>
+                        <Switch location={location}>
+                            <Route path={'/'} exact>
+                                <DashboardContainer />
                             </Route>
-                        ))}
-                        <Route path={'*'}>
-                            <NotFound />
-                        </Route>
-                    </Switch>
-                </React.Suspense>
-            </TransitionRouter>
+                            {routes.account.map(({ path, component: Component }) => (
+                                <Route key={path} path={`/account/${path}`.replace('//', '/')} exact>
+                                    <Component />
+                                </Route>
+                            ))}
+                            <Route path={'*'}>
+                                <NotFound />
+                            </Route>
+                        </Switch>
+                    </React.Suspense>
+                </TransitionRouter>
+            </>
         </>
     );
 };

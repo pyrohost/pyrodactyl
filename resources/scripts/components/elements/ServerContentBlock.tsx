@@ -1,5 +1,5 @@
 import PageContentBlock, { PageContentBlockProps } from '@/components/elements/PageContentBlock';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ServerContext } from '@/state/server';
 
 interface Props extends PageContentBlockProps {

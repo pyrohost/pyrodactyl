@@ -185,6 +185,8 @@ export default () => {
                         <ConflictStateRenderer />
                     ) : (
                         <ErrorBoundary>
+                            {/* same reason as resources\scripts\routers\DashboardRouter.tsx */}
+                            {/* @ts-ignore */}
                             <TransitionRouter>
                                 <Switch location={location}>
                                     {routes.server.map(({ path, permission, component: Component }) => (

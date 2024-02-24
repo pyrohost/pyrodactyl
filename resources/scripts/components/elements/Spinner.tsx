@@ -7,6 +7,7 @@ export type SpinnerSize = 'small' | 'base' | 'large';
 
 interface Props {
     size?: SpinnerSize;
+    children?: React.ReactNode;
     centered?: boolean;
     isBlue?: boolean;
 }
