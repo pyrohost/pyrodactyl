@@ -47,7 +47,7 @@
         "swr": "^0.2.3",
         "tailwindcss": "^3.4.1",
         "uuid": "^8.3.2",
-        "xterm": "^4.19.0",
+        "xterm": "^5.3.0",
         "xterm-addon-fit": "^0.5.0",
         "xterm-addon-search": "^0.9.0",
         "xterm-addon-search-bar": "^0.2.0",
