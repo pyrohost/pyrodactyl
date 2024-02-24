@@ -38,9 +38,23 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Databases'}>
+            <div className={'flex flex-row justify-between items-center mb-8'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Databases</h1>
+                <Can action={'database.create'}>
+                    <div css={tw`flex items-center justify-end`}>
+                        {databaseLimit > 0 && databases.length > 0 && (
+                            <p css={tw`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
+                                {databases.length} of {databaseLimit} databases
+                            </p>
+                        )}
+                        {databaseLimit > 0 && databaseLimit !== databases.length && <CreateDatabaseButton />}
+                    </div>
+                </Can>
+            </div>
             <FlashMessageRender byKey={'databases'} css={tw`mb-4`} />
             {!databases.length && loading ? (
-                <Spinner size={'large'} centered />
+                // <Spinner size={'large'} centered />
+                <></>
             ) : (
                 <Fade timeout={150}>
                     <>
@@ -59,19 +73,6 @@ export default () => {
                                     : 'Databases cannot be created for this server.'}
                             </p>
                         )}
-                        <Can action={'database.create'}>
-                            <div css={tw`mt-6 flex items-center justify-end`}>
-                                {databaseLimit > 0 && databases.length > 0 && (
-                                    <p css={tw`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
-                                        {databases.length} of {databaseLimit} databases have been allocated to this
-                                        server.
-                                    </p>
-                                )}
-                                {databaseLimit > 0 && databaseLimit !== databases.length && (
-                                    <CreateDatabaseButton css={tw`flex justify-end mt-6`} />
-                                )}
-                            </div>
-                        </Can>
                     </>
                 </Fade>
             )}

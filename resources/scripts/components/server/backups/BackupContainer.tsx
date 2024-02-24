@@ -34,6 +34,19 @@ const BackupContainer = () => {
 
     return (
         <ServerContentBlock title={'Backups'}>
+            <div className={'flex flex-row justify-between items-center mb-8'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+                <Can action={'backup.create'}>
+                    <div css={tw`sm:flex items-center justify-end`}>
+                        {backupLimit > 0 && backups.backupCount > 0 && (
+                            <p css={tw`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
+                                {backups.backupCount} of {backupLimit} backups
+                            </p>
+                        )}
+                        {backupLimit > 0 && backupLimit > backups.backupCount && <CreateBackupButton />}
+                    </div>
+                </Can>
+            </div>
             <FlashMessageRender byKey={'backups'} css={tw`mb-4`} />
             <Pagination data={backups} onPageSelect={setPage}>
                 {({ items }) =>
@@ -59,18 +72,6 @@ const BackupContainer = () => {
                     Backups cannot be created for this server because the backup limit is set to 0.
                 </p>
             )}
-            <Can action={'backup.create'}>
-                <div css={tw`mt-6 sm:flex items-center justify-end`}>
-                    {backupLimit > 0 && backups.backupCount > 0 && (
-                        <p css={tw`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
-                            {backups.backupCount} of {backupLimit} backups have been created for this server.
-                        </p>
-                    )}
-                    {backupLimit > 0 && backupLimit > backups.backupCount && (
-                        <CreateBackupButton css={tw`w-full sm:w-auto`} />
-                    )}
-                </div>
-            </Can>
         </ServerContentBlock>
     );
 };
