@@ -40,8 +40,8 @@ const inputStyle = css<Props>`
     // Reset to normal styling.
     resize: none;
     ${tw`appearance-none outline-none w-full min-w-0`};
-    ${tw`p-3 border-2 rounded text-sm transition-all duration-150`};
-    ${tw`bg-zinc-600 border-zinc-500 hover:border-zinc-400 text-zinc-200 shadow-none focus:ring-0`};
+    ${tw`py-2 px-3 border-2 rounded-lg text-sm transition-all duration-150`};
+    ${tw`bg-[#131313] border-transparent hover:border-zinc-800 text-zinc-200 shadow-none focus:ring-0`};
 
     & + .input-help {
         ${tw`mt-1 text-xs`};

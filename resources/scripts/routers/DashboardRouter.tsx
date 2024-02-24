@@ -11,9 +11,18 @@ import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import Avatar from '@/components/Avatar';
+import http from '@/api/http';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default () => {
     const location = useLocation();
+    const onTriggerLogout = () => {
+        http.post('/auth/logout').finally(() => {
+            // @ts-expect-error this is valid
+            window.location = '/';
+        });
+    };
 
     return (
         <>
@@ -50,6 +59,10 @@ export default () => {
                         </div>
                         <p>You</p>
                     </NavLink>
+                    <button className='flex flex-row items-center gap-2 py-4' onClick={onTriggerLogout}>
+                        <FontAwesomeIcon size='lg' icon={faSignOutAlt} />
+                        <p>Sign Out</p>
+                    </button>
                     {/* Hidden for now until I add the dropdown component for these account routes. */}
                     {/* {routes.account
                             .filter((route) => !!route.name)
