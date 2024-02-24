@@ -21,6 +21,12 @@ import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
+import HugeIconsConsole from '@/components/elements/hugeicons/Console';
+import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
+import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
+import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -97,7 +103,44 @@ export default () => {
                         </div>
                         <div className='mt-8 mb-4 bg-[#ffffff33] h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>
-                            {routes.server
+                            {/* lord forgive me for hardcoding this */}
+                            <NavLink className='flex flex-row items-center' to={to('/', true)} exact>
+                                <HugeIconsConsole fill='currentColor' />
+                                <p>Console</p>
+                            </NavLink>
+                            <Can action={'file.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={to('/files', true)} exact>
+                                    <HugeIconsFolder fill='currentColor' />
+                                    <p>Files</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'database.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={to('/databases', true)} exact>
+                                    <HugeIconsDatabase fill='currentColor' />
+                                    <p>Databases</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'backup.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={to('/backups', true)} exact>
+                                    <HugeIconsCloudUp fill='currentColor' />
+                                    <p>Backups</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'allocation.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={to('/network', true)} exact>
+                                    <HugeIconsConnections fill='currentColor' />
+                                    <p>Networking</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={['settings.*', 'file.sftp']} matchAny>
+                                <NavLink className='flex flex-row items-center' to={to('/settings', true)} exact>
+                                    <HugeIconsDashboardSettings fill='currentColor' />
+                                    <p>Settings</p>
+                                </NavLink>
+                            </Can>
+                            {/* i needed to do this to control which routes people visit without rendering them */}
+                            {/* actually no i want them to still be accessible but i dont think theyre important enough for the sidebar */}
+                            {/* {routes.server
                                 .filter((route) => !!route.name)
                                 .map((route) =>
                                     route.permission ? (
@@ -120,11 +163,15 @@ export default () => {
                                             {route.name}
                                         </NavLink>
                                     )
-                                )}
+                                )} */}
                             {rootAdmin && (
                                 // eslint-disable-next-line react/jsx-no-target-blank
                                 <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
-                                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                    <FontAwesomeIcon className='ml-0.5' size={'lg'} icon={faExternalLinkAlt} />
+                                    <div className='ml-1'>Manage Server </div>
+                                    <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                        Staff
+                                    </span>
                                 </a>
                             )}
                         </div>
