@@ -10,7 +10,7 @@ import { Button } from '@/components/elements/button/index';
 import GreyRowBox from '@/components/elements/GreyRowBox';
 import { Allocation } from '@/api/server/getServer';
 import styled from 'styled-components/macro';
-import { debounce } from 'debounce';
+import debounce from 'debounce';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
 import { useFlashKey } from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';

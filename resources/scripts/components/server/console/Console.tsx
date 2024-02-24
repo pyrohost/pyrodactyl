@@ -10,7 +10,7 @@ import { ServerContext } from '@/state/server';
 import { usePermissions } from '@/plugins/usePermissions';
 import { theme as th } from 'twin.macro';
 import useEventListener from '@/plugins/useEventListener';
-import { debounce } from 'debounce';
+import debounce from 'debounce';
 import { usePersistedState } from '@/plugins/usePersistedState';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import classNames from 'classnames';

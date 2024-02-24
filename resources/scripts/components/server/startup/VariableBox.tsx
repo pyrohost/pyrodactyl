@@ -6,7 +6,7 @@ import InputSpinner from '@/components/elements/InputSpinner';
 import Input from '@/components/elements/Input';
 import Switch from '@/components/elements/Switch';
 import tw from 'twin.macro';
-import { debounce } from 'debounce';
+import debounce from 'debounce';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
 import useFlash from '@/plugins/useFlash';
 import FlashMessageRender from '@/components/FlashMessageRender';
