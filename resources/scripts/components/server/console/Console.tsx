@@ -48,14 +48,14 @@ const terminalProps: ITerminalOptions = {
     allowTransparency: true,
     fontSize: 12,
     fontFamily: th('fontFamily.mono'),
-    rows: 30,
+    // rows: 30,
     theme: theme,
 };
 
 export default () => {
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pterodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
-    const terminal = useMemo(() => new Terminal({ ...terminalProps }), []);
+    const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
     const fitAddon = new FitAddon();
     const searchAddon = new SearchAddon();
     const searchBar = new SearchBarAddon({ searchAddon });
