@@ -40,7 +40,7 @@ class DropdownMenu extends React.PureComponent<Props, State> {
         if (this.state.visible && !prevState.visible && menu) {
             document.addEventListener('click', this.windowListener);
             document.addEventListener('contextmenu', this.contextMenuListener);
-            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth - 300)}px`;
+            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth)}px`;
         }
 
         if (!this.state.visible && prevState.visible) {
@@ -84,7 +84,7 @@ class DropdownMenu extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <div>
+            <>
                 {this.props.renderToggle(this.onClickHandler)}
                 <Fade timeout={150} in={this.state.visible} unmountOnExit>
                     <div
@@ -94,12 +94,12 @@ class DropdownMenu extends React.PureComponent<Props, State> {
                             this.setState({ visible: false });
                         }}
                         style={{ width: '12rem' }}
-                        css={tw`absolute bg-white p-2 rounded border border-zinc-700 shadow-lg text-zinc-500 z-50`}
+                        className='fixed backdrop-blur-xl bg-[#16161640] p-2 rounded-lg border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto'
                     >
                         {this.props.children}
                     </div>
                 </Fade>
-            </div>
+            </>
         );
     }
 }
