@@ -31,7 +31,7 @@
     }
 
     & > .container {
-        @apply rounded-t p-1 sm:p-2 bg-black font-mono text-sm h-full;
+        @apply rounded-t-xl border-[1px] border-[#ffffff07] p-1 sm:py-4 sm:pl-4 bg-[#131313] font-mono text-sm h-full;
 
         & #terminal {
             @apply h-full w-full;
@@ -51,7 +51,7 @@
     }
 
     & .command_input {
-        @apply relative bg-black px-2 text-zinc-100 pl-10 pr-4 py-2 w-full font-mono text-sm sm:rounded-b;
+        @apply relative bg-[#131313] px-2 text-zinc-100 pl-10 pr-4 py-2 w-full font-mono text-sm sm:rounded-b;
         @apply focus:ring-0 outline-none focus-visible:outline-none;
         @apply border-0 border-b-2 border-transparent transition-colors duration-100;
         @apply active:border-blue-500 focus:border-blue-500;
