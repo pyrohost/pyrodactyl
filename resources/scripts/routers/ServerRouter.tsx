@@ -102,12 +102,21 @@ export default () => {
                                 .map((route) =>
                                     route.permission ? (
                                         <Can key={route.path} action={route.permission} matchAny>
-                                            <NavLink to={to(route.path, true)} exact={route.exact}>
+                                            <NavLink
+                                                className='flex flex-row items-center'
+                                                to={to(route.path, true)}
+                                                exact={route.exact}
+                                            >
                                                 {route.name}
                                             </NavLink>
                                         </Can>
                                     ) : (
-                                        <NavLink key={route.path} to={to(route.path, true)} exact={route.exact}>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            key={route.path}
+                                            to={to(route.path, true)}
+                                            exact={route.exact}
+                                        >
                                             {route.name}
                                         </NavLink>
                                     )
