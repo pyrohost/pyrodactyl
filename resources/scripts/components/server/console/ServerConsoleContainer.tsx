@@ -23,7 +23,7 @@ const ServerConsoleContainer = () => {
 
     return (
         <ServerContentBlock title={'Home'}>
-            <div className='w-full h-full flex flex-col gap-2'>
+            <div className='w-full h-full min-h-full flex-1 flex flex-col gap-2'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance
@@ -33,12 +33,18 @@ const ServerConsoleContainer = () => {
                             : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <div className={'flex flex-row justify-between items-center'}>
+                <div className={'flex flex-row justify-between items-center mb-8'}>
                     <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
                     <PowerButtons className='flex gap-1 items-center justify-center' />
                 </div>
                 {/* i WANNA rebuild this so everything is gone for now :3 */}
+                <ServerDetailsBlock className={'col-span-4 lg:col-span-1 order-last lg:order-none'} />
                 <Console />
+                <div className={'grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4'}>
+                    <Spinner.Suspense>
+                        <StatGraphs />
+                    </Spinner.Suspense>
+                </div>
                 <Features enabled={eggFeatures} />
             </div>
         </ServerContentBlock>

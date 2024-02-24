@@ -18,6 +18,7 @@ ChartJS.register(LineElement, PointElement, Filler, LinearScale);
 
 const options: ChartOptions<'line'> = {
     responsive: true,
+    animation: false,
     // animation: {
     //     duration: 50,
     //     easing: 'easeInOutQuart',
