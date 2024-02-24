@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 import tw from 'twin.macro';
 
 const SubNavigation = styled.nav`
-    ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8`};
+    ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8 select-none`};
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -12,6 +12,12 @@ const SubNavigation = styled.nav`
         & > a,
         & > div {
             ${tw`relative flex py-4 gap-2 whitespace-nowrap font-bold text-sm min-h-[56px]`};
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            user-drag: none;
+            -ms-user-drag: none;
+            -moz-user-drag: none;
+            -webkit-user-drag: none;
 
             &.active {
                 ${tw`text-brand fill-brand`};
