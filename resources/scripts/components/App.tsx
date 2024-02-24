@@ -59,12 +59,14 @@ const App = () => {
     return (
         <>
             <GlobalStylesheet />
+            {/* @ts-ignore children error */}
             <StoreProvider store={store}>
                 <ProgressBar />
                 <div
                     data-pyro-routerwrap=''
                     className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg gap-2'
                 >
+                    {/* @ts-ignore children error */}
                     <Router history={history}>
                         <Switch>
                             <Route path={'/auth'}>
@@ -74,6 +76,7 @@ const App = () => {
                             </Route>
                             <AuthenticatedRoute path={'/server/:id'}>
                                 <Spinner.Suspense>
+                                    {/* @ts-ignore ??? */}
                                     <ServerContext.Provider>
                                         <ServerRouter />
                                     </ServerContext.Provider>

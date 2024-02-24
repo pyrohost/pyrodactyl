@@ -7,6 +7,7 @@ import isEqual from 'react-fast-compare';
 
 interface Props {
     isEditable: boolean;
+    children?: React.ReactNode;
     title: string;
     permissions: string[];
     className?: string;

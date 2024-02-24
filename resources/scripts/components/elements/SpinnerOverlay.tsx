@@ -5,6 +5,7 @@ import tw from 'twin.macro';
 
 interface Props {
     visible: boolean;
+    children?: string | React.ReactNode;
     fixed?: boolean;
     size?: SpinnerSize;
     backgroundOpacity?: number;

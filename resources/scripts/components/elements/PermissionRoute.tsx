@@ -6,6 +6,7 @@ import { ServerError } from '@/components/elements/ScreenBlock';
 
 interface Props extends Omit<RouteProps, 'path'> {
     path: string;
+    children: React.ReactNode;
     permission: string | string[] | null;
 }
 
