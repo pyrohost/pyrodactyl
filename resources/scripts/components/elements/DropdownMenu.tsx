@@ -9,11 +9,13 @@ interface Props {
 }
 
 export const DropdownButtonRow = styled.button<{ danger?: boolean }>`
-    ${tw`p-2 flex items-center rounded w-full text-zinc-500`};
-    transition: 150ms all ease;
+    ${tw`px-3 py-2 text-sm font-bold flex gap-4 items-center rounded-md w-full text-white`};
+    transition: 80ms all ease;
 
     &:hover {
-        ${(props) => (props.danger ? tw`text-red-700 bg-red-100` : tw`text-zinc-700 bg-zinc-100`)};
+        transition: 0ms all ease;
+        ${tw`shadow-md`}
+        ${(props) => (props.danger ? tw`text-red-700 bg-red-100` : tw`bg-[#ffffff13]`)};
     }
 `;
 
@@ -86,7 +88,7 @@ class DropdownMenu extends React.PureComponent<Props, State> {
         return (
             <>
                 {this.props.renderToggle(this.onClickHandler)}
-                <Fade timeout={75} in={this.state.visible} unmountOnExit>
+                <Fade timeout={40} in={this.state.visible} unmountOnExit>
                     <div
                         ref={this.menu}
                         onClick={(e) => {
@@ -94,11 +96,11 @@ class DropdownMenu extends React.PureComponent<Props, State> {
                             this.setState({ visible: false });
                         }}
                         style={{
-                            width: '12rem',
+                            width: '14rem',
                             background:
                                 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgba(46, 46, 46, 0.3) 0%, rgb(26, 26, 26, 0.2) 100%)',
                         }}
-                        className='fixed backdrop-blur-xl p-2 rounded-xl border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto'
+                        className='flex flex-col gap-0.5 fixed backdrop-blur-xl p-2 rounded-xl border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto overflow-hidden'
                     >
                         {this.props.children}
                     </div>

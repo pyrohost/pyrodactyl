@@ -32,12 +32,24 @@ import decompressFiles from '@/api/server/files/decompressFiles';
 import isEqual from 'react-fast-compare';
 import ChmodFileModal from '@/components/server/files/ChmodFileModal';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsMoveTo from '@/components/elements/hugeicons/MoveTo';
+import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsFileZip from '@/components/elements/hugeicons/FileZip';
+import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
+import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
 
 type ModalType = 'rename' | 'move' | 'chmod';
 
 const StyledRow = styled.div<{ $danger?: boolean }>`
-    ${tw`p-2 flex items-center rounded`};
-    ${(props) => (props.$danger ? tw`hover:bg-red-100 hover:text-red-700` : tw`hover:bg-zinc-100 hover:text-zinc-700`)};
+    ${tw`px-3 py-2 text-sm font-bold flex gap-4 items-center rounded-md w-full text-white`};
+    transition: 80ms all ease;
+
+    &:hover {
+        transition: 0ms all ease;
+        ${tw`bg-[#ffffff13] shadow-md`}
+    }
 `;
 
 interface RowProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -49,7 +61,7 @@ interface RowProps extends React.HTMLAttributes<HTMLDivElement> {
 const Row = ({ icon, title, ...props }: RowProps) => (
     <StyledRow {...props}>
         <FontAwesomeIcon icon={icon} css={tw`text-xs`} fixedWidth />
-        <span css={tw`ml-2`}>{title}</span>
+        <span>{title}</span>
     </StyledRow>
 );
 
@@ -166,13 +178,29 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 )}
             >
                 <Can action={'file.update'}>
-                    <Row onClick={() => setModal('rename')} icon={faPencilAlt} title={'Rename'} />
+                    <StyledRow onClick={() => setModal('rename')}>
+                        <HugeIconsPencil className='!h-4 !w-4' fill='currentColor' />
+                        <span>Rename</span>
+                    </StyledRow>
+                    <StyledRow onClick={() => setModal('move')}>
+                        <HugeIconsMoveTo className='!h-4 !w-4' fill='currentColor' />
+                        <span>Move</span>
+                    </StyledRow>
+                    <StyledRow onClick={() => setModal('chmod')}>
+                        <HugeIconsFileSecurity className='!h-4 !w-4' fill='currentColor' />
+                        <span>Permissions</span>
+                    </StyledRow>
+                    {/* <Row onClick={() => setModal('rename')} icon={faPencilAlt} title={'Rename'} />
                     <Row onClick={() => setModal('move')} icon={faLevelUpAlt} title={'Move'} />
-                    <Row onClick={() => setModal('chmod')} icon={faFileCode} title={'Permissions'} />
+                    <Row onClick={() => setModal('chmod')} icon={faFileCode} title={'Permissions'} /> */}
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
-                        <Row onClick={doCopy} icon={faCopy} title={'Copy'} />
+                        <StyledRow onClick={doCopy}>
+                            <HugeIconsCopy className='!h-4 !w-4' fill='currentColor' />
+                            <span>Copy</span>
+                        </StyledRow>
+                        {/* <Row onClick={doCopy} icon={faCopy} title={'Copy'} /> */}
                     </Can>
                 )}
                 {file.isArchiveType() ? (
@@ -181,12 +209,26 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
-                        <Row onClick={doArchive} icon={faFileArchive} title={'Archive'} />
+                        <StyledRow onClick={doArchive}>
+                            <HugeIconsFileZip className='!h-4 !w-4' fill='currentColor' />
+                            <span>Archive</span>
+                        </StyledRow>
+                        {/* <Row onClick={doArchive} icon={faFileArchive} title={'Archive'} /> */}
                     </Can>
                 )}
-                {file.isFile && <Row onClick={doDownload} icon={faFileDownload} title={'Download'} />}
+                {file.isFile && (
+                    <StyledRow onClick={doDownload}>
+                        <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
+                        <span>Download</span>
+                    </StyledRow>
+                    // <Row onClick={doDownload} icon={faFileDownload} title={'Download'} />
+                )}
                 <Can action={'file.delete'}>
-                    <Row onClick={() => setShowConfirmation(true)} icon={faTrashAlt} title={'Delete'} $danger />
+                    <StyledRow onClick={() => setShowConfirmation(true)}>
+                        <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
+                        <span>Delete</span>
+                    </StyledRow>
+                    {/* <Row onClick={() => setShowConfirmation(true)} icon={faTrashAlt} title={'Delete'} $danger /> */}
                 </Can>
             </DropdownMenu>
         </>

@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 import tw from 'twin.macro';
 
 const SubNavigation = styled.nav`
-    ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8 select-none`};
+    ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8 select-none relative`};
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
 
