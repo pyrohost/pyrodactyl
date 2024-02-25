@@ -14,7 +14,7 @@ import { SocketEvent, SocketRequest } from '@/components/server/events';
 import UptimeDuration from '@/components/server/UptimeDuration';
 import StatBlock from '@/components/server/console/StatBlock';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { capitalize } from '@/lib/strings';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
@@ -89,7 +89,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     });
 
     return (
-        <div className={classNames('flex gap-4', className)}>
+        <div className={clsx('flex gap-4', className)}>
             <StatBlock icon={faWifi} title={'IP Address'} copyOnClick={allocation}>
                 {allocation}
             </StatBlock>

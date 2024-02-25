@@ -105,7 +105,7 @@ export default () => {
     }, [uuid]);
 
     return error ? (
-        <CSSTransition timeout={150} in appear classNames={'fade'}>
+        <CSSTransition timeout={150} in appear clsx={'fade'}>
             <div css={tw`bg-red-500 py-2`}>
                 <ContentContainer css={tw`flex items-center justify-center`}>
                     {error === 'connecting' ? (

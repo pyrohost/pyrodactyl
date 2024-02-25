@@ -7,7 +7,7 @@ import { format, formatDistanceToNowStrict } from 'date-fns';
 import { ActivityLog } from '@definitions/user';
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
 // FIXME: add icons back
-import classNames from 'classnames';
+import clsx from 'clsx';
 import style from './style.module.css';
 import useLocationHash from '@/plugins/useLocationHash';
 import { getObjectKeys, isObject } from '@/lib/objects';
@@ -63,7 +63,7 @@ export default ({ activity, children }: Props) => {
                         >
                             {activity.event}
                         </Link>
-                        <div className={classNames(style.icons, 'group-hover:text-zinc-300')}>
+                        <div className={clsx(style.icons, 'group-hover:text-zinc-300')}>
                             {activity.isApi && (
                                 // <Tooltip placement={'top'} content={'Using API Key'}>
                                 // <TerminalIcon />

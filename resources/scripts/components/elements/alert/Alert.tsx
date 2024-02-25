@@ -1,6 +1,6 @@
 // FIXME: add icons back
 import React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface AlertProps {
     type: 'warning' | 'danger';
@@ -11,7 +11,7 @@ interface AlertProps {
 export default ({ type, className, children }: AlertProps) => {
     return (
         <div
-            className={classNames(
+            className={clsx(
                 'flex items-center border-l-8 text-zinc-50 rounded-md shadow px-4 py-3',
                 {
                     ['border-red-500 bg-red-500/25']: type === 'danger',

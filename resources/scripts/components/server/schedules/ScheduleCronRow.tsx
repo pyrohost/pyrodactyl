@@ -1,6 +1,6 @@
 import React from 'react';
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface Props {
     cron: Schedule['cron'];
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ScheduleCronRow = ({ cron, className }: Props) => (
-    <div className={classNames('flex', className)}>
+    <div className={clsx('flex', className)}>
         <div className={'w-1/5 sm:w-auto text-center'}>
             <p className={'font-medium'}>{cron.minute}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Minute</p>

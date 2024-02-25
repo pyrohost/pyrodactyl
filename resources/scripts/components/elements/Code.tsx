@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface CodeProps {
     dark?: boolean | undefined;
@@ -9,7 +9,7 @@ interface CodeProps {
 
 export default ({ dark, className, children }: CodeProps) => (
     <code
-        className={classNames('font-mono text-sm px-2 py-1 inline-block rounded', className, {
+        className={clsx('font-mono text-sm px-2 py-1 inline-block rounded', className, {
             'bg-zinc-700': !dark,
             'bg-zinc-900 text-zinc-100': dark,
         })}

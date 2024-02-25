@@ -8,7 +8,7 @@ import PaginationFooter from '@/components/elements/table/PaginationFooter';
 // FIXME: add icons back
 import Spinner from '@/components/elements/Spinner';
 import { styles as btnStyles } from '@/components/elements/button/index';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
@@ -38,7 +38,7 @@ export default () => {
                 <div className={'flex justify-end mb-2'}>
                     <Link
                         to={'#'}
-                        className={classNames(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
+                        className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
                         onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
                     >
                         Clear Filters

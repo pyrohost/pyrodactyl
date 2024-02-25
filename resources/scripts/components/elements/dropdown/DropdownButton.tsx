@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from '@/components/elements/dropdown/style.module.css';
 // FIXME: add icons back
 import { Menu } from '@headlessui/react';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default ({ className, animate = true, children }: Props) => (
-    <Menu.Button className={classNames(styles.button, className || 'px-4')}>
+    <Menu.Button className={clsx(styles.button, className || 'px-4')}>
         {typeof children === 'string' ? (
             <>
                 <span className={'mr-2'}>{children}</span>

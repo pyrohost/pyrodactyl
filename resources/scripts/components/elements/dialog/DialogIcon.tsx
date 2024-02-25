@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 // FIXME: add icons back
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { DialogContext, DialogIconProps, styles } from './';
 
 // const icons = {
@@ -17,7 +17,7 @@ export default ({ type, position, className }: DialogIconProps) => {
         // const Icon = icons[type];
 
         setIcon(
-            <div className={classNames(styles.dialog_icon, styles[type], className)}>
+            <div className={clsx(styles.dialog_icon, styles[type], className)}>
                 {/* <Icon className={'w-6 h-6'} /> */}
                 <div>FIXME: Icons</div>
             </div>

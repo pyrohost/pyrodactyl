@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Menu } from '@headlessui/react';
 import styles from './style.module.css';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface Props {
     children: React.ReactNode | ((opts: { active: boolean; disabled: boolean }) => JSX.Element);
@@ -20,7 +20,7 @@ const DropdownItem = forwardRef<HTMLAnchorElement, Props>(
                     <a
                         ref={ref}
                         href={'#'}
-                        className={classNames(
+                        className={clsx(
                             styles.menu_item,
                             {
                                 [styles.danger]: danger,

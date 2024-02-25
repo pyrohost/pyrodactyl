@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Fade from '@/components/elements/Fade';
 import Portal from '@/components/elements/Portal';
 import copy from 'copy-to-clipboard';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 interface CopyOnClickProps {
     text: string | number | null | undefined;
@@ -33,7 +33,7 @@ const CopyOnClick = ({ text, showInNotification = true, children }: CopyOnClickP
         ? React.Children.only(children)
         : React.cloneElement(React.Children.only(children), {
               // @ts-ignore
-              className: classNames(children.props.className || '', 'cursor-pointer'),
+              className: clsx(children.props.className || '', 'cursor-pointer'),
               onClick: (e: React.MouseEvent<HTMLElement>) => {
                   copy(String(text));
                   setCopied(true);

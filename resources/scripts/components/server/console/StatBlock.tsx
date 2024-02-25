@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './style.module.css';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 
@@ -18,12 +18,12 @@ export default ({ title, copyOnClick, icon, color, className, children }: StatBl
 
     return (
         <CopyOnClick text={copyOnClick}>
-            <div className={classNames(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
-                <div className={classNames(styles.status_bar, color || 'bg-zinc-700')} />
-                {/* <div className={classNames(styles.icon, color || 'bg-zinc-700')}>
+            <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
+                <div className={clsx(styles.status_bar, color || 'bg-zinc-700')} />
+                {/* <div className={clsx(styles.icon, color || 'bg-zinc-700')}>
                     <Icon
                         icon={icon}
-                        className={classNames({
+                        className={clsx({
                             'text-zinc-100': !color || color === 'bg-zinc-700',
                             'text-zinc-50': color && color !== 'bg-zinc-700',
                         })}

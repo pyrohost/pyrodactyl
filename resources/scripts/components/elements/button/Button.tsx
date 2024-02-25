@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ButtonProps, Options } from '@/components/elements/button/types';
 import styles from './style.module.css';
 
@@ -8,7 +8,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         return (
             <button
                 ref={ref}
-                className={classNames(
+                className={clsx(
                     styles.button,
                     styles.primary,
                     {
@@ -29,12 +29,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 const TextButton = forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => (
     // @ts-expect-error not sure how to get this correct
-    <Button ref={ref} className={classNames(styles.text, className)} {...props} />
+    <Button ref={ref} className={clsx(styles.text, className)} {...props} />
 ));
 
 const DangerButton = forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => (
     // @ts-expect-error not sure how to get this correct
-    <Button ref={ref} className={classNames(styles.danger, className)} {...props} />
+    <Button ref={ref} className={clsx(styles.danger, className)} {...props} />
 ));
 
 const _Button = Object.assign(Button, {

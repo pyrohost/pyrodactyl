@@ -1,7 +1,7 @@
 import React, { ElementType, forwardRef, useMemo } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import styles from './style.module.css';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import DropdownItem from '@/components/elements/dropdown/DropdownItem';
 import DropdownButton from '@/components/elements/dropdown/DropdownButton';
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const DropdownGap = ({ invisible }: { invisible?: boolean }) => (
-    <div className={classNames('border m-2', { 'border-zinc-700': !invisible, 'border-transparent': invisible })} />
+    <div className={clsx('border m-2', { 'border-zinc-700': !invisible, 'border-transparent': invisible })} />
 );
 
 type TypedChild = (React.ReactChild | React.ReactFragment | React.ReactPortal) & {
@@ -43,7 +43,7 @@ const Dropdown = forwardRef<typeof Menu, Props>(({ as, children }, ref) => {
                 leaveFrom={'transform scale-100 opacity-100'}
                 leaveTo={'transform scale-95 opacity-0'}
             >
-                <Menu.Items className={classNames(styles.items_container, 'w-56')}>
+                <Menu.Items className={clsx(styles.items_container, 'w-56')}>
                     <div className={'px-1 py-1'}>{items}</div>
                 </Menu.Items>
             </Transition>

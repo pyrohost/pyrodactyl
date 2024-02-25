@@ -13,7 +13,7 @@ import useEventListener from '@/plugins/useEventListener';
 import debounce from 'debounce';
 import { usePersistedState } from '@/plugins/usePersistedState';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import 'xterm/css/xterm.css';
 import styles from './style.module.css';
@@ -192,19 +192,17 @@ export default () => {
     }, [connected, instance]);
 
     return (
-        <div className={classNames(styles.terminal, 'relative')}>
+        <div className={clsx(styles.terminal, 'relative')}>
             <SpinnerOverlay visible={!connected} size={'large'} />
-            <div
-                className={classNames(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}
-            >
+            <div className={clsx(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}>
                 <div className={'h-full'}>
                     <div id={styles.terminal} ref={ref} />
                 </div>
             </div>
             {canSendCommands && (
-                <div className={classNames('relative', styles.overflows_container)}>
+                <div className={clsx('relative', styles.overflows_container)}>
                     <input
-                        className={classNames('peer', styles.command_input)}
+                        className={clsx('peer', styles.command_input)}
                         type={'text'}
                         placeholder={'Enter a command'}
                         aria-label={'Console command input.'}
@@ -214,7 +212,7 @@ export default () => {
                         autoCapitalize={'none'}
                     />
                     {/* <div
-                        className={classNames(
+                        className={clsx(
                             'text-zinc-100 peer-focus:text-zinc-50 peer-focus:animate-pulse',
                             styles.command_icon
                         )}
