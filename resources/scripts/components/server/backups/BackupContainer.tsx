@@ -29,7 +29,8 @@ const BackupContainer = () => {
     }, [error]);
 
     if (!backups || (error && isValidating)) {
-        return <Spinner size={'large'} centered />;
+        // return <Spinner size={'large'} centered />;
+        return <></>;
     }
 
     return (

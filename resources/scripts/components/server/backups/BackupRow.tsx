@@ -50,7 +50,7 @@ export default ({ backup, className }: Props) => {
     return (
         <GreyRowBox css={tw`flex-wrap md:flex-nowrap items-center`} className={className}>
             <div css={tw`flex items-center truncate w-full md:flex-1`}>
-                <div css={tw`mr-4`}>
+                {/* <div css={tw`mr-4`}>
                     {backup.completedAt !== null ? (
                         backup.isLocked ? (
                             <FontAwesomeIcon icon={faLock} css={tw`text-yellow-500`} />
@@ -60,7 +60,7 @@ export default ({ backup, className }: Props) => {
                     ) : (
                         <Spinner size={'small'} />
                     )}
-                </div>
+                </div> */}
                 <div css={tw`flex flex-col truncate`}>
                     <div css={tw`flex items-center text-sm mb-1`}>
                         {backup.completedAt !== null && !backup.isSuccessful && (
@@ -70,9 +70,9 @@ export default ({ backup, className }: Props) => {
                                 Failed
                             </span>
                         )}
-                        <p css={tw`break-words truncate`}>{backup.name}</p>
+                        <p css={tw`break-words truncate text-lg`}>{backup.name}</p>
                         {backup.completedAt !== null && backup.isSuccessful && (
-                            <span css={tw`ml-3 text-zinc-300 text-xs font-extralight hidden sm:inline`}>
+                            <span css={tw`ml-2 text-zinc-300 text-xs font-extralight hidden sm:inline`}>
                                 {bytesToString(backup.bytes)}
                             </span>
                         )}
@@ -80,11 +80,10 @@ export default ({ backup, className }: Props) => {
                     <p css={tw`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
                 </div>
             </div>
-            <div css={tw`flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
-                <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} css={tw`text-sm`}>
+            <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} className={`text-xs`}>
                     {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
                 </p>
-                <p css={tw`text-xs text-zinc-500 uppercase mt-1`}>Created</p>
             </div>
             <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 <div css={tw`mt-4 md:mt-0 ml-6`} style={{ marginRight: '-0.5rem' }}>
