@@ -8,7 +8,8 @@ import { Button } from '@/components/elements/button/index';
 import Spinner from '@/components/elements/Spinner';
 import { Input } from '@/components/elements/inputs';
 import CopyOnClick from '@/components/elements/CopyOnClick';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
+// todo: replace with radix tooltip
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Actions, useStoreActions } from 'easy-peasy';
@@ -101,7 +102,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             />
             <Dialog.Footer>
                 <Button.Text onClick={close}>Cancel</Button.Text>
-                <Tooltip
+                {/* <Tooltip
                     disabled={password.length > 0 && value.length === 6}
                     content={
                         !token
@@ -109,7 +110,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                             : 'You must enter the 6-digit code and your password to continue.'
                     }
                     delay={100}
-                >
+                > */}
                     <Button
                         disabled={!token || value.length !== 6 || !password.length}
                         type={'submit'}
@@ -117,7 +118,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     >
                         Enable
                     </Button>
-                </Tooltip>
+                {/* </Tooltip> */}
             </Dialog.Footer>
         </form>
     );

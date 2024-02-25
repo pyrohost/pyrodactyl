@@ -10,7 +10,9 @@ import tw, { theme } from 'twin.macro';
 import styled from 'styled-components/macro';
 import http from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
+// todo: replace with radix tooltip
+// this file actually isnt used so i dont need to actually
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 
 const RightNavigation = styled.div`
     & > a,
@@ -63,17 +65,17 @@ export default () => {
                 </div>
                 <RightNavigation className={'flex h-full items-center justify-center'}>
                     <SearchContainer />
-                    <Tooltip placement={'bottom'} content={'Dashboard'}>
-                        <NavLink to={'/'} exact>
-                            <FontAwesomeIcon icon={faLayerGroup} />
-                        </NavLink>
-                    </Tooltip>
+                    {/* <Tooltip placement={'bottom'} content={'Dashboard'}> */}
+                    <NavLink to={'/'} exact>
+                        <FontAwesomeIcon icon={faLayerGroup} />
+                    </NavLink>
+                    {/* </Tooltip> */}
                     {rootAdmin && (
-                        <Tooltip placement={'bottom'} content={'Admin'}>
-                            <a href={'/admin'} rel={'noreferrer'}>
-                                <FontAwesomeIcon icon={faCogs} />
-                            </a>
-                        </Tooltip>
+                        // <Tooltip placement={'bottom'} content={'Admin'}>
+                        <a href={'/admin'} rel={'noreferrer'}>
+                            <FontAwesomeIcon icon={faCogs} />
+                        </a>
+                        // </Tooltip>
                     )}
                     {/* <Tooltip placement={'bottom'} content={'Account Settings'}>
                         <NavLink to={'/account'}>
@@ -82,11 +84,11 @@ export default () => {
                             </span>
                         </NavLink>
                     </Tooltip> */}
-                    <Tooltip placement={'bottom'} content={'Sign Out'}>
-                        <button onClick={onTriggerLogout}>
-                            <FontAwesomeIcon icon={faSignOutAlt} />
-                        </button>
-                    </Tooltip>
+                    {/* <Tooltip placement={'bottom'} content={'Sign Out'}> */}
+                    <button onClick={onTriggerLogout}>
+                        <FontAwesomeIcon icon={faSignOutAlt} />
+                    </button>
+                    {/* </Tooltip> */}
                 </RightNavigation>
             </div>
         </header>

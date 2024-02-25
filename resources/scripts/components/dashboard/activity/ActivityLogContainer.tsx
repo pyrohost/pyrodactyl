@@ -10,7 +10,8 @@ import Spinner from '@/components/elements/Spinner';
 import { styles as btnStyles } from '@/components/elements/button/index';
 import classNames from 'classnames';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
+// todo: replace with radix tooltip
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import useLocationHash from '@/plugins/useLocationHash';
 
 export default () => {
@@ -51,11 +52,11 @@ export default () => {
                     {data?.items.map((activity) => (
                         <ActivityLogEntry key={activity.id} activity={activity}>
                             {typeof activity.properties.useragent === 'string' && (
-                                <Tooltip content={activity.properties.useragent} placement={'top'}>
+                                // <Tooltip content={activity.properties.useragent} placement={'top'}>
                                     <span>
                                         <DesktopComputerIcon />
                                     </span>
-                                </Tooltip>
+                                // </Tooltip>
                             )}
                         </ActivityLogEntry>
                     ))}

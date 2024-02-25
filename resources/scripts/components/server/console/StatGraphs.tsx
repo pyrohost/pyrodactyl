@@ -79,12 +79,13 @@ export default () => {
                 title={'Network Activity'}
                 legend={
                     <>
-                        <Tooltip arrow content={'Inbound'}>
-                            <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} />
-                        </Tooltip>
-                        <Tooltip arrow content={'Outbound'}>
-                            <CloudUploadIcon className={'w-4 h-4 text-blue-400'} />
-                        </Tooltip>
+                        {/* todo: replace with radix tooltip */}
+                        {/* <Tooltip arrow content={'Inbound'}> */}
+                        <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} />
+                        {/* </Tooltip> */}
+                        {/* <Tooltip arrow content={'Outbound'}> */}
+                        <CloudUploadIcon className={'w-4 h-4 text-blue-400'} />
+                        {/* </Tooltip> */}
                     </>
                 }
             >

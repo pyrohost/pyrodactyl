@@ -4,7 +4,8 @@ import { CloudUploadIcon, XIcon } from '@heroicons/react/solid';
 import asDialog from '@/hoc/asDialog';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Button } from '@/components/elements/button/index';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
+// todo: replace with radix tooltip
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Code from '@/components/elements/Code';
 import { useSignal } from '@preact/signals-react';
 
@@ -42,11 +43,11 @@ const FileUploadList = () => {
         <div className={'space-y-2 mt-6'}>
             {uploads.map(([name, file]) => (
                 <div key={name} className={'flex items-center space-x-3 bg-zinc-700 p-3 rounded'}>
-                    <Tooltip content={`${Math.floor((file.loaded / file.total) * 100)}%`} placement={'left'}>
-                        <div className={'flex-shrink-0'}>
-                            <Spinner progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
-                        </div>
-                    </Tooltip>
+                    {/* <Tooltip content={`${Math.floor((file.loaded / file.total) * 100)}%`} placement={'left'}> */}
+                    <div className={'flex-shrink-0'}>
+                        <Spinner progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
+                    </div>
+                    {/* </Tooltip> */}
                     <Code className={'flex-1 truncate'}>{name}</Code>
                     <button
                         onClick={cancelFileUpload.bind(this, name)}
@@ -89,7 +90,7 @@ export default () => {
     return (
         <>
             {count > 0 && (
-                <Tooltip content={`${count} files are uploading, click to view`}>
+                // <Tooltip content={`${count} files are uploading, click to view`}>
                     <button
                         className={'flex items-center justify-center w-10 h-10'}
                         onClick={() => (open.value = true)}
@@ -97,7 +98,7 @@ export default () => {
                         <Spinner progress={(progress.uploaded / progress.total) * 100} className={'w-8 h-8'} />
                         <CloudUploadIcon className={'h-3 absolute mx-auto animate-pulse'} />
                     </button>
-                </Tooltip>
+                // </Tooltip>
             )}
             <FileUploadListDialog open={open.value} onClose={() => (open.value = false)} />
         </>

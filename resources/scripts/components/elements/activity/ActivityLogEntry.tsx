@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Tooltip from '@/components/elements/tooltip/Tooltip';
+// todo: replace with radix tooltip
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Translate from '@/components/elements/Translate';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { ActivityLog } from '@definitions/user';
@@ -52,9 +53,9 @@ export default ({ activity, children }: Props) => {
             <div className={'col-span-10 sm:col-span-9 flex'}>
                 <div className={'flex-1 px-4 sm:px-0'}>
                     <div className={'flex items-center text-zinc-50'}>
-                        <Tooltip placement={'top'} content={actor?.email || 'System User'}>
-                            <span>{actor?.username || 'System'}</span>
-                        </Tooltip>
+                        {/* <Tooltip placement={'top'} content={actor?.email || 'System User'}> */}
+                        <span>{actor?.username || 'System'}</span>
+                        {/* </Tooltip> */}
                         <span className={'text-zinc-400'}>&nbsp;&mdash;&nbsp;</span>
                         <Link
                             to={`#${pathTo({ event: activity.event })}`}
@@ -64,14 +65,14 @@ export default ({ activity, children }: Props) => {
                         </Link>
                         <div className={classNames(style.icons, 'group-hover:text-zinc-300')}>
                             {activity.isApi && (
-                                <Tooltip placement={'top'} content={'Using API Key'}>
-                                    <TerminalIcon />
-                                </Tooltip>
+                                // <Tooltip placement={'top'} content={'Using API Key'}>
+                                <TerminalIcon />
+                                // </Tooltip>
                             )}
                             {activity.event.startsWith('server:sftp.') && (
-                                <Tooltip placement={'top'} content={'Using SFTP'}>
-                                    <FolderOpenIcon />
-                                </Tooltip>
+                                // <Tooltip placement={'top'} content={'Using SFTP'}>
+                                <FolderOpenIcon />
+                                // </Tooltip>
                             )}
                             {children}
                         </div>
@@ -86,9 +87,9 @@ export default ({ activity, children }: Props) => {
                                 <span className={'text-zinc-400'}>&nbsp;|&nbsp;</span>
                             </span>
                         )}
-                        <Tooltip placement={'right'} content={format(activity.timestamp, 'MMM do, yyyy H:mm:ss')}>
-                            <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
-                        </Tooltip>
+                        {/* <Tooltip placement={'right'} content={format(activity.timestamp, 'MMM do, yyyy H:mm:ss')}> */}
+                        <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
+                        {/* </Tooltip> */}
                     </div>
                 </div>
                 {activity.hasAdditionalMetadata && <ActivityLogMetaButton meta={activity.properties} />}
