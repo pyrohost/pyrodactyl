@@ -100,7 +100,7 @@ class DropdownMenu extends React.PureComponent<Props, State> {
                             background:
                                 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgba(46, 46, 46, 0.3) 0%, rgb(26, 26, 26, 0.2) 100%)',
                         }}
-                        className='flex flex-col gap-0.5 fixed backdrop-blur-xl p-2 rounded-xl border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto overflow-hidden'
+                        className='flex flex-col gap-0.5 absolute backdrop-blur-xl p-2 rounded-xl border border-[#ffffff07] shadow-lg z-[9999] isolate select-none pointer-events-auto overflow-hidden'
                     >
                         {this.props.children}
                     </div>
