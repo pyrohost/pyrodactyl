@@ -38,11 +38,14 @@ class DropdownMenu extends React.PureComponent<Props, State> {
 
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         const menu = this.menu.current;
+        const winHeight = window.innerHeight;
+        const winWidth = window.innerWidth;
 
         if (this.state.visible && !prevState.visible && menu) {
             document.addEventListener('click', this.windowListener);
             document.addEventListener('contextmenu', this.contextMenuListener);
-            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth)}px`;
+            // todo: fix this fuckery
+            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth - 100)}px`;
         }
 
         if (!this.state.visible && prevState.visible) {
