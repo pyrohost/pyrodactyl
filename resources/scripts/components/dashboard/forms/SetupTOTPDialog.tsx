@@ -8,7 +8,7 @@ import { Button } from '@/components/elements/button/index';
 import Spinner from '@/components/elements/Spinner';
 import { Input } from '@/components/elements/inputs';
 import CopyOnClick from '@/components/elements/CopyOnClick';
-// todo: replace with radix tooltip
+// FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -111,13 +111,13 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     }
                     delay={100}
                 > */}
-                    <Button
-                        disabled={!token || value.length !== 6 || !password.length}
-                        type={'submit'}
-                        form={'enable-totp-form'}
-                    >
-                        Enable
-                    </Button>
+                <Button
+                    disabled={!token || value.length !== 6 || !password.length}
+                    type={'submit'}
+                    form={'enable-totp-form'}
+                >
+                    Enable
+                </Button>
                 {/* </Tooltip> */}
             </Dialog.Footer>
         </form>

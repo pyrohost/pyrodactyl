@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ClipboardListIcon } from '@heroicons/react/outline';
+// FIXME: add icons back
 import { Dialog } from '@/components/elements/dialog';
 import { Button } from '@/components/elements/button/index';
 
@@ -27,7 +27,8 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
                 }
                 onClick={() => setOpen(true)}
             >
-                <ClipboardListIcon className={'w-5 h-5'} />
+                FIXME: Clipboard Icon
+                {/* <ClipboardListIcon className={'w-5 h-5'} /> */}
             </button>
         </div>
     );

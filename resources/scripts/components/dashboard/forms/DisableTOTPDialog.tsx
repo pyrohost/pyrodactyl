@@ -3,7 +3,7 @@ import asDialog from '@/hoc/asDialog';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Button } from '@/components/elements/button/index';
 import { Input } from '@/components/elements/inputs';
-// todo: replace with radix tooltip
+// FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import disableAccountTwoFactor from '@/api/account/disableAccountTwoFactor';
 import { useFlashKey } from '@/plugins/useFlash';
@@ -58,9 +58,9 @@ const DisableTOTPDialog = () => {
                     disabled={password.length > 0}
                     content={'You must enter your account password to continue.'}
                 > */}
-                    <Button.Danger type={'submit'} form={'disable-totp-form'} disabled={submitting || !password.length}>
-                        Disable
-                    </Button.Danger>
+                <Button.Danger type={'submit'} form={'disable-totp-form'} disabled={submitting || !password.length}>
+                    Disable
+                </Button.Danger>
                 {/* </Tooltip> */}
             </Dialog.Footer>
         </form>

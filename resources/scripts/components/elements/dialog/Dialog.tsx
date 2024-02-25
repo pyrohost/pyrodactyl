@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Dialog as HDialog } from '@headlessui/react';
 import { Button } from '@/components/elements/button/index';
-import { XIcon } from '@heroicons/react/solid';
+// FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
 
@@ -116,7 +116,8 @@ export default ({
                                                 onClick={onClose}
                                                 className={'group'}
                                             >
-                                                <XIcon className={styles.close_icon} />
+                                                {/* <XIcon className={styles.close_icon} /> */}
+                                                <div>FIXME: Close Icon</div>
                                             </Button.Text>
                                         </div>
                                     )}

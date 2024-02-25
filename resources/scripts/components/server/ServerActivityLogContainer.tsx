@@ -10,7 +10,7 @@ import { ActivityLogFilters } from '@/api/account/activity';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { styles as btnStyles } from '@/components/elements/button/index';
-import { XCircleIcon } from '@heroicons/react/solid';
+// FIXME: add icons back
 import useLocationHash from '@/plugins/useLocationHash';
 
 export default () => {
@@ -41,7 +41,8 @@ export default () => {
                         className={classNames(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
                         onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
                     >
-                        Clear Filters <XCircleIcon className={'w-4 h-4 ml-2'} />
+                        Clear Filters
+                        {/* FIXME: X icon */}
                     </Link>
                 </div>
             )}

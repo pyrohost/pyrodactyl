@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import styles from '@/components/elements/dropdown/style.module.css';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+// FIXME: add icons back
 import { Menu } from '@headlessui/react';
 import React from 'react';
 
@@ -15,7 +15,7 @@ export default ({ className, animate = true, children }: Props) => (
         {typeof children === 'string' ? (
             <>
                 <span className={'mr-2'}>{children}</span>
-                <ChevronDownIcon aria-hidden={'true'} data-animated={animate.toString()} />
+                {/* <ChevronDownIcon aria-hidden={'true'} data-animated={animate.toString()} /> */}
             </>
         ) : (
             children

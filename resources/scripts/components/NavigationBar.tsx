@@ -10,7 +10,7 @@ import tw, { theme } from 'twin.macro';
 import styled from 'styled-components/macro';
 import http from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-// todo: replace with radix tooltip
+// FIXME: replace with radix tooltip
 // this file actually isnt used so i dont need to actually
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 

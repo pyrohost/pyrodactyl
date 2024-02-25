@@ -1,4 +1,4 @@
-import { ExclamationIcon, ShieldExclamationIcon } from '@heroicons/react/outline';
+// FIXME: add icons back
 import React from 'react';
 import classNames from 'classnames';
 
@@ -21,9 +21,11 @@ export default ({ type, className, children }: AlertProps) => {
             )}
         >
             {type === 'danger' ? (
-                <ShieldExclamationIcon className={'w-6 h-6 text-red-400 mr-2'} />
+                // <ShieldExclamationIcon className={'w-6 h-6 text-red-400 mr-2'} />
+                <div>FIXME: ShieldExclamationIcon</div>
             ) : (
-                <ExclamationIcon className={'w-6 h-6 text-yellow-500 mr-2'} />
+                // <ExclamationIcon className={'w-6 h-6 text-yellow-500 mr-2'} />
+                <div>FIXME: ExclamationIcon</div>
             )}
             {children}
         </div>

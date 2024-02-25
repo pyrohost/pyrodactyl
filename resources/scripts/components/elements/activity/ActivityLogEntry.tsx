@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// todo: replace with radix tooltip
+// FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Translate from '@/components/elements/Translate';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { ActivityLog } from '@definitions/user';
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
-import { FolderOpenIcon, TerminalIcon } from '@heroicons/react/solid';
+// FIXME: add icons back
 import classNames from 'classnames';
 import style from './style.module.css';
 import useLocationHash from '@/plugins/useLocationHash';
@@ -66,12 +66,14 @@ export default ({ activity, children }: Props) => {
                         <div className={classNames(style.icons, 'group-hover:text-zinc-300')}>
                             {activity.isApi && (
                                 // <Tooltip placement={'top'} content={'Using API Key'}>
-                                <TerminalIcon />
+                                // <TerminalIcon />
+                                <div>terminal icon</div>
                                 // </Tooltip>
                             )}
                             {activity.event.startsWith('server:sftp.') && (
                                 // <Tooltip placement={'top'} content={'Using SFTP'}>
-                                <FolderOpenIcon />
+                                // <FolderOpenIcon />
+                                <div>folder open icon</div>
                                 // </Tooltip>
                             )}
                             {children}

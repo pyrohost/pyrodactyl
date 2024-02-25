@@ -11,7 +11,7 @@ import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import { ServerContext } from '@/state/server';
 import { WithClassname } from '@/components/types';
 import Portal from '@/components/elements/Portal';
-import { CloudUploadIcon } from '@heroicons/react/outline';
+// FIXME: add icons back
 import { useSignal } from '@preact/signals-react';
 
 function isFileOrDirectory(event: DragEvent): boolean {
@@ -123,7 +123,7 @@ export default ({ className }: WithClassname) => {
                                     'flex items-center space-x-4 bg-black w-full ring-4 ring-blue-200 ring-opacity-60 rounded p-6 mx-10 max-w-sm'
                                 }
                             >
-                                <CloudUploadIcon className={'w-10 h-10 flex-shrink-0'} />
+                                {/* <CloudUploadIcon className={'w-10 h-10 flex-shrink-0'} /> */}
                                 <p className={' flex-1 text-lg text-zinc-100 text-center'}>
                                     Drag and drop files to upload.
                                 </p>

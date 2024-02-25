@@ -6,8 +6,8 @@ import { Line } from 'react-chartjs-2';
 import { useChart, useChartTickLabel } from '@/components/server/console/chart';
 import { hexToRgba } from '@/lib/helpers';
 import { bytesToString } from '@/lib/formatters';
-import { CloudDownloadIcon, CloudUploadIcon } from '@heroicons/react/solid';
-import { theme } from 'twin.macro';
+// FIXME: add icons back
+// import { theme } from 'twin.macro';
 import ChartBlock from '@/components/server/console/ChartBlock';
 
 export default () => {
@@ -78,12 +78,13 @@ export default () => {
                 title={'Network Activity'}
                 legend={
                     <>
-                        {/* todo: replace with radix tooltip */}
+                        {/* FIXME: add icons legend back */}
+                        {/* FIXME: replace with radix tooltip */}
                         {/* <Tooltip arrow content={'Inbound'}> */}
-                        <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} />
+                        {/* <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} /> */}
                         {/* </Tooltip> */}
                         {/* <Tooltip arrow content={'Outbound'}> */}
-                        <CloudUploadIcon className={'w-4 h-4 text-blue-400'} />
+                        {/* <CloudUploadIcon className={'w-4 h-4 text-blue-400'} /> */}
                         {/* </Tooltip> */}
                     </>
                 }

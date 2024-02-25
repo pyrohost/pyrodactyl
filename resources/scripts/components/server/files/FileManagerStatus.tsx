@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { ServerContext } from '@/state/server';
-import { CloudUploadIcon, XIcon } from '@heroicons/react/solid';
+// FIXME: add icons back
 import asDialog from '@/hoc/asDialog';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Button } from '@/components/elements/button/index';
-// todo: replace with radix tooltip
+// FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Code from '@/components/elements/Code';
 import { useSignal } from '@preact/signals-react';
@@ -53,7 +53,7 @@ const FileUploadList = () => {
                         onClick={cancelFileUpload.bind(this, name)}
                         className={'text-zinc-500 hover:text-zinc-200 transition-colors duration-75'}
                     >
-                        <XIcon className={'w-5 h-5'} />
+                        FIXME: add X icon Cancel Upload
                     </button>
                 </div>
             ))}
@@ -91,13 +91,11 @@ export default () => {
         <>
             {count > 0 && (
                 // <Tooltip content={`${count} files are uploading, click to view`}>
-                    <button
-                        className={'flex items-center justify-center w-10 h-10'}
-                        onClick={() => (open.value = true)}
-                    >
-                        <Spinner progress={(progress.uploaded / progress.total) * 100} className={'w-8 h-8'} />
-                        <CloudUploadIcon className={'h-3 absolute mx-auto animate-pulse'} />
-                    </button>
+                <button className={'flex items-center justify-center w-10 h-10'} onClick={() => (open.value = true)}>
+                    <Spinner progress={(progress.uploaded / progress.total) * 100} className={'w-8 h-8'} />
+                    {/* <CloudUploadIcon className={'h-3 absolute mx-auto animate-pulse'} /> */}
+                    <div>FIXME: CloudUploadIcon</div>
+                </button>
                 // </Tooltip>
             )}
             <FileUploadListDialog open={open.value} onClose={() => (open.value = false)} />
