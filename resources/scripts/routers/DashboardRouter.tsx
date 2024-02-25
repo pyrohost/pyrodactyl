@@ -53,18 +53,6 @@ export default () => {
                             <FontAwesomeIcon size='lg' icon={faSignOutAlt} />
                             <p>Sign Out</p>
                         </DropdownButtonRow>
-                        <DropdownButtonRow onClick={onTriggerLogout}>
-                            <p>Test 1</p>
-                        </DropdownButtonRow>
-                        <DropdownButtonRow onClick={onTriggerLogout}>
-                            <p>Test 2</p>
-                        </DropdownButtonRow>
-                        <DropdownButtonRow onClick={onTriggerLogout}>
-                            <p>Test 3</p>
-                        </DropdownButtonRow>
-                        <DropdownButtonRow onClick={onTriggerLogout}>
-                            <p>Test 4</p>
-                        </DropdownButtonRow>
                     </DropdownMenu>
                 </div>
                 <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
