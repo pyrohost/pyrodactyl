@@ -69,14 +69,14 @@ export default () => {
 
     return (
         <>
-            <ChartBlock title={'CPU Load'}>
+            <ChartBlock title={'CPU'}>
                 <Line {...cpu.props} />
             </ChartBlock>
-            <ChartBlock title={'Memory'}>
+            <ChartBlock title={'RAM'}>
                 <Line {...memory.props} />
             </ChartBlock>
             <ChartBlock
-                title={'Network'}
+                title={'Network Activity'}
                 legend={
                     <>
                         <Tooltip arrow content={'Inbound'}>

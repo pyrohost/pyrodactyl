@@ -9,11 +9,11 @@ interface ChartBlockProps {
 }
 
 export default ({ title, legend, children }: ChartBlockProps) => (
-    <div className={classNames(styles.chart_container, 'group')}>
-        <div className={'flex items-center justify-between px-4 py-2'}>
-            <h3 className={'font-bold text-lg'}>{title}</h3>
+    <div className={classNames(styles.chart_container, 'group !p-8')}>
+        <div className={'flex items-center justify-between mb-4'}>
+            <h3 className={'font-extrabold text-sm'}>{title}</h3>
             {legend && <p className={'text-sm flex items-center'}>{legend}</p>}
         </div>
-        <div className={'z-10 ml-2'}>{children}</div>
+        <div className={'z-10 overflow-hidden rounded-lg'}>{children}</div>
     </div>
 );

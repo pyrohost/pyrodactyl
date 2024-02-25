@@ -21,7 +21,7 @@ import styles from './style.module.css';
 
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',
-    background: '#000000',
+    background: '#131313',
     cursor: 'transparent',
     black: th`colors.black`.toString(),
     red: '#E54B4B',
@@ -214,14 +214,14 @@ export default () => {
                         autoCorrect={'off'}
                         autoCapitalize={'none'}
                     />
-                    <div
+                    {/* <div
                         className={classNames(
                             'text-zinc-100 peer-focus:text-zinc-50 peer-focus:animate-pulse',
                             styles.command_icon
                         )}
                     >
                         <ChevronDoubleRightIcon className={'w-4 h-4'} />
-                    </div>
+                    </div> */}
                 </div>
             )}
         </div>

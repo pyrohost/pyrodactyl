@@ -23,7 +23,7 @@ const ServerConsoleContainer = () => {
 
     return (
         <ServerContentBlock title={'Home'}>
-            <div className='w-full h-full min-h-full flex-1 flex flex-col gap-2'>
+            <div className='w-full h-full min-h-full flex-1 flex flex-col gap-4'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance
