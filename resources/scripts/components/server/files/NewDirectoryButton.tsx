@@ -40,7 +40,7 @@ const generateDirectoryData = (name: string): FileObject => ({
 });
 
 const NewDirectoryDialog = asDialog({
-    title: 'Create Directory',
+    title: 'New Folder',
 })(() => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -72,10 +72,10 @@ const NewDirectoryDialog = asDialog({
                     <FlashMessageRender key={'files:directory-modal'} />
                     <Form css={tw`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
-                        <p css={tw`mt-2 text-sm md:text-base break-all`}>
-                            <span css={tw`text-zinc-200`}>This directory will be created as&nbsp;</span>
+                        <p css={tw`mt-2 !text-xs break-all`}>
+                            <span css={tw`text-zinc-200`}>This folder will be created as&nbsp;</span>
                             <Code>
-                                /home/container/
+                                /root/
                                 <span css={tw`text-blue-200`}>
                                     {join(directory, values.directoryName).replace(/^(\.\.\/|\/)+/, '')}
                                 </span>
