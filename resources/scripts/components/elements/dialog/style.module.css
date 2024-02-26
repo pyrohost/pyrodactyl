@@ -3,12 +3,12 @@
 }
 
 .panel {
-    @apply relative bg-zinc-600 rounded max-w-xl w-full mx-auto shadow-lg text-left;
-    @apply ring-4 ring-zinc-800 ring-opacity-80;
+    @apply relative border-[1px] border-[#ffffff07] rounded-2xl max-w-xl w-full mx-auto text-left shadow-2xl backdrop-blur-3xl;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12);
 }
 
 .title {
-    @apply text-xl font-medium mb-2 text-zinc-50 pr-4;
+    @apply text-2xl tracking-tight font-extrabold mb-2 pr-4;
 }
 
 .close_icon {

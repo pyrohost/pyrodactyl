@@ -4,6 +4,7 @@ import { Button } from '@/components/elements/button/index';
 // FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
+import HugeIconsX from '../hugeicons/X';
 
 const variants = {
     open: {
@@ -72,8 +73,14 @@ export default ({
                         open={open}
                         onClose={onDialogClose}
                     >
-                        <div className={'fixed inset-0 bg-zinc-900/50 z-40'} />
-                        <div className={'fixed inset-0 overflow-y-auto z-50'}>
+                        <div
+                            style={{
+                                background:
+                                    'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
+                            }}
+                            className={'fixed inset-0 backdrop-blur-sm z-[9997]'}
+                        />
+                        <div className={'fixed inset-0 overflow-y-auto z-[9998]'}>
                             <div
                                 ref={container}
                                 className={styles.container}
@@ -109,16 +116,10 @@ export default ({
                                     {footer}
                                     {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
                                     {!hideCloseIcon && (
-                                        <div className={'absolute right-0 top-0 m-4'}>
-                                            <Button.Text
-                                                size={Button.Sizes.Small}
-                                                shape={Button.Shapes.IconSquare}
-                                                onClick={onClose}
-                                                className={'group'}
-                                            >
-                                                {/* <XIcon className={styles.close_icon} /> */}
-                                                <div>FIXME: Close Icon</div>
-                                            </Button.Text>
+                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
+                                            <button onClick={onClose}>
+                                                <HugeIconsX fill='currentColor' />
+                                            </button>
                                         </div>
                                     )}
                                 </HDialog.Panel>

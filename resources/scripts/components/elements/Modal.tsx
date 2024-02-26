@@ -21,8 +21,8 @@ export interface ModalProps extends RequiredModalProps {
 }
 
 export const ModalMask = styled.div`
-    ${tw`fixed z-50 overflow-auto flex w-full inset-0`};
-    background: rgba(0, 0, 0, 0.7);
+    ${tw`fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm`};
+    background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%);
 `;
 
 const ModalContainer = styled.div<{ alignTop?: boolean }>`
@@ -42,8 +42,7 @@ const ModalContainer = styled.div<{ alignTop?: boolean }>`
     margin-bottom: auto;
 
     & > .close-icon {
-        ${tw`absolute right-0 p-2 text-white cursor-pointer opacity-50 transition-all duration-150 ease-linear hover:opacity-100`};
-        top: -2.5rem;
+        ${tw`absolute right-0 top-0 p-2 text-white cursor-pointer opacity-50 transition-all duration-150 ease-linear hover:opacity-100`};
 
         &:hover {
             ${tw`transform rotate-90`}
@@ -130,7 +129,11 @@ const Modal: React.FC<ModalProps> = ({
                         </Fade>
                     )}
                     <div
-                        css={tw`bg-zinc-800 p-3 sm:p-4 md:p-6 rounded shadow-md overflow-y-scroll transition-all duration-150`}
+                        style={{
+                            background:
+                                'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12)',
+                        }}
+                        className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full mx-auto text-left shadow-2xl backdrop-blur-3xl'
                     >
                         {children}
                     </div>
