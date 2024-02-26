@@ -70,7 +70,7 @@ const PIDLimitModalFeature = () => {
                     </p>
                     <div css={tw`mt-8 sm:flex items-center justify-end`}>
                         <Button onClick={() => setVisible(false)} css={tw`w-full sm:w-auto border-transparent`}>
-                            Close
+                            <div>close</div>
                         </Button>
                     </div>
                 </>
@@ -90,7 +90,7 @@ const PIDLimitModalFeature = () => {
                     </p>
                     <div css={tw`mt-8 sm:flex items-center justify-end`}>
                         <Button onClick={() => setVisible(false)} css={tw`w-full sm:w-auto border-transparent`}>
-                            Close
+                            <div>close</div>
                         </Button>
                     </div>
                 </>

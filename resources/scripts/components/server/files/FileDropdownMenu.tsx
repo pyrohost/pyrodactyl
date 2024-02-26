@@ -138,8 +138,18 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             <DropdownMenu
                 ref={onClickRef}
                 renderToggle={(onClick) => (
-                    <div css={tw`px-4 py-2 hover:text-white`} onClick={onClick}>
-                        <div>FIXME: Dropdow Icon</div>
+                    <button onClick={onClick}>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='32'
+                            height='32'
+                            fill='currentColor'
+                            viewBox='0 0 256 256'
+                            className='flex shrink-0 h-full w-full'
+                        >
+                            {/* @ts-ignore */}
+                            <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                        </svg>
                         {modal ? (
                             modal === 'chmod' ? (
                                 <ChmodFileModal
@@ -159,7 +169,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                             )
                         ) : null}
                         <SpinnerOverlay visible={showSpinner} fixed size={'large'} />
-                    </div>
+                    </button>
                 )}
             >
                 <Can action={'file.update'}>
