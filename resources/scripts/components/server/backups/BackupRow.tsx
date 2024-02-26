@@ -85,11 +85,7 @@ export default ({ backup, className }: Props) => {
             </div>
             <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 <div css={tw`mt-4 md:mt-0 ml-6`} style={{ marginRight: '-0.5rem' }}>
-                    {!backup.completedAt ? (
-                        <div css={tw`p-2 invisible`}>FIXME: Options</div>
-                    ) : (
-                        <BackupContextMenu backup={backup} />
-                    )}
+                    {!backup.completedAt ? <div className='w-8'></div> : <BackupContextMenu backup={backup} />}
                 </div>
             </Can>
         </GreyRowBox>

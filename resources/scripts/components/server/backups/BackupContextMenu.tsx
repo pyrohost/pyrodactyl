@@ -156,11 +156,18 @@ export default ({ backup }: Props) => {
             {backup.isSuccessful ? (
                 <DropdownMenu
                     renderToggle={(onClick) => (
-                        <button
-                            onClick={onClick}
-                            css={tw`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
-                        >
-                            FIXME: Options
+                        <button onClick={onClick}>
+                            <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='32'
+                                height='32'
+                                fill='currentColor'
+                                viewBox='0 0 256 256'
+                                className='flex shrink-0 h-full w-full'
+                            >
+                                {/* @ts-ignore */}
+                                <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                            </svg>
                         </button>
                     )}
                 >
