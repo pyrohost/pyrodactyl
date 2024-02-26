@@ -1,16 +1,11 @@
 import React from 'react';
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
 import tw from 'twin.macro';
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
 
 export default ({ schedule }: { schedule: Schedule }) => (
     <>
-        <div css={tw`hidden md:block`}>
-            <FontAwesomeIcon icon={faCalendarAlt} fixedWidth />
-        </div>
         <div css={tw`flex-1 md:ml-4`}>
             <p>{schedule.name}</p>
             <p css={tw`text-xs text-zinc-400`}>

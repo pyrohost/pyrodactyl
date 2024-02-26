@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCogs, faLayerGroup, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
 import SearchContainer from '@/components/dashboard/search/SearchContainer';
@@ -67,13 +65,13 @@ export default () => {
                     <SearchContainer />
                     {/* <Tooltip placement={'bottom'} content={'Dashboard'}> */}
                     <NavLink to={'/'} exact>
-                        <FontAwesomeIcon icon={faLayerGroup} />
+                        {/* <FontAwesomeIcon icon={faLayerGroup} /> */}
                     </NavLink>
                     {/* </Tooltip> */}
                     {rootAdmin && (
                         // <Tooltip placement={'bottom'} content={'Admin'}>
                         <a href={'/admin'} rel={'noreferrer'}>
-                            <FontAwesomeIcon icon={faCogs} />
+                            {/* <FontAwesomeIcon icon={faCogs} /> */}
                         </a>
                         // </Tooltip>
                     )}
@@ -86,7 +84,7 @@ export default () => {
                     </Tooltip> */}
                     {/* <Tooltip placement={'bottom'} content={'Sign Out'}> */}
                     <button onClick={onTriggerLogout}>
-                        <FontAwesomeIcon icon={faSignOutAlt} />
+                        {/* <FontAwesomeIcon icon={faSignOutAlt} /> */}
                     </button>
                     {/* </Tooltip> */}
                 </RightNavigation>

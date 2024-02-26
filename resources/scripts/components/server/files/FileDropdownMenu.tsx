@@ -1,17 +1,4 @@
 import React, { memo, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faBoxOpen,
-    faCopy,
-    faEllipsisH,
-    faFileArchive,
-    faFileCode,
-    faFileDownload,
-    faLevelUpAlt,
-    faPencilAlt,
-    faTrashAlt,
-    IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
 import { ServerContext } from '@/state/server';
 import { join } from 'pathe';
@@ -53,14 +40,12 @@ const StyledRow = styled.div<{ $danger?: boolean }>`
 `;
 
 interface RowProps extends React.HTMLAttributes<HTMLDivElement> {
-    icon: IconDefinition;
     title: string;
     $danger?: boolean;
 }
 
-const Row = ({ icon, title, ...props }: RowProps) => (
+const Row = ({ title, ...props }: RowProps) => (
     <StyledRow {...props}>
-        <FontAwesomeIcon icon={icon} css={tw`text-xs`} fixedWidth />
         <span>{title}</span>
     </StyledRow>
 );
@@ -154,7 +139,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 ref={onClickRef}
                 renderToggle={(onClick) => (
                     <div css={tw`px-4 py-2 hover:text-white`} onClick={onClick}>
-                        <FontAwesomeIcon icon={faEllipsisH} />
+                        <div>FIXME: Dropdow Icon</div>
                         {modal ? (
                             modal === 'chmod' ? (
                                 <ChmodFileModal
@@ -205,7 +190,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <Row onClick={doUnarchive} icon={faBoxOpen} title={'Unarchive'} />
+                        <Row onClick={doUnarchive} title={'Unarchive'} />
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>

@@ -10,6 +10,7 @@ import StatGraphs from '@/components/server/console/StatGraphs';
 import PowerButtons from '@/components/server/console/PowerButtons';
 import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import { Alert } from '@/components/elements/alert';
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -37,7 +38,6 @@ const ServerConsoleContainer = () => {
                     <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
                     <PowerButtons className='flex gap-1 items-center justify-center' />
                 </div>
-                {/* i WANNA rebuild this so everything is gone for now :3 */}
                 <ServerDetailsBlock className={'col-span-4 lg:col-span-1 order-last lg:order-none'} />
                 <Console />
                 <div className={'grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4'}>
@@ -45,7 +45,9 @@ const ServerConsoleContainer = () => {
                         <StatGraphs />
                     </Spinner.Suspense>
                 </div>
-                <Features enabled={eggFeatures} />
+                <ErrorBoundary>
+                    <Features enabled={eggFeatures} />
+                </ErrorBoundary>
             </div>
         </ServerContentBlock>
     );

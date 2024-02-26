@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Subuser } from '@/state/server/subusers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faUnlockAlt, faUserLock } from '@fortawesome/free-solid-svg-icons';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 import EditSubuserModal from '@/components/server/users/EditSubuserModal';
 import Can from '@/components/elements/Can';
@@ -29,11 +27,12 @@ export default ({ subuser }: Props) => {
             <div css={tw`ml-4`}>
                 <p css={tw`font-medium text-center`}>
                     &nbsp;
-                    <FontAwesomeIcon
+                    {/* <FontAwesomeIcon
                         icon={subuser.twoFactorEnabled ? faUserLock : faUnlockAlt}
                         fixedWidth
                         css={!subuser.twoFactorEnabled ? tw`text-red-400` : undefined}
-                    />
+                    /> */}
+                    {subuser.twoFactorEnabled ? 'MFA Enabled' : 'MFA Disabled'}
                     &nbsp;
                 </p>
                 <p css={tw`text-xs text-zinc-500 uppercase hidden md:block`}>2FA Enabled</p>
@@ -53,7 +52,8 @@ export default ({ subuser }: Props) => {
                             css={tw`block text-sm p-1 md:p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mx-4`}
                             onClick={() => setVisible(true)}
                         >
-                            <FontAwesomeIcon icon={faPencilAlt} />
+                            {/* <FontAwesomeIcon icon={faPencilAlt} /> */}
+                            FIXME: Edit User
                         </button>
                     </Can>
                     <Can action={'user.delete'}>

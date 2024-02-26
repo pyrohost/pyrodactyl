@@ -1,6 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArchive, faEllipsisH, faLock } from '@fortawesome/free-solid-svg-icons';
 import { format, formatDistanceToNow } from 'date-fns';
 import Spinner from '@/components/elements/Spinner';
 import { bytesToString } from '@/lib/formatters';
@@ -88,9 +86,7 @@ export default ({ backup, className }: Props) => {
             <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 <div css={tw`mt-4 md:mt-0 ml-6`} style={{ marginRight: '-0.5rem' }}>
                     {!backup.completedAt ? (
-                        <div css={tw`p-2 invisible`}>
-                            <FontAwesomeIcon icon={faEllipsisH} />
-                        </div>
+                        <div css={tw`p-2 invisible`}>FIXME: Options</div>
                     ) : (
                         <BackupContextMenu backup={backup} />
                     )}

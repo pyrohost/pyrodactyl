@@ -9,8 +9,6 @@ import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 
@@ -50,7 +48,6 @@ export default () => {
                         )}
                     >
                         <DropdownButtonRow onClick={onTriggerLogout}>
-                            <FontAwesomeIcon size='lg' icon={faSignOutAlt} />
                             <p>Sign Out</p>
                         </DropdownButtonRow>
                     </DropdownMenu>

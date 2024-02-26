@@ -3,8 +3,6 @@ import ContentBox from '@/components/elements/ContentBox';
 import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
 import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKey, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import deleteApiKey from '@/api/account/deleteApiKey';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { format } from 'date-fns';
@@ -69,7 +67,7 @@ export default () => {
                                 key={key.identifier}
                                 css={[tw`bg-zinc-600 flex items-center`, index > 0 && tw`mt-2`]}
                             >
-                                <FontAwesomeIcon icon={faKey} css={tw`text-zinc-300`} />
+                                {/* <FontAwesomeIcon icon={faKey} css={tw`text-zinc-300`} /> */}
                                 <div css={tw`ml-4 flex-1 overflow-hidden`}>
                                     <p css={tw`text-sm break-words`}>{key.description}</p>
                                     <p css={tw`text-xs text-zinc-300 uppercase`}>
@@ -81,10 +79,11 @@ export default () => {
                                     <code css={tw`font-mono py-1 px-2 bg-zinc-900 rounded`}>{key.identifier}</code>
                                 </p>
                                 <button css={tw`ml-4 p-2 text-sm`} onClick={() => setDeleteIdentifier(key.identifier)}>
-                                    <FontAwesomeIcon
+                                    {/* <FontAwesomeIcon
                                         icon={faTrashAlt}
                                         css={tw`text-zinc-400 hover:text-red-400 transition-colors duration-150`}
-                                    />
+                                    /> */}
+                                    FIXME: Delete Icon
                                 </button>
                             </GreyRowBox>
                         ))

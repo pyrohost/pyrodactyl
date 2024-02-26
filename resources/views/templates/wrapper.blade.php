@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-pyro-html style="background-color: #000000">
     <head>
-        <title>{{ config('app.name', 'Pterodactyl') }}</title>
+        <title>{{ config('app.name', 'pyro.host') }}</title>
 
         @section('meta')
             <meta charset="utf-8">

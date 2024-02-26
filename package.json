@@ -4,9 +4,6 @@
         "node": ">=14"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^6.5.1",
-        "@fortawesome/free-solid-svg-icons": "^6.5.1",
-        "@fortawesome/react-fontawesome": "^0.2.0",
         "@headlessui/react": "^1.6.4",
         "@heroicons/react": "^1.0.6",
         "@preact/signals-react": "^1.2.1",

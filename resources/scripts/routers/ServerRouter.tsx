@@ -14,8 +14,6 @@ import { useStoreState } from 'easy-peasy';
 import SubNavigation from '@/components/elements/SubNavigation';
 import InstallListener from '@/components/server/InstallListener';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
@@ -168,7 +166,6 @@ export default () => {
                             {rootAdmin && (
                                 // eslint-disable-next-line react/jsx-no-target-blank
                                 <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
-                                    <FontAwesomeIcon className='ml-0.5' size={'lg'} icon={faExternalLinkAlt} />
                                     <div className='ml-1'>Manage Server </div>
                                     <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
                                         Staff

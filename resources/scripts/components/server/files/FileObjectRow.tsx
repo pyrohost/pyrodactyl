@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileAlt, faFileArchive, faFileImport, faFolder } from '@fortawesome/free-solid-svg-icons';
 import { encodePathSegments } from '@/helpers';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import React, { memo } from 'react';
@@ -47,9 +45,6 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
         <Clickable file={file}>
             <div css={tw`flex-none text-zinc-400 ml-6 mr-4 text-lg pl-3`}>
                 {file.isFile ? (
-                    // <FontAwesomeIcon
-                    //     icon={file.isSymlink ? faFileImport : file.isArchiveType() ? faFileArchive : faFileAlt}
-                    // />
                     // todo handle other types of files. ugh
                     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                         <path

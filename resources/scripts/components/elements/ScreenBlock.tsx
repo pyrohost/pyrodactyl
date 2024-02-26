@@ -1,7 +1,5 @@
 import React from 'react';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import styled, { keyframes } from 'styled-components/macro';
 import tw from 'twin.macro';
 import Button from '@/components/elements/Button';
@@ -50,7 +48,8 @@ const ScreenBlock = ({ title, image, message, onBack, onRetry }: ScreenBlockProp
                             onClick={() => (onRetry ? onRetry() : onBack ? onBack() : null)}
                             className={onRetry ? 'hover:spin' : undefined}
                         >
-                            <FontAwesomeIcon icon={onRetry ? faSyncAlt : faArrowLeft} />
+                            {/* <FontAwesomeIcon icon={onRetry ? faSyncAlt : faArrowLeft} /> */}
+                            <div>FIXME: Icon</div>
                         </ActionButton>
                     </div>
                 )}

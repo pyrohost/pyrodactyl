@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import useEventListener from '@/plugins/useEventListener';
 import SearchModal from '@/components/dashboard/search/SearchModal';
 // FIXME: replace with radix tooltip
@@ -22,7 +20,8 @@ export default () => {
             {visible && <SearchModal appear visible={visible} onDismissed={() => setVisible(false)} />}
             {/* <Tooltip placement={'bottom'} content={'Search'}> */}
             <div className={'navigation-link'} onClick={() => setVisible(true)}>
-                <FontAwesomeIcon icon={faSearch} />
+                {/* <FontAwesomeIcon icon={faSearch} /> */}
+                FIXME: Search
             </div>
             {/* </Tooltip> */}
         </>

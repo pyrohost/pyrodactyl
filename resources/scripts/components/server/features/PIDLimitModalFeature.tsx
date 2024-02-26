@@ -7,8 +7,6 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
 import { SocketEvent } from '@/components/server/events';
 import { useStoreState } from 'easy-peasy';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 const PIDLimitModalFeature = () => {
     const [visible, setVisible] = useState(false);
@@ -59,7 +57,6 @@ const PIDLimitModalFeature = () => {
             {isAdmin ? (
                 <>
                     <div css={tw`mt-4 sm:flex items-center`}>
-                        <FontAwesomeIcon css={tw`pr-4`} icon={faExclamationTriangle} color={'orange'} size={'4x'} />
                         <h2 css={tw`text-2xl mb-4 text-zinc-100 `}>Memory or process limit reached...</h2>
                     </div>
                     <p css={tw`mt-4`}>This server has reached the maximum process or memory limit.</p>
@@ -80,7 +77,6 @@ const PIDLimitModalFeature = () => {
             ) : (
                 <>
                     <div css={tw`mt-4 sm:flex items-center`}>
-                        <FontAwesomeIcon css={tw`pr-4`} icon={faExclamationTriangle} color={'orange'} size={'4x'} />
                         <h2 css={tw`text-2xl mb-4 text-zinc-100`}>Possible resource limit reached...</h2>
                     </div>
                     <p css={tw`mt-4`}>

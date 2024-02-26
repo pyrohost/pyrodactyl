@@ -1,13 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-    faClock,
-    faCloudDownloadAlt,
-    faCloudUploadAlt,
-    faHdd,
-    faMemory,
-    faMicrochip,
-    faWifi,
-} from '@fortawesome/free-solid-svg-icons';
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import { ServerContext } from '@/state/server';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -90,7 +81,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     return (
         <div className={clsx('flex gap-4', className)}>
-            <StatBlock icon={faWifi} title={'IP Address'} copyOnClick={allocation}>
+            <StatBlock title={'IP Address'} copyOnClick={allocation}>
                 {allocation}
             </StatBlock>
             {/* <StatBlock
@@ -106,7 +97,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     capitalize(status)
                 )}
             </StatBlock> */}
-            <StatBlock icon={faMicrochip} title={'CPU'} color={getBackgroundColor(stats.cpu, limits.cpu)}>
+            <StatBlock title={'CPU'} color={getBackgroundColor(stats.cpu, limits.cpu)}>
                 {status === 'offline' ? (
                     <span className={'text-zinc-400'}>Offline</span>
                 ) : (
@@ -114,7 +105,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                 )}
             </StatBlock>
             <StatBlock
-                icon={faMemory}
                 title={'RAM'}
                 color={getBackgroundColor(stats.memory / 1024, limits.memory * 1024)}
             >
@@ -124,7 +114,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
                 )}
             </StatBlock>
-            <StatBlock icon={faHdd} title={'Storage'} color={getBackgroundColor(stats.disk / 1024, limits.disk * 1024)}>
+            <StatBlock title={'Storage'} color={getBackgroundColor(stats.disk / 1024, limits.disk * 1024)}>
                 <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
             </StatBlock>
             {/* <StatBlock icon={faCloudDownloadAlt} title={'Network (Inbound)'}>
