@@ -80,7 +80,6 @@ export default () => {
                 )
             ) : (
                 <>
-                    {/* <CSSTransition timeout={150} classNames={'fade'} appear in> */}
                     <SubNavigation>
                         <div className='flex flex-row items-center justify-between h-8'>
                             <Link to={'/'} className='flex shrink-0 h-full w-fit'>
@@ -137,32 +136,6 @@ export default () => {
                                     <p>Settings</p>
                                 </NavLink>
                             </Can>
-                            {/* i needed to do this to control which routes people visit without rendering them */}
-                            {/* actually no i want them to still be accessible but i dont think theyre important enough for the sidebar */}
-                            {/* {routes.server
-                                .filter((route) => !!route.name)
-                                .map((route) =>
-                                    route.permission ? (
-                                        <Can key={route.path} action={route.permission} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center'
-                                                to={to(route.path, true)}
-                                                exact={route.exact}
-                                            >
-                                                {route.name}
-                                            </NavLink>
-                                        </Can>
-                                    ) : (
-                                        <NavLink
-                                            className='flex flex-row items-center'
-                                            key={route.path}
-                                            to={to(route.path, true)}
-                                            exact={route.exact}
-                                        >
-                                            {route.name}
-                                        </NavLink>
-                                    )
-                                )} */}
                             {rootAdmin && (
                                 // eslint-disable-next-line react/jsx-no-target-blank
                                 <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
@@ -174,7 +147,6 @@ export default () => {
                             )}
                         </div>
                     </SubNavigation>
-                    {/* </CSSTransition> */}
                     <InstallListener />
                     <TransferListener />
                     <WebsocketHandler />
