@@ -47,7 +47,7 @@ export default ({ backup, className }: Props) => {
 
     return (
         <GreyRowBox css={tw`flex-wrap md:flex-nowrap items-center`} className={className}>
-            <div css={tw`flex items-center truncate w-full md:flex-1`}>
+            <div className={`flex items-center truncate w-full md:flex-1`}>
                 {/* <div css={tw`mr-4`}>
                     {backup.completedAt !== null ? (
                         backup.isLocked ? (
@@ -68,15 +68,26 @@ export default ({ backup, className }: Props) => {
                                 Failed
                             </span>
                         )}
-                        <p css={tw`break-words truncate text-lg`}>{backup.name}</p>
-                        {backup.completedAt !== null && backup.isSuccessful && (
-                            <span css={tw`ml-2 text-zinc-300 text-xs font-extralight hidden sm:inline`}>
-                                {bytesToString(backup.bytes)}
-                            </span>
-                        )}
+                        <div className={`flex gap-2 items-center justify-center`}>
+                            <p className='break-words truncate text-lg'>{backup.name}</p>
+                            {backup.completedAt !== null ? (
+                                backup.isLocked ? (
+                                    <span className='font-bold z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                        Locked
+                                    </span>
+                                ) : null
+                            ) : (
+                                <Spinner size={'small'} />
+                            )}
+                        </div>
                     </div>
-                    <p css={tw`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
+                    <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
                 </div>
+            </div>
+            <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                {backup.completedAt !== null && backup.isSuccessful && (
+                    <span css={tw`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
+                )}
             </div>
             <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
                 <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} className={`text-xs`}>

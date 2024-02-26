@@ -62,9 +62,20 @@ const BackupContainer = () => {
                             </p>
                         )
                     ) : (
-                        items.map((backup, index) => (
-                            <BackupRow key={backup.uuid} backup={backup} css={index > 0 ? tw`mt-2` : undefined} />
-                        ))
+                        <div
+                            data-pyro-file-manager-files
+                            style={{
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                            }}
+                            className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                        >
+                            <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
+                                {items.map((backup, index) => (
+                                    <BackupRow key={backup.uuid} backup={backup} />
+                                ))}
+                            </div>
+                        </div>
                     )
                 }
             </Pagination>
