@@ -63,7 +63,7 @@ const App = () => {
                 <ProgressBar />
                 <div
                     data-pyro-routerwrap=''
-                    className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg gap-2'
+                    className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
                 >
                     <Router history={history}>
                         <Switch>

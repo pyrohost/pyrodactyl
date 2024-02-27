@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/elements/button/index';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
 import { Dialog } from '@/components/elements/dialog';
+import { toast } from 'sonner';
 
 interface PowerButtonProps {
     className?: string;
@@ -25,6 +25,13 @@ export default ({ className }: PowerButtonProps) => {
         }
 
         if (instance) {
+            if (action === 'start') {
+                toast.success('Your server is starting!');
+            } else if (action === 'restart') {
+                toast.success('Your server is restarting.');
+            } else {
+                toast.success('Your server is being stopped.');
+            }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
         }

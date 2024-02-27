@@ -211,14 +211,6 @@ export default () => {
                         autoCorrect={'off'}
                         autoCapitalize={'none'}
                     />
-                    {/* <div
-                        className={clsx(
-                            'text-zinc-100 peer-focus:text-zinc-50 peer-focus:animate-pulse',
-                            styles.command_icon
-                        )}
-                    >
-                        <ChevronDoubleRightIcon className={'w-4 h-4'} />
-                    </div> */}
                 </div>
             )}
         </div>

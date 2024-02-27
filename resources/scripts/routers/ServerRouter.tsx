@@ -1,11 +1,10 @@
+import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
-import NavigationBar from '@/components/NavigationBar';
 import TransitionRouter from '@/TransitionRouter';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
-import { CSSTransition } from 'react-transition-group';
 import Can from '@/components/elements/Can';
 import Spinner from '@/components/elements/Spinner';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
@@ -19,7 +18,6 @@ import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
-import HugeIconsConsole from '@/components/elements/hugeicons/Console';
 import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
 import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
@@ -70,16 +68,23 @@ export default () => {
 
     return (
         <React.Fragment key={'server-router'}>
-            {/* <NavigationBar /> */}
             {!uuid || !id ? (
                 error ? (
                     <ServerError message={error} />
                 ) : (
-                    // <Spinner size={'large'} centered />
                     <></>
                 )
             ) : (
                 <>
+                    <Toaster
+                        theme='dark'
+                        toastOptions={{
+                            unstyled: true,
+                            classNames: {
+                                toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
+                            },
+                        }}
+                    />
                     <SubNavigation>
                         <div className='flex flex-row items-center justify-between h-8'>
                             <Link to={'/'} className='flex shrink-0 h-full w-fit'>
