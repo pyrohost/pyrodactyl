@@ -70,7 +70,22 @@ export default () => {
     const zIndex = `
     .xterm-search-bar__addon {
         z-index: 10;
-    }`;
+        background: #323232;
+        background-color: #323232;
+        border-radius: 0.75rem;
+        padding: 1rem;
+    }
+    .xterm-search-bar__addon .search-bar__input {
+        background-color: transparent;
+        padding: 8px;
+    }
+    .xterm-search-bar__addon .search-bar__input:focus {
+        outline: none;
+    }
+    .xterm-search-bar__addon .search-bar__btn {
+        background-color: transparent;
+    }
+    `;
 
     const handleConsoleOutput = (line: string, prelude = false) =>
         terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
