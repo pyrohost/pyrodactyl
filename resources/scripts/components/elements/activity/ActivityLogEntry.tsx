@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
-import Translate from '@/components/elements/Translate';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { ActivityLog } from '@definitions/user';
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
@@ -79,9 +78,10 @@ export default ({ activity, children }: Props) => {
                             {children}
                         </div>
                     </div>
-                    <p className={style.description}>
+                    {/* We really don't need an i18n lib to translate what the activity log does */}
+                    {/* <p className={style.description}>
                         <Translate ns={'activity'} values={properties} i18nKey={activity.event.replace(':', '.')} />
-                    </p>
+                    </p> */}
                     <div className={'mt-1 flex items-center text-sm'}>
                         {activity.ip && (
                             <span>
