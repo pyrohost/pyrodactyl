@@ -135,7 +135,7 @@
         "test": "jest",
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx",
         "//watch": "I set node_env to production because watch does not work otherwise. Too bad!",
-        "watch": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --watch --progress",
+        "watch": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --watch --progress",
         "build": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --progress",
         "build:fast": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider TYPE_CHECKING=false ./node_modules/.bin/webpack --progress && echo \"\n[!] Type checking was disabled for this build, this may result in runtime errors.\n\"",
         "build:production": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --mode production",
