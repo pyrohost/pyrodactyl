@@ -27,7 +27,8 @@ module.exports = {
     entry: ['./resources/scripts/index.tsx'],
     output: {
         path: path.join(__dirname, '/public/assets'),
-        filename: 'bundle.js', // Simplify filename for development
+        filename: '[name].js',
+        chunkFilename: '[id].[chunkhash].js',
         publicPath: process.env.WEBPACK_PUBLIC_PATH || '/assets/',
         crossOriginLoading: 'anonymous',
         pathinfo: false,
@@ -140,6 +141,7 @@ module.exports = {
         providedExports: isProduction,
         concatenateModules: isProduction,
         minimize: isProduction,
+        runtimeChunk: true,
         minimizer: [
             new TerserPlugin({
                 extractComments: false,
