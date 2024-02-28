@@ -18,7 +18,7 @@
         "date-fns": "^3.3.1",
         "debounce": "^2.0.0",
         "deepmerge-ts": "^5.1.0",
-        "easy-peasy": "^4.0.1",
+        "easy-peasy": "^6.0.4",
         "events": "^3.0.0",
         "formik": "^2.2.6",
         "framer-motion": "^6.3.10",

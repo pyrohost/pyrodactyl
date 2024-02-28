@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { httpErrorToHuman } from '@/api/http';
-import { CSSTransition } from 'react-transition-group';
-import Spinner from '@/components/elements/Spinner';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import { FileObject } from '@/api/server/files/loadDirectory';
@@ -10,7 +8,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import Can from '@/components/elements/Can';
 import { ServerError } from '@/components/elements/ScreenBlock';
 import tw from 'twin.macro';
-import { Button } from '@/components/elements/button/index';
 import { ServerContext } from '@/state/server';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import FileManagerStatus from '@/components/server/files/FileManagerStatus';
