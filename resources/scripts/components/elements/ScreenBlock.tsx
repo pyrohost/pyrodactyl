@@ -1,6 +1,6 @@
 import React from 'react';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components/macro';
 import tw from 'twin.macro';
 import Button from '@/components/elements/Button';
 import NotFoundSvg from '@/assets/images/not_found.svg';

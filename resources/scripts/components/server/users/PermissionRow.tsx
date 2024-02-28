@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import tw from 'twin.macro';
 import Checkbox from '@/components/elements/Checkbox';
 import React from 'react';

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { breakpoint } from '@/theme';
 import tw from 'twin.macro';
 
