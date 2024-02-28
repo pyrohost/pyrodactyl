@@ -20,7 +20,7 @@
         "deepmerge-ts": "^5.1.0",
         "easy-peasy": "^6.0.4",
         "events": "^3.0.0",
-        "formik": "^2.2.6",
+        "formik": "^2.4.5",
         "framer-motion": "^6.3.10",
         "pathe": "^1.1.2",
         "qrcode.react": "^1.0.1",
