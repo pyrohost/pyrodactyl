@@ -28,7 +28,6 @@
         "react-chartjs-2": "^4.2.0",
         "react-dom": "^16.14.0",
         "react-fast-compare": "^3.2.0",
-        "react-hot-loader": "^4.12.21",
         "react-router-dom": "^5.1.2",
         "react-transition-group": "^4.4.1",
         "reaptcha": "^1.12.1",

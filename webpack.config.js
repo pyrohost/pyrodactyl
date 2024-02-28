@@ -24,7 +24,7 @@ module.exports = {
     performance: {
         hints: false,
     },
-    entry: ['react-hot-loader/patch', './resources/scripts/index.tsx'],
+    entry: ['./resources/scripts/index.tsx'],
     output: {
         path: path.join(__dirname, '/public/assets'),
         filename: 'bundle.js', // Simplify filename for development
