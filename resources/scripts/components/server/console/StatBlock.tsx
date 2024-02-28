@@ -12,8 +12,6 @@ interface StatBlockProps {
 }
 
 export default ({ title, copyOnClick, color, className, children }: StatBlockProps) => {
-    // const { fontSize, ref } = useFitText({ minFontSize: 8, maxFontSize: 500 });
-
     return (
         <CopyOnClick text={copyOnClick}>
             <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>

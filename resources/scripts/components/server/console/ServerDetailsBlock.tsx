@@ -2,11 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import { ServerContext } from '@/state/server';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
-import UptimeDuration from '@/components/server/UptimeDuration';
 import StatBlock from '@/components/server/console/StatBlock';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 import clsx from 'clsx';
-import { capitalize } from '@/lib/strings';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 
@@ -26,7 +24,6 @@ const getBackgroundColor = (value: number, max: number | null): string | undefin
 const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => (
     <>
         {children}
-        {/* <span className={'ml-1 text-zinc-300 text-[70%] select-none'}>/ {limit || <>&infin;</>}</span> */}
     </>
 );
 
@@ -117,12 +114,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
             <StatBlock title={'Storage'} color={getBackgroundColor(stats.disk / 1024, limits.disk * 1024)}>
                 <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
             </StatBlock>
-            {/* <StatBlock icon={faCloudDownloadAlt} title={'Network (Inbound)'}>
-                {status === 'offline' ? <span className={'text-zinc-400'}>Offline</span> : bytesToString(stats.rx)}
-            </StatBlock>
-            <StatBlock icon={faCloudUploadAlt} title={'Network (Outbound)'}>
-                {status === 'offline' ? <span className={'text-zinc-400'}>Offline</span> : bytesToString(stats.tx)}
-            </StatBlock> */}
         </div>
     );
 };
