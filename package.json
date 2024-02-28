@@ -110,7 +110,7 @@
         "redux-devtools-extension": "^2.13.8",
         "source-map-loader": "^5.0.0",
         "style-loader": "^3.3.4",
-        "svg-url-loader": "^7.1.1",
+        "svg-url-loader": "^8.0.0",
         "terser-webpack-plugin": "^4.2.3",
         "ts-essentials": "^9.1.2",
         "ts-jest": "^28.0.5",
