@@ -111,7 +111,7 @@
         "source-map-loader": "^5.0.0",
         "style-loader": "^3.3.4",
         "svg-url-loader": "^8.0.0",
-        "terser-webpack-plugin": "^4.2.3",
+        "terser-webpack-plugin": "^5.3.10",
         "ts-essentials": "^9.1.2",
         "ts-jest": "^28.0.5",
         "twin.macro": "^3.4.1",
