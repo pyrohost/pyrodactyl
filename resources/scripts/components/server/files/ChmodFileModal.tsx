@@ -28,12 +28,12 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
     const directory = ServerContext.useStoreState((state) => state.files.directory);
     const setSelectedFiles = ServerContext.useStoreActions((actions) => actions.files.setSelectedFiles);
 
-    const submit = ({ mode }: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
+    const submit = async ({ mode }: FormikValues, { setSubmitting }: FormikHelpers<FormikValues>) => {
         clearFlashes('files');
 
-        mutate(
+        await mutate(
             (data) =>
-                data.map((f) =>
+                data!.map((f) =>
                     f.name === files[0]?.file ? { ...f, mode: fileBitsToString(mode, !f.isFile), modeBits: mode } : f
                 ),
             false

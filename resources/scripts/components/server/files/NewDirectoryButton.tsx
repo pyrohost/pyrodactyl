@@ -56,7 +56,7 @@ const NewDirectoryDialog = asDialog({
 
     const submit = ({ directoryName }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         createDirectory(uuid, directory, directoryName)
-            .then(() => mutate((data) => [...data, generateDirectoryData(directoryName)], false))
+            .then(() => mutate((data) => [...data!, generateDirectoryData(directoryName)], false))
             .then(() => close())
             .catch((error) => {
                 setSubmitting(false);
