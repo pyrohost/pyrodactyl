@@ -33,7 +33,7 @@ module.exports = {
         // 'standard',
         'eslint:recommended',
         'plugin:react/recommended',
-        // 'plugin:react/jsx-runtime',
+        'plugin:react/jsx-runtime',
         'plugin:@typescript-eslint/recommended',
         'plugin:jest-dom/recommended',
     ],
