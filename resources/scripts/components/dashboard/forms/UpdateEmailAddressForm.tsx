@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';

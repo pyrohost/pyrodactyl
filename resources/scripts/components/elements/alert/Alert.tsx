@@ -1,5 +1,5 @@
 // FIXME: add icons back
-import React from 'react';
+import * as React from 'react';
 import clsx from 'clsx';
 
 interface AlertProps {

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { ServerContext } from '@/state/server';
 import { useStoreState } from 'easy-peasy';

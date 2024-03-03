@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { DialogContextType, DialogWrapperContextType } from './types';
 
 export const DialogContext = React.createContext<DialogContextType>({
