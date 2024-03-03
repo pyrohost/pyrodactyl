@@ -3,8 +3,6 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     overrides: [
         {
-            files: ['*.ts', '*.tsx'],
-            ignore: ['*.js', '*.jsx', '*.d.ts', '*.cjs'],
             parserOptions: {
                 ecmaVersion: 6,
                 ecmaFeatures: {
