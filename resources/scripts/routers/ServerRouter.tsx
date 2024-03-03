@@ -25,6 +25,13 @@ import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import CommandMenu from '@/components/elements/commandk/CmdK';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenuNew';
+import http from '@/api/http';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -39,6 +46,13 @@ export default () => {
     const serverId = ServerContext.useStoreState((state) => state.server.data?.internalId);
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
+
+    const onTriggerLogout = () => {
+        http.post('/auth/logout').finally(() => {
+            // @ts-expect-error this is valid
+            window.location = '/';
+        });
+    };
 
     const to = (value: string, url = false) => {
         if (value === '/') {
@@ -91,19 +105,26 @@ export default () => {
                             <Link to={'/'} className='flex shrink-0 h-full w-fit'>
                                 <Logo />
                             </Link>
-                            <div className='flex shrink-0 h-6 w-6 fill-white'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='32'
-                                    height='32'
-                                    fill='currentColor'
-                                    viewBox='0 0 256 256'
-                                    className='flex shrink-0 h-full w-full'
-                                >
-                                    {/* @ts-ignore */}
-                                    <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
-                                </svg>
-                            </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <button className='w-8 h-8 flex items-center justify-center rounded-md text-white'>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width='32'
+                                            height='32'
+                                            fill='currentColor'
+                                            viewBox='0 0 256 256'
+                                            className='flex shrink-0 h-full w-full'
+                                        >
+                                            {/* @ts-ignore */}
+                                            <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                                        </svg>
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                                    <DropdownMenuItem onClick={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                         <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>

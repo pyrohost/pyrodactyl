@@ -11,6 +11,12 @@ import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 // import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 import { Suspense } from 'react';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenuNew';
 
 export default () => {
     const location = useLocation();
@@ -30,17 +36,26 @@ export default () => {
                     <Link to={'/'} className='flex shrink-0 h-full w-fit'>
                         <Logo />
                     </Link>
-                    <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='32'
-                        height='32'
-                        fill='currentColor'
-                        viewBox='0 0 256 256'
-                        className='flex shrink-0 h-full w-full'
-                    >
-                        {/* @ts-ignore */}
-                        <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
-                    </svg>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className='w-8 h-8 flex items-center justify-center rounded-md text-white'>
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='32'
+                                    height='32'
+                                    fill='currentColor'
+                                    viewBox='0 0 256 256'
+                                    className='flex shrink-0 h-full w-full'
+                                >
+                                    {/* @ts-ignore */}
+                                    <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                                </svg>
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                            <DropdownMenuItem onClick={onTriggerLogout}>Log Out</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
                 <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <div className='pyro-subnav-routes-wrapper'>
@@ -52,7 +67,6 @@ export default () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Your Settings</p>
                     </NavLink>
-                    <button onClick={onTriggerLogout}>Logout</button>
                 </div>
             </SubNavigation>
             {/* )} */}
