@@ -6,7 +6,7 @@ interface Props extends Omit<CSSTransitionProps, 'timeout' | 'classNames'> {
     timeout: number;
 }
 
-const Container = styled.div<{ timeout: number }>`
+const Container = styled.div<{ $timeout: number }>`
     .fade-enter,
     .fade-exit,
     .fade-appear {
@@ -20,7 +20,7 @@ const Container = styled.div<{ timeout: number }>`
         &.fade-enter-active,
         &.fade-appear-active {
             ${tw`opacity-100 transition-opacity ease-in`};
-            transition-duration: ${(props) => props.timeout}ms;
+            transition-duration: ${(props) => props.$timeout}ms;
         }
     }
 
@@ -29,13 +29,13 @@ const Container = styled.div<{ timeout: number }>`
 
         &.fade-exit-active {
             ${tw`opacity-0 transition-opacity ease-in`};
-            transition-duration: ${(props) => props.timeout}ms;
+            transition-duration: ${(props) => props.$timeout}ms;
         }
     }
 `;
 
 const Fade: React.FC<Props> = ({ timeout, children, ...props }) => (
-    <Container timeout={timeout}>
+    <Container $timeout={timeout}>
         <CSSTransition timeout={timeout} classNames={'fade'} {...props}>
             {children}
         </CSSTransition>
