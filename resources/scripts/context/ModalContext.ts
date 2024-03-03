@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { SettableModalProps } from '@/hoc/asModal';
+import { createContext } from 'react';
 
 export interface ModalContextValues {
     dismiss: () => void;
@@ -11,7 +11,7 @@ export interface ModalContextValues {
     ) => void;
 }
 
-const ModalContext = React.createContext<ModalContextValues>({
+const ModalContext = createContext<ModalContextValues>({
     dismiss: () => null,
     setPropOverrides: () => null,
 });

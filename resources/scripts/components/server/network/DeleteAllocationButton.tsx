@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import tw from 'twin.macro';
-import Icon from '@/components/elements/Icon';
+import { useState } from 'react';
 import { ServerContext } from '@/state/server';
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';

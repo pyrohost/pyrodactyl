@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ITerminalOptions, Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { SearchAddon } from 'xterm-addon-search';
@@ -189,7 +189,12 @@ export default () => {
             }
 
             Object.keys(listeners).forEach((key: string) => {
-                instance.addListener(key, listeners[key]);
+                const listener = listeners[key];
+                if (listener === undefined) {
+                    return;
+                }
+
+                instance.addListener(key, listener);
             });
             instance.send(SocketRequest.SEND_LOGS);
         }
@@ -197,7 +202,12 @@ export default () => {
         return () => {
             if (instance) {
                 Object.keys(listeners).forEach((key: string) => {
-                    instance.removeListener(key, listeners[key]);
+                    const listener = listeners[key];
+                    if (listener === undefined) {
+                        return;
+                    }
+
+                    instance.removeListener(key, listener);
                 });
             }
         };

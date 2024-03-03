@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Link, NavLink, Route, Switch } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
@@ -11,6 +10,7 @@ import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
+import { Suspense } from 'react';
 
 export default () => {
     const location = useLocation();
@@ -66,7 +66,7 @@ export default () => {
             </SubNavigation>
             {/* )} */}
             <TransitionRouter>
-                <React.Suspense fallback={null}>
+                <Suspense fallback={null}>
                     <Switch location={location}>
                         <Route path={'/'} exact>
                             <DashboardContainer />
@@ -80,7 +80,7 @@ export default () => {
                             <NotFound />
                         </Route>
                     </Switch>
-                </React.Suspense>
+                </Suspense>
             </TransitionRouter>
         </>
     );

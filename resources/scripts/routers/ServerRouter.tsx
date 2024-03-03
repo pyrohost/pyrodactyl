@@ -1,6 +1,6 @@
 import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
 import TransitionRouter from '@/TransitionRouter';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
@@ -67,7 +67,7 @@ export default () => {
     }, [match.params.id]);
 
     return (
-        <React.Fragment key={'server-router'}>
+        <Fragment key={'server-router'}>
             {!uuid || !id ? (
                 error ? (
                     <ServerError message={error} />
@@ -175,6 +175,6 @@ export default () => {
                     )}
                 </>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 };

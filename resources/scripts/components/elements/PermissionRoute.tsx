@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { RouteProps } from 'react-router';
 import Can from '@/components/elements/Can';

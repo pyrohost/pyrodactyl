@@ -1,4 +1,3 @@
-import * as React from 'react';
 import tw from 'twin.macro';
 import { ServerContext } from '@/state/server';
 import styled from 'styled-components';

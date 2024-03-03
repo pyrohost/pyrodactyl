@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ServerContext } from '@/state/server';
 import ScreenBlock from '@/components/elements/ScreenBlock';
 import ServerInstallSvg from '@/assets/images/server_installing.svg';

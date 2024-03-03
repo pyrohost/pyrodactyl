@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { usePermissions } from '@/plugins/usePermissions';
 import isEqual from 'react-fast-compare';
 

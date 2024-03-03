@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import LoginContainer from '@/components/auth/LoginContainer';
 import ForgotPasswordContainer from '@/components/auth/ForgotPasswordContainer';

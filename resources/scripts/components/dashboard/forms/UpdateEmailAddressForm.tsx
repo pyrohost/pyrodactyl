@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +7,7 @@ import { httpErrorToHuman } from '@/api/http';
 import { ApplicationStore } from '@/state';
 import tw from 'twin.macro';
 import { Button } from '@/components/elements/button/index';
+import { Fragment } from 'react';
 
 interface Values {
     email: string;
@@ -53,7 +53,7 @@ export default () => {
     return (
         <Formik onSubmit={submit} validationSchema={schema} initialValues={{ email: user!.email, password: '' }}>
             {({ isSubmitting, isValid }) => (
-                <React.Fragment>
+                <Fragment>
                     <SpinnerOverlay size={'large'} visible={isSubmitting} />
                     <Form css={tw`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
@@ -69,7 +69,7 @@ export default () => {
                             <Button disabled={isSubmitting || !isValid}>Update Email</Button>
                         </div>
                     </Form>
-                </React.Fragment>
+                </Fragment>
             )}
         </Formik>
     );

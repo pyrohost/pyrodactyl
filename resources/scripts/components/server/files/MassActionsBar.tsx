@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import tw from 'twin.macro';
 import { Button } from '@/components/elements/button/index';
 import Fade from '@/components/elements/Fade';

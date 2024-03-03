@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 // FIXME: add icons back
 import { Dialog } from '@/components/elements/dialog';
 import { Button } from '@/components/elements/button/index';

@@ -1,22 +1,9 @@
-import * as React from 'react';
 import { Route } from 'react-router';
-import { SwitchTransition } from 'react-transition-group';
-import Fade from '@/components/elements/Fade';
-import styled from 'styled-components';
-import tw from 'twin.macro';
-
-const StyledSwitchTransition = styled(SwitchTransition)`
-    ${tw`relative`};
-
-    & section {
-        ${tw`absolute w-full top-0 left-0`};
-    }
-`;
 
 const TransitionRouter: React.FC = ({ children }) => {
     return (
         <Route
-            render={({ location }) => (
+            render={() => (
                 <div
                     className='w-full h-full rounded-md'
                     style={{

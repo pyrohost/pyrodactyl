@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { ServerContext } from '@/state/server';
 // FIXME: add icons back
 import asDialog from '@/hoc/asDialog';

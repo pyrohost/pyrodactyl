@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
 import { httpErrorToHuman } from '@/api/http';
@@ -9,7 +9,6 @@ import useFlash from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
 import tw from 'twin.macro';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
-import Icon from '@/components/elements/Icon';
 
 interface Props {
     schedule: Schedule;

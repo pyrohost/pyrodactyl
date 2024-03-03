@@ -1,46 +1,45 @@
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
-import { format, formatDistanceToNowStrict } from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 import { ActivityLog } from '@definitions/user';
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
 // FIXME: add icons back
 import clsx from 'clsx';
 import style from './style.module.css';
 import useLocationHash from '@/plugins/useLocationHash';
-import { getObjectKeys, isObject } from '@/lib/objects';
+// import { getObjectKeys, isObject } from '@/lib/objects';
 
 interface Props {
     activity: ActivityLog;
     children?: React.ReactNode;
 }
 
-function wrapProperties(value: unknown): any {
-    if (value === null || typeof value === 'string' || typeof value === 'number') {
-        return `<strong>${String(value)}</strong>`;
-    }
+// function wrapProperties(value: unknown): any {
+//     if (value === null || typeof value === 'string' || typeof value === 'number') {
+//         return `<strong>${String(value)}</strong>`;
+//     }
 
-    if (isObject(value)) {
-        return getObjectKeys(value).reduce((obj, key) => {
-            if (key === 'count' || (typeof key === 'string' && key.endsWith('_count'))) {
-                return { ...obj, [key]: value[key] };
-            }
-            return { ...obj, [key]: wrapProperties(value[key]) };
-        }, {} as Record<string, unknown>);
-    }
+//     if (isObject(value)) {
+//         return getObjectKeys(value).reduce((obj, key) => {
+//             if (key === 'count' || (typeof key === 'string' && key.endsWith('_count'))) {
+//                 return { ...obj, [key]: value[key] };
+//             }
+//             return { ...obj, [key]: wrapProperties(value[key]) };
+//         }, {} as Record<string, unknown>);
+//     }
 
-    if (Array.isArray(value)) {
-        return value.map(wrapProperties);
-    }
+//     if (Array.isArray(value)) {
+//         return value.map(wrapProperties);
+//     }
 
-    return value;
-}
+//     return value;
+// }
 
 export default ({ activity, children }: Props) => {
     const { pathTo } = useLocationHash();
     const actor = activity.relationships.actor;
-    const properties = wrapProperties(activity.properties);
+    // const properties = wrapProperties(activity.properties);
 
     return (
         <div className={'grid grid-cols-10 py-4 border-b-2 border-zinc-800 last:rounded-b last:border-0 group'}>

@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog as HDialog } from '@headlessui/react';
-import { Button } from '@/components/elements/button/index';
 // FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
