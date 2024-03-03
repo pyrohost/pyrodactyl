@@ -1,3 +1,7 @@
+// Because of how react-router, react lazy, and signals work with each other
+// the only way to prevent mismatching and weird errors is to import the lib
+// in the root first. The github issue for this is still open. Stupid.
+// https://github.com/preactjs/signals/issues/414
 import '@preact/signals-react';
 
 import { lazy } from 'react';
