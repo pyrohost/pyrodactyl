@@ -85,9 +85,6 @@ export default ({ className }: WithClassname) => {
                                 signal: controller.signal,
                                 headers: { 'Content-Type': 'multipart/form-data' },
                                 params: { directory },
-                                // this just tracks upload progress, but axios v1 has types that i don't
-                                // want to figure out right now
-                                // @ts-ignore
                                 onUploadProgress: (data) => onUploadProgress(data, file.name),
                             }
                         )
