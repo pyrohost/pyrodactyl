@@ -63,7 +63,6 @@ export default createGlobalStyle`
         background: transparent;
     }
 
-
     @keyframes list-anim {
         0% {
             transform: translateY(-22px) scale(0.98);
@@ -75,7 +74,6 @@ export default createGlobalStyle`
             opacity: 1;
         }
     }
-
 
     .skeleton-anim-2 {
         animation: list-anim 1.5s both;

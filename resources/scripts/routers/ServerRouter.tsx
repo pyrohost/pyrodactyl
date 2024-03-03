@@ -10,10 +10,10 @@ import Spinner from '@/components/elements/Spinner';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
 import { useStoreState } from 'easy-peasy';
+import { useLocation } from 'react-router';
 import SubNavigation from '@/components/elements/SubNavigation';
 import InstallListener from '@/components/server/InstallListener';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { useLocation } from 'react-router';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import routes from '@/routers/routes';
@@ -24,6 +24,7 @@ import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import CommandMenu from '@/components/elements/commandk/CmdK';
 
 export default () => {
     const match = useRouteMatch<{ id: string }>();
@@ -152,6 +153,7 @@ export default () => {
                             )}
                         </div>
                     </SubNavigation>
+                    <CommandMenu />
                     <InstallListener />
                     <TransferListener />
                     <WebsocketHandler />
