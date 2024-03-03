@@ -116,8 +116,8 @@
         "twin.macro": "^3.4.1",
         "typescript": "^4.7.3",
         "webpack": "^5.90.3",
-        "webpack-assets-manifest": "^3.1.1",
-        "webpack-bundle-analyzer": "^3.8.0",
+        "webpack-assets-manifest": "^5.2.1",
+        "webpack-bundle-analyzer": "^4.10.1",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.0.2"
     },
