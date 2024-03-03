@@ -2,7 +2,7 @@ import { encodePathSegments } from '@/helpers';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import { memo } from 'react';
 import { FileObject } from '@/api/server/files/loadDirectory';
-import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
+// import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import tw from 'twin.macro';
@@ -90,7 +90,6 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
                     : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}
             </div>
         </Clickable>
-        <FileDropdownMenu file={file} />
     </div>
 );
 
