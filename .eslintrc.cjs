@@ -3,6 +3,8 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     overrides: [
         {
+            files: ['*.ts', '*.tsx'],
+            ignore: ['*.js', '*.jsx', '*.d.ts', '*.cjs'],
             parserOptions: {
                 ecmaVersion: 6,
                 ecmaFeatures: {
@@ -38,7 +40,13 @@ module.exports = {
     ],
     rules: {
         eqeqeq: 'error',
-        'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+        'prettier/prettier': [
+            'error',
+            {
+                endOfLine: 'auto',
+            },
+            { usePrettierrc: true },
+        ],
         // TypeScript can infer this significantly better than eslint ever can.
         'react/prop-types': 0,
         'react/display-name': 0,
