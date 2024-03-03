@@ -95,6 +95,10 @@
         cursor: not-allowed;
     }
 
+    &[data-disabled='true'] svg {
+        color: #444;
+    }
+
     &:active {
         transition-property: background;
         background: #3a3a3add;
@@ -103,7 +107,7 @@
     svg {
         width: 16px;
         height: 16px;
-        color: #eee;
+        color: #ddd;
     }
 }
 
@@ -126,6 +130,7 @@
     font-size: 12px;
     color: var(--gray11);
     padding: 0 16px;
+    margin-top: 8px;
     margin-bottom: 4px;
     display: flex;
     align-items: center;

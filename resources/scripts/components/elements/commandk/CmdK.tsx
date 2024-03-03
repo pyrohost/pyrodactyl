@@ -3,14 +3,22 @@ import { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import './styles.module.css';
 import Can from '@/components/elements/Can';
+import { ServerContext } from '@/state/server';
+import { toast } from 'sonner';
 import HugeIconsHome from '../hugeicons/Home';
 import HugeIconsFolder from '../hugeicons/Folder';
 import HugeIconsDatabase from '../hugeicons/Database';
 import HugeIconsCloudUp from '../hugeicons/CloudUp';
 import HugeIconsConnections from '../hugeicons/Connections';
 import HugeIconsDashboardSettings from '../hugeicons/DashboardSettings';
+import HugeIconsZap from '../hugeicons/Zap';
 
 const CommandMenu = () => {
+    const [open, setOpen] = useState(false);
+    const history = useHistory();
+    // controls server power status
+    const status = ServerContext.useStoreState((state) => state.status.value);
+    const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const match = useRouteMatch<{ id: string }>();
 
     const to = (value: string, url = false) => {
@@ -20,8 +28,19 @@ const CommandMenu = () => {
         return `${(url ? match.url : match.path).replace(/\/*$/, '')}/${value.replace(/^\/+/, '')}`;
     };
 
-    const [open, setOpen] = useState(false);
-    const history = useHistory();
+    const cmdkPowerAction = (action: string) => {
+        if (instance) {
+            if (action === 'start') {
+                toast.success('Your server is starting!');
+            } else if (action === 'restart') {
+                toast.success('Your server is restarting.');
+            } else {
+                toast.success('Your server is being stopped.');
+            }
+            setOpen(false);
+            instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
+        }
+    };
 
     const cmdkNavigate = (url: string) => {
         history.push(to(url, true));
@@ -79,6 +98,26 @@ const CommandMenu = () => {
                         <Command.Item onSelect={() => cmdkNavigate('/settings')}>
                             <HugeIconsDashboardSettings fill='currentColor' />
                             Settings
+                        </Command.Item>
+                    </Can>
+                </Command.Group>
+                <Command.Group heading='Server'>
+                    <Can action={'control.start'}>
+                        <Command.Item disabled={status !== 'offline'} onSelect={() => cmdkPowerAction('start')}>
+                            <HugeIconsZap fill='currentColor' />
+                            Start Server
+                        </Command.Item>
+                    </Can>
+                    <Can action={'control.restart'}>
+                        <Command.Item disabled={!status} onSelect={() => cmdkPowerAction('restart')}>
+                            <HugeIconsZap fill='currentColor' />
+                            Restart Server
+                        </Command.Item>
+                    </Can>
+                    <Can action={'control.restart'}>
+                        <Command.Item disabled={status === 'offline'} onSelect={() => cmdkPowerAction('stop')}>
+                            <HugeIconsZap fill='currentColor' />
+                            Stop Server
                         </Command.Item>
                     </Can>
                 </Command.Group>
