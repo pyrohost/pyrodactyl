@@ -1,13 +1,15 @@
 {
     "name": "pterodactyl-panel",
     "engines": {
-        "node": ">=14"
+        "node": ">=20.0"
     },
+    "type": "module",
     "dependencies": {
         "@headlessui/react": "^1.6.4",
         "@preact/signals-react": "^1.2.1",
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/line-clamp": "^0.4.4",
+        "@vitejs/plugin-react": "^4.2.1",
         "axios": "^0.27.2",
         "browserslist": "^4.23.0",
         "chart.js": "^3.8.0",
@@ -22,6 +24,7 @@
         "events": "^3.0.0",
         "formik": "^2.4.5",
         "framer-motion": "^11.0.8",
+        "laravel-vite-plugin": "^1.0.2",
         "pathe": "^1.1.2",
         "qrcode.react": "^1.0.1",
         "react": "^18.2.0",
@@ -38,6 +41,7 @@
         "swr": "^2.2.5",
         "tailwindcss": "^3.4.1",
         "uuid": "^8.3.2",
+        "vite": "^5.1.4",
         "xterm": "^5.3.0",
         "xterm-addon-fit": "^0.8.0",
         "xterm-addon-search": "^0.13.0",
@@ -67,7 +71,7 @@
         "@types/debounce": "^1.2.0",
         "@types/events": "^3.0.0",
         "@types/jest": "^28.1.3",
-        "@types/node": "^14.11.10",
+        "@types/node": "^20.11.24",
         "@types/qrcode.react": "^1.0.1",
         "@types/react": "^17.0.76",
         "@types/react-copy-to-clipboard": "^4.3.0",
@@ -124,12 +128,8 @@
         "clean": "cd public/assets && find . \\( -name \"*.js\" -o -name \"*.map\" \\) -type f -delete",
         "test": "jest",
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx",
-        "//watch": "I set node_env to production because watch does not work otherwise. Too bad!",
-        "watch": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --watch --progress",
-        "build": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --progress",
-        "build:fast": "cross-env NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider TYPE_CHECKING=false ./node_modules/.bin/webpack --progress && echo \"\n[!] Type checking was disabled for this build, this may result in runtime errors.\n\"",
-        "build:production": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/webpack --mode production",
-        "serve": "npm run clean && cross-env WEBPACK_PUBLIC_PATH=/webpack@hmr/ NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8080 --public https://pterodactyl.test --hot"
+        "dev": "vite",
+        "build": "vite build"
     },
     "browserslist": [
         "> 0.5%",
@@ -139,6 +139,7 @@
     ],
     "babelMacros": {
         "twin": {
+            "config": "tailwind.config.cjs",
             "preset": "styled-components"
         },
         "styledComponents": {

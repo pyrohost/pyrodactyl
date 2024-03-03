@@ -32,15 +32,15 @@
         @yield('assets')
 
         @include('layouts.scripts')
+
+        @viteReactRefresh
+        @vite('resources/scripts/index.tsx')
     </head>
     <body data-pyro-body class="{{ $css['body'] ?? 'bg-zinc-50' }}">
         @section('content')
             @yield('above-container')
             @yield('container')
             @yield('below-container')
-        @show
-        @section('scripts')
-            {!! $asset->js('main.js') !!}
         @show
     </body>
 </html>

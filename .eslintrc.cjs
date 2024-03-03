@@ -1,14 +1,18 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
     parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaVersion: 6,
-        ecmaFeatures: {
-            jsx: true,
+    overrides: [
+        {
+            parserOptions: {
+                ecmaVersion: 6,
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                project: './tsconfig.json',
+                tsconfigRootDir: './',
+            },
         },
-        project: './tsconfig.json',
-        tsconfigRootDir: './',
-    },
+    ],
     settings: {
         react: {
             pragma: 'React',
@@ -23,11 +27,6 @@ module.exports = {
         browser: true,
         es6: true,
     },
-    overrides: [
-        {
-            files: ['*.ts', '*.tsx'],
-        },
-    ],
     plugins: ['react', 'react-hooks', 'prettier', '@typescript-eslint'],
     extends: [
         // 'standard',
@@ -38,7 +37,8 @@ module.exports = {
         'plugin:jest-dom/recommended',
     ],
     rules: {
-        'prettier/prettier': 0,
+        eqeqeq: 'error',
+        'prettier/prettier': ['error', {}, { usePrettierrc: true }],
         // TypeScript can infer this significantly better than eslint ever can.
         'react/prop-types': 0,
         'react/display-name': 0,
@@ -51,12 +51,7 @@ module.exports = {
         // @see https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md#how-to-use
         'no-use-before-define': 0,
         '@typescript-eslint/no-use-before-define': 'warn',
-        '@typescript-eslint/no-unused-vars': 0,
-        '@typescript-eslint/ban-ts-comment': 0,
-    },
-    settings: {
-        react: {
-            version: 'detect',
-        },
+        '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+        '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
     },
 };
