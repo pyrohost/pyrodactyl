@@ -9,7 +9,7 @@ import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
+// import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 import { Suspense } from 'react';
 
 export default () => {
@@ -30,27 +30,17 @@ export default () => {
                     <Link to={'/'} className='flex shrink-0 h-full w-fit'>
                         <Logo />
                     </Link>
-                    <DropdownMenu
-                        renderToggle={(onClick) => (
-                            <button onClick={onClick} className='absolute right-0 flex shrink-0 h-6 w-6 fill-white'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='32'
-                                    height='32'
-                                    fill='currentColor'
-                                    viewBox='0 0 256 256'
-                                    className='flex shrink-0 h-full w-full'
-                                >
-                                    {/* @ts-ignore */}
-                                    <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
-                                </svg>
-                            </button>
-                        )}
+                    <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='32'
+                        height='32'
+                        fill='currentColor'
+                        viewBox='0 0 256 256'
+                        className='flex shrink-0 h-full w-full'
                     >
-                        <DropdownButtonRow onClick={onTriggerLogout}>
-                            <p>Sign Out</p>
-                        </DropdownButtonRow>
-                    </DropdownMenu>
+                        {/* @ts-ignore */}
+                        <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
+                    </svg>
                 </div>
                 <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <div className='pyro-subnav-routes-wrapper'>
@@ -62,6 +52,7 @@ export default () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Your Settings</p>
                     </NavLink>
+                    <button onClick={onTriggerLogout}>Logout</button>
                 </div>
             </SubNavigation>
             {/* )} */}
