@@ -1,6 +1,6 @@
 import { fileBitsToString } from '@/helpers';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
-import React from 'react';
+import * as React from 'react';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@/components/elements/Field';

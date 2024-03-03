@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import MessageBox from '@/components/MessageBox';
 import { useStoreState } from 'easy-peasy';
 import tw from 'twin.macro';

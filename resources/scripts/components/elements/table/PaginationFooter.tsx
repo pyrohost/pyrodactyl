@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { PaginationDataSet } from '@/api/http';
 import clsx from 'clsx';
 import { Button } from '@/components/elements/button/index';

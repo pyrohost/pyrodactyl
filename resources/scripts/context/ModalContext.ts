@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { SettableModalProps } from '@/hoc/asModal';
 
 export interface ModalContextValues {

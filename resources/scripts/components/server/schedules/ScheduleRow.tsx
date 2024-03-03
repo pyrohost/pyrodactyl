@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 import { format } from 'date-fns';
 import tw from 'twin.macro';
