@@ -1,9 +1,10 @@
+import '@preact/signals-react';
+
 import { lazy } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { StoreProvider } from 'easy-peasy';
 import { store } from '@/state';
 import { SiteSettings } from '@/state/settings';
-
 import { NotFound } from '@/components/elements/ScreenBlock';
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import { history } from '@/components/history';
