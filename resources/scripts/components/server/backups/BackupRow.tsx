@@ -1,9 +1,9 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import Spinner from '@/components/elements/Spinner';
 import { bytesToString } from '@/lib/formatters';
-import Can from '@/components/elements/Can';
+// import Can from '@/components/elements/Can';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
+// import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
 import tw from 'twin.macro';
 import GreyRowBox from '@/components/elements/GreyRowBox';
 import getServerBackups from '@/api/swr/getServerBackups';
@@ -93,9 +93,9 @@ export default ({ backup, className }: Props) => {
                     {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
                 </p>
             </div>
-            <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
+            {/* <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 {!backup.completedAt ? <div className='w-8'></div> : <BackupContextMenu backup={backup} />}
-            </Can>
+            </Can> */}
         </GreyRowBox>
     );
 };
