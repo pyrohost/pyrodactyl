@@ -99,8 +99,6 @@
         "typescript": "^4.7.3"
     },
     "scripts": {
-        "clean": "cd public/assets && find . \\( -name \"*.js\" -o -name \"*.map\" \\) -type f -delete",
-        "test": "jest",
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx",
         "dev": "vite",
         "build": "vite build"
