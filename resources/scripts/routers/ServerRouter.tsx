@@ -86,6 +86,7 @@ export default () => {
                         }}
                     />
                     <SubNavigation>
+                        <div>hi 2</div>
                         <div className='flex flex-row items-center justify-between h-8'>
                             <Link to={'/'} className='flex shrink-0 h-full w-fit'>
                                 <Logo />

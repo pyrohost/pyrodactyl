@@ -6,7 +6,7 @@ module.exports = {
     preset: 'ts-jest',
     globals: {
         'ts-jest': {
-            isolatedModules: true,
+        isolatedModules: true,
         },
     },
     moduleFileExtensions: ['js', 'ts', 'tsx', 'd.ts', 'json', 'node'],
