@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
 import tw from 'twin.macro';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import { breakpoint } from '@/theme';
 import Fade from '@/components/elements/Fade';
 import { createPortal } from 'react-dom';
@@ -87,59 +87,55 @@ const Modal: React.FC<ModalProps> = ({
     useEffect(() => setRender(visible), [visible]);
 
     return (
-        <Fade in={render} timeout={150} appear={appear || true} unmountOnExit onExited={() => onDismissed()}>
-            <ModalMask
-                onClick={(e) => e.stopPropagation()}
-                onContextMenu={(e) => e.stopPropagation()}
-                onMouseDown={(e) => {
-                    if (isDismissable && closeOnBackground) {
-                        e.stopPropagation();
-                        if (e.target === e.currentTarget) {
-                            setRender(false);
-                        }
+        <ModalMask
+            onClick={(e) => e.stopPropagation()}
+            onContextMenu={(e) => e.stopPropagation()}
+            onMouseDown={(e) => {
+                if (isDismissable && closeOnBackground) {
+                    e.stopPropagation();
+                    if (e.target === e.currentTarget) {
+                        setRender(false);
                     }
-                }}
-            >
-                <ModalContainer alignTop={top}>
-                    {isDismissable && (
-                        <div className={'close-icon'} onClick={() => setRender(false)}>
-                            <svg
-                                xmlns={'http://www.w3.org/2000/svg'}
-                                fill={'none'}
-                                viewBox={'0 0 24 24'}
-                                stroke={'currentColor'}
-                            >
-                                <path
-                                    strokeLinecap={'round'}
-                                    strokeLinejoin={'round'}
-                                    strokeWidth={'2'}
-                                    d={'M6 18L18 6M6 6l12 12'}
-                                />
-                            </svg>
-                        </div>
-                    )}
-                    {showSpinnerOverlay && (
-                        <Fade timeout={150} appear in>
-                            <div
-                                css={tw`absolute w-full h-full rounded flex items-center justify-center`}
-                                style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
-                            >
-                                <Spinner />
-                            </div>
-                        </Fade>
-                    )}
-                    <div
-                        style={{
-                            background:
-                                'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12)',
-                        }}
-                        className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full mx-auto text-left shadow-2xl backdrop-blur-3xl'
-                    >
-                        {children}
+                }
+            }}
+        >
+            <ModalContainer alignTop={top}>
+                {isDismissable && (
+                    <div className={'close-icon'} onClick={() => setRender(false)}>
+                        <svg
+                            xmlns={'http://www.w3.org/2000/svg'}
+                            fill={'none'}
+                            viewBox={'0 0 24 24'}
+                            stroke={'currentColor'}
+                        >
+                            <path
+                                strokeLinecap={'round'}
+                                strokeLinejoin={'round'}
+                                strokeWidth={'2'}
+                                d={'M6 18L18 6M6 6l12 12'}
+                            />
+                        </svg>
                     </div>
-                </ModalContainer>
-            </ModalMask>
-        </Fade>
+                )}
+                {showSpinnerOverlay && (
+                    <div
+                        css={tw`absolute w-full h-full rounded flex items-center justify-center`}
+                        style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
+                    >
+                        <Spinner />
+                    </div>
+                )}
+                <div
+                    style={{
+                        background:
+                            'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12)',
+                    }}
+                    className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full mx-auto text-left shadow-2xl backdrop-blur-3xl'
+                >
+                    {children}
+                </div>
+            </ModalContainer>
+        </ModalMask>
     );
 };
 

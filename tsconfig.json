@@ -14,6 +14,7 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
+        "noImplicitAny": false,
         // "importsNotUsedAsValues": "preserve",
         "paths": {
             "@/*": ["./resources/scripts/*"],
