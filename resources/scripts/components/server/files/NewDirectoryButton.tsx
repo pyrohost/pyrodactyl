@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ServerContext } from '@/state/server';
 import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@/components/elements/Field';
@@ -10,7 +10,6 @@ import { Button } from '@/components/elements/button/index';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import { useFlashKey } from '@/plugins/useFlash';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
-import { WithClassname } from '@/components/types';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import Code from '@/components/elements/Code';
@@ -96,7 +95,7 @@ const NewDirectoryDialog = asDialog({
     );
 });
 
-export default ({ className }: WithClassname) => {
+export default () => {
     const [open, setOpen] = useState(false);
 
     return (

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { ServerEggVariable } from '@/api/server/types';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { usePermissions } from '@/plugins/usePermissions';

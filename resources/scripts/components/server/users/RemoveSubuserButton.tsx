@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';

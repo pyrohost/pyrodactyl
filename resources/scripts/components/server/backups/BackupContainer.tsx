@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useFlash from '@/plugins/useFlash';
 import Can from '@/components/elements/Can';
 import CreateBackupButton from '@/components/server/backups/CreateBackupButton';
@@ -70,7 +70,8 @@ const BackupContainer = () => {
                             className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                         >
                             <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                {items.map((backup, index) => (
+                                {/* not using index */}
+                                {items.map((backup, _) => (
                                     <BackupRow key={backup.uuid} backup={backup} />
                                 ))}
                             </div>

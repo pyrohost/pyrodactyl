@@ -1,6 +1,6 @@
 import { encodePathSegments } from '@/helpers';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';

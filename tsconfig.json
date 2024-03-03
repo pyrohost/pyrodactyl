@@ -30,6 +30,7 @@
         "newLine": "lf",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": false,

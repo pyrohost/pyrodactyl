@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from '@/components/elements/Modal';
 import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@/components/elements/Field';
@@ -39,10 +39,10 @@ export default ({ database, className }: Props) => {
     const schema = object().shape({
         confirm: string()
             .required('The database name must be provided.')
-            .oneOf([database.name.split('_', 2)[1], database.name], 'The database name must be provided.'),
+            .oneOf([database.name.split('_', 2)[1] || '', database.name], 'The database name must be provided.'),
     });
 
-    const submit = (values: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
+    const submit = (_: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
         clearFlashes();
         deleteServerDatabase(uuid, database.id)
             .then(() => {

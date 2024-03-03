@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ServerContext } from '@/state/server';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Field as FormikField, Form, Formik, FormikHelpers, useFormikContext } from 'formik';

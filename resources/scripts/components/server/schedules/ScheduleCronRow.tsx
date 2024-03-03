@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 import clsx from 'clsx';
 

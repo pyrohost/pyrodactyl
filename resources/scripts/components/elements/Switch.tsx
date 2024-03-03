@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
 import tw from 'twin.macro';

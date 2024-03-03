@@ -57,7 +57,7 @@ const files: ServerFileStore = {
 
     setUploadProgress: action((state, { name, loaded }) => {
         if (state.uploads[name]) {
-            state.uploads[name].loaded = loaded;
+            state.uploads[name]!.loaded = loaded;
         }
     }),
 
@@ -71,7 +71,7 @@ const files: ServerFileStore = {
         if (state.uploads[payload]) {
             // Abort the request if it is still in flight. If it already completed this is
             // a no-op.
-            state.uploads[payload].abort.abort();
+            state.uploads[payload]?.abort.abort();
 
             delete state.uploads[payload];
         }

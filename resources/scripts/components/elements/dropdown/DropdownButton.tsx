@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import styles from '@/components/elements/dropdown/style.module.css';
 // FIXME: add icons back
 import { Menu } from '@headlessui/react';
-import * as React from 'react';
 
 interface Props {
     className?: string;
@@ -10,7 +9,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export default ({ className, animate = true, children }: Props) => (
+export default ({ className, children }: Props) => (
     <Menu.Button className={clsx(styles.button, className || 'px-4')}>
         {typeof children === 'string' ? (
             <>

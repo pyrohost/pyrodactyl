@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 // FIXME: add icons back
 import clsx from 'clsx';
 import { DialogContext, DialogIconProps, styles } from './';

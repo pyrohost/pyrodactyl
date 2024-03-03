@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';

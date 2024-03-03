@@ -1,15 +1,13 @@
 import axios from 'axios';
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 import tw from 'twin.macro';
-import { Button } from '@/components/elements/button/index';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ModalMask } from '@/components/elements/Modal';
 import Fade from '@/components/elements/Fade';
 import useEventListener from '@/plugins/useEventListener';
 import { useFlashKey } from '@/plugins/useFlash';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import { ServerContext } from '@/state/server';
-import { WithClassname } from '@/components/types';
 import Portal from '@/components/elements/Portal';
 // FIXME: add icons back
 import { useSignal } from '@preact/signals-react';
@@ -22,7 +20,7 @@ function isFileOrDirectory(event: DragEvent): boolean {
     return event.dataTransfer.types.some((value) => value.toLowerCase() === 'files');
 }
 
-export default ({ className }: WithClassname) => {
+export default () => {
     const fileUploadInput = useRef<HTMLInputElement>(null);
 
     const visible = useSignal(false);

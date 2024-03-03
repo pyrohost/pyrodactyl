@@ -1,18 +1,14 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
-import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import { bytesToString, ip } from '@/lib/formatters';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
-const IconDescription = styled.p<{ $alarm: boolean }>`
-    ${tw`text-sm ml-2`};
-    ${(props) => (props.$alarm ? tw`text-white` : tw`text-zinc-400`)};
-`;
 
 const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>`
     // background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.044) 100%);
@@ -82,9 +78,9 @@ export default ({ server, className }: { server: Server; className?: string }) =
         alarms.disk = server.limits.disk === 0 ? false : isAlarmState(stats.diskUsageInBytes, server.limits.disk);
     }
 
-    const diskLimit = server.limits.disk !== 0 ? bytesToString(mbToBytes(server.limits.disk)) : 'Unlimited';
-    const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Unlimited';
-    const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + ' %' : 'Unlimited';
+    // const diskLimit = server.limits.disk !== 0 ? bytesToString(mbToBytes(server.limits.disk)) : 'Unlimited';
+    // const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Unlimited';
+    // const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + ' %' : 'Unlimited';
 
     return (
         <StatusIndicatorBox as={Link} to={`/server/${server.id}`} className={className} $status={stats?.status}>
@@ -101,9 +97,9 @@ export default ({ server, className }: { server: Server; className?: string }) =
                         {server.allocations
                             .filter((alloc) => alloc.isDefault)
                             .map((allocation) => (
-                                <React.Fragment key={allocation.ip + allocation.port.toString()}>
+                                <Fragment key={allocation.ip + allocation.port.toString()}>
                                     {allocation.alias || ip(allocation.ip)}:{allocation.port}
-                                </React.Fragment>
+                                </Fragment>
                             ))}
                     </p>
                     {/* I don't think servers will ever have descriptions normall so I'll vaporize it */}
@@ -138,7 +134,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                         <div className='text-xs opacity-25'>Sit tight!</div>
                     )
                 ) : (
-                    <React.Fragment>
+                    <Fragment>
                         <div css={tw`sm:flex hidden`}>
                             <div css={tw`flex justify-center gap-2 w-fit`}>
                                 <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>CPU</p>
@@ -180,7 +176,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                             ░░░░░░░░░░░░░░▀▄▄▄▄▄░░░░░░░░█░░ */}
                             {/* <p css={tw`text-xs text-zinc-600 text-center mt-1`}>of {diskLimit}</p> */}
                         </div>
-                    </React.Fragment>
+                    </Fragment>
                 )}
             </div>
         </StatusIndicatorBox>

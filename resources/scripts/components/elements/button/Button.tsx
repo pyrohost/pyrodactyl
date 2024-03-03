@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import clsx from 'clsx';
 import { ButtonProps, Options } from '@/components/elements/button/types';
 import styles from './style.module.css';

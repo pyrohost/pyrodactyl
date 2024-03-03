@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@/components/elements/Field';
@@ -9,6 +8,7 @@ import { httpErrorToHuman } from '@/api/http';
 import { ApplicationStore } from '@/state';
 import tw from 'twin.macro';
 import { Button } from '@/components/elements/button/index';
+import { Fragment } from 'react'
 
 interface Values {
     current: string;
@@ -55,14 +55,14 @@ export default () => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Formik
                 onSubmit={submit}
                 validationSchema={schema}
                 initialValues={{ current: '', password: '', confirmPassword: '' }}
             >
                 {({ isSubmitting, isValid }) => (
-                    <React.Fragment>
+                    <Fragment>
                         <SpinnerOverlay size={'large'} visible={isSubmitting} />
                         <Form css={tw`m-0`}>
                             <Field
@@ -94,9 +94,9 @@ export default () => {
                                 <Button disabled={isSubmitting || !isValid}>Update Password</Button>
                             </div>
                         </Form>
-                    </React.Fragment>
+                    </Fragment>
                 )}
             </Formik>
-        </React.Fragment>
+        </Fragment>
     );
 };

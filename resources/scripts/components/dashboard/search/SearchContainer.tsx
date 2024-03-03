@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useEventListener from '@/plugins/useEventListener';
 import SearchModal from '@/components/dashboard/search/SearchModal';
 // FIXME: replace with radix tooltip

@@ -1,4 +1,5 @@
-import React, { createRef } from 'react';
+import { createRef } from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import Fade from '@/components/elements/Fade';
@@ -27,25 +28,22 @@ interface State {
 class DropdownMenu extends React.PureComponent<Props, State> {
     menu = createRef<HTMLDivElement>();
 
-    state: State = {
+    override state: State = {
         posX: 0,
         visible: false,
     };
 
-    componentWillUnmount() {
+    override componentWillUnmount() {
         this.removeListeners();
     }
 
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
+    override componentDidUpdate(_prevProps: Readonly<Props>, prevState: Readonly<State>) {
         const menu = this.menu.current;
-        const winHeight = window.innerHeight;
-        const winWidth = window.innerWidth;
 
         if (this.state.visible && !prevState.visible && menu) {
             document.addEventListener('click', this.windowListener);
             document.addEventListener('contextmenu', this.contextMenuListener);
-            // todo: fix this fuckery
-            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth - 100)}px`;
+            menu.style.left = `${Math.round(this.state.posX - menu.clientWidth)}px`;
         }
 
         if (!this.state.visible && prevState.visible) {
@@ -87,7 +85,7 @@ class DropdownMenu extends React.PureComponent<Props, State> {
             visible: !s.visible,
         }));
 
-    render() {
+    override render() {
         return (
             <>
                 {this.props.renderToggle(this.onClickHandler)}

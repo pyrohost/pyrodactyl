@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import { ServerContext } from '@/state/server';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -21,6 +21,7 @@ const getBackgroundColor = (value: number, max: number | null): string | undefin
     return undefined;
 };
 
+// @ts-ignore
 const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => <>{children}</>;
 
 const ServerDetailsBlock = ({ className }: { className?: string }) => {

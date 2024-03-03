@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
 import Spinner from '@/components/elements/Spinner';
 import { bytesToString } from '@/lib/formatters';

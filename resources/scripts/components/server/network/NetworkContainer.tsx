@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import Spinner from '@/components/elements/Spinner';
+import { useEffect, useState } from 'react';
 import { useFlashKey } from '@/plugins/useFlash';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { ServerContext } from '@/state/server';
 import AllocationRow from '@/components/server/network/AllocationRow';
-import Button from '@/components/elements/Button';
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import tw from 'twin.macro';
 import Can from '@/components/elements/Can';

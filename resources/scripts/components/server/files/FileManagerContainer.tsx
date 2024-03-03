@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { httpErrorToHuman } from '@/api/http';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Can from '@/components/elements/Can';
 import { ServerError } from '@/components/elements/ScreenBlock';
 import tw from 'twin.macro';
@@ -18,14 +18,14 @@ import { useStoreActions } from '@/state/hooks';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { FileActionCheckbox } from '@/components/server/files/SelectFileCheckbox';
 import { hashToPath } from '@/helpers';
-import style from './style.module.css';
+// import style from './style.module.css';
 import NewFileButton from './NewFileButton';
 
 const sortFiles = (files: FileObject[]): FileObject[] => {
     const sortedFiles: FileObject[] = files
         .sort((a, b) => a.name.localeCompare(b.name))
         .sort((a, b) => (a.isFile === b.isFile ? 0 : a.isFile ? 1 : -1));
-    return sortedFiles.filter((file, index) => index === 0 || file.name !== sortedFiles[index - 1].name);
+    return sortedFiles.filter((file, index) => index === 0 || file.name !== sortedFiles[index - 1]?.name);
 };
 
 export default () => {

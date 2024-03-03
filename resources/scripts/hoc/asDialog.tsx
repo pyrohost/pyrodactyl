@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogProps, DialogWrapperContext, WrapperProps } from '@/components/elements/dialog';
 
 function asDialog(

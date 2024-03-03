@@ -1,4 +1,3 @@
-import * as React from 'react';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import styled, { keyframes } from 'styled-components';
 import tw from 'twin.macro';

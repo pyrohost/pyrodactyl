@@ -1,4 +1,3 @@
-import * as React from 'react';
 import clsx from 'clsx';
 import styles from '@/components/server/console/style.module.css';
 

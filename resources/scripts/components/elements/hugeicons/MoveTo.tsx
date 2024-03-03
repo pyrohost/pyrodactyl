@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { HugeIconProps } from './props';
 
 const HugeIconsMoveTo = (props: HugeIconProps) => {

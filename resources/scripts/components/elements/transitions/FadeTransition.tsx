@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Transition } from '@headlessui/react';
 
 type Duration = `duration-${number}`;

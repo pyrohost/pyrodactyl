@@ -1,9 +1,9 @@
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { StoreProvider } from 'easy-peasy';
 import { store } from '@/state';
 import { SiteSettings } from '@/state/settings';
-import ProgressBar from '@/components/elements/ProgressBar';
+
 import { NotFound } from '@/components/elements/ScreenBlock';
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import { history } from '@/components/history';
@@ -58,7 +58,6 @@ const App = () => {
         <>
             <GlobalStylesheet />
             <StoreProvider store={store}>
-                <ProgressBar />
                 <div
                     data-pyro-routerwrap=''
                     className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
