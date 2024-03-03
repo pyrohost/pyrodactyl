@@ -5,7 +5,7 @@ import { useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
 import SearchContainer from '@/components/dashboard/search/SearchContainer';
 import tw from 'twin.macro';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import http from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 // FIXME: replace with radix tooltip
@@ -83,9 +83,7 @@ export default () => {
                         </NavLink>
                     </Tooltip> */}
                     {/* <Tooltip placement={'bottom'} content={'Sign Out'}> */}
-                    <button onClick={onTriggerLogout}>
-                        {/* <FontAwesomeIcon icon={faSignOutAlt} /> */}
-                    </button>
+                    <button onClick={onTriggerLogout}>{/* <FontAwesomeIcon icon={faSignOutAlt} /> */}</button>
                     {/* </Tooltip> */}
                 </RightNavigation>
             </div>

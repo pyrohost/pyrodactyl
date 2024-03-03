@@ -1,7 +1,7 @@
 import React from 'react';
 import { PaginatedResult } from '@/api/http';
 import tw from 'twin.macro';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import Button from '@/components/elements/Button';
 
 interface RenderFuncProps<T> {
@@ -38,6 +38,7 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
     const end = Math.min(pagination.totalPages, pagination.currentPage + 5);
 
     for (let i = start; i <= end; i++) {
+        // @ts-ignore
         pages.push(i);
     }
 
