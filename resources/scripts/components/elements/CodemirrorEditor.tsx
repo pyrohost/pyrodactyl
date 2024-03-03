@@ -4,9 +4,6 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 import modes from '@/modes';
 
-// TODO: this is broken because we can no longer use require
-// We need to upgrade codemirror and its plugins to v6
-// For now, you can't edit files in the panel
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/ayu-mirage.css');
 require('codemirror/addon/edit/closebrackets');
