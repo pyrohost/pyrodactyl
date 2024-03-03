@@ -21,11 +21,7 @@ const getBackgroundColor = (value: number, max: number | null): string | undefin
     return undefined;
 };
 
-const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => (
-    <>
-        {children}
-    </>
-);
+const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => <>{children}</>;
 
 const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const [stats, setStats] = useState<Stats>({ memory: 0, cpu: 0, disk: 0, uptime: 0, tx: 0, rx: 0 });
@@ -81,19 +77,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
             <StatBlock title={'IP Address'} copyOnClick={allocation}>
                 {allocation}
             </StatBlock>
-            {/* <StatBlock
-                icon={faClock}
-                title={'Uptime'}
-                color={getBackgroundColor(status === 'running' ? 0 : status !== 'offline' ? 9 : 10, 10)}
-            >
-                {status === null ? (
-                    'Offline'
-                ) : stats.uptime > 0 ? (
-                    <UptimeDuration uptime={stats.uptime / 1000} />
-                ) : (
-                    capitalize(status)
-                )}
-            </StatBlock> */}
             <StatBlock title={'CPU'} color={getBackgroundColor(stats.cpu, limits.cpu)}>
                 {status === 'offline' ? (
                     <span className={'text-zinc-400'}>Offline</span>
@@ -101,10 +84,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
                 )}
             </StatBlock>
-            <StatBlock
-                title={'RAM'}
-                color={getBackgroundColor(stats.memory / 1024, limits.memory * 1024)}
-            >
+            <StatBlock title={'RAM'} color={getBackgroundColor(stats.memory / 1024, limits.memory * 1024)}>
                 {status === 'offline' ? (
                     <span className={'text-zinc-400'}>Offline</span>
                 ) : (
