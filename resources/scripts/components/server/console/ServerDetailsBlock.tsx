@@ -74,26 +74,70 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     return (
         <div className={clsx('flex gap-4', className)}>
-            <StatBlock title={'IP Address'} copyOnClick={allocation}>
-                {allocation}
-            </StatBlock>
-            <StatBlock title={'CPU'} color={getBackgroundColor(stats.cpu, limits.cpu)}>
-                {status === 'offline' ? (
-                    <span className={'text-zinc-400'}>Offline</span>
-                ) : (
-                    <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
-                )}
-            </StatBlock>
-            <StatBlock title={'RAM'} color={getBackgroundColor(stats.memory / 1024, limits.memory * 1024)}>
-                {status === 'offline' ? (
-                    <span className={'text-zinc-400'}>Offline</span>
-                ) : (
-                    <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
-                )}
-            </StatBlock>
-            <StatBlock title={'Storage'} color={getBackgroundColor(stats.disk / 1024, limits.disk * 1024)}>
-                <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
-            </StatBlock>
+            <div
+                className='transform-gpu skeleton-anim-2'
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    animationDelay: `150ms`,
+                    animationTimingFunction:
+                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                }}
+            >
+                <StatBlock title={'IP Address'} copyOnClick={allocation}>
+                    {allocation}
+                </StatBlock>
+            </div>
+            <div
+                className='transform-gpu skeleton-anim-2'
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    animationDelay: `175ms`,
+                    animationTimingFunction:
+                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                }}
+            >
+                <StatBlock title={'CPU'} color={getBackgroundColor(stats.cpu, limits.cpu)}>
+                    {status === 'offline' ? (
+                        <span className={'text-zinc-400'}>Offline</span>
+                    ) : (
+                        <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
+                    )}
+                </StatBlock>
+            </div>
+            <div
+                className='transform-gpu skeleton-anim-2'
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    animationDelay: `200ms`,
+                    animationTimingFunction:
+                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                }}
+            >
+                <StatBlock title={'RAM'} color={getBackgroundColor(stats.memory / 1024, limits.memory * 1024)}>
+                    {status === 'offline' ? (
+                        <span className={'text-zinc-400'}>Offline</span>
+                    ) : (
+                        <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                    )}
+                </StatBlock>
+            </div>
+            <div
+                className='transform-gpu skeleton-anim-2'
+                style={{
+                    display: 'flex',
+                    width: '100%',
+                    animationDelay: `225ms`,
+                    animationTimingFunction:
+                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                }}
+            >
+                <StatBlock title={'Storage'} color={getBackgroundColor(stats.disk / 1024, limits.disk * 1024)}>
+                    <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
+                </StatBlock>
+            </div>
         </div>
     );
 };
