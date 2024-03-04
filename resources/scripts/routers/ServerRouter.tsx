@@ -178,16 +178,23 @@ export default () => {
                         <ConflictStateRenderer />
                     ) : (
                         <ErrorBoundary>
-                            <Switch location={location}>
-                                {routes.server.map(({ path, permission, component: Component }) => (
-                                    <PermissionRoute key={path} permission={permission} path={to(path)} end>
-                                        <Spinner.Suspense>
-                                            <Component />
-                                        </Spinner.Suspense>
-                                    </PermissionRoute>
+                            <Routes location={location}>
+                                {routes.server.map(({ route, permission, component: Component }) => (
+                                    <Route
+                                        key={route}
+                                        path={route}
+                                        element={
+                                            <PermissionRoute permission={permission}>
+                                                <Spinner.Suspense>
+                                                    <Component />
+                                                </Spinner.Suspense>
+                                            </PermissionRoute>
+                                        }
+                                    />
                                 ))}
-                                <Route path={'*'} component={NotFound} />
-                            </Switch>
+
+                                <Route path='*' element={<NotFound />} />
+                            </Routes>
                         </ErrorBoundary>
                     )}
                 </>
