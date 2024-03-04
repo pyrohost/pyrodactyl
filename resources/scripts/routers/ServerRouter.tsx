@@ -5,7 +5,6 @@ import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
 import Can from '@/components/elements/Can';
-import Spinner from '@/components/elements/Spinner';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
 import { useStoreState } from 'easy-peasy';
