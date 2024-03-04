@@ -79,7 +79,9 @@ const App = () => {
                                 element={
                                     <AuthenticatedRoute>
                                         <Spinner.Suspense>
-                                            <ServerRouter />
+                                            <ServerContext.Provider>
+                                                <ServerRouter />
+                                            </ServerContext.Provider>
                                         </Spinner.Suspense>
                                     </AuthenticatedRoute>
                                 }
