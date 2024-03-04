@@ -64,15 +64,32 @@ export default () => {
                 </div>
             </SubNavigation>
             <Suspense fallback={null}>
-                <Routes>
-                    <Route path='' element={<DashboardContainer />} />
+                <div
+                    className='w-full h-full rounded-md'
+                    style={{
+                        background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
+                    }}
+                >
+                    <main
+                        data-pyro-main=''
+                        data-pyro-transitionrouter=''
+                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                    >
+                        <Routes>
+                            <Route path='' element={<DashboardContainer />} />
 
-                    {routes.account.map(({ route, component: Component }) => (
-                        <Route key={route} path={`/account/${route}`.replace('//', '/')} element={<Component />} />
-                    ))}
+                            {routes.account.map(({ route, component: Component }) => (
+                                <Route
+                                    key={route}
+                                    path={`/account/${route}`.replace('//', '/')}
+                                    element={<Component />}
+                                />
+                            ))}
 
-                    <Route path='*' element={<NotFound />} />
-                </Routes>
+                            <Route path='*' element={<NotFound />} />
+                        </Routes>
+                    </main>
+                </div>
             </Suspense>
         </>
     );

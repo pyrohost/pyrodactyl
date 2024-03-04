@@ -173,29 +173,44 @@ export default () => {
                     <InstallListener />
                     <TransferListener />
                     <WebsocketHandler />
-                    {inConflictState && (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
-                        <ConflictStateRenderer />
-                    ) : (
-                        <ErrorBoundary>
-                            <Routes location={location}>
-                                {routes.server.map(({ route, permission, component: Component }) => (
-                                    <Route
-                                        key={route}
-                                        path={route}
-                                        element={
-                                            <PermissionRoute permission={permission}>
-                                                <Suspense fallback={null}>
-                                                    <Component />
-                                                </Suspense>
-                                            </PermissionRoute>
-                                        }
-                                    />
-                                ))}
+                    <div
+                        className='w-full h-full rounded-md'
+                        style={{
+                            background:
+                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
+                        }}
+                    >
+                        <main
+                            data-pyro-main=''
+                            data-pyro-transitionrouter=''
+                            className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                        >
+                            {inConflictState &&
+                            (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                <ConflictStateRenderer />
+                            ) : (
+                                <ErrorBoundary>
+                                    <Routes location={location}>
+                                        {routes.server.map(({ route, permission, component: Component }) => (
+                                            <Route
+                                                key={route}
+                                                path={route}
+                                                element={
+                                                    <PermissionRoute permission={permission}>
+                                                        <Suspense fallback={null}>
+                                                            <Component />
+                                                        </Suspense>
+                                                    </PermissionRoute>
+                                                }
+                                            />
+                                        ))}
 
-                                <Route path='*' element={<NotFound />} />
-                            </Routes>
-                        </ErrorBoundary>
-                    )}
+                                        <Route path='*' element={<NotFound />} />
+                                    </Routes>
+                                </ErrorBoundary>
+                            )}
+                        </main>
+                    </div>
                 </>
             )}
         </Fragment>
