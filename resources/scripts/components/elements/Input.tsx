@@ -41,7 +41,7 @@ const inputStyle = css<Props>`
     resize: none;
     ${tw`appearance-none outline-none w-full min-w-0`};
     ${tw`py-2 px-3 border-2 rounded-lg text-sm transition-all duration-150`};
-    ${tw`bg-[#131313] border-transparent hover:border-zinc-800 text-zinc-200 shadow-none focus:ring-0`};
+    ${tw`bg-[#ffffff18] border-transparent hover:border-zinc-800 text-zinc-200 shadow-none focus:ring-0`};
 
     & + .input-help {
         ${tw`mt-1 text-xs`};

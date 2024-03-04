@@ -66,23 +66,37 @@ export default () => {
             initialValues={{ email: '' }}
             validationSchema={object().shape({
                 email: string()
-                    .email('A valid email address must be provided to continue.')
-                    .required('A valid email address must be provided to continue.'),
+                    .email('Please enter your email address to reset your password.')
+                    .required('Please enter your email address to reset your password.'),
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
-                <LoginFormContainer title={'Request Password Reset'} css={tw`w-full flex`}>
-                    <Field
-                        light
-                        label={'Email'}
-                        description={
-                            'Enter your account email address to receive instructions on resetting your password.'
-                        }
-                        name={'email'}
-                        type={'email'}
-                    />
-                    <div css={tw`mt-6`}>
-                        <Button type={'submit'} size={'xlarge'} disabled={isSubmitting} isLoading={isSubmitting}>
+                <LoginFormContainer css={tw`w-full flex`}>
+                    <div className='flex items-start h-12 w-fit mb-4'>
+                        {/* temp src */}
+                        <img
+                            className='w-full max-w-full h-full'
+                            loading='lazy'
+                            decoding='async'
+                            alt=''
+                            aria-hidden
+                            style={{
+                                color: 'transparent',
+                            }}
+                            src='https://i.imgur.com/Hbum4fc.png'
+                        />
+                    </div>
+                    <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
+                    <div className='text-sm mb-6'>We'll send you an email with a link to reset your password.</div>
+                    <Field label={'Email'} name={'email'} type={'email'} />
+                    <div className={`mt-6`}>
+                        <Button
+                            css={tw`mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            type={'submit'}
+                            size={'xlarge'}
+                            isLoading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
                             Send Email
                         </Button>
                     </div>
@@ -101,14 +115,6 @@ export default () => {
                             }}
                         />
                     )}
-                    <div css={tw`mt-6 text-center`}>
-                        <Link
-                            to={'/auth/login'}
-                            css={tw`text-xs text-zinc-500 tracking-wide uppercase no-underline hover:text-zinc-700`}
-                        >
-                            Return to Login
-                        </Link>
-                    </div>
                 </LoginFormContainer>
             )}
         </Formik>
