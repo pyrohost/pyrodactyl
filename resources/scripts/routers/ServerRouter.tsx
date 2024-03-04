@@ -125,36 +125,36 @@ export default () => {
                         <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
-                            <NavLink className='flex flex-row items-center' to={to('/', true)} end>
+                            <NavLink className='flex flex-row items-center' to={`/server/${id}`} end>
                                 <HugeIconsHome fill='currentColor' />
                                 <p>Home</p>
                             </NavLink>
                             <Can action={'file.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/files', true)} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/files`} end>
                                     <HugeIconsFolder fill='currentColor' />
                                     <p>Files</p>
                                 </NavLink>
                             </Can>
                             <Can action={'database.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/databases', true)} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/databases`} end>
                                     <HugeIconsDatabase fill='currentColor' />
                                     <p>Databases</p>
                                 </NavLink>
                             </Can>
                             <Can action={'backup.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/backups', true)} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/backups`} end>
                                     <HugeIconsCloudUp fill='currentColor' />
                                     <p>Backups</p>
                                 </NavLink>
                             </Can>
                             <Can action={'allocation.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/network', true)} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/network`} end>
                                     <HugeIconsConnections fill='currentColor' />
                                     <p>Networking</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/settings', true)} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/settings`} end>
                                     <HugeIconsDashboardSettings fill='currentColor' />
                                     <p>Settings</p>
                                 </NavLink>
