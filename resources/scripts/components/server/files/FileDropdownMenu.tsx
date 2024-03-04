@@ -1,19 +1,14 @@
-import { memo, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
 import { ServerContext } from '@/state/server';
 import { join } from 'pathe';
 import deleteFiles from '@/api/server/files/deleteFiles';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import copyFile from '@/api/server/files/copyFile';
 import Can from '@/components/elements/Can';
 import getFileDownloadUrl from '@/api/server/files/getFileDownloadUrl';
 import useFlash from '@/plugins/useFlash';
-import tw from 'twin.macro';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
-import DropdownMenu from '@/components/elements/DropdownMenu';
-import styled from 'styled-components';
-import useEventListener from '@/plugins/useEventListener';
 import compressFiles from '@/api/server/files/compressFiles';
 import decompressFiles from '@/api/server/files/decompressFiles';
 import isEqual from 'react-fast-compare';
@@ -26,33 +21,11 @@ import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 import HugeIconsFileZip from '@/components/elements/hugeicons/FileZip';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
+import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
 
 type ModalType = 'rename' | 'move' | 'chmod';
 
-const StyledRow = styled.div<{ $danger?: boolean }>`
-    ${tw`px-3 py-2 text-sm font-bold flex gap-4 items-center rounded-md w-full text-white`};
-    transition: 80ms all ease;
-
-    &:hover {
-        transition: 0ms all ease;
-        ${tw`bg-[#ffffff13] shadow-md`}
-    }
-`;
-
-interface RowProps extends React.HTMLAttributes<HTMLDivElement> {
-    title: string;
-    $danger?: boolean;
-}
-
-const Row = ({ title, ...props }: RowProps) => (
-    <StyledRow {...props}>
-        <span>{title}</span>
-    </StyledRow>
-);
-
 const FileDropdownMenu = ({ file }: { file: FileObject }) => {
-    const onClickRef = useRef<DropdownMenu>(null);
-    const [showSpinner, setShowSpinner] = useState(false);
     const [modal, setModal] = useState<ModalType | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -60,12 +33,6 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError, clearFlashes } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-
-    useEventListener(`pterodactyl:files:ctx:${file.key}`, (e: CustomEvent) => {
-        if (onClickRef.current) {
-            onClickRef.current.triggerMenu(e.detail);
-        }
-    });
 
     const doDeletion = async () => {
         clearFlashes('files');
@@ -81,17 +48,14 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     };
 
     const doCopy = () => {
-        setShowSpinner(true);
         clearFlashes('files');
 
         copyFile(uuid, join(directory, file.name))
             .then(() => mutate())
-            .catch((error) => clearAndAddHttpError({ key: 'files', error }))
-            .then(() => setShowSpinner(false));
+            .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doDownload = () => {
-        setShowSpinner(true);
         clearFlashes('files');
 
         getFileDownloadUrl(uuid, join(directory, file.name))
@@ -99,28 +63,23 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 // @ts-expect-error this is valid
                 window.location = url;
             })
-            .catch((error) => clearAndAddHttpError({ key: 'files', error }))
-            .then(() => setShowSpinner(false));
+            .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doArchive = () => {
-        setShowSpinner(true);
         clearFlashes('files');
 
         compressFiles(uuid, directory, [file.name])
             .then(() => mutate())
-            .catch((error) => clearAndAddHttpError({ key: 'files', error }))
-            .then(() => setShowSpinner(false));
+            .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doUnarchive = () => {
-        setShowSpinner(true);
         clearFlashes('files');
 
         decompressFiles(uuid, directory, file.name)
             .then(() => mutate())
-            .catch((error) => clearAndAddHttpError({ key: 'files', error }))
-            .then(() => setShowSpinner(false));
+            .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     return (
@@ -135,97 +94,72 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 You will not be able to recover the contents of&nbsp;
                 <span className={'font-semibold text-zinc-50'}>{file.name}</span> once deleted.
             </Dialog.Confirm>
-            <DropdownMenu
-                ref={onClickRef}
-                renderToggle={(onClick) => (
-                    <button onClick={onClick}>
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='32'
-                            height='32'
-                            fill='currentColor'
-                            viewBox='0 0 256 256'
-                            className='flex shrink-0 h-full w-full'
-                        >
-                            {/* @ts-ignore */}
-                            <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
-                        </svg>
-                        {modal ? (
-                            modal === 'chmod' ? (
-                                <ChmodFileModal
-                                    visible
-                                    appear
-                                    files={[{ file: file.name, mode: file.modeBits }]}
-                                    onDismissed={() => setModal(null)}
-                                />
-                            ) : (
-                                <RenameFileModal
-                                    visible
-                                    appear
-                                    files={[file.name]}
-                                    useMoveTerminology={modal === 'move'}
-                                    onDismissed={() => setModal(null)}
-                                />
-                            )
-                        ) : null}
-                        <SpinnerOverlay visible={showSpinner} fixed size={'large'} />
-                    </button>
-                )}
-            >
+            {modal ? (
+                modal === 'chmod' ? (
+                    <ChmodFileModal
+                        visible
+                        appear
+                        files={[{ file: file.name, mode: file.modeBits }]}
+                        onDismissed={() => setModal(null)}
+                    />
+                ) : (
+                    <RenameFileModal
+                        visible
+                        appear
+                        files={[file.name]}
+                        useMoveTerminology={modal === 'move'}
+                        onDismissed={() => setModal(null)}
+                    />
+                )
+            ) : null}
+            <ContextMenuContent className='flex flex-col gap-1'>
                 <Can action={'file.update'}>
-                    <StyledRow onClick={() => setModal('rename')}>
+                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
                         <HugeIconsPencil className='!h-4 !w-4' fill='currentColor' />
                         <span>Rename</span>
-                    </StyledRow>
-                    <StyledRow onClick={() => setModal('move')}>
+                    </ContextMenuItem>
+                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
                         <HugeIconsMoveTo className='!h-4 !w-4' fill='currentColor' />
                         <span>Move</span>
-                    </StyledRow>
-                    <StyledRow onClick={() => setModal('chmod')}>
+                    </ContextMenuItem>
+                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
                         <HugeIconsFileSecurity className='!h-4 !w-4' fill='currentColor' />
                         <span>Permissions</span>
-                    </StyledRow>
-                    {/* <Row onClick={() => setModal('rename')} icon={faPencilAlt} title={'Rename'} />
-                    <Row onClick={() => setModal('move')} icon={faLevelUpAlt} title={'Move'} />
-                    <Row onClick={() => setModal('chmod')} icon={faFileCode} title={'Permissions'} /> */}
+                    </ContextMenuItem>
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
-                        <StyledRow onClick={doCopy}>
+                        <ContextMenuItem className='flex gap-2' onClick={doCopy}>
                             <HugeIconsCopy className='!h-4 !w-4' fill='currentColor' />
                             <span>Copy</span>
-                        </StyledRow>
-                        {/* <Row onClick={doCopy} icon={faCopy} title={'Copy'} /> */}
+                        </ContextMenuItem>
                     </Can>
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <Row onClick={doUnarchive} title={'Unarchive'} />
+                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'} />
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
-                        <StyledRow onClick={doArchive}>
+                        <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
                             <HugeIconsFileZip className='!h-4 !w-4' fill='currentColor' />
                             <span>Archive</span>
-                        </StyledRow>
-                        {/* <Row onClick={doArchive} icon={faFileArchive} title={'Archive'} /> */}
+                        </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
-                    <StyledRow onClick={doDownload}>
+                    <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                         <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
                         <span>Download</span>
-                    </StyledRow>
-                    // <Row onClick={doDownload} icon={faFileDownload} title={'Download'} />
+                    </ContextMenuItem>
                 )}
                 <Can action={'file.delete'}>
-                    <StyledRow onClick={() => setShowConfirmation(true)}>
+                    <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
                         <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
                         <span>Delete</span>
-                    </StyledRow>
-                    {/* <Row onClick={() => setShowConfirmation(true)} icon={faTrashAlt} title={'Delete'} $danger /> */}
+                    </ContextMenuItem>
                 </Can>
-            </DropdownMenu>
+            </ContextMenuContent>
         </>
     );
 };
