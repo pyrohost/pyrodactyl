@@ -63,6 +63,10 @@ export default () => {
     useEffect(() => {
         setError('');
 
+        if (params.id === undefined) {
+            return;
+        }
+
         getServer(params.id).catch((error) => {
             console.error(error);
             setError(httpErrorToHuman(error));
