@@ -1,14 +1,12 @@
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import TransitionRouter from '@/TransitionRouter';
 import SubNavigation from '@/components/elements/SubNavigation';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-// import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 import { Suspense } from 'react';
 import {
     DropdownMenu,
@@ -18,7 +16,6 @@ import {
 } from '@/components/elements/DropdownMenuNew';
 
 export default () => {
-    const location = useLocation();
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
             // @ts-expect-error this is valid
@@ -28,8 +25,6 @@ export default () => {
 
     return (
         <>
-            {/* <NavigationBar /> */}
-            {/* {location.pathname.startsWith('/account') && ( */}
             <SubNavigation>
                 <div className='relative flex flex-row items-center justify-between h-8'>
                     <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
@@ -68,20 +63,17 @@ export default () => {
                     </NavLink>
                 </div>
             </SubNavigation>
-            {/* )} */}
-            <TransitionRouter>
-                <Suspense fallback={null}>
-                    <Routes>
-                        <Route path='' element={<DashboardContainer />} />
+            <Suspense fallback={null}>
+                <Routes>
+                    <Route path='' element={<DashboardContainer />} />
 
-                        {routes.account.map(({ route, component: Component }) => (
-                            <Route key={route} path={`/account/${route}`.replace('//', '/')} element={<Component />} />
-                        ))}
+                    {routes.account.map(({ route, component: Component }) => (
+                        <Route key={route} path={`/account/${route}`.replace('//', '/')} element={<Component />} />
+                    ))}
 
-                        <Route path='*' element={<NotFound />} />
-                    </Routes>
-                </Suspense>
-            </TransitionRouter>
+                    <Route path='*' element={<NotFound />} />
+                </Routes>
+            </Suspense>
         </>
     );
 };

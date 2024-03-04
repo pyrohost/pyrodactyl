@@ -2,7 +2,6 @@ import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
 import { Fragment, useEffect, useState } from 'react';
 import { Link, NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
-import TransitionRouter from '@/TransitionRouter';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
 import Can from '@/components/elements/Can';
@@ -182,7 +181,6 @@ export default () => {
                         <ConflictStateRenderer />
                     ) : (
                         <ErrorBoundary>
-                            <TransitionRouter>
                                 <Switch location={location}>
                                     {routes.server.map(({ path, permission, component: Component }) => (
                                         <PermissionRoute key={path} permission={permission} path={to(path)} exact>
@@ -193,7 +191,6 @@ export default () => {
                                     ))}
                                     <Route path={'*'} component={NotFound} />
                                 </Switch>
-                            </TransitionRouter>
                         </ErrorBoundary>
                     )}
                 </>
