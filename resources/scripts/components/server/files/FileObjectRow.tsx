@@ -14,8 +14,6 @@ import { bytesToString } from '@/lib/formatters';
 import styles from './style.module.css';
 import {
     ContextMenu,
-    ContextMenuContent,
-    ContextMenuItem,
     ContextMenuTrigger,
 } from '@/components/elements/ContextMenu';
 import FileDropdownMenu from './FileDropdownMenu';

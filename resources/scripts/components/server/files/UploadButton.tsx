@@ -3,14 +3,12 @@ import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 import tw from 'twin.macro';
 import { useEffect, useRef, useState } from 'react';
 import { ModalMask } from '@/components/elements/Modal';
-import Fade from '@/components/elements/Fade';
 import useEventListener from '@/plugins/useEventListener';
 import { useFlashKey } from '@/plugins/useFlash';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import { ServerContext } from '@/state/server';
 import Portal from '@/components/elements/Portal';
 // FIXME: add icons back
-import { useSignal } from '@preact/signals-react';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
 function isFileOrDirectory(event: DragEvent): boolean {
