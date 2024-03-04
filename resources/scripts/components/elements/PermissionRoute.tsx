@@ -10,7 +10,7 @@ interface Props {
 }
 
 function PermissionRoute({ children, permission }: Props): JSX.Element {
-    if (permission === undefined) {
+    if (permission === undefined || permission === null) {
         return <>{children}</>;
     }
 

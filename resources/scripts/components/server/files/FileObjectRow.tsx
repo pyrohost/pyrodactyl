@@ -1,10 +1,10 @@
 import { encodePathSegments } from '@/helpers';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
-import { memo } from 'react';
+import { ReactNode, memo } from 'react';
 import { FileObject } from '@/api/server/files/loadDirectory';
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import tw from 'twin.macro';
 import isEqual from 'react-fast-compare';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
@@ -20,31 +20,31 @@ import {
 } from '@/components/elements/ContextMenu';
 import FileDropdownMenu from './FileDropdownMenu';
 
-const Clickable: React.FC<{ file: FileObject }> = memo(({ file, children }) => {
-    const [canRead] = usePermissions(['file.read']);
+function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
     const [canReadContents] = usePermissions(['file.read-content']);
+    const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
-    const match = useRouteMatch();
-
-    return (file.isFile && (!file.isEditable() || !canReadContents)) || (!file.isFile && !canRead) ? (
+    return !canReadContents || (file.isFile && !file.isEditable()) ? (
         <div className={styles.details}>{children}</div>
     ) : (
         <NavLink
             className={styles.details}
-            to={`${match.url}${file.isFile ? '/edit' : ''}#${encodePathSegments(join(directory, file.name))}`}
+            to={`/server/${id}/files${file.isFile ? '/edit' : ''}#${encodePathSegments(join(directory, file.name))}`}
         >
             {children}
         </NavLink>
     );
-}, isEqual);
+}
+
+const MemoizedClickable = memo(Clickable, isEqual);
 
 const FileObjectRow = ({ file }: { file: FileObject }) => (
     <ContextMenu>
         <ContextMenuTrigger asChild>
             <div className={styles.file_row} key={file.name}>
                 <SelectFileCheckbox name={file.name} />
-                <Clickable file={file}>
+                <MemoizedClickable file={file}>
                     <div css={tw`flex-none text-zinc-400 ml-6 mr-4 text-lg pl-3`}>
                         {file.isFile ? (
                             // todo handle other types of files. ugh
@@ -103,7 +103,7 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
                             ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
                             : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}
                     </div>
-                </Clickable>
+                </MemoizedClickable>
             </div>
         </ContextMenuTrigger>
         <FileDropdownMenu file={file} />

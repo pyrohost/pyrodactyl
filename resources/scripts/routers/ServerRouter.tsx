@@ -1,6 +1,6 @@
 import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, Suspense, useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
@@ -185,9 +185,9 @@ export default () => {
                                         path={route}
                                         element={
                                             <PermissionRoute permission={permission}>
-                                                <Spinner.Suspense>
+                                                <Suspense fallback={null}>
                                                     <Component />
-                                                </Spinner.Suspense>
+                                                </Suspense>
                                             </PermissionRoute>
                                         }
                                     />
