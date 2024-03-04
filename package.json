@@ -79,7 +79,7 @@
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
         "autoprefixer": "^10.4.7",
-        "babel-plugin-styled-components": "^2.0.7",
+        "babel-plugin-styled-components": "^2.1.4",
         "cross-env": "^7.0.2",
         "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
