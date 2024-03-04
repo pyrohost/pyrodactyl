@@ -11,8 +11,6 @@ import { store } from '@/state';
 import { SiteSettings } from '@/state/settings';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
-import { history } from '@/components/history';
-import { setupInterceptors } from '@/api/interceptors';
 import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { ServerContext } from '@/state/server';
 import '@/assets/tailwind.css';
@@ -37,8 +35,6 @@ interface ExtendedWindow extends Window {
         /* eslint-enable camelcase */
     };
 }
-
-setupInterceptors(history);
 
 const App = () => {
     const { PterodactylUser, SiteConfiguration } = window as ExtendedWindow;
