@@ -1,6 +1,6 @@
 import { Command } from 'cmdk';
 import { useState, useEffect } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './styles.module.css';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
@@ -15,18 +15,10 @@ import HugeIconsZap from '../hugeicons/Zap';
 
 const CommandMenu = () => {
     const [open, setOpen] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
     // controls server power status
     const status = ServerContext.useStoreState((state) => state.status.value);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
-    const match = useRouteMatch<{ id: string }>();
-
-    const to = (value: string, url = false) => {
-        if (value === '/') {
-            return url ? match.url : match.path;
-        }
-        return `${(url ? match.url : match.path).replace(/\/*$/, '')}/${value.replace(/^\/+/, '')}`;
-    };
 
     const cmdkPowerAction = (action: string) => {
         if (instance) {
@@ -43,7 +35,7 @@ const CommandMenu = () => {
     };
 
     const cmdkNavigate = (url: string) => {
-        history.push(to(url, true));
+        navigate(url);
         setOpen(false);
     };
 

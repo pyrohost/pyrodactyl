@@ -4,7 +4,8 @@ import { httpErrorToHuman } from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import saveFileContents from '@/api/server/files/saveFileContents';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import FileNameModal from '@/components/server/files/FileNameModal';
 import Can from '@/components/elements/Can';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -29,7 +30,7 @@ export default () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [mode, setMode] = useState('text/plain');
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const { hash } = useLocation();
 
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
@@ -66,7 +67,7 @@ export default () => {
             .then((content) => saveFileContents(uuid, name || hashToPath(hash), content))
             .then(() => {
                 if (name) {
-                    history.push(`/server/${id}/files/edit#/${encodePathSegments(name)}`);
+                    navigate(`/server/${id}/files/edit#/${encodePathSegments(name)}`);
                     return;
                 }
 
@@ -80,7 +81,7 @@ export default () => {
     };
 
     if (error) {
-        return <ServerError message={error} onBack={() => history.goBack()} />;
+        return <ServerError message={error} />;
     }
 
     return (
