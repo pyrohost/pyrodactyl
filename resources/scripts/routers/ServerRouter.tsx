@@ -1,7 +1,7 @@
 import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
 import { Fragment, useEffect, useState } from 'react';
-import { Link, NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { ServerContext } from '@/state/server';
 import Can from '@/components/elements/Can';
@@ -33,7 +33,7 @@ import {
 import http from '@/api/http';
 
 export default () => {
-    const match = useRouteMatch<{ id: string }>();
+    const params = useParams<'id'>();
     const location = useLocation();
 
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
@@ -53,13 +53,6 @@ export default () => {
         });
     };
 
-    const to = (value: string, url = false) => {
-        if (value === '/') {
-            return url ? match.url : match.path;
-        }
-        return `${(url ? match.url : match.path).replace(/\/*$/, '')}/${value.replace(/^\/+/, '')}`;
-    };
-
     useEffect(
         () => () => {
             clearServerState();
@@ -70,7 +63,7 @@ export default () => {
     useEffect(() => {
         setError('');
 
-        getServer(match.params.id).catch((error) => {
+        getServer(params.id).catch((error) => {
             console.error(error);
             setError(httpErrorToHuman(error));
         });
@@ -78,7 +71,7 @@ export default () => {
         return () => {
             clearServerState();
         };
-    }, [match.params.id]);
+    }, [params.id]);
 
     return (
         <Fragment key={'server-router'}>
@@ -101,9 +94,9 @@ export default () => {
                     />
                     <SubNavigation>
                         <div className='flex flex-row items-center justify-between h-8'>
-                            <Link to={'/'} className='flex shrink-0 h-full w-fit'>
+                            <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                                 <Logo />
-                            </Link>
+                            </NavLink>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button className='w-8 h-8 flex items-center justify-center rounded-md text-white'>
@@ -128,36 +121,36 @@ export default () => {
                         <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                         <div className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
-                            <NavLink className='flex flex-row items-center' to={to('/', true)} exact>
+                            <NavLink className='flex flex-row items-center' to={to('/', true)} end>
                                 <HugeIconsHome fill='currentColor' />
                                 <p>Home</p>
                             </NavLink>
                             <Can action={'file.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/files', true)} exact>
+                                <NavLink className='flex flex-row items-center' to={to('/files', true)} end>
                                     <HugeIconsFolder fill='currentColor' />
                                     <p>Files</p>
                                 </NavLink>
                             </Can>
                             <Can action={'database.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/databases', true)} exact>
+                                <NavLink className='flex flex-row items-center' to={to('/databases', true)} end>
                                     <HugeIconsDatabase fill='currentColor' />
                                     <p>Databases</p>
                                 </NavLink>
                             </Can>
                             <Can action={'backup.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/backups', true)} exact>
+                                <NavLink className='flex flex-row items-center' to={to('/backups', true)} end>
                                     <HugeIconsCloudUp fill='currentColor' />
                                     <p>Backups</p>
                                 </NavLink>
                             </Can>
                             <Can action={'allocation.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/network', true)} exact>
+                                <NavLink className='flex flex-row items-center' to={to('/network', true)} end>
                                     <HugeIconsConnections fill='currentColor' />
                                     <p>Networking</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
-                                <NavLink className='flex flex-row items-center' to={to('/settings', true)} exact>
+                                <NavLink className='flex flex-row items-center' to={to('/settings', true)} end>
                                     <HugeIconsDashboardSettings fill='currentColor' />
                                     <p>Settings</p>
                                 </NavLink>
@@ -181,16 +174,16 @@ export default () => {
                         <ConflictStateRenderer />
                     ) : (
                         <ErrorBoundary>
-                                <Switch location={location}>
-                                    {routes.server.map(({ path, permission, component: Component }) => (
-                                        <PermissionRoute key={path} permission={permission} path={to(path)} exact>
-                                            <Spinner.Suspense>
-                                                <Component />
-                                            </Spinner.Suspense>
-                                        </PermissionRoute>
-                                    ))}
-                                    <Route path={'*'} component={NotFound} />
-                                </Switch>
+                            <Switch location={location}>
+                                {routes.server.map(({ path, permission, component: Component }) => (
+                                    <PermissionRoute key={path} permission={permission} path={to(path)} end>
+                                        <Spinner.Suspense>
+                                            <Component />
+                                        </Spinner.Suspense>
+                                    </PermissionRoute>
+                                ))}
+                                <Route path={'*'} component={NotFound} />
+                            </Switch>
                         </ErrorBoundary>
                     )}
                 </>
