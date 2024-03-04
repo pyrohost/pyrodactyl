@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
 import tw from 'twin.macro';
 import styled, { css } from 'styled-components';
-import { breakpoint } from '@/theme';
 import Fade from '@/components/elements/Fade';
 import { createPortal } from 'react-dom';
 
@@ -28,15 +27,12 @@ export const ModalMask = styled.div`
 const ModalContainer = styled.div<{ alignTop?: boolean }>`
     max-width: 95%;
     max-height: calc(100vh - 8rem);
-    ${breakpoint('md')`max-width: 75%`};
-    ${breakpoint('lg')`max-width: 50%`};
 
     ${tw`relative flex flex-col w-full m-auto`};
     ${(props) =>
         props.alignTop &&
         css`
             margin-top: 20%;
-            ${breakpoint('md')`margin-top: 10%`};
         `};
 
     margin-bottom: auto;
