@@ -1,15 +1,12 @@
-import { Link, NavLink, Route, Switch } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import TransitionRouter from '@/TransitionRouter';
 import SubNavigation from '@/components/elements/SubNavigation';
-import { useLocation } from 'react-router';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-// import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 import { Suspense } from 'react';
 import {
     DropdownMenu,
@@ -19,7 +16,6 @@ import {
 } from '@/components/elements/DropdownMenuNew';
 
 export default () => {
-    const location = useLocation();
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
             // @ts-expect-error this is valid
@@ -29,13 +25,11 @@ export default () => {
 
     return (
         <>
-            {/* <NavigationBar /> */}
-            {/* {location.pathname.startsWith('/account') && ( */}
             <SubNavigation>
                 <div className='relative flex flex-row items-center justify-between h-8'>
-                    <Link to={'/'} className='flex shrink-0 h-full w-fit'>
+                    <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                         <Logo />
-                    </Link>
+                    </NavLink>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <button className='w-8 h-8 flex items-center justify-center rounded-md text-white'>
@@ -59,34 +53,44 @@ export default () => {
                 </div>
                 <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <div className='pyro-subnav-routes-wrapper'>
-                    <NavLink to={'/'} exact className='flex flex-row items-center'>
+                    <NavLink to={'/'} end className='flex flex-row items-center'>
                         <HugeIconsHome fill='currentColor' />
                         <p>Your Servers</p>
                     </NavLink>
-                    <NavLink to={'/account'} exact className='flex flex-row items-center'>
+                    <NavLink to={'/account'} end className='flex flex-row items-center'>
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Your Settings</p>
                     </NavLink>
                 </div>
             </SubNavigation>
-            {/* )} */}
-            <TransitionRouter>
-                <Suspense fallback={null}>
-                    <Switch location={location}>
-                        <Route path={'/'} exact>
-                            <DashboardContainer />
-                        </Route>
-                        {routes.account.map(({ path, component: Component }) => (
-                            <Route key={path} path={`/account/${path}`.replace('//', '/')} exact>
-                                <Component />
-                            </Route>
-                        ))}
-                        <Route path={'*'}>
-                            <NotFound />
-                        </Route>
-                    </Switch>
-                </Suspense>
-            </TransitionRouter>
+            <Suspense fallback={null}>
+                <div
+                    className='w-full h-full rounded-md'
+                    style={{
+                        background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
+                    }}
+                >
+                    <main
+                        data-pyro-main=''
+                        data-pyro-transitionrouter=''
+                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                    >
+                        <Routes>
+                            <Route path='' element={<DashboardContainer />} />
+
+                            {routes.account.map(({ route, component: Component }) => (
+                                <Route
+                                    key={route}
+                                    path={`/account/${route}`.replace('//', '/')}
+                                    element={<Component />}
+                                />
+                            ))}
+
+                            <Route path='*' element={<NotFound />} />
+                        </Routes>
+                    </main>
+                </div>
+            </Suspense>
         </>
     );
 };

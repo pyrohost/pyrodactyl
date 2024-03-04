@@ -1,16 +1,15 @@
 import axios from 'axios';
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 import tw from 'twin.macro';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ModalMask } from '@/components/elements/Modal';
-import Fade from '@/components/elements/Fade';
 import useEventListener from '@/plugins/useEventListener';
 import { useFlashKey } from '@/plugins/useFlash';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import { ServerContext } from '@/state/server';
 import Portal from '@/components/elements/Portal';
 // FIXME: add icons back
-import { useSignal } from '@preact/signals-react';
+import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
 function isFileOrDirectory(event: DragEvent): boolean {
     if (!event.dataTransfer?.types) {
@@ -22,16 +21,14 @@ function isFileOrDirectory(event: DragEvent): boolean {
 
 export default () => {
     const fileUploadInput = useRef<HTMLInputElement>(null);
-
-    const visible = useSignal(false);
-    const timeouts = useSignal<NodeJS.Timeout[]>([]);
-
+    const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
+    const [visible, setVisible] = useState(false);
     const { mutate } = useFileManagerSwr();
     const { addError, clearAndAddHttpError } = useFlashKey('files');
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const { clearFileUploads, removeFileUpload, pushFileUpload, setUploadProgress } = ServerContext.useStoreActions(
+    const { clearFileUploads, appendFileUpload, removeFileUpload } = ServerContext.useStoreActions(
         (actions) => actions.files
     );
 
@@ -41,22 +38,28 @@ export default () => {
             e.preventDefault();
             e.stopPropagation();
             if (isFileOrDirectory(e)) {
-                visible.value = true;
+                return setVisible(true);
             }
         },
         { capture: true }
     );
 
-    useEventListener('dragexit', () => (visible.value = false), { capture: true });
+    useEventListener('dragexit', () => setVisible(false), { capture: true });
 
-    useEventListener('keydown', () => (visible.value = false));
+    useEventListener('keydown', () => {
+        visible && setVisible(false);
+    });
 
     useEffect(() => {
-        return () => timeouts.value.forEach(clearTimeout);
+        return () => timeouts.forEach(clearTimeout);
     }, []);
 
     const onUploadProgress = (data: ProgressEvent, name: string) => {
-        setUploadProgress({ name, loaded: data.loaded });
+        appendFileUpload({ name, loaded: data.loaded, total: data.total });
+        if (data.loaded >= data.total) {
+            const timeout = setTimeout(() => removeFileUpload(name), 500);
+            setTimeouts((t) => [...t, timeout]);
+        }
     };
 
     const onFileSubmission = (files: FileList) => {
@@ -66,27 +69,25 @@ export default () => {
             return addError('Folder uploads are not supported at this time.', 'Error');
         }
 
-        const uploads = list.map((file) => {
-            const controller = new AbortController();
-            pushFileUpload({
-                name: file.name,
-                data: { abort: controller, loaded: 0, total: file.size },
-            });
+        if (!list.length) {
+            return;
+        }
 
+        const uploads = list.map((file) => {
+            appendFileUpload({ name: file.name, loaded: 0, total: file.size });
             return () =>
                 getFileUploadUrl(uuid).then((url) =>
-                    axios
-                        .post(
-                            url,
-                            { files: file },
-                            {
-                                signal: controller.signal,
-                                headers: { 'Content-Type': 'multipart/form-data' },
-                                params: { directory },
-                                onUploadProgress: (data) => onUploadProgress(data, file.name),
-                            }
-                        )
-                        .then(() => timeouts.value.push(setTimeout(() => removeFileUpload(file.name), 500)))
+                    axios.post(
+                        url,
+                        { files: file },
+                        {
+                            headers: { 'Content-Type': 'multipart/form-data' },
+                            params: { directory },
+                            onUploadProgress: (data) => {
+                                onUploadProgress(data, file.name);
+                            },
+                        }
+                    )
                 );
         });
 
@@ -101,15 +102,15 @@ export default () => {
     return (
         <>
             <Portal>
-                <Fade appear in={visible.value} timeout={75} key={'upload_modal_mask'} unmountOnExit>
+                <FadeTransition show={visible} duration='duration-75' key='upload_modal_mask' appear unmount>
                     <ModalMask
-                        onClick={() => (visible.value = false)}
+                        onClick={() => setVisible(false)}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
 
-                            visible.value = false;
+                            setVisible(false);
                             if (!e.dataTransfer?.files.length) return;
 
                             onFileSubmission(e.dataTransfer.files);
@@ -128,7 +129,7 @@ export default () => {
                             </div>
                         </div>
                     </ModalMask>
-                </Fade>
+                </FadeTransition>
             </Portal>
             <input
                 type={'file'}

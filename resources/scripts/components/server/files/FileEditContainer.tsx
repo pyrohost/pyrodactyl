@@ -1,92 +1,93 @@
-import { useEffect, useState } from 'react';
-import getFileContents from '@/api/server/files/getFileContents';
-import { httpErrorToHuman } from '@/api/http';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import saveFileContents from '@/api/server/files/saveFileContents';
-import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
-import { useHistory, useLocation, useParams } from 'react-router';
-import FileNameModal from '@/components/server/files/FileNameModal';
-import Can from '@/components/elements/Can';
+// import { useEffect, useState } from 'react';
+// import getFileContents from '@/api/server/files/getFileContents';
+// import { httpErrorToHuman } from '@/api/http';
+// import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+// import saveFileContents from '@/api/server/files/saveFileContents';
+// import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
+// import { useLocation, useParams } from 'react-router';
+// import { useNavigate } from 'react-router-dom';
+// import FileNameModal from '@/components/server/files/FileNameModal';
+// import Can from '@/components/elements/Can';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-import { ServerError } from '@/components/elements/ScreenBlock';
+// import { ServerError } from '@/components/elements/ScreenBlock';
 import tw from 'twin.macro';
-import Button from '@/components/elements/Button';
-import Select from '@/components/elements/Select';
-import modes from '@/modes';
-import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { encodePathSegments, hashToPath } from '@/helpers';
-import { dirname } from 'pathe';
-import CodemirrorEditor from '@/components/elements/CodemirrorEditor';
+// import Button from '@/components/elements/Button';
+// import Select from '@/components/elements/Select';
+// import modes from '@/modes';
+// import useFlash from '@/plugins/useFlash';
+// import { ServerContext } from '@/state/server';
+// import ErrorBoundary from '@/components/elements/ErrorBoundary';
+// import { encodePathSegments, hashToPath } from '@/helpers';
+// import { dirname } from 'pathe';
+// import CodemirrorEditor from '@/components/elements/CodemirrorEditor';
 
 export default () => {
-    const [error, setError] = useState('');
-    const { action } = useParams<{ action: 'new' | string }>();
-    const [loading, setLoading] = useState(action === 'edit');
-    const [content, setContent] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
-    const [mode, setMode] = useState('text/plain');
+    // const [error, setError] = useState('');
+    // const { action } = useParams<{ action: 'new' | string }>();
+    // const [loading, setLoading] = useState(action === 'edit');
+    // const [content, setContent] = useState('');
+    // const [modalVisible, setModalVisible] = useState(false);
+    // const [mode, setMode] = useState('text/plain');
 
-    const history = useHistory();
-    const { hash } = useLocation();
+    // const navigate = useNavigate();
+    // const { hash } = useLocation();
 
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
-    const { addError, clearFlashes } = useFlash();
+    // const id = ServerContext.useStoreState((state) => state.server.data!.id);
+    // const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    // const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
+    // const { addError, clearFlashes } = useFlash();
 
-    let fetchFileContent: null | (() => Promise<string>) = null;
+    // let fetchFileContent: null | (() => Promise<string>) = null;
 
-    useEffect(() => {
-        if (action === 'new') return;
+    // useEffect(() => {
+    //     if (action === 'new') return;
 
-        setError('');
-        setLoading(true);
-        const path = hashToPath(hash);
-        setDirectory(dirname(path));
-        getFileContents(uuid, path)
-            .then(setContent)
-            .catch((error) => {
-                console.error(error);
-                setError(httpErrorToHuman(error));
-            })
-            .then(() => setLoading(false));
-    }, [action, uuid, hash]);
+    //     setError('');
+    //     setLoading(true);
+    //     const path = hashToPath(hash);
+    //     setDirectory(dirname(path));
+    //     getFileContents(uuid, path)
+    //         .then(setContent)
+    //         .catch((error) => {
+    //             console.error(error);
+    //             setError(httpErrorToHuman(error));
+    //         })
+    //         .then(() => setLoading(false));
+    // }, [action, uuid, hash]);
 
-    const save = (name?: string) => {
-        if (!fetchFileContent) {
-            return;
-        }
+    // const save = (name?: string) => {
+    //     if (!fetchFileContent) {
+    //         return;
+    //     }
 
-        setLoading(true);
-        clearFlashes('files:view');
-        fetchFileContent()
-            .then((content) => saveFileContents(uuid, name || hashToPath(hash), content))
-            .then(() => {
-                if (name) {
-                    history.push(`/server/${id}/files/edit#/${encodePathSegments(name)}`);
-                    return;
-                }
+    //     setLoading(true);
+    //     clearFlashes('files:view');
+    //     fetchFileContent()
+    //         .then((content) => saveFileContents(uuid, name || hashToPath(hash), content))
+    //         .then(() => {
+    //             if (name) {
+    //                 navigate(`/server/${id}/files/edit#/${encodePathSegments(name)}`);
+    //                 return;
+    //             }
 
-                return Promise.resolve();
-            })
-            .catch((error) => {
-                console.error(error);
-                addError({ message: httpErrorToHuman(error), key: 'files:view' });
-            })
-            .then(() => setLoading(false));
-    };
+    //             return Promise.resolve();
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             addError({ message: httpErrorToHuman(error), key: 'files:view' });
+    //         })
+    //         .then(() => setLoading(false));
+    // };
 
-    if (error) {
-        return <ServerError message={error} onBack={() => history.goBack()} />;
-    }
+    // if (error) {
+    //     return <ServerError message={error} />;
+    // }
 
     return (
         <PageContentBlock>
             <FlashMessageRender byKey={'files:view'} css={tw`mb-4`} />
-            <ErrorBoundary>
+            {/* <ErrorBoundary>
                 <div css={tw`mb-4`}>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />
                 </div>
@@ -109,8 +110,8 @@ export default () => {
                     setModalVisible(false);
                     save(name);
                 }}
-            />
-            <div css={tw`relative h-full w-full`}>
+            /> */}
+            {/* <div css={tw`relative h-full w-full`}>
                 <SpinnerOverlay visible={loading} />
                 <CodemirrorEditor
                     mode={mode}
@@ -128,8 +129,12 @@ export default () => {
                         }
                     }}
                 />
+            </div> */}
+            <div>
+                Note: File editing is currently disabled while we migrate pyrodactyl's built-in editor to a newer
+                version. This message is here to prevent errors on your end. Thanks for your patience!
             </div>
-            <div css={tw`flex justify-end mt-4`}>
+            {/* <div css={tw`flex justify-end mt-4`}>
                 <div css={tw`flex-1 sm:flex-none rounded bg-zinc-900 mr-4`}>
                     <Select value={mode} onChange={(e) => setMode(e.currentTarget.value)}>
                         {modes.map((mode) => (
@@ -152,7 +157,7 @@ export default () => {
                         </Button>
                     </Can>
                 )}
-            </div>
+            </div> */}
         </PageContentBlock>
     );
 };

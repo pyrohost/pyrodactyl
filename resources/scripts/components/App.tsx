@@ -5,14 +5,12 @@
 import '@preact/signals-react';
 
 import { lazy } from 'react';
-import { Route, Router, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { StoreProvider } from 'easy-peasy';
 import { store } from '@/state';
 import { SiteSettings } from '@/state/settings';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
-import { history } from '@/components/history';
-import { setupInterceptors } from '@/api/interceptors';
 import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { ServerContext } from '@/state/server';
 import '@/assets/tailwind.css';
@@ -37,8 +35,6 @@ interface ExtendedWindow extends Window {
         /* eslint-enable camelcase */
     };
 }
-
-setupInterceptors(history);
 
 const App = () => {
     const { PterodactylUser, SiteConfiguration } = window as ExtendedWindow;
@@ -67,30 +63,44 @@ const App = () => {
                     data-pyro-routerwrap=''
                     className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
                 >
-                    <Router history={history}>
-                        <Switch>
-                            <Route path={'/auth'}>
-                                <Spinner.Suspense>
-                                    <AuthenticationRouter />
-                                </Spinner.Suspense>
-                            </Route>
-                            <AuthenticatedRoute path={'/server/:id'}>
-                                <Spinner.Suspense>
-                                    <ServerContext.Provider>
-                                        <ServerRouter />
-                                    </ServerContext.Provider>
-                                </Spinner.Suspense>
-                            </AuthenticatedRoute>
-                            <AuthenticatedRoute path={'/'}>
-                                <Spinner.Suspense>
-                                    <DashboardRouter />
-                                </Spinner.Suspense>
-                            </AuthenticatedRoute>
-                            <Route path={'*'}>
-                                <NotFound />
-                            </Route>
-                        </Switch>
-                    </Router>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route
+                                path='/auth/*'
+                                element={
+                                    <Spinner.Suspense>
+                                        <AuthenticationRouter />
+                                    </Spinner.Suspense>
+                                }
+                            />
+
+                            <Route
+                                path='/server/:id/*'
+                                element={
+                                    <AuthenticatedRoute>
+                                        <Spinner.Suspense>
+                                            <ServerContext.Provider>
+                                                <ServerRouter />
+                                            </ServerContext.Provider>
+                                        </Spinner.Suspense>
+                                    </AuthenticatedRoute>
+                                }
+                            />
+
+                            <Route
+                                path='/*'
+                                element={
+                                    <AuthenticatedRoute>
+                                        <Spinner.Suspense>
+                                            <DashboardRouter />
+                                        </Spinner.Suspense>
+                                    </AuthenticatedRoute>
+                                }
+                            />
+
+                            <Route path='*' element={<NotFound />} />
+                        </Routes>
+                    </BrowserRouter>
                 </div>
             </StoreProvider>
         </>
