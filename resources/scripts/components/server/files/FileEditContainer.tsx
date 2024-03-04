@@ -87,7 +87,7 @@ export default () => {
     return (
         <PageContentBlock>
             <FlashMessageRender byKey={'files:view'} css={tw`mb-4`} />
-            <ErrorBoundary>
+            {/* <ErrorBoundary>
                 <div css={tw`mb-4`}>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />
                 </div>
@@ -110,8 +110,8 @@ export default () => {
                     setModalVisible(false);
                     save(name);
                 }}
-            />
-            <div css={tw`relative h-full w-full`}>
+            /> */}
+            {/* <div css={tw`relative h-full w-full`}>
                 <SpinnerOverlay visible={loading} />
                 <CodemirrorEditor
                     mode={mode}
@@ -129,8 +129,12 @@ export default () => {
                         }
                     }}
                 />
+            </div> */}
+            <div>
+                Note: File editing is currently disabled while we migrate pyrodactyl's built-in editor to a newer
+                version. This message is here to prevent errors on your end. Thanks for your patience!
             </div>
-            <div css={tw`flex justify-end mt-4`}>
+            {/* <div css={tw`flex justify-end mt-4`}>
                 <div css={tw`flex-1 sm:flex-none rounded bg-zinc-900 mr-4`}>
                     <Select value={mode} onChange={(e) => setMode(e.currentTarget.value)}>
                         {modes.map((mode) => (
@@ -153,7 +157,7 @@ export default () => {
                         </Button>
                     </Can>
                 )}
-            </div>
+            </div> */}
         </PageContentBlock>
     );
 };
