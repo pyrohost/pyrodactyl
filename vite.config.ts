@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { dirname, resolve } from 'pathe';
 import { fileURLToPath } from 'node:url';
+import manifestSRI from 'vite-plugin-manifest-sri';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -28,6 +29,7 @@ export default defineConfig({
 
     plugins: [
         laravel('resources/scripts/index.tsx'),
+        manifestSRI(),
         react({
             babel: {
                 plugins: ['babel-plugin-macros', 'babel-plugin-styled-components'],
