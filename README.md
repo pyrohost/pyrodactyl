@@ -4,6 +4,8 @@
 
 pyrodactyl is the Pterodactyl-based game server management panel. Our fork focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: pyrodactyl is the world's best Pterodactyl.
 
+[![Dashboard Image](https://pyro.host/img/panel1.jpg)](https://panel.pyro.host)
+
 ## Changes from vanilla Pterodactyl
 
 - **Smaller bundle sizes:** pyrodactyl is built using Vite, and significant re-architecting of the application means the resulting bundle size is **55 times smaller than leading, closed-source Pterodactyl forks**
