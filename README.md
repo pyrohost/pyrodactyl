@@ -8,8 +8,8 @@ pyrodactyl is the Pterodactyl-based game server management panel. Our fork focus
 
 ## Changes from vanilla Pterodactyl
 
-- **Smaller bundle sizes:** pyrodactyl is built using Vite, and significant re-architecting of the application means the resulting bundle size is **55 times smaller than leading, closed-source Pterodactyl forks**
-- **Faster loading times:** pyrodactyl's load times are **multiple orders of magnitudes faster** than other closed-source Pterodactyl forks. Smarter code splitting and chunking means that pages you in the panel only load the resources they need.
+- **Smaller bundle sizes:** pyrodactyl is built using Vite, and significant re-architecting of the application means the initial download size is **[55 times smaller than leading, closed-source Pterodactyl forks](https://i.imgur.com/tKWLHhR.png)**
+- **Faster loading times:** pyrodactyl's load times are **[over 3 times faster](https://i.imgur.com/28XxmMi.png)** than other closed-source Pterodactyl forks. Smarter code splitting and chunking means that pages you in the panel only load the resources they need.
 - **More secure:** pyrodactyl's modern architecture means **most severe and easily exploitable CVEs simply do not exist**.
 - **More accessible:** Pyro believes that gaming should be easily available for everyone. pyrodactyl builds with the latest Web accessibility guidelines in mind. pyrodactyl is **entirely keyboard-navigable, even context menus.**.
 - **More approachable:** pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server [with Pyro](https://pyro.host).
