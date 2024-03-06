@@ -1,7 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import SubNavigation from '@/components/elements/SubNavigation';
+import MainSidebar from '@/components/elements/MainSidebar';
 import routes from '@/routers/routes';
 import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
@@ -25,7 +25,7 @@ export default () => {
 
     return (
         <>
-            <SubNavigation>
+            <MainSidebar>
                 <div className='relative flex flex-row items-center justify-between h-8'>
                     <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                         <Logo />
@@ -62,7 +62,7 @@ export default () => {
                         <p>Your Settings</p>
                     </NavLink>
                 </div>
-            </SubNavigation>
+            </MainSidebar>
             <Suspense fallback={null}>
                 <div
                     className='w-full h-full rounded-md'

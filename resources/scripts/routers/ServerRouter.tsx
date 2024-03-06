@@ -9,7 +9,7 @@ import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
 import { useStoreState } from 'easy-peasy';
 import { useLocation } from 'react-router';
-import SubNavigation from '@/components/elements/SubNavigation';
+import MainSidebar from '@/components/elements/MainSidebar';
 import InstallListener from '@/components/server/InstallListener';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
@@ -95,7 +95,7 @@ export default () => {
                             },
                         }}
                     />
-                    <SubNavigation>
+                    <MainSidebar>
                         <div className='flex flex-row items-center justify-between h-8'>
                             <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                                 <Logo />
@@ -168,7 +168,7 @@ export default () => {
                                 </a>
                             )}
                         </div>
-                    </SubNavigation>
+                    </MainSidebar>
                     <CommandMenu />
                     <InstallListener />
                     <TransferListener />
@@ -176,8 +176,7 @@ export default () => {
                     <div
                         className='w-full h-full rounded-md'
                         style={{
-                            background:
-                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
+                            background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
                         }}
                     >
                         <main

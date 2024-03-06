@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import tw from 'twin.macro';
 
 import getWebsocketToken from '@/api/server/getWebsocketToken';
-import ContentContainer from '@/components/elements/ContentContainer';
 import Spinner from '@/components/elements/Spinner';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import { Websocket } from '@/plugins/Websocket';
@@ -110,18 +109,16 @@ function WebsocketHandler() {
     return error ? (
         <FadeTransition duration='duration-150' show>
             <div css={tw`bg-red-500 py-2`}>
-                <ContentContainer css={tw`flex items-center justify-center`}>
-                    {error === 'connecting' ? (
-                        <>
-                            <Spinner size={'small'} />
-                            <p css={tw`ml-2 text-sm text-red-100`}>
-                                We&apos;re having some trouble connecting to your server, please wait...
-                            </p>
-                        </>
-                    ) : (
-                        <p css={tw`ml-2 text-sm text-white`}>{error}</p>
-                    )}
-                </ContentContainer>
+                {error === 'connecting' ? (
+                    <>
+                        <Spinner size={'small'} />
+                        <p css={tw`ml-2 text-sm text-red-100`}>
+                            We&apos;re having some trouble connecting to your server, please wait...
+                        </p>
+                    </>
+                ) : (
+                    <p css={tw`ml-2 text-sm text-white`}>{error}</p>
+                )}
             </div>
         </FadeTransition>
     ) : null;

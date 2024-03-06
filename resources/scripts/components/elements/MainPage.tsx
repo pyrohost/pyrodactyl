@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-const ContentContainer = styled.div`
+const MainPage = styled.div`
     ${tw`flex flex-col flex-1 h-fit min-h-full relative px-14 w-full`};
 `;
-ContentContainer.displayName = 'ContentContainer';
+MainPage.displayName = 'MainPage';
 
-export default ContentContainer;
+export default MainPage;

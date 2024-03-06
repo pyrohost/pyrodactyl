@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-const SubNavigation = styled.nav`
+const MainSidebar = styled.nav`
     ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8 select-none relative mr-2`};
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -59,4 +59,4 @@ const SubNavigation = styled.nav`
     }
 `;
 
-export default SubNavigation;
+export default MainSidebar;
