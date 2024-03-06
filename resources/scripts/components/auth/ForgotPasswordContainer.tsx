@@ -1,15 +1,16 @@
+import { useStoreState } from 'easy-peasy';
+import type { FormikHelpers } from 'formik';
+import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Reaptcha from 'reaptcha';
+import tw from 'twin.macro';
+import { object, string } from 'yup';
+
 import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
 import { httpErrorToHuman } from '@/api/http';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import { useStoreState } from 'easy-peasy';
-import Field from '@/components/elements/Field';
-import { Formik, FormikHelpers } from 'formik';
-import { object, string } from 'yup';
-import tw from 'twin.macro';
 import Button from '@/components/elements/Button';
-import Reaptcha from 'reaptcha';
+import Field from '@/components/elements/Field';
 import useFlash from '@/plugins/useFlash';
 
 interface Values {
@@ -54,7 +55,9 @@ export default () => {
             })
             .then(() => {
                 setToken('');
-                if (ref.current) ref.current.reset();
+                if (ref.current !== null) {
+                    void ref.current.reset();
+                }
 
                 setSubmitting(false);
             });

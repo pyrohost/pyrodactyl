@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import performPasswordReset from '@/api/auth/performPasswordReset';
 import { httpErrorToHuman } from '@/api/http';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
@@ -18,7 +17,7 @@ interface Values {
     passwordConfirmation: string;
 }
 
-export default ({ match, location }: RouteComponentProps<{ token: string }>) => {
+function ResetPasswordContainer() {
     const [email, setEmail] = useState('');
 
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -28,9 +27,11 @@ export default ({ match, location }: RouteComponentProps<{ token: string }>) => 
         setEmail(parsed.get('email') || '');
     }
 
+    const params = useParams<'token'>();
+
     const submit = ({ password, passwordConfirmation }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
-        performPasswordReset(email, { token: match.params.token, password, passwordConfirmation })
+        performPasswordReset(email, { token: params.token ?? '', password, passwordConfirmation })
             .then(() => {
                 // @ts-expect-error this is valid
                 window.location = '/';
@@ -56,8 +57,7 @@ export default ({ match, location }: RouteComponentProps<{ token: string }>) => 
                     .min(8, 'Your new password should be at least 8 characters in length.'),
                 passwordConfirmation: string()
                     .required('Your new password does not match.')
-                    // @ts-expect-error this is valid
-                    .oneOf([ref('password'), null], 'Your new password does not match.'),
+                    .oneOf([ref('password')], 'Your new password does not match.'),
             })}
         >
             {({ isSubmitting }) => (
@@ -86,7 +86,7 @@ export default ({ match, location }: RouteComponentProps<{ token: string }>) => 
                     <div css={tw`mt-6 text-center`}>
                         <Link
                             to={'/auth/login'}
-                            css={tw`text-xs text-zinc-500 tracking-wide no-underline uppercase hover:text-zinc-600`}
+                            css={tw`text-xs text-neutral-500 tracking-wide no-underline uppercase hover:text-neutral-600`}
                         >
                             Return to Login
                         </Link>
@@ -95,4 +95,6 @@ export default ({ match, location }: RouteComponentProps<{ token: string }>) => 
             )}
         </Formik>
     );
-};
+}
+
+export default ResetPasswordContainer;

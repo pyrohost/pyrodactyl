@@ -14,7 +14,7 @@ export default () => {
             style={{
                 background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #121212 0%, #000000 100%)',
             }}
-            className={'w-full h-full flex justify-center items-center'}
+            className={'w-full h-full flex justify-center items-center rounded-md'}
         >
             <Routes>
                 <Route path='login' element={<LoginContainer />} />
