@@ -1,13 +1,21 @@
 [![Logo Image](https://i.imgur.com/rrp2f0j.png)](https://panel.pyro.host)
 
-# pyrodactyl by pyro.host
+<p align="center">
+ <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
+ <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
+ <a aria-label="Licensed under Business Source License 1.1" href="https://github.com/pyrohost/panel/blob/main/LICENSE"><img alt="" src="https://i.imgur.com/DHx8Cz6.png"></a>
+</p>
+
+<h1 align="center">pyrodactyl by pyro.host</h1>
 
 pyrodactyl is the Pterodactyl-based game server management panel. Our fork focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: pyrodactyl is the world's best Pterodactyl.
 
+[![Dashboard Image](https://pyro.host/img/panel1.jpg)](https://panel.pyro.host)
+
 ## Changes from vanilla Pterodactyl
 
-- **Smaller bundle sizes:** pyrodactyl is built using Vite, and significant re-architecting of the application means the resulting bundle size is **55 times smaller than leading, closed-source Pterodactyl forks**
-- **Faster loading times:** pyrodactyl's load times are **multiple orders of magnitudes faster** than other closed-source Pterodactyl forks. Smarter code splitting and chunking means that pages you in the panel only load the resources they need.
+- **Smaller bundle sizes:** pyrodactyl is built using Vite, and significant re-architecting of the application means the initial download size is **[55 times smaller than leading, closed-source Pterodactyl forks](https://i.imgur.com/tKWLHhR.png)**
+- **Faster loading times:** pyrodactyl's load times are **[over 3 times faster](https://i.imgur.com/28XxmMi.png)** than other closed-source Pterodactyl forks. Smarter code splitting and chunking means that pages you in the panel only load the resources they need.
 - **More secure:** pyrodactyl's modern architecture means **most severe and easily exploitable CVEs simply do not exist**.
 - **More accessible:** Pyro believes that gaming should be easily available for everyone. pyrodactyl builds with the latest Web accessibility guidelines in mind. pyrodactyl is **entirely keyboard-navigable, even context menus.**.
 - **More approachable:** pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server [with Pyro](https://pyro.host).
