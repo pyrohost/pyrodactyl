@@ -118,14 +118,16 @@ export default () => {
                             className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
+                                opacity: top === '0' ? 0 : 1,
                                 transition: 'top 95ms',
                                 transitionTimingFunction: 'ease-in-out',
                             }}
                         />
                         <div
-                            className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full opacity-50 pointer-events-none'
+                            className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
+                                opacity: top === '0' ? 0 : 0.5,
                                 transition: 'top 95ms',
                                 transitionTimingFunction: 'ease-in-out',
                             }}
