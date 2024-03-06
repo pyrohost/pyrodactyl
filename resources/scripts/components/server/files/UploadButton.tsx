@@ -147,7 +147,11 @@ export default () => {
                                         fill='white'
                                     />
                                 </svg>
-                                <h1 className={'flex-1 text-lg font-bold tracking-tight text-center'}>
+                                <h1
+                                    className={
+                                        'flex-1 text-lg font-bold tracking-tight text-center truncate w-full relative px-4'
+                                    }
+                                >
                                     Upload to {name}
                                 </h1>
                             </div>
