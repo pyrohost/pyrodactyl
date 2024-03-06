@@ -25,4 +25,8 @@
             @apply cursor-default;
         }
     }
+
+    &[data-state='open'] {
+        @apply bg-[#ffffff12];
+    }
 }
