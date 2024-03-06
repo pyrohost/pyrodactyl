@@ -76,6 +76,24 @@ export default () => {
         };
     }, [params.id]);
 
+    // For now this doesn't account for subusers that may not
+    // have all permissions for a server, so the locations are hardcoded.
+    // TODO: in the future, we will want to just map the routes and get their ref,
+    // and then use that to calculate the top position.
+    const calculateTop = (pathname: string) => {
+        if (!id) return '0';
+
+        if (pathname.endsWith(`/server/${id}`)) return '7.5rem';
+        if (pathname.endsWith(`/server/${id}/files`)) return '11rem';
+        if (pathname.endsWith(`/server/${id}/databases`)) return '14.5rem';
+        if (pathname.endsWith(`/server/${id}/backups`)) return '18rem';
+        if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
+        if (pathname.endsWith(`/server/${id}/settings`)) return '25rem';
+        return '0';
+    };
+
+    const top = calculateTop(location.pathname);
+
     return (
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
@@ -96,6 +114,22 @@ export default () => {
                         }}
                     />
                     <MainSidebar>
+                        <div
+                            className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
+                            style={{
+                                top,
+                                transition: 'top 95ms',
+                                transitionTimingFunction: 'ease-in-out',
+                            }}
+                        />
+                        <div
+                            className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full opacity-50 pointer-events-none'
+                            style={{
+                                top,
+                                transition: 'top 95ms',
+                                transitionTimingFunction: 'ease-in-out',
+                            }}
+                        />
                         <div className='flex flex-row items-center justify-between h-8'>
                             <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                                 <Logo />

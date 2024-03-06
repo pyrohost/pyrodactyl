@@ -14,8 +14,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenuNew';
+import { useLocation } from 'react-router';
 
 export default () => {
+    const location = useLocation();
+
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
             // @ts-expect-error this is valid
@@ -23,9 +26,33 @@ export default () => {
         });
     };
 
+    const calculateTop = (pathname: string) => {
+        if (pathname.endsWith(`/`)) return '7.5rem';
+        if (pathname.endsWith(`/account`)) return '11rem';
+        return '0';
+    };
+
+    const top = calculateTop(location.pathname);
+
     return (
         <>
             <MainSidebar>
+                <div
+                    className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
+                    style={{
+                        top,
+                        transition: 'top 95ms',
+                        transitionTimingFunction: 'ease-in-out',
+                    }}
+                />
+                <div
+                    className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full opacity-50 pointer-events-none'
+                    style={{
+                        top,
+                        transition: 'top 95ms',
+                        transitionTimingFunction: 'ease-in-out',
+                    }}
+                />
                 <div className='relative flex flex-row items-center justify-between h-8'>
                     <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
                         <Logo />

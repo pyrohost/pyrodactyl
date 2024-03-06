@@ -18,43 +18,44 @@ const MainSidebar = styled.nav`
             -ms-user-drag: none;
             -moz-user-drag: none;
             -webkit-user-drag: none;
+            transition: 80ms all ease-in-out;
 
             &.active {
                 ${tw`text-brand fill-brand`};
             }
 
-            &:before {
-                content: '';
-                position: absolute;
-                left: -32px;
-                height: 0px;
-                width: 0px;
-                // background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
-                //     radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
-                // border-radius: 8px;
-                transition: 80ms all ease-in-out;
-            }
+            // &:before {
+            //     content: '';
+            //     position: absolute;
+            //     left: -32px;
+            //     height: 0px;
+            //     width: 0px;
+            //     // background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
+            //     //     radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
+            //     // border-radius: 8px;
+            //     transition: 80ms all ease-in-out;
+            // }
 
-            &:hover:before {
-                content: '';
-                position: absolute;
-                left: -32px;
-                height: calc(100% - 36px);
-                width: 2px;
-                background: white;
-                border-radius: 8px;
-            }
+            // &:hover:before {
+            //     content: '';
+            //     position: absolute;
+            //     left: -32px;
+            //     height: calc(100% - 36px);
+            //     width: 2px;
+            //     background: white;
+            //     border-radius: 8px;
+            // }
 
-            &.active:before {
-                content: '';
-                position: absolute;
-                left: -32px;
-                height: calc(100% - 16px);
-                width: 3px;
-                background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
-                    radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
-                border-radius: 8px;
-            }
+            // &.active:before {
+            //     content: '';
+            //     position: absolute;
+            //     left: -32px;
+            //     height: calc(100% - 16px);
+            //     width: 3px;
+            //     background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
+            //         radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
+            //     border-radius: 8px;
+            // }
         }
     }
 `;
