@@ -35,6 +35,16 @@ You will need a working installation of Vagrant, the latest LTS version of NodeJ
 5. Once you receive a message that says "pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
 6. Visit localhost:3000/admin to provision your first server on pyrodactyl!
 
+## Star History
+
+<a href="https://star-history.com/#pyrohost/panel&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
+  </picture>
+</a>
+
 ## License
 
 Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
