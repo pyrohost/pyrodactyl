@@ -3,6 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import { dirname, resolve } from 'pathe';
 import { fileURLToPath } from 'node:url';
 import manifestSRI from 'vite-plugin-manifest-sri';
+import { splitVendorChunkPlugin } from 'vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -17,6 +18,15 @@ export default defineConfig({
 
         rollupOptions: {
             input: 'resources/scripts/index.tsx',
+            output: {
+                // @ts-ignore
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        // @ts-expect-error
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                    }
+                },
+            },
         },
     },
 
@@ -30,6 +40,7 @@ export default defineConfig({
     plugins: [
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
+        splitVendorChunkPlugin(),
         react({
             babel: {
                 plugins: ['babel-plugin-macros', 'babel-plugin-styled-components'],
