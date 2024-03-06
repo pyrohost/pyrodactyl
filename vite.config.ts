@@ -43,7 +43,22 @@ export default defineConfig({
         splitVendorChunkPlugin(),
         react({
             babel: {
-                plugins: ['babel-plugin-macros', 'babel-plugin-styled-components'],
+                plugins: [
+                    ['babel-plugin-macros'],
+                    [
+                        'babel-plugin-styled-components',
+                        {
+                            // Not particularly useful for us (more of a monorepo solution)
+                            // but I just think it's neat
+                            // https://youtube.com/watch?v=DrQqajtiRt4
+                            namespace: 'pyrodactyl',
+                            // ssr: false,
+                            // displayName: false,
+                            // performs deadcode elimination
+                            pure: true,
+                        },
+                    ],
+                ],
             },
         }),
     ],
