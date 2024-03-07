@@ -44,7 +44,7 @@ export default ({ backup, className }: Props) => {
     });
 
     return (
-        <GreyRowBox className={`flex-wrap md:flex-nowrap items-center`}>
+        <div className={`flex bg-[#ffffff11] px-6 py-4 rounded-md items-center`}>
             <div className={`flex items-center truncate w-full md:flex-1`}>
                 {/* <div className={`mr-4`}>
                     {backup.completedAt !== null ? (
@@ -95,6 +95,6 @@ export default ({ backup, className }: Props) => {
             {/* <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 {!backup.completedAt ? <div className='w-8'></div> : <BackupContextMenu backup={backup} />}
             </Can> */}
-        </GreyRowBox>
+        </div>
     );
 };

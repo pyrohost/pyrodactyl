@@ -52,7 +52,7 @@ const AllocationRow = ({ allocation }: Props) => {
     };
 
     return (
-        <GreyRowBox $hoverable={false} className={'flex-wrap md:flex-nowrap mt-2'}>
+        <div className={'flex bg-[#ffffff11] px-6 py-4 rounded-md items-center'}>
             <div className={'flex items-center w-full md:w-auto'}>
                 <div className={'mr-4 flex-1 md:w-40'}>
                     {allocation.alias ? (
@@ -70,11 +70,15 @@ const AllocationRow = ({ allocation }: Props) => {
                             </div>
                         </CopyOnClick>
                     )}
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>{allocation.alias ? 'Hostname' : 'IP Address'}</label>
+                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
+                        {allocation.alias ? 'Hostname' : 'IP Address'}
+                    </label>
                 </div>
                 <div className={'w-16 md:w-24 overflow-hidden'}>
                     <Code dark>{allocation.port}</Code>
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>Port</label>
+                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
+                        Port
+                    </label>
                 </div>
             </div>
             <div className={'mt-4 w-full md:mt-0 md:flex-1 md:w-auto'}>
@@ -105,7 +109,7 @@ const AllocationRow = ({ allocation }: Props) => {
                     </>
                 )}
             </div>
-        </GreyRowBox>
+        </div>
     );
 };
 
