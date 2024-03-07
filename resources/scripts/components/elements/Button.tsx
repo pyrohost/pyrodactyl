@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Spinner from '@/components/elements/Spinner';
+import clsx from 'clsx';
 
 interface Props {
     isLoading?: boolean;
@@ -8,7 +9,7 @@ interface Props {
     isSecondary?: boolean;
 }
 
-const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>``
+const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>``;
 
 type ComponentProps = Omit<JSX.IntrinsicElements['button'], 'ref' | keyof Props> & Props;
 
@@ -19,7 +20,14 @@ const Button: React.FC<ComponentProps> = ({ children, isLoading, ...props }) => 
                 <Spinner size={'small'} />
             </div>
         )}
-        <span>{children}</span>
+        <span
+            className={clsx({
+                'opacity-0': isLoading,
+                'pointer-events-none': isLoading,
+            })}
+        >
+            {children}
+        </span>
     </ButtonStyle>
 );
 

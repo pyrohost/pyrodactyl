@@ -17,7 +17,7 @@ const MainSidebar = styled.nav`
     & > .pyro-subnav-routes-wrapper {
         display: flex;
         flex-direction: column;
-        font-size: 12px;
+        font-size: 14px;
 
         & > a,
         & > div {
@@ -26,7 +26,6 @@ const MainSidebar = styled.nav`
             padding: 16px 0;
             gap: 8px;
             font-weight: 600;
-            font-size: 12px;
             min-height: 56px;
             -webkit-tap-highlight-color: transparent;
             user-select: none;

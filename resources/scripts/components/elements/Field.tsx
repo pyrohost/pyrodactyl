@@ -1,7 +1,5 @@
 import { forwardRef } from 'react';
 import { Field as FormikField, FieldProps } from 'formik';
-import Input from '@/components/elements/Input';
-import Label from '@/components/elements/Label';
 
 interface OwnProps {
     name: string;
@@ -17,26 +15,25 @@ const Field = forwardRef<HTMLInputElement, Props>(
     ({ id, name, light = false, label, description, validate, ...props }, ref) => (
         <FormikField innerRef={ref} name={name} validate={validate}>
             {({ field, form: { errors, touched } }: FieldProps) => (
-                <div>
+                <div className='flex flex-col gap-2'>
                     {label && (
-                        <Label htmlFor={id} isLight={light}>
+                        <label className='text-sm text-[#ffffff77]' htmlFor={id}>
                             {label}
-                        </Label>
+                        </label>
                     )}
-                    <Input
+                    <input
+                        className='px-4 py-2 rounded-lg outline-none bg-[#ffffff17] text-sm'
                         id={id}
                         {...field}
                         {...props}
-                        isLight={light}
-                        hasError={!!(touched[field.name] && errors[field.name])}
                     />
                     {touched[field.name] && errors[field.name] ? (
-                        <p className={'input-help error'}>
+                        <p className={'text-sm font-bold text-[#d36666]'}>
                             {(errors[field.name] as string).charAt(0).toUpperCase() +
                                 (errors[field.name] as string).slice(1)}
                         </p>
                     ) : description ? (
-                        <p className={'input-help'}>{description}</p>
+                        <p className={'text-sm font-bold'}>{description}</p>
                     ) : null}
                 </div>
             )}

@@ -116,7 +116,7 @@ function LoginContainer() {
                     </div>
                     <div className={`mt-6`}>
                         <Button
-                            className={`mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}
