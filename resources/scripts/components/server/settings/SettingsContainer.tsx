@@ -4,7 +4,6 @@ import { useStoreState } from 'easy-peasy';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
-import Input from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import isEqual from 'react-fast-compare';
