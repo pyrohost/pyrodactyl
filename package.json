@@ -107,7 +107,8 @@
     "scripts": {
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx",
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "build:turbo": "turbo build"
     },
     "browserslist": [
         "> 0.5%",
