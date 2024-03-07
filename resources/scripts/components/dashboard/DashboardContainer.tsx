@@ -71,7 +71,7 @@ export default () => {
                             items.map((server, index) => (
                                 <div
                                     key={server.uuid}
-                                    className='transform-gpu skeleton-anim-2 mb-2'
+                                    className='transform-gpu skeleton-anim-2 mb-4'
                                     style={{
                                         animationDelay: `${index * 50 + 50}ms`,
                                         animationTimingFunction:

@@ -13,7 +13,7 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
     border: 1px solid #ffffff07;
     background: #ffffff11;
     transition: all 250ms ease-in-out;
-    padding: 1.75rem 1.5rem;
+    padding: 1.75rem 2rem;
     cursor: pointer;
     border-radius: 0.75rem;
     display: flex;
@@ -100,7 +100,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                     <FontAwesomeIcon icon={faServer} />
                 </div> */}
                 <div className='flex flex-col'>
-                    <div className='flex items-center justify-center gap-2'>
+                    <div className='flex items-center gap-2'>
                         <p className={`text-xl tracking-tight font-bold break-words`}>{server.name}</p>{' '}
                         <div className={'status-bar'} />
                     </div>
