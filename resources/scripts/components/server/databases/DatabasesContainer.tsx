@@ -7,7 +7,6 @@ import DatabaseRow from '@/components/server/databases/DatabaseRow';
 import CreateDatabaseButton from '@/components/server/databases/CreateDatabaseButton';
 import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
-import tw from 'twin.macro';
 import Fade from '@/components/elements/Fade';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useDeepMemoize } from '@/plugins/useDeepMemoize';
@@ -40,9 +39,9 @@ export default () => {
             <div className={'flex flex-row justify-between items-center mb-8'}>
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Databases</h1>
                 <Can action={'database.create'}>
-                    <div css={tw`flex items-center justify-end`}>
+                    <div className={`flex items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
-                            <p css={tw`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
+                            <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                 {databases.length} of {databaseLimit} databases
                             </p>
                         )}
@@ -50,7 +49,7 @@ export default () => {
                     </div>
                 </Can>
             </div>
-            <FlashMessageRender byKey={'databases'} css={tw`mb-4`} />
+            <FlashMessageRender byKey={'databases'} />
             {!databases.length && loading ? (
                 // <Spinner size={'large'} centered />
                 <></>
@@ -66,7 +65,7 @@ export default () => {
                                 />
                             ))
                         ) : (
-                            <p css={tw`text-center text-sm text-zinc-300`}>
+                            <p className={`text-center text-sm text-zinc-300`}>
                                 {databaseLimit > 0
                                     ? 'It looks like you have no databases.'
                                     : 'Databases cannot be created for this server.'}

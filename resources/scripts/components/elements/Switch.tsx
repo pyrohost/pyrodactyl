@@ -1,40 +1,41 @@
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
-import tw from 'twin.macro';
 import Label from '@/components/elements/Label';
 import Input from '@/components/elements/Input';
 
-const ToggleContainer = styled.div`
-    ${tw`relative select-none w-12 leading-normal`};
+const ToggleContainer = styled.div``
 
-    & > input[type='checkbox'] {
-        ${tw`hidden`};
+// const ToggleContainer = styled.div`
+//     ${tw`relative select-none w-12 leading-normal`};
 
-        &:checked + label {
-            ${tw`bg-zinc-500 border-zinc-700 shadow-none`};
-        }
+//     & > input[type='checkbox'] {
+//         ${tw`hidden`};
 
-        &:checked + label:before {
-            right: 0.125rem;
-        }
-    }
+//         &:checked + label {
+//             ${tw`bg-zinc-500 border-zinc-700 shadow-none`};
+//         }
 
-    & > label {
-        ${tw`mb-0 block overflow-hidden cursor-pointer bg-zinc-950 border border-zinc-700 rounded-full h-6 shadow-inner`};
-        transition: all 75ms linear;
+//         &:checked + label:before {
+//             right: 0.125rem;
+//         }
+//     }
 
-        &::before {
-            ${tw`absolute block bg-white border h-5 w-5 rounded-full`};
-            top: 0.125rem;
-            right: calc(50% + 0.125rem);
-            //width: 1.25rem;
-            //height: 1.25rem;
-            content: '';
-            transition: all 75ms ease-in;
-        }
-    }
-`;
+//     & > label {
+//         ${tw`mb-0 block overflow-hidden cursor-pointer bg-zinc-950 border border-zinc-700 rounded-full h-6 shadow-inner`};
+//         transition: all 75ms linear;
+
+//         &::before {
+//             ${tw`absolute block bg-white border h-5 w-5 rounded-full`};
+//             top: 0.125rem;
+//             right: calc(50% + 0.125rem);
+//             //width: 1.25rem;
+//             //height: 1.25rem;
+//             content: '';
+//             transition: all 75ms ease-in;
+//         }
+//     }
+// `;
 
 export interface SwitchProps {
     name: string;
@@ -50,8 +51,8 @@ const Switch = ({ name, label, description, defaultChecked, readOnly, onChange, 
     const uuid = useMemo(() => v4(), []);
 
     return (
-        <div css={tw`flex items-center`}>
-            <ToggleContainer css={tw`flex-none`}>
+        <div className={`flex items-center`}>
+            <ToggleContainer className={`flex-none`}>
                 {children || (
                     <Input
                         id={uuid}
@@ -65,13 +66,13 @@ const Switch = ({ name, label, description, defaultChecked, readOnly, onChange, 
                 <Label htmlFor={uuid} />
             </ToggleContainer>
             {(label || description) && (
-                <div css={tw`ml-4 w-full`}>
+                <div className={`ml-4 w-full`}>
                     {label && (
-                        <Label css={[tw`cursor-pointer`, !!description && tw`mb-0`]} htmlFor={uuid}>
+                        <Label htmlFor={uuid}>
                             {label}
                         </Label>
                     )}
-                    {description && <p css={tw`text-zinc-400 text-sm mt-2`}>{description}</p>}
+                    {description && <p className={`text-zinc-400 text-sm mt-2`}>{description}</p>}
                 </div>
             )}
         </div>

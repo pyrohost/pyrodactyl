@@ -5,7 +5,6 @@ import Field from '@/components/elements/Field';
 import { join } from 'pathe';
 import { object, string } from 'yup';
 import createDirectory from '@/api/server/files/createDirectory';
-import tw from 'twin.macro';
 import { Button } from '@/components/elements/button/index';
 import { FileObject } from '@/api/server/files/loadDirectory';
 import { useFlashKey } from '@/plugins/useFlash';
@@ -69,13 +68,13 @@ const NewDirectoryDialog = asDialog({
             {({ submitForm, values }) => (
                 <>
                     <FlashMessageRender key={'files:directory-modal'} />
-                    <Form css={tw`m-0`}>
+                    <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
-                        <p css={tw`mt-2 !text-xs break-all`}>
-                            <span css={tw`text-zinc-200`}>This folder will be created as&nbsp;</span>
+                        <p className={`mt-2 !text-xs break-all`}>
+                            <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
                             <Code>
                                 /root/
-                                <span css={tw`text-blue-200`}>
+                                <span className={`text-blue-200`}>
                                     {join(directory, values.directoryName).replace(/^(\.\.\/|\/)+/, '')}
                                 </span>
                             </Code>

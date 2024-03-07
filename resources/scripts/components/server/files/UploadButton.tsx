@@ -1,6 +1,5 @@
 import axios from 'axios';
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
-import tw from 'twin.macro';
 import { useEffect, useRef, useState } from 'react';
 import { ModalMask } from '@/components/elements/Modal';
 import useEventListener from '@/plugins/useEventListener';
@@ -162,7 +161,7 @@ export default () => {
             <input
                 type={'file'}
                 ref={fileUploadInput}
-                css={tw`hidden`}
+                className={`hidden`}
                 onChange={(e) => {
                     if (!e.currentTarget.files) return;
 

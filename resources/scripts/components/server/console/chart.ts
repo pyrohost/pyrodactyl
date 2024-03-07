@@ -11,7 +11,6 @@ import {
 import { DeepPartial } from 'ts-essentials';
 import { useState } from 'react';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
-import { theme } from 'twin.macro';
 import { hexToRgba } from '@/lib/helpers';
 
 ChartJS.register(LineElement, PointElement, Filler, LinearScale);
@@ -49,15 +48,12 @@ const options: ChartOptions<'line'> = {
             type: 'linear',
             grid: {
                 display: false,
-                color: theme('colors.gray.700'),
                 drawBorder: false,
             },
             ticks: {
                 display: true,
                 count: 3,
-                color: theme('colors.gray.200'),
                 font: {
-                    family: theme('fontFamily.jakarta'),
                     size: 11,
                     weight: '400',
                 },
@@ -96,8 +92,8 @@ function getEmptyData(label: string, sets = 1, callback?: ChartDatasetCallback |
                         fill: true,
                         label,
                         data: Array(20).fill(-5),
-                        borderColor: theme('colors.brand'),
-                        backgroundColor: hexToRgba(theme('colors.brand'), 0.09),
+                        borderColor: '#fa4e49',
+                        backgroundColor: hexToRgba('#fa4e49', 0.09),
                     },
                     index
                 )

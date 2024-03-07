@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import tw from 'twin.macro';
 
 import getWebsocketToken from '@/api/server/getWebsocketToken';
 import Spinner from '@/components/elements/Spinner';
@@ -108,16 +107,16 @@ function WebsocketHandler() {
 
     return error ? (
         <FadeTransition duration='duration-150' show>
-            <div css={tw`bg-red-500 py-2`}>
+            <div className={`bg-red-500 py-2`}>
                 {error === 'connecting' ? (
                     <>
                         <Spinner size={'small'} />
-                        <p css={tw`ml-2 text-sm text-red-100`}>
+                        <p className={`ml-2 text-sm text-red-100`}>
                             We&apos;re having some trouble connecting to your server, please wait...
                         </p>
                     </>
                 ) : (
-                    <p css={tw`ml-2 text-sm text-white`}>{error}</p>
+                    <p className={`ml-2 text-sm text-white`}>{error}</p>
                 )}
             </div>
         </FadeTransition>

@@ -11,7 +11,6 @@
 import FlashMessageRender from '@/components/FlashMessageRender';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 // import { ServerError } from '@/components/elements/ScreenBlock';
-import tw from 'twin.macro';
 // import Button from '@/components/elements/Button';
 // import Select from '@/components/elements/Select';
 // import modes from '@/modes';
@@ -86,7 +85,7 @@ export default () => {
 
     return (
         <PageContentBlock>
-            <FlashMessageRender byKey={'files:view'} css={tw`mb-4`} />
+            <FlashMessageRender byKey={'files:view'} />
             {/* <ErrorBoundary>
                 <div css={tw`mb-4`}>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />

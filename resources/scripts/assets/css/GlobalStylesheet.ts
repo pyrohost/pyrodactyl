@@ -1,4 +1,3 @@
-import tw from 'twin.macro';
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
@@ -7,19 +6,23 @@ export default createGlobalStyle`
     }
 
     html, body, #app {
-        ${tw`font-jakarta h-full w-full bg-black overflow-hidden text-white relative`};
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        ${tw`font-medium tracking-normal`};
+        position: relative;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        --tw-bg-opacity: 1;
+        background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+        font-family: "Plus Jakarta Sans", sans-serif;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
     }
 
     form {
-        ${tw`m-0`};
+        margin: 0;
     }
 
     textarea, select, input, button, button:focus, button:focus-visible {
-        ${tw`outline-none`};
+        outline: none;
     }
 
     input[type=number]::-webkit-outer-spin-button,

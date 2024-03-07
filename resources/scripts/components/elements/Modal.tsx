@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
-import tw from 'twin.macro';
 import styled, { css } from 'styled-components';
 import Fade from '@/components/elements/Fade';
 import { createPortal } from 'react-dom';
@@ -20,35 +19,46 @@ export interface ModalProps extends RequiredModalProps {
 }
 
 export const ModalMask = styled.div`
-    ${tw`fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm`};
     background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%);
+    position: fixed;
+    z-index: 9997;
+    overflow: auto;
+    flex: 1;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    
 `;
 
-const ModalContainer = styled.div<{ alignTop?: boolean }>`
-    max-width: 95%;
-    max-height: calc(100vh - 8rem);
+// export const ModalMask = styled.div`
+//     ${tw`fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm`};
+//     background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%);
+// `;
 
-    ${tw`relative flex flex-col w-full m-auto`};
-    ${(props) =>
-        props.alignTop &&
-        css`
-            margin-top: 20%;
-        `};
+// const ModalContainer = styled.div<{ alignTop?: boolean }>`
+//     max-width: 95%;
+//     max-height: calc(100vh - 8rem);
 
-    margin-bottom: auto;
+//     ${tw`relative flex flex-col w-full m-auto`};
+//     ${(props) =>
+//         props.alignTop &&
+//         css`
+//             margin-top: 20%;
+//         `};
 
-    & > .close-icon {
-        ${tw`absolute right-0 top-0 p-2 text-white cursor-pointer opacity-50 transition-all duration-150 ease-linear hover:opacity-100`};
+//     margin-bottom: auto;
 
-        &:hover {
-            ${tw`transform rotate-90`}
-        }
+//     & > .close-icon {
+//         ${tw`absolute right-0 top-0 p-2 text-white cursor-pointer opacity-50 transition-all duration-150 ease-linear hover:opacity-100`};
 
-        & > svg {
-            ${tw`w-6 h-6`};
-        }
-    }
-`;
+//         &:hover {
+//             ${tw`transform rotate-90`}
+//         }
+
+//         & > svg {
+//             ${tw`w-6 h-6`};
+//         }
+//     }
+// `;
 
 const Modal: React.FC<ModalProps> = ({
     visible,
@@ -84,7 +94,11 @@ const Modal: React.FC<ModalProps> = ({
 
     return (
         <Fade in={render} timeout={150} appear={appear || true} unmountOnExit onExited={() => onDismissed()}>
-            <ModalMask
+            <div
+                className='fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm'
+                style={{
+                    background: 'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
+                }}
                 onClick={(e) => e.stopPropagation()}
                 onContextMenu={(e) => e.stopPropagation()}
                 onMouseDown={(e) => {
@@ -96,7 +110,7 @@ const Modal: React.FC<ModalProps> = ({
                     }
                 }}
             >
-                <ModalContainer alignTop={top}>
+                <div>
                     {isDismissable && (
                         <div className={'close-icon'} onClick={() => setRender(false)}>
                             <svg
@@ -117,7 +131,7 @@ const Modal: React.FC<ModalProps> = ({
                     {showSpinnerOverlay && (
                         <Fade timeout={150} appear in>
                             <div
-                                css={tw`absolute w-full h-full rounded flex items-center justify-center`}
+                                className={`absolute w-full h-full rounded flex items-center justify-center`}
                                 style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
                             >
                                 <Spinner />
@@ -133,8 +147,8 @@ const Modal: React.FC<ModalProps> = ({
                     >
                         {children}
                     </div>
-                </ModalContainer>
-            </ModalMask>
+                </div>
+            </div>
         </Fade>
     );
 };

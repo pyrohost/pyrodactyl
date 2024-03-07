@@ -7,7 +7,6 @@ import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
 import { useLocation } from 'react-router-dom';
 import Can from '@/components/elements/Can';
 import { ServerError } from '@/components/elements/ScreenBlock';
-import tw from 'twin.macro';
 import { ServerContext } from '@/state/server';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import FileManagerStatus from '@/components/server/files/FileManagerStatus';
@@ -78,7 +77,7 @@ export default () => {
                                 type={'checkbox'}
                                 className='ml-6 mr-4'
                                 // todo: find a user friendly way to implement this
-                                // css={tw`opacity-0 -ml-8 mr-4`}
+                                // className={`opacity-0 -ml-8 mr-4`}
                                 // className='group-hover:opacity-100 group-focus:opacity-100 group-hover:ml-6'
                                 checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
                                 onChange={onSelectAllClick}
@@ -93,13 +92,13 @@ export default () => {
             ) : (
                 <>
                     {!files.length ? (
-                        <p css={tw`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
+                        <p className={`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
                     ) : (
                         // <CSSTransition classNames={'fade'} timeout={150} appear in>
                         <>
                             {files.length > 250 && (
-                                <div css={tw`rounded bg-yellow-400 mb-px p-3`}>
-                                    <p css={tw`text-yellow-900 text-sm text-center`}>
+                                <div className={`rounded bg-yellow-400 mb-px p-3`}>
+                                    <p className={`text-yellow-900 text-sm text-center`}>
                                         This directory is too large to display in the browser, limiting the output to
                                         the first 250 files.
                                     </p>

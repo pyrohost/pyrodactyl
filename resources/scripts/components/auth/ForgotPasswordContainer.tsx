@@ -3,7 +3,6 @@ import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import Reaptcha from 'reaptcha';
-import tw from 'twin.macro';
 import { object, string } from 'yup';
 
 import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
@@ -74,7 +73,7 @@ export default () => {
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
-                <LoginFormContainer css={tw`w-full flex`}>
+                <LoginFormContainer className={`w-full flex`}>
                     <div className='flex items-start h-12 w-fit mb-4'>
                         {/* temp src */}
                         <img
@@ -91,10 +90,10 @@ export default () => {
                     </div>
                     <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
                     <div className='text-sm mb-6'>We'll send you an email with a link to reset your password.</div>
-                    <Field label={'Email'} name={'email'} type={'email'} />
+                    <Field id='email' label={'Email'} name={'email'} type={'email'} />
                     <div className={`mt-6`}>
                         <Button
-                            css={tw`mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}

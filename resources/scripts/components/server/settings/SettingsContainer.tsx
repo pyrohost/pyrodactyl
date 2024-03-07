@@ -4,8 +4,6 @@ import { useStoreState } from 'easy-peasy';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
-import tw from 'twin.macro';
-import Input from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import isEqual from 'react-fast-compare';
@@ -25,9 +23,9 @@ export default () => {
             <div className={'flex flex-row justify-between items-center mb-8'}>
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Settings</h1>
             </div>
-            <FlashMessageRender byKey={'settings'} css={tw`mb-4`} />
+            <FlashMessageRender byKey={'settings'} className={`mb-4`} />
             {/* <Can action={'settings.rename'}>
-                    <div css={tw`mb-6 md:mb-10`}>
+                    <div className={`mb-6 md:mb-10`}>
                         <RenameServerBox />
                     </div>
                 </Can> */}
@@ -36,40 +34,40 @@ export default () => {
                     <ReinstallServerBox />
                 </Can>
                 <TitledGreyBox title={'Debug Information'}>
-                    <div css={tw`flex items-center justify-between text-sm`}>
+                    <div className={`flex items-center justify-between text-sm`}>
                         <p>Node</p>
-                        <code css={tw`font-mono bg-zinc-900 rounded py-1 px-2`}>{node}</code>
+                        <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{node}</code>
                     </div>
                     <CopyOnClick text={uuid}>
-                        <div css={tw`flex items-center justify-between mt-2 text-sm`}>
+                        <div className={`flex items-center justify-between mt-2 text-sm`}>
                             <p>Server ID</p>
-                            <code css={tw`font-mono bg-zinc-900 rounded py-1 px-2`}>{uuid}</code>
+                            <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{uuid}</code>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
                 <Can action={'file.sftp'}>
-                    <TitledGreyBox title={'SFTP Details'} css={tw`mb-6 md:mb-10`}>
+                    <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
                         <div>
                             <Label>Server Address</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
-                                <Input type={'text'} value={`sftp://${ip(sftp.ip)}:${sftp.port}`} readOnly />
+                                <div>{`sftp://${ip(sftp.ip)}:${sftp.port}`}</div>
                             </CopyOnClick>
                         </div>
-                        <div css={tw`mt-6`}>
+                        <div className={`mt-6`}>
                             <Label>Username</Label>
                             <CopyOnClick text={`${username}.${id}`}>
-                                <Input type={'text'} value={`${username}.${id}`} readOnly />
+                                <div>{`${username}.${id}`}</div>
                             </CopyOnClick>
                         </div>
-                        <div css={tw`mt-6 flex items-center`}>
-                            <div css={tw`flex-1`}>
-                                <div css={tw`border-l-4 border-blue-500 p-3`}>
-                                    <p css={tw`text-xs text-zinc-200`}>
+                        <div className={`mt-6 flex items-center`}>
+                            <div className={`flex-1`}>
+                                <div className={`border-l-4 border-blue-500 p-3`}>
+                                    <p className={`text-xs text-zinc-200`}>
                                         Your SFTP password is the same as the password you use to access this panel.
                                     </p>
                                 </div>
                             </div>
-                            <div css={tw`ml-4`}>
+                            <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
                                     <Button.Text variant={Button.Variants.Secondary}>Launch SFTP</Button.Text>
                                 </a>

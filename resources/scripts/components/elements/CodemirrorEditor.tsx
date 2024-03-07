@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import CodeMirror from 'codemirror';
 import styled from 'styled-components';
-import tw from 'twin.macro';
 import modes from '@/modes';
 
 // TODO: this is broken because we can no longer use require
@@ -85,11 +84,6 @@ require('codemirror/mode/yaml/yaml');
 const EditorContainer = styled.div`
     min-height: 16rem;
     height: calc(100vh - 8rem);
-    ${tw`relative`};
-
-    > div {
-        ${tw`rounded h-full`};
-    }
 
     .CodeMirror {
         font-size: 12px;

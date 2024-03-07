@@ -1,17 +1,32 @@
 import styled from 'styled-components';
-import tw from 'twin.macro';
 
 const MainSidebar = styled.nav`
-    ${tw`w-[300px] flex flex-col flex-shrink-0 rounded-md overflow-x-hidden p-8 select-none relative mr-2`};
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow-x: hidden;
+    padding: 32px;
+    position: relative;
+    margin-right: 8px;
+    user-select: none;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
 
     & > .pyro-subnav-routes-wrapper {
-        ${tw`flex flex-col text-sm`};
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
 
         & > a,
         & > div {
-            ${tw`relative flex py-4 gap-2 whitespace-nowrap font-bold text-sm min-h-[56px]`};
+            display: flex;
+            position: relative;
+            padding: 16px 0;
+            gap: 8px;
+            font-weight: 600;
+            min-height: 56px;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
             user-drag: none;
@@ -21,41 +36,9 @@ const MainSidebar = styled.nav`
             transition: 80ms all ease-in-out;
 
             &.active {
-                ${tw`text-brand fill-brand`};
+                color: #fa4e49;
+                fill: #fa4e49;
             }
-
-            // &:before {
-            //     content: '';
-            //     position: absolute;
-            //     left: -32px;
-            //     height: 0px;
-            //     width: 0px;
-            //     // background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
-            //     //     radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
-            //     // border-radius: 8px;
-            //     transition: 80ms all ease-in-out;
-            // }
-
-            // &:hover:before {
-            //     content: '';
-            //     position: absolute;
-            //     left: -32px;
-            //     height: calc(100% - 36px);
-            //     width: 2px;
-            //     background: white;
-            //     border-radius: 8px;
-            // }
-
-            // &.active:before {
-            //     content: '';
-            //     position: absolute;
-            //     left: -32px;
-            //     height: calc(100% - 16px);
-            //     width: 3px;
-            //     background: linear-gradient(0deg, rgba(243, 180, 166, 0.06), rgba(243, 180, 166, 0.06)),
-            //         radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
-            //     border-radius: 8px;
-            // }
         }
     }
 `;

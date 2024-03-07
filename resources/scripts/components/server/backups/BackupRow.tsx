@@ -4,7 +4,6 @@ import { bytesToString } from '@/lib/formatters';
 // import Can from '@/components/elements/Can';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 // import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
-import tw from 'twin.macro';
 import GreyRowBox from '@/components/elements/GreyRowBox';
 import getServerBackups from '@/api/swr/getServerBackups';
 import { ServerBackup } from '@/api/server/types';
@@ -45,24 +44,24 @@ export default ({ backup, className }: Props) => {
     });
 
     return (
-        <GreyRowBox css={tw`flex-wrap md:flex-nowrap items-center`} className={className}>
+        <div className={`flex bg-[#ffffff11] px-6 py-4 rounded-md items-center`}>
             <div className={`flex items-center truncate w-full md:flex-1`}>
-                {/* <div css={tw`mr-4`}>
+                {/* <div className={`mr-4`}>
                     {backup.completedAt !== null ? (
                         backup.isLocked ? (
-                            <FontAwesomeIcon icon={faLock} css={tw`text-yellow-500`} />
+                            <FontAwesomeIcon icon={faLock} className={`text-yellow-500`} />
                         ) : (
-                            <FontAwesomeIcon icon={faArchive} css={tw`text-zinc-300`} />
+                            <FontAwesomeIcon icon={faArchive} className={`text-zinc-300`} />
                         )
                     ) : (
                         <Spinner size={'small'} />
                     )}
                 </div> */}
-                <div css={tw`flex flex-col truncate`}>
-                    <div css={tw`flex items-center text-sm mb-1`}>
+                <div className={`flex flex-col truncate`}>
+                    <div className={`flex items-center text-sm mb-1`}>
                         {backup.completedAt !== null && !backup.isSuccessful && (
                             <span
-                                css={tw`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
+                                className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
                             >
                                 Failed
                             </span>
@@ -85,7 +84,7 @@ export default ({ backup, className }: Props) => {
             </div>
             <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
                 {backup.completedAt !== null && backup.isSuccessful && (
-                    <span css={tw`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
+                    <span className={`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
                 )}
             </div>
             <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
@@ -96,6 +95,6 @@ export default ({ backup, className }: Props) => {
             {/* <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                 {!backup.completedAt ? <div className='w-8'></div> : <BackupContextMenu backup={backup} />}
             </Can> */}
-        </GreyRowBox>
+        </div>
     );
 };

@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenuNew';
 import { useLocation } from 'react-router';
+import MainWrapper from '@/components/elements/MainWrapper';
 
 export default () => {
     const location = useLocation();
@@ -93,12 +94,7 @@ export default () => {
                 </div>
             </MainSidebar>
             <Suspense fallback={null}>
-                <div
-                    className='w-full h-full rounded-md'
-                    style={{
-                        background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
-                    }}
-                >
+                <MainWrapper>
                     <main
                         data-pyro-main=''
                         data-pyro-transitionrouter=''
@@ -118,7 +114,7 @@ export default () => {
                             <Route path='*' element={<NotFound />} />
                         </Routes>
                     </main>
-                </div>
+                </MainWrapper>
             </Suspense>
         </>
     );
