@@ -41,7 +41,17 @@ export default defineConfig({
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
         splitVendorChunkPlugin(),
-        react({ plugins: [['@swc/plugin-styled-components', {}]] }),
+        react({
+            plugins: [
+                [
+                    '@swc/plugin-styled-components',
+                    {
+                        pure: true,
+                        namespace: 'pyrodactyl',
+                    },
+                ],
+            ],
+        }),
     ],
 
     resolve: {

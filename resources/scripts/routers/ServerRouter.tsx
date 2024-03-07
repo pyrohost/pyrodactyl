@@ -30,6 +30,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenuNew';
 import http from '@/api/http';
+import MainWrapper from '@/components/elements/MainWrapper';
 
 export default () => {
     const params = useParams<'id'>();
@@ -206,15 +207,10 @@ export default () => {
                         </div>
                     </MainSidebar>
                     <CommandMenu />
-                    <InstallListener />
+                    <InstallListener /> 
                     <TransferListener />
                     <WebsocketHandler />
-                    <div
-                        className='w-full h-full rounded-md'
-                        style={{
-                            background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #101010 0%, #040404 100%)',
-                        }}
-                    >
+                    <MainWrapper>
                         <main
                             data-pyro-main=''
                             data-pyro-transitionrouter=''
@@ -245,7 +241,7 @@ export default () => {
                                 </ErrorBoundary>
                             )}
                         </main>
-                    </div>
+                    </MainWrapper>
                 </>
             )}
         </Fragment>
