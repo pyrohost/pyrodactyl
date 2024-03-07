@@ -79,7 +79,7 @@ const StartupContainer = () => {
         !error || (error && isValidating) ? (
             <Spinner centered size={Spinner.Size.LARGE} />
         ) : (
-            <ServerError title={'Oops!'} message={httpErrorToHuman(error)} onRetry={() => mutate()} />
+            <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
         )
     ) : (
         <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
