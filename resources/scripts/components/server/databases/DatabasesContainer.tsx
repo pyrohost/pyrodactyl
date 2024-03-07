@@ -7,7 +7,6 @@ import DatabaseRow from '@/components/server/databases/DatabaseRow';
 import CreateDatabaseButton from '@/components/server/databases/CreateDatabaseButton';
 import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
-import Fade from '@/components/elements/Fade';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useDeepMemoize } from '@/plugins/useDeepMemoize';
 
@@ -54,7 +53,6 @@ export default () => {
                 // <Spinner size={'large'} centered />
                 <></>
             ) : (
-                <Fade timeout={150}>
                     <>
                         {databases.length > 0 ? (
                             databases.map((database, index) => (
@@ -72,7 +70,6 @@ export default () => {
                             </p>
                         )}
                     </>
-                </Fade>
             )}
         </ServerContentBlock>
     );

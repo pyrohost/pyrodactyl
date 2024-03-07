@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
-import styled, { css } from 'styled-components';
-import Fade from '@/components/elements/Fade';
+import styled from 'styled-components';
 import { createPortal } from 'react-dom';
+import FadeTransition from './transitions/FadeTransition';
 
 export interface RequiredModalProps {
     visible: boolean;
@@ -26,7 +26,7 @@ export const ModalMask = styled.div`
     flex: 1;
     inset: 0;
     backdrop-filter: blur(3px);
-    
+
 `;
 
 // export const ModalMask = styled.div`
@@ -93,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({
     useEffect(() => setRender(visible), [visible]);
 
     return (
-        <Fade in={render} timeout={150} appear={appear || true} unmountOnExit onExited={() => onDismissed()}>
+        <FadeTransition as={Fragment} show={render} duration="duration-150" appear={appear ?? true} unmount>
             <div
                 className='fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm'
                 style={{
@@ -129,14 +129,12 @@ const Modal: React.FC<ModalProps> = ({
                         </div>
                     )}
                     {showSpinnerOverlay && (
-                        <Fade timeout={150} appear in>
                             <div
                                 className={`absolute w-full h-full rounded flex items-center justify-center`}
                                 style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
                             >
                                 <Spinner />
                             </div>
-                        </Fade>
                     )}
                     <div
                         style={{
@@ -149,7 +147,7 @@ const Modal: React.FC<ModalProps> = ({
                     </div>
                 </div>
             </div>
-        </Fade>
+        </FadeTransition>
     );
 };
 
