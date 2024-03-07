@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { dirname, resolve } from 'pathe';
 import { fileURLToPath } from 'node:url';
@@ -41,25 +41,7 @@ export default defineConfig({
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
         splitVendorChunkPlugin(),
-        react({
-            babel: {
-                plugins: [
-                    [
-                        'babel-plugin-styled-components',
-                        {
-                            // Not particularly useful for us (more of a monorepo solution)
-                            // but I just think it's neat
-                            // https://youtube.com/watch?v=DrQqajtiRt4
-                            namespace: 'pyrodactyl',
-                            // ssr: false,
-                            // displayName: false,
-                            // performs deadcode elimination
-                            pure: true,
-                        },
-                    ],
-                ],
-            },
-        }),
+        react({ plugins: [['@swc/plugin-styled-components', {}]] }),
     ],
 
     resolve: {
