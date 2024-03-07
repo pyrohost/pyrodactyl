@@ -7,7 +7,6 @@ import { useChart, useChartTickLabel } from '@/components/server/console/chart';
 import { hexToRgba } from '@/lib/helpers';
 import { bytesToString } from '@/lib/formatters';
 // FIXME: add icons back
-// import { theme } from 'twin.macro';
 import ChartBlock from '@/components/server/console/ChartBlock';
 
 export default () => {

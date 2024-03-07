@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import MainPage from '@/components/elements/MainPage';
-import tw from 'twin.macro';
 import FlashMessageRender from '@/components/FlashMessageRender';
 
 export interface PageContentBlockProps {
@@ -18,8 +17,8 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey
 
     return (
         <>
-            <MainPage className={`${className && ''} py-2 sm:py-14`}>
-                {showFlashKey && <FlashMessageRender byKey={showFlashKey} css={tw`mb-4`} />}
+            <MainPage className={`${className && ''} px-2 sm:px-14 py-2 sm:py-14`}>
+                {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
                 {children}
             </MainPage>
         </>

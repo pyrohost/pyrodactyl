@@ -2,7 +2,6 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import tw from 'twin.macro';
 import Button from '@/components/elements/Button';
 import Input, { Textarea } from '@/components/elements/Input';
 import styled from 'styled-components';
@@ -13,10 +12,6 @@ interface Values {
     name: string;
     publicKey: string;
 }
-
-const CustomTextarea = styled(Textarea)`
-    ${tw`h-32`}
-`;
 
 export default () => {
     const { clearAndAddHttpError } = useFlashKey('account');
@@ -47,7 +42,7 @@ export default () => {
                 {({ isSubmitting }) => (
                     <Form>
                         <SpinnerOverlay visible={isSubmitting} />
-                        <FormikFieldWrapper label={'SSH Key Name'} name={'name'} css={tw`mb-6`}>
+                        <FormikFieldWrapper label={'SSH Key Name'} name={'name'}>
                             <Field name={'name'} as={Input} />
                         </FormikFieldWrapper>
                         <FormikFieldWrapper
@@ -55,9 +50,9 @@ export default () => {
                             name={'publicKey'}
                             description={'Enter your public SSH key.'}
                         >
-                            <Field name={'publicKey'} as={CustomTextarea} />
+                            <Field name={'publicKey'} />
                         </FormikFieldWrapper>
-                        <div css={tw`flex justify-end mt-6`}>
+                        <div className={`flex justify-end mt-6`}>
                             <Button>Save</Button>
                         </div>
                     </Form>

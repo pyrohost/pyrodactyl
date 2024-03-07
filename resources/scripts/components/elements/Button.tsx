@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-import tw from 'twin.macro';
+import styled from 'styled-components';
 import Spinner from '@/components/elements/Spinner';
 
 interface Props {
@@ -9,99 +8,18 @@ interface Props {
     isSecondary?: boolean;
 }
 
-const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>`
-    ${tw`relative inline-block rounded p-2 uppercase tracking-wide text-sm transition-all duration-150 border`};
-
-    ${(props) =>
-        ((!props.isSecondary && !props.color) || props.color === 'primary') &&
-        css<Props>`
-            ${(props) => !props.isSecondary && tw`bg-zinc-500 border-zinc-600 border text-zinc-50`};
-
-            &:hover:not(:disabled) {
-                ${tw`bg-zinc-600 border-zinc-700`};
-            }
-        `};
-
-    ${(props) =>
-        props.color === 'grey' &&
-        css`
-            ${tw`border-zinc-600 bg-zinc-500 text-zinc-50`};
-
-            &:hover:not(:disabled) {
-                ${tw`bg-zinc-600 border-zinc-700`};
-            }
-        `};
-
-    ${(props) =>
-        props.color === 'green' &&
-        css<Props>`
-            ${tw`border-green-600 bg-green-500 text-green-50`};
-
-            &:hover:not(:disabled) {
-                ${tw`bg-green-600 border-green-700`};
-            }
-
-            ${(props) =>
-                props.isSecondary &&
-                css`
-                    &:active:not(:disabled) {
-                        ${tw`bg-green-600 border-green-700`};
-                    }
-                `};
-        `};
-
-    ${(props) =>
-        props.color === 'red' &&
-        css<Props>`
-            ${tw`border-red-600 bg-red-500 text-red-50`};
-
-            &:hover:not(:disabled) {
-                ${tw`bg-red-600 border-red-700`};
-            }
-
-            ${(props) =>
-                props.isSecondary &&
-                css`
-                    &:active:not(:disabled) {
-                        ${tw`bg-red-600 border-red-700`};
-                    }
-                `};
-        `};
-
-    ${(props) => props.size === 'xsmall' && tw`px-2 py-1 text-xs`};
-    ${(props) => (!props.size || props.size === 'small') && tw`px-4 py-2`};
-    ${(props) => props.size === 'large' && tw`p-4 text-sm`};
-    ${(props) => props.size === 'xlarge' && tw`p-4 w-full`};
-
-    ${(props) =>
-        props.isSecondary &&
-        css<Props>`
-            ${tw`border-zinc-600 bg-transparent text-zinc-200`};
-
-            &:hover:not(:disabled) {
-                ${tw`border-zinc-500 text-zinc-100`};
-                ${(props) => props.color === 'red' && tw`bg-red-500 border-red-600 text-red-50`};
-                ${(props) => props.color === 'primary' && tw`bg-zinc-500 border-zinc-600 text-zinc-50`};
-                ${(props) => props.color === 'green' && tw`bg-green-500 border-green-600 text-green-50`};
-            }
-        `};
-
-    &:disabled {
-        opacity: 0.55;
-        cursor: default;
-    }
-`;
+const ButtonStyle = styled.button<Omit<Props, 'isLoading'>>``
 
 type ComponentProps = Omit<JSX.IntrinsicElements['button'], 'ref' | keyof Props> & Props;
 
 const Button: React.FC<ComponentProps> = ({ children, isLoading, ...props }) => (
     <ButtonStyle {...props}>
         {isLoading && (
-            <div css={tw`flex absolute justify-center items-center w-full h-full left-0 top-0`}>
+            <div className={`flex absolute justify-center items-center w-full h-full left-0 top-0`}>
                 <Spinner size={'small'} />
             </div>
         )}
-        <span css={isLoading ? tw`text-transparent` : undefined}>{children}</span>
+        <span>{children}</span>
     </ButtonStyle>
 );
 

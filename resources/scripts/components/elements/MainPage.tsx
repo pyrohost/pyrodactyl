@@ -1,8 +1,13 @@
 import styled from 'styled-components';
-import tw from 'twin.macro';
 
 const MainPage = styled.div`
-    ${tw`flex flex-col flex-1 h-fit min-h-full relative px-14 w-full`};
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: fit-content;
+    min-height: 100%;
+    position: relative;
+    width: 100%;
 `;
 MainPage.displayName = 'MainPage';
 

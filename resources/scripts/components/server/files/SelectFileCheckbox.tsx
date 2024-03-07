@@ -1,14 +1,14 @@
-import tw from 'twin.macro';
 import { ServerContext } from '@/state/server';
 import styled from 'styled-components';
 import Input from '@/components/elements/Input';
 
 export const FileActionCheckbox = styled(Input)`
     && {
-        ${tw`border-zinc-500 bg-transparent`};
+        background: transparent;
+        border: #ffffffaa;
 
-        &:not(:checked) {
-            ${tw`hover:border-zinc-300`};
+        &:not(:checked):hover {
+            border-color: #ffffff55;
         }
     }
 `;
@@ -19,7 +19,7 @@ export default ({ name }: { name: string }) => {
     const removeSelectedFile = ServerContext.useStoreActions((actions) => actions.files.removeSelectedFile);
 
     return (
-        <label css={tw`flex-none px-4 py-2 absolute self-center z-30 cursor-pointer`}>
+        <label className={`flex-none px-4 py-2 absolute self-center z-30 cursor-pointer`}>
             <FileActionCheckbox
                 name={'selectedFiles'}
                 value={name}

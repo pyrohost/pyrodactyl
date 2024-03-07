@@ -7,7 +7,6 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { ServerContext } from '@/state/server';
 import { usePermissions } from '@/plugins/usePermissions';
-import { theme as th } from 'twin.macro';
 import useEventListener from '@/plugins/useEventListener';
 import debounce from 'debounce';
 import { usePersistedState } from '@/plugins/usePersistedState';
@@ -21,7 +20,7 @@ const theme = {
     // background: 'rgba(0, 0, 0, 0)',
     background: '#131313',
     cursor: 'transparent',
-    black: th`colors.black`.toString(),
+    black: '#000000',
     red: '#E54B4B',
     green: '#9ECE58',
     yellow: '#FAED70',
@@ -45,7 +44,6 @@ const terminalProps: ITerminalOptions = {
     cursorStyle: 'underline',
     allowTransparency: true,
     fontSize: 12,
-    fontFamily: th('fontFamily.mono'),
     // rows: 30,
     theme: theme,
 };

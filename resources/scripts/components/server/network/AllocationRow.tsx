@@ -1,13 +1,11 @@
 import { memo, useCallback, useState } from 'react';
 import isEqual from 'react-fast-compare';
-import tw from 'twin.macro';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { Textarea } from '@/components/elements/Input';
 import Can from '@/components/elements/Can';
 import { Button } from '@/components/elements/button/index';
 import GreyRowBox from '@/components/elements/GreyRowBox';
 import { Allocation } from '@/api/server/getServer';
-import styled from 'styled-components';
 import debounce from 'debounce';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
 import { useFlashKey } from '@/plugins/useFlash';
@@ -18,10 +16,6 @@ import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAll
 import getServerAllocations from '@/api/swr/getServerAllocations';
 import { ip } from '@/lib/formatters';
 import Code from '@/components/elements/Code';
-
-const Label = styled.label`
-    ${tw`uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150`}
-`;
 
 interface Props {
     allocation: Allocation;
@@ -76,11 +70,11 @@ const AllocationRow = ({ allocation }: Props) => {
                             </div>
                         </CopyOnClick>
                     )}
-                    <Label>{allocation.alias ? 'Hostname' : 'IP Address'}</Label>
+                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>{allocation.alias ? 'Hostname' : 'IP Address'}</label>
                 </div>
                 <div className={'w-16 md:w-24 overflow-hidden'}>
                     <Code dark>{allocation.port}</Code>
-                    <Label>Port</Label>
+                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>Port</label>
                 </div>
             </div>
             <div className={'mt-4 w-full md:mt-0 md:flex-1 md:w-auto'}>

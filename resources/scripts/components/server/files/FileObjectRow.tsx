@@ -5,7 +5,6 @@ import { FileObject } from '@/api/server/files/loadDirectory';
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
 import { NavLink } from 'react-router-dom';
-import tw from 'twin.macro';
 import isEqual from 'react-fast-compare';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 import { usePermissions } from '@/plugins/usePermissions';
@@ -43,7 +42,7 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
             <div className={styles.file_row} key={file.name}>
                 <SelectFileCheckbox name={file.name} />
                 <MemoizedClickable file={file}>
-                    <div css={tw`flex-none text-zinc-400 ml-6 mr-4 text-lg pl-3`}>
+                    <div className={`flex-none text-zinc-400 ml-6 mr-4 text-lg pl-3`}>
                         {file.isFile ? (
                             // todo handle other types of files. ugh
                             <svg
@@ -92,11 +91,11 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
                             </svg>
                         )}
                     </div>
-                    <div css={tw`flex-1 truncate font-bold text-sm`}>{file.name}</div>
+                    <div className={`flex-1 truncate font-bold text-sm`}>{file.name}</div>
                     {file.isFile && (
-                        <div css={tw`w-1/6 text-right mr-4 hidden sm:block text-xs`}>{bytesToString(file.size)}</div>
+                        <div className={`w-1/6 text-right mr-4 hidden sm:block text-xs`}>{bytesToString(file.size)}</div>
                     )}
-                    <div css={tw`w-1/5 text-right mr-4 hidden md:block text-xs`} title={file.modifiedAt.toString()}>
+                    <div className={`w-1/5 text-right mr-4 hidden md:block text-xs`} title={file.modifiedAt.toString()}>
                         {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
                             ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
                             : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}

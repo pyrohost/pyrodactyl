@@ -1,6 +1,5 @@
 import FlashMessageRender from '@/components/FlashMessageRender';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import tw from 'twin.macro';
 
 type Props = Readonly<
     React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
@@ -13,11 +12,11 @@ type Props = Readonly<
 
 const ContentBox = ({ title, borderColor, showFlashes, showLoadingOverlay, children, ...props }: Props) => (
     <div {...props}>
-        {title && <h2 css={tw`text-zinc-300 mb-4 px-4 text-2xl`}>{title}</h2>}
+        {title && <h2 className={`text-zinc-300 mb-4 px-4 text-2xl`}>{title}</h2>}
         {showFlashes && (
-            <FlashMessageRender byKey={typeof showFlashes === 'string' ? showFlashes : undefined} css={tw`mb-4`} />
+            <FlashMessageRender byKey={typeof showFlashes === 'string' ? showFlashes : undefined} />
         )}
-        <div css={[tw`bg-zinc-950 p-4 rounded shadow-lg relative`, !!borderColor && tw`border-t-4`]}>
+        <div>
             <SpinnerOverlay visible={showLoadingOverlay || false} />
             {children}
         </div>

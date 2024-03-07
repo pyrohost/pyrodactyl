@@ -1,6 +1,5 @@
 import MessageBox from '@/components/MessageBox';
 import { useStoreState } from 'easy-peasy';
-import tw from 'twin.macro';
 import { Fragment } from 'react';
 
 type Props = Readonly<{
@@ -17,7 +16,7 @@ const FlashMessageRender = ({ byKey, className }: Props) => {
         <div className={className}>
             {flashes.map((flash, index) => (
                 <Fragment key={flash.id || flash.type + flash.message}>
-                    {index > 0 && <div css={tw`mt-2`}></div>}
+                    {index > 0 && <div></div>}
                     <MessageBox type={flash.type} title={flash.title}>
                         {flash.message}
                     </MessageBox>

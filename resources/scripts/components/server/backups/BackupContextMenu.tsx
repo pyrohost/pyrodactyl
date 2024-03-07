@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import DropdownMenu, { DropdownButtonRow } from '@/components/elements/DropdownMenu';
 import getBackupDownloadUrl from '@/api/server/backups/getBackupDownloadUrl';
 import useFlash from '@/plugins/useFlash';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import deleteBackup from '@/api/server/backups/deleteBackup';
 import Can from '@/components/elements/Can';
-import tw from 'twin.macro';
 import getServerBackups from '@/api/swr/getServerBackups';
 import { ServerBackup } from '@/api/server/types';
 import { ServerContext } from '@/state/server';
@@ -130,11 +128,10 @@ export default ({ backup }: Props) => {
                     Your server will be stopped. You will not be able to control the power state, access the file
                     manager, or create additional backups until completed.
                 </p>
-                <p css={tw`mt-4 -mb-2 bg-zinc-700 p-3 rounded`}>
-                    <label htmlFor={'restore_truncate'} css={tw`text-base flex items-center cursor-pointer`}>
+                <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded`}>
+                    <label htmlFor={'restore_truncate'} className={`text-base flex items-center cursor-pointer`}>
                         <Input
                             type={'checkbox'}
-                            css={tw`text-red-500! w-5! h-5! mr-2`}
                             id={'restore_truncate'}
                             value={'true'}
                             checked={truncate}
@@ -155,52 +152,11 @@ export default ({ backup }: Props) => {
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
-                <DropdownMenu
-                    renderToggle={(onClick) => (
-                        <button onClick={onClick}>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='32'
-                                height='32'
-                                fill='currentColor'
-                                viewBox='0 0 256 256'
-                                className='flex shrink-0 h-full w-full'
-                            >
-                                {/* @ts-ignore */}
-                                <path d='M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z'></path>
-                            </svg>
-                        </button>
-                    )}
-                >
-                    <div css={tw`text-sm`}>
-                        <Can action={'backup.download'}>
-                            <DropdownButtonRow onClick={doDownload}>
-                                <span css={tw`ml-2`}>Download</span>
-                            </DropdownButtonRow>
-                        </Can>
-                        <Can action={'backup.restore'}>
-                            <DropdownButtonRow onClick={() => setModal('restore')}>
-                                <span css={tw`ml-2`}>Restore</span>
-                            </DropdownButtonRow>
-                        </Can>
-                        <Can action={'backup.delete'}>
-                            <>
-                                <DropdownButtonRow onClick={onLockToggle}>
-                                    {backup.isLocked ? 'Unlock' : 'Lock'}
-                                </DropdownButtonRow>
-                                {!backup.isLocked && (
-                                    <DropdownButtonRow danger onClick={() => setModal('delete')}>
-                                        <span css={tw`ml-2`}>Delete</span>
-                                    </DropdownButtonRow>
-                                )}
-                            </>
-                        </Can>
-                    </div>
-                </DropdownMenu>
+                <div>TODO: dropdown</div>
             ) : (
                 <button
                     onClick={() => setModal('delete')}
-                    css={tw`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
+                    className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
                 >
                     FIXME: delete
                 </button>

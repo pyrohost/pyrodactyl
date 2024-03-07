@@ -1,4 +1,3 @@
-import tw from 'twin.macro';
 import { useState } from 'react';
 import { useFlashKey } from '@/plugins/useFlash';
 import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
@@ -33,7 +32,7 @@ export default ({ name, fingerprint }: { name: string; fingerprint: string }) =>
             >
                 Removing the <Code>{name}</Code> SSH key will invalidate its usage across the Panel.
             </Dialog.Confirm>
-            <button css={tw`ml-4 p-2 text-sm`} onClick={() => setVisible(true)}>
+            <button className={`ml-4 p-2 text-sm`} onClick={() => setVisible(true)}>
                 FIXME: Delete Icon
             </button>
         </>
