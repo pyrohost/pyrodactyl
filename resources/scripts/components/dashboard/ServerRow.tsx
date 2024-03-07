@@ -8,7 +8,6 @@ import styled from 'styled-components';
 // than the more faded default style.
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
-
 const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>`
     // background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.044) 100%);
     border: 1px solid #ffffff07;
@@ -16,7 +15,7 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
     transition: all 250ms ease-in-out;
     padding: 1.75rem 1.5rem;
     cursor: pointer;
-    border-radius: 0.375rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -119,7 +118,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                 </div>
             </div>
             <div
-                className={`hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 text-sm gap-4`}
+                className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
                 {!stats || isSuspended ? (
                     isSuspended ? (

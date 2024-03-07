@@ -13,7 +13,7 @@ const FlashMessageRender = ({ byKey, className }: Props) => {
     );
 
     return flashes.length ? (
-        <div className={className}>
+        <>
             {flashes.map((flash, index) => (
                 <Fragment key={flash.id || flash.type + flash.message}>
                     {index > 0 && <div></div>}
@@ -22,7 +22,7 @@ const FlashMessageRender = ({ byKey, className }: Props) => {
                     </MessageBox>
                 </Fragment>
             ))}
-        </div>
+        </>
     ) : null;
 };
 
