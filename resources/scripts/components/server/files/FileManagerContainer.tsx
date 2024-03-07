@@ -53,7 +53,7 @@ export default () => {
     };
 
     if (error) {
-        return <ServerError message={httpErrorToHuman(error)} onRetry={() => mutate()} />;
+        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
     }
 
     return (

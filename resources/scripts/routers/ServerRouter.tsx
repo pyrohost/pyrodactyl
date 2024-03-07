@@ -99,7 +99,7 @@ export default () => {
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
                 error ? (
-                    <ServerError message={error} />
+                    <ServerError title='Something went wrong' message={error} />
                 ) : (
                     <></>
                 )
@@ -207,7 +207,7 @@ export default () => {
                         </div>
                     </MainSidebar>
                     <CommandMenu />
-                    <InstallListener /> 
+                    <InstallListener />
                     <TransferListener />
                     <WebsocketHandler />
                     <MainWrapper>
