@@ -9,6 +9,7 @@ import deleteFiles from '@/api/server/files/deleteFiles';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
 import Portal from '@/components/elements/Portal';
 import { Dialog } from '@/components/elements/dialog';
+import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
 const MassActionsBar = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -91,7 +92,8 @@ const MassActionsBar = () => {
                     />
                 )}
                 <Portal>
-                    <div className={'pointer-events-none fixed bottom-0 mb-6 flex justify-center w-full z-50'}>
+                    <FadeTransition duration='duration-75' show={selectedFiles.length > 0} appear unmount>
+                        <div className={'pointer-events-none fixed bottom-0 mb-6 flex justify-center w-full z-50'}>
                             <div className={`flex items-center space-x-4 pointer-events-auto rounded p-4 bg-black/50`}>
                                 <Button onClick={() => setShowMove(true)}>Move</Button>
                                 <Button onClick={onClickCompress}>Archive</Button>
@@ -99,7 +101,8 @@ const MassActionsBar = () => {
                                     Delete
                                 </Button.Danger>
                             </div>
-                    </div>
+                        </div>
+                    </FadeTransition>
                 </Portal>
             </div>
         </>
