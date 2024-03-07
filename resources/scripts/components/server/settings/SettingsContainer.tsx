@@ -51,13 +51,13 @@ export default () => {
                         <div>
                             <Label>Server Address</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
-                                <Input type={'text'} value={`sftp://${ip(sftp.ip)}:${sftp.port}`} readOnly />
+                                <div>{`sftp://${ip(sftp.ip)}:${sftp.port}`}</div>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-6`}>
                             <Label>Username</Label>
                             <CopyOnClick text={`${username}.${id}`}>
-                                <Input type={'text'} value={`${username}.${id}`} readOnly />
+                                <div>{`${username}.${id}`}</div>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-6 flex items-center`}>
