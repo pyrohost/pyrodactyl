@@ -104,9 +104,21 @@ function LoginContainer() {
                             Sign up
                         </a>
                     </div>
-                    <Field type={'text'} label={'Username or Email'} name={'username'} disabled={isSubmitting} />
+                    <Field
+                        id='usernameOrEmail'
+                        type={'text'}
+                        label={'Username or Email'}
+                        name={'username'}
+                        disabled={isSubmitting}
+                    />
                     <div className={`relative mt-6`}>
-                        <Field type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
+                        <Field
+                            id='password'
+                            type={'password'}
+                            label={'Password'}
+                            name={'password'}
+                            disabled={isSubmitting}
+                        />
                         <Link
                             to={'/auth/password'}
                             className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
