@@ -90,7 +90,7 @@ export default () => {
                     </div>
                     <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
                     <div className='text-sm mb-6'>We'll send you an email with a link to reset your password.</div>
-                    <Field label={'Email'} name={'email'} type={'email'} />
+                    <Field id='email' label={'Email'} name={'email'} type={'email'} />
                     <div className={`mt-6`}>
                         <Button
                             className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
