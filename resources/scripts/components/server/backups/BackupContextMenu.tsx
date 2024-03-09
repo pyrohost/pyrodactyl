@@ -12,6 +12,8 @@ import { restoreServerBackup } from '@/api/server/backups';
 import http, { httpErrorToHuman } from '@/api/http';
 import { Dialog } from '@/components/elements/dialog';
 
+import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
+
 interface Props {
     backup: ServerBackup;
 }
@@ -52,8 +54,8 @@ export default ({ backup }: Props) => {
                             items: data!.items.filter((b) => b.uuid !== backup.uuid),
                             backupCount: data!.backupCount - 1,
                         }),
-                        false
-                    )
+                        false,
+                    ),
             )
             .catch((error) => {
                 console.error(error);
@@ -70,7 +72,7 @@ export default ({ backup }: Props) => {
                 setServerFromState((s) => ({
                     ...s,
                     status: 'restoring_backup',
-                }))
+                })),
             )
             .catch((error) => {
                 console.error(error);
@@ -97,11 +99,11 @@ export default ({ backup }: Props) => {
                                     : {
                                           ...b,
                                           isLocked: !b.isLocked,
-                                      }
+                                      },
                             ),
                         }),
-                        false
-                    )
+                        false,
+                    ),
             )
             .catch((error) => alert(httpErrorToHuman(error)))
             .then(() => setModal(''));
@@ -152,13 +154,30 @@ export default ({ backup }: Props) => {
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
-                <div>TODO: dropdown</div>
+                <ContextMenuContent className='flex flex-col gap-1'>
+                    <Can action={'backup.download'}>
+                        <ContextMenuItem onSelect={doDownload}>Download Backup</ContextMenuItem>
+                    </Can>
+                    <Can action={'backup.restore'}>
+                        <ContextMenuItem onSelect={() => setModal('restore')}>Restore Backup</ContextMenuItem>
+                    </Can>
+                    <Can action={'backup.delete'}>
+                        <>
+                            <ContextMenuItem onClick={onLockToggle}>
+                                {backup.isLocked ? 'Unlock' : 'Lock'}
+                            </ContextMenuItem>
+                            {!backup.isLocked && (
+                                <ContextMenuItem onSelect={() => setModal('delete')}>Delete</ContextMenuItem>
+                            )}
+                        </>
+                    </Can>
+                </ContextMenuContent>
             ) : (
                 <button
                     onClick={() => setModal('delete')}
                     className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
                 >
-                    FIXME: delete
+                    Delete Backup
                 </button>
             )}
         </>
