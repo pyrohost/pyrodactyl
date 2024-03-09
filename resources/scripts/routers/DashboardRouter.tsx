@@ -85,11 +85,11 @@ export default () => {
                 <div className='pyro-subnav-routes-wrapper'>
                     <NavLink to={'/'} end className='flex flex-row items-center'>
                         <HugeIconsHome fill='currentColor' />
-                        <p>Your Servers</p>
+                        <p>Servers</p>
                     </NavLink>
                     <NavLink to={'/account'} end className='flex flex-row items-center'>
                         <HugeIconsDashboardSettings fill='currentColor' />
-                        <p>Your Settings</p>
+                        <p>Settings</p>
                     </NavLink>
                 </div>
             </MainSidebar>

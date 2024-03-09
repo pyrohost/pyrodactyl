@@ -5,6 +5,20 @@ import { fileURLToPath } from 'node:url';
 import manifestSRI from 'vite-plugin-manifest-sri';
 import { splitVendorChunkPlugin } from 'vite';
 import { defineConfig } from 'vite';
+import packageJson from './package.json';
+import * as child from 'child_process';
+
+let branchName;
+let commitHash;
+
+try {
+    branchName = child.execSync('git rev-parse --abbrev-ref HEAD').toString().trimEnd();
+    commitHash = child.execSync('git rev-parse HEAD').toString().trimEnd();
+} catch (error) {
+    console.error('Error executing git command:', error);
+    branchName = 'unknown';
+    commitHash = 'unknown';
+}
 
 export default defineConfig({
     build: {
@@ -31,6 +45,9 @@ export default defineConfig({
     },
 
     define: {
+        'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
+        'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
+        'import.meta.env.VITE_BRANCH_NAME': JSON.stringify(branchName),
         'process.env': {},
         'process.platform': null,
         'process.version': null,
@@ -62,7 +79,7 @@ export default defineConfig({
                 'resources',
                 'scripts',
                 'api',
-                'definitions'
+                'definitions',
             ),
             '@feature': resolve(
                 dirname(fileURLToPath(import.meta.url)),
@@ -70,7 +87,7 @@ export default defineConfig({
                 'scripts',
                 'components',
                 'server',
-                'features'
+                'features',
             ),
         },
     },
