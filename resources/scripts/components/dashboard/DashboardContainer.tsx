@@ -29,6 +29,11 @@ export default () => {
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
 
+    const [dashboardDisplayOption, setDashboardDisplayOption] = usePersistedState(
+        `${uuid}:dashboard_display_option`,
+        'list',
+    );
+
     const { data: servers, error } = useSWR<PaginatedResult<Server>>(
         ['/api/client/servers', showOnlyAdmin && rootAdmin, page],
         () => getServers({ page, type: showOnlyAdmin && rootAdmin ? 'admin' : undefined }),
@@ -55,7 +60,13 @@ export default () => {
 
     return (
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
-            <Tabs defaultValue='list' className='w-full'>
+            <Tabs
+                defaultValue={dashboardDisplayOption}
+                onValueChange={(value) => {
+                    setDashboardDisplayOption(value);
+                }}
+                className='w-full'
+            >
                 <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
                     <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Your Servers</h1>
                     <div className='flex gap-4'>
@@ -83,11 +94,11 @@ export default () => {
                                         fill='none'
                                     >
                                         <path
-                                            fill-rule='evenodd'
-                                            clip-rule='evenodd'
+                                            fillRule='evenodd'
+                                            clipRule='evenodd'
                                             d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
                                             fill='white'
-                                            fill-opacity='0.37'
+                                            fillOpacity='0.37'
                                         />
                                     </svg>
                                 </button>
@@ -106,7 +117,7 @@ export default () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <TabsList>
-                            <TabsTrigger aria-label='View servers in a grid layout.' value='list'>
+                            <TabsTrigger aria-label='View servers in a list layout.' value='list'>
                                 <svg
                                     width='16'
                                     height='17'
@@ -120,7 +131,7 @@ export default () => {
                                     />
                                 </svg>
                             </TabsTrigger>
-                            <TabsTrigger aria-label='View servers in a list layout.' value='grid'>
+                            <TabsTrigger aria-label='View servers in a grid layout.' value='grid'>
                                 <svg
                                     width='16'
                                     height='17'
