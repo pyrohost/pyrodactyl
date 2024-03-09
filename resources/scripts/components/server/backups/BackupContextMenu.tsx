@@ -13,6 +13,9 @@ import http, { httpErrorToHuman } from '@/api/http';
 import { Dialog } from '@/components/elements/dialog';
 
 import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
+import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
+import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
+import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
 
 interface Props {
     backup: ServerBackup;
@@ -156,18 +159,28 @@ export default ({ backup }: Props) => {
             {backup.isSuccessful ? (
                 <ContextMenuContent className='flex flex-col gap-1'>
                     <Can action={'backup.download'}>
-                        <ContextMenuItem onSelect={doDownload}>Download Backup</ContextMenuItem>
+                        <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
+                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
+                            Download Backup
+                        </ContextMenuItem>
                     </Can>
                     <Can action={'backup.restore'}>
-                        <ContextMenuItem onSelect={() => setModal('restore')}>Restore Backup</ContextMenuItem>
+                        <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
+                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
+                            Restore Backup
+                        </ContextMenuItem>
                     </Can>
                     <Can action={'backup.delete'}>
                         <>
-                            <ContextMenuItem onClick={onLockToggle}>
+                            <ContextMenuItem className='flex gap-2' onClick={onLockToggle}>
+                                <HugeIconsFileSecurity className='!h-4 !w-4' fill='currentColor' />
                                 {backup.isLocked ? 'Unlock' : 'Lock'}
                             </ContextMenuItem>
                             {!backup.isLocked && (
-                                <ContextMenuItem onSelect={() => setModal('delete')}>Delete</ContextMenuItem>
+                                <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
+                                    <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
+                                    Delete Backup
+                                </ContextMenuItem>
                             )}
                         </>
                     </Can>
