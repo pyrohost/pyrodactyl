@@ -8,8 +8,17 @@ import { defineConfig } from 'vite';
 import packageJson from './package.json';
 import * as child from 'child_process';
 
-const branchName = child.execSync('git rev-parse --abbrev-ref HEAD').toString().trimEnd();
-const commitHash = child.execSync('git rev-parse HEAD').toString().trimEnd();
+let branchName;
+let commitHash;
+
+try {
+    branchName = child.execSync('git rev-parse --abbrev-ref HEAD').toString().trimEnd();
+    commitHash = child.execSync('git rev-parse HEAD').toString().trimEnd();
+} catch (error) {
+    console.error('Error executing git command:', error);
+    branchName = 'unknown';
+    commitHash = 'unknown';
+}
 
 export default defineConfig({
     build: {
