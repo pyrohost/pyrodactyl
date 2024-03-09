@@ -46,17 +46,6 @@ export default ({ backup, className }: Props) => {
     return (
         <div className={`flex bg-[#ffffff11] px-6 py-4 rounded-md items-center`}>
             <div className={`flex items-center truncate w-full md:flex-1`}>
-                {/* <div className={`mr-4`}>
-                    {backup.completedAt !== null ? (
-                        backup.isLocked ? (
-                            <FontAwesomeIcon icon={faLock} className={`text-yellow-500`} />
-                        ) : (
-                            <FontAwesomeIcon icon={faArchive} className={`text-zinc-300`} />
-                        )
-                    ) : (
-                        <Spinner size={'small'} />
-                    )}
-                </div> */}
                 <div className={`flex flex-col truncate`}>
                     <div className={`flex items-center text-sm mb-1`}>
                         {backup.completedAt !== null && !backup.isSuccessful && (
