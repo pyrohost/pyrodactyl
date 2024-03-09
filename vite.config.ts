@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { dirname, resolve } from 'pathe';
@@ -46,7 +46,7 @@ export default defineConfig({
             },
         },
 
-        sourcemap: true
+        sourcemap: true,
     },
 
     define: {
@@ -75,9 +75,10 @@ export default defineConfig({
             ],
         }),
         sentryVitePlugin({
-            org: "pyrohost",
-            project: "pyrodactyl-panel"
-        })
+            org: 'pyrohost',
+            project: 'pyrodactyl-panel',
+            telemetry: false,
+        }),
     ],
 
     resolve: {
