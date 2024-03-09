@@ -10,11 +10,10 @@ interface StatBlockProps {
     className?: string;
 }
 
-export default ({ title, copyOnClick, color, className, children }: StatBlockProps) => {
+export default ({ title, copyOnClick, className, children }: StatBlockProps) => {
     return (
         <CopyOnClick text={copyOnClick}>
             <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
-                <div className={clsx(styles.status_bar, color || 'bg-zinc-700')} />
                 <div className={'flex flex-col justify-center overflow-hidden w-full'}>
                     <p className={'leading-tight text-xs md:text-sm text-zinc-400'}>{title}</p>
                     <div className={'text-[32px] font-extrabold leading-[98%] tracking-[-0.07rem] w-full truncate'}>

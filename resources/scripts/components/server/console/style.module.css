@@ -21,15 +21,6 @@
 .terminal {
     @apply flex flex-col w-full h-full relative;
 
-    & .overflows_container {
-        @apply -ml-4 sm:ml-0;
-        /* width: calc(100% + 2rem); */
-
-        @screen sm {
-            @apply w-full;
-        }
-    }
-
     & > .container {
         @apply min-h-[453px] rounded-t-xl pt-8 pl-8 bg-[#131313] border-x-[1px] border-[#ffffff11] border-t-[1px] font-mono text-sm h-full;
 

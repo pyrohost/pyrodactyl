@@ -38,7 +38,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
             memory: limits?.memory ? bytesToString(mbToBytes(limits.memory)) : null,
             disk: limits?.disk ? bytesToString(mbToBytes(limits.disk)) : null,
         }),
-        [limits]
+        [limits],
     );
 
     const allocation = ServerContext.useStoreState((state) => {
@@ -74,7 +74,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     });
 
     return (
-        <div className={clsx('flex gap-4', className)}>
+        <div className={clsx('flex md:flex-row gap-4 flex-col', className)}>
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{

@@ -30,17 +30,17 @@ const ServerConsoleContainer = () => {
                         {isNodeUnderMaintenance
                             ? 'The node of this server is currently under maintenance and all actions are unavailable.'
                             : isInstalling
-                            ? 'This server is currently running its installation process and most actions are unavailable.'
-                            : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                              ? 'This server is currently running its installation process and most actions are unavailable.'
+                              : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <div className={'flex flex-row justify-between items-center mb-8'}>
+                <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8'}>
                     <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
                     <PowerButtons className='flex gap-1 items-center justify-center' />
                 </div>
-                <ServerDetailsBlock className={'col-span-4 lg:col-span-1 order-last lg:order-none'} />
+                <ServerDetailsBlock />
                 <Console />
-                <div className={'grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4'}>
+                <div className={'grid grid-cols-1 md:grid-cols-3 gap-4'}>
                     <Spinner.Suspense>
                         <StatGraphs />
                     </Spinner.Suspense>

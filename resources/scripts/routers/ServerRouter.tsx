@@ -57,7 +57,7 @@ export default () => {
         () => () => {
             clearServerState();
         },
-        []
+        [],
     );
 
     useEffect(() => {
@@ -114,7 +114,7 @@ export default () => {
                             },
                         }}
                     />
-                    <MainSidebar>
+                    <MainSidebar className='hidden lg:flex'>
                         <div
                             className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
