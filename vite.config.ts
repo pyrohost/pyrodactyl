@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 import { dirname, resolve } from 'pathe';
@@ -24,10 +25,12 @@ export default defineConfig({
     build: {
         assetsInlineLimit: 0,
         emptyOutDir: true,
+
         // we need to do this because otherwise it will
         // generate in .vite/manifest.json, while laravel
         // looks in public/build/manifest.json
         manifest: 'manifest.json',
+
         outDir: 'public/build',
 
         rollupOptions: {
@@ -42,6 +45,8 @@ export default defineConfig({
                 },
             },
         },
+
+        sourcemap: true
     },
 
     define: {
@@ -69,6 +74,10 @@ export default defineConfig({
                 ],
             ],
         }),
+        sentryVitePlugin({
+            org: "pyrohost",
+            project: "pyrodactyl-panel"
+        })
     ],
 
     resolve: {
