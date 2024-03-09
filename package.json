@@ -1,6 +1,6 @@
 {
     "name": "pyrodactyl",
-    "version": "0.40.0-alpha",
+    "version": "0.41.0-alpha",
     "engines": {
         "node": ">=20.0"
     },
