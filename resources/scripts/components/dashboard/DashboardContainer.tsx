@@ -149,7 +149,6 @@ export default () => {
                     </div>
                 </div>
                 {!servers ? (
-                    // <Spinner centered size={'large'} />
                     <></>
                 ) : (
                     <>
