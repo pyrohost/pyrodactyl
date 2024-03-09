@@ -36,3 +36,5 @@ result
 docker-compose.yaml
 .swc/
 .turbo
+# Sentry Config File
+.env.sentry-build-plugin
