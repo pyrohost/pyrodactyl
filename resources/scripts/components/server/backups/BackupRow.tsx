@@ -4,10 +4,12 @@ import { bytesToString } from '@/lib/formatters';
 // import Can from '@/components/elements/Can';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 // import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 import getServerBackups from '@/api/swr/getServerBackups';
 import { ServerBackup } from '@/api/server/types';
 import { SocketEvent } from '@/components/server/events';
+import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
+import BackupContextMenu from './BackupContextMenu';
+import Can from '@/components/elements/Can';
 
 interface Props {
     backup: ServerBackup;
@@ -33,10 +35,10 @@ export default ({ backup, className }: Props) => {
                                   checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
                                   bytes: parsed.file_size || 0,
                                   completedAt: new Date(),
-                              }
+                              },
                     ),
                 }),
-                false
+                false,
             );
         } catch (e) {
             console.warn(e);
@@ -44,57 +46,52 @@ export default ({ backup, className }: Props) => {
     });
 
     return (
-        <div className={`flex bg-[#ffffff11] px-6 py-4 rounded-md items-center`}>
-            <div className={`flex items-center truncate w-full md:flex-1`}>
-                {/* <div className={`mr-4`}>
-                    {backup.completedAt !== null ? (
-                        backup.isLocked ? (
-                            <FontAwesomeIcon icon={faLock} className={`text-yellow-500`} />
-                        ) : (
-                            <FontAwesomeIcon icon={faArchive} className={`text-zinc-300`} />
-                        )
-                    ) : (
-                        <Spinner size={'small'} />
-                    )}
-                </div> */}
-                <div className={`flex flex-col truncate`}>
-                    <div className={`flex items-center text-sm mb-1`}>
-                        {backup.completedAt !== null && !backup.isSuccessful && (
-                            <span
-                                className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
-                            >
-                                Failed
-                            </span>
-                        )}
-                        <div className={`flex gap-2 items-center justify-center`}>
-                            <p className='break-words truncate text-lg'>{backup.name}</p>
-                            {backup.completedAt !== null ? (
-                                backup.isLocked ? (
-                                    <span className='font-bold z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
-                                        Locked
+        <ContextMenu>
+            <ContextMenuTrigger>
+                <div
+                    className={`flex bg-[#ffffff11] hover:bg-[#ffffff19] transition duration-[80ms] hover:duration-0 px-6 py-4 rounded-md items-center`}
+                >
+                    <div className={`flex items-center truncate w-full md:flex-1`}>
+                        <div className={`flex flex-col truncate`}>
+                            <div className={`flex items-center text-sm mb-1`}>
+                                {backup.completedAt !== null && !backup.isSuccessful && (
+                                    <span
+                                        className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
+                                    >
+                                        Failed
                                     </span>
-                                ) : null
-                            ) : (
-                                <Spinner size={'small'} />
-                            )}
+                                )}
+                                <div className={`flex gap-2 items-center justify-center`}>
+                                    <p className='break-words truncate text-lg'>{backup.name}</p>
+                                    {backup.completedAt !== null ? (
+                                        backup.isLocked ? (
+                                            <span className='font-bold z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                                Locked
+                                            </span>
+                                        ) : null
+                                    ) : (
+                                        <Spinner size={'small'} />
+                                    )}
+                                </div>
+                            </div>
+                            <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
                         </div>
                     </div>
-                    <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
+                    <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                        {backup.completedAt !== null && backup.isSuccessful && (
+                            <span className={`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
+                        )}
+                    </div>
+                    <div className={`flex flex-1 md:flex-none mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                        <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} className={`text-xs`}>
+                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
+                        </p>
+                    </div>
+                    <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
+                        {!backup.completedAt ? <></> : <BackupContextMenu backup={backup} />}
+                    </Can>
                 </div>
-            </div>
-            <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
-                {backup.completedAt !== null && backup.isSuccessful && (
-                    <span className={`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
-                )}
-            </div>
-            <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
-                <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} className={`text-xs`}>
-                    {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
-                </p>
-            </div>
-            {/* <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
-                {!backup.completedAt ? <div className='w-8'></div> : <BackupContextMenu backup={backup} />}
-            </Can> */}
-        </div>
+            </ContextMenuTrigger>
+        </ContextMenu>
     );
 };
