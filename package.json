@@ -21,7 +21,7 @@
         "browserslist": "^4.23.0",
         "chart.js": "^3.8.0",
         "clsx": "^2.1.0",
-        "cmdk": "^0.2.1",
+        "cmdk": "^1.0.0",
         "codemirror": "^5.57.0",
         "copy-to-clipboard": "^3.3.3",
         "date-fns": "^3.3.1",
