@@ -37,7 +37,7 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
             });
 
     return (
-        <div className={`group flex flex-grow-0 items-center text-sm text-zinc-500 overflow-x-hidden`}>
+        <div className={`group flex flex-grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
             {/* displaying "home" is so useless and needlessly confusing */}
             {/* <span className={`px-1 text-zinc-300`}>home</span>
@@ -88,7 +88,7 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
                     <span key={index} className={`px-1 text-zinc-300`}>
                         {crumb.name}
                     </span>
-                )
+                ),
             )}
             {file && (
                 <Fragment>
