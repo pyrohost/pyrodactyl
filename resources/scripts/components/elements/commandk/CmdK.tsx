@@ -59,7 +59,7 @@ const CommandMenu = () => {
                 <Command.Empty>No results found.</Command.Empty>
 
                 <Command.Group heading='Pages'>
-                    <Command.Item onSelect={() => cmdkNavigate('/')}>
+                    <Command.Item onSelect={() => cmdkNavigate('')}>
                         <HugeIconsHome fill='currentColor' />
                         Home
                     </Command.Item>
