@@ -13,7 +13,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenuNew';
+} from '@/components/elements/DropdownMenu';
 import { useLocation } from 'react-router';
 import MainWrapper from '@/components/elements/MainWrapper';
 

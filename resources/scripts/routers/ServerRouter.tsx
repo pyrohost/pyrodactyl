@@ -28,7 +28,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenuNew';
+} from '@/components/elements/DropdownMenu';
 import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
 

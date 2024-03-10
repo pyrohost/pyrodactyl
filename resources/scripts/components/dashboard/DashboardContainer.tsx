@@ -16,7 +16,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenuNew';
+} from '@/components/elements/DropdownMenu';
 
 export default () => {
     const { search } = useLocation();
