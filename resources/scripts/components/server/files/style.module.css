@@ -29,4 +29,8 @@
     &[data-state='open'] {
         @apply bg-[#ffffff12];
     }
+
+    &:has(button[data-state='checked']) {
+        @apply bg-[#2a2021];
+    }
 }

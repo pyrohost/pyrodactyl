@@ -15,7 +15,7 @@ import UploadButton from '@/components/server/files/UploadButton';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useStoreActions } from '@/state/hooks';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { FileActionCheckbox } from '@/components/server/files/SelectFileCheckbox';
+import { Checkbox } from '@/components/elements/CheckboxNew';
 import { hashToPath } from '@/helpers';
 // import style from './style.module.css';
 import NewFileButton from './NewFileButton';
@@ -48,8 +48,13 @@ export default () => {
         mutate();
     }, [directory]);
 
-    const onSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedFiles(e.currentTarget.checked ? files?.map((file) => file.name) || [] : []);
+    const onSelectAllClick = () => {
+        console.log('files', files);
+        setSelectedFiles(
+            selectedFilesLength === (files?.length === 0 ? -1 : files?.length)
+                ? []
+                : files?.map((file) => file.name) || [],
+        );
     };
 
     if (error) {
@@ -73,14 +78,10 @@ export default () => {
                 <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
                     <FileManagerBreadcrumbs
                         renderLeft={
-                            <FileActionCheckbox
-                                type={'checkbox'}
-                                className='ml-6 mr-4'
-                                // todo: find a user friendly way to implement this
-                                // className={`opacity-0 -ml-8 mr-4`}
-                                // className='group-hover:opacity-100 group-focus:opacity-100 group-hover:ml-6'
+                            <Checkbox
+                                className='ml-[1.6rem] mr-4'
                                 checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
-                                onChange={onSelectAllClick}
+                                onCheckedChange={() => onSelectAllClick()}
                             />
                         }
                     />

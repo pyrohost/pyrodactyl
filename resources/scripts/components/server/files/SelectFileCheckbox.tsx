@@ -1,17 +1,5 @@
 import { ServerContext } from '@/state/server';
-import styled from 'styled-components';
-import Input from '@/components/elements/Input';
-
-export const FileActionCheckbox = styled(Input)`
-    && {
-        background: transparent;
-        border: #ffffffaa;
-
-        &:not(:checked):hover {
-            border-color: #ffffff55;
-        }
-    }
-`;
+import { Checkbox } from '@/components/elements/CheckboxNew';
 
 export default ({ name }: { name: string }) => {
     const isChecked = ServerContext.useStoreState((state) => state.files.selectedFiles.indexOf(name) >= 0);
@@ -19,20 +7,12 @@ export default ({ name }: { name: string }) => {
     const removeSelectedFile = ServerContext.useStoreActions((actions) => actions.files.removeSelectedFile);
 
     return (
-        <label className={`flex-none px-4 py-2 absolute self-center z-30 cursor-pointer`}>
-            <FileActionCheckbox
-                name={'selectedFiles'}
-                value={name}
-                checked={isChecked}
-                type={'checkbox'}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (e.currentTarget.checked) {
-                        appendSelectedFile(name);
-                    } else {
-                        removeSelectedFile(name);
-                    }
-                }}
-            />
-        </label>
+        <Checkbox
+            className='ml-4'
+            name={'selectedFiles'}
+            value={name}
+            checked={isChecked}
+            onCheckedChange={isChecked ? () => removeSelectedFile(name) : () => appendSelectedFile(name)}
+        />
     );
 };
