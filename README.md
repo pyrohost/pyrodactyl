@@ -36,6 +36,8 @@ You will need a working installation of Vagrant, the latest LTS version of NodeJ
 5. Once you receive a message that says "pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
 6. Visit localhost:3000/admin to provision your first server on pyrodactyl!
 
+Note: If you have the dev server running (`pnpm dev`), a development build of the app will be served at localhost:3000 with HMR. If you want to preview a production build of pyrodactyl, terminate the dev server and run `pnpm build:turbo`. Once it finishes, it will also be served at localhost:3000.
+
 ## Star History
 
 <a href="https://star-history.com/#pyrohost/panel&Date">
