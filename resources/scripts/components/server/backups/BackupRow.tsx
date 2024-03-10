@@ -49,7 +49,7 @@ export default ({ backup, className }: Props) => {
         <ContextMenu>
             <ContextMenuTrigger>
                 <div
-                    className={`flex bg-[#ffffff11] hover:bg-[#ffffff19] transition duration-[80ms] hover:duration-0 px-6 py-4 rounded-md items-center`}
+                    className={`flex bg-[#ffffff11] hover:bg-[#ffffff19] transition duration-100 hover:duration-0 px-6 py-4 rounded-md items-center`}
                 >
                     <div className={`flex items-center truncate w-full md:flex-1`}>
                         <div className={`flex flex-col truncate`}>
