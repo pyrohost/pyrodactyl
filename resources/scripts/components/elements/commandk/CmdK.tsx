@@ -1,6 +1,6 @@
 import { Command } from 'cmdk';
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './styles.module.css';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
