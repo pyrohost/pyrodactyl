@@ -3,14 +3,13 @@ License text copyright (c) 2020 MariaDB Corporation Ab, All Rights Reserved.
 
 Parameters
 
-Licensor: Pyro Hosting
-Licensed Work: pyrodactyl Panel. The Licensed Work is (c) 2024
-Pyro Hosting
+Licensor:             Pyro Inc.
+Licensed Work:        pyrodactyl Panel. The Licensed Work is (c) 2024 Pyro Inc.
 Additional Use Grant: You may make production use of the Licensed Work, provided
-Your use does not include offering the Licensed Work to third
-parties on a hosted or embedded basis in order to compete with
-Pyro Hosting's offering of the Licensed Work. For purposes
-of this license:
+                      Your use does not include offering the Licensed Work to third
+                      parties on a hosted or embedded basis in order to compete with
+                      Pyro's offering of the Licensed Work. For purposes
+                      of this license:
 
                       A "competitive offering" is a Product that is offered to third
                       parties on a paid basis, including through paid support
@@ -37,8 +36,8 @@ of this license:
                       offering. Pyro Hosting considers your organization to include all
                       of your affiliates under common control.
 
-Change Date: Four years from the date the Licensed Work is published.
-Change License: MPL 2.0
+Change Date:         Four years from the date the Licensed Work is published.
+Change License:      MPL 2.0
 
 For information about alternative licensing arrangements for the Licensed Work,
 please contact team@pyro.host.
