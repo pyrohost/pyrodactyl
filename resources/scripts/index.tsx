@@ -5,7 +5,7 @@ import App from '@/components/App';
 Sentry.init({
     // This is safe to be public.
     // See https://docs.sentry.io/product/sentry-basics/concepts/dsn-explainer/ for more information.
-    dsn: 'https://14d9c749b3286d03c85d783748fd13c9@o4506882582577152.ingest.us.sentry.io/4506882584150016',
+    dsn: 'https://b25e7066a7d647cea237cd72beec5c9f@app.glitchtip.com/6107',
     integrations: [],
 });
 
