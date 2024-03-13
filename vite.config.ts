@@ -8,6 +8,7 @@ import { splitVendorChunkPlugin } from 'vite';
 import { defineConfig } from 'vite';
 import packageJson from './package.json';
 import * as child from 'child_process';
+import million from 'million/compiler';
 
 let branchName;
 let commitHash;
@@ -63,17 +64,20 @@ export default defineConfig({
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
         splitVendorChunkPlugin(),
-        react({
-            plugins: [
-                [
-                    '@swc/plugin-styled-components',
-                    {
-                        pure: true,
-                        namespace: 'pyrodactyl',
-                    },
+        [
+            million.vite({ auto: true }),
+            react({
+                plugins: [
+                    [
+                        '@swc/plugin-styled-components',
+                        {
+                            pure: true,
+                            namespace: 'pyrodactyl',
+                        },
+                    ],
                 ],
-            ],
-        }),
+            }),
+        ],
         sentryVitePlugin({
             org: 'pyrohost',
             project: 'pyrodactyl-panel',
