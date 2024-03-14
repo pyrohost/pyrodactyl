@@ -67,7 +67,9 @@ export default () => {
                 className='w-full'
             >
                 <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
-                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Your Servers</h1>
+                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>
+                        {showOnlyAdmin ? 'Other Servers' : 'Your Servers'}
+                    </h1>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
