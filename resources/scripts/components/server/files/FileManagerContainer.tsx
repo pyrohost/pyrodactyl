@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { httpErrorToHuman } from '@/api/http';
+import { For } from 'million/react';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import { FileObject } from '@/api/server/files/loadDirectory';
@@ -31,6 +32,7 @@ export default () => {
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const { hash } = useLocation();
     const { data: files, error, mutate } = useFileManagerSwr();
+    const filesArray = sortFiles(files?.slice(0, 250) ?? []);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
     const clearFlashes = useStoreActions((actions) => actions.flashes.clearFlashes);
     const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
@@ -114,9 +116,9 @@ export default () => {
                                 className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                             >
                                 <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                    {sortFiles(files.slice(0, 250)).map((file) => (
-                                        <FileObjectRow key={file.key} file={file} />
-                                    ))}
+                                    <For each={filesArray} memo>
+                                        {(file) => <FileObjectRow key={file.key} file={file} />}
+                                    </For>
                                 </div>
                             </div>
                             <MassActionsBar />

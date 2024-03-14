@@ -65,7 +65,11 @@ export default defineConfig({
         manifestSRI(),
         splitVendorChunkPlugin(),
         [
-            million.vite({ auto: true }),
+            million.vite({
+                auto: {
+                    threshold: 0.01,
+                },
+            }),
             react({
                 plugins: [
                     [
