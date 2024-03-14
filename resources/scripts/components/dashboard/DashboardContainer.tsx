@@ -181,7 +181,7 @@ export default () => {
                             </Pagination>
                         </TabsContent>
                         <TabsContent value='grid'>
-                            <div className='grid grid-cols-2 gap-4'>
+                            <div className='grid grid-cols-2 gap-x-4'>
                                 <Pagination data={servers} onPageSelect={setPage}>
                                     {({ items }) =>
                                         items.length > 0 ? (
