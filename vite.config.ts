@@ -69,6 +69,7 @@ export default defineConfig({
                 auto: {
                     threshold: 0.01,
                 },
+                telemetry: false,
             }),
             react({
                 plugins: [
