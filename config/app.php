@@ -11,7 +11,7 @@ return [
     | change this value if you are not maintaining your own internal versions.
     */
 
-    'version' => '1.11.5',
+    'version' => '0.51.0-alpha',
 
     /*
     |--------------------------------------------------------------------------
