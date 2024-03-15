@@ -16,9 +16,11 @@ import {
 } from '@/components/elements/DropdownMenu';
 import { useLocation } from 'react-router';
 import MainWrapper from '@/components/elements/MainWrapper';
+import { useStoreState } from 'easy-peasy';
 
 export default () => {
     const location = useLocation();
+    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -91,6 +93,13 @@ export default () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
+                    {rootAdmin && (
+                        // eslint-disable-next-line react/jsx-no-target-blank
+                        <a href={`/admin`} target={'_blank'}>
+                            <div className='ml-1'>Admin Panel </div>
+                            <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>Staff</span>
+                        </a>
+                    )}
                 </div>
             </MainSidebar>
 
