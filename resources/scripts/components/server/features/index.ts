@@ -11,7 +11,8 @@ const features: Record<string, ComponentType> = {
     java_version: lazy(() => import('@feature/JavaVersionModalFeature')),
     gsl_token: lazy(() => import('@feature/GSLTokenModalFeature')),
     // Why are you broken?
-    // pid_limit: lazy(() => import('@feature/PIDLimitModalFeature')),
+    // Not anymore, there's a fix!
+    pid_limit: lazy(() => import('@feature/PIDLimitModalFeature')),
     steam_disk_space: lazy(() => import('@feature/SteamDiskSpaceFeature')),
 };
 
