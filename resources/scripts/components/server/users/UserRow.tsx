@@ -4,7 +4,6 @@ import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 import EditSubuserModal from '@/components/server/users/EditSubuserModal';
 import Can from '@/components/elements/Can';
 import { useStoreState } from 'easy-peasy';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 
 interface Props {
     subuser: Subuser;

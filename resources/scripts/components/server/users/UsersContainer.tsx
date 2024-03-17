@@ -49,16 +49,17 @@ export default () => {
     return (
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} className={`mb-4`} />
+            <div className={'flex flex-row justify-between items-center mb-8'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+                <Can action={'user.create'}>
+                    <AddSubuserButton />
+                </Can>
+            </div>
             {!subusers.length ? (
                 <p className={`text-center text-sm text-zinc-300`}>It looks like you don&apos;t have any subusers.</p>
             ) : (
                 subusers.map((subuser) => <UserRow key={subuser.uuid} subuser={subuser} />)
             )}
-            <Can action={'user.create'}>
-                <div className={`flex justify-end mt-6`}>
-                    <AddSubuserButton />
-                </div>
-            </Can>
         </ServerContentBlock>
     );
 };
