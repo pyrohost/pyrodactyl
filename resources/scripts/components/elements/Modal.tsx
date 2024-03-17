@@ -26,7 +26,6 @@ export const ModalMask = styled.div`
     flex: 1;
     inset: 0;
     backdrop-filter: blur(3px);
-
 `;
 
 // export const ModalMask = styled.div`
@@ -93,9 +92,9 @@ const Modal: React.FC<ModalProps> = ({
     useEffect(() => setRender(visible), [visible]);
 
     return (
-        <FadeTransition as={Fragment} show={render} duration="duration-150" appear={appear ?? true} unmount>
+        <FadeTransition as={Fragment} show={render} duration='duration-150' appear={appear ?? true} unmount>
             <div
-                className='fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm'
+                className='fixed z-[9997] overflow-hidden flex w-full inset-0 backdrop-blur-sm overflow-y-scroll py-6'
                 style={{
                     background: 'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
                 }}
@@ -110,39 +109,39 @@ const Modal: React.FC<ModalProps> = ({
                     }
                 }}
             >
-                <div>
-                    {isDismissable && (
-                        <div className={'close-icon'} onClick={() => setRender(false)}>
-                            <svg
-                                xmlns={'http://www.w3.org/2000/svg'}
-                                fill={'none'}
-                                viewBox={'0 0 24 24'}
-                                stroke={'currentColor'}
-                            >
-                                <path
-                                    strokeLinecap={'round'}
-                                    strokeLinejoin={'round'}
-                                    strokeWidth={'2'}
-                                    d={'M6 18L18 6M6 6l12 12'}
-                                />
-                            </svg>
-                        </div>
-                    )}
+                <div className='max-w-2xl mx-auto'>
                     {showSpinnerOverlay && (
-                            <div
-                                className={`absolute w-full h-full rounded flex items-center justify-center`}
-                                style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
-                            >
-                                <Spinner />
-                            </div>
+                        <div
+                            className={`absolute w-full h-full rounded flex items-center justify-center`}
+                            style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
+                        >
+                            <Spinner />
+                        </div>
                     )}
                     <div
                         style={{
                             background:
                                 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12)',
                         }}
-                        className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full mx-auto text-left shadow-2xl backdrop-blur-3xl'
+                        className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full h-fit mx-auto text-left shadow-2xl backdrop-blur-3xl'
                     >
+                        {isDismissable && (
+                            <div className={'w-8 h-8 absolute top-4 right-4'} onClick={() => setRender(false)}>
+                                <svg
+                                    xmlns={'http://www.w3.org/2000/svg'}
+                                    fill={'none'}
+                                    viewBox={'0 0 24 24'}
+                                    stroke={'currentColor'}
+                                >
+                                    <path
+                                        strokeLinecap={'round'}
+                                        strokeLinejoin={'round'}
+                                        strokeWidth={'2'}
+                                        d={'M6 18L18 6M6 6l12 12'}
+                                    />
+                                </svg>
+                            </div>
+                        )}
                         {children}
                     </div>
                 </div>
