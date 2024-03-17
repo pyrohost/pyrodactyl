@@ -43,7 +43,7 @@ export default () => {
     }, []);
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
-        return <Spinner size={'large'} centered />;
+        return null;
     }
 
     return (
