@@ -90,7 +90,8 @@ export default () => {
         if (pathname.endsWith(`/server/${id}/databases`)) return '14.5rem';
         if (pathname.endsWith(`/server/${id}/backups`)) return '18rem';
         if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
-        if (pathname.endsWith(`/server/${id}/settings`)) return '25rem';
+        if (pathname.endsWith(`/server/${id}/users`)) return '25rem';
+        if (pathname.endsWith(`/server/${id}/settings`)) return '28.5rem';
         return '0';
     };
 
