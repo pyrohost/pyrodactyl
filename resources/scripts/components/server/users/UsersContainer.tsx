@@ -49,16 +49,30 @@ export default () => {
     return (
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} className={`mb-4`} />
+            <div className={'flex flex-row justify-between items-center mb-8'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+                <Can action={'user.create'}>
+                    <AddSubuserButton />
+                </Can>
+            </div>
             {!subusers.length ? (
                 <p className={`text-center text-sm text-zinc-300`}>It looks like you don&apos;t have any subusers.</p>
             ) : (
-                subusers.map((subuser) => <UserRow key={subuser.uuid} subuser={subuser} />)
-            )}
-            <Can action={'user.create'}>
-                <div className={`flex justify-end mt-6`}>
-                    <AddSubuserButton />
+                <div
+                    data-pyro-users-container-users
+                    style={{
+                        background:
+                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                    }}
+                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                >
+                    <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
+                        {subusers.map((subuser) => (
+                            <UserRow key={subuser.uuid} subuser={subuser} />
+                        ))}
+                    </div>
                 </div>
-            </Can>
+            )}
         </ServerContentBlock>
     );
 };

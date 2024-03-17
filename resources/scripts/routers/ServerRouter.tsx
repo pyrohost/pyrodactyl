@@ -31,6 +31,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
+import HugeIconsPeople from '@/components/elements/hugeicons/People';
 
 export default () => {
     const params = useParams<'id'>();
@@ -89,7 +90,8 @@ export default () => {
         if (pathname.endsWith(`/server/${id}/databases`)) return '14.5rem';
         if (pathname.endsWith(`/server/${id}/backups`)) return '18rem';
         if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
-        if (pathname.endsWith(`/server/${id}/settings`)) return '25rem';
+        if (pathname.endsWith(`/server/${id}/users`)) return '25rem';
+        if (pathname.endsWith(`/server/${id}/settings`)) return '28.5rem';
         return '0';
     };
 
@@ -187,6 +189,12 @@ export default () => {
                                 <NavLink className='flex flex-row items-center' to={`/server/${id}/network`} end>
                                     <HugeIconsConnections fill='currentColor' />
                                     <p>Networking</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'user.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/users`} end>
+                                    <HugeIconsPeople fill='currentColor' />
+                                    <p>Users</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
