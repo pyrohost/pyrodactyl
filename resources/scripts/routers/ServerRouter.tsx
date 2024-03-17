@@ -31,6 +31,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
+import HugeIconsPeople from '@/components/elements/hugeicons/People';
 
 export default () => {
     const params = useParams<'id'>();
@@ -187,6 +188,12 @@ export default () => {
                                 <NavLink className='flex flex-row items-center' to={`/server/${id}/network`} end>
                                     <HugeIconsConnections fill='currentColor' />
                                     <p>Networking</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'user.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/users`} end>
+                                    <HugeIconsPeople fill='currentColor' />
+                                    <p>Users</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
