@@ -94,7 +94,7 @@ const Modal: React.FC<ModalProps> = ({
     return (
         <FadeTransition as={Fragment} show={render} duration='duration-150' appear={appear ?? true} unmount>
             <div
-                className='fixed z-[9997] overflow-hidden flex w-full inset-0 backdrop-blur-sm overflow-y-scroll py-6'
+                className='fixed z-[9997] overflow-hidden flex w-full inset-0 backdrop-blur-sm overflow-y-scroll'
                 style={{
                     background: 'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
                 }}
@@ -109,15 +109,15 @@ const Modal: React.FC<ModalProps> = ({
                     }
                 }}
             >
-                <div className='max-w-2xl mx-auto'>
-                    {showSpinnerOverlay && (
-                        <div
-                            className={`absolute w-full h-full rounded flex items-center justify-center`}
-                            style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
-                        >
-                            <Spinner />
-                        </div>
-                    )}
+                {showSpinnerOverlay && (
+                    <div
+                        className={`absolute w-full h-full rounded flex items-center justify-center`}
+                        style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
+                    >
+                        <Spinner />
+                    </div>
+                )}
+                <div className='max-w-2xl mx-auto py-6'>
                     <div
                         style={{
                             background:
