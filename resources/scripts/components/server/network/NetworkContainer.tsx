@@ -9,6 +9,7 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import getServerAllocations from '@/api/swr/getServerAllocations';
 import isEqual from 'react-fast-compare';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
+import { For } from 'million/react';
 
 const NetworkContainer = () => {
     const [loading, setLoading] = useState(false);
@@ -85,9 +86,28 @@ const NetworkContainer = () => {
                 <></>
             ) : (
                 <>
-                    {data.map((allocation) => (
-                        <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
-                    ))}
+                    <div
+                        data-pyro-network-container-allocations
+                        style={{
+                            background:
+                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                        }}
+                        className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                    >
+                        <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
+                            {/* {data.map((allocation) => (
+                                <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
+                            ))} */}
+                            <For each={data} memo>
+                                {(allocation) => (
+                                    <AllocationRow
+                                        key={`${allocation.ip}:${allocation.port}`}
+                                        allocation={allocation}
+                                    />
+                                )}
+                            </For>
+                        </div>
+                    </div>
                 </>
             )}
         </ServerContentBlock>

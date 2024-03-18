@@ -52,7 +52,11 @@ const AllocationRow = ({ allocation }: Props) => {
     };
 
     return (
-        <div className={'flex bg-[#ffffff11] px-6 py-4 rounded-md items-center'}>
+        <div
+            className={
+                'flex rounded-sm p-1 transition bg-[#ffffff08] border-[1px] border-[#ffffff07] px-6 py-4 items-center'
+            }
+        >
             <div className={'flex items-center w-full md:w-auto'}>
                 <div className={'mr-4 flex-1 md:w-40'}>
                     {allocation.alias ? (
@@ -84,7 +88,7 @@ const AllocationRow = ({ allocation }: Props) => {
             <div className={'mt-4 w-full md:mt-0 md:flex-1 md:w-auto'}>
                 <InputSpinner visible={loading}>
                     <Textarea
-                        className={'bg-zinc-800 hover:border-zinc-600 border-transparent'}
+                        className={'bg-transparent p-4 rounded-xl w-full'}
                         placeholder={'Notes'}
                         defaultValue={allocation.notes || undefined}
                         onChange={(e) => setAllocationNotes(e.currentTarget.value)}
