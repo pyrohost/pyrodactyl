@@ -36,7 +36,7 @@ const ServerConsoleContainer = () => {
                 )}
                 <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
                     <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
-                    <PowerButtons className='flex gap-1 items-center justify-center' />
+                    <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
                 </div>
                 <ServerDetailsBlock />
                 <Console />
