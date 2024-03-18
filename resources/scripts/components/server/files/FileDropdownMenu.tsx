@@ -131,7 +131,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onClick={doCopy}>
                             <HugeIconsCopy className='!h-4 !w-4' fill='currentColor' />
-                            <span>Copy</span>
+                            <span>Duplicate</span>
                         </ContextMenuItem>
                     </Can>
                 )}
