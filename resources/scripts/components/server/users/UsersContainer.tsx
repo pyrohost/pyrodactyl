@@ -10,6 +10,7 @@ import getServerSubusers from '@/api/server/users/getServerSubusers';
 import { httpErrorToHuman } from '@/api/http';
 import Can from '@/components/elements/Can';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { For } from 'million/react';
 
 export default () => {
     const [loading, setLoading] = useState(true);
@@ -67,9 +68,12 @@ export default () => {
                     className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                 >
                     <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                        {subusers.map((subuser) => (
+                        {/* {subusers.map((subuser) => (
                             <UserRow key={subuser.uuid} subuser={subuser} />
-                        ))}
+                        ))} */}
+                        <For each={subusers} memo>
+                            {(subuser) => <UserRow key={subuser.uuid} subuser={subuser} />}
+                        </For>
                     </div>
                 </div>
             )}
