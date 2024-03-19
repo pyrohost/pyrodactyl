@@ -1,17 +1,14 @@
 import { ServerContext } from '@/state/server';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Field as FormikField, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { toast } from 'sonner';
 import { Actions, useStoreActions } from 'easy-peasy';
 import renameServer from '@/api/server/renameServer';
 import Field from '@/components/elements/Field';
 import { object, string } from 'yup';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { ApplicationStore } from '@/state';
 import { httpErrorToHuman } from '@/api/http';
 import { Button } from '@/components/elements/button/index';
-import Label from '@/components/elements/Label';
-import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import { Textarea } from '@/components/elements/Input';
 
 interface Values {
     name: string;
@@ -19,19 +16,11 @@ interface Values {
 }
 
 const RenameServerBox = () => {
-    const { isSubmitting } = useFormikContext<Values>();
-
     return (
-        <TitledGreyBox title={'Change Server Details'}>
-            <SpinnerOverlay visible={isSubmitting} />
-            <Form>
+        <TitledGreyBox title={'Server Details'}>
+            <Form className='flex flex-col gap-4'>
                 <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <div className={`mt-6`}>
-                    <Label>Server Description</Label>
-                    <FormikFieldWrapper name={'description'}>
-                        <FormikField as={Textarea} name={'description'} rows={3} />
-                    </FormikFieldWrapper>
-                </div>
+                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
                 <div className={`mt-6 text-right`}>
                     <Button type={'submit'}>Save</Button>
                 </div>
@@ -45,15 +34,16 @@ export default () => {
     const setServer = ServerContext.useStoreActions((actions) => actions.server.setServer);
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
-    const submit = ({ name, description }: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const submit = ({ name, description }: Values) => {
         clearFlashes('settings');
+        toast('Updating server details...');
         renameServer(server.uuid, name, description)
             .then(() => setServer({ ...server, name, description }))
             .catch((error) => {
                 console.error(error);
                 addError({ key: 'settings', message: httpErrorToHuman(error) });
             })
-            .then(() => setSubmitting(false));
+            .then(() => toast.success('Server details updated!'));
     };
 
     return (

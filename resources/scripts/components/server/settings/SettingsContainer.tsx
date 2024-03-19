@@ -10,6 +10,7 @@ import isEqual from 'react-fast-compare';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { ip } from '@/lib/formatters';
 import { Button } from '@/components/elements/button/index';
+import RenameServerBox from './RenameServerBox';
 
 export default () => {
     const username = useStoreState((state) => state.user.data!.username);
@@ -24,11 +25,11 @@ export default () => {
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Settings</h1>
             </div>
             <FlashMessageRender byKey={'settings'} className={`mb-4`} />
-            {/* <Can action={'settings.rename'}>
-                    <div className={`mb-6 md:mb-10`}>
-                        <RenameServerBox />
-                    </div>
-                </Can> */}
+            <Can action={'settings.rename'}>
+                <div className={`mb-6 md:mb-10`}>
+                    <RenameServerBox />
+                </div>
+            </Can>
             <div className='w-full h-full flex flex-col gap-8'>
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />
