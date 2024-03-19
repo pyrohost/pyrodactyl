@@ -4,7 +4,6 @@ import InputSpinner from '@/components/elements/InputSpinner';
 import { Textarea } from '@/components/elements/Input';
 import Can from '@/components/elements/Can';
 import { Button } from '@/components/elements/button/index';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 import { Allocation } from '@/api/server/getServer';
 import debounce from 'debounce';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
