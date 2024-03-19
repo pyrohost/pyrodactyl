@@ -4,7 +4,6 @@ import { ServerContext } from '@/state/server';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
 import { Dialog } from '@/components/elements/dialog';
 import { toast } from 'sonner';
-import clsx from 'clsx';
 
 interface PowerButtonProps {
     className?: string;
