@@ -34,7 +34,7 @@
         "easy-peasy": "^6.0.4",
         "events": "^3.0.0",
         "formik": "^2.4.5",
-        "framer-motion": "^11.0.8",
+        "framer-motion": "^11.0.15",
         "laravel-vite-plugin": "^1.0.2",
         "million": "^3.0.6",
         "pathe": "^1.1.2",
