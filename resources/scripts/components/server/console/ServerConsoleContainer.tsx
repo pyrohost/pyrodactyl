@@ -16,6 +16,7 @@ export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
+    const status = ServerContext.useStoreState((state) => state.status.value);
     const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
@@ -37,7 +38,7 @@ const ServerConsoleContainer = () => {
                 <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
                     <div className='flex items-center'>
                         <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
-                        
+                        <h2>{status === 'offline' ? 'Offline' : status === 'running' ? 'Online' : 'Starting'}</h2>
                     </div>
                     <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
                 </div>
