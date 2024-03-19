@@ -16,7 +16,7 @@ export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
-    // const description = ServerContext.useStoreState((state) => state.server.data!.description);
+    const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
@@ -35,9 +35,13 @@ const ServerConsoleContainer = () => {
                     </Alert>
                 )}
                 <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
-                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
+                    <div className='flex items-center'>
+                        <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
+                        
+                    </div>
                     <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
                 </div>
+                <p>{description}</p>
                 <ServerDetailsBlock />
                 <Console />
                 <div className={'grid grid-cols-1 md:grid-cols-3 gap-4'}>
