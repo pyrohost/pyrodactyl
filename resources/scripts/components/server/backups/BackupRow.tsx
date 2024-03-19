@@ -77,12 +77,14 @@ export default ({ backup, className }: Props) => {
                             <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>{backup.checksum}</p>
                         </div>
                     </div>
-                    <div className={`flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                    <div
+                        className={`w-1/6 justify-end flex flex-1 md:flex-none md:w-48 mt-4 md:mt-0 md:ml-8 md:text-center`}
+                    >
                         {backup.completedAt !== null && backup.isSuccessful && (
                             <span className={`text-xs hidden sm:inline`}>{bytesToString(backup.bytes)}</span>
                         )}
                     </div>
-                    <div className={`flex flex-1 md:flex-none mt-4 md:mt-0 md:ml-8 md:text-center`}>
+                    <div className={`w-1/5 justify-end flex flex-1 md:flex-none mt-4 md:mt-0 md:ml-8 md:text-center`}>
                         <p title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')} className={`text-xs`}>
                             {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
                         </p>
