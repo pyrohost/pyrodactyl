@@ -32,6 +32,7 @@ import {
 import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
 import HugeIconsPeople from '@/components/elements/hugeicons/People';
+import HugeIconsConsole from '@/components/elements/hugeicons/Console';
 
 export default () => {
     const params = useParams<'id'>();
@@ -195,6 +196,12 @@ export default () => {
                                 <NavLink className='flex flex-row items-center' to={`/server/${id}/users`} end>
                                     <HugeIconsPeople fill='currentColor' />
                                     <p>Users</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'startup.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/startup`} end>
+                                    <HugeIconsConsole fill='currentColor' />
+                                    <p>Startup</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
