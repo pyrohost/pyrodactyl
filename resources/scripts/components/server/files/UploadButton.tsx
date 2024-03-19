@@ -28,8 +28,8 @@ export default () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const { clearFileUploads, appendFileUpload, removeFileUpload } = ServerContext.useStoreActions(
-        (actions) => actions.files
+    const { clearFileUploads, removeFileUpload, pushFileUpload } = ServerContext.useStoreActions(
+        (actions) => actions.files,
     );
 
     useEventListener(
@@ -41,7 +41,7 @@ export default () => {
                 return setVisible(true);
             }
         },
-        { capture: true }
+        { capture: true },
     );
 
     useEventListener('dragexit', () => setVisible(false), { capture: true });
@@ -54,14 +54,6 @@ export default () => {
         return () => timeouts.forEach(clearTimeout);
     }, []);
 
-    const onUploadProgress = (data: ProgressEvent, name: string) => {
-        appendFileUpload({ name, loaded: data.loaded, total: data.total });
-        if (data.loaded >= data.total) {
-            const timeout = setTimeout(() => removeFileUpload(name), 500);
-            setTimeouts((t) => [...t, timeout]);
-        }
-    };
-
     const onFileSubmission = (files: FileList) => {
         clearAndAddHttpError();
         const list = Array.from(files);
@@ -69,25 +61,26 @@ export default () => {
             return addError('Folder uploads are not supported at this time.', 'Error');
         }
 
-        if (!list.length) {
-            return;
-        }
-
         const uploads = list.map((file) => {
-            appendFileUpload({ name: file.name, loaded: 0, total: file.size });
+            const controller = new AbortController();
+            pushFileUpload({
+                name: file.name,
+                data: { abort: controller, loaded: 0, total: file.size },
+            });
+
             return () =>
                 getFileUploadUrl(uuid).then((url) =>
-                    axios.post(
-                        url,
-                        { files: file },
-                        {
-                            headers: { 'Content-Type': 'multipart/form-data' },
-                            params: { directory },
-                            onUploadProgress: (data) => {
-                                onUploadProgress(data, file.name);
+                    axios
+                        .post(
+                            url,
+                            { files: file },
+                            {
+                                signal: controller.signal,
+                                headers: { 'Content-Type': 'multipart/form-data' },
+                                params: { directory },
                             },
-                        }
-                    )
+                        )
+                        .then(() => timeouts.push(setTimeout(() => removeFileUpload(file.name), 500))),
                 );
         });
 
