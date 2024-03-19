@@ -7,7 +7,7 @@
     "type": "module",
     "dependencies": {
         "@headlessui/react": "^1.7.18",
-        "@preact/signals-react": "^2.0.0",
+        "@preact/signals-react": "^2.0.1",
         "@radix-ui/react-checkbox": "^1.0.4",
         "@radix-ui/react-context-menu": "^2.1.5",
         "@radix-ui/react-dropdown-menu": "^2.0.6",
