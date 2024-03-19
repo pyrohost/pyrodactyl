@@ -97,9 +97,7 @@ const AllocationRow = ({ allocation }: Props) => {
             </div>
             <div className={'flex justify-end space-x-4 mt-4 w-full md:mt-0 md:w-48'}>
                 {allocation.isDefault ? (
-                    <Button size={Button.Sizes.Small} className={'!text-zinc-50 !bg-blue-600'} disabled>
-                        Primary
-                    </Button>
+                    <p>Primary Port</p>
                 ) : (
                     <>
                         <Can action={'allocation.delete'}>
