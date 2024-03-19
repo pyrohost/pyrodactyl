@@ -137,7 +137,10 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'} />
+                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'}>
+                            <HugeIconsFileZip className='!h-4 !w-4' fill='currentColor' />
+                            <span>Unarchive</span>
+                        </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
