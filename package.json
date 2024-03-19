@@ -82,7 +82,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-react": "^7.30.1",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "postcss": "^8.4.35",
+        "postcss": "^8.4.37",
         "postcss-import": "^16.0.1",
         "postcss-nesting": "^12.1.0",
         "postcss-preset-env": "^9.5.0",
