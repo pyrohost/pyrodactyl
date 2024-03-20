@@ -35,7 +35,10 @@ export default () => {
                     </p>
                     <div className='flex flex-col gap-4'>
                         <Code>{import.meta.env.VITE_PYRODACTYL_VERSION}</Code>
-                        <Code>Commit {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
+                        <Code>
+                            Build {import.meta.env.VITE_PYRODACTYL_BUILD_NUMBER}, Commit{' '}
+                            {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}
+                        </Code>
                     </div>
                 </ContentBox>
             </div>

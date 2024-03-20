@@ -54,6 +54,7 @@ export default defineConfig({
         'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
         'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
         'import.meta.env.VITE_BRANCH_NAME': JSON.stringify(branchName),
+        'import.meta.env.VITE_PYRODACTYL_BUILD_NUMBER': JSON.stringify(packageJson.buildNumber),
         'process.env': {},
         'process.platform': null,
         'process.version': null,
