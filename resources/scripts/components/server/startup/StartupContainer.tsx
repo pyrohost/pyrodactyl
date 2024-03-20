@@ -22,6 +22,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
+import CopyOnClick from '@/components/elements/CopyOnClick';
 
 const StartupContainer = () => {
     const [loading, setLoading] = useState(false);
@@ -100,9 +101,11 @@ const StartupContainer = () => {
             </h2>
             <div className={`flex flex-col gap-8`}>
                 <TitledGreyBox title={'Startup Command'} className={`flex-1`}>
-                    <div className={`px-1 py-2`}>
-                        <p className={`font-mono bg-zinc-900 rounded py-2 px-4`}>{data.invocation}</p>
-                    </div>
+                    <CopyOnClick text={data.invocation}>
+                        <div className={`px-1 py-2`}>
+                            <p className={`font-mono bg-zinc-900 rounded py-2 px-4`}>{data.invocation}</p>
+                        </div>
+                    </CopyOnClick>
                 </TitledGreyBox>
                 <TitledGreyBox title={'Docker Image'} className={`flex-1 lg:flex-none lg:w-1/3 mt-8 md:mt-0 md:ml-10`}>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
