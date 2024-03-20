@@ -93,7 +93,8 @@ export default () => {
         if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
         if (pathname.endsWith(`/server/${id}/users`)) return '25rem';
         if (pathname.endsWith(`/server/${id}/startup`)) return '28.5rem';
-        if (pathname.endsWith(`/server/${id}/settings`)) return '32rem';
+        if (pathname.endsWith(`/server/${id}/schedules`)) return '32rem';
+        if (pathname.endsWith(`/server/${id}/settings`)) return '35.5rem';
         return '0';
     };
 
@@ -203,6 +204,12 @@ export default () => {
                                 <NavLink className='flex flex-row items-center' to={`/server/${id}/startup`} end>
                                     <HugeIconsConsole fill='currentColor' />
                                     <p>Startup</p>
+                                </NavLink>
+                            </Can>
+                            <Can action={'schedule.*'} matchAny>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/schedules`} end>
+                                    <HugeIconsDashboardSettings fill='currentColor' />
+                                    <p>Schedules</p>
                                 </NavLink>
                             </Can>
                             <Can action={['settings.*', 'file.sftp']} matchAny>
