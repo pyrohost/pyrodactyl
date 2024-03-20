@@ -125,10 +125,20 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             <Label>Action</Label>
                             <ActionListener />
                             <FormikFieldWrapper name={'action'}>
-                                <FormikField as={Select} name={'action'}>
-                                    <option value={'command'}>Send command</option>
-                                    <option value={'power'}>Send power action</option>
-                                    <option value={'backup'}>Create backup</option>
+                                <FormikField
+                                    className='px-4 py-2 bg-[#ffffff11] rounded-sm'
+                                    as={Select}
+                                    name={'action'}
+                                >
+                                    <option className='bg-black' value={'command'}>
+                                        Send command
+                                    </option>
+                                    <option className='bg-black' value={'power'}>
+                                        Send power action
+                                    </option>
+                                    <option className='bg-black' value={'backup'}>
+                                        Create backup
+                                    </option>
                                 </FormikField>
                             </FormikFieldWrapper>
                         </div>
@@ -147,18 +157,35 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             <div>
                                 <Label>Payload</Label>
                                 <FormikFieldWrapper name={'payload'}>
-                                    <FormikField as={Textarea} name={'payload'} rows={6} />
+                                    <FormikField
+                                        className='w-full rounded-2xl p-2 bg-[#ffffff11]'
+                                        as={Textarea}
+                                        name={'payload'}
+                                        rows={6}
+                                    />
                                 </FormikFieldWrapper>
                             </div>
                         ) : values.action === 'power' ? (
                             <div>
                                 <Label>Payload</Label>
                                 <FormikFieldWrapper name={'payload'}>
-                                    <FormikField as={Select} name={'payload'}>
-                                        <option value={'start'}>Start the server</option>
-                                        <option value={'restart'}>Restart the server</option>
-                                        <option value={'stop'}>Stop the server</option>
-                                        <option value={'kill'}>Terminate the server</option>
+                                    <FormikField
+                                        className='px-4 py-2 bg-[#ffffff11] rounded-sm'
+                                        as={Select}
+                                        name={'payload'}
+                                    >
+                                        <option className='bg-black' value={'start'}>
+                                            Start the server
+                                        </option>
+                                        <option className='bg-black' value={'restart'}>
+                                            Restart the server
+                                        </option>
+                                        <option className='bg-black' value={'stop'}>
+                                            Stop the server
+                                        </option>
+                                        <option className='bg-black' value={'kill'}>
+                                            Terminate the server
+                                        </option>
                                     </FormikField>
                                 </FormikFieldWrapper>
                             </div>
@@ -171,7 +198,12 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                         'Optional. Include the files and folders to be excluded in this backup. By default, the contents of your .pteroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
                                     }
                                 >
-                                    <FormikField as={Textarea} name={'payload'} rows={6} />
+                                    <FormikField
+                                        className='w-full rounded-2xl p-2 bg-[#ffffff11]'
+                                        as={Textarea}
+                                        name={'payload'}
+                                        rows={6}
+                                    />
                                 </FormikFieldWrapper>
                             </div>
                         )}
