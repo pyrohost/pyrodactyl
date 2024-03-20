@@ -11,7 +11,7 @@ import useFlash from '@/plugins/useFlash';
 import GreyRowBox from '@/components/elements/GreyRowBox';
 import { Button } from '@/components/elements/button/index';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function ScheduleContainer() {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -37,35 +37,50 @@ function ScheduleContainer() {
     return (
         <ServerContentBlock title={'Schedules'}>
             <FlashMessageRender byKey={'schedules'} />
+            <div className={'flex flex-row justify-between items-center mb-8'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Schedules</h1>
+                <Can action={'schedule.create'}>
+                    <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
+                    <button
+                        style={{
+                            background:
+                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                        }}
+                        className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
+                        onClick={() => setVisible(true)}
+                    >
+                        New Schedule
+                    </button>
+                </Can>
+            </div>
             {!schedules.length && loading ? (
-                <Spinner size={'large'} centered />
+                <></>
             ) : (
                 <>
-                    {schedules.length === 0 ? (
-                        <p className={`text-sm text-center text-neutral-300`}>
-                            There are no schedules configured for this server.
-                        </p>
-                    ) : (
-                        schedules.map((schedule) => (
-                            // @ts-expect-error
-                            <GreyRowBox
-                                key={schedule.id}
-                                as={Link}
-                                to={schedule.id}
-                                // className={`cursor-pointer mb-2 flex-wrap`}
-                            >
-                                <ScheduleRow schedule={schedule} />
-                            </GreyRowBox>
-                        ))
-                    )}
-                    <Can action={'schedule.create'}>
-                        <div className={`mt-8 flex justify-end`}>
-                            <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
-                            <Button type={'button'} onClick={() => setVisible(true)}>
-                                Create schedule
-                            </Button>
+                    <div
+                        data-pyro-backups
+                        style={{
+                            background:
+                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                        }}
+                        className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                    >
+                        <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
+                            {schedules.length === 0 ? (
+                                <p className={`text-sm text-center text-neutral-300`}>
+                                    There are no schedules configured for this server.
+                                </p>
+                            ) : (
+                                schedules.map((schedule) => (
+                                    <NavLink key={schedule.id} to={`${schedule.id}`} end>
+                                        <div className='flex bg-[#ffffff11] hover:bg-[#ffffff19] transition duration-100 hover:duration-0 px-6 py-4 rounded-md items-center'>
+                                            <ScheduleRow schedule={schedule} />
+                                        </div>
+                                    </NavLink>
+                                ))
+                            )}
                         </div>
-                    </Can>
+                    </div>
                 </>
             )}
         </ServerContentBlock>
