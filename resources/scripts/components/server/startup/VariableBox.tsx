@@ -38,11 +38,11 @@ const VariableBox = ({ variable }: Props) => {
                         ...data!,
                         invocation,
                         variables: (data!.variables || []).map((v) =>
-                            v.envVariable === response.envVariable ? response : v
+                            v.envVariable === response.envVariable ? response : v,
                         ),
                     }),
-                    false
-                )
+                    false,
+                ),
             )
             .catch((error) => {
                 console.error(error);
@@ -52,23 +52,20 @@ const VariableBox = ({ variable }: Props) => {
     }, 500);
 
     const useSwitch = variable.rules.some(
-        (v) => v === 'boolean' || v === 'in:0,1' || v === 'in:1,0' || v === 'in:true,false' || v === 'in:false,true'
+        (v) => v === 'boolean' || v === 'in:0,1' || v === 'in:1,0' || v === 'in:true,false' || v === 'in:false,true',
     );
     const isStringSwitch = variable.rules.some((v) => v === 'string');
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <TitledGreyBox
-            title={
-                <p className={`text-sm uppercase`}>
-                    {!variable.isEditable && (
-                        <span className={`bg-neutral-700 text-xs py-1 px-2 rounded-full mr-2 mb-1`}>Read Only</span>
-                    )}
-                    {variable.name}
-                </p>
-            }
-        >
+        <TitledGreyBox>
             <FlashMessageRender byKey={FLASH_KEY} className={`mb-2 md:mb-4`} />
+            <div className={`text-sm mb-2`}>
+                {!variable.isEditable && (
+                    <span className={`bg-neutral-700 text-xs py-1 px-2 rounded-full mr-2 mb-1`}>Read Only</span>
+                )}
+                {variable.name}
+            </div>
             <InputSpinner visible={loading}>
                 {useSwitch ? (
                     <>
@@ -111,7 +108,8 @@ const VariableBox = ({ variable }: Props) => {
                             </>
                         ) : (
                             <>
-                                <Input
+                                <input
+                                    className='px-4 py-2 rounded-lg outline-none bg-[#ffffff17] text-sm w-full'
                                     onKeyUp={(e) => {
                                         if (canEdit && variable.isEditable) {
                                             setVariableValue(e.currentTarget.value);
