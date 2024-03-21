@@ -38,16 +38,16 @@ export default createGlobalStyle`
     /* Scroll Bar Style */
     ::-webkit-scrollbar {
         background: none;
-        width: 16px;
+        width: 12px;
         height: 16px;
     }
 
     ::-webkit-scrollbar-thumb {
         border: solid 0 rgb(0 0 0 / 0%);
-        border-right-width: 4px;
-        border-left-width: 4px;
+        border-right-width: 3px;
+        border-left-width: 3px;
         -webkit-border-radius: 9px 4px;
-        -webkit-box-shadow: inset 0 0 0 1px hsl(211, 10%, 53%), inset 0 0 0 4px hsl(209deg 18% 30%);
+        -webkit-box-shadow: inset 0 0 0 3px hsl(0deg 0% 30%);
     }
 
     ::-webkit-scrollbar-track-piece {
