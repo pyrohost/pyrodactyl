@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { httpErrorToHuman } from '@/api/http';
 import { For } from 'million/react';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
@@ -20,6 +20,7 @@ import { Checkbox } from '@/components/elements/CheckboxNew';
 import { hashToPath } from '@/helpers';
 // import style from './style.module.css';
 import NewFileButton from './NewFileButton';
+import debounce from 'debounce';
 
 const sortFiles = (files: FileObject[]): FileObject[] => {
     const sortedFiles: FileObject[] = files
@@ -58,6 +59,13 @@ export default () => {
                 : files?.map((file) => file.name) || [],
         );
     };
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearchTerm = debounce(setSearchTerm, 50);
+
+    useEffect(() => {
+        setSearchTerm('');
+    }, [location]);
 
     if (error) {
         return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
@@ -116,7 +124,30 @@ export default () => {
                                 className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                             >
                                 <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                    <For each={filesArray} memo>
+                                    <div className='relative w-full h-full'>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            strokeWidth={1.5}
+                                            stroke='currentColor'
+                                            className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-5'
+                                        >
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+                                            />
+                                        </svg>
+
+                                        <input
+                                            className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
+                                            type='text'
+                                            placeholder='Search'
+                                            onChange={(event) => debouncedSearchTerm(event.target.value)}
+                                        />
+                                    </div>
+                                    <For each={filesArray.filter((file) => file.name.includes(searchTerm))} memo>
                                         {(file) => <FileObjectRow key={file.key} file={file} />}
                                     </For>
                                 </div>
