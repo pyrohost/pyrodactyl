@@ -16,12 +16,8 @@ import { hexToRgba } from '@/lib/helpers';
 ChartJS.register(LineElement, PointElement, Filler, LinearScale);
 
 const options: ChartOptions<'line'> = {
-    responsive: true,
+    maintainAspectRatio: false,
     animation: false,
-    // animation: {
-    //     duration: 50,
-    //     easing: 'easeInOutQuart',
-    // },
     plugins: {
         legend: { display: false },
         title: { display: false },
@@ -37,7 +33,6 @@ const options: ChartOptions<'line'> = {
             type: 'linear',
             grid: {
                 display: false,
-                drawBorder: false,
             },
             ticks: {
                 display: false,
@@ -48,14 +43,13 @@ const options: ChartOptions<'line'> = {
             type: 'linear',
             grid: {
                 display: false,
-                drawBorder: false,
             },
             ticks: {
                 display: true,
                 count: 3,
                 font: {
                     size: 11,
-                    weight: '400',
+                    weight: 400,
                 },
             },
         },
@@ -95,8 +89,8 @@ function getEmptyData(label: string, sets = 1, callback?: ChartDatasetCallback |
                         borderColor: '#fa4e49',
                         backgroundColor: hexToRgba('#fa4e49', 0.09),
                     },
-                    index
-                )
+                    index,
+                ),
             ),
     };
 }
@@ -111,7 +105,7 @@ interface UseChartOptions {
 
 function useChart(label: string, opts?: UseChartOptions) {
     const options = getOptions(
-        typeof opts?.options === 'number' ? { scales: { y: { min: 0, suggestedMax: opts.options } } } : opts?.options
+        typeof opts?.options === 'number' ? { scales: { y: { min: 0, suggestedMax: opts.options } } } : opts?.options,
     );
     const [data, setData] = useState(getEmptyData(label, opts?.sets || 1, opts?.callback));
 
@@ -125,7 +119,7 @@ function useChart(label: string, opts?: UseChartOptions) {
                             ?.slice(1)
                             ?.concat(typeof item === 'number' ? Number(item.toFixed(2)) : item) ?? [],
                 })),
-            })
+            }),
         );
 
     const clear = () =>
@@ -135,7 +129,7 @@ function useChart(label: string, opts?: UseChartOptions) {
                     ...value,
                     data: Array(20).fill(-5),
                 })),
-            })
+            }),
         );
 
     return { props: { data, options }, push, clear };
