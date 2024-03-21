@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html data-pyro-html lang="en" style="background-color: #000000">
+<!-- Copyright (c) Pyro Inc. and parent collaborators -->
+<!-- SPDX-License-Identifier: BUSL-1.1 -->
+<html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%;">
     <head>
         <title>{{ config('app.name', 'pyro.host') }}</title>
 
@@ -36,7 +38,7 @@
         @viteReactRefresh
         @vite('resources/scripts/index.tsx')
     </head>
-    <body data-pyro-body class="{{ $css['body'] ?? 'bg-zinc-50' }}">
+    <body data-pyro-body class="{{ $css['body'] }}" style="background-color: #000000; height: 100%; width: 100%;">
         @section('content')
             @yield('above-container')
             @yield('container')
