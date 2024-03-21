@@ -33,6 +33,7 @@ import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
 import HugeIconsPeople from '@/components/elements/hugeicons/People';
 import HugeIconsConsole from '@/components/elements/hugeicons/Console';
+import HugeIconsClock from '@/components/elements/hugeicons/Clock';
 
 export default () => {
     const params = useParams<'id'>();
@@ -208,7 +209,7 @@ export default () => {
                             </Can>
                             <Can action={'schedule.*'} matchAny>
                                 <NavLink className='flex flex-row items-center' to={`/server/${id}/schedules`} end>
-                                    <HugeIconsDashboardSettings fill='currentColor' />
+                                    <HugeIconsClock fill='currentColor' />
                                     <p>Schedules</p>
                                 </NavLink>
                             </Can>
