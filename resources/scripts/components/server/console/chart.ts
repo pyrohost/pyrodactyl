@@ -49,7 +49,7 @@ const options: ChartOptions<'line'> = {
                 count: 3,
                 font: {
                     size: 11,
-                    weight: 400,
+                    weight: 600,
                 },
             },
         },

@@ -38,7 +38,7 @@ export default createGlobalStyle`
     /* Scroll Bar Style */
     ::-webkit-scrollbar {
         background: none;
-        width: 12px;
+        width: 10px;
         height: 16px;
     }
 
