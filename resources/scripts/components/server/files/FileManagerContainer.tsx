@@ -147,7 +147,12 @@ export default () => {
                                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                                         />
                                     </div>
-                                    <For each={filesArray.filter((file) => file.name.includes(searchTerm))} memo>
+                                    <For
+                                        each={filesArray.filter((file) =>
+                                            file.name.toLowerCase().includes(searchTerm.toLowerCase()),
+                                        )}
+                                        memo
+                                    >
                                         {(file) => <FileObjectRow key={file.key} file={file} />}
                                     </For>
                                 </div>
