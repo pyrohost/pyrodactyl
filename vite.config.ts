@@ -1,14 +1,16 @@
+import { defineConfig } from 'vite';
+import { splitVendorChunkPlugin } from 'vite';
+import manifestSRI from 'vite-plugin-manifest-sri';
+
+import million from 'million/compiler';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
+
+import packageJson from './package.json';
 import { dirname, resolve } from 'pathe';
 import { fileURLToPath } from 'node:url';
-import manifestSRI from 'vite-plugin-manifest-sri';
-import { splitVendorChunkPlugin } from 'vite';
-import { defineConfig } from 'vite';
-import packageJson from './package.json';
 import * as child from 'child_process';
-import million from 'million/compiler';
 
 let branchName;
 let commitHash;
@@ -50,6 +52,10 @@ export default defineConfig({
         sourcemap: true,
     },
 
+    css: {
+        preprocessorMaxWorkers: true,
+    },
+
     define: {
         'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
         'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
@@ -59,6 +65,10 @@ export default defineConfig({
         'process.platform': null,
         'process.version': null,
         'process.versions': null,
+    },
+
+    optimizeDeps: {
+        holdUntilCrawlEnd: true,
     },
 
     plugins: [
