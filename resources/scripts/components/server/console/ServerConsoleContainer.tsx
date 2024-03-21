@@ -76,7 +76,7 @@ const ServerConsoleContainer = () => {
                     </div>
                     <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
                 </div>
-                {description !== '' && (
+                {description && (
                     <h2 className='text-sm -mt-8'>
                         <span className='opacity-50'>Description: </span>
                         {description}
