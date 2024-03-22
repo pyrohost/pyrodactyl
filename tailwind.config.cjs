@@ -8,7 +8,7 @@ delete colors['coolGray'];
 delete colors['blueGray'];
 
 module.exports = {
-    content: ['./resources/scripts/**/*.{js,ts,tsx}'],
+    content: ['./resources/views/**/*.blade.php', './resources/scripts/**/*.{js,ts,tsx}'],
     theme: {
         extend: {
             fontFamily: {
