@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl",
     "version": "1.0.1-rc1",
-    "buildNumber": "101100",
+    "buildNumber": "101102",
     "engines": {
         "node": ">=20.0"
     },
@@ -47,7 +47,7 @@
         "react-router-dom": "^6.22.3",
         "reaptcha": "^1.12.1",
         "sockette": "^2.0.6",
-        "sonner": "^1.4.3",
+        "sonner": "^1.4.41",
         "styled-components": "^6.1.8",
         "swr": "^2.2.5",
         "tailwind-merge": "^2.2.2",
