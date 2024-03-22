@@ -32,7 +32,7 @@ const MainSidebar = styled.nav`
             -ms-user-drag: none;
             -moz-user-drag: none;
             -webkit-user-drag: none;
-            transition: 80ms all ease-in-out;
+            transition: 200ms all ease-in-out;
 
             &.active {
                 color: #fa4e49;
