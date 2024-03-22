@@ -1,7 +1,6 @@
 import { Command } from 'cmdk';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './styles.module.css';
 import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
 import { toast } from 'sonner';

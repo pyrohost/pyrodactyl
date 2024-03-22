@@ -52,9 +52,9 @@ export default defineConfig({
         sourcemap: true,
     },
 
-    css: {
-        preprocessorMaxWorkers: true,
-    },
+    // css: {
+    //     preprocessorMaxWorkers: true,
+    // },
 
     define: {
         'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
@@ -67,9 +67,9 @@ export default defineConfig({
         'process.versions': null,
     },
 
-    optimizeDeps: {
-        holdUntilCrawlEnd: true,
-    },
+    // optimizeDeps: {
+    //     holdUntilCrawlEnd: true,
+    // },
 
     plugins: [
         laravel('resources/scripts/index.tsx'),
