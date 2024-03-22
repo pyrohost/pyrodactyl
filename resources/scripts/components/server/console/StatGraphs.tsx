@@ -76,7 +76,7 @@ export default () => {
                 }}
             >
                 <ChartBlock title={'CPU'}>
-                    <Line {...cpu.props} />
+                    <Line aria-label='CPU Usage' role='img' {...cpu.props} />
                 </ChartBlock>
             </div>
             <div
@@ -88,7 +88,7 @@ export default () => {
                 }}
             >
                 <ChartBlock title={'RAM'}>
-                    <Line {...memory.props} />
+                    <Line aria-label='Memory Usage' role='img' {...memory.props} />
                 </ChartBlock>
             </div>
             <div
@@ -114,7 +114,7 @@ export default () => {
                         </>
                     }
                 >
-                    <Line {...network.props} />
+                    <Line aria-label='Network Activity. Download and upload activity' role='img' {...network.props} />
                 </ChartBlock>
             </div>
         </>
