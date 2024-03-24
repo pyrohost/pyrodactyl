@@ -101,6 +101,14 @@ export default () => {
 
     const top = calculateTop(location.pathname);
 
+    const [height, setHeight] = useState('40px');
+
+    useEffect(() => {
+        setHeight('34px');
+        const timeoutId = setTimeout(() => setHeight('40px'), 200);
+        return () => clearTimeout(timeoutId);
+    }, [top]);
+
     return (
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
@@ -125,9 +133,10 @@ export default () => {
                             className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
+                                height,
                                 opacity: top === '0' ? 0 : 1,
                                 transition:
-                                    'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
+                                    'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                             }}
                         />
                         <div
