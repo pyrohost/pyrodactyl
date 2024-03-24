@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl",
     "version": "1.0.2-rc1",
-    "buildNumber": "102107",
+    "buildNumber": "102109",
     "engines": {
         "node": ">=20.0"
     },
@@ -33,7 +33,7 @@
         "debounce": "^2.0.0",
         "deepmerge-ts": "^5.1.0",
         "easy-peasy": "^6.0.4",
-        "events": "^3.0.0",
+        "events": "^3.3.0",
         "formik": "^2.4.5",
         "framer-motion": "^11.0.20",
         "laravel-vite-plugin": "^1.0.2",
@@ -53,7 +53,7 @@
         "tailwind-merge": "^2.2.2",
         "tailwindcss": "^3.4.1",
         "tailwindcss-animate": "^1.0.7",
-        "uuid": "^8.3.2",
+        "uuid": "^9.0.1",
         "vite": "^5.2.6",
         "yup": "^1.4.0"
     },
