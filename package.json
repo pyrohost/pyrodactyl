@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl",
     "version": "1.0.2-rc1",
-    "buildNumber": "102106",
+    "buildNumber": "102107",
     "engines": {
         "node": ">=20.0"
     },
@@ -54,7 +54,7 @@
         "tailwindcss": "^3.4.1",
         "tailwindcss-animate": "^1.0.7",
         "uuid": "^8.3.2",
-        "vite": "^5.2.2",
+        "vite": "^5.2.6",
         "yup": "^1.4.0"
     },
     "devDependencies": {
