@@ -1,5 +1,6 @@
 import { HugeIconProps } from './props';
 
+// million-ignore
 const HugeIconsDatabase = (props: HugeIconProps) => {
     return (
         <svg
