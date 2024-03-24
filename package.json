@@ -104,16 +104,5 @@
         "last 2 versions",
         "firefox esr",
         "not dead"
-    ],
-    "babelMacros": {
-        "twin": {
-            "config": "tailwind.config.cjs",
-            "preset": "styled-components"
-        },
-        "styledComponents": {
-            "pure": true,
-            "displayName": true,
-            "fileName": true
-        }
-    }
+    ]
 }
