@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl",
-    "version": "1.0.1-rc1",
-    "buildNumber": "101135",
+    "version": "1.0.2-rc1",
+    "buildNumber": "102100",
     "engines": {
         "node": ">=20.0"
     },
@@ -22,7 +22,7 @@
         "@xterm/addon-search": "^0.14.0",
         "@xterm/addon-web-links": "^0.10.0",
         "@xterm/xterm": "^5.4.0",
-        "axios": "^0.28.0",
+        "axios": "^1.6.8",
         "browserslist": "^4.23.0",
         "chart.js": "^4.4.2",
         "clsx": "^2.1.0",
