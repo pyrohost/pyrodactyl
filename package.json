@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl",
     "version": "1.0.2-rc1",
-    "buildNumber": "102100",
+    "buildNumber": "102104",
     "engines": {
         "node": ">=20.0"
     },
