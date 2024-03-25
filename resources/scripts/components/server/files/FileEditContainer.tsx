@@ -148,7 +148,7 @@ export default () => {
                 />
             </div>
 
-            <div className={`flex flex-row absolute top-4 right-4`}>
+            <div className={`flex flex-row absolute top-2 right-2`}>
                 <div className={`flex-1 sm:flex-none rounded mr-4`}>
                     <select
                         className='h-full rounded-md bg-[#ffffff12] text-white px-4 py-3 text-sm font-bold shadow-md w-full appearance-none'
