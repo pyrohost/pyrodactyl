@@ -95,9 +95,11 @@
     },
     "scripts": {
         "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx",
+        "lint:turbo": "turbo lint",
         "dev": "vite",
         "build": "vite build",
-        "build:turbo": "turbo build"
+        "build:turbo": "turbo build",
+        "ship": "turbo lint build"
     },
     "browserslist": [
         "> 0.5%",
