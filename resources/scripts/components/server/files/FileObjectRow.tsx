@@ -24,7 +24,7 @@ function Clickable({ file, children }: { file: FileObject; children: ReactNode }
     ) : (
         <NavLink
             className={styles.details}
-            to={`/server/${id}/files${file.isFile ? '/edit' : ''}#${encodePathSegments(join(directory, file.name))}`}
+            to={`/server/${id}/files${file.isFile ? '/edit' : '#'}${encodePathSegments(join(directory, file.name))}`}
         >
             {children}
         </NavLink>
