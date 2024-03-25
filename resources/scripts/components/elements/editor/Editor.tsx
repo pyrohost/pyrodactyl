@@ -99,7 +99,7 @@ export interface EditorProps {
     onLanguageChanged?: (language: LanguageDescription | undefined) => void;
 }
 
-export function Editor(props: EditorProps) {
+export default function Editor(props: EditorProps) {
     const ref = useRef<HTMLDivElement>(null);
 
     const [view, setView] = useState<EditorView>();

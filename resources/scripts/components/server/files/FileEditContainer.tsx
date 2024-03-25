@@ -1,4 +1,5 @@
 import type { LanguageDescription } from '@codemirror/language';
+import { lazy } from 'react';
 import { languages } from '@codemirror/language-data';
 import { dirname } from 'pathe';
 import { useEffect, useState } from 'react';
@@ -13,11 +14,12 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import FileNameModal from '@/components/server/files/FileNameModal';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { Editor } from '@/components/elements/editor';
 import useFlash from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
 import { encodePathSegments } from '@/helpers';
 import { toast } from 'sonner';
+
+const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 
 export default () => {
     const [error, setError] = useState('');
