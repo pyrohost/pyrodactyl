@@ -4,6 +4,6 @@
         "build": {
             "outputs": ["public/build/**"]
         },
-        "type-check": {}
+        "lint": {}
     }
 }
