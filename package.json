@@ -89,7 +89,7 @@
         "postcss-preset-env": "^9.5.0",
         "prettier": "^3.2.5",
         "redux-devtools-extension": "^2.13.8",
-        "ts-essentials": "^9.1.2",
+        "ts-essentials": "^9.4.1",
         "typescript": "^5.4.3",
         "vite-plugin-manifest-sri": "^0.2.0"
     },
