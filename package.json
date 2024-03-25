@@ -61,7 +61,7 @@
         "@swc/plugin-styled-components": "^1.5.119",
         "@types/codemirror": "^0.0.98",
         "@types/debounce": "^1.2.4",
-        "@types/events": "^3.0.0",
+        "@types/events": "^3.0.3",
         "@types/node": "^20.11.30",
         "@types/qrcode.react": "^1.0.5",
         "@types/react": "^18.2.70",
