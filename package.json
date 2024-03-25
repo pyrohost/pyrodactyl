@@ -62,7 +62,7 @@
         "@types/codemirror": "^0.0.98",
         "@types/debounce": "^1.2.4",
         "@types/events": "^3.0.0",
-        "@types/node": "^20.11.24",
+        "@types/node": "^20.11.30",
         "@types/qrcode.react": "^1.0.5",
         "@types/react": "^18.2.70",
         "@types/react-copy-to-clipboard": "^5.0.7",
