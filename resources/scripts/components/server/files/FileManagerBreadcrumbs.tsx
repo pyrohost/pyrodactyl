@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { ServerContext } from '@/state/server';
-import { NavLink, useLocation } from 'react-router-dom';
-import { encodePathSegments, hashToPath } from '@/helpers';
+import { NavLink, useParams } from 'react-router-dom';
+import { encodePathSegments } from '@/helpers';
 
 interface Props {
     renderLeft?: JSX.Element;
@@ -10,22 +10,29 @@ interface Props {
 }
 
 export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
-    const [file, setFile] = useState<string | null>(null);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const { hash } = useLocation();
+
+    const params = useParams<'*'>();
+
+    const [file, setFile] = useState<string>();
 
     useEffect(() => {
-        const path = hashToPath(hash);
-
-        if (withinFileEditor && !isNewFile) {
-            const name = path.split('/').pop() || null;
-            setFile(name);
+        if (!withinFileEditor || isNewFile) {
+            return;
         }
-    }, [withinFileEditor, isNewFile, hash]);
 
-    const breadcrumbs = (): { name: string; path?: string }[] =>
-        directory
+        if (withinFileEditor && params['*'] !== undefined && !isNewFile) {
+            setFile(decodeURIComponent(params['*']).split('/').pop());
+        }
+    }, [withinFileEditor, isNewFile]);
+
+    const breadcrumbs = (): { name: string; path?: string }[] => {
+        if (directory === '.') {
+            return [];
+        }
+
+        return directory
             .split('/')
             .filter((directory) => !!directory)
             .map((directory, index, dirs) => {
@@ -35,6 +42,7 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
 
                 return { name: directory, path: `/${dirs.slice(0, index + 1).join('/')}` };
             });
+    };
 
     return (
         <div className={`group flex flex-grow-0 items-center text-sm overflow-x-hidden`}>
