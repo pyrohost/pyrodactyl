@@ -18,6 +18,7 @@ interface Values {
     name: string;
     ignored: string;
     isLocked: boolean;
+    children?: React.ReactNode;
 }
 
 const ModalContent = ({ ...props }: RequiredModalProps) => {

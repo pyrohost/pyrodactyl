@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<{}, State> {
                 </div>
             </div>
         ) : (
-            this.props.children
+            (this.props as { children: React.ReactNode }).children
         );
     }
 }

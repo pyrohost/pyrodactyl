@@ -8,6 +8,7 @@ type Props = {
     buttonText: string;
     onConfirmed: () => void;
     showSpinnerOverlay?: boolean;
+    children: React.ReactNode;
 };
 
 const ConfirmationModal: React.FC<Props> = ({ title, children, buttonText, onConfirmed }) => {

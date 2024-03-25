@@ -10,6 +10,7 @@ export interface RequiredModalProps {
     onDismissed: () => void;
     appear?: boolean;
     top?: boolean;
+    children?: React.ReactNode;
 }
 
 export interface ModalProps extends RequiredModalProps {
@@ -65,10 +66,10 @@ const Modal: React.FC<ModalProps> = ({
     appear,
     dismissable,
     showSpinnerOverlay,
-    top = true,
+    // top = true,
     closeOnBackground = true,
     closeOnEscape = true,
-    onDismissed,
+    // onDismissed,
     children,
 }) => {
     const [render, setRender] = useState(visible);

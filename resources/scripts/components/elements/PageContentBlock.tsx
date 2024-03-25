@@ -6,6 +6,7 @@ export interface PageContentBlockProps {
     title?: string;
     className?: string;
     showFlashKey?: string;
+    children?: React.ReactNode;
 }
 
 const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey, className, children }) => {

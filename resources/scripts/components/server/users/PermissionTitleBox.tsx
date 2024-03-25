@@ -9,6 +9,7 @@ interface Props {
     title: string;
     permissions: string[];
     className?: string;
+    children: React.ReactNode;
 }
 
 const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissions, className, children }) => {

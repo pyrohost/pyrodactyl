@@ -5,6 +5,7 @@ interface Props {
     fixed?: boolean;
     size?: SpinnerSize;
     backgroundOpacity?: number;
+    children?: React.ReactNode;
 }
 
 const SpinnerOverlay: React.FC<Props> = () => <></>;

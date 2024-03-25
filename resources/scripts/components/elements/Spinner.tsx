@@ -8,6 +8,7 @@ interface Props {
     size?: SpinnerSize;
     centered?: boolean;
     isBlue?: boolean;
+    children?: React.ReactNode;
 }
 
 interface Spinner extends React.FC<Props> {
