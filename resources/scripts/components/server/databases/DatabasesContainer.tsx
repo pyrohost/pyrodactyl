@@ -53,23 +53,23 @@ export default () => {
                 // <Spinner size={'large'} centered />
                 <></>
             ) : (
-                    <>
-                        {databases.length > 0 ? (
-                            databases.map((database, index) => (
-                                <DatabaseRow
-                                    key={database.id}
-                                    database={database}
-                                    className={index > 0 ? 'mt-1' : undefined}
-                                />
-                            ))
-                        ) : (
-                            <p className={`text-center text-sm text-zinc-300`}>
-                                {databaseLimit > 0
-                                    ? 'It looks like you have no databases.'
-                                    : 'Databases cannot be created for this server.'}
-                            </p>
-                        )}
-                    </>
+                <>
+                    {databases.length > 0 ? (
+                        databases.map((database, index) => (
+                            <DatabaseRow
+                                key={database.id}
+                                database={database}
+                                className={index > 0 ? 'mt-1' : undefined}
+                            />
+                        ))
+                    ) : (
+                        <p className={`text-center text-sm text-zinc-300`}>
+                            {databaseLimit > 0
+                                ? 'It looks like you have no databases.'
+                                : 'Databases cannot be created for this server.'}
+                        </p>
+                    )}
+                </>
             )}
         </ServerContentBlock>
     );

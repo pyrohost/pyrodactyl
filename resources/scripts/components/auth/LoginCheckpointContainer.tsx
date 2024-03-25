@@ -30,7 +30,6 @@ function LoginCheckpointContainer() {
         <LoginFormContainer title={'Device Checkpoint'} className={`w-full flex`}>
             <div className={`mt-6`}>
                 <Field
-                    light
                     name={isMissingDevice ? 'recoveryCode' : 'code'}
                     title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
                     description={

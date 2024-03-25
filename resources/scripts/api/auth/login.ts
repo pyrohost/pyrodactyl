@@ -20,7 +20,7 @@ export default ({ username, password, recaptchaData }: LoginData): Promise<Login
                     user: username,
                     password,
                     'g-recaptcha-response': recaptchaData,
-                })
+                }),
             )
             .then((response) => {
                 if (!(response.data instanceof Object)) {

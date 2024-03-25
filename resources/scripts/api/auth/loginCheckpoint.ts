@@ -12,7 +12,7 @@ export default (token: string, code: string, recoveryToken?: string): Promise<Lo
                 resolve({
                     complete: response.data.data.complete,
                     intended: response.data.data.intended || undefined,
-                })
+                }),
             )
             .catch(reject);
     });

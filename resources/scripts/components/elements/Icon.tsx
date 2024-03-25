@@ -1,7 +1,5 @@
 const Icon = () => {
-    return (
-        <div>This component is deprecated.</div>
-    );
+    return <div>This component is deprecated.</div>;
 };
 
 export default Icon;

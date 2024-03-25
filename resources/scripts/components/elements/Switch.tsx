@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 import Label from '@/components/elements/Label';
 import Input from '@/components/elements/Input';
 
-const ToggleContainer = styled.div``
+const ToggleContainer = styled.div``;
 
 // const ToggleContainer = styled.div`
 //     ${tw`relative select-none w-12 leading-normal`};
@@ -67,11 +67,7 @@ const Switch = ({ name, label, description, defaultChecked, readOnly, onChange, 
             </ToggleContainer>
             {(label || description) && (
                 <div className={`ml-4 w-full`}>
-                    {label && (
-                        <Label htmlFor={uuid}>
-                            {label}
-                        </Label>
-                    )}
+                    {label && <Label htmlFor={uuid}>{label}</Label>}
                     {description && <p className={`text-zinc-400 text-sm mt-2`}>{description}</p>}
                 </div>
             )}

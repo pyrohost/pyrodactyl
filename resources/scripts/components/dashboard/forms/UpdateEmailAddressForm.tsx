@@ -33,7 +33,7 @@ export default () => {
                     type: 'success',
                     key: 'account:email',
                     message: 'Your primary email has been updated.',
-                })
+                }),
             )
             .catch((error) =>
                 addFlash({
@@ -41,7 +41,7 @@ export default () => {
                     key: 'account:email',
                     title: 'Error',
                     message: httpErrorToHuman(error),
-                })
+                }),
             )
             .then(() => {
                 resetForm();

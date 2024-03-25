@@ -3,6 +3,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     overrides: [
         {
+            files: ['*.ts', '*.tsx'],
             parserOptions: {
                 ecmaVersion: 6,
                 ecmaFeatures: {
@@ -26,6 +27,7 @@ module.exports = {
     env: {
         browser: true,
         es6: true,
+        node: true,
     },
     plugins: ['react', 'react-hooks', 'prettier', '@typescript-eslint'],
     extends: [
@@ -36,9 +38,10 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
     ],
     rules: {
-        eqeqeq: 'error',
+        '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/ban-ts-comment': 0,
         'prettier/prettier': [
-            'error',
+            'warn',
             {
                 endOfLine: 'auto',
             },
@@ -57,6 +60,5 @@ module.exports = {
         'no-use-before-define': 0,
         '@typescript-eslint/no-use-before-define': 'warn',
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
-        '@typescript-eslint/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
     },
 };

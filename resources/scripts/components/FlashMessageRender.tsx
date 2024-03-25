@@ -4,12 +4,11 @@ import { Fragment } from 'react';
 
 type Props = Readonly<{
     byKey?: string;
-    className?: string;
 }>;
 
-const FlashMessageRender = ({ byKey, className }: Props) => {
+const FlashMessageRender = ({ byKey }: Props) => {
     const flashes = useStoreState((state) =>
-        state.flashes.items.filter((flash) => (byKey ? flash.key === byKey : true))
+        state.flashes.items.filter((flash) => (byKey ? flash.key === byKey : true)),
     );
 
     return flashes.length ? (

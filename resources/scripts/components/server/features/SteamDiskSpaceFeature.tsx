@@ -57,13 +57,11 @@ const SteamDiskSpaceFeature = () => {
                     </p>
                     <p className={`mt-4`}>
                         Ensure the machine has enough disk space by typing{' '}
-                        <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> on the machine hosting this
-                        server. Delete files or increase the available disk space to resolve the issue.
+                        <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> on the machine hosting
+                        this server. Delete files or increase the available disk space to resolve the issue.
                     </p>
                     <div className={`mt-8 sm:flex items-center justify-end`}>
-                        <Button onClick={() => setVisible(false)}>
-                            Close
-                        </Button>
+                        <Button onClick={() => setVisible(false)}>Close</Button>
                     </div>
                 </>
             ) : (
@@ -76,9 +74,7 @@ const SteamDiskSpaceFeature = () => {
                         process. Please get in touch with the administrator(s) and inform them of disk space issues.
                     </p>
                     <div className={`mt-8 sm:flex items-center justify-end`}>
-                        <Button onClick={() => setVisible(false)}>
-                            Close
-                        </Button>
+                        <Button onClick={() => setVisible(false)}>Close</Button>
                     </div>
                 </>
             )}

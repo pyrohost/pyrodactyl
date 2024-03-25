@@ -40,7 +40,7 @@ const DisableTOTPDialog = () => {
 
     return (
         <form id={'disable-totp-form'} className={'mt-6'} onSubmit={submit}>
-            <FlashMessageRender byKey={'account:two-step'} className={'-mt-2 mb-6'} />
+            <FlashMessageRender byKey={'account:two-step'} />
             <label className={'block pb-1'} htmlFor={'totp-password'}>
                 Password
             </label>

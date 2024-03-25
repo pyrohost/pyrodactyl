@@ -81,9 +81,7 @@ const EulaModalFeature = () => {
                 <Button isSecondary onClick={() => setVisible(false)}>
                     Cancel
                 </Button>
-                <Button onClick={onAcceptEULA}>
-                    I Accept
-                </Button>
+                <Button onClick={onAcceptEULA}>I Accept</Button>
             </div>
         </Modal>
     );

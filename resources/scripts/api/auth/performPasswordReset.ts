@@ -23,7 +23,7 @@ export default (email: string, data: Data): Promise<PasswordResetResponse> => {
                 resolve({
                     redirectTo: response.data.redirect_to,
                     sendToLogin: response.data.send_to_login,
-                })
+                }),
             )
             .catch(reject);
     });

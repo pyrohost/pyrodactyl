@@ -40,15 +40,15 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
             !$status || $status === 'offline'
                 ? '0 0 12px 1px #C74343'
                 : $status === 'running'
-                ? '0 0 12px 1px #43C760'
-                : '0 0 12px 1px #c7aa43'};
+                  ? '0 0 12px 1px #43C760'
+                  : '0 0 12px 1px #c7aa43'};
 
         background: ${({ $status }) =>
             !$status || $status === 'offline'
                 ? `linear-gradient(180deg, #C74343 0%, #C74343 100%)`
                 : $status === 'running'
-                ? `linear-gradient(180deg, #91FFA9 0%, #43C760 100%)`
-                : `linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)`};
+                  ? `linear-gradient(180deg, #91FFA9 0%, #43C760 100%)`
+                  : `linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)`};
     }
 `;
 
@@ -133,10 +133,10 @@ export default ({ server, className }: { server: Server; className?: string }) =
                                 {server.isTransferring
                                     ? 'Transferring'
                                     : server.status === 'installing'
-                                    ? 'Installing'
-                                    : server.status === 'restoring_backup'
-                                    ? 'Restoring Backup'
-                                    : 'Unavailable'}
+                                      ? 'Installing'
+                                      : server.status === 'restoring_backup'
+                                        ? 'Restoring Backup'
+                                        : 'Unavailable'}
                             </span>
                         </div>
                     ) : (

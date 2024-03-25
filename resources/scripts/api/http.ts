@@ -31,7 +31,7 @@ http.interceptors.response.use(
         store.getActions().progress.setComplete();
 
         throw error;
-    }
+    },
 );
 
 export default http;
@@ -137,11 +137,14 @@ export interface QueryBuilderParams<FilterKeys extends string = string, SortKeys
 export const withQueryBuilderParams = (data?: QueryBuilderParams): Record<string, unknown> => {
     if (!data) return {};
 
-    const filters = Object.keys(data.filters || {}).reduce((obj, key) => {
-        const value = data.filters?.[key];
+    const filters = Object.keys(data.filters || {}).reduce(
+        (obj, key) => {
+            const value = data.filters?.[key];
 
-        return !value || value === '' ? obj : { ...obj, [`filter[${key}]`]: value };
-    }, {} as NonNullable<QueryBuilderParams['filters']>);
+            return !value || value === '' ? obj : { ...obj, [`filter[${key}]`]: value };
+        },
+        {} as NonNullable<QueryBuilderParams['filters']>,
+    );
 
     const sorts = Object.keys(data.sorts || {}).reduce((arr, key) => {
         const value = data.sorts?.[key];

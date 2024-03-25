@@ -35,10 +35,8 @@ export default () => {
                             {!data ? 'Loading...' : 'No SSH Keys exist for this account.'}
                         </p>
                     ) : (
-                        data.map((key, index) => (
-                            <GreyRowBox
-                                key={key.fingerprint}
-                            >
+                        data.map((key, _) => (
+                            <GreyRowBox key={key.fingerprint}>
                                 {/* <FontAwesomeIcon icon={faKey} className={`text-zinc-300`} /> */}
                                 <div className={`flex-1`}>
                                     <p className={`text-sm break-words font-medium`}>{key.name}</p>

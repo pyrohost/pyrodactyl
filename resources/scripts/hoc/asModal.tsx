@@ -19,7 +19,7 @@ interface State {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 function asModal<P extends {}>(
-    modalProps?: SettableModalProps | ((props: P) => SettableModalProps)
+    modalProps?: SettableModalProps | ((props: P) => SettableModalProps),
 ): (Component: any) => any {
     return function (Component) {
         return class extends PureComponent<P & AsModalProps, State> {

@@ -22,7 +22,7 @@ const schema = object().shape({
         .max(48, 'Database name must not exceed 48 characters.')
         .matches(
             /^[\w\-.]{3,48}$/,
-            'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.'
+            'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.',
         ),
     connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'A valid host address must be provided.'),
 });
@@ -89,16 +89,10 @@ export default () => {
                                 />
                             </div>
                             <div className={`flex flex-wrap justify-end mt-6`}>
-                                <Button
-                                    type={'button'}
-                                    isSecondary
-                                    onClick={() => setVisible(false)}
-                                >
+                                <Button type={'button'} isSecondary onClick={() => setVisible(false)}>
                                     Cancel
                                 </Button>
-                                <Button type={'submit'}>
-                                    Create Database
-                                </Button>
+                                <Button type={'submit'}>Create Database</Button>
                             </div>
                         </Form>
                     </Modal>

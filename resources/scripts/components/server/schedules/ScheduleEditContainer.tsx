@@ -26,10 +26,10 @@ const CronBox = ({ title, value }: { title: string; value: string }) => (
 
 const ActivePill = ({ active }: { active: boolean }) => (
     <span
-        // css={[
-        //     tw`rounded-full px-2 py-px text-xs ml-4 uppercase`,
-        //     active ? tw`bg-green-600 text-green-100` : tw`bg-red-600 text-red-100`,
-        // ]}
+    // css={[
+    //     tw`rounded-full px-2 py-px text-xs ml-4 uppercase`,
+    //     active ? tw`bg-green-600 text-green-100` : tw`bg-red-600 text-red-100`,
+    // ]}
     >
         {active ? 'Active' : 'Inactive'}
     </span>
@@ -48,7 +48,7 @@ export default () => {
 
     const schedule = ServerContext.useStoreState(
         (st) => st.schedules.data.find((s) => s.id === Number(scheduleId)),
-        isEqual
+        isEqual,
     );
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
 
@@ -134,7 +134,7 @@ export default () => {
                             {schedule.tasks.length > 0
                                 ? schedule.tasks
                                       .sort((a, b) =>
-                                          a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1
+                                          a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
                                       )
                                       .map((task) => (
                                           <ScheduleTaskRow

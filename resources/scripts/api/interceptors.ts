@@ -5,7 +5,7 @@ import http from '@/api/http';
 
 export const setupInterceptors = (navigate: NavigateFunction) => {
     http.interceptors.response.use(
-        resp => resp,
+        (resp) => resp,
         (error: AxiosError) => {
             if (error.response?.status === 400) {
                 if (

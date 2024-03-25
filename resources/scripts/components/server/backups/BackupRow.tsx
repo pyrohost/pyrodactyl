@@ -13,10 +13,9 @@ import Can from '@/components/elements/Can';
 
 interface Props {
     backup: ServerBackup;
-    className?: string;
 }
 
-export default ({ backup, className }: Props) => {
+export default ({ backup }: Props) => {
     const { mutate } = getServerBackups();
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {

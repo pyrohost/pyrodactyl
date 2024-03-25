@@ -17,6 +17,6 @@ export default () => {
             revalidateOnMount: false,
             refreshInterval: 0,
             errorRetryCount: 2,
-        }
+        },
     );
 };

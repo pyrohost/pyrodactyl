@@ -100,7 +100,7 @@ export class Websocket extends EventEmitter {
                 JSON.stringify({
                     event,
                     args: Array.isArray(payload) ? payload : [payload],
-                })
+                }),
             );
     }
 }

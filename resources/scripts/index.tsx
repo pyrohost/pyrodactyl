@@ -1,3 +1,5 @@
+// I know it's deprecated! We need to fix it!!!
+// eslint-disable-next-line react/no-deprecated
 import { render } from 'react-dom';
 import * as Sentry from '@sentry/react';
 import App from '@/components/App';

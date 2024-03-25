@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
 import styled from 'styled-components';

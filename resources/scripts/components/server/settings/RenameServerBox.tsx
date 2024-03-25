@@ -1,6 +1,6 @@
 import { ServerContext } from '@/state/server';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik } from 'formik';
 import { toast } from 'sonner';
 import { Actions, useStoreActions } from 'easy-peasy';
 import renameServer from '@/api/server/renameServer';

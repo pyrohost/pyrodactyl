@@ -100,7 +100,7 @@ const JavaVersionModalFeature = () => {
                 </div>
             </Can>
             <div className={`mt-8 flex flex-col sm:flex-row justify-end sm:space-x-4 space-y-4 sm:space-y-0`}>
-                <Button isSecondary onClick={() => setVisible(false)} >
+                <Button isSecondary onClick={() => setVisible(false)}>
                     Cancel
                 </Button>
                 <Can action={'startup.docker-image'}>

@@ -130,7 +130,7 @@ export default () => {
                 />
             </div> */}
             <div>
-                Note: File editing is currently disabled while we migrate pyrodactyl's built-in editor to a newer
+                Note: File editing is currently disabled while we migrate pyrodactyl&apos;s built-in editor to a newer
                 version. This message is here to prevent errors on your end. Thanks for your patience!
             </div>
             {/* <div css={tw`flex justify-end mt-4`}>

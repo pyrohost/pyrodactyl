@@ -31,7 +31,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSubuser = ServerContext.useStoreActions((actions) => actions.subusers.appendSubuser);
     const { clearFlashes, clearAndAddHttpError } = useStoreActions(
-        (actions: Actions<ApplicationStore>) => actions.flashes
+        (actions: Actions<ApplicationStore>) => actions.flashes,
     );
     const { dismiss, setPropOverrides } = useContext(ModalContext);
 
@@ -45,7 +45,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
     // The permissions that can be modified by this user.
     const editablePermissions = useDeepCompareMemo(() => {
         const cleaned = Object.keys(permissions).map((key) =>
-            Object.keys(permissions[key]?.keys ?? {}).map((pkey) => `${key}.${pkey}`)
+            Object.keys(permissions[key]?.keys ?? {}).map((pkey) => `${key}.${pkey}`),
         );
 
         const list: string[] = ([] as string[]).concat.apply([], Object.values(cleaned));
@@ -81,7 +81,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
         () => () => {
             clearFlashes('user:edit');
         },
-        []
+        [],
     );
 
     return (
@@ -114,7 +114,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
                         </Button>
                     </div>
                 </div>
-                <FlashMessageRender byKey={'user:edit'} className={`mt-4`} />
+                <FlashMessageRender byKey={'user:edit'} />
                 {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                     <div className={`mt-4 pl-4 py-2 border-l-4 border-blue-400`}>
                         <p className={`text-sm text-zinc-300`}>

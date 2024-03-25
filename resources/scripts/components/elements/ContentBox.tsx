@@ -10,7 +10,7 @@ type Props = Readonly<
     }
 >;
 
-const ContentBox = ({ title, borderColor, showFlashes, showLoadingOverlay, children, ...props }: Props) => (
+const ContentBox = ({ title, showFlashes, showLoadingOverlay, children, ...props }: Props) => (
     <div className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl' {...props}>
         {title && <h2 className={`font-extrabold mb-4  text-2xl`}>{title}</h2>}
         {showFlashes && <FlashMessageRender byKey={typeof showFlashes === 'string' ? showFlashes : undefined} />}

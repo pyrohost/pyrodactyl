@@ -31,12 +31,12 @@ const SpinnerComponent = styled.div<Props>`
         props.size === 'small'
             ? `width: 16px; height: 16px; border-width: 2px;`
             : props.size === 'large'
-            ? css`
-                  width: 64px;
-                  height: 64px;
-                  border-width: 6px;
-              `
-            : null};
+              ? css`
+                    width: 64px;
+                    height: 64px;
+                    border-width: 6px;
+                `
+              : null};
 
     border-color: ${(props) => (!props.isBlue ? 'rgba(255, 255, 255, 0.2)' : 'hsla(212, 92%, 43%, 0.2)')};
     border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
@@ -58,6 +58,7 @@ Spinner.Size = {
     LARGE: 'large',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 Spinner.Suspense = ({ children, centered = true, size = Spinner.Size.LARGE, ...props }) => (
     // <Spinner centered={centered} size={size} {...props} />
     <Suspense fallback={null} {...props}>

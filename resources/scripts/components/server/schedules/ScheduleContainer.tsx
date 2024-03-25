@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import getServerSchedules from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
-import Spinner from '@/components/elements/Spinner';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
 import { httpErrorToHuman } from '@/api/http';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
-import GreyRowBox from '@/components/elements/GreyRowBox';
-import { Button } from '@/components/elements/button/index';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function ScheduleContainer() {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

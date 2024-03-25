@@ -61,10 +61,8 @@ export default () => {
                             {loading ? 'Loading...' : 'No API keys exist for this account.'}
                         </p>
                     ) : (
-                        keys.map((key, index) => (
-                            <GreyRowBox
-                                key={key.identifier}
-                            >
+                        keys.map((key, _) => (
+                            <GreyRowBox key={key.identifier}>
                                 {/* <FontAwesomeIcon icon={faKey} className={`text-zinc-300`} /> */}
                                 <div className={`ml-4 flex-1 overflow-hidden`}>
                                     <p className={`text-sm break-words`}>{key.description}</p>
@@ -76,7 +74,10 @@ export default () => {
                                 <p className={`text-sm ml-4 hidden md:block`}>
                                     <code className={`font-mono py-1 px-2 bg-zinc-900 rounded`}>{key.identifier}</code>
                                 </p>
-                                <button className={`ml-4 p-2 text-sm`} onClick={() => setDeleteIdentifier(key.identifier)}>
+                                <button
+                                    className={`ml-4 p-2 text-sm`}
+                                    onClick={() => setDeleteIdentifier(key.identifier)}
+                                >
                                     {/* <FontAwesomeIcon
                                         icon={faTrashAlt}
                                         className={`text-zinc-400 hover:text-red-400 transition-colors duration-150`}

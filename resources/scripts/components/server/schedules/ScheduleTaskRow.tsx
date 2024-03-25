@@ -43,7 +43,7 @@ export default ({ schedule, task }: Props) => {
                 appendSchedule({
                     ...schedule,
                     tasks: schedule.tasks.filter((t) => t.id !== task.id),
-                })
+                }),
             )
             .catch((error) => {
                 console.error(error);
@@ -91,7 +91,9 @@ export default ({ schedule, task }: Props) => {
             <div className={`mt-3 sm:mt-0 flex items-center w-full sm:w-auto`}>
                 {task.continueOnFailure && (
                     <div className={`mr-6`}>
-                        <div className={`flex items-center px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
+                        <div
+                            className={`flex items-center px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}
+                        >
                             Continues on Failure
                         </div>
                     </div>

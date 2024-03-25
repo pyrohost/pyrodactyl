@@ -91,9 +91,7 @@ const GSLTokenModalFeature = () => {
                         />
                     </div>
                     <div className={`mt-8 sm:flex items-center justify-end`}>
-                        <Button type={'submit'}>
-                            Update GSL Token
-                        </Button>
+                        <Button type={'submit'}>Update GSL Token</Button>
                     </div>
                 </Form>
             </Modal>

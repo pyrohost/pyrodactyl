@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ServerContext } from '@/state/server';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
-import Spinner from '@/components/elements/Spinner';
 import AddSubuserButton from '@/components/server/users/AddSubuserButton';
 import UserRow from '@/components/server/users/UserRow';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -49,7 +48,7 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Users'}>
-            <FlashMessageRender byKey={'users'} className={`mb-4`} />
+            <FlashMessageRender byKey={'users'} />
             <div className={'flex flex-row justify-between items-center mb-8'}>
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
                 <Can action={'user.create'}>

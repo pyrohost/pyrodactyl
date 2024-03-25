@@ -3,7 +3,6 @@ import { ServerEggVariable } from '@/api/server/types';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { usePermissions } from '@/plugins/usePermissions';
 import InputSpinner from '@/components/elements/InputSpinner';
-import Input from '@/components/elements/Input';
 import Switch from '@/components/elements/Switch';
 import debounce from 'debounce';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -59,7 +58,7 @@ const VariableBox = ({ variable }: Props) => {
 
     return (
         <TitledGreyBox>
-            <FlashMessageRender byKey={FLASH_KEY} className={`mb-2 md:mb-4`} />
+            <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
                 {!variable.isEditable && (
                     <span className={`bg-neutral-700 text-xs py-1 px-2 rounded-full mr-2 mb-1`}>Read Only</span>

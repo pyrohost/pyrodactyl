@@ -16,7 +16,7 @@ interface Props<T> {
     children: (props: RenderFuncProps<T>) => React.ReactNode;
 }
 
-const Block = styled(Button)``
+const Block = styled(Button)``;
 
 function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: Props<T>) {
     const isFirstPage = pagination.currentPage === 1;

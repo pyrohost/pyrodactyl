@@ -20,7 +20,7 @@ export default ({ type, position, className }: DialogIconProps) => {
             <div className={clsx(styles.dialog_icon, styles[type], className)}>
                 {/* <Icon className={'w-6 h-6'} /> */}
                 <div>FIXME: Icons</div>
-            </div>
+            </div>,
         );
     }, [type, className]);
 

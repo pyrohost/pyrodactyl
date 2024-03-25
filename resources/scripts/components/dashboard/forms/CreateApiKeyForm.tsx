@@ -9,7 +9,7 @@ import { httpErrorToHuman } from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { ApiKey } from '@/api/account/getApiKeys';
 import Button from '@/components/elements/Button';
-import Input, { Textarea } from '@/components/elements/Input';
+import Input from '@/components/elements/Input';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
 
 interface Values {

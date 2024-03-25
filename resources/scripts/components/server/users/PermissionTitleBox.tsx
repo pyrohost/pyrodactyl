@@ -22,7 +22,7 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
                 setValue(value.filter((p) => !permissions.includes(p)));
             }
         },
-        [permissions, value]
+        [permissions, value],
     );
 
     return (

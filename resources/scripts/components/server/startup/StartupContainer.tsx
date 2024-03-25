@@ -13,14 +13,14 @@ import isEqual from 'react-fast-compare';
 import Input from '@/components/elements/Input';
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import InputSpinner from '@/components/elements/InputSpinner';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+// import {
+//     DropdownMenu,
+//     DropdownMenuContent,
+//     DropdownMenuItem,
+//     DropdownMenuRadioGroup,
+//     DropdownMenuRadioItem,
+//     DropdownMenuTrigger,
+// } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 

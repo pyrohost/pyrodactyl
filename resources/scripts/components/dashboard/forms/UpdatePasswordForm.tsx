@@ -7,7 +7,7 @@ import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
 import { ApplicationStore } from '@/state';
 import { Button } from '@/components/elements/button/index';
-import { Fragment } from 'react'
+import { Fragment } from 'react';
 
 interface Values {
     current: string;
@@ -23,7 +23,7 @@ const schema = Yup.object().shape({
         'Password confirmation does not match the password you entered.',
         function (value) {
             return value === this.parent.password;
-        }
+        },
     ),
 });
 
@@ -48,7 +48,7 @@ export default () => {
                     type: 'error',
                     title: 'Error',
                     message: httpErrorToHuman(error),
-                })
+                }),
             )
             .then(() => setSubmitting(false));
     };

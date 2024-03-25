@@ -3,7 +3,6 @@ import { Field as FormikField, FieldProps } from 'formik';
 
 interface OwnProps {
     name: string;
-    light?: boolean;
     label?: string;
     description?: string;
     validate?: (value: any) => undefined | string | Promise<any>;
@@ -12,7 +11,7 @@ interface OwnProps {
 type Props = OwnProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'>;
 
 const Field = forwardRef<HTMLInputElement, Props>(
-    ({ id, name, light = false, label, description, validate, ...props }, ref) => (
+    ({ id, name = false, label, description, validate, ...props }, ref) => (
         <FormikField innerRef={ref} name={name} validate={validate}>
             {({ field, form: { errors, touched } }: FieldProps) => (
                 <div className='flex flex-col gap-2'>
@@ -38,7 +37,7 @@ const Field = forwardRef<HTMLInputElement, Props>(
                 </div>
             )}
         </FormikField>
-    )
+    ),
 );
 Field.displayName = 'Field';
 
