@@ -173,8 +173,8 @@ export default () => {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-                        <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                        <div className='pyro-subnav-routes-wrapper'>
+                        <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
+                        <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
                             <NavLink className='flex flex-row items-center' to={`/server/${id}`} end>
                                 <HugeIconsHome fill='currentColor' />
@@ -237,7 +237,7 @@ export default () => {
                                     </span>
                                 </a>
                             )}
-                        </div>
+                        </ul>
                     </MainSidebar>
                     <CommandMenu />
                     <InstallListener />

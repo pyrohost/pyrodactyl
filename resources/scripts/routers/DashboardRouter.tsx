@@ -83,8 +83,8 @@ export default () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <div className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                <div className='pyro-subnav-routes-wrapper'>
+                <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
+                <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                     <NavLink to={'/'} end className='flex flex-row items-center'>
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
@@ -100,7 +100,7 @@ export default () => {
                             <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>Staff</span>
                         </a>
                     )}
-                </div>
+                </ul>
             </MainSidebar>
 
             <Suspense fallback={null}>
