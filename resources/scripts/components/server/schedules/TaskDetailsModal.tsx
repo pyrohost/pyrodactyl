@@ -34,10 +34,9 @@ interface Values {
 const schema = object().shape({
     action: string().required().oneOf(['command', 'power', 'backup']),
     payload: string().when('action', {
-        // @ts-ignore
         is: (v) => v !== 'backup',
-        then: string().required('A task payload must be provided.'),
-        otherwise: string(),
+        then: () => string().required('A task payload must be provided.'),
+        otherwise: () => string(),
     }),
     continueOnFailure: boolean(),
     timeOffset: number()
