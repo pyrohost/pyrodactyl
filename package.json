@@ -34,7 +34,6 @@
         "chart.js": "^4.4.2",
         "clsx": "^2.1.0",
         "cmdk": "^1.0.0",
-        "codemirror": "^5.57.0",
         "copy-to-clipboard": "^3.3.3",
         "date-fns": "^3.6.0",
         "debounce": "^2.0.0",
