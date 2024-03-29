@@ -11,7 +11,7 @@ const variants = {
         opacity: 1,
         transition: {
             type: 'spring',
-            damping: 15,
+            damping: 20,
             stiffness: 300,
             duration: 0.15,
         },

@@ -14,7 +14,7 @@ const variants = {
         opacity: 1,
         transition: {
             type: 'spring',
-            damping: 15,
+            damping: 20,
             stiffness: 300,
             duration: 0.15,
         },
@@ -59,7 +59,7 @@ export const ModalMask = styled.div`
     backdrop-filter: blur(3px);
 `;
 
-const Modal: React.FC<ModalProps> = ({ visible, appear, dismissable, showSpinnerOverlay, onDismissed, children }) => {
+const Modal: React.FC<ModalProps> = ({ visible, dismissable = true, showSpinnerOverlay, onDismissed, children }) => {
     const isDismissable = useMemo(() => {
         return (dismissable || true) && !(showSpinnerOverlay || false);
     }, [dismissable, showSpinnerOverlay]);
@@ -77,80 +77,86 @@ const Modal: React.FC<ModalProps> = ({ visible, appear, dismissable, showSpinner
     };
 
     const onDialogClose = (): void => {
-        if (!isDismissable) {
+        if (isDismissable) {
             return onDismissed();
         }
     };
 
     return (
-        <AnimatePresence>
-            {(visible || appear) && (
-                <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
-                    <HDialog
-                        static
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        open={visible}
-                        onClose={onDialogClose}
-                    >
-                        <div
-                            style={{
-                                background:
-                                    'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
-                            }}
-                            className={'fixed inset-0 backdrop-blur-sm z-[9997]'}
-                        />
-                        {showSpinnerOverlay && (
+        <>
+            {showSpinnerOverlay && (
+                <div
+                    className={`fixed inset-0 w-full h-full rounded flex items-center justify-center`}
+                    style={{ background: 'rgba(0,0,0,0.75)', zIndex: 9999 }}
+                >
+                    <Spinner />
+                </div>
+            )}
+            <AnimatePresence>
+                {visible && (
+                    <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
+                        <HDialog
+                            static
+                            as={motion.div}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            open={visible}
+                            onClose={onDialogClose}
+                        >
                             <div
-                                className={`absolute w-full h-full rounded flex items-center justify-center`}
-                                style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
-                            >
-                                <Spinner />
-                            </div>
-                        )}
-                        <div className={'fixed inset-0 overflow-y-auto z-[9998]'}>
-                            <div
-                                ref={container}
-                                className={styles.container}
-                                onMouseDown={onContainerClick.bind(this, true)}
-                                onMouseUp={onContainerClick.bind(this, false)}
-                            >
-                                <HDialog.Panel
-                                    as={motion.div}
-                                    initial={'closed'}
-                                    animate={down ? 'bounce' : 'open'}
-                                    exit={'closed'}
-                                    variants={variants}
-                                    className={styles.panel}
+                                style={{
+                                    background:
+                                        'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
+                                }}
+                                className={'fixed inset-0 backdrop-blur-sm z-[9997]'}
+                            />
+                            <div className={'fixed inset-0 overflow-y-auto z-[9998]'}>
+                                <div
+                                    ref={container}
+                                    className={styles.container}
+                                    onMouseDown={onContainerClick.bind(this, true)}
+                                    onMouseUp={onContainerClick.bind(this, false)}
                                 >
-                                    <div className={'flex p-6 pb-0 overflow-y-auto'}>
-                                        {iconPosition === 'container' && icon}
-                                        <div className={'flex-1 max-h-[70vh] min-w-0'}>
-                                            <div className={'flex items-center'}>
-                                                {iconPosition !== 'container' && icon}
-                                                {children}
-                                                <div className={'invisible h-6'} />
+                                    <HDialog.Panel
+                                        as={motion.div}
+                                        initial={'closed'}
+                                        animate={down ? 'bounce' : 'open'}
+                                        exit={'closed'}
+                                        variants={variants}
+                                        className={styles.panel}
+                                    >
+                                        <div className={'flex p-6 pb-0 overflow-y-auto'}>
+                                            {iconPosition === 'container' && icon}
+                                            <div className={'flex-1 max-h-[70vh] min-w-0'}>
+                                                <div className={'flex items-center'}>
+                                                    {iconPosition !== 'container' && icon}
+                                                    {children}
+                                                    <div className={'invisible h-6'} />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
-                                    {dismissable && (
-                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onDialogClose}>
-                                                <HugeIconsX fill='currentColor' />
-                                            </button>
-                                        </div>
-                                    )}
-                                </HDialog.Panel>
-                            </div>
-                        </div>{' '}
-                    </HDialog>
-                </DialogContext.Provider>
-            )}
-        </AnimatePresence>
+
+                                        {dismissable && (
+                                            <div
+                                                className={
+                                                    'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'
+                                                }
+                                            >
+                                                <button onClick={onDismissed}>
+                                                    <HugeIconsX fill='currentColor' />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </HDialog.Panel>
+                                </div>
+                            </div>{' '}
+                        </HDialog>
+                    </DialogContext.Provider>
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 
