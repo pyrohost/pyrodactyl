@@ -128,12 +128,11 @@ export default function Editor(props: EditorProps) {
         }
 
         if (view === undefined) {
-            setView(
-                new EditorView({
-                    state: createEditorState(),
-                    parent: ref.current,
-                }),
-            );
+            const __editorView = new EditorView({
+                state: createEditorState(),
+                parent: ref.current,
+            });
+            setView(__editorView);
         } else {
             // Fully replace the state whenever the initial content changes, this prevents any unrelated
             // history (for undo and redo) from being tracked.
@@ -190,6 +189,10 @@ export default function Editor(props: EditorProps) {
             });
             return;
         }
+
+        view.dispatch({
+            scrollIntoView: true,
+        });
 
         const { onContentSaved } = props;
         if (onContentSaved !== undefined) {
