@@ -64,7 +64,7 @@
         "yup": "^1.4.0"
     },
     "devDependencies": {
-        "@swc/plugin-styled-components": "^1.5.121",
+        "@swc/plugin-styled-components": "^1.5.122",
         "@types/codemirror": "^5.60.15",
         "@types/debounce": "^1.2.4",
         "@types/events": "^3.0.3",
