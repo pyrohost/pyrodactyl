@@ -230,4 +230,8 @@ export default createGlobalStyle`
         white-space: pre-wrap;
         color: var(--gray11);
     }
+
+    input::placeholder {
+        color: #ffffff55;
+    }
 `;
