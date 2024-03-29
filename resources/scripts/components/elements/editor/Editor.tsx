@@ -193,6 +193,19 @@ export default function Editor(props: EditorProps) {
         view.dispatch({
             scrollIntoView: true,
         });
+    }, [view, props.fetchContent]);
+
+    useEffect(() => {
+        if (props.fetchContent === undefined) {
+            return;
+        }
+
+        if (!view) {
+            props.fetchContent(async () => {
+                throw new Error('no editor session has been configured');
+            });
+            return;
+        }
 
         const { onContentSaved } = props;
         if (onContentSaved !== undefined) {
