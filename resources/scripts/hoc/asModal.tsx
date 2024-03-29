@@ -72,7 +72,6 @@ function asModal<P extends {}>(
 
                 return (
                     <PortaledModal
-                        appear
                         onDismissed={() =>
                             this.setState({ render: false }, () => {
                                 if (typeof this.props.onModalDismissed === 'function') {

@@ -1,9 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
 import styled from 'styled-components';
-import { createPortal } from 'react-dom';
-import FadeTransition from './transitions/FadeTransition';
+import { Dialog as HDialog } from '@headlessui/react';
+// FIXME: add icons back
+import { AnimatePresence, motion } from 'framer-motion';
+import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
+import HugeIconsX from './hugeicons/X';
+
+const variants = {
+    open: {
+        scale: 1,
+        opacity: 1,
+        transition: {
+            type: 'spring',
+            damping: 15,
+            stiffness: 300,
+            duration: 0.15,
+        },
+    },
+    closed: {
+        scale: 0.75,
+        opacity: 0,
+        transition: {
+            type: 'easeIn',
+            duration: 0.15,
+        },
+    },
+    bounce: {
+        scale: 0.95,
+        opacity: 1,
+        transition: { type: 'linear', duration: 0.075 },
+    },
+};
 
 export interface RequiredModalProps {
     visible: boolean;
@@ -30,132 +59,99 @@ export const ModalMask = styled.div`
     backdrop-filter: blur(3px);
 `;
 
-// export const ModalMask = styled.div`
-//     ${tw`fixed z-[9997] overflow-auto flex w-full inset-0 backdrop-blur-sm`};
-//     background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%);
-// `;
-
-// const ModalContainer = styled.div<{ alignTop?: boolean }>`
-//     max-width: 95%;
-//     max-height: calc(100vh - 8rem);
-
-//     ${tw`relative flex flex-col w-full m-auto`};
-//     ${(props) =>
-//         props.alignTop &&
-//         css`
-//             margin-top: 20%;
-//         `};
-
-//     margin-bottom: auto;
-
-//     & > .close-icon {
-//         ${tw`absolute right-0 top-0 p-2 text-white cursor-pointer opacity-50 transition-all duration-150 ease-linear hover:opacity-100`};
-
-//         &:hover {
-//             ${tw`transform rotate-90`}
-//         }
-
-//         & > svg {
-//             ${tw`w-6 h-6`};
-//         }
-//     }
-// `;
-
-const Modal: React.FC<ModalProps> = ({
-    visible,
-    appear,
-    dismissable,
-    showSpinnerOverlay,
-    // top = true,
-    closeOnBackground = true,
-    closeOnEscape = true,
-    // onDismissed,
-    children,
-}) => {
-    const [render, setRender] = useState(visible);
-
+const Modal: React.FC<ModalProps> = ({ visible, appear, dismissable, showSpinnerOverlay, onDismissed, children }) => {
     const isDismissable = useMemo(() => {
         return (dismissable || true) && !(showSpinnerOverlay || false);
     }, [dismissable, showSpinnerOverlay]);
 
-    useEffect(() => {
-        if (!isDismissable || !closeOnEscape) return;
+    const container = useRef<HTMLDivElement>(null);
+    const [icon, setIcon] = useState<React.ReactNode>();
+    const [_, setFooter] = useState<React.ReactNode>();
+    const [iconPosition, setIconPosition] = useState<IconPosition>('title');
+    const [down, setDown] = useState(false);
 
-        const handler = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setRender(false);
-        };
+    const onContainerClick = (down: boolean, e: React.MouseEvent<HTMLDivElement>): void => {
+        if (e.target instanceof HTMLElement && container.current?.isSameNode(e.target)) {
+            setDown(down);
+        }
+    };
 
-        window.addEventListener('keydown', handler);
-        return () => {
-            window.removeEventListener('keydown', handler);
-        };
-    }, [isDismissable, closeOnEscape, render]);
-
-    useEffect(() => setRender(visible), [visible]);
+    const onDialogClose = (): void => {
+        if (!isDismissable) {
+            return onDismissed();
+        }
+    };
 
     return (
-        <FadeTransition as={Fragment} show={render} duration='duration-150' appear={appear ?? true} unmount>
-            <div
-                className='fixed z-[9997] overflow-hidden flex w-full inset-0 backdrop-blur-sm overflow-y-scroll'
-                style={{
-                    background: 'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
-                }}
-                onClick={(e) => e.stopPropagation()}
-                onContextMenu={(e) => e.stopPropagation()}
-                onMouseDown={(e) => {
-                    if (isDismissable && closeOnBackground) {
-                        e.stopPropagation();
-                        if (e.target === e.currentTarget) {
-                            setRender(false);
-                        }
-                    }
-                }}
-            >
-                {showSpinnerOverlay && (
-                    <div
-                        className={`absolute w-full h-full rounded flex items-center justify-center`}
-                        style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
+        <AnimatePresence>
+            {(visible || appear) && (
+                <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
+                    <HDialog
+                        static
+                        as={motion.div}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        open={visible}
+                        onClose={onDialogClose}
                     >
-                        <Spinner />
-                    </div>
-                )}
-                <div className='max-w-2xl mx-auto py-6'>
-                    <div
-                        style={{
-                            background:
-                                'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(255, 255, 255, 0.12)',
-                        }}
-                        className='p-8 relative border-[1px] border-[#ffffff07] rounded-2xl w-full h-fit mx-auto text-left shadow-2xl backdrop-blur-3xl'
-                    >
-                        {isDismissable && (
-                            <div className={'w-8 h-8 absolute top-4 right-4'} onClick={() => setRender(false)}>
-                                <svg
-                                    xmlns={'http://www.w3.org/2000/svg'}
-                                    fill={'none'}
-                                    viewBox={'0 0 24 24'}
-                                    stroke={'currentColor'}
-                                >
-                                    <path
-                                        strokeLinecap={'round'}
-                                        strokeLinejoin={'round'}
-                                        strokeWidth={'2'}
-                                        d={'M6 18L18 6M6 6l12 12'}
-                                    />
-                                </svg>
+                        <div
+                            style={{
+                                background:
+                                    'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
+                            }}
+                            className={'fixed inset-0 backdrop-blur-sm z-[9997]'}
+                        />
+                        {showSpinnerOverlay && (
+                            <div
+                                className={`absolute w-full h-full rounded flex items-center justify-center`}
+                                style={{ background: 'hsla(211, 10%, 53%, 0.35)', zIndex: 9999 }}
+                            >
+                                <Spinner />
                             </div>
                         )}
-                        {children}
-                    </div>
-                </div>
-            </div>
-        </FadeTransition>
+                        <div className={'fixed inset-0 overflow-y-auto z-[9998]'}>
+                            <div
+                                ref={container}
+                                className={styles.container}
+                                onMouseDown={onContainerClick.bind(this, true)}
+                                onMouseUp={onContainerClick.bind(this, false)}
+                            >
+                                <HDialog.Panel
+                                    as={motion.div}
+                                    initial={'closed'}
+                                    animate={down ? 'bounce' : 'open'}
+                                    exit={'closed'}
+                                    variants={variants}
+                                    className={styles.panel}
+                                >
+                                    <div className={'flex p-6 pb-0 overflow-y-auto'}>
+                                        {iconPosition === 'container' && icon}
+                                        <div className={'flex-1 max-h-[70vh] min-w-0'}>
+                                            <div className={'flex items-center'}>
+                                                {iconPosition !== 'container' && icon}
+                                                {children}
+                                                <div className={'invisible h-6'} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
+                                    {dismissable && (
+                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
+                                            <button onClick={onDialogClose}>
+                                                <HugeIconsX fill='currentColor' />
+                                            </button>
+                                        </div>
+                                    )}
+                                </HDialog.Panel>
+                            </div>
+                        </div>{' '}
+                    </HDialog>
+                </DialogContext.Provider>
+            )}
+        </AnimatePresence>
     );
 };
 
-const PortaledModal: React.FC<ModalProps> = ({ children, ...props }) => {
-    const element = useRef(document.getElementById('modal-portal'));
-
-    return createPortal(<Modal {...props}>{children}</Modal>, element.current!);
-};
-
-export default PortaledModal;
+export default Modal;

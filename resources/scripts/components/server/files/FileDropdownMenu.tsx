@@ -45,6 +45,8 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             mutate();
             clearAndAddHttpError({ key: 'files', error });
         });
+
+        setShowConfirmation(false);
     };
 
     const doCopy = () => {
