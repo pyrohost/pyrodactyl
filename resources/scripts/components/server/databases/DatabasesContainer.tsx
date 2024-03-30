@@ -50,10 +50,7 @@ export default () => {
                 </Can>
             </MainPageHeader>
 
-            {!databases.length && loading ? (
-                // <Spinner size={'large'} centered />
-                <></>
-            ) : (
+            {!databases.length && loading ? null : (
                 <>
                     {databases.length > 0 ? (
                         databases.map((database, index) => (
