@@ -40,7 +40,7 @@ Instead of downloading the official panel, follow the steps below to install pyr
 
 1. `git clone https://github.com/pyrohost/panel.git /var/www/pterodactyl`
 2. `cd /var/www/pterodactyl`
-3. `pnpm i`
+3. `npm i`
 4. `pnpm ship`
 
 Proceed with the rest of the installation as you would with the official panel.
@@ -71,6 +71,9 @@ You will need a working installation of Vagrant, the latest LTS version of NodeJ
 - If you receive a message like `Vagrant was unable to mount VirtualBox shared folders`, you [may need to install the vbguest plugin for VirtualBox](https://stackoverflow.com/a/48569055/11537010) with `vagrant plugin install vagrant-vbguest`. If it's already installed, run `vagrant plugin update vagrant-vbguest`.
 
 - We recommend setting up [Remote Caching via turbo](https://turbo.build/repo/docs/core-concepts/remote-caching). When you run `pnpm ship` on your local development machine, its results will be cached and uploaded, allowing you to finish a build on your production server in milliseconds.
+
+> [!CAUTION]
+> We do not recommend installing packages via pnpm. Although it is entirely possible to run and build pyrodactyl solely with pnpm, pnpm is incompatible with our build chunking strategy that allows pyrodactyl to load so quickly.
 
 ## Star History
 
