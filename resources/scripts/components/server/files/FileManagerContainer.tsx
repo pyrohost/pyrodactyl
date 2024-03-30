@@ -18,7 +18,6 @@ import { useStoreActions } from '@/state/hooks';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import { hashToPath } from '@/helpers';
-// import style from './style.module.css';
 import NewFileButton from './NewFileButton';
 import debounce from 'debounce';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -97,15 +96,11 @@ export default () => {
                     />
                 </div>
             </ErrorBoundary>
-            {!files ? (
-                // <Spinner size={'large'} centered />
-                <></>
-            ) : (
+            {!files ? null : (
                 <>
                     {!files.length ? (
                         <p className={`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
                     ) : (
-                        // <CSSTransition classNames={'fade'} timeout={150} appear in>
                         <>
                             {files.length > 250 && (
                                 <div className={`rounded bg-yellow-400 mb-px p-3`}>
@@ -159,7 +154,6 @@ export default () => {
                             </div>
                             <MassActionsBar />
                         </>
-                        // </CSSTransition>
                     )}
                 </>
             )}
