@@ -1,4 +1,3 @@
-import { Toaster } from 'sonner';
 import TransferListener from '@/components/server/TransferListener';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useParams, useLocation } from 'react-router-dom';
