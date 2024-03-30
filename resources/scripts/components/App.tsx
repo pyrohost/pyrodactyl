@@ -15,6 +15,7 @@ import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { ServerContext } from '@/state/server';
 import '@/assets/tailwind.css';
 import Spinner from '@/components/elements/Spinner';
+import { Toaster } from 'sonner';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
@@ -63,6 +64,15 @@ const App = () => {
                     data-pyro-routerwrap=''
                     className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
                 >
+                    <Toaster
+                        theme='dark'
+                        toastOptions={{
+                            unstyled: true,
+                            classNames: {
+                                toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
+                            },
+                        }}
+                    />
                     <BrowserRouter>
                         <Routes>
                             <Route

@@ -119,15 +119,6 @@ export default () => {
                 )
             ) : (
                 <>
-                    <Toaster
-                        theme='dark'
-                        toastOptions={{
-                            unstyled: true,
-                            classNames: {
-                                toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
-                            },
-                        }}
-                    />
                     <MainSidebar className='hidden lg:flex'>
                         <div
                             className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
