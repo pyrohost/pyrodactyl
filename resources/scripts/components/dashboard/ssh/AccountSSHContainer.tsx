@@ -5,7 +5,6 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import CreateSSHKeyForm from '@/components/dashboard/ssh/CreateSSHKeyForm';
 import DeleteSSHKeyButton from '@/components/dashboard/ssh/DeleteSSHKeyButton';
 import ContentBox from '@/components/elements/ContentBox';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
@@ -39,7 +38,7 @@ export default () => {
                         </p>
                     ) : (
                         data.map((key, _) => (
-                            <GreyRowBox key={key.fingerprint}>
+                            <div className='flex flex-col' key={key.fingerprint}>
                                 {/* <FontAwesomeIcon icon={faKey} className={`text-zinc-300`} /> */}
                                 <div className={`flex-1`}>
                                     <p className={`text-sm break-words font-medium`}>{key.name}</p>
@@ -50,7 +49,7 @@ export default () => {
                                     </p>
                                 </div>
                                 <DeleteSSHKeyButton name={key.name} fingerprint={key.fingerprint} />
-                            </GreyRowBox>
+                            </div>
                         ))
                     )}
                 </ContentBox>

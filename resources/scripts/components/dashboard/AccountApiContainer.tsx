@@ -5,7 +5,6 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
 import Code from '@/components/elements/Code';
 import ContentBox from '@/components/elements/ContentBox';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
@@ -65,7 +64,7 @@ export default () => {
                         </p>
                     ) : (
                         keys.map((key, _) => (
-                            <GreyRowBox key={key.identifier}>
+                            <div className='flex flex-col' key={key.identifier}>
                                 {/* <FontAwesomeIcon icon={faKey} className={`text-zinc-300`} /> */}
                                 <div className={`ml-4 flex-1 overflow-hidden`}>
                                     <p className={`text-sm break-words`}>{key.description}</p>
@@ -87,7 +86,7 @@ export default () => {
                                     /> */}
                                     FIXME: Delete Icon
                                 </button>
-                            </GreyRowBox>
+                            </div>
                         ))
                     )}
                 </ContentBox>

@@ -7,7 +7,6 @@ import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
-import GreyRowBox from '@/components/elements/GreyRowBox';
 import Input from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import Modal from '@/components/elements/Modal';
@@ -140,7 +139,7 @@ export default ({ database, className }: Props) => {
                     </Button>
                 </div>
             </Modal>
-            <GreyRowBox $hoverable={false} className={className}>
+            <div className={className}>
                 <div className={`hidden md:block`}>
                     {/* <FontAwesomeIcon icon={faDatabase} fixedWidth /> */}
                     FIXME: Database Icon
@@ -178,7 +177,7 @@ export default ({ database, className }: Props) => {
                         </Button>
                     </Can>
                 </div>
-            </GreyRowBox>
+            </div>
         </>
     );
 };
