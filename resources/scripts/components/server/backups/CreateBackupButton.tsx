@@ -34,8 +34,9 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     label={'Backup name'}
                     description={'If provided, the name that should be used to reference this backup.'}
                 />
-                <div className={`mt-6`}>
+                <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
+                        className='flex flex-col gap-2'
                         name={'ignored'}
                         label={'Ignored Files & Directories'}
                         description={`
@@ -45,11 +46,16 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                             prefixing the path with an exclamation point.
                         `}
                     >
-                        <FormikField as={Textarea} name={'ignored'} rows={6} />
+                        <FormikField
+                            as={Textarea}
+                            className='px-4 py-2 rounded-lg outline-none bg-[#ffffff17] text-sm'
+                            name={'ignored'}
+                            rows={6}
+                        />
                     </FormikFieldWrapper>
                 </div>
                 <Can action={'backup.delete'}>
-                    <div className={`mt-6 bg-zinc-700 border border-zinc-800 shadow-inner p-4 rounded`}>
+                    <div className={`mt-6`}>
                         <FormikSwitch
                             name={'isLocked'}
                             label={'Locked'}
