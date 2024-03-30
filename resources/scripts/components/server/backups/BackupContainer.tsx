@@ -28,7 +28,11 @@ const BackupContainer = () => {
 
     if (!backups || (error && isValidating)) {
         // return <Spinner size={'large'} centered />;
-        return <></>;
+        return (
+            <ServerContentBlock title={'Backups'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+            </ServerContentBlock>
+        );
     }
 
     return (
