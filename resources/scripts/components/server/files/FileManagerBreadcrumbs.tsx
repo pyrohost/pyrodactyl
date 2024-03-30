@@ -47,18 +47,6 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
     return (
         <div className={`group flex flex-grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
-            {/* displaying "home" is so useless and needlessly confusing */}
-            {/* <span className={`px-1 text-zinc-300`}>home</span>
-            <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
-                stroke='currentColor'
-                className='w-3 h-3'
-            >
-                <path strokeLinecap='round' strokeLinejoin='round' d='m8.25 4.5 7.5 7.5-7.5 7.5' />
-            </svg> */}
             <NavLink to={`/server/${id}/files`} className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
                 root
             </NavLink>

@@ -97,11 +97,12 @@ export default () => {
     }
 
     return (
-        <PageContentBlock className='!p-0'>
+        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='!p-0'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
-                <div className={`py-4`}>
+                <div className={`flex py-6 bg-[#ffffff11] rounded-md border-[1px] border-[#ffffff07]`}>
+                    <span className='-ml-[2rem]'></span>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />
                 </div>
             </ErrorBoundary>
@@ -130,7 +131,7 @@ export default () => {
 
             <div className={`relative h-full [&>div>div]:h-full [&>div>div]:!outline-none w-full`}>
                 <Editor
-                    style={{ height: 'calc(100vh - 68px)', width: '100%' }}
+                    style={{ height: 'calc(100vh - 86px)', width: '100%' }}
                     filename={filename}
                     initialContent={content}
                     language={language}
@@ -150,7 +151,7 @@ export default () => {
                 />
             </div>
 
-            <div className={`flex flex-row absolute top-2 right-2`}>
+            <div className={`flex flex-row absolute top-2.5 right-2`}>
                 <div className={`flex-1 sm:flex-none rounded mr-4`}>
                     <select
                         className='h-full rounded-md bg-[#ffffff12] text-white px-4 py-3 text-sm font-bold shadow-md w-full appearance-none'
@@ -172,12 +173,12 @@ export default () => {
                         <button
                             style={{
                                 background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
                             }}
                             className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
                             onClick={() => save()}
                         >
-                            Save File
+                            Save <span className='text-xs font-bold uppercase'>CTRL + S</span>
                         </button>
                     </Can>
                 ) : (
