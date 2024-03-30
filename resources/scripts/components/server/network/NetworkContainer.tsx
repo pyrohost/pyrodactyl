@@ -10,6 +10,7 @@ import getServerAllocations from '@/api/swr/getServerAllocations';
 import isEqual from 'react-fast-compare';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import { For } from 'million/react';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const NetworkContainer = () => {
     const [loading, setLoading] = useState(false);
@@ -50,15 +51,11 @@ const NetworkContainer = () => {
 
     return (
         <ServerContentBlock showFlashKey={'server:network'} title={'Network'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Networking</h1>
-                {!data ? (
-                    <></>
-                ) : (
+            <MainPageHeader title={'Network'}>
+                {!data ? null : (
                     <>
                         {allocationLimit > 0 && (
                             <Can action={'allocation.create'}>
-                                <SpinnerOverlay visible={loading} />
                                 <div className={`sm:flex items-center justify-end`}>
                                     <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                         {data.length} of {allocationLimit} allowed allocations
@@ -80,7 +77,7 @@ const NetworkContainer = () => {
                         )}
                     </>
                 )}
-            </div>
+            </MainPageHeader>
             {!data ? (
                 // <Spinner size={'large'} centered />
                 <></>
