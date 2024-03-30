@@ -160,7 +160,7 @@ export default () => {
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-[99999]' sideOffset={8}>
-                                    <DropdownMenuItem onClick={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
