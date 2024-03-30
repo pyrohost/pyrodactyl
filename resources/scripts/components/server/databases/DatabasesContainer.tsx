@@ -36,6 +36,7 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Databases'}>
+            <FlashMessageRender byKey={'databases'} />
             <MainPageHeader title={'Databases'}>
                 <Can action={'database.create'}>
                     <div className={`flex items-center justify-end`}>
@@ -48,7 +49,7 @@ export default () => {
                     </div>
                 </Can>
             </MainPageHeader>
-            <FlashMessageRender byKey={'databases'} />
+
             {!databases.length && loading ? (
                 // <Spinner size={'large'} centered />
                 <></>
