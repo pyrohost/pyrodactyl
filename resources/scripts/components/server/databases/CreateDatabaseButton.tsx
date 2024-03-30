@@ -8,7 +8,7 @@ import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 
 interface Values {
     databaseName: string;
@@ -67,34 +67,36 @@ export default () => {
                             setVisible(false);
                         }}
                     >
-                        <FlashMessageRender byKey={'database:create'} />
-                        <h2 className={`text-2xl mb-6`}>Create new database</h2>
-                        <Form className={`m-0`}>
-                            <Field
-                                type={'string'}
-                                id={'database_name'}
-                                name={'databaseName'}
-                                label={'Database Name'}
-                                description={'A descriptive name for your database instance.'}
-                            />
-                            <div className={`mt-6`}>
+                        <div className='flex flex-col'>
+                            <FlashMessageRender byKey={'database:create'} />
+                            <h2 className={`text-2xl mb-6`}>Create new database</h2>
+                            <Form className={`m-0 flex flex-col`}>
                                 <Field
                                     type={'string'}
-                                    id={'connections_from'}
-                                    name={'connectionsFrom'}
-                                    label={'Connections From'}
-                                    description={
-                                        'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
-                                    }
+                                    id={'database_name'}
+                                    name={'databaseName'}
+                                    label={'Database Name'}
+                                    description={'A descriptive name for your database instance.'}
                                 />
-                            </div>
-                            <div className={`flex flex-wrap justify-end mt-6`}>
-                                <Button type={'button'} isSecondary onClick={() => setVisible(false)}>
-                                    Cancel
-                                </Button>
-                                <Button type={'submit'}>Create Database</Button>
-                            </div>
-                        </Form>
+                                <div className={`mt-6`}>
+                                    <Field
+                                        type={'string'}
+                                        id={'connections_from'}
+                                        name={'connectionsFrom'}
+                                        label={'Connections From'}
+                                        description={
+                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
+                                        }
+                                    />
+                                </div>
+                                <div className={`flex gap-6 justify-end my-6`}>
+                                    <Button type={'button'} onClick={() => setVisible(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button type={'submit'}>Create Database</Button>
+                                </div>
+                            </Form>
+                        </div>
                     </Modal>
                 )}
             </Formik>
