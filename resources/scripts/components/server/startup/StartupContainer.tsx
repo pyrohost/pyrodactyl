@@ -94,7 +94,7 @@ const StartupContainer = () => {
     ) : (
         <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
             <MainPageHeader direction='column' title='Startup Settings'>
-                <h2 className='mb-8 text-sm'>
+                <h2 className='text-sm'>
                     These settings are used to control how your server starts up. Please be careful when modifying these
                     settings as they can cause your server to become inoperable.
                 </h2>
