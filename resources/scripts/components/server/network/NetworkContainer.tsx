@@ -5,14 +5,14 @@ import { ServerContext } from '@/state/server';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import Can from '@/components/elements/Can';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import getServerAllocations from '@/api/swr/getServerAllocations';
 import isEqual from 'react-fast-compare';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import { For } from 'million/react';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const NetworkContainer = () => {
-    const [loading, setLoading] = useState(false);
+    const [_, setLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const allocationLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.allocations);
     const allocations = ServerContext.useStoreState((state) => state.server.data!.allocations, isEqual);
@@ -50,15 +50,11 @@ const NetworkContainer = () => {
 
     return (
         <ServerContentBlock showFlashKey={'server:network'} title={'Network'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Networking</h1>
-                {!data ? (
-                    <></>
-                ) : (
+            <MainPageHeader title={'Network'}>
+                {!data ? null : (
                     <>
                         {allocationLimit > 0 && (
                             <Can action={'allocation.create'}>
-                                <SpinnerOverlay visible={loading} />
                                 <div className={`sm:flex items-center justify-end`}>
                                     <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                         {data.length} of {allocationLimit} allowed allocations
@@ -80,11 +76,8 @@ const NetworkContainer = () => {
                         )}
                     </>
                 )}
-            </div>
-            {!data ? (
-                // <Spinner size={'large'} centered />
-                <></>
-            ) : (
+            </MainPageHeader>
+            {!data ? null : (
                 <>
                     <div
                         data-pyro-network-container-allocations
@@ -95,9 +88,6 @@ const NetworkContainer = () => {
                         className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                     >
                         <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                            {/* {data.map((allocation) => (
-                                <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
-                            ))} */}
                             <For each={data} memo>
                                 {(allocation) => (
                                     <AllocationRow

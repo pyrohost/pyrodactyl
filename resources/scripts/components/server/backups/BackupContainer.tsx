@@ -8,6 +8,7 @@ import getServerBackups, { Context as ServerBackupContext } from '@/api/swr/getS
 import { ServerContext } from '@/state/server';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Pagination from '@/components/elements/Pagination';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const BackupContainer = () => {
     const { page, setPage } = useContext(ServerBackupContext);
@@ -27,7 +28,6 @@ const BackupContainer = () => {
     }, [error]);
 
     if (!backups || (error && isValidating)) {
-        // return <Spinner size={'large'} centered />;
         return (
             <ServerContentBlock title={'Backups'}>
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
@@ -37,8 +37,7 @@ const BackupContainer = () => {
 
     return (
         <ServerContentBlock title={'Backups'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+            <MainPageHeader title={'Backups'}>
                 <Can action={'backup.create'}>
                     <div className={`sm:flex items-center justify-end`}>
                         {backupLimit > 0 && backups.backupCount > 0 && (
@@ -49,7 +48,7 @@ const BackupContainer = () => {
                         {backupLimit > 0 && backupLimit > backups.backupCount && <CreateBackupButton />}
                     </div>
                 </Can>
-            </div>
+            </MainPageHeader>
             <FlashMessageRender byKey={'backups'} />
             <Pagination data={backups} onPageSelect={setPage}>
                 {({ items }) =>
@@ -60,7 +59,7 @@ const BackupContainer = () => {
                             <p className={`text-center text-sm text-zinc-300`}>
                                 {page > 1
                                     ? "Looks like we've run out of backups to show you, try going back a page."
-                                    : 'It looks like there are no backups currently stored for this server.'}
+                                    : 'Your server does not have any backups.'}
                             </p>
                         )
                     ) : (

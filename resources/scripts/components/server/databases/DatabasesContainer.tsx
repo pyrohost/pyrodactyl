@@ -9,6 +9,7 @@ import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useDeepMemoize } from '@/plugins/useDeepMemoize';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -35,8 +36,8 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Databases'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Databases</h1>
+            <FlashMessageRender byKey={'databases'} />
+            <MainPageHeader title={'Databases'}>
                 <Can action={'database.create'}>
                     <div className={`flex items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
@@ -47,12 +48,9 @@ export default () => {
                         {databaseLimit > 0 && databaseLimit !== databases.length && <CreateDatabaseButton />}
                     </div>
                 </Can>
-            </div>
-            <FlashMessageRender byKey={'databases'} />
-            {!databases.length && loading ? (
-                // <Spinner size={'large'} centered />
-                <></>
-            ) : (
+            </MainPageHeader>
+
+            {!databases.length && loading ? null : (
                 <>
                     {databases.length > 0 ? (
                         databases.map((database, index) => (
@@ -65,7 +63,7 @@ export default () => {
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
-                                ? 'It looks like you have no databases.'
+                                ? 'Your server does not have any databases.'
                                 : 'Databases cannot be created for this server.'}
                         </p>
                     )}

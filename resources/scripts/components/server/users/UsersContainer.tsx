@@ -10,6 +10,7 @@ import { httpErrorToHuman } from '@/api/http';
 import Can from '@/components/elements/Can';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { For } from 'million/react';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 export default () => {
     const [loading, setLoading] = useState(true);
@@ -53,14 +54,15 @@ export default () => {
     return (
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} />
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+            <MainPageHeader title={'Users'}>
                 <Can action={'user.create'}>
                     <AddSubuserButton />
                 </Can>
-            </div>
+            </MainPageHeader>
             {!subusers.length ? (
-                <p className={`text-center text-sm text-zinc-300`}>It looks like you don&apos;t have any subusers.</p>
+                <p className={`text-center text-sm text-zinc-300`}>
+                    Your server does not have any additional users. Add others to help you manage your server.
+                </p>
             ) : (
                 <div
                     data-pyro-users-container-users
@@ -71,9 +73,6 @@ export default () => {
                     className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                 >
                     <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                        {/* {subusers.map((subuser) => (
-                            <UserRow key={subuser.uuid} subuser={subuser} />
-                        ))} */}
                         <For each={subusers} memo>
                             {(subuser) => <UserRow key={subuser.uuid} subuser={subuser} />}
                         </For>

@@ -23,6 +23,7 @@ import InputSpinner from '@/components/elements/InputSpinner';
 // } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
 import CopyOnClick from '@/components/elements/CopyOnClick';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const StartupContainer = () => {
     const [loading, setLoading] = useState(false);
@@ -92,13 +93,12 @@ const StartupContainer = () => {
         )
     ) : (
         <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Startup Settings</h1>
-            </div>
-            <h2 className='mb-8 text-sm'>
-                These settings are used to control how your server starts up. Please be careful when modifying these
-                settings as they can cause your server to become inoperable.
-            </h2>
+            <MainPageHeader direction='column' title='Startup Settings'>
+                <h2 className='mb-8 text-sm'>
+                    These settings are used to control how your server starts up. Please be careful when modifying these
+                    settings as they can cause your server to become inoperable.
+                </h2>
+            </MainPageHeader>
             <div className={`flex flex-col gap-8`}>
                 <TitledGreyBox title={'Startup Command'} className={`flex-1`}>
                     <CopyOnClick text={data.invocation}>

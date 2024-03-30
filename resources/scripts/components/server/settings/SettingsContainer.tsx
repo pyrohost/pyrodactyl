@@ -11,6 +11,7 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 import { ip } from '@/lib/formatters';
 import { Button } from '@/components/elements/button/index';
 import RenameServerBox from './RenameServerBox';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 export default () => {
     const username = useStoreState((state) => state.user.data!.username);
@@ -21,10 +22,8 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Settings'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Settings</h1>
-            </div>
             <FlashMessageRender byKey={'settings'} />
+            <MainPageHeader title={'Settings'} />
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
                     <RenameServerBox />
