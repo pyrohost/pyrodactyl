@@ -72,7 +72,7 @@
         "@types/qrcode.react": "^1.0.5",
         "@types/react": "^18.2.73",
         "@types/react-copy-to-clipboard": "^5.0.7",
-        "@types/react-dom": "^18.2.22",
+        "@types/react-dom": "^18.2.23",
         "@types/react-redux": "^7.1.1",
         "@types/uuid": "^9.0.8",
         "@typescript-eslint/eslint-plugin": "^7.4.0",
