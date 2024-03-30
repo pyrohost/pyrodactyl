@@ -89,12 +89,14 @@ export default () => {
 
         if (pathname.endsWith(`/server/${id}`)) return '7.5rem';
         if (pathname.endsWith(`/server/${id}/files`)) return '11rem';
+        if (new RegExp(`^/server/${id}/files(/(new|edit)/.*)?$`).test(pathname)) return '11rem';
         if (pathname.endsWith(`/server/${id}/databases`)) return '14.5rem';
         if (pathname.endsWith(`/server/${id}/backups`)) return '18rem';
         if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
         if (pathname.endsWith(`/server/${id}/users`)) return '25rem';
         if (pathname.endsWith(`/server/${id}/startup`)) return '28.5rem';
         if (pathname.endsWith(`/server/${id}/schedules`)) return '32rem';
+        if (new RegExp(`^/server/${id}/schedules/\\d+$`).test(pathname)) return '32rem';
         if (pathname.endsWith(`/server/${id}/settings`)) return '35.5rem';
         return '0';
     };
@@ -172,7 +174,7 @@ export default () => {
                                 <p>Home</p>
                             </NavLink>
                             <Can action={'file.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={`/server/${id}/files`} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/files`}>
                                     <HugeIconsFolder fill='currentColor' />
                                     <p>Files</p>
                                 </NavLink>
@@ -208,7 +210,7 @@ export default () => {
                                 </NavLink>
                             </Can>
                             <Can action={'schedule.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' to={`/server/${id}/schedules`} end>
+                                <NavLink className='flex flex-row items-center' to={`/server/${id}/schedules`}>
                                     <HugeIconsClock fill='currentColor' />
                                     <p>Schedules</p>
                                 </NavLink>
