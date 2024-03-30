@@ -57,7 +57,7 @@
         "styled-components": "^6.1.8",
         "swr": "^2.2.5",
         "tailwind-merge": "^2.2.2",
-        "tailwindcss": "^3.4.1",
+        "tailwindcss": "^3.4.3",
         "tailwindcss-animate": "^1.0.7",
         "uuid": "^9.0.1",
         "vite": "^5.2.7",
