@@ -17,6 +17,10 @@ export default createGlobalStyle`
         color: rgb(255 255 255 / var(--tw-text-opacity));
     }
 
+    button {
+        user-select: none;
+    }
+
     form {
         margin: 0;
     }
