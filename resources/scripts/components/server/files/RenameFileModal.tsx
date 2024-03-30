@@ -4,7 +4,7 @@ import Field from '@/components/elements/Field';
 import { join } from 'pathe';
 import renameFiles from '@/api/server/files/renameFiles';
 import { ServerContext } from '@/state/server';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
 
@@ -57,23 +57,21 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
         <Formik onSubmit={submit} initialValues={{ name: files.length > 1 ? '' : files[0] || '' }}>
             {({ isSubmitting, values }) => (
                 <Modal {...props} dismissable={!isSubmitting} showSpinnerOverlay={isSubmitting}>
-                    <Form className={`m-0`}>
-                        <div>
-                            <div className={`w-full sm:flex-1 sm:mr-4`}>
-                                <Field
-                                    type={'string'}
-                                    id={'file_name'}
-                                    name={'name'}
-                                    label={'File Name'}
-                                    description={
-                                        useMoveTerminology
-                                            ? 'Enter the new name and directory of this file or folder, relative to the current directory.'
-                                            : undefined
-                                    }
-                                    autoFocus
-                                />
-                            </div>
-                            <div className={`w-full sm:w-auto mt-4 sm:mt-0`}>
+                    <Form className={`m-0 w-full`}>
+                        <div className='w-full'>
+                            <Field
+                                type={'string'}
+                                id={'file_name'}
+                                name={'name'}
+                                label={'File Name'}
+                                description={
+                                    useMoveTerminology
+                                        ? 'Enter the new name and directory of this file or folder, relative to the current directory.'
+                                        : undefined
+                                }
+                                autoFocus
+                            />
+                            <div className={`flex justify-end w-full my-4`}>
                                 <Button>{useMoveTerminology ? 'Move' : 'Rename'}</Button>
                             </div>
                         </div>
