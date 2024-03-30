@@ -164,6 +164,7 @@ export default () => {
                                             position: 'relative',
                                         }}
                                         as='div'
+                                        memo
                                     >
                                         {(virtualItem) => {
                                             if (filesArray[virtualItem.index] !== undefined) {
