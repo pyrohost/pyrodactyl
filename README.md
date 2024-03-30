@@ -51,9 +51,7 @@ It is not currently possible to run pyrodactyl in a **production environment** o
 
 ## Local Development on Windows
 
-pyrodactyl is the world's first Pterodactyl panel that can be developed and run locally (with Wings) on Windows machines through [Vagrant](https://www.vagrantup.com/).
-
-You will need a working installation of Vagrant, the latest LTS version of NodeJS, the latest version of npm, the latest version of [Turbo](https://turbo.build), and the latest version of pnpm to properly run pyro. Once you have verified you have Vagrant, NodeJS, npm, Turbo and pnpm installed, you can follow the steps below:
+pyrodactyl is the world's first Pterodactyl panel that can be developed and run locally (with Wings) on Windows machines through [Vagrant](https://www.vagrantup.com/). Verify you have met the prerequisites above, then follow the steps below.
 
 1. Clone the pyrodactyl panel repository
 2. Run `npm i` to install all the packages necessary.
@@ -62,7 +60,7 @@ You will need a working installation of Vagrant, the latest LTS version of NodeJ
 5. Once you receive a message that says "pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
 6. Visit localhost:3000/admin to provision your first server on pyrodactyl!
 
-### Notes about Local Development
+### Notes about Local Development on Windows
 
 - If you have the dev server running (`pnpm dev`), a development build of the app will be served at localhost:3000 with HMR. If you want to preview a production build of pyrodactyl, terminate the dev server and run `pnpm ship`. Once it finishes, it will also be served at localhost:3000.
 
@@ -71,6 +69,8 @@ You will need a working installation of Vagrant, the latest LTS version of NodeJ
 - If you receive a message like `Vagrant was unable to mount VirtualBox shared folders`, you [may need to install the vbguest plugin for VirtualBox](https://stackoverflow.com/a/48569055/11537010) with `vagrant plugin install vagrant-vbguest`. If it's already installed, run `vagrant plugin update vagrant-vbguest`.
 
 - We recommend setting up [Remote Caching via turbo](https://turbo.build/repo/docs/core-concepts/remote-caching). When you run `pnpm ship` on your local development machine, its results will be cached and uploaded, allowing you to finish a build on your production server in milliseconds.
+
+- We do not recommend using Hyper-V as your virtualization layer. If your vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
 
 > [!CAUTION]
 > We do not recommend installing packages via pnpm. Although it is entirely possible to run and build pyrodactyl solely with pnpm, pnpm is incompatible with our build chunking strategy that allows pyrodactyl to load so quickly.
