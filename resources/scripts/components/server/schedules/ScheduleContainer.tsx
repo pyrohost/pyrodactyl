@@ -9,6 +9,7 @@ import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { NavLink } from 'react-router-dom';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 function ScheduleContainer() {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -34,8 +35,7 @@ function ScheduleContainer() {
     return (
         <ServerContentBlock title={'Schedules'}>
             <FlashMessageRender byKey={'schedules'} />
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Schedules</h1>
+            <MainPageHeader title={'Schedules'}>
                 <Can action={'schedule.create'}>
                     <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
                     <button
@@ -49,10 +49,8 @@ function ScheduleContainer() {
                         New Schedule
                     </button>
                 </Can>
-            </div>
-            {!schedules.length && loading ? (
-                <></>
-            ) : (
+            </MainPageHeader>
+            {!schedules.length && loading ? null : (
                 <>
                     <div
                         data-pyro-backups
