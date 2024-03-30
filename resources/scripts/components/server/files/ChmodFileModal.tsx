@@ -6,7 +6,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import Field from '@/components/elements/Field';
 import chmodFiles from '@/api/server/files/chmodFiles';
 import { ServerContext } from '@/state/server';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 import useFlash from '@/plugins/useFlash';
 
 interface FormikValues {
@@ -55,12 +55,16 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
         <Formik onSubmit={submit} initialValues={{ mode: files.length > 1 ? '' : files[0]?.mode ?? '' }}>
             {({ isSubmitting }) => (
                 <Modal {...props} dismissable={!isSubmitting} showSpinnerOverlay={isSubmitting}>
-                    <Form className={`m-0`}>
-                        <div className={`flex flex-wrap items-end`}>
-                            <div className={`w-full sm:flex-1 sm:mr-4`}>
+                    <Form className={`w-full m-0`}>
+                        <div className={`flex flex-col`}>
+                            <div className={`w-full`}>
                                 <Field type={'string'} id={'file_mode'} name={'mode'} label={'File Mode'} autoFocus />
+                                <h2 className='mb-4 my-4 text-sm'>
+                                    This is intended for advanced users. You may irreperably damage your server by
+                                    changing file permissions.
+                                </h2>
                             </div>
-                            <div className={`w-full sm:w-auto mt-4 sm:mt-0`}>
+                            <div className={`flex justify-end w-full my-4`}>
                                 <Button>Update</Button>
                             </div>
                         </div>
