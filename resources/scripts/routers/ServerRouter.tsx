@@ -114,9 +114,7 @@ export default () => {
             {!uuid || !id ? (
                 error ? (
                     <ServerError title='Something went wrong' message={error} />
-                ) : (
-                    <></>
-                )
+                ) : null
             ) : (
                 <>
                     <MainSidebar className='hidden lg:flex'>
