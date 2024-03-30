@@ -25,12 +25,7 @@ const CronBox = ({ title, value }: { title: string; value: string }) => (
 );
 
 const ActivePill = ({ active }: { active: boolean }) => (
-    <span
-    // css={[
-    //     tw`rounded-full px-2 py-px text-xs ml-4 uppercase`,
-    //     active ? tw`bg-green-600 text-green-100` : tw`bg-red-600 text-red-100`,
-    // ]}
-    >
+    <span className='flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white'>
         {active ? 'Active' : 'Inactive'}
     </span>
 );
@@ -79,10 +74,9 @@ export default () => {
                 <Spinner size={'large'} centered />
             ) : (
                 <>
-                    <ScheduleCronRow cron={schedule.cron} />
                     <div className={`rounded shadow`}>
                         <div
-                            className={`sm:flex items-center bg-neutral-900 p-3 sm:p-6 border-b-4 border-neutral-600 rounded-t`}
+                            className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center p-6 rounded-2xl`}
                         >
                             <div className={`flex-1`}>
                                 <h3 className={`flex items-center text-neutral-100 text-2xl`}>

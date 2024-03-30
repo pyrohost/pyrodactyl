@@ -7,7 +7,6 @@ import compressFiles from '@/api/server/files/compressFiles';
 import { ServerContext } from '@/state/server';
 import deleteFiles from '@/api/server/files/deleteFiles';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
-import Portal from '@/components/elements/Portal';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
@@ -91,19 +90,21 @@ const MassActionsBar = () => {
                         onDismissed={() => setShowMove(false)}
                     />
                 )}
-                <Portal>
-                    <FadeTransition duration='duration-75' show={selectedFiles.length > 0} appear unmount>
-                        <div className={'pointer-events-none fixed bottom-0 mb-6 flex justify-center w-full z-50'}>
-                            <div className={`flex items-center space-x-4 pointer-events-auto rounded p-4 bg-black/50`}>
-                                <Button onClick={() => setShowMove(true)}>Move</Button>
-                                <Button onClick={onClickCompress}>Archive</Button>
-                                <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
-                                    Delete
-                                </Button.Danger>
-                            </div>
+                <FadeTransition duration='duration-75' show={selectedFiles.length > 0} appear unmount>
+                    <div
+                        className={
+                            'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
+                        }
+                    >
+                        <div className={`flex items-center space-x-4 pointer-events-auto rounded p-4 bg-black/50`}>
+                            <Button onClick={() => setShowMove(true)}>Move</Button>
+                            <Button onClick={onClickCompress}>Archive</Button>
+                            <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
+                                Delete
+                            </Button.Danger>
                         </div>
-                    </FadeTransition>
-                </Portal>
+                    </div>
+                </FadeTransition>
             </div>
         </>
     );
