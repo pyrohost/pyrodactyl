@@ -3,7 +3,7 @@ import { splitVendorChunkPlugin } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
 
 import million from 'million/compiler';
-import { sentryVitePlugin } from '@sentry/vite-plugin';
+// import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 
@@ -95,11 +95,11 @@ export default defineConfig({
                 ],
             }),
         ],
-        sentryVitePlugin({
-            org: 'pyrohost',
-            project: 'pyrodactyl-panel',
-            telemetry: false,
-        }),
+        // sentryVitePlugin({
+        //     org: 'pyrohost',
+        //     project: 'pyrodactyl-panel',
+        //     telemetry: false,
+        // }),
     ],
 
     resolve: {
