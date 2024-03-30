@@ -95,7 +95,7 @@ export default () => {
 
         if (pathname.endsWith(`/server/${id}`)) return '7.5rem';
         if (pathname.endsWith(`/server/${id}/files`)) return '11rem';
-        if (new RegExp(`^/server/${id}/files(/(new|edit)/.*)?$`).test(pathname)) return '11rem';
+        if (new RegExp(`^/server/${id}/files(/(new|edit).*)?$`).test(pathname)) return '11rem';
         if (pathname.endsWith(`/server/${id}/databases`)) return '14.5rem';
         if (pathname.endsWith(`/server/${id}/backups`)) return '18rem';
         if (pathname.endsWith(`/server/${id}/network`)) return '21.5rem';
