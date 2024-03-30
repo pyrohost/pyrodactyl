@@ -2,7 +2,7 @@ import ModalContext from '@/context/ModalContext';
 import asModal from '@/hoc/asModal';
 import { useContext } from 'react';
 
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 
 type Props = {
     title: string;
@@ -17,15 +17,13 @@ const ConfirmationModal: React.FC<Props> = ({ title, children, buttonText, onCon
 
     return (
         <>
-            <h2 className={`text-2xl mb-6`}>{title}</h2>
-            <div className={`text-zinc-300`}>{children}</div>
-            <div className={`flex flex-wrap items-center justify-end mt-8`}>
-                <Button isSecondary onClick={() => dismiss()}>
-                    Cancel
-                </Button>
-                <Button color={'red'} onClick={() => onConfirmed()}>
-                    {buttonText}
-                </Button>
+            <div className='flex flex-col w-full'>
+                <h2 className={`text-2xl tracking-tight font-extrabold pr-4 mb-2`}>{title}</h2>
+                <div className={`text-zinc-300`}>{children}</div>
+                <div className={`flex gap-4 items-center justify-end my-6`}>
+                    <Button.Text onClick={() => dismiss()}>Cancel</Button.Text>
+                    <Button onClick={() => onConfirmed()}>{buttonText}</Button>
+                </div>
             </div>
         </>
     );

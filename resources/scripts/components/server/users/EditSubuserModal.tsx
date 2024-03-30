@@ -6,9 +6,9 @@ import { useContext, useEffect, useRef } from 'react';
 import { array, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
+import { Button } from '@/components/elements/button/index';
 import PermissionRow from '@/components/server/users/PermissionRow';
 import PermissionTitleBox from '@/components/server/users/PermissionTitleBox';
 
@@ -106,18 +106,9 @@ const EditSubuserModal = ({ subuser }: Props) => {
             })}
         >
             <Form>
-                <div className={`flex justify-between`}>
-                    <h2 className={`text-2xl`} ref={ref}>
-                        {subuser
-                            ? `${canEditUser ? 'Modify' : 'View'} permissions for ${subuser.email}`
-                            : 'Create new subuser'}
-                    </h2>
-                    <div>
-                        <Button type={'submit'} className={`w-full sm:w-auto`}>
-                            {subuser ? 'Save' : 'Invite User'}
-                        </Button>
-                    </div>
-                </div>
+                <h2 className={`text-2xl tracking-tight font-extrabold mb-2 pr-4`} ref={ref}>
+                    {subuser ? `Permissions for ${subuser.email}` : 'Create new subuser'}
+                </h2>
                 <FlashMessageRender byKey={'user:edit'} />
                 {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                     <div className={`mt-4 pl-4 py-2 border-l-4 border-blue-400`}>
@@ -138,30 +129,31 @@ const EditSubuserModal = ({ subuser }: Props) => {
                         />
                     </div>
                 )}
-                <div className={`my-6`}>
+                <div className={`flex flex-col gap-4`}>
                     {Object.keys(permissions)
                         .filter((key) => key !== 'websocket')
-                        .map((key, index) => (
+                        .map((key, _) => (
                             <PermissionTitleBox
                                 key={`permission_${key}`}
                                 title={key}
                                 isEditable={canEditUser}
                                 permissions={Object.keys(permissions[key]?.keys ?? {}).map((pkey) => `${key}.${pkey}`)}
-                                css={index > 0 ? `` : undefined}
                             >
                                 <p className={`text-sm text-neutral-400 mb-4`}>{permissions[key]?.description}</p>
-                                {Object.keys(permissions[key]?.keys ?? {}).map((pkey) => (
-                                    <PermissionRow
-                                        key={`permission_${key}.${pkey}`}
-                                        permission={`${key}.${pkey}`}
-                                        disabled={!canEditUser || editablePermissions.indexOf(`${key}.${pkey}`) < 0}
-                                    />
-                                ))}
+                                <div className='flex flex-col gap-4'>
+                                    {Object.keys(permissions[key]?.keys ?? {}).map((pkey) => (
+                                        <PermissionRow
+                                            key={`permission_${key}.${pkey}`}
+                                            permission={`${key}.${pkey}`}
+                                            disabled={!canEditUser || editablePermissions.indexOf(`${key}.${pkey}`) < 0}
+                                        />
+                                    ))}
+                                </div>
                             </PermissionTitleBox>
                         ))}
                 </div>
                 <Can action={subuser ? 'user.update' : 'user.create'}>
-                    <div className={`pb-6 flex justify-end`}>
+                    <div className={`my-6 flex justify-end`}>
                         <Button type={'submit'} className={`w-full sm:w-auto`}>
                             {subuser ? 'Save' : 'Invite User'}
                         </Button>
