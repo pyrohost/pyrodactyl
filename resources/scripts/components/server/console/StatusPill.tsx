@@ -1,6 +1,9 @@
 import clsx from 'clsx';
+import { ServerContext } from '@/state/server';
 
-export const StatusPill = (status: any) => {
+export const StatusPill = () => {
+    const status = ServerContext.useStoreState((state) => state.status.value);
+
     return (
         <div
             className={clsx(
@@ -21,7 +24,13 @@ export const StatusPill = (status: any) => {
                 )}
             ></div>
             <div className='text-sm font-bold'>
-                {status === 'offline' ? 'Offline' : status === 'running' ? 'Online' : 'Starting'}
+                {status === 'offline'
+                    ? 'Offline'
+                    : status === 'running'
+                      ? 'Online'
+                      : status === 'stopping'
+                        ? 'Stopping'
+                        : 'Starting'}
             </div>
         </div>
     );

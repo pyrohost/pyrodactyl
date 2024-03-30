@@ -37,7 +37,7 @@ const ServerConsoleContainer = () => {
                               : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <MainPageHeader title={name} titleChildren={<StatusPill status={status} />}>
+                <MainPageHeader title={name} titleChildren={<StatusPill />}>
                     <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
                 </MainPageHeader>
                 {description && (
