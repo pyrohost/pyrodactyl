@@ -3,7 +3,6 @@ import { splitVendorChunkPlugin } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
 
 import million from 'million/compiler';
-// import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import laravel from 'laravel-vite-plugin';
 
@@ -29,9 +28,8 @@ export default defineConfig({
         assetsInlineLimit: 0,
         emptyOutDir: true,
 
-        // we need to do this because otherwise it will
-        // generate in .vite/manifest.json, while laravel
-        // looks in public/build/manifest.json
+        // default manifest location is in .vite/manifest.json
+        // laravel looks in public/build/manifest.json
         manifest: 'manifest.json',
 
         outDir: 'public/build',
@@ -49,13 +47,7 @@ export default defineConfig({
                 },
             },
         },
-
-        // sourcemap: true,
     },
-
-    // css: {
-    //     preprocessorMaxWorkers: true,
-    // },
 
     define: {
         'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
@@ -67,10 +59,6 @@ export default defineConfig({
         'process.version': null,
         'process.versions': null,
     },
-
-    // optimizeDeps: {
-    //     holdUntilCrawlEnd: true,
-    // },
 
     plugins: [
         laravel('resources/scripts/index.tsx'),
@@ -95,11 +83,6 @@ export default defineConfig({
                 ],
             }),
         ],
-        // sentryVitePlugin({
-        //     org: 'pyrohost',
-        //     project: 'pyrodactyl-panel',
-        //     telemetry: false,
-        // }),
     ],
 
     resolve: {
