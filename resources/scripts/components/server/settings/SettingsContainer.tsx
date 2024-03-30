@@ -22,6 +22,7 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Settings'}>
+            <FlashMessageRender byKey={'settings'} />
             <MainPageHeader title={'Settings'} />
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
