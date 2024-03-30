@@ -52,30 +52,30 @@ function ScheduleContainer() {
             </MainPageHeader>
             {!schedules.length && loading ? null : (
                 <>
-                    <div
-                        data-pyro-backups
-                        style={{
-                            background:
-                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                        }}
-                        className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                    >
-                        <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                            {schedules.length === 0 ? (
-                                <p className={`text-sm text-center text-neutral-300`}>
-                                    There are no schedules configured for this server.
-                                </p>
-                            ) : (
-                                schedules.map((schedule) => (
+                    {schedules.length === 0 ? (
+                        <p className={`text-sm text-center text-neutral-300`}>
+                            There are no schedules configured for this server.
+                        </p>
+                    ) : (
+                        <div
+                            data-pyro-backups
+                            style={{
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                            }}
+                            className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                        >
+                            <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
+                                {schedules.map((schedule) => (
                                     <NavLink key={schedule.id} to={`${schedule.id}`} end>
                                         <div className='flex bg-[#ffffff11] hover:bg-[#ffffff19] transition duration-100 hover:duration-0 px-6 py-4 rounded-md items-center'>
                                             <ScheduleRow schedule={schedule} />
                                         </div>
                                     </NavLink>
-                                ))
-                            )}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </>
             )}
         </ServerContentBlock>
