@@ -122,4 +122,15 @@ export default defineConfig({
             ),
         },
     },
+
+    server: {
+        warmup: {
+            clientFiles: [
+                'resources/scripts/index.tsx',
+                'resources/scripts/routers/DashboardRouter.tsx',
+                'resources/scripts/components/dashboard/DashboardContainer.tsx',
+                'resources/scripts/routers/ServerRouter.tsx',
+            ],
+        },
+    },
 });
