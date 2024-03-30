@@ -232,6 +232,6 @@ export default createGlobalStyle`
     }
 
     input::placeholder {
-        color: #ffffff55;
+        color: #ffffff55 !important;
     }
 `;
