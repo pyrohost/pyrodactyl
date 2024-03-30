@@ -1,4 +1,4 @@
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import MainSidebar from '@/components/elements/MainSidebar';
@@ -14,7 +14,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
-import { useLocation } from 'react-router';
 import MainWrapper from '@/components/elements/MainWrapper';
 import { useStoreState } from 'easy-peasy';
 
