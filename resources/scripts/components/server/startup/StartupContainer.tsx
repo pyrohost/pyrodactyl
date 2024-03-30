@@ -23,7 +23,6 @@ import InputSpinner from '@/components/elements/InputSpinner';
 // } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
 import CopyOnClick from '@/components/elements/CopyOnClick';
-import MainPage from '@/components/elements/MainPage';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const StartupContainer = () => {

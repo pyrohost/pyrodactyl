@@ -5,7 +5,6 @@ import { ServerContext } from '@/state/server';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import Can from '@/components/elements/Can';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import getServerAllocations from '@/api/swr/getServerAllocations';
 import isEqual from 'react-fast-compare';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
@@ -13,7 +12,7 @@ import { For } from 'million/react';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const NetworkContainer = () => {
-    const [loading, setLoading] = useState(false);
+    const [_, setLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const allocationLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.allocations);
     const allocations = ServerContext.useStoreState((state) => state.server.data!.allocations, isEqual);
@@ -78,10 +77,7 @@ const NetworkContainer = () => {
                     </>
                 )}
             </MainPageHeader>
-            {!data ? (
-                // <Spinner size={'large'} centered />
-                <></>
-            ) : (
+            {!data ? null : (
                 <>
                     <div
                         data-pyro-network-container-allocations
@@ -92,9 +88,6 @@ const NetworkContainer = () => {
                         className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                     >
                         <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                            {/* {data.map((allocation) => (
-                                <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
-                            ))} */}
                             <For each={data} memo>
                                 {(allocation) => (
                                     <AllocationRow
