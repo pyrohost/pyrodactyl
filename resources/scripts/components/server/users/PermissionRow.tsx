@@ -1,5 +1,4 @@
 import { useStoreState } from 'easy-peasy';
-import styled from 'styled-components';
 
 import Checkbox from '@/components/elements/Checkbox';
 import Label from '@/components/elements/Label';
