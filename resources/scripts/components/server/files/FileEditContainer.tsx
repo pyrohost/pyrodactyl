@@ -1,6 +1,13 @@
-import { httpErrorToHuman } from '@/api/http';
-import getFileContents from '@/api/server/files/getFileContents';
-import saveFileContents from '@/api/server/files/saveFileContents';
+import { encodePathSegments } from '@/helpers';
+import type { LanguageDescription } from '@codemirror/language';
+import { languages } from '@codemirror/language-data';
+import { For } from 'million/react';
+import { dirname } from 'pathe';
+import { lazy } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import {
@@ -13,17 +20,14 @@ import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import FileNameModal from '@/components/server/files/FileNameModal';
-import { encodePathSegments } from '@/helpers';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import getFileContents from '@/api/server/files/getFileContents';
+import saveFileContents from '@/api/server/files/saveFileContents';
+
 import { ServerContext } from '@/state/server';
-import type { LanguageDescription } from '@codemirror/language';
-import { languages } from '@codemirror/language-data';
-import { For } from 'million/react';
-import { dirname } from 'pathe';
-import { lazy } from 'react';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
+
+import useFlash from '@/plugins/useFlash';
 
 const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 

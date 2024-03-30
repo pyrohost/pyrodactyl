@@ -1,18 +1,23 @@
-import FileDropdownMenu from './FileDropdownMenu';
-import styles from './style.module.css';
-import { FileObject } from '@/api/server/files/loadDirectory';
-import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
-import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 import { encodePathSegments } from '@/helpers';
 import { bytesToString } from '@/lib/formatters';
-import { usePermissions } from '@/plugins/usePermissions';
-// import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
-import { ServerContext } from '@/state/server';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import { join } from 'pathe';
 import { ReactNode, memo } from 'react';
 import isEqual from 'react-fast-compare';
 import { NavLink } from 'react-router-dom';
+
+import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
+import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
+
+import { FileObject } from '@/api/server/files/loadDirectory';
+
+// import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
+import { ServerContext } from '@/state/server';
+
+import { usePermissions } from '@/plugins/usePermissions';
+
+import FileDropdownMenu from './FileDropdownMenu';
+import styles from './style.module.css';
 
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
     const [canReadContents] = usePermissions(['file.read-content']);

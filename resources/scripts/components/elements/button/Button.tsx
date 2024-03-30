@@ -1,7 +1,9 @@
-import styles from './style.module.css';
-import { ButtonProps, Options } from '@/components/elements/button/types';
 import clsx from 'clsx';
 import { forwardRef } from 'react';
+
+import { ButtonProps, Options } from '@/components/elements/button/types';
+
+import styles from './style.module.css';
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ({ children, shape, size, variant, className, ...rest }, ref) => {

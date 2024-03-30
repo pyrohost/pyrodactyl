@@ -1,14 +1,13 @@
+import react from '@vitejs/plugin-react-swc';
+import * as child from 'child_process';
+import laravel from 'laravel-vite-plugin';
+import million from 'million/compiler';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'pathe';
 import { defineConfig } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
 
-import million from 'million/compiler';
-import react from '@vitejs/plugin-react-swc';
-import laravel from 'laravel-vite-plugin';
-
 import packageJson from './package.json';
-import { dirname, resolve } from 'pathe';
-import { fileURLToPath } from 'node:url';
-import * as child from 'child_process';
 
 let branchName;
 let commitHash;

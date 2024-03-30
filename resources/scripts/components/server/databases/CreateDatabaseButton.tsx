@@ -1,14 +1,18 @@
-import { httpErrorToHuman } from '@/api/http';
-import createServerDatabase from '@/api/server/databases/createServerDatabase';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useState } from 'react';
+import { object, string } from 'yup';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
 import Modal from '@/components/elements/Modal';
 import { Button } from '@/components/elements/button/index';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import createServerDatabase from '@/api/server/databases/createServerDatabase';
+
 import { ServerContext } from '@/state/server';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { useState } from 'react';
-import { object, string } from 'yup';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Values {
     databaseName: string;

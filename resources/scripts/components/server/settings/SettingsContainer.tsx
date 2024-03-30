@@ -1,4 +1,7 @@
-import RenameServerBox from './RenameServerBox';
+import { ip } from '@/lib/formatters';
+import { useStoreState } from 'easy-peasy';
+import isEqual from 'react-fast-compare';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
@@ -8,10 +11,10 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Button } from '@/components/elements/button/index';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
-import { ip } from '@/lib/formatters';
+
 import { ServerContext } from '@/state/server';
-import { useStoreState } from 'easy-peasy';
-import isEqual from 'react-fast-compare';
+
+import RenameServerBox from './RenameServerBox';
 
 export default () => {
     const username = useStoreState((state) => state.user.data!.username);

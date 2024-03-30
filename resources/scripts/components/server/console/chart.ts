@@ -1,12 +1,12 @@
 import { hexToRgba } from '@/lib/helpers';
 import {
-    Chart as ChartJS,
     ChartData,
     ChartDataset,
+    Chart as ChartJS,
     ChartOptions,
     Filler,
-    LinearScale,
     LineElement,
+    LinearScale,
     PointElement,
 } from 'chart.js';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';

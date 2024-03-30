@@ -1,36 +1,37 @@
-import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
-import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import {
-    defaultHighlightStyle,
-    syntaxHighlighting,
-    indentOnInput,
-    bracketMatching,
-    foldGutter,
-    foldKeymap,
-    indentUnit,
     LanguageDescription,
     LanguageSupport,
+    bracketMatching,
+    defaultHighlightStyle,
+    foldGutter,
+    foldKeymap,
+    indentOnInput,
+    indentUnit,
+    syntaxHighlighting,
 } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
 import { lintKeymap } from '@codemirror/lint';
-import { searchKeymap, highlightSelectionMatches } from '@codemirror/search';
+import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import type { Extension } from '@codemirror/state';
-import { EditorState, Compartment } from '@codemirror/state';
+import { Compartment, EditorState } from '@codemirror/state';
 import {
-    keymap,
-    highlightSpecialChars,
-    drawSelection,
-    highlightActiveLine,
-    dropCursor,
-    rectangularSelection,
-    crosshairCursor,
-    lineNumbers,
-    highlightActiveLineGutter,
     EditorView,
+    crosshairCursor,
+    drawSelection,
+    dropCursor,
+    highlightActiveLine,
+    highlightActiveLineGutter,
+    highlightSpecialChars,
+    keymap,
+    lineNumbers,
+    rectangularSelection,
 } from '@codemirror/view';
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
+
+import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
 
 function findLanguageByFilename(filename: string): LanguageDescription | undefined {
     const language = LanguageDescription.matchFilename(languages, filename);

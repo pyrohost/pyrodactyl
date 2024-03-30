@@ -1,10 +1,3 @@
-import styles from './style.module.css';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
-import useEventListener from '@/plugins/useEventListener';
-import { usePermissions } from '@/plugins/usePermissions';
-import { usePersistedState } from '@/plugins/usePersistedState';
-import { ServerContext } from '@/state/server';
 import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import { WebLinksAddon } from '@xterm/addon-web-links';
@@ -13,6 +6,17 @@ import '@xterm/xterm/css/xterm.css';
 import clsx from 'clsx';
 import debounce from 'debounce';
 import { useEffect, useMemo, useRef, useState } from 'react';
+
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
+
+import { ServerContext } from '@/state/server';
+
+import useEventListener from '@/plugins/useEventListener';
+import { usePermissions } from '@/plugins/usePermissions';
+import { usePersistedState } from '@/plugins/usePersistedState';
+
+import styles from './style.module.css';
 
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',

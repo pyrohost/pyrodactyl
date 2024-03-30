@@ -1,10 +1,12 @@
-import Field from '@/components/elements/Field';
-import Modal, { RequiredModalProps } from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
-import { ServerContext } from '@/state/server';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { object, string } from 'yup';
+
+import Field from '@/components/elements/Field';
+import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+import { Button } from '@/components/elements/button/index';
+
+import { ServerContext } from '@/state/server';
 
 type Props = RequiredModalProps & {
     onFileNamed: (name: string) => void;

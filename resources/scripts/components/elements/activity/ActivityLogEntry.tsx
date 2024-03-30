@@ -1,6 +1,3 @@
-import style from './style.module.css';
-import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
-import useLocationHash from '@/plugins/useLocationHash';
 import { ActivityLog } from '@definitions/user';
 // FIXME: add icons back
 import clsx from 'clsx';
@@ -8,6 +5,12 @@ import clsx from 'clsx';
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { Link } from 'react-router-dom';
+
+import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
+
+import useLocationHash from '@/plugins/useLocationHash';
+
+import style from './style.module.css';
 
 // import { getObjectKeys, isObject } from '@/lib/objects';
 

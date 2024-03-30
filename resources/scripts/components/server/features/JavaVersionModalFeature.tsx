@@ -1,5 +1,5 @@
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
-import getServerStartup from '@/api/swr/getServerStartup';
+import { useEffect, useState } from 'react';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
@@ -7,10 +7,14 @@ import InputSpinner from '@/components/elements/InputSpinner';
 import Modal from '@/components/elements/Modal';
 import Select from '@/components/elements/Select';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+
+import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import getServerStartup from '@/api/swr/getServerStartup';
+
+import { ServerContext } from '@/state/server';
+
 import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-import { ServerContext } from '@/state/server';
-import { useEffect, useState } from 'react';
 
 const MATCH_ERRORS = [
     'minecraft 1.17 requires running the server with java 16 or above',

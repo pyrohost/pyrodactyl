@@ -1,6 +1,9 @@
-import { httpErrorToHuman } from '@/api/http';
-import createOrUpdateScheduleTask from '@/api/server/schedules/createOrUpdateScheduleTask';
-import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+import ModalContext from '@/context/ModalContext';
+import asModal from '@/hoc/asModal';
+import { Form, Formik, Field as FormikField, FormikHelpers, useField } from 'formik';
+import { useContext, useEffect } from 'react';
+import { boolean, number, object, string } from 'yup';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
@@ -9,13 +12,14 @@ import { Textarea } from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
 import { Button } from '@/components/elements/button/index';
-import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import createOrUpdateScheduleTask from '@/api/server/schedules/createOrUpdateScheduleTask';
+import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+
 import { ServerContext } from '@/state/server';
-import { Field as FormikField, Form, Formik, FormikHelpers, useField } from 'formik';
-import { useContext, useEffect } from 'react';
-import { boolean, number, object, string } from 'yup';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Props {
     schedule: Schedule;

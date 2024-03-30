@@ -1,6 +1,8 @@
-import getServers from '@/api/getServers';
-import { PaginatedResult } from '@/api/http';
-import { Server } from '@/api/server/getServer';
+import { useStoreState } from 'easy-peasy';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import useSWR from 'swr';
+
 import ServerRow from '@/components/dashboard/ServerRow';
 import {
     DropdownMenu,
@@ -11,12 +13,13 @@ import {
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Pagination from '@/components/elements/Pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
+
+import getServers from '@/api/getServers';
+import { PaginatedResult } from '@/api/http';
+import { Server } from '@/api/server/getServer';
+
 import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
-import { useStoreState } from 'easy-peasy';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import useSWR from 'swr';
 
 export default () => {
     const { search } = useLocation();

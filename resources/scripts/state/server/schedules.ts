@@ -1,5 +1,6 @@
+import { Action, action } from 'easy-peasy';
+
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import { action, Action } from 'easy-peasy';
 
 export interface ServerScheduleStore {
     data: Schedule[];

@@ -1,4 +1,7 @@
-import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
+import clsx from 'clsx';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 // FIXME: add icons back
@@ -6,13 +9,13 @@ import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
 import { styles as btnStyles } from '@/components/elements/button/index';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
+
+import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
+
 import { useFlashKey } from '@/plugins/useFlash';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import useLocationHash from '@/plugins/useLocationHash';
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 export default () => {
     const { hash } = useLocationHash();

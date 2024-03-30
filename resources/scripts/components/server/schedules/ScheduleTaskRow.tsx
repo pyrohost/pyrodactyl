@@ -1,13 +1,17 @@
-import { httpErrorToHuman } from '@/api/http';
-import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
-import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+import { useState } from 'react';
+
 import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
+import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+
 import { ServerContext } from '@/state/server';
-import { useState } from 'react';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Props {
     schedule: Schedule;

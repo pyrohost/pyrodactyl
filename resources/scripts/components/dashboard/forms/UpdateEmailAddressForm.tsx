@@ -1,12 +1,15 @@
-import { httpErrorToHuman } from '@/api/http';
-import Field from '@/components/elements/Field';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
-import { ApplicationStore } from '@/state';
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
+
+import Field from '@/components/elements/Field';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Button } from '@/components/elements/button/index';
+
+import { httpErrorToHuman } from '@/api/http';
+
+import { ApplicationStore } from '@/state';
 
 interface Values {
     email: string;

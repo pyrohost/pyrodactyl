@@ -4,17 +4,19 @@
 // https://github.com/preactjs/signals/issues/414
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import '@/assets/tailwind.css';
-import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
-import { NotFound } from '@/components/elements/ScreenBlock';
-import Spinner from '@/components/elements/Spinner';
-import { store } from '@/state';
-import { ServerContext } from '@/state/server';
-import { SiteSettings } from '@/state/settings';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
 import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
+
+import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
+import { NotFound } from '@/components/elements/ScreenBlock';
+import Spinner from '@/components/elements/Spinner';
+
+import { store } from '@/state';
+import { ServerContext } from '@/state/server';
+import { SiteSettings } from '@/state/settings';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));

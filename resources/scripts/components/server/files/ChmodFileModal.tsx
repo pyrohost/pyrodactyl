@@ -1,12 +1,16 @@
-import chmodFiles from '@/api/server/files/chmodFiles';
+import { fileBitsToString } from '@/helpers';
+import { Form, Formik, FormikHelpers } from 'formik';
+
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import { Button } from '@/components/elements/button/index';
-import { fileBitsToString } from '@/helpers';
+
+import chmodFiles from '@/api/server/files/chmodFiles';
+
+import { ServerContext } from '@/state/server';
+
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import { Form, Formik, FormikHelpers } from 'formik';
 
 interface FormikValues {
     mode: string;

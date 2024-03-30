@@ -1,12 +1,16 @@
-import renameFiles from '@/api/server/files/renameFiles';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { join } from 'pathe';
+
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import { Button } from '@/components/elements/button/index';
+
+import renameFiles from '@/api/server/files/renameFiles';
+
+import { ServerContext } from '@/state/server';
+
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { join } from 'pathe';
 
 interface FormikValues {
     name: string;

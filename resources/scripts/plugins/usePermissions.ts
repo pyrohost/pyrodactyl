@@ -1,5 +1,6 @@
-import { useDeepCompareMemo } from '@/plugins/useDeepCompareMemo';
 import { ServerContext } from '@/state/server';
+
+import { useDeepCompareMemo } from '@/plugins/useDeepCompareMemo';
 
 export const usePermissions = (action: string | string[]): boolean[] => {
     const userPermissions = ServerContext.useStoreState((state) => state.server.permissions);

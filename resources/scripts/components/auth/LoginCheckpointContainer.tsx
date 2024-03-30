@@ -1,14 +1,18 @@
-import loginCheckpoint from '@/api/auth/loginCheckpoint';
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
-import Field from '@/components/elements/Field';
-import useFlash from '@/plugins/useFlash';
-import type { FlashStore } from '@/state/flashes';
 import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
 import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+import LoginFormContainer from '@/components/auth/LoginFormContainer';
+import Button from '@/components/elements/Button';
+import Field from '@/components/elements/Field';
+
+import loginCheckpoint from '@/api/auth/loginCheckpoint';
+
+import type { FlashStore } from '@/state/flashes';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Values {
     code: string;

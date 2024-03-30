@@ -1,9 +1,13 @@
-import getWebsocketToken from '@/api/server/getWebsocketToken';
+import { useEffect, useState } from 'react';
+
 import Spinner from '@/components/elements/Spinner';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
-import { Websocket } from '@/plugins/Websocket';
+
+import getWebsocketToken from '@/api/server/getWebsocketToken';
+
 import { ServerContext } from '@/state/server';
-import { useEffect, useState } from 'react';
+
+import { Websocket } from '@/plugins/Websocket';
 
 const reconnectErrors = ['jwt: exp claim is invalid', 'jwt: created too far in past (denylist)'];
 

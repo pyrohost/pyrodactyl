@@ -1,4 +1,8 @@
-import http from '@/api/http';
+import routes from '@/routers/routes';
+import { useStoreState } from 'easy-peasy';
+import { Fragment, Suspense } from 'react';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import {
     DropdownMenu,
@@ -13,10 +17,8 @@ import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import routes from '@/routers/routes';
-import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense } from 'react';
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+
+import http from '@/api/http';
 
 export default () => {
     const location = useLocation();

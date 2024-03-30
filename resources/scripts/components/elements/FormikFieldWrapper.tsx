@@ -1,6 +1,7 @@
+import { Field, FieldProps } from 'formik';
+
 import InputError from '@/components/elements/InputError';
 import Label from '@/components/elements/Label';
-import { Field, FieldProps } from 'formik';
 
 interface Props {
     id?: string;

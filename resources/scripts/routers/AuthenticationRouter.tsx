@@ -1,9 +1,10 @@
+import { Route, Routes } from 'react-router-dom';
+
 import ForgotPasswordContainer from '@/components/auth/ForgotPasswordContainer';
 import LoginCheckpointContainer from '@/components/auth/LoginCheckpointContainer';
 import LoginContainer from '@/components/auth/LoginContainer';
 import ResetPasswordContainer from '@/components/auth/ResetPasswordContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import { Route, Routes } from 'react-router-dom';
 
 export default () => {
     return (

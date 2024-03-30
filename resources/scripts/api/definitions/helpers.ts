@@ -1,11 +1,12 @@
+import { Model } from '@definitions/index';
+
 import {
     FractalPaginatedResponse,
     FractalResponseData,
     FractalResponseList,
-    getPaginationSet,
     PaginatedResult,
+    getPaginationSet,
 } from '@/api/http';
-import { Model } from '@definitions/index';
 
 type TransformerFunc<T> = (callback: FractalResponseData) => T;
 

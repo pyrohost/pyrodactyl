@@ -1,15 +1,19 @@
-import { httpErrorToHuman } from '@/api/http';
-import getServerSchedules from '@/api/server/schedules/getServerSchedules';
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import getServerSchedules from '@/api/server/schedules/getServerSchedules';
+
 import { ServerContext } from '@/state/server';
-import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+
+import useFlash from '@/plugins/useFlash';
 
 function ScheduleContainer() {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

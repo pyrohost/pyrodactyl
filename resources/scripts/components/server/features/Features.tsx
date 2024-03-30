@@ -1,7 +1,8 @@
-import features from './index';
 import { getObjectKeys } from '@/lib/objects';
 import type { ComponentType } from 'react';
 import { Suspense, useMemo } from 'react';
+
+import features from './index';
 
 type ListItems = [string, ComponentType][];
 

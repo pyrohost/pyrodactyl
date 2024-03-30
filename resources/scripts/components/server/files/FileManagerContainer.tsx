@@ -1,6 +1,10 @@
-import NewFileButton from './NewFileButton';
-import { httpErrorToHuman } from '@/api/http';
-import { FileObject } from '@/api/server/files/loadDirectory';
+import { hashToPath } from '@/helpers';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import debounce from 'debounce';
+import { For } from 'million/react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import Can from '@/components/elements/Can';
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
@@ -13,15 +17,16 @@ import FileObjectRow from '@/components/server/files/FileObjectRow';
 import MassActionsBar from '@/components/server/files/MassActionsBar';
 import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
 import UploadButton from '@/components/server/files/UploadButton';
-import { hashToPath } from '@/helpers';
-import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+
+import { httpErrorToHuman } from '@/api/http';
+import { FileObject } from '@/api/server/files/loadDirectory';
+
 import { useStoreActions } from '@/state/hooks';
 import { ServerContext } from '@/state/server';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import debounce from 'debounce';
-import { For } from 'million/react';
-import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+
+import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+
+import NewFileButton from './NewFileButton';
 
 const sortFiles = (files: FileObject[]): FileObject[] => {
     const sortedFiles: FileObject[] = files

@@ -1,3 +1,6 @@
+import type { ComponentType } from 'react';
+import { lazy } from 'react';
+
 import AccountApiContainer from '@/components/dashboard/AccountApiContainer';
 import AccountOverviewContainer from '@/components/dashboard/AccountOverviewContainer';
 import ActivityLogContainer from '@/components/dashboard/activity/ActivityLogContainer';
@@ -12,8 +15,6 @@ import ScheduleContainer from '@/components/server/schedules/ScheduleContainer';
 import SettingsContainer from '@/components/server/settings/SettingsContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
-import type { ComponentType } from 'react';
-import { lazy } from 'react';
 
 // Each of the router files is already code split out appropriately — so
 // all the items above will only be loaded in when that router is loaded.

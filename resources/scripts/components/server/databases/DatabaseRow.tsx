@@ -1,6 +1,7 @@
-import { httpErrorToHuman } from '@/api/http';
-import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
-import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useState } from 'react';
+import { object, string } from 'yup';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
@@ -11,11 +12,14 @@ import Input from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import Modal from '@/components/elements/Modal';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
+import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
+
 import { ServerContext } from '@/state/server';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { useState } from 'react';
-import { object, string } from 'yup';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Props {
     database: ServerDatabase;

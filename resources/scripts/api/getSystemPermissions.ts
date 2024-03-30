@@ -1,4 +1,5 @@
 import http from '@/api/http';
+
 import { PanelPermissions } from '@/state/permissions';
 
 export default (): Promise<PanelPermissions> => {

@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
+
 import { ServerContext } from '@/state/server';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 interface PowerButtonProps {
     className?: string;

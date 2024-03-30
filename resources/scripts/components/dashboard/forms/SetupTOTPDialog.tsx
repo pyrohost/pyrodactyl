@@ -1,19 +1,23 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
-import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
-import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';
+import asDialog from '@/hoc/asDialog';
+import { Actions, useStoreActions } from 'easy-peasy';
+import QRCode from 'qrcode.react';
+import { useContext, useEffect, useState } from 'react';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Spinner from '@/components/elements/Spinner';
 import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
-import asDialog from '@/hoc/asDialog';
-import { useFlashKey } from '@/plugins/useFlash';
+
+import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
+import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';
+
 import { ApplicationStore } from '@/state';
-import { Actions, useStoreActions } from 'easy-peasy';
-import QRCode from 'qrcode.react';
-import { useContext, useEffect, useState } from 'react';
+
+import { useFlashKey } from '@/plugins/useFlash';
 
 interface Props {
     onTokens: (tokens: string[]) => void;

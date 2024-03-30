@@ -1,4 +1,8 @@
-import getServerSchedule from '@/api/server/schedules/getServerSchedule';
+import { format } from 'date-fns';
+import { useCallback, useEffect, useState } from 'react';
+import isEqual from 'react-fast-compare';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -9,12 +13,12 @@ import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import NewTaskButton from '@/components/server/schedules/NewTaskButton';
 import RunScheduleButton from '@/components/server/schedules/RunScheduleButton';
 import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
-import useFlash from '@/plugins/useFlash';
+
+import getServerSchedule from '@/api/server/schedules/getServerSchedule';
+
 import { ServerContext } from '@/state/server';
-import { format } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
-import isEqual from 'react-fast-compare';
-import { useNavigate, useParams } from 'react-router-dom';
+
+import useFlash from '@/plugins/useFlash';
 
 const CronBox = ({ title, value }: { title: string; value: string }) => (
     <div className={`bg-neutral-700 rounded p-3`}>

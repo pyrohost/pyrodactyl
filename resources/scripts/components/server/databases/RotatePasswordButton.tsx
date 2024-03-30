@@ -1,11 +1,14 @@
+import { Actions, useStoreActions } from 'easy-peasy';
+import { useState } from 'react';
+
+import Button from '@/components/elements/Button';
+
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePassword';
-import Button from '@/components/elements/Button';
+
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
-import { Actions, useStoreActions } from 'easy-peasy';
-import { useState } from 'react';
 
 export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (database: ServerDatabase) => void }) => {
     const [loading, setLoading] = useState(false);

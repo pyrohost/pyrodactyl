@@ -1,18 +1,22 @@
-import { httpErrorToHuman } from '@/api/http';
-import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
-import { Schedule } from '@/api/server/schedules/getServerSchedules';
+import ModalContext from '@/context/ModalContext';
+import asModal from '@/hoc/asModal';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useContext, useEffect, useState } from 'react';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
 import FormikSwitch from '@/components/elements/FormikSwitch';
 import Switch from '@/components/elements/Switch';
 import { Button } from '@/components/elements/button/index';
 import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
-import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
-import useFlash from '@/plugins/useFlash';
+
+import { httpErrorToHuman } from '@/api/http';
+import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
+import { Schedule } from '@/api/server/schedules/getServerSchedules';
+
 import { ServerContext } from '@/state/server';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { useContext, useEffect, useState } from 'react';
+
+import useFlash from '@/plugins/useFlash';
 
 interface Props {
     schedule?: Schedule;

@@ -1,9 +1,10 @@
-import HugeIconsX from '../hugeicons/X';
-import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
 import { Dialog as HDialog } from '@headlessui/react';
 // FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRef, useState } from 'react';
+
+import HugeIconsX from '../hugeicons/X';
+import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
 
 const variants = {
     open: {

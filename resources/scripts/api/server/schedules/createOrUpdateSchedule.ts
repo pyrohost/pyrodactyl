@@ -1,5 +1,5 @@
 import http from '@/api/http';
-import { rawDataToServerSchedule, Schedule } from '@/api/server/schedules/getServerSchedules';
+import { Schedule, rawDataToServerSchedule } from '@/api/server/schedules/getServerSchedules';
 
 type Data = Pick<Schedule, 'cron' | 'name' | 'onlyWhenOnline' | 'isActive'> & { id?: number };
 

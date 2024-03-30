@@ -1,9 +1,7 @@
-import compressFiles from '@/api/server/files/compressFiles';
-import copyFile from '@/api/server/files/copyFile';
-import decompressFiles from '@/api/server/files/decompressFiles';
-import deleteFiles from '@/api/server/files/deleteFiles';
-import getFileDownloadUrl from '@/api/server/files/getFileDownloadUrl';
-import { FileObject } from '@/api/server/files/loadDirectory';
+import { join } from 'pathe';
+import { memo, useState } from 'react';
+import isEqual from 'react-fast-compare';
+
 import Can from '@/components/elements/Can';
 import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
 import { Dialog } from '@/components/elements/dialog';
@@ -16,12 +14,18 @@ import HugeIconsMoveTo from '@/components/elements/hugeicons/MoveTo';
 import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import ChmodFileModal from '@/components/server/files/ChmodFileModal';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
+
+import compressFiles from '@/api/server/files/compressFiles';
+import copyFile from '@/api/server/files/copyFile';
+import decompressFiles from '@/api/server/files/decompressFiles';
+import deleteFiles from '@/api/server/files/deleteFiles';
+import getFileDownloadUrl from '@/api/server/files/getFileDownloadUrl';
+import { FileObject } from '@/api/server/files/loadDirectory';
+
+import { ServerContext } from '@/state/server';
+
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import { join } from 'pathe';
-import { memo, useState } from 'react';
-import isEqual from 'react-fast-compare';
 
 type ModalType = 'rename' | 'move' | 'chmod';
 

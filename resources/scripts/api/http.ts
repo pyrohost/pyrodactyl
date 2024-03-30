@@ -1,5 +1,6 @@
-import { store } from '@/state';
 import axios, { AxiosInstance } from 'axios';
+
+import { store } from '@/state';
 
 const http: AxiosInstance = axios.create({
     withCredentials: true,

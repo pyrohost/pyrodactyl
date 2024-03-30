@@ -1,8 +1,9 @@
-import Input from '@/components/elements/Input';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { useField } from 'formik';
 import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
+
+import Input from '@/components/elements/Input';
+import TitledGreyBox from '@/components/elements/TitledGreyBox';
 
 interface Props {
     isEditable?: boolean;

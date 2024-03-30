@@ -1,5 +1,5 @@
 import http from '@/api/http';
-import { rawDataToServerTask, Task } from '@/api/server/schedules/getServerSchedules';
+import { Task, rawDataToServerTask } from '@/api/server/schedules/getServerSchedules';
 
 interface Data {
     action: string;

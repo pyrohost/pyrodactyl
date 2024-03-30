@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement } from 'react';
 // eslint-disable-next-line no-restricted-imports
-import styledImport, { css as cssImport, CSSProp, StyledComponentProps } from 'styled-components';
+import styledImport, { CSSProp, StyledComponentProps, css as cssImport } from 'styled-components';
 
 declare module 'react' {
     interface Attributes {

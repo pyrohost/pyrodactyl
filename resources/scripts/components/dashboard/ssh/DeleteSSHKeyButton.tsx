@@ -1,8 +1,11 @@
-import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
+import { useState } from 'react';
+
 import Code from '@/components/elements/Code';
 import { Dialog } from '@/components/elements/dialog';
+
+import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
+
 import { useFlashKey } from '@/plugins/useFlash';
-import { useState } from 'react';
 
 export default ({ name, fingerprint }: { name: string; fingerprint: string }) => {
     const { clearAndAddHttpError } = useFlashKey('account');

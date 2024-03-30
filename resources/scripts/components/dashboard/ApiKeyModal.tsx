@@ -1,8 +1,9 @@
-import Button from '@/components/elements/Button';
-import CopyOnClick from '@/components/elements/CopyOnClick';
 import ModalContext from '@/context/ModalContext';
 import asModal from '@/hoc/asModal';
 import { useContext } from 'react';
+
+import Button from '@/components/elements/Button';
+import CopyOnClick from '@/components/elements/CopyOnClick';
 
 interface Props {
     apiKey: string;

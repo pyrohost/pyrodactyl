@@ -1,12 +1,15 @@
-import { httpErrorToHuman } from '@/api/http';
-import http from '@/api/http';
+import routes from '@/routers/routes';
+import { useStoreState } from 'easy-peasy';
+import { Fragment, Suspense, useEffect, useState } from 'react';
+import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+
 import Can from '@/components/elements/Can';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import MainSidebar from '@/components/elements/MainSidebar';
@@ -28,11 +31,11 @@ import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import InstallListener from '@/components/server/InstallListener';
 import TransferListener from '@/components/server/TransferListener';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
-import routes from '@/routers/routes';
+
+import { httpErrorToHuman } from '@/api/http';
+import http from '@/api/http';
+
 import { ServerContext } from '@/state/server';
-import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense, useEffect, useState } from 'react';
-import { NavLink, Route, Routes, useParams, useLocation } from 'react-router-dom';
 
 export default () => {
     const params = useParams<'id'>();

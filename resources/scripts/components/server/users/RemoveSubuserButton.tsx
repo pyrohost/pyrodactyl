@@ -1,11 +1,14 @@
+import { Actions, useStoreActions } from 'easy-peasy';
+import { useState } from 'react';
+
+import ConfirmationModal from '@/components/elements/ConfirmationModal';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
-import ConfirmationModal from '@/components/elements/ConfirmationModal';
+
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
-import { Actions, useStoreActions } from 'easy-peasy';
-import { useState } from 'react';
 
 export default ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);

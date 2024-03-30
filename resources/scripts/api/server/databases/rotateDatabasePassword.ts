@@ -1,5 +1,5 @@
 import http from '@/api/http';
-import { rawDataToServerDatabase, ServerDatabase } from '@/api/server/databases/getServerDatabases';
+import { ServerDatabase, rawDataToServerDatabase } from '@/api/server/databases/getServerDatabases';
 
 export default (uuid: string, database: string): Promise<ServerDatabase> => {
     return new Promise((resolve, reject) => {

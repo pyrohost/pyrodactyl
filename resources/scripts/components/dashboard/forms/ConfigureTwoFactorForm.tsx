@@ -1,11 +1,14 @@
+import { useStoreState } from 'easy-peasy';
+import { useEffect, useState } from 'react';
+
 import DisableTOTPDialog from '@/components/dashboard/forms/DisableTOTPDialog';
 import RecoveryTokensDialog from '@/components/dashboard/forms/RecoveryTokensDialog';
 import SetupTOTPDialog from '@/components/dashboard/forms/SetupTOTPDialog';
 import { Button } from '@/components/elements/button/index';
-import { useFlashKey } from '@/plugins/useFlash';
+
 import { ApplicationStore } from '@/state';
-import { useStoreState } from 'easy-peasy';
-import { useEffect, useState } from 'react';
+
+import { useFlashKey } from '@/plugins/useFlash';
 
 export default () => {
     const [tokens, setTokens] = useState<string[]>([]);

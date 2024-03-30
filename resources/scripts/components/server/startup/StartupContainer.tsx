@@ -1,6 +1,6 @@
-import { httpErrorToHuman } from '@/api/http';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
-import getServerStartup from '@/api/swr/getServerStartup';
+import { useCallback, useEffect, useState } from 'react';
+import isEqual from 'react-fast-compare';
+
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Input from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
@@ -11,6 +11,13 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import VariableBox from '@/components/server/startup/VariableBox';
+
+import { httpErrorToHuman } from '@/api/http';
+import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import getServerStartup from '@/api/swr/getServerStartup';
+
+import { ServerContext } from '@/state/server';
+
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 // import {
 //     DropdownMenu,
@@ -21,9 +28,6 @@ import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 //     DropdownMenuTrigger,
 // } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import { useCallback, useEffect, useState } from 'react';
-import isEqual from 'react-fast-compare';
 
 const StartupContainer = () => {
     const [loading, setLoading] = useState(false);
