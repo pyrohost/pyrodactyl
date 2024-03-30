@@ -10,6 +10,7 @@ import useFlash from '@/plugins/useFlash';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useDeepMemoize } from '@/plugins/useDeepMemoize';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import { For } from 'million/react';
 
 export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -53,13 +54,15 @@ export default () => {
             {!databases.length && loading ? null : (
                 <>
                     {databases.length > 0 ? (
-                        databases.map((database, index) => (
-                            <DatabaseRow
-                                key={database.id}
-                                database={database}
-                                className={index > 0 ? 'mt-1' : undefined}
-                            />
-                        ))
+                        <For each={databases} memo>
+                            {(database, index) => (
+                                <DatabaseRow
+                                    key={database.id}
+                                    database={database}
+                                    className={index > 0 ? 'mt-1' : undefined}
+                                />
+                            )}
+                        </For>
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
