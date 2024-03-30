@@ -63,7 +63,7 @@ export default () => {
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
-                                ? 'It looks like you have no databases.'
+                                ? 'Your server does not have any databases.'
                                 : 'Databases cannot be created for this server.'}
                         </p>
                     )}
