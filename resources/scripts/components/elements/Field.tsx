@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
 import { Field as FormikField, FieldProps } from 'formik';
+import { forwardRef } from 'react';
 
 interface OwnProps {
     name: string;

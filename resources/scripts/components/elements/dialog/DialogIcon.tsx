@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { DialogContext, DialogIconProps, styles } from './';
 // FIXME: add icons back
 import clsx from 'clsx';
-import { DialogContext, DialogIconProps, styles } from './';
+import { useContext, useEffect } from 'react';
 
 // const icons = {
 //     danger: ShieldExclamationIcon,

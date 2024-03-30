@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { httpErrorToHuman } from '@/api/http';
+import deleteSubuser from '@/api/server/users/deleteSubuser';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
-import deleteSubuser from '@/api/server/users/deleteSubuser';
 import { Actions, useStoreActions } from 'easy-peasy';
-import { ApplicationStore } from '@/state';
-import { httpErrorToHuman } from '@/api/http';
+import { useState } from 'react';
 
 export default ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);

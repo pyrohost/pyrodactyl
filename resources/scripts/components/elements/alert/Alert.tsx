@@ -1,5 +1,4 @@
 // FIXME: add icons back
-
 import clsx from 'clsx';
 
 interface AlertProps {

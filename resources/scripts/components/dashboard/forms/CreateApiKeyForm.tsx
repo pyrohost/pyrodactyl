@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { object, string } from 'yup';
-import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import createApiKey from '@/api/account/createApiKey';
-import { Actions, useStoreActions } from 'easy-peasy';
-import { ApplicationStore } from '@/state';
-import { httpErrorToHuman } from '@/api/http';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { ApiKey } from '@/api/account/getApiKeys';
-import Button from '@/components/elements/Button';
-import Input from '@/components/elements/Input';
+import { httpErrorToHuman } from '@/api/http';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
+import Button from '@/components/elements/Button';
+import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import Input from '@/components/elements/Input';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { ApplicationStore } from '@/state';
+import { Actions, useStoreActions } from 'easy-peasy';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { useState } from 'react';
+import { object, string } from 'yup';
 
 interface Values {
     description: string;

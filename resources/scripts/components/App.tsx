@@ -2,19 +2,18 @@
 // the only way to prevent mismatching and weird errors is to import the lib
 // in the root first. The github issue for this is still open. Stupid.
 // https://github.com/preactjs/signals/issues/414
+import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
+import '@/assets/tailwind.css';
+import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
+import { NotFound } from '@/components/elements/ScreenBlock';
+import Spinner from '@/components/elements/Spinner';
+import { store } from '@/state';
+import { ServerContext } from '@/state/server';
+import { SiteSettings } from '@/state/settings';
 import '@preact/signals-react';
-
+import { StoreProvider } from 'easy-peasy';
 import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { StoreProvider } from 'easy-peasy';
-import { store } from '@/state';
-import { SiteSettings } from '@/state/settings';
-import { NotFound } from '@/components/elements/ScreenBlock';
-import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
-import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
-import { ServerContext } from '@/state/server';
-import '@/assets/tailwind.css';
-import Spinner from '@/components/elements/Spinner';
 import { Toaster } from 'sonner';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));

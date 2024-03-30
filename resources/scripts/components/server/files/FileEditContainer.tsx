@@ -1,31 +1,29 @@
-import type { LanguageDescription } from '@codemirror/language';
-import { lazy } from 'react';
-import { languages } from '@codemirror/language-data';
-import { dirname } from 'pathe';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { httpErrorToHuman } from '@/api/http';
 import getFileContents from '@/api/server/files/getFileContents';
 import saveFileContents from '@/api/server/files/saveFileContents';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
-import PageContentBlock from '@/components/elements/PageContentBlock';
-import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
-import FileNameModal from '@/components/server/files/FileNameModal';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import useFlash from '@/plugins/useFlash';
-import { ServerContext } from '@/state/server';
-import { encodePathSegments } from '@/helpers';
-import { toast } from 'sonner';
-
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
+import FileNameModal from '@/components/server/files/FileNameModal';
+import { encodePathSegments } from '@/helpers';
+import useFlash from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
+import type { LanguageDescription } from '@codemirror/language';
+import { languages } from '@codemirror/language-data';
 import { For } from 'million/react';
+import { dirname } from 'pathe';
+import { lazy } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 

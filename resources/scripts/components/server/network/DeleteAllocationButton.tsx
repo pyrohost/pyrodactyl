@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { ServerContext } from '@/state/server';
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
-import { useFlashKey } from '@/plugins/useFlash';
 import { Dialog } from '@/components/elements/dialog';
+import { useFlashKey } from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
+import { useState } from 'react';
+
 interface Props {
     allocation: number;
 }

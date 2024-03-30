@@ -1,6 +1,6 @@
 import { PaginatedResult } from '@/api/http';
-import styled from 'styled-components';
 import Button from '@/components/elements/Button';
+import styled from 'styled-components';
 
 interface RenderFuncProps<T> {
     items: T[];

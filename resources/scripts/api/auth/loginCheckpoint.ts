@@ -1,5 +1,5 @@
-import http from '@/api/http';
 import { LoginResponse } from '@/api/auth/login';
+import http from '@/api/http';
 
 export default (token: string, code: string, recoveryToken?: string): Promise<LoginResponse> => {
     return new Promise((resolve, reject) => {

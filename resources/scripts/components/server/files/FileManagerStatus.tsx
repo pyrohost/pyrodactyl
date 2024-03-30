@@ -1,13 +1,13 @@
-import { useContext, useEffect } from 'react';
-import { ServerContext } from '@/state/server';
-// FIXME: add icons back
-import asDialog from '@/hoc/asDialog';
-import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
-import { Button } from '@/components/elements/button/index';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Code from '@/components/elements/Code';
+import { Button } from '@/components/elements/button/index';
+import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
+// FIXME: add icons back
+import asDialog from '@/hoc/asDialog';
+import { ServerContext } from '@/state/server';
 import { useSignal } from '@preact/signals-react';
+import { useContext, useEffect } from 'react';
 
 const svgProps = {
     cx: 16,

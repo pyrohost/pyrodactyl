@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import EditSubuserModal from '@/components/server/users/EditSubuserModal';
+import { useState } from 'react';
 
 export default () => {
     const [visible, setVisible] = useState(false);

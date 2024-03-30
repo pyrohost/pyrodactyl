@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMemo, useRef, useState } from 'react';
+import HugeIconsX from './hugeicons/X';
 import Spinner from '@/components/elements/Spinner';
-import styled from 'styled-components';
+import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
 import { Dialog as HDialog } from '@headlessui/react';
 // FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
-import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
-import HugeIconsX from './hugeicons/X';
+import { useMemo, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const variants = {
     open: {

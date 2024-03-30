@@ -1,13 +1,5 @@
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
-import DashboardContainer from '@/components/dashboard/DashboardContainer';
-import { NotFound } from '@/components/elements/ScreenBlock';
-import MainSidebar from '@/components/elements/MainSidebar';
-import routes from '@/routers/routes';
-import Logo from '@/components/elements/PyroLogo';
-import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
-import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import { Fragment, Suspense } from 'react';
+import DashboardContainer from '@/components/dashboard/DashboardContainer';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,8 +7,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
+import Logo from '@/components/elements/PyroLogo';
+import { NotFound } from '@/components/elements/ScreenBlock';
+import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
+import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import routes from '@/routers/routes';
 import { useStoreState } from 'easy-peasy';
+import { Fragment, Suspense } from 'react';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 export default () => {
     const location = useLocation();

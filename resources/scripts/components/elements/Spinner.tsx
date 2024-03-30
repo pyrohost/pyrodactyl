@@ -1,6 +1,6 @@
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { Suspense } from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
 
 export type SpinnerSize = 'small' | 'base' | 'large';
 

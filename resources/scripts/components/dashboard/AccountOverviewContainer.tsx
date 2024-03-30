@@ -1,11 +1,11 @@
-import ContentBox from '@/components/elements/ContentBox';
-import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm';
-import UpdateEmailAddressForm from '@/components/dashboard/forms/UpdateEmailAddressForm';
-import ConfigureTwoFactorForm from '@/components/dashboard/forms/ConfigureTwoFactorForm';
-import PageContentBlock from '@/components/elements/PageContentBlock';
-import MessageBox from '@/components/MessageBox';
-import { useLocation } from 'react-router-dom';
 import Code from '../elements/Code';
+import MessageBox from '@/components/MessageBox';
+import ConfigureTwoFactorForm from '@/components/dashboard/forms/ConfigureTwoFactorForm';
+import UpdateEmailAddressForm from '@/components/dashboard/forms/UpdateEmailAddressForm';
+import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm';
+import ContentBox from '@/components/elements/ContentBox';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import { useLocation } from 'react-router-dom';
 
 export default () => {
     const { state } = useLocation();

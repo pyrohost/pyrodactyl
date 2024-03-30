@@ -1,14 +1,14 @@
-import { ServerContext } from '@/state/server';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Form, Formik } from 'formik';
-import { toast } from 'sonner';
-import { Actions, useStoreActions } from 'easy-peasy';
+import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
 import Field from '@/components/elements/Field';
-import { object, string } from 'yup';
-import { ApplicationStore } from '@/state';
-import { httpErrorToHuman } from '@/api/http';
+import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Button } from '@/components/elements/button/index';
+import { ApplicationStore } from '@/state';
+import { ServerContext } from '@/state/server';
+import { Actions, useStoreActions } from 'easy-peasy';
+import { Form, Formik } from 'formik';
+import { toast } from 'sonner';
+import { object, string } from 'yup';
 
 interface Values {
     name: string;

@@ -1,5 +1,5 @@
-import Sockette from 'sockette';
 import { EventEmitter } from 'events';
+import Sockette from 'sockette';
 
 export class Websocket extends EventEmitter {
     // Timer instance for this socket.

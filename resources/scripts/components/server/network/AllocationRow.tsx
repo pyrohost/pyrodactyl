@@ -1,20 +1,20 @@
-import { memo, useCallback, useState } from 'react';
-import isEqual from 'react-fast-compare';
-import InputSpinner from '@/components/elements/InputSpinner';
-import { Textarea } from '@/components/elements/Input';
-import Can from '@/components/elements/Can';
-import { Button } from '@/components/elements/button/index';
 import { Allocation } from '@/api/server/getServer';
-import debounce from 'debounce';
+import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
+import getServerAllocations from '@/api/swr/getServerAllocations';
+import Can from '@/components/elements/Can';
+import Code from '@/components/elements/Code';
+import CopyOnClick from '@/components/elements/CopyOnClick';
+import { Textarea } from '@/components/elements/Input';
+import InputSpinner from '@/components/elements/InputSpinner';
+import { Button } from '@/components/elements/button/index';
+import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
+import { ip } from '@/lib/formatters';
 import { useFlashKey } from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
-import CopyOnClick from '@/components/elements/CopyOnClick';
-import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
-import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
-import getServerAllocations from '@/api/swr/getServerAllocations';
-import { ip } from '@/lib/formatters';
-import Code from '@/components/elements/Code';
+import debounce from 'debounce';
+import { memo, useCallback, useState } from 'react';
+import isEqual from 'react-fast-compare';
 
 interface Props {
     allocation: Allocation;

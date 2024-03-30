@@ -1,18 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { httpErrorToHuman } from '@/api/http';
+import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import getServerStartup from '@/api/swr/getServerStartup';
+import CopyOnClick from '@/components/elements/CopyOnClick';
+import Input from '@/components/elements/Input';
+import InputSpinner from '@/components/elements/InputSpinner';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import { ServerError } from '@/components/elements/ScreenBlock';
+import Select from '@/components/elements/Select';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import VariableBox from '@/components/server/startup/VariableBox';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import getServerStartup from '@/api/swr/getServerStartup';
-import Spinner from '@/components/elements/Spinner';
-import { ServerError } from '@/components/elements/ScreenBlock';
-import { httpErrorToHuman } from '@/api/http';
-import { ServerContext } from '@/state/server';
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
-import Select from '@/components/elements/Select';
-import isEqual from 'react-fast-compare';
-import Input from '@/components/elements/Input';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
-import InputSpinner from '@/components/elements/InputSpinner';
 // import {
 //     DropdownMenu,
 //     DropdownMenuContent,
@@ -22,8 +21,9 @@ import InputSpinner from '@/components/elements/InputSpinner';
 //     DropdownMenuTrigger,
 // } from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
-import CopyOnClick from '@/components/elements/CopyOnClick';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import { ServerContext } from '@/state/server';
+import { useCallback, useEffect, useState } from 'react';
+import isEqual from 'react-fast-compare';
 
 const StartupContainer = () => {
     const [loading, setLoading] = useState(false);

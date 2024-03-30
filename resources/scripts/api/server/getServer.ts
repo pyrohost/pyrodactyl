@@ -1,6 +1,6 @@
 import http, { FractalResponseData, FractalResponseList } from '@/api/http';
-import { rawDataToServerAllocation, rawDataToServerEggVariable } from '@/api/transformers';
 import { ServerEggVariable, ServerStatus } from '@/api/server/types';
+import { rawDataToServerAllocation, rawDataToServerEggVariable } from '@/api/transformers';
 
 export interface Allocation {
     id: number;

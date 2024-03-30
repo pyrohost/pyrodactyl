@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import ContentBox from '@/components/elements/ContentBox';
-import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
-import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import deleteApiKey from '@/api/account/deleteApiKey';
+import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { format } from 'date-fns';
-import PageContentBlock from '@/components/elements/PageContentBlock';
+import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
+import Code from '@/components/elements/Code';
+import ContentBox from '@/components/elements/ContentBox';
 import GreyRowBox from '@/components/elements/GreyRowBox';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 import { useFlashKey } from '@/plugins/useFlash';
-import Code from '@/components/elements/Code';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 export default () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');

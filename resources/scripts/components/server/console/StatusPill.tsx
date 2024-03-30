@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import { ServerContext } from '@/state/server';
+import clsx from 'clsx';
 
 export const StatusPill = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);

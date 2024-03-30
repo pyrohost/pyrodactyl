@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { Button } from '@/components/elements/button/index';
 // FIXME: add icons back
 import { Dialog } from '@/components/elements/dialog';
-import { Button } from '@/components/elements/button/index';
+import { useState } from 'react';
 
 export default ({ meta }: { meta: Record<string, unknown> }) => {
     const [open, setOpen] = useState(false);

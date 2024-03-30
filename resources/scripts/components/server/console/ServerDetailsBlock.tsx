@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
-import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
-import { ServerContext } from '@/state/server';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
 import StatBlock from '@/components/server/console/StatBlock';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
+import { ServerContext } from '@/state/server';
 import clsx from 'clsx';
+import { useEffect, useMemo, useState } from 'react';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 

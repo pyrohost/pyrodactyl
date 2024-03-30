@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import Spinner from '@/components/elements/Spinner';
 import clsx from 'clsx';
+import styled from 'styled-components';
 
 interface Props {
     isLoading?: boolean;

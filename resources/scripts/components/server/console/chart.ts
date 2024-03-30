@@ -1,3 +1,4 @@
+import { hexToRgba } from '@/lib/helpers';
 import {
     Chart as ChartJS,
     ChartData,
@@ -8,10 +9,9 @@ import {
     LineElement,
     PointElement,
 } from 'chart.js';
-import { DeepPartial } from 'ts-essentials';
-import { useState } from 'react';
 import { deepmerge, deepmergeCustom } from 'deepmerge-ts';
-import { hexToRgba } from '@/lib/helpers';
+import { useState } from 'react';
+import { DeepPartial } from 'ts-essentials';
 
 ChartJS.register(LineElement, PointElement, Filler, LinearScale);
 

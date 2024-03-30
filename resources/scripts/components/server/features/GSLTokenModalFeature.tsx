@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { ServerContext } from '@/state/server';
-import Modal from '@/components/elements/Modal';
-import Button from '@/components/elements/Button';
-import FlashMessageRender from '@/components/FlashMessageRender';
-import useFlash from '@/plugins/useFlash';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
-import Field from '@/components/elements/Field';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
+import FlashMessageRender from '@/components/FlashMessageRender';
+import Button from '@/components/elements/Button';
+import Field from '@/components/elements/Field';
+import Modal from '@/components/elements/Modal';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
+import useFlash from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
 import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
 
 interface Values {
     gslToken: string;

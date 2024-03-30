@@ -1,18 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
-import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import Field from '@/components/elements/Field';
-import { Form, Formik, FormikHelpers } from 'formik';
-import FormikSwitch from '@/components/elements/FormikSwitch';
-import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
-import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
+import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
+import { Schedule } from '@/api/server/schedules/getServerSchedules';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import useFlash from '@/plugins/useFlash';
+import Field from '@/components/elements/Field';
+import FormikSwitch from '@/components/elements/FormikSwitch';
+import Switch from '@/components/elements/Switch';
 import { Button } from '@/components/elements/button/index';
+import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
 import ModalContext from '@/context/ModalContext';
 import asModal from '@/hoc/asModal';
-import Switch from '@/components/elements/Switch';
-import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
+import useFlash from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useContext, useEffect, useState } from 'react';
 
 interface Props {
     schedule?: Schedule;

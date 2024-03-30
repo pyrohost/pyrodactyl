@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from 'react';
-import { ServerContext } from '@/state/server';
-import { NavLink, useParams } from 'react-router-dom';
 import { encodePathSegments } from '@/helpers';
+import { ServerContext } from '@/state/server';
+import { Fragment, useEffect, useState } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 
 interface Props {
     renderLeft?: JSX.Element;

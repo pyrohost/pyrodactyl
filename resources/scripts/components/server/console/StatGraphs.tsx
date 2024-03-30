@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { ServerContext } from '@/state/server';
-import { SocketEvent } from '@/components/server/events';
-import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-import { Line } from 'react-chartjs-2';
-import { useChart, useChartTickLabel } from '@/components/server/console/chart';
-import { hexToRgba } from '@/lib/helpers';
-import { bytesToString } from '@/lib/formatters';
 // FIXME: add icons back
 import ChartBlock from '@/components/server/console/ChartBlock';
+import { useChart, useChartTickLabel } from '@/components/server/console/chart';
+import { SocketEvent } from '@/components/server/events';
+import { bytesToString } from '@/lib/formatters';
+import { hexToRgba } from '@/lib/helpers';
+import useWebsocketEvent from '@/plugins/useWebsocketEvent';
+import { ServerContext } from '@/state/server';
+import { useEffect, useRef } from 'react';
+import { Line } from 'react-chartjs-2';
 
 export default () => {
     const status = ServerContext.useStoreState((state) => state.status.value);

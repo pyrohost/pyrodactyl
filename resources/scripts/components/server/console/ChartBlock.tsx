@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import styles from '@/components/server/console/style.module.css';
+import clsx from 'clsx';
 
 interface ChartBlockProps {
     title: string;

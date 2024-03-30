@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Subuser } from '@/state/server/subusers';
-import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
-import EditSubuserModal from '@/components/server/users/EditSubuserModal';
 import Can from '@/components/elements/Can';
+import EditSubuserModal from '@/components/server/users/EditSubuserModal';
+import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
+import { Subuser } from '@/state/server/subusers';
 import { useStoreState } from 'easy-peasy';
+import { useState } from 'react';
 
 interface Props {
     subuser: Subuser;

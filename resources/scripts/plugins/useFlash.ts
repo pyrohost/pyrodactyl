@@ -1,6 +1,6 @@
-import { Actions, useStoreActions } from 'easy-peasy';
-import { FlashStore } from '@/state/flashes';
 import { ApplicationStore } from '@/state';
+import { FlashStore } from '@/state/flashes';
+import { Actions, useStoreActions } from 'easy-peasy';
 
 interface KeyedFlashStore {
     addError: (message: string, title?: string) => void;

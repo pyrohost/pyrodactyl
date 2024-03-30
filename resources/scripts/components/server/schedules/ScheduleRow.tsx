@@ -1,6 +1,6 @@
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import { format } from 'date-fns';
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
+import { format } from 'date-fns';
 
 export default ({ schedule }: { schedule: Schedule }) => (
     <>

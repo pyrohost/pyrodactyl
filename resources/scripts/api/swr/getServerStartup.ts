@@ -1,10 +1,9 @@
-import type { AxiosError } from 'axios';
-import type { SWRConfiguration } from 'swr';
-import useSWR from 'swr';
-
 import http, { FractalResponseList } from '@/api/http';
 import type { ServerEggVariable } from '@/api/server/types';
 import { rawDataToServerEggVariable } from '@/api/transformers';
+import type { AxiosError } from 'axios';
+import type { SWRConfiguration } from 'swr';
+import useSWR from 'swr';
 
 interface Response {
     invocation: string;

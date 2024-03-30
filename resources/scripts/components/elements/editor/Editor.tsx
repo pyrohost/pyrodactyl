@@ -1,3 +1,4 @@
+import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
 import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import {
@@ -30,8 +31,6 @@ import {
 } from '@codemirror/view';
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
-
-import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
 
 function findLanguageByFilename(filename: string): LanguageDescription | undefined {
     const language = LanguageDescription.matchFilename(languages, filename);

@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { ActivityLogFilters } from '@/api/account/activity';
 import { useActivityLogs } from '@/api/server/activity';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { useFlashKey } from '@/plugins/useFlash';
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import PaginationFooter from '@/components/elements/table/PaginationFooter';
-import { ActivityLogFilters } from '@/api/account/activity';
-import { Link } from 'react-router-dom';
-import clsx from 'clsx';
 import { styles as btnStyles } from '@/components/elements/button/index';
+import PaginationFooter from '@/components/elements/table/PaginationFooter';
+import { useFlashKey } from '@/plugins/useFlash';
 // FIXME: add icons back
 import useLocationHash from '@/plugins/useLocationHash';
+import clsx from 'clsx';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default () => {
     const { hash } = useLocationHash();

@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
-import clsx from 'clsx';
 import styles from './styles.module.css';
+import clsx from 'clsx';
+import { forwardRef } from 'react';
 
 type Props = Omit<React.ComponentProps<'input'>, 'type'>;
 

@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import getServerDatabases from '@/api/server/databases/getServerDatabases';
-import { ServerContext } from '@/state/server';
 import { httpErrorToHuman } from '@/api/http';
+import getServerDatabases from '@/api/server/databases/getServerDatabases';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import DatabaseRow from '@/components/server/databases/DatabaseRow';
-import CreateDatabaseButton from '@/components/server/databases/CreateDatabaseButton';
 import Can from '@/components/elements/Can';
-import useFlash from '@/plugins/useFlash';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { useDeepMemoize } from '@/plugins/useDeepMemoize';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import CreateDatabaseButton from '@/components/server/databases/CreateDatabaseButton';
+import DatabaseRow from '@/components/server/databases/DatabaseRow';
+import { useDeepMemoize } from '@/plugins/useDeepMemoize';
+import useFlash from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
 import { For } from 'million/react';
+import { useEffect, useState } from 'react';
 
 export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

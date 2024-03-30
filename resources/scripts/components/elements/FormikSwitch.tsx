@@ -1,6 +1,6 @@
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import { Field, FieldProps } from 'formik';
 import Switch, { SwitchProps } from '@/components/elements/Switch';
+import { Field, FieldProps } from 'formik';
 
 const FormikSwitch = ({ name, label, ...props }: SwitchProps) => {
     return (

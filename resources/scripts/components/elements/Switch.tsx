@@ -1,8 +1,8 @@
+import Input from '@/components/elements/Input';
+import Label from '@/components/elements/Label';
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { v4 } from 'uuid';
-import Label from '@/components/elements/Label';
-import Input from '@/components/elements/Input';
 
 const ToggleContainer = styled.div``;
 

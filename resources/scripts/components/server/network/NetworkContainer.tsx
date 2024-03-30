@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useFlashKey } from '@/plugins/useFlash';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { ServerContext } from '@/state/server';
-import AllocationRow from '@/components/server/network/AllocationRow';
 import createServerAllocation from '@/api/server/network/createServerAllocation';
-import Can from '@/components/elements/Can';
 import getServerAllocations from '@/api/swr/getServerAllocations';
-import isEqual from 'react-fast-compare';
-import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
-import { For } from 'million/react';
+import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import AllocationRow from '@/components/server/network/AllocationRow';
+import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
+import { useFlashKey } from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
+import { For } from 'million/react';
+import { useEffect, useState } from 'react';
+import isEqual from 'react-fast-compare';
 
 const NetworkContainer = () => {
     const [_, setLoading] = useState(false);

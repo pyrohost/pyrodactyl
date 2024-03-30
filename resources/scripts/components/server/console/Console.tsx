@@ -1,19 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ITerminalOptions, Terminal } from '@xterm/xterm';
+import styles from './style.module.css';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
+import useEventListener from '@/plugins/useEventListener';
+import { usePermissions } from '@/plugins/usePermissions';
+import { usePersistedState } from '@/plugins/usePersistedState';
+import { ServerContext } from '@/state/server';
 import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import { WebLinksAddon } from '@xterm/addon-web-links';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { ServerContext } from '@/state/server';
-import { usePermissions } from '@/plugins/usePermissions';
-import useEventListener from '@/plugins/useEventListener';
-import debounce from 'debounce';
-import { usePersistedState } from '@/plugins/usePersistedState';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
-import clsx from 'clsx';
-
+import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import styles from './style.module.css';
+import clsx from 'clsx';
+import debounce from 'debounce';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',

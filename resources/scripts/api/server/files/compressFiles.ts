@@ -1,5 +1,5 @@
-import { FileObject } from '@/api/server/files/loadDirectory';
 import http from '@/api/http';
+import { FileObject } from '@/api/server/files/loadDirectory';
 import { rawDataToFileObject } from '@/api/transformers';
 
 export default async (uuid: string, directory: string, files: string[]): Promise<FileObject> => {

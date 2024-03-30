@@ -1,7 +1,7 @@
-import styled from 'styled-components';
 import Checkbox from '@/components/elements/Checkbox';
-import { useStoreState } from 'easy-peasy';
 import Label from '@/components/elements/Label';
+import { useStoreState } from 'easy-peasy';
+import styled from 'styled-components';
 
 const Container = styled.label``;
 

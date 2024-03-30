@@ -1,7 +1,7 @@
+import FadeTransition from './transitions/FadeTransition';
+import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 import styled, { css } from 'styled-components';
-import Select from '@/components/elements/Select';
-import FadeTransition from './transitions/FadeTransition';
 
 const Container = styled.div<{ visible?: boolean }>`
     position: relative

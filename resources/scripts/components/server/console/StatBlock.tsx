@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import styles from './style.module.css';
 import CopyOnClick from '@/components/elements/CopyOnClick';
+import clsx from 'clsx';
 
 interface StatBlockProps {
     title: string;

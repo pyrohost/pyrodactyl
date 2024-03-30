@@ -1,7 +1,6 @@
+import http from '@/api/http';
 import type { AxiosError } from 'axios';
 import type { NavigateFunction } from 'react-router-dom';
-
-import http from '@/api/http';
 
 export const setupInterceptors = (navigate: NavigateFunction) => {
     http.interceptors.response.use(

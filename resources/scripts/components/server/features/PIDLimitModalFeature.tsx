@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { ServerContext } from '@/state/server';
-import Modal from '@/components/elements/Modal';
-import Button from '@/components/elements/Button';
 import FlashMessageRender from '@/components/FlashMessageRender';
-import useFlash from '@/plugins/useFlash';
+import Button from '@/components/elements/Button';
+import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
+import useFlash from '@/plugins/useFlash';
+import { ServerContext } from '@/state/server';
 import { useStoreState } from 'easy-peasy';
+import { useEffect, useState } from 'react';
 
 const PIDLimitModalFeature = () => {
     const [visible, setVisible] = useState(false);

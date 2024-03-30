@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import Can from '@/components/elements/Can';
-import { ServerContext } from '@/state/server';
-import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
 import { Dialog } from '@/components/elements/dialog';
+import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
+import { ServerContext } from '@/state/server';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface PowerButtonProps {

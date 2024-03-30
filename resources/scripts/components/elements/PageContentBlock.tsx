@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import MainPage from '@/components/elements/MainPage';
 import FlashMessageRender from '@/components/FlashMessageRender';
+import MainPage from '@/components/elements/MainPage';
+import { useEffect } from 'react';
 
 export interface PageContentBlockProps {
     title?: string;

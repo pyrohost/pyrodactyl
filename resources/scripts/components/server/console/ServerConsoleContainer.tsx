@@ -1,18 +1,18 @@
-import { memo } from 'react';
-import { ServerContext } from '@/state/server';
-// import Can from '@/components/elements/Can';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import isEqual from 'react-fast-compare';
-import Spinner from '@/components/elements/Spinner';
-import Features from '@feature/Features';
-import Console from '@/components/server/console/Console';
-import StatGraphs from '@/components/server/console/StatGraphs';
-import PowerButtons from '@/components/server/console/PowerButtons';
-import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
-import { Alert } from '@/components/elements/alert';
+import { StatusPill } from './StatusPill';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import { StatusPill } from './StatusPill';
+// import Can from '@/components/elements/Can';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import Spinner from '@/components/elements/Spinner';
+import { Alert } from '@/components/elements/alert';
+import Console from '@/components/server/console/Console';
+import PowerButtons from '@/components/server/console/PowerButtons';
+import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
+import StatGraphs from '@/components/server/console/StatGraphs';
+import { ServerContext } from '@/state/server';
+import Features from '@feature/Features';
+import { memo } from 'react';
+import isEqual from 'react-fast-compare';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 

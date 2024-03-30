@@ -1,7 +1,3 @@
-import type { Action, Computed, Thunk } from 'easy-peasy';
-import { action, computed, createContextStore, thunk } from 'easy-peasy';
-import isEqual from 'react-fast-compare';
-
 import type { Server } from '@/api/server/getServer';
 import getServer from '@/api/server/getServer';
 import type { ServerDatabaseStore } from '@/state/server/databases';
@@ -14,6 +10,9 @@ import type { SocketStore } from '@/state/server/socket';
 import socket from '@/state/server/socket';
 import type { ServerSubuserStore } from '@/state/server/subusers';
 import subusers from '@/state/server/subusers';
+import type { Action, Computed, Thunk } from 'easy-peasy';
+import { action, computed, createContextStore, thunk } from 'easy-peasy';
+import isEqual from 'react-fast-compare';
 
 export type ServerStatus = 'offline' | 'starting' | 'stopping' | 'running' | null;
 

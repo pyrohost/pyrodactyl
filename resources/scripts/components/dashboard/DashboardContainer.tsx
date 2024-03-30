@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Server } from '@/api/server/getServer';
 import getServers from '@/api/getServers';
-import ServerRow from '@/components/dashboard/ServerRow';
-import PageContentBlock from '@/components/elements/PageContentBlock';
-import useFlash from '@/plugins/useFlash';
-import { useStoreState } from 'easy-peasy';
-import { usePersistedState } from '@/plugins/usePersistedState';
-import useSWR from 'swr';
 import { PaginatedResult } from '@/api/http';
-import Pagination from '@/components/elements/Pagination';
-import { useLocation } from 'react-router-dom';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
+import { Server } from '@/api/server/getServer';
+import ServerRow from '@/components/dashboard/ServerRow';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import Pagination from '@/components/elements/Pagination';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
+import useFlash from '@/plugins/useFlash';
+import { usePersistedState } from '@/plugins/usePersistedState';
+import { useStoreState } from 'easy-peasy';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import useSWR from 'swr';
 
 export default () => {
     const { search } = useLocation();

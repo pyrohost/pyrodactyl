@@ -1,6 +1,6 @@
 import { useDeepCompareMemo } from '@/plugins/useDeepCompareMemo';
-import { ServerContext } from '@/state/server';
 import { useStoreState } from '@/state/hooks';
+import { ServerContext } from '@/state/server';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Context = string | string[] | (string | number | null | {})[];

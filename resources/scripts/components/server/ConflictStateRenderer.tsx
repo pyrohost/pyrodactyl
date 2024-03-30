@@ -1,5 +1,5 @@
-import { ServerContext } from '@/state/server';
 import ScreenBlock from '@/components/elements/ScreenBlock';
+import { ServerContext } from '@/state/server';
 
 export default () => {
     const status = ServerContext.useStoreState((state) => state.server.data?.status || null);

@@ -1,16 +1,16 @@
-import { Command } from 'cmdk';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Can from '@/components/elements/Can';
-import { ServerContext } from '@/state/server';
-import { toast } from 'sonner';
-import HugeIconsHome from '../hugeicons/Home';
-import HugeIconsFolder from '../hugeicons/Folder';
-import HugeIconsDatabase from '../hugeicons/Database';
 import HugeIconsCloudUp from '../hugeicons/CloudUp';
 import HugeIconsConnections from '../hugeicons/Connections';
 import HugeIconsDashboardSettings from '../hugeicons/DashboardSettings';
+import HugeIconsDatabase from '../hugeicons/Database';
+import HugeIconsFolder from '../hugeicons/Folder';
+import HugeIconsHome from '../hugeicons/Home';
 import HugeIconsZap from '../hugeicons/Zap';
+import Can from '@/components/elements/Can';
+import { ServerContext } from '@/state/server';
+import { Command } from 'cmdk';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const CommandMenu = () => {
     const [open, setOpen] = useState(false);

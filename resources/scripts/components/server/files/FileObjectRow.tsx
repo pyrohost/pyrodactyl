@@ -1,18 +1,18 @@
-import { encodePathSegments } from '@/helpers';
-import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
-import { ReactNode, memo } from 'react';
+import FileDropdownMenu from './FileDropdownMenu';
+import styles from './style.module.css';
 import { FileObject } from '@/api/server/files/loadDirectory';
+import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
+import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
+import { encodePathSegments } from '@/helpers';
+import { bytesToString } from '@/lib/formatters';
+import { usePermissions } from '@/plugins/usePermissions';
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
-import { NavLink } from 'react-router-dom';
-import isEqual from 'react-fast-compare';
-import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
-import { usePermissions } from '@/plugins/usePermissions';
+import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import { join } from 'pathe';
-import { bytesToString } from '@/lib/formatters';
-import styles from './style.module.css';
-import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
-import FileDropdownMenu from './FileDropdownMenu';
+import { ReactNode, memo } from 'react';
+import isEqual from 'react-fast-compare';
+import { NavLink } from 'react-router-dom';
 
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
     const [canReadContents] = usePermissions(['file.read-content']);

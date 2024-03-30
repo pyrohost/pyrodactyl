@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
-import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
 import { httpErrorToHuman } from '@/api/http';
+import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
+import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
+import Can from '@/components/elements/Can';
+import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
-import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
-import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import { useState } from 'react';
 
 interface Props {
     schedule: Schedule;

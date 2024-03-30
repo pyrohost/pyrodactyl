@@ -1,26 +1,6 @@
-import TransferListener from '@/components/server/TransferListener';
-import { Fragment, Suspense, useEffect, useState } from 'react';
-import { NavLink, Route, Routes, useParams, useLocation } from 'react-router-dom';
-import WebsocketHandler from '@/components/server/WebsocketHandler';
-import { ServerContext } from '@/state/server';
-import Can from '@/components/elements/Can';
-import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import { httpErrorToHuman } from '@/api/http';
-import { useStoreState } from 'easy-peasy';
-import MainSidebar from '@/components/elements/MainSidebar';
-import InstallListener from '@/components/server/InstallListener';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
-import PermissionRoute from '@/components/elements/PermissionRoute';
-import routes from '@/routers/routes';
-import Logo from '@/components/elements/PyroLogo';
-import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
-import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
-import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
-import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import CommandMenu from '@/components/elements/commandk/CmdK';
+import http from '@/api/http';
+import Can from '@/components/elements/Can';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,11 +8,31 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSeparator,
 } from '@/components/elements/DropdownMenu';
-import http from '@/api/http';
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import HugeIconsPeople from '@/components/elements/hugeicons/People';
-import HugeIconsConsole from '@/components/elements/hugeicons/Console';
+import PermissionRoute from '@/components/elements/PermissionRoute';
+import Logo from '@/components/elements/PyroLogo';
+import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
+import CommandMenu from '@/components/elements/commandk/CmdK';
 import HugeIconsClock from '@/components/elements/hugeicons/Clock';
+import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
+import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
+import HugeIconsConsole from '@/components/elements/hugeicons/Console';
+import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
+import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import HugeIconsPeople from '@/components/elements/hugeicons/People';
+import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
+import InstallListener from '@/components/server/InstallListener';
+import TransferListener from '@/components/server/TransferListener';
+import WebsocketHandler from '@/components/server/WebsocketHandler';
+import routes from '@/routers/routes';
+import { ServerContext } from '@/state/server';
+import { useStoreState } from 'easy-peasy';
+import { Fragment, Suspense, useEffect, useState } from 'react';
+import { NavLink, Route, Routes, useParams, useLocation } from 'react-router-dom';
 
 export default () => {
     const params = useParams<'id'>();

@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom';
+import style from './style.module.css';
+import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
+import useLocationHash from '@/plugins/useLocationHash';
+import { ActivityLog } from '@definitions/user';
+// FIXME: add icons back
+import clsx from 'clsx';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { ActivityLog } from '@definitions/user';
-import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
-// FIXME: add icons back
-import clsx from 'clsx';
-import style from './style.module.css';
-import useLocationHash from '@/plugins/useLocationHash';
+import { Link } from 'react-router-dom';
+
 // import { getObjectKeys, isObject } from '@/lib/objects';
 
 interface Props {
