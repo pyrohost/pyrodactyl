@@ -7,7 +7,7 @@ import Logo from '@/components/elements/PyroLogo';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import http from '@/api/http';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -38,7 +38,7 @@ export default () => {
     const top = calculateTop(location.pathname);
 
     return (
-        <>
+        <Fragment key={'dashboard-router'}>
             <MainSidebar className='hidden lg:flex'>
                 <div
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
@@ -126,6 +126,6 @@ export default () => {
                     </main>
                 </MainWrapper>
             </Suspense>
-        </>
+        </Fragment>
     );
 };
