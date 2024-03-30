@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import { splitVendorChunkPlugin } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
 
 import million from 'million/compiler';
@@ -63,7 +62,6 @@ export default defineConfig({
     plugins: [
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
-        splitVendorChunkPlugin(),
         [
             million.vite({
                 auto: {
