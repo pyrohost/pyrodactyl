@@ -43,7 +43,11 @@ export default () => {
     }, []);
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
-        return null;
+        return (
+            <ServerContentBlock title={'Users'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+            </ServerContentBlock>
+        );
     }
 
     return (
