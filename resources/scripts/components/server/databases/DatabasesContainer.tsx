@@ -9,6 +9,7 @@ import Can from '@/components/elements/Can';
 import useFlash from '@/plugins/useFlash';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { useDeepMemoize } from '@/plugins/useDeepMemoize';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -35,8 +36,7 @@ export default () => {
 
     return (
         <ServerContentBlock title={'Databases'}>
-            <div className={'flex flex-row justify-between items-center mb-8'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Databases</h1>
+            <MainPageHeader title={'Databases'}>
                 <Can action={'database.create'}>
                     <div className={`flex items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
@@ -47,7 +47,7 @@ export default () => {
                         {databaseLimit > 0 && databaseLimit !== databases.length && <CreateDatabaseButton />}
                     </div>
                 </Can>
-            </div>
+            </MainPageHeader>
             <FlashMessageRender byKey={'databases'} />
             {!databases.length && loading ? (
                 // <Spinner size={'large'} centered />
