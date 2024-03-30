@@ -21,6 +21,7 @@ import { hashToPath } from '@/helpers';
 // import style from './style.module.css';
 import NewFileButton from './NewFileButton';
 import debounce from 'debounce';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
 
 const sortFiles = (files: FileObject[]): FileObject[] => {
     const sortedFiles: FileObject[] = files
@@ -74,8 +75,7 @@ export default () => {
     return (
         <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
             <ErrorBoundary>
-                <div className='flex flex-row justify-between items-center mb-8'>
-                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Files</h1>
+                <MainPageHeader title={'Files'}>
                     <Can action={'file.create'}>
                         <div className='flex flex-row gap-1'>
                             <FileManagerStatus />
@@ -84,7 +84,7 @@ export default () => {
                             <UploadButton />
                         </div>
                     </Can>
-                </div>
+                </MainPageHeader>
                 <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
                     <FileManagerBreadcrumbs
                         renderLeft={
