@@ -26,6 +26,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    DropdownMenuSeparator,
 } from '@/components/elements/DropdownMenu';
 import http from '@/api/http';
 import MainWrapper from '@/components/elements/MainWrapper';
@@ -52,6 +53,10 @@ export default () => {
             // @ts-expect-error this is valid
             window.location = '/';
         });
+    };
+
+    const onSelectManageServer = () => {
+        window.open(`/admin/servers/view/${serverId}`);
     };
 
     useEffect(
@@ -158,6 +163,15 @@ export default () => {
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                                    {rootAdmin && (
+                                        <DropdownMenuItem onSelect={onSelectManageServer}>
+                                            Manage Server
+                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                                Staff
+                                            </span>
+                                        </DropdownMenuItem>
+                                    )}
+                                    <DropdownMenuSeparator />
                                     <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -217,15 +231,14 @@ export default () => {
                                     <p>Settings</p>
                                 </NavLink>
                             </Can>
-                            {rootAdmin && (
-                                // eslint-disable-next-line react/jsx-no-target-blank
-                                <a href={`/admin/servers/view/${serverId}`} target={'_blank'}>
+                            {/* {rootAdmin && (
+                                <a href={`/admin/servers/view/${serverId}`} target={'_blank'} rel='noreferrer'>
                                     <div className='ml-1'>Manage Server </div>
                                     <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
                                         Staff
                                     </span>
                                 </a>
-                            )}
+                            )} */}
                         </ul>
                     </MainSidebar>
                     <CommandMenu />

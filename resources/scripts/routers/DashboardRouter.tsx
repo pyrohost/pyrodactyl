@@ -12,6 +12,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import MainWrapper from '@/components/elements/MainWrapper';
@@ -26,6 +27,10 @@ export default () => {
             // @ts-expect-error this is valid
             window.location = '/';
         });
+    };
+
+    const onSelectAdminPanel = () => {
+        window.open(`/admin`);
     };
 
     const calculateTop = (pathname: string) => {
@@ -78,6 +83,15 @@ export default () => {
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                            {rootAdmin && (
+                                <DropdownMenuItem onSelect={onSelectAdminPanel}>
+                                    Admin Panel
+                                    <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                        Staff
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -92,13 +106,6 @@ export default () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
-                    {rootAdmin && (
-                        // eslint-disable-next-line react/jsx-no-target-blank
-                        <a href={`/admin`} target={'_blank'}>
-                            <div className='ml-1'>Admin Panel </div>
-                            <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>Staff</span>
-                        </a>
-                    )}
                 </ul>
             </MainSidebar>
 
