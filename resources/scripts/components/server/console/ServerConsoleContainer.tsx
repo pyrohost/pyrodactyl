@@ -11,7 +11,8 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import { Alert } from '@/components/elements/alert';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import clsx from 'clsx';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import { StatusPill } from './StatusPill';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -36,46 +37,9 @@ const ServerConsoleContainer = () => {
                               : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
-                    <div className='flex items-center gap-4'>
-                        <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{name}</h1>
-                        <div
-                            className={clsx(
-                                'relative transition rounded-full pl-3 pr-3 py-2 flex items-center gap-1',
-                                status === 'offline'
-                                    ? 'bg-red-400/25'
-                                    : status === 'running'
-                                      ? 'bg-green-400/25'
-                                      : 'bg-yellow-400/25',
-                            )}
-                        >
-                            <div
-                                className={clsx(
-                                    'transition rounded-full h-4 w-4',
-                                    status === 'offline'
-                                        ? 'bg-red-500'
-                                        : status === 'running'
-                                          ? 'bg-green-500'
-                                          : 'bg-yellow-500',
-                                )}
-                            ></div>
-                            <div
-                                className={clsx(
-                                    'transition rounded-full h-4 w-4 animate-ping absolute top-2.5 opacity-45',
-                                    status === 'offline'
-                                        ? 'bg-red-500'
-                                        : status === 'running'
-                                          ? 'bg-green-500'
-                                          : 'bg-yellow-500',
-                                )}
-                            ></div>
-                            <div className='text-sm font-bold'>
-                                {status === 'offline' ? 'Offline' : status === 'running' ? 'Online' : 'Starting'}
-                            </div>
-                        </div>
-                    </div>
+                <MainPageHeader title={name} titleChildren={<StatusPill status={status} />}>
                     <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
-                </div>
+                </MainPageHeader>
                 {description && (
                     <h2 className='text-sm -mt-8'>
                         <span className='opacity-50'>Description: </span>
