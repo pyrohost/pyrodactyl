@@ -39,7 +39,7 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
             <div className={styles.file_row} key={file.name}>
                 <SelectFileCheckbox name={file.name} />
                 <MemoizedClickable file={file}>
-                    <div className={`flex-none text-zinc-400 mr-4 text-lg pl-3`}>
+                    <div className={`flex-none text-zinc-400 mr-4 text-lg pl-3 mb-0.5`}>
                         {file.isFile ? (
                             // todo handle other types of files. ugh
                             <svg

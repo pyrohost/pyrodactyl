@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { httpErrorToHuman } from '@/api/http';
 import { For } from 'million/react';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
@@ -21,6 +21,7 @@ import { hashToPath } from '@/helpers';
 import NewFileButton from './NewFileButton';
 import debounce from 'debounce';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 const sortFiles = (files: FileObject[]): FileObject[] => {
     const sortedFiles: FileObject[] = files
@@ -30,10 +31,12 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
 };
 
 export default () => {
+    const parentRef = useRef<HTMLDivElement | null>(null);
+
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const { hash } = useLocation();
     const { data: files, error, mutate } = useFileManagerSwr();
-    const filesArray = sortFiles(files?.slice(0, 250) ?? []);
+
     const directory = ServerContext.useStoreState((state) => state.files.directory);
     const clearFlashes = useStoreActions((actions) => actions.flashes.clearFlashes);
     const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
@@ -63,6 +66,8 @@ export default () => {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = debounce(setSearchTerm, 50);
 
+    const filesArray = sortFiles(files ?? []).filter((file) => file.name.includes(searchTerm));
+
     useEffect(() => {
         setSearchTerm('');
     }, [location]);
@@ -71,55 +76,57 @@ export default () => {
         return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
     }
 
+    const rowVirtualizer = useVirtualizer({
+        // count: 10000,
+        count: filesArray.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 54,
+        // scrollMargin: 54,
+    });
+
     return (
-        <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
-            <ErrorBoundary>
-                <MainPageHeader title={'Files'}>
-                    <Can action={'file.create'}>
-                        <div className='flex flex-row gap-1'>
-                            <FileManagerStatus />
-                            <NewDirectoryButton />
-                            <NewFileButton id={id} />
-                            <UploadButton />
-                        </div>
-                    </Can>
-                </MainPageHeader>
-                <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
-                    <FileManagerBreadcrumbs
-                        renderLeft={
-                            <Checkbox
-                                className='ml-[1.6rem] mr-4'
-                                checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
-                                onCheckedChange={() => onSelectAllClick()}
-                            />
-                        }
-                    />
-                </div>
-            </ErrorBoundary>
+        <ServerContentBlock className='!p-0' title={'File Manager'} showFlashKey={'files'}>
+            <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
+                <ErrorBoundary>
+                    <MainPageHeader title={'Files'}>
+                        <Can action={'file.create'}>
+                            <div className='flex flex-row gap-1'>
+                                <FileManagerStatus />
+                                <NewDirectoryButton />
+                                <NewFileButton id={id} />
+                                <UploadButton />
+                            </div>
+                        </Can>
+                    </MainPageHeader>
+                    <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
+                        <FileManagerBreadcrumbs
+                            renderLeft={
+                                <Checkbox
+                                    className='ml-[1.22rem] mr-4'
+                                    checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
+                                    onCheckedChange={() => onSelectAllClick()}
+                                />
+                            }
+                        />
+                    </div>
+                </ErrorBoundary>
+            </div>
             {!files ? null : (
                 <>
                     {!files.length ? (
                         <p className={`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
                     ) : (
                         <>
-                            {files.length > 250 && (
-                                <div className={`rounded bg-yellow-400 mb-px p-3`}>
-                                    <p className={`text-yellow-900 text-sm text-center`}>
-                                        This directory is too large to display in the browser, limiting the output to
-                                        the first 250 files.
-                                    </p>
-                                </div>
-                            )}
-                            <div
-                                data-pyro-file-manager-files
-                                style={{
-                                    background:
-                                        'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                                }}
-                                className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                            >
-                                <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                    <div className='relative w-full h-full'>
+                            <div ref={parentRef} style={{ height: `calc(100vh - 194px)`, overflowY: 'scroll' }}>
+                                <div
+                                    data-pyro-file-manager-files
+                                    style={{
+                                        background:
+                                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                                    }}
+                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl ml-14 mr-12'
+                                >
+                                    <div className='relative w-full h-full mb-1'>
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
                                             fill='none'
@@ -143,12 +150,41 @@ export default () => {
                                         />
                                     </div>
                                     <For
-                                        each={filesArray.filter((file) =>
-                                            file.name.toLowerCase().includes(searchTerm.toLowerCase()),
-                                        )}
-                                        memo
+                                        each={rowVirtualizer.getVirtualItems()}
+                                        style={{
+                                            height: `${rowVirtualizer.getTotalSize()}px`,
+                                            width: '100%',
+                                            overflow: 'hidden',
+                                            borderRadius: '0.5rem',
+                                            position: 'relative',
+                                        }}
+                                        as='div'
                                     >
-                                        {(file) => <FileObjectRow key={file.key} file={file} />}
+                                        {(virtualItem) => {
+                                            if (filesArray[virtualItem.index] !== undefined) {
+                                                return (
+                                                    <div
+                                                        key={virtualItem.key}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            height: `${virtualItem.size}px`,
+                                                            width: '100%',
+                                                            paddingBottom: '1px',
+                                                            transform: `translateY(${virtualItem.start}px)`,
+                                                        }}
+                                                    >
+                                                        <FileObjectRow
+                                                            // @ts-ignore
+                                                            file={filesArray[virtualItem.index]}
+                                                            key={filesArray[virtualItem.index]?.name}
+                                                        />
+                                                    </div>
+                                                );
+                                            }
+                                            return <></>;
+                                        }}
                                     </For>
                                 </div>
                             </div>
