@@ -91,4 +91,4 @@ Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
 
 pyrodactyl™ Copyright © 2024 pyro.host
 
-pyrodactyl™ and its source code is licensed and distributed under Business Source License 1.1. Please see the [LICENSE](https://github.com/pyrohost/panel/blob/main/LICENSE) file for more information on your rights to use pyrodactyl.
+pyrodactyl™ and its source code is licensed and distributed under Pyro Source Available License. Please see the [LICENSE](https://github.com/pyrohost/panel/blob/main/LICENSE) file for more information on your rights to use pyrodactyl.
