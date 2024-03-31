@@ -25,7 +25,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
                 'mb-8 gap-8 mt-8 md:mt-0',
             )}
         >
-            <div className='flex items-center gap-4'>
+            <div className='flex items-center gap-4 flex-wrap'>
                 <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{title}</h1>
                 {titleChildren}
             </div>
