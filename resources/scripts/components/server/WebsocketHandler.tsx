@@ -110,7 +110,9 @@ function WebsocketHandler() {
 
     return error ? (
         <FadeTransition duration='duration-150' show>
-            <div className={`bg-red-500 py-2`}>
+            <div
+                className={`flex items-center px-4 rounded-full fixed w-fit mx-auto left-0 right-0 top-4 bg-red-500 py-2 z-[9999]`}
+            >
                 {error === 'connecting' ? (
                     <>
                         <Spinner size={'small'} />
