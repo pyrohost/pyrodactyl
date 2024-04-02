@@ -23,7 +23,6 @@
         "@radix-ui/react-tabs": "^1.0.4",
         "@sentry/react": "^7.109.0",
         "@sentry/vite-plugin": "^2.16.0",
-        "@tailwindcss/line-clamp": "^0.4.4",
         "@tanstack/react-virtual": "^3.2.0",
         "@xterm/addon-fit": "^0.9.0",
         "@xterm/addon-search": "^0.14.0",
