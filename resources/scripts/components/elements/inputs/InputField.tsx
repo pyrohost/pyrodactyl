@@ -16,7 +16,7 @@ interface InputFieldProps extends React.ComponentProps<'input'> {
 const Component = forwardRef<HTMLInputElement, InputFieldProps>(({ className, variant, ...props }, ref) => (
     <input
         ref={ref}
-        className={clsx('form-input', styles.text_input, { [styles.loose]: variant === Variant.Loose }, className)}
+        className={clsx('', styles.text_input, { [styles.loose]: variant === Variant.Loose }, className)}
         {...props}
     />
 ));
