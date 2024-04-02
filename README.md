@@ -6,9 +6,12 @@
  <a aria-label="Licensed under Business Source License 1.1" href="https://github.com/pyrohost/panel/blob/main/LICENSE"><img alt="" src="https://i.imgur.com/DHx8Cz6.png"></a>
 </p>
 
-<h1 align="center">pyrodactyl by pyro.host</h1>
+<h1 align="center">pyrodactyl by Pyro Inc.</h1>
 
 pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: pyrodactyl is the world's best Pterodactyl.
+
+> [!NOTE]
+> Pyro Inc. and its employees are not obligated to provide support to users if it actively prevents us from working on our platform.
 
 [![Dashboard Image](https://pyro.host/img/panel1.jpg)](https://panel.pyro.host)
 
