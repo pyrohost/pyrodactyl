@@ -62,7 +62,14 @@ function LoginContainer() {
                 console.error(error);
 
                 setToken('');
-                if (ref.current) ref.current.reset();
+                // https://github.com/jsardev/reaptcha/issues/218
+                if (ref.current) {
+                    setTimeout(() => {
+                        if (ref.current) {
+                            ref.current.reset();
+                        }
+                    }, 500);
+                }
 
                 setSubmitting(false);
                 clearAndAddHttpError({ error });
