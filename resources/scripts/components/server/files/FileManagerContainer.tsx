@@ -71,7 +71,9 @@ export default () => {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = debounce(setSearchTerm, 50);
 
-    const filesArray = sortFiles(files ?? []).filter((file) => file.name.includes(searchTerm));
+    const filesArray = sortFiles(files ?? []).filter((file) =>
+        file.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
 
     useEffect(() => {
         setSearchTerm('');
