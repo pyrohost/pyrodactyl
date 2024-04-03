@@ -1,19 +1,13 @@
 {
-    "name": "pterodactyl/panel",
-    "description": "The free, open-source game management panel. Supporting Minecraft, Spigot, BungeeCord, and SRCDS servers.",
-    "license": "MIT",
+    "name": "pyrohost/panel",
+    "description": "pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
+    "license": "PSAL",
     "authors": [
         {
-            "name": "Matthew Penner",
-            "email": "matthew@pterodactyl.io",
-            "homepage": "https://github.com/matthewpi",
-            "role": "Lead Developer"
-        },
-        {
-            "name": "Dane Everitt",
-            "email": "dane@daneeveritt.com",
-            "homepage": "https://github.com/DaneEveritt",
-            "role": "Developer"
+            "name": "Pyro Inc.",
+            "email": "team@pyro.host",
+            "homepage": "https://pyro.host",
+            "role": "Product Owner"
         }
     ],
     "require": {
