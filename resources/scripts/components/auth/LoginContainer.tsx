@@ -136,7 +136,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Login
+                            Sign in
                         </Button>
                     </div>
                     {recaptchaEnabled && (
