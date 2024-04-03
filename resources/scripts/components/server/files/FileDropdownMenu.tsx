@@ -1,6 +1,7 @@
 import { join } from 'pathe';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
@@ -41,8 +42,6 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const doDeletion = async () => {
         clearFlashes('files');
 
-        // For UI speed, immediately remove the file from the listing before calling the deletion function.
-        // If the delete actually fails, we'll fetch the current directory contents again automatically.
         await mutate((files) => files!.filter((f) => f.key !== file.key), false);
 
         deleteFiles(uuid, directory, [file.name]).catch((error) => {
@@ -55,9 +54,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doCopy = () => {
         clearFlashes('files');
+        toast.info('Duplicating...');
 
         copyFile(uuid, join(directory, file.name))
             .then(() => mutate())
+            .then(() => toast.success('File successfully duplicated.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -74,17 +75,21 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doArchive = () => {
         clearFlashes('files');
+        toast.info('Archiving files...');
 
         compressFiles(uuid, directory, [file.name])
             .then(() => mutate())
+            .then(() => toast.success('Files successfully archived.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doUnarchive = () => {
         clearFlashes('files');
+        toast.info('Unarchiving files...');
 
         decompressFiles(uuid, directory, file.name)
             .then(() => mutate())
+            .then(() => toast.success('Files successfully unarchived.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
