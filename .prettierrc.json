@@ -6,6 +6,7 @@
     "singleQuote": true,
     "jsxSingleQuote": true,
     "importOrder": [
+        "^@/routers/(.*)$",
         "^@/components/(.*)$",
         "^@/hoc/(.*)$",
         "^@/lib/(.*)$",
