@@ -7,6 +7,7 @@
     "jsxSingleQuote": true,
     "importOrder": [
         "^@/components/(.*)$",
+        "^@/hoc/(.*)$",
         "^@/api/(.*)$",
         "^@/state(.*)$",
         "^@/state/(.*)$",
