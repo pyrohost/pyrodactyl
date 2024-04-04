@@ -31,7 +31,9 @@ export const StatusPill = () => {
                       ? 'Online'
                       : status === 'stopping'
                         ? 'Stopping'
-                        : 'Starting'}
+                        : status === 'starting'
+                          ? 'Starting'
+                          : 'Fetching'}
             </div>
         </div>
     );
