@@ -21,6 +21,8 @@ import { Server } from '@/api/server/getServer';
 import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
+import { MainPageHeader } from '../elements/MainPageHeader';
+
 export default () => {
     const { search } = useLocation();
     const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
@@ -69,14 +71,11 @@ export default () => {
                 }}
                 className='w-full'
             >
-                <div className={'flex flex-col md:flex-row justify-between items-center mb-8 gap-8 mt-8 md:mt-0'}>
-                    <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>
-                        {showOnlyAdmin ? 'Other Servers' : 'Your Servers'}
-                    </h1>
+                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11]'>
+                                <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] hover:bg-[#ffffff22] transition hover:duration-0'>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='20'
@@ -151,7 +150,7 @@ export default () => {
                             </TabsTrigger>
                         </TabsList>
                     </div>
-                </div>
+                </MainPageHeader>
                 {!servers ? (
                     <></>
                 ) : (
