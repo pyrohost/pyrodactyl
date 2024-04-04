@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- Copyright (c) Pyro Inc. and parent collaborators -->
-<!-- SPDX-License-Identifier: BUSL-1.1 -->
+<!-- Copyright (c) 2023-2024 Pyro Inc. and parent collaborators -->
+<!-- pyrodactyl is licensed by Pyro Inc. under the Pyro Source Available License. https://pyro.host/psal -->
 <html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
         <title>{{ config('app.name', 'pyro.host') }}</title>
