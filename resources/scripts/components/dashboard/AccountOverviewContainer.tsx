@@ -21,16 +21,19 @@ export default () => {
                 </MessageBox>
             )}
 
-            <div className='flex flex-col w-full h-full gap-8'>
-                <ContentBox title={'Update Password'} showFlashes={'account:password'}>
-                    <UpdatePasswordForm />
-                </ContentBox>
-                <ContentBox title={'Update Email Address'} showFlashes={'account:email'}>
+            <div className='flex flex-col w-full h-full gap-4'>
+                <h2 className='mt-8 font-extrabold text-2xl'>Account Information</h2>
+                <ContentBox title={'Email Address'} showFlashes={'account:email'}>
                     <UpdateEmailAddressForm />
                 </ContentBox>
-                <ContentBox title={'Two-Step Verification'}>
+                <h2 className='mt-8 font-extrabold text-2xl'>Password and Authentication</h2>
+                <ContentBox title={'Account Password'} showFlashes={'account:password'}>
+                    <UpdatePasswordForm />
+                </ContentBox>
+                <ContentBox title={'Multi-Factor Authentication'}>
                     <ConfigureTwoFactorForm />
                 </ContentBox>
+                <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
                 <ContentBox title={'Panel Version'}>
                     <p className='text-sm mb-4'>
                         This is useful to provide Pyro staff if you run into an unexpected issue.

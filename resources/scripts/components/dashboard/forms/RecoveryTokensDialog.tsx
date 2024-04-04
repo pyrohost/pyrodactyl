@@ -19,9 +19,9 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
         <Dialog
             open={open}
             onClose={onClose}
-            title={'Two-Step Authentication Enabled'}
+            title={'Authenticator App Enabled'}
             description={
-                'Store the codes below somewhere safe. If you lose access to your phone you can use these backup codes to sign in.'
+                'Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.'
             }
             hideCloseIcon
             preventExternalClose

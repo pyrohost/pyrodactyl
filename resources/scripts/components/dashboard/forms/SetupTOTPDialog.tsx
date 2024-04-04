@@ -79,8 +79,8 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                Scan the QR code above using the two-step authentication app of your choice. Then, enter the 6-digit
-                code generated into the field below.
+                Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
+                6-digit code it generates below.
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -129,7 +129,6 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
 };
 
 export default asDialog({
-    title: 'Enable Two-Step Verification',
-    description:
-        "Help protect your account from unauthorized access. You'll be prompted for a verification code each time you sign in.",
+    title: 'Enable Authenticator App',
+    description: "You'll be required to enter a verification code each time you sign in.",
 })(ConfigureTwoFactorForm);

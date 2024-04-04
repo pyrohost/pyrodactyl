@@ -73,6 +73,6 @@ const DisableTOTPDialog = () => {
 };
 
 export default asDialog({
-    title: 'Disable Two-Step Verification',
-    description: 'Disabling two-step verification will make your account less secure.',
+    title: 'Remove Authenticator App',
+    description: 'Removing your authenticator app will make your account less secure.',
 })(DisableTOTPDialog);

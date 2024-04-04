@@ -19,7 +19,7 @@ interface Values {
 }
 
 const schema = Yup.object().shape({
-    current: Yup.string().min(1).required('You must provide your current password.'),
+    current: Yup.string().min(1).required('You must provide your current account password.'),
     password: Yup.string().min(8).required(),
     confirmPassword: Yup.string().test(
         'password',
