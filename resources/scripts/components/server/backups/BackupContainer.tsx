@@ -86,9 +86,7 @@ const BackupContainer = () => {
                 }
             </Pagination>
             {backupLimit === 0 && (
-                <p className={`text-center text-sm text-zinc-300`}>
-                    Backups cannot be created for this server because the backup limit is set to 0.
-                </p>
+                <p className={`text-center text-sm text-zinc-300`}>Backups cannot be created for this server.</p>
             )}
         </ServerContentBlock>
     );
