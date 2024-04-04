@@ -70,7 +70,7 @@ export default () => {
                     </NavLink>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className='w-8 h-8 flex items-center justify-center rounded-md text-white'>
+                            <button className='w-8 h-8 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-1'>
                                 <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     width='32'
