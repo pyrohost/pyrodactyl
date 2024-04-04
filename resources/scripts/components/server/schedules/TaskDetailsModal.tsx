@@ -1,5 +1,4 @@
 import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
 import { Form, Formik, Field as FormikField, FormikHelpers, useField } from 'formik';
 import { useContext, useEffect } from 'react';
 import { boolean, number, object, string } from 'yup';
@@ -12,6 +11,8 @@ import { Textarea } from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
 import { Button } from '@/components/elements/button/index';
+
+import asModal from '@/hoc/asModal';
 
 import { httpErrorToHuman } from '@/api/http';
 import createOrUpdateScheduleTask from '@/api/server/schedules/createOrUpdateScheduleTask';

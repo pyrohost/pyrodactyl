@@ -1,5 +1,4 @@
 import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
 import { useContext, useEffect, useRef } from 'react';
@@ -11,6 +10,8 @@ import Field from '@/components/elements/Field';
 import { Button } from '@/components/elements/button/index';
 import PermissionRow from '@/components/server/users/PermissionRow';
 import PermissionTitleBox from '@/components/server/users/PermissionTitleBox';
+
+import asModal from '@/hoc/asModal';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 

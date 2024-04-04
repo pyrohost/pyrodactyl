@@ -1,13 +1,14 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 // FIXME: add icons back
-import asDialog from '@/hoc/asDialog';
 import { useSignal } from '@preact/signals-react';
 import { useContext, useEffect } from 'react';
 
 import Code from '@/components/elements/Code';
 import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
+
+import asDialog from '@/hoc/asDialog';
 
 import { ServerContext } from '@/state/server';
 

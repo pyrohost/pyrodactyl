@@ -1,6 +1,5 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
-import asDialog from '@/hoc/asDialog';
 import { Actions, useStoreActions } from 'easy-peasy';
 import QRCode from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
@@ -11,6 +10,8 @@ import Spinner from '@/components/elements/Spinner';
 import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
+
+import asDialog from '@/hoc/asDialog';
 
 import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
 import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';

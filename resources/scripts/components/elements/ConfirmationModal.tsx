@@ -1,8 +1,9 @@
 import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
 import { useContext } from 'react';
 
 import { Button } from '@/components/elements/button/index';
+
+import asModal from '@/hoc/asModal';
 
 type Props = {
     title: string;

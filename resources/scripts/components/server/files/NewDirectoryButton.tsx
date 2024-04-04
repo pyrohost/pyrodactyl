@@ -1,4 +1,3 @@
-import asDialog from '@/hoc/asDialog';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { useContext, useEffect, useState } from 'react';
@@ -9,6 +8,8 @@ import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
+
+import asDialog from '@/hoc/asDialog';
 
 import createDirectory from '@/api/server/files/createDirectory';
 import { FileObject } from '@/api/server/files/loadDirectory';

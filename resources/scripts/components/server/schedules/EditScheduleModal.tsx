@@ -1,5 +1,4 @@
 import ModalContext from '@/context/ModalContext';
-import asModal from '@/hoc/asModal';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useContext, useEffect, useState } from 'react';
 
@@ -9,6 +8,8 @@ import FormikSwitch from '@/components/elements/FormikSwitch';
 import Switch from '@/components/elements/Switch';
 import { Button } from '@/components/elements/button/index';
 import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
+
+import asModal from '@/hoc/asModal';
 
 import { httpErrorToHuman } from '@/api/http';
 import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
