@@ -121,7 +121,7 @@ export default () => {
             {!files ? null : (
                 <>
                     {!files.length ? (
-                        <p className={`text-sm text-zinc-400 text-center`}>This directory seems to be empty.</p>
+                        <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
                     ) : (
                         <>
                             <div ref={parentRef} style={{ height: `calc(100vh - 194px)`, overflowY: 'scroll' }}>
