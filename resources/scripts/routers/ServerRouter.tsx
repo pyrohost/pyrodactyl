@@ -1,7 +1,8 @@
-import routes from '@/routers/routes';
 import { useStoreState } from 'easy-peasy';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+
+import routes from '@/routers/routes';
 
 import Can from '@/components/elements/Can';
 import {
