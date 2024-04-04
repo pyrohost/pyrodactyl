@@ -1,5 +1,4 @@
 import { encodePathSegments } from '@/helpers';
-import { bytesToString } from '@/lib/formatters';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import { join } from 'pathe';
 import { ReactNode, memo } from 'react';
@@ -8,6 +7,8 @@ import { NavLink } from 'react-router-dom';
 
 import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
+
+import { bytesToString } from '@/lib/formatters';
 
 import { FileObject } from '@/api/server/files/loadDirectory';
 

@@ -1,4 +1,3 @@
-import { ip } from '@/lib/formatters';
 import { useStoreState } from 'easy-peasy';
 import isEqual from 'react-fast-compare';
 
@@ -11,6 +10,8 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Button } from '@/components/elements/button/index';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
+
+import { ip } from '@/lib/formatters';
 
 import { ServerContext } from '@/state/server';
 

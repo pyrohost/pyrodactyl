@@ -1,4 +1,3 @@
-import Features from '@feature/Features';
 import { memo } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -14,6 +13,8 @@ import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import StatGraphs from '@/components/server/console/StatGraphs';
 
 import { ServerContext } from '@/state/server';
+
+import Features from '@feature/Features';
 
 import { StatusPill } from './StatusPill';
 

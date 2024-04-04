@@ -1,5 +1,6 @@
-import { capitalize } from '@/lib/strings';
 import { FormikErrors, FormikTouched } from 'formik';
+
+import { capitalize } from '@/lib/strings';
 
 interface Props {
     errors: FormikErrors<any>;

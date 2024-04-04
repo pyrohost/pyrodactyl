@@ -1,9 +1,10 @@
-import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+
+import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
 import { ServerContext } from '@/state/server';
 

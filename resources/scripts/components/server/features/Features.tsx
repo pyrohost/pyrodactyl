@@ -1,6 +1,7 @@
-import { getObjectKeys } from '@/lib/objects';
 import type { ComponentType } from 'react';
 import { Suspense, useMemo } from 'react';
+
+import { getObjectKeys } from '@/lib/objects';
 
 import features from './index';
 

@@ -1,4 +1,3 @@
-import { ip } from '@/lib/formatters';
 import debounce from 'debounce';
 import { memo, useCallback, useState } from 'react';
 import isEqual from 'react-fast-compare';
@@ -10,6 +9,8 @@ import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { Button } from '@/components/elements/button/index';
 import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
+
+import { ip } from '@/lib/formatters';
 
 import { Allocation } from '@/api/server/getServer';
 import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
