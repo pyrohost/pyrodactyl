@@ -1,3 +1,4 @@
+import { For } from 'million/react';
 import { useContext, useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -76,10 +77,9 @@ const BackupContainer = () => {
                             className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                         >
                             <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                {/* not using index */}
-                                {items.map((backup, _) => (
-                                    <BackupRow key={backup.uuid} backup={backup} />
-                                ))}
+                                <For each={items} memo>
+                                    {(backup) => <BackupRow key={backup.uuid} backup={backup} />}
+                                </For>
                             </div>
                         </div>
                     )
