@@ -92,7 +92,7 @@
         "prettier": "^3.2.5",
         "prettier-plugin-tailwindcss": "^0.5.13",
         "ts-essentials": "^9.4.1",
-        "typescript": "^5.4.3",
+        "typescript": "^5.4.4",
         "vite-plugin-manifest-sri": "^0.2.0"
     },
     "scripts": {
