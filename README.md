@@ -83,4 +83,4 @@ denisapain® Copyright © 2015 - 2025 myself.
 
 denispanel™ Copyright © 2028 denisland.ovh
 
-my panel™ and its source code is licensed and distributed under Pyro Source Available License. Please see the [LICENSE](https://nolicenseL.usa.gov.iso.eduu.com.ue.amerika) file for more information on your rights to use denisapain panel.
+my panel™ and its source code is licensed and distributed under do whatever the fuck you want license™. Please see the [LICENSE](https://nolicenseL.usa.gov.iso.eduu.com.ue.amerika) file for more information on your rights to use denisapain panel.
