@@ -71,9 +71,9 @@ my panel is the world's first Pterodactyl panel that can be developed and run lo
 
 <a href="https://star-history.com/#denispain/denisland-panel&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=denisapain/denisland-panel&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=denisapain/denisland-panel&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=denisapain/denisland-panel&type=Date" />
   </picture>
 </a>
 
