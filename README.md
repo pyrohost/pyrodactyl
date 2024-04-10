@@ -11,7 +11,7 @@
 pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: pyrodactyl is the world's best Pterodactyl.
 
 > [!NOTE]
-> Pyro Inc. and its employees are not obligated to provide support to users if it actively prevents us from working on our platform.
+> Pyro Host Inc. and its employees are not obligated to provide support to users if it actively prevents us from working on our platform.
 
 [![Dashboard Image](https://pyro.host/img/panel1.jpg)](https://panel.pyro.host)
 
