@@ -101,7 +101,7 @@ function LoginContainer() {
                             src='https://i.imgur.com/Hbum4fc.png'
                         />
                     </div>
-                    <h2 className='text-xl font-extrabold mb-2'>Sign in</h2>
+                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
                     <div className='text-sm mb-6'>
                         New to Pyro?{' '}
                         <a
@@ -143,7 +143,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Sign in
+                            Login
                         </Button>
                     </div>
                     {recaptchaEnabled && (
