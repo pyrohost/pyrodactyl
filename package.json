@@ -13,7 +13,7 @@
         "@codemirror/lint": "^6.5.0",
         "@codemirror/search": "^6.5.6",
         "@codemirror/state": "^6.4.1",
-        "@codemirror/view": "^6.26.1",
+        "@codemirror/view": "^6.26.3",
         "@headlessui/react": "^1.7.18",
         "@preact/signals-react": "^2.0.1",
         "@radix-ui/react-checkbox": "^1.0.4",
