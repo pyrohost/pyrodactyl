@@ -92,6 +92,6 @@ pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
 
-pyrodactyl™ Copyright © 2024 pyro.host
+pyrodactyl™ Copyright © 2024 Pyro Host Inc.
 
-pyrodactyl™ and its source code is licensed and distributed under Pyro Source Available License. Please see the [LICENSE](https://github.com/pyrohost/panel/blob/main/LICENSE) file for more information on your rights to use pyrodactyl.
+pyrodactyl™ is licensed by Pyro Host Inc. under the [Pyro Source Available License (PSAL)](https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md). Your access to and use of content in this repository is governed by the terms of the PSAL. If you don't agree to the terms of the PSAL, you are not permitted to access or use content available in this repository.
