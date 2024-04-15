@@ -1,13 +1,15 @@
 # Pyro Source Available License
 
-This Software License Agreement (this "**License**") is a legal contract between You and Pyro Inc. ("**Pyro**").
+License text copyright (c) 2024 Pyro Host Inc. All Rights Reserved.
+
+This Software License Agreement (this "**License**") is a legal contract between You and Pyro Host Inc. ("**Pyro**").
 
 ## 1. Definitions
 
 1. **Software** means all copies of the original or modified software, and all derivative software licensed under this License.
 2. **You** or **Your** means the individual or entity that exercises the rights granted under this License.
 3. **Personal Use** means use of the Software for internal purposes only, such as for learning, hobbies, or personal projects excluding any use that could directly or indirectly support a commercial enterprise.
-4. **Commercial Use** means using the Software to create products or services intended for sale, distribution for profit, or to gain a competitive advantage.
+4. **Commercial Use** means using the Software to create products or services intended for sale, distribution for profit, to gain a competitive advantage, or for usage in a production environment.
 
 ## 2. Grant of Rights
 
@@ -41,8 +43,12 @@ This License constitutes the entire agreement between the parties concerning the
 
 ## 8. Modifications
 
-Pyro reserves the right to modify this License at any time. Modifications to this License will be effective immediately upon posting. Your continued use of the Software after any modifications to this License will constitute Your acceptance of such modifications.
+Pyro reserves the right to modify this License at any time. Modifications to this License will be effective immediately upon posting and will apply retroactively to all Software, unless otherwise stated. Your continued use of the Software after any modifications to this License will constitute Your acceptance of such modifications.
 
 ## 9. Acceptance
 
 By using the Software, You acknowledge that You have read, understood, and agree to be bound by the terms of this License. If You do not agree to the terms of this License, You are prohibited from using the Software.
+
+## 10. Miscellaneous
+
+If any provision of this Agreement is held by a court of law to be illegal, invalid, or unenforceable, the legality, validity, and enforceability of the remaining provisions of this Agreement will not be affected or impaired thereby and the illegal, invalid, or unenforceable provision will be deemed modified such that it is legal, valid, and enforceable and accomplishes the intention of Pyro to the fullest extent possible. Failure, neglect or delay by Pyro to enforce the provisions of this Agreement or its rights or remedies at any time, will not be construed or be deemed to be a waiver of Pyro's rights under this Agreement and will not in any way affect the validity of the whole or any part of this Agreement or prejudice such Pyro's right to take subsequent action.
