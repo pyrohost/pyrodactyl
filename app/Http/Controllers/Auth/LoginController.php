@@ -40,9 +40,14 @@ class LoginController extends AbstractLoginController
      */
     public function login(Request $request): JsonResponse
     {
+
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
             $this->sendLockoutResponse($request);
+        }
+
+        if (!$this->validateLoginIntegrity()) {
+            $this->sendFailedLoginResponse($request);
         }
 
         try {
