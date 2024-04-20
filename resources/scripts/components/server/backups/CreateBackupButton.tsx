@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { boolean, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
@@ -67,7 +67,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                         />
                     </div>
                 </Can>
-                <div className={`flex justify-end mt-6`}>
+                <div className={`flex justify-end mt-6 p-4`}>
                     <Button type={'submit'} disabled={isSubmitting}>
                         Start backup
                     </Button>

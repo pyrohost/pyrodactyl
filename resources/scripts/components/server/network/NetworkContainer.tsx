@@ -92,14 +92,24 @@ const NetworkContainer = () => {
                         className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                     >
                         <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                            <For each={data} memo>
-                                {(allocation) => (
-                                    <AllocationRow
-                                        key={`${allocation.ip}:${allocation.port}`}
-                                        allocation={allocation}
-                                    />
-                                )}
-                            </For>
+                        <For
+                            each={data.sort((a, b) => {
+                                if (b.isDefault !== a.isDefault) {
+                                    return b.isDefault ? 1 : -1;
+                                }
+
+                                return a.port - b.port;
+                            })}
+                            memo
+                        >
+                            {(allocation) => (
+                                <AllocationRow
+                                    key={`${allocation.ip}:${allocation.port}`}
+                                    allocation={allocation}
+                                />
+                            )}
+                        </For>
+
                         </div>
                     </div>
                 </>

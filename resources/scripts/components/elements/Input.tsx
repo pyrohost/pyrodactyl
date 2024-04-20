@@ -5,7 +5,7 @@ export interface Props {
     hasError?: boolean;
 }
 
-const checkboxStyle = css<Props>`
+const radioStyle = css<Props>`
     color-adjust: exact;
     background-origin: border-box;
     transition:
@@ -48,7 +48,7 @@ const Input = styled.input<Props>`
 
     &[type='checkbox'],
     &[type='radio'] {
-        ${checkboxStyle};
+        ${radioStyle};
 
         &[type='radio'] {
         }

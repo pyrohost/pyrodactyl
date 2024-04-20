@@ -35,6 +35,7 @@
         "clsx": "^2.1.0",
         "cmdk": "^1.0.0",
         "copy-to-clipboard": "^3.3.3",
+        "crypto-js": "^4.2.0",
         "date-fns": "^3.6.0",
         "debounce": "^2.0.0",
         "deepmerge-ts": "^5.1.0",

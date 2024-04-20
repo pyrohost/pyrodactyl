@@ -58,63 +58,72 @@ const AllocationRow = ({ allocation }: Props) => {
     return (
         <div
             className={
-                'flex rounded-sm p-1 transition bg-[#ffffff08] border-[1px] border-[#ffffff07] px-6 py-4 items-center'
+                'flex rounded-sm p-1 transition bg-[#ffffff08] border-[1px] border-[#ffffff07] px-6 py-2 items-center'
             }
         >
-            <div className={'flex items-center w-full md:w-auto'}>
-                <div className={'mr-4 flex-1 md:w-40'}>
-                    {allocation.alias ? (
-                        <CopyOnClick text={allocation.alias}>
-                            <div>
-                                <Code dark className={'w-40 truncate'}>
-                                    {allocation.alias}
-                                </Code>
-                            </div>
-                        </CopyOnClick>
+            <div className={'flex flex-col mt-4 w-full md:mt-0 md:w-56'}>
+                <div className='pb-1'>
+                    {allocation.isDefault ? (
+                        <p>Primary Port</p>
                     ) : (
-                        <CopyOnClick text={ip(allocation.ip)}>
+                        <p>Auxiliary Port</p>
+                    )}
+                </div>
+                <div className={'flex items-center w-full md:w-auto'}>
+                    <div className={'mr-4'}>
+                        <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
+                            {allocation.alias ? 'Hostname' : 'IP Address'}
+                        </label>
+                        {allocation.alias ? (
+                            <CopyOnClick text={allocation.alias}>
+                                <div>
+                                    <Code dark>
+                                        {allocation.alias}
+                                    </Code>
+                                </div>
+                            </CopyOnClick>
+                        ) : (
+                            <CopyOnClick text={ip(allocation.ip)}>
+                                <div>
+                                    <Code dark>{ip(allocation.ip)}</Code>
+                                </div>
+                            </CopyOnClick>
+                        )}
+                    </div>
+                    <div className={'flex-1 md:w-40'}>
+                        <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
+                            Port
+                        </label>
+                        <CopyOnClick text={allocation.port.toString()}>
                             <div>
-                                <Code dark>{ip(allocation.ip)}</Code>
+                                <Code dark>{allocation.port}</Code>
                             </div>
                         </CopyOnClick>
-                    )}
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        {allocation.alias ? 'Hostname' : 'IP Address'}
-                    </label>
-                </div>
-                <div className={'w-16 md:w-24 overflow-hidden'}>
-                    <Code dark>{allocation.port}</Code>
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        Port
-                    </label>
+                    </div>
                 </div>
             </div>
-            <div className={'mt-4 w-full md:mt-0 md:flex-1 md:w-auto'}>
+            <div className={'mt-4 mr-4 w-full md:mt-0 md:flex-1 md:w-auto'}>
                 <InputSpinner visible={loading}>
                     <Textarea
-                        className={'bg-transparent p-4 rounded-xl w-full'}
+                        className={'bg-transparent p-4 rounded-xl w-full h-20'}
                         placeholder={'Notes'}
                         defaultValue={allocation.notes || undefined}
                         onChange={(e) => setAllocationNotes(e.currentTarget.value)}
                     />
                 </InputSpinner>
             </div>
-            <div className={'flex justify-end space-x-4 mt-4 w-full md:mt-0 md:w-48'}>
-                {allocation.isDefault ? (
-                    <p>Primary Port</p>
-                ) : (
-                    <>
-                        <Can action={'allocation.delete'}>
-                            <DeleteAllocationButton allocation={allocation.id} />
-                        </Can>
-                        <Can action={'allocation.update'}>
-                            <Button.Text size={Button.Sizes.Small} onClick={setPrimaryAllocation}>
-                                Make Primary
-                            </Button.Text>
-                        </Can>
-                    </>
-                )}
-            </div>
+            {!allocation.isDefault && (
+                <div className={'flex flex-col justify-end mt-4 w-full md:mt-0 md:w-48 gap-y-2'}>
+                    <Can action={'allocation.delete'}>
+                        <DeleteAllocationButton allocation={allocation.id} />
+                    </Can>
+                    <Can action={'allocation.update'}>
+                        <Button.Text size={Button.Sizes.Small} onClick={setPrimaryAllocation}>
+                            Make Primary
+                        </Button.Text>
+                    </Can>
+                </div>
+            )}
         </div>
     );
 };

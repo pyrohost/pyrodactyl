@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Dialog } from '@/components/elements/dialog';
+import { Button } from '@/components/elements/button/index';
 
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -45,7 +46,7 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <button onClick={() => setConfirm(true)}>Delete</button>
+            <Button className='' size={Button.Sizes.Small} onClick={() => setConfirm(true)}>Delete</Button>
         </>
     );
 };

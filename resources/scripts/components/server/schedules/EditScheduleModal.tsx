@@ -113,13 +113,15 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         running. Use the fields above to specify when these tasks should begin running.
                     </p>
                     <div className={`mt-6 bg-[#ffffff11] p-4 rounded-xl`}>
-                        <Switch
-                            name={'show_cheatsheet'}
-                            description={'Show the cron cheatsheet for some examples.'}
-                            label={'Show Cheatsheet'}
-                            defaultChecked={showCheatsheet}
-                            onChange={() => setShowCheetsheet((s) => !s)}
-                        />
+                        <div className={`flex justify-between items-center`}>
+                            <div className={`flex flex-col`}>
+                                <a className=''>Show Cheatsheet</a>
+                                <a className='text-sm text-zinc-400'>Show the cron cheatsheet for some examples.</a>
+                            </div>
+                            <div onClick={() => setShowCheetsheet((s) => !s)} className={`cursor-pointer pr-2 hover:text-zinc-400`}>
+                                <a className='font-thin'>{showCheatsheet ? 'V' : 'Λ'}</a>
+                            </div>
+                        </div>
                         {showCheatsheet && (
                             <div className={`block md:flex w-full`}>
                                 <ScheduleCheatsheetCards />
