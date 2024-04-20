@@ -43,8 +43,7 @@ class AppSettingsCommand extends Command
                             {--redis-host= : Redis host to use for connections.}
                             {--redis-pass= : Password used to connect to redis.}
                             {--redis-port= : Port to connect to redis over.}
-                            {--settings-ui= : Enable or disable the settings UI.}
-                            {--telemetry= : Enable or disable anonymous telemetry.}';
+                            {--settings-ui= : Enable or disable the settings UI.}';
 
     protected array $variables = [];
 
@@ -119,11 +118,7 @@ class AppSettingsCommand extends Command
             $this->variables['APP_ENVIRONMENT_ONLY'] = $this->confirm('Enable UI based settings editor?', true) ? 'false' : 'true';
         }
 
-        $this->output->comment('Please reference https://pterodactyl.io/panel/1.0/additional_configuration.html#telemetry for more detailed information regarding telemetry data and collection.');
-        $this->variables['PTERODACTYL_TELEMETRY_ENABLED'] = $this->option('telemetry') ?? $this->confirm(
-            'Enable sending anonymous telemetry data?',
-            config('pterodactyl.telemetry.enabled', true)
-        ) ? 'true' : 'false';
+        $this->output->warning('Pyrodactyl collects usage data to enforce the terms of service and improve the software. This data is not shared with third-parties. Removing or disabling this feature will result in a violation of the terms of service and may break your installation.');
 
         // Make sure session cookies are set as "secure" when using HTTPS
         if (str_starts_with($this->variables['APP_URL'], 'https://')) {
