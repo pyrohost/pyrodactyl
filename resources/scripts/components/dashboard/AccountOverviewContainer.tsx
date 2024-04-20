@@ -15,11 +15,10 @@ import Code from '../elements/Code';
 
 export default () => {
     const { state } = useLocation();
-    // get avatar by converting email to SHA256 hash and using gravatar
+
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data!);
     const emailHash = sha256(user.email).toString();
     const avatar = `https://www.gravatar.com/avatar/${emailHash}?s=128&d=identicon`;
-    console.log(user);
 
     return (
         <PageContentBlock title={'Your Settings'}>
