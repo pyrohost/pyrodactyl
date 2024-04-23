@@ -51,21 +51,21 @@ export default () => {
                 </TitledGreyBox>
                 <Can action={'file.sftp'}>
                     <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
-                        <div>
+                        <div className={`flex items-center justify-between text-sm`}>
                             <Label>Server Address</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
-                                <div>{`sftp://${ip(sftp.ip)}:${sftp.port}`}</div>
+                                <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`sftp://${ip(sftp.ip)}:${sftp.port}`}</code>
                             </CopyOnClick>
                         </div>
-                        <div className={`mt-6`}>
+                        <div className={`mt-2 flex items-center justify-between text-sm`}>
                             <Label>Username</Label>
                             <CopyOnClick text={`${username}.${id}`}>
-                                <div>{`${username}.${id}`}</div>
+                                <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`${username}.${id}`}</code>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-6 flex items-center`}>
                             <div className={`flex-1`}>
-                                <div className={`border-l-4 border-blue-500 p-3`}>
+                                <div className={`border-l-4 border-brand p-3`}>
                                     <p className={`text-xs text-zinc-200`}>
                                         Your SFTP password is the same as the password you use to access this panel.
                                     </p>
