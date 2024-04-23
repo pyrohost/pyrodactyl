@@ -3,8 +3,8 @@ Vagrant.configure("2") do |config|
     config.vm.network "forwarded_port", guest: 3000, host: 3000, host_ip: "localhost"
     config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "localhost"
     config.vm.provider "virtualbox" do |vb|
-        vb.memory = "8192"
-        vb.cpus = "4"
+        vb.memory = "40960"
+        vb.cpus = "12"
     end
     
     # setup the synced folder and provision the VM

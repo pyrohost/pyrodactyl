@@ -236,7 +236,7 @@ export default () => {
                                     background:
                                         'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
                                 }}
-                                className='pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md'
+                                className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md'
                                 onClick={() => save()}
                             >
                                 Save <span className='ml-2 font-mono text-xs font-bold uppercase'>CTRL + S</span>
