@@ -45,8 +45,7 @@ const ServerConsoleContainer = () => {
                 </MainPageHeader>
                 {description && (
                     <h2 className='text-sm -mt-8'>
-                        <span className='opacity-50'>Description: </span>
-                        {description}
+                        <span className='opacity-50'>{description}</span>
                     </h2>
                 )}
                 <ServerDetailsBlock />
