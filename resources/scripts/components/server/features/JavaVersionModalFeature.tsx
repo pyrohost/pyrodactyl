@@ -78,7 +78,7 @@ const JavaVersionModalFeature = () => {
             closeOnBackground={false}
             showSpinnerOverlay={loading}
         >
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 w-full h-full'>
                 <FlashMessageRender key={'feature:javaVersion'} />
                 <h2 className={`text-2xl mb-4 text-zinc-100`}>Unsupported Java Version</h2>
                 <p className={`mt-4`}>
