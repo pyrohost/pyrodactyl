@@ -78,40 +78,42 @@ const JavaVersionModalFeature = () => {
             closeOnBackground={false}
             showSpinnerOverlay={loading}
         >
-            <FlashMessageRender key={'feature:javaVersion'} />
-            <h2 className={`text-2xl mb-4 text-zinc-100`}>Unsupported Java Version</h2>
-            <p className={`mt-4`}>
-                This server is currently running an unsupported version of Java and cannot be started.
+            <div className='flex flex-col gap-4'>
+                <FlashMessageRender key={'feature:javaVersion'} />
+                <h2 className={`text-2xl mb-4 text-zinc-100`}>Unsupported Java Version</h2>
+                <p className={`mt-4`}>
+                    This server is currently running an unsupported version of Java and cannot be started.
+                    <Can action={'startup.docker-image'}>
+                        &nbsp;Please select a supported version from the list below to continue starting the server.
+                    </Can>
+                </p>
                 <Can action={'startup.docker-image'}>
-                    &nbsp;Please select a supported version from the list below to continue starting the server.
+                    <div className={`mt-4`}>
+                        <InputSpinner visible={!data || isValidating}>
+                            <Select disabled={!data} onChange={(e) => setSelectedVersion(e.target.value)}>
+                                {!data ? (
+                                    <option disabled />
+                                ) : (
+                                    Object.keys(data.dockerImages).map((key) => (
+                                        <option key={key} value={data.dockerImages[key]}>
+                                            {key}
+                                        </option>
+                                    ))
+                                )}
+                            </Select>
+                        </InputSpinner>
+                    </div>
                 </Can>
-            </p>
-            <Can action={'startup.docker-image'}>
-                <div className={`mt-4`}>
-                    <InputSpinner visible={!data || isValidating}>
-                        <Select disabled={!data} onChange={(e) => setSelectedVersion(e.target.value)}>
-                            {!data ? (
-                                <option disabled />
-                            ) : (
-                                Object.keys(data.dockerImages).map((key) => (
-                                    <option key={key} value={data.dockerImages[key]}>
-                                        {key}
-                                    </option>
-                                ))
-                            )}
-                        </Select>
-                    </InputSpinner>
-                </div>
-            </Can>
-            <div className={`mt-8 flex flex-col sm:flex-row justify-end sm:space-x-4 space-y-4 sm:space-y-0`}>
-                <Button isSecondary onClick={() => setVisible(false)}>
-                    Cancel
-                </Button>
-                <Can action={'startup.docker-image'}>
-                    <Button onClick={updateJava} className={`w-full sm:w-auto`}>
-                        Update Docker Image
+                <div className={`mt-8 flex flex-row justify-end gap-4 my-4`}>
+                    <Button isSecondary onClick={() => setVisible(false)}>
+                        Cancel
                     </Button>
-                </Can>
+                    <Can action={'startup.docker-image'}>
+                        <Button onClick={updateJava} className={`w-full sm:w-auto`}>
+                            Update Docker Image
+                        </Button>
+                    </Can>
+                </div>
             </div>
         </Modal>
     );
