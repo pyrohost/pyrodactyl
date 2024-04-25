@@ -117,16 +117,16 @@ export default () => {
         const HighlightOffset : number = 8
 
         if (pathname.endsWith(`/server/${id}`) && ButtonHome != null) return (ButtonHome as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/files`)) return (ButtonFiles as any).offsetTop+HighlightOffset;
-        if (new RegExp(`^/server/${id}/files(/(new|edit).*)?$`).test(pathname)) return (ButtonFiles as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/databases`)) return (ButtonDatabases as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/backups`)) return (ButtonBackups as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/network`)) return (ButtonNetworking as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/users`)) return (ButtonUsers as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/startup`)) return (ButtonStartup as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/schedules`)) return (ButtonSchedules as any).offsetTop+HighlightOffset;
-        if (new RegExp(`^/server/${id}/schedules/\\d+$`).test(pathname)) return (ButtonSchedules as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/settings`)) return (ButtonSettings as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/files`) && ButtonFiles != null) return (ButtonFiles as any).offsetTop+HighlightOffset;
+        if (new RegExp(`^/server/${id}/files(/(new|edit).*)?$`).test(pathname) && ButtonFiles != null) return (ButtonFiles as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/databases`) && ButtonDatabases != null) return (ButtonDatabases as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/backups`) && ButtonBackups != null) return (ButtonBackups as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/network`) && ButtonNetworking != null) return (ButtonNetworking as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/users`) && ButtonUsers != null) return (ButtonUsers as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/startup`) && ButtonStartup != null) return (ButtonStartup as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/schedules`) && ButtonSchedules != null) return (ButtonSchedules as any).offsetTop+HighlightOffset;
+        if (new RegExp(`^/server/${id}/schedules/\\d+$`).test(pathname) && ButtonSchedules != null) return (ButtonSchedules as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/settings`) && ButtonSettings != null) return (ButtonSettings as any).offsetTop+HighlightOffset;
         return '0';
     };
 
