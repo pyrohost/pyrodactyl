@@ -113,7 +113,7 @@ export default () => {
         const ButtonSettings = NavigationSettings.current;
 
         // Perfectly center the page highlighter with simple math.
-        // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by two is 8.
+        // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
         const HighlightOffset : number = 8
 
         if (pathname.endsWith(`/server/${id}`) && ButtonHome != null) return (ButtonHome as any).offsetTop+HighlightOffset;

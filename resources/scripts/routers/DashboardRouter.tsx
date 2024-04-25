@@ -1,5 +1,5 @@
 import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense } from 'react';
+import { Fragment, Suspense, useRef, useState, useEffect } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 import routes from '@/routers/routes';
@@ -36,13 +36,33 @@ export default () => {
         window.open(`/admin`);
     };
 
+    // Define refs for navigation buttons.
+    const NavigationHome = useRef(null);
+    const NavigationSettings = useRef(null);
+
     const calculateTop = (pathname: string) => {
-        if (pathname.endsWith(`/`)) return '7.5rem';
-        if (pathname.endsWith(`/account`)) return '11rem';
+        // Get currents of navigation refs.
+        const ButtonHome = NavigationHome.current;
+        const ButtonSettings = NavigationSettings.current;
+
+        // Perfectly center the page highlighter with simple math.
+        // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
+        const HighlightOffset : number = 8
+
+        if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/account`) && ButtonSettings != null) return (ButtonSettings as any).offsetTop+HighlightOffset;
         return '0';
     };
 
     const top = calculateTop(location.pathname);
+
+    const [height, setHeight] = useState('40px');
+
+    useEffect(() => {
+        setHeight('34px');
+        const timeoutId = setTimeout(() => setHeight('40px'), 200);
+        return () => clearTimeout(timeoutId);
+    }, [top]);
 
     return (
         <Fragment key={'dashboard-router'}>
@@ -51,9 +71,10 @@ export default () => {
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                     style={{
                         top,
+                        height,
                         opacity: top === '0' ? 0 : 1,
                         transition:
-                            'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
+                            'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                     }}
                 />
                 <div
@@ -101,11 +122,11 @@ export default () => {
                 </div>
                 <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
-                    <NavLink to={'/'} end className='flex flex-row items-center'>
+                    <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
                     </NavLink>
-                    <NavLink to={'/account'} end className='flex flex-row items-center'>
+                    <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
