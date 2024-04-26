@@ -46,7 +46,7 @@
         "million": "^3.0.6",
         "pathe": "^1.1.2",
         "qrcode.react": "^3.1.0",
-        "react": "^18.2.0",
+        "react": "^18.3.0",
         "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.2.0",
         "react-fast-compare": "^3.2.2",
