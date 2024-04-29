@@ -37,7 +37,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ### Linux
 
-Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/community/installation) for your distribution up to the point where you need to download the panel.
+Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
 
 Instead of downloading the official panel, follow the steps below to install Pyrodactyl:
 
