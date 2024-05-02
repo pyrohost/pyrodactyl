@@ -54,7 +54,9 @@ export default () => {
                         <div className={`flex items-center justify-between text-sm`}>
                             <Label>Server Address</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
-                                <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`sftp://${ip(sftp.ip)}:${sftp.port}`}</code>
+                                <code
+                                    className={`font-mono bg-zinc-900 rounded py-1 px-2`}
+                                >{`sftp://${ip(sftp.ip)}:${sftp.port}`}</code>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-2 flex items-center justify-between text-sm`}>

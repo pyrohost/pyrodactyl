@@ -1,5 +1,5 @@
 import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense, useRef, useState, useEffect } from 'react';
+import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 import routes from '@/routers/routes';
@@ -47,10 +47,11 @@ export default () => {
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
-        const HighlightOffset : number = 8
+        const HighlightOffset: number = 8;
 
-        if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/account`) && ButtonSettings != null) return (ButtonSettings as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/account`) && ButtonSettings != null)
+            return (ButtonSettings as any).offsetTop + HighlightOffset;
         return '0';
     };
 
