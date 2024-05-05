@@ -92,4 +92,26 @@ class SettingsController extends ClientApiController
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
+
+    /**
+    * Changes the egg for a server.
+    *
+    * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+    * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
+    */
+    public function changeEgg(ReinstallServerRequest $request, Server $server): JsonResponse
+    {
+        $egg = $request->input('egg');
+        $this->repository->update($server->id, [
+            'egg_id' => $egg,
+        ]);
+
+        if ($server->egg_id !== $egg) {
+            Activity::event('server:settings.egg')
+                ->property(['old' => $server->egg_id, 'new' => $egg])
+                ->log();
+        }
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
 }

@@ -7,8 +7,11 @@ interface Basket {
 
 export default (): Promise<Basket> => {
     return new Promise((resolve, reject) => {
-        http.get('/api/client/eggs')
-            .then(({ data }) => console.log(data))
+        http.get('/api/client/eggs', {
+            params: {
+            },
+        })
+            .then(({ data }) => resolve(data.data))
             .catch(reject);
     });
 };

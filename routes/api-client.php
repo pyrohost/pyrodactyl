@@ -18,7 +18,15 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 */
 Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
-Route::get('/eggs', [Client\EggsController::class, 'index']);
+
+
+Route::prefix('/nests')->group(function () {
+    Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
+    Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');
+
+    Route::get('/{nest}/eggs', [Client\Nests\EggController::class, 'index'])->name('api:client.nests.eggs');
+    Route::get('/{nest}/eggs/{egg}', [Client\Nests\EggController::class, 'view'])->name('api:client.nests.eggs.view');
+});
 
 Route::prefix('/account')->middleware(AccountSubject::class)->group(function () {
     Route::prefix('/')->withoutMiddleware(RequireTwoFactorAuthentication::class)->group(function () {
@@ -139,5 +147,6 @@ Route::group([
         Route::post('/rename', [Client\Servers\SettingsController::class, 'rename']);
         Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall']);
         Route::put('/docker-image', [Client\Servers\SettingsController::class, 'dockerImage']);
+        Route::put('/egg', [Client\Servers\SettingsController::class, 'changeEgg']);
     });
 });

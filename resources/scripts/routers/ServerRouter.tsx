@@ -37,6 +37,7 @@ import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
 
 import { ServerContext } from '@/state/server';
+import HugeIconsController from '@/components/elements/hugeicons/Controller';
 
 export default () => {
     const params = useParams<'id'>();
@@ -322,8 +323,8 @@ export default () => {
                                     to={`/server/${id}/shell`}
                                     end
                                 >
-                                    <HugeIconsDashboardSettings fill='currentColor' /> {/* FIX ME: Add proper icon */}
-                                    <p>Shell</p>
+                                    <HugeIconsController fill='currentColor' />
+                                    <p>Game Swapper</p>
                                 </NavLink>
                             </Can>
                             {/* {rootAdmin && (

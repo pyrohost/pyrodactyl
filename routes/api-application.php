@@ -114,7 +114,8 @@ Route::group(['prefix' => '/servers'], function () {
 */
 Route::group(['prefix' => '/nests'], function () {
     Route::get('/', [Application\Nests\NestController::class, 'index'])->name('api.application.nests');
-    Route::get('/{nest:id}', [Application\Nests\NestController::class, 'view'])->name('api.application.nests.view');
+    Route::get('/{nest:id}', [Application\Nests\NestController::class, 'view'])->name('api.applica
+    tion.nests.view');
 
     // Egg Management Endpoint
     Route::group(['prefix' => '/{nest:id}/eggs'], function () {

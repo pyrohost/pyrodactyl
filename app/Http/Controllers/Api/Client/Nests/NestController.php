@@ -21,13 +21,13 @@ class NestController extends ClientApiController
     /**
      * Return all Nests that exist on the Panel.
      */
-    public function index(GetNestsRequest $request): array
+    public function index(): array
     {
-        $nests = $this->repository->paginated($request->query('per_page') ?? 50);
+        $nests = $this->repository->all();
 
         return $this->fractal->collection($nests)
-            ->transformWith($this->getTransformer(NestTransformer::class))
-            ->toArray();
+        ->transformWith($this->getTransformer(NestTransformer::class))
+        ->toArray();
     }
 
     /**
