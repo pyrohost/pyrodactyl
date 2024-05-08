@@ -39,6 +39,7 @@ import http from '@/api/http';
 import { ServerContext } from '@/state/server';
 import HugeIconsController from '@/components/elements/hugeicons/Controller';
 
+const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60';
 export default () => {
     const params = useParams<'id'>();
     const location = useLocation();
@@ -52,6 +53,7 @@ export default () => {
     const serverId = ServerContext.useStoreState((state) => state.server.data?.internalId);
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
+    const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -221,101 +223,105 @@ export default () => {
                         <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                         <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
-                            <NavLink
-                                className='flex flex-row items-center'
-                                ref={NavigationHome}
-                                to={`/server/${id}`}
-                                end
-                            >
-                                <HugeIconsHome fill='currentColor' />
-                                <p>Home</p>
-                            </NavLink>
-                            <Can action={'file.*'} matchAny>
+                            { egg_id !== blankEggId && (
+                                <>
                                 <NavLink
                                     className='flex flex-row items-center'
-                                    ref={NavigationFiles}
-                                    to={`/server/${id}/files`}
-                                >
-                                    <HugeIconsFolder fill='currentColor' />
-                                    <p>Files</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'database.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationDatabases}
-                                    to={`/server/${id}/databases`}
+                                    ref={NavigationHome}
+                                    to={`/server/${id}`}
                                     end
                                 >
-                                    <HugeIconsDatabase fill='currentColor' />
-                                    <p>Databases</p>
+                                    <HugeIconsHome fill='currentColor' />
+                                    <p>Home</p>
                                 </NavLink>
-                            </Can>
-                            <Can action={'backup.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationBackups}
-                                    to={`/server/${id}/backups`}
-                                    end
-                                >
-                                    <HugeIconsCloudUp fill='currentColor' />
-                                    <p>Backups</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'allocation.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationNetworking}
-                                    to={`/server/${id}/network`}
-                                    end
-                                >
-                                    <HugeIconsConnections fill='currentColor' />
-                                    <p>Networking</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'user.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationUsers}
-                                    to={`/server/${id}/users`}
-                                    end
-                                >
-                                    <HugeIconsPeople fill='currentColor' />
-                                    <p>Users</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'startup.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationStartup}
-                                    to={`/server/${id}/startup`}
-                                    end
-                                >
-                                    <HugeIconsConsole fill='currentColor' />
-                                    <p>Startup</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'schedule.*'} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationSchedules}
-                                    to={`/server/${id}/schedules`}
-                                >
-                                    <HugeIconsClock fill='currentColor' />
-                                    <p>Schedules</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={['settings.*', 'file.sftp']} matchAny>
-                                <NavLink
-                                    className='flex flex-row items-center'
-                                    ref={NavigationSettings}
-                                    to={`/server/${id}/settings`}
-                                    end
-                                >
-                                    <HugeIconsDashboardSettings fill='currentColor' />
-                                    <p>Settings</p>
-                                </NavLink>
-                            </Can>
+                                <Can action={'file.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationFiles}
+                                        to={`/server/${id}/files`}
+                                    >
+                                        <HugeIconsFolder fill='currentColor' />
+                                        <p>Files</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'database.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationDatabases}
+                                        to={`/server/${id}/databases`}
+                                        end
+                                    >
+                                        <HugeIconsDatabase fill='currentColor' />
+                                        <p>Databases</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'backup.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationBackups}
+                                        to={`/server/${id}/backups`}
+                                        end
+                                    >
+                                        <HugeIconsCloudUp fill='currentColor' />
+                                        <p>Backups</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'allocation.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationNetworking}
+                                        to={`/server/${id}/network`}
+                                        end
+                                    >
+                                        <HugeIconsConnections fill='currentColor' />
+                                        <p>Networking</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'user.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationUsers}
+                                        to={`/server/${id}/users`}
+                                        end
+                                    >
+                                        <HugeIconsPeople fill='currentColor' />
+                                        <p>Users</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'startup.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationStartup}
+                                        to={`/server/${id}/startup`}
+                                        end
+                                    >
+                                        <HugeIconsConsole fill='currentColor' />
+                                        <p>Startup</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={'schedule.*'} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationSchedules}
+                                        to={`/server/${id}/schedules`}
+                                    >
+                                        <HugeIconsClock fill='currentColor' />
+                                        <p>Schedules</p>
+                                    </NavLink>
+                                </Can>
+                                <Can action={['settings.*', 'file.sftp']} matchAny>
+                                    <NavLink
+                                        className='flex flex-row items-center'
+                                        ref={NavigationSettings}
+                                        to={`/server/${id}/settings`}
+                                        end
+                                    >
+                                        <HugeIconsDashboardSettings fill='currentColor' />
+                                        <p>Settings</p>
+                                    </NavLink>
+                                </Can>
+                                </>
+                            )}
                             <Can action={'settings.*'} matchAny> {/* FIX ME: Add permission */}
                                 <NavLink
                                     className='flex flex-row items-center'
