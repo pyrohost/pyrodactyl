@@ -60,6 +60,8 @@ class Permission extends Model
     public const ACTION_STARTUP_UPDATE = 'startup.update';
     public const ACTION_STARTUP_DOCKER_IMAGE = 'startup.docker-image';
 
+    public const ACTION_STARTUP_EGG = 'startup.egg';
+
     public const ACTION_SETTINGS_RENAME = 'settings.rename';
     public const ACTION_SETTINGS_REINSTALL = 'settings.reinstall';
 
@@ -168,6 +170,7 @@ class Permission extends Model
                 'read' => 'Allows a user to view the startup variables for a server.',
                 'update' => 'Allows a user to modify the startup variables for the server.',
                 'docker-image' => 'Allows a user to modify the Docker image used when running the server.',
+                'egg' => 'Allows a user to modify the Egg used when running the server.',
             ],
         ],
 
