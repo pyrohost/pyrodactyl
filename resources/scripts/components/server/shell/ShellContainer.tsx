@@ -12,10 +12,13 @@ import { Dialog } from '@/components/elements/dialog';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
+
 import { httpErrorToHuman } from '@/api/http';
 import getNests from '@/api/nests/getNests';
 import reinstallServer from '@/api/server/reinstallServer';
 import setSelectedEggImage from '@/api/server/setSelectedEggImage';
+import getServerBackups from '@/api/swr/getServerBackups';
+import createServerBackup from '@/api/server/backups/createServerBackup';
 
 interface Egg {
     object: string;
@@ -55,6 +58,8 @@ const ShellContainer = () => {
     const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
     const [nests, setNests] = useState<Nest | null>(null);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+    const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
+    const { data: backups } = getServerBackups();
 
     const reinstall = () => {
         clearFlashes('shell');
@@ -82,9 +87,29 @@ const ShellContainer = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (backups) {
+            if (backupLimit <= 0 || backups.backupCount >= backupLimit) {
+                setShouldBackup(false);
+            }
+        }
+    }, [backups, backupLimit]);
+
     const handleNestSelect = (nest: Nest) => {
         setSelectedNest(nest);
         setSelectedEgg(null);
+    };
+
+    const changeEgg = (eggId: number, nestId: number) => {
+        setSelectedEggImage(uuid, eggId, nestId)
+        .then(() => {
+            reinstall();
+            setModalVisible(false);
+        })
+        .catch((error) => {
+            console.error(error);
+            addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+        });
     };
 
     const confirmSelection = () => {
@@ -92,9 +117,20 @@ const ShellContainer = () => {
         const nestId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.id;
         const eggId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.relationships.eggs.data.findIndex((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid) + 1;
         
-        setSelectedEggImage(uuid, eggId, nestId);
-        reinstall();
-        setModalVisible(false);
+        if (shouldBackup) {
+            const backupName = `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`;
+            createServerBackup(uuid, {name: backupName, isLocked: false})
+                .then(() => {
+                    changeEgg(eggId, nestId);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                });
+        } else if (shouldBackup === false) {
+            changeEgg(eggId, nestId);
+        }
+        
     };
 
     const handleEggSelect = (egg: Egg) => {
@@ -103,8 +139,7 @@ const ShellContainer = () => {
     };
 
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
-
-    console.log(nests);
+    
     return (
         <ServerContentBlock title='Shell'>
             <FlashMessageRender byKey='Shell' />
