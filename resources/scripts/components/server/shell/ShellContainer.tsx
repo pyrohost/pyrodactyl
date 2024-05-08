@@ -1,5 +1,6 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -118,14 +119,12 @@ const ShellContainer = () => {
         const eggId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.relationships.eggs.data.findIndex((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid) + 1;
         
         if (shouldBackup) {
-            const backupName = `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`;
-            createServerBackup(uuid, {name: backupName, isLocked: false})
+            createServerBackup(uuid, {name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`, isLocked: false})
                 .then(() => {
                     changeEgg(eggId, nestId);
                 })
                 .catch((error) => {
-                    console.error(error);
-                    addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                    toast.error(httpErrorToHuman(error));
                 });
         } else if (shouldBackup === false) {
             changeEgg(eggId, nestId);
