@@ -77,6 +77,7 @@ const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change f
 const ShellContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest | null>(null);
+    const eggs = nests?.reduce((eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data], [] as Egg[]);
     const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
@@ -144,9 +145,8 @@ const ShellContainer = () => {
     };
 
     const confirmSelection = () => {
-        // get the index id because the model dosent use uuid
         const nestId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.id;
-        const eggId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.relationships.eggs.data.findIndex((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid) + 1;
+        const eggId = eggs?.findIndex((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid) + 1 || 0;
         
         if (shouldBackup) {
             createServerBackup(uuid, {name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`, isLocked: false})
@@ -336,7 +336,7 @@ const ShellContainer = () => {
                                 </div>
                             ) || step == 3 && (
                                 <div className='flex items-center justify-center'>
-                                    <p className='text-neutral-300'>Select a category to choose a game from.</p>
+                                    <p className='text-neutral-300'>Select a category to choose a game/software from.</p>
                                 </div>
                             )}
                         </div>
