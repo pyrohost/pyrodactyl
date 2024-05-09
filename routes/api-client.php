@@ -23,9 +23,6 @@ Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 Route::prefix('/nests')->group(function () {
     Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
     Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');
-
-    Route::get('/{nest}/eggs', [Client\Nests\EggController::class, 'index'])->name('api:client.nests.eggs');
-    Route::get('/{nest}/eggs/{egg}', [Client\Nests\EggController::class, 'view'])->name('api:client.nests.eggs.view');
 });
 
 Route::prefix('/account')->middleware(AccountSubject::class)->group(function () {

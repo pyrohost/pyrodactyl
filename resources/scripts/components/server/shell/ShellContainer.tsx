@@ -5,14 +5,10 @@ import { toast } from 'sonner';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import { Dialog } from '@/components/elements/dialog';
 import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import { Dialog } from '@/components/elements/dialog';
-
-import { ApplicationStore } from '@/state';
-import { ServerContext } from '@/state/server';
-
+import HugeIconsArrowRight from '@/components/elements/hugeicons/ArrowRight';
 
 import { httpErrorToHuman } from '@/api/http';
 import getNests from '@/api/nests/getNests';
@@ -20,8 +16,9 @@ import reinstallServer from '@/api/server/reinstallServer';
 import setSelectedEggImage from '@/api/server/setSelectedEggImage';
 import getServerBackups from '@/api/swr/getServerBackups';
 import createServerBackup from '@/api/server/backups/createServerBackup';
-import HugeIconsArrowRight from '@/components/elements/hugeicons/ArrowRight';
-import { i } from 'vite/dist/node/types.d-aGj9QkWt';
+
+import { ApplicationStore } from '@/state';
+import { ServerContext } from '@/state/server';
 
 interface Egg {
     object: string;
@@ -74,40 +71,27 @@ const steps = [
         description: 'Select the sub-set of the game or software.',
     },
 ]
-const hidden_nests = ['Pyro'];
-const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60';
+const hidden_nests = ['Pyro']; // Hardcoded
+const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
 
 const ShellContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const [visible, setVisible] = useState(false);
-    // if current egg is blank start at 1 instead of 0
-    const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
-    const [step, setStep] = useState(steps[0] && currentEgg === blankEggId ? 1 : 0);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [shouldBackup, setShouldBackup] = useState(false);
-    const [selectedNest, setSelectedNest] = useState<Nest | null>(null);
-    const [selectedEgg, setSelectedEgg] = useState<Egg | null>(null);
     const [nests, setNests] = useState<Nest | null>(null);
-    const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+    const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
+    const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
 
-    const reinstall = () => {
-        clearFlashes('shell');
-        reinstallServer(uuid)
-            .then(() => {
-                addFlash({
-                    key: 'shell',
-                    type: 'success',
-                    message: 'Your servers egg has changed and the reinstallation process has begun.',
-                });
-            })
-            .catch((error) => {
-                console.error(error);
+    const [step, setStep] = useState(steps[0] && currentEgg === blankEggId ? 1 : 0);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
 
-                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
-            })
-    }
+    const [shouldBackup, setShouldBackup] = useState(false);
+    const [selectedNest, setSelectedNest] = useState<Nest | null>(null);
+    const [selectedEgg, setSelectedEgg] = useState<Egg | null>(null);
+    const [showFullDescriptions, setShowFullDescriptions] = useState<boolean[]>([]);
+
+    const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -125,6 +109,22 @@ const ShellContainer = () => {
             }
         }
     }, [backups, backupLimit]);
+
+    const reinstall = () => {
+        clearFlashes('shell');
+        reinstallServer(uuid)
+            .then(() => {
+                addFlash({
+                    key: 'shell',
+                    type: 'success',
+                    message: 'Your servers egg has changed and the reinstallation process has begun.',
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            })
+    };
 
     const handleNestSelect = (nest: Nest) => {
         setSelectedNest(nest);
@@ -166,12 +166,7 @@ const ShellContainer = () => {
         setSelectedEgg(egg);
         setModalVisible(true);
     };
-
-    const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     
-    const [showFullDescriptions, setShowFullDescriptions] = useState<boolean[]>([]);
-
-    // Function to toggle showing/hiding full egg descriptions
     const toggleDescriptionVisibility = (index: number) => {
         setShowFullDescriptions((prev) => {
             const newVisibility = [...prev];
@@ -192,7 +187,12 @@ const ShellContainer = () => {
                         <button onClick={() => toggleDescriptionVisibility(index)}>Show More</button>
                     </>
                 ) : (
-                    <>{description} </>
+                    <>
+                        {description}
+                        {isLongDescription && (
+                            <button onClick={() => toggleDescriptionVisibility(index)}>..Show Less</button>
+                        )}
+                    </>
                 )}
             </div>
         );

@@ -39,7 +39,7 @@ import http from '@/api/http';
 import { ServerContext } from '@/state/server';
 import HugeIconsController from '@/components/elements/hugeicons/Controller';
 
-const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60';
+const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
 export default () => {
     const params = useParams<'id'>();
     const location = useLocation();
