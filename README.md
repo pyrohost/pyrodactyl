@@ -1,4 +1,4 @@
-# New repo incase this gets taken down https://git.denisland.ovh/denisapain/pyronocherry<
+# New repo incase this gets taken down https://git.denisland.ovh/denisapain/pyronocherry
 ## Running Pyrodactyl
 
 ### Prerequisites
