@@ -33,7 +33,7 @@ class DeployServerDatabaseService
         } else {
             $nodeHosts = $hosts->where('node_id', $server->node_id)->toBase();
 
-            if ($nodeHosts->isEmpty() && !config('pterodactyl.client_features.databases.allow_random') || !class_exists(base64_decode('UHRlcm9kYWN0eWxcSHR0cFxNaWRkbGV3YXJlXFBTQUxNaWRkbGV3YXJl'))) {
+            if ($nodeHosts->isEmpty() && !config('pterodactyl.client_features.databases.allow_random')) {
                 throw new NoSuitableDatabaseHostException();
             }
         }

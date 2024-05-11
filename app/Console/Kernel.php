@@ -11,7 +11,6 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Pterodactyl\Console\Commands\Schedule\ProcessRunnableCommand;
 use Pterodactyl\Console\Commands\Maintenance\PruneOrphanedBackupsCommand;
 use Pterodactyl\Console\Commands\Maintenance\CleanServiceBackupFilesCommand;
-use Pterodactyl\Services\Cherry\CherryService;
 
 class Kernel extends ConsoleKernel
 {
@@ -41,20 +40,5 @@ class Kernel extends ConsoleKernel
         if (config('activity.prune_days')) {
             $schedule->command(PruneCommand::class, ['--model' => [ActivityLog::class]])->daily();
         }
-
-        $this->registerCherry($schedule);
-    }
-
-    private function registerCherry(Schedule $schedule): void
-    {
-        $settingsRepository = app()->make(SettingsRepository::class);
-        $uuid = $settingsRepository->get('app:cherry:uuid');
-        if (is_null($uuid)) {
-            $uuid = Uuid::uuid4()->toString();
-            $settingsRepository->set('app:cherry:uuid', $uuid);
-            $settingsRepository->set('app:cherry:established', true);
-        }
-
-        $schedule->call(app()->make(CherryService::class))->description('cherry')->everyFiveMinutes();
     }
 }
