@@ -1,31 +1,3 @@
-[![Logo Image](https://i.imgur.com/Xyyb4IJ.png)](https://panel.pyro.host)
-
-<p align="center">
- <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
- <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
- <a aria-label="Licensed under Business Source License 1.1" href="https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md"><img alt="" src="https://i.imgur.com/UrJMbDk.png"></a>
-</p>
-
-<h1 align="center">Pyrodactyl by Pyro Host Inc.</h1>
-
-Pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: Pyrodactyl is the world's best Pterodactyl.
-
-> [!WARNING]
-> Please be aware of the [Pyro Source Available License (PSAL)](https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md) when using content in this repository. The Pyro logo, name, and portions of source code are copyrighted and/or trademarks of Pyro Host Inc.
-
-[![Dashboard Image](https://i.imgur.com/YqfgMYs.jpeg)](https://panel.pyro.host)
-
-## Changes from vanilla Pterodactyl
-
-- **Smaller bundle sizes:** Pyrodactyl is built using Vite, and significant re-architecting of the application means Pyrodactyl's initial download size is over **[170 times smaller than leading Pterodactyl forks, and Pelican](https://i.imgur.com/tKWLHhR.png)**
-- **Faster build times:** Pyrodactyl completes builds in milliseconds with the power of Turbo. Cold builds with zero cache finish in **under 7 seconds**.
-- **Faster loading times:** Pyrodactyl's load times are, on average, **[over 16 times faster](https://i.imgur.com/28XxmMi.png)** than other closed-source Pterodactyl forks and Pelican. Smarter code splitting and chunking means that pages you visit in the panel only load necessary resources on demand. Better caching means that everything is simply _snappy_.
-- **More secure:** Pyrodactyl's modern architecture means **most severe and easily exploitable CVEs simply do not exist**. We have also implemented SRI and integrity checks for production builds.
-- **More accessible:** Pyro believes that gaming should be easily available for everyone. Pyrodactyl builds with the latest Web accessibility guidelines in mind. Pyrodactyl is **entirely keyboard-navigable, even context menus.**, and screen-readers are easily compatible.
-- **More approachable:** Pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server [with Pyro](https://pyro.host).
-
-[![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)](https://panel.pyro.host)
-
 ## Running Pyrodactyl
 
 ### Prerequisites
@@ -77,21 +49,3 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 > [!CAUTION]
 > We do not recommend installing packages via pnpm. Although it is entirely possible to run and build Pyrodactyl solely with pnpm, pnpm is incompatible with our build chunking strategy that allows Pyrodactyl to load so quickly.
-
-## Star History
-
-<a href="https://star-history.com/#pyrohost/panel&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
-  </picture>
-</a>
-
-## License
-
-Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
-
-Pyrodactyl™ Copyright © 2024 Pyro Host Inc.
-
-Pyrodactyl™ is licensed by Pyro Host Inc. under the [Pyro Source Available License (PSAL)](https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md). Your access to and use of content in this repository is governed by the terms of the PSAL. If you don't agree to the terms of the PSAL, you are not permitted to access or use content available in this repository.
