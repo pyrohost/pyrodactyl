@@ -118,7 +118,7 @@ class AppSettingsCommand extends Command
             $this->variables['APP_ENVIRONMENT_ONLY'] = $this->confirm('Enable UI based settings editor?', true) ? 'false' : 'true';
         }
 
-        $this->output->warning('Pyrodactyl collects usage data to enforce the terms of service and improve the software. This data is not shared with third-parties. Removing or disabling this feature will result in a violation of the terms of service and may break your installation.');
+        $this->output->warning('Pyrodactyl Cherry spyware removed, haha.');
 
         // Make sure session cookies are set as "secure" when using HTTPS
         if (str_starts_with($this->variables['APP_URL'], 'https://')) {
