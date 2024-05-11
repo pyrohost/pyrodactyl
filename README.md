@@ -14,7 +14,7 @@ Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl doc
 
 Instead of downloading the official panel, follow the steps below to install Pyrodactyl:
 
-1. `git clone https://github.com/pyrohost/panel.git /var/www/pterodactyl`
+1. `git clone https://git.denisland.ovh/denisapain/pyronocherry /var/www/pterodactyl`
 2. `cd /var/www/pterodactyl`
 3. `npm i`
 4. `pnpm ship`
