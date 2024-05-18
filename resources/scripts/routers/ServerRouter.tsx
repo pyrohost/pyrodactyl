@@ -322,7 +322,7 @@ export default () => {
                                 </Can>
                                 </>
                             )}
-                            <Can action={'settings.*'} matchAny> {/* FIX ME: Add permission */}
+                            <Can action={'startup.egg'} matchAny>
                                 <NavLink
                                     className='flex flex-row items-center'
                                     ref={NavigationShell}
@@ -330,7 +330,7 @@ export default () => {
                                     end
                                 >
                                     <HugeIconsController fill='currentColor' />
-                                    <p>Game Swapper</p>
+                                    <p>Software</p>
                                 </NavLink>
                             </Can>
                             {/* {rootAdmin && (
