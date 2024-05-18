@@ -142,6 +142,7 @@ const ShellContainer = () => {
     const handleNestSelect = (nest: Nest) => {
         setSelectedNest(nest);
         setSelectedEgg(null);
+        setStep(1);
     };
 
     const changeEgg = (eggId: number, nestId: number) => {
@@ -176,6 +177,7 @@ const ShellContainer = () => {
 
     const handleEggSelect = (egg: Egg) => {
         setSelectedEgg(egg);
+        setStep(2);
     };
     
     const toggleDescriptionVisibility = (index: number) => {
@@ -195,13 +197,13 @@ const ShellContainer = () => {
                 {isLongDescription && !shouldShowFull ? (
                     <>
                         {`${description.slice(0, MAX_DESCRIPTION_LENGTH)}... `}
-                        <button onClick={() => toggleDescriptionVisibility(index)}>Show More</button>
+                        <button className='text-brand' onClick={() => toggleDescriptionVisibility(index)}>Show More</button>
                     </>
                 ) : (
                     <>
                         {description}
                         {isLongDescription && (
-                            <button onClick={() => toggleDescriptionVisibility(index)}>..Show Less</button>
+                            <button className='text-brand' onClick={() => toggleDescriptionVisibility(index)}><span className='text-neutral-400'>..</span>Show Less</button>
                         )}
                     </>
                 )}
@@ -303,7 +305,9 @@ const ShellContainer = () => {
                                     {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => currentEgg === egg.attributes.uuid ? null :(
                                         <div
                                             key={egg.attributes.uuid}
-                                            className='cursor-pointer border border-neutral-800 hover:border-neutral-700 p-4 rounded-lg bg-[#3333332a] w-full'
+                                            className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
+                                                selectedEgg?.attributes.uuid === egg.attributes.uuid ? 'border-[#555555ef]' : 'border-[#55555540]'
+                                            }`}
                                         >
                                             <div className='flex items-center justify-between'>
                                                 <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
@@ -313,18 +317,18 @@ const ShellContainer = () => {
                                                     Select
                                                 </Button>
                                             </div>
-                                            <p className='text-neutral-300 text-xs mt-2'>{renderEggDescription(egg.attributes.description, eggIndex)}</p>
+                                            <p className='text-neutral-400 text-xs mt-2'>{renderEggDescription(egg.attributes.description, eggIndex)}</p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         ) || step == 1 && (
-                            <div className='flex items-center justify-center h-100%'>
-                                <p className='text-neutral-300'>Please select a game first</p>
+                            <div className='flex items-center justify-center h-[63svh]'>
+                                <p className='text-neutral-300 '>Please select a game first</p>
                             </div>
                         )}
 
-                        {step == 2 && currentEgg !== blankEggId && (
+                        {step == 2 && selectedEgg && currentEgg !== blankEggId && (
                             <div className='flex flex-col gap-4'>
                                 <div className='grid grid-cols-2 gap-4 mt-4'>
                                     <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
@@ -343,7 +347,7 @@ const ShellContainer = () => {
                                             <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
                                             <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
                                         </div>
-                                        <Switch />
+                                        <Switch disabled={true} />
                                     </div>
                                 </div>
 
@@ -378,6 +382,10 @@ const ShellContainer = () => {
                                 >
                                     Confirm
                                 </Button>
+                            </div>
+                        ) || step == 2  && currentEgg !== blankEggId && (
+                            <div className='flex items-center justify-center h-[63svh]'>
+                                <p className='text-neutral-300 '>Please select a egg first</p>
                             </div>
                         )}
                     </div>
