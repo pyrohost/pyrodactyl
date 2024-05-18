@@ -1,5 +1,6 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState, useEffect } from 'react';
+import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -8,6 +9,10 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { Dialog } from '@/components/elements/dialog';
 import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
+import { Switch } from '@/components/elements/SwitchV2';
+import Button from '@/components/elements/ButtonV2';
+import VariableBox from '@/components/server/startup/VariableBox';
+import Pagination from '@/components/elements/Pagination';
 
 import { httpErrorToHuman } from '@/api/http';
 import getNests from '@/api/nests/getNests';
@@ -15,11 +20,10 @@ import reinstallServer from '@/api/server/reinstallServer';
 import setSelectedEggImage from '@/api/server/setSelectedEggImage';
 import getServerBackups from '@/api/swr/getServerBackups';
 import createServerBackup from '@/api/server/backups/createServerBackup';
+import getServerStartup from '@/api/swr/getServerStartup';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
-import { Switch } from '@/components/elements/SwitchV2';
-import Button from '@/components/elements/ButtonV2';
 
 interface Egg {
     object: string;
@@ -75,6 +79,21 @@ const ShellContainer = () => {
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
+    const variables = ServerContext.useStoreState(
+        ({ server }) => ({
+            variables: server.data!.variables,
+            invocation: server.data!.invocation,
+            dockerImage: server.data!.dockerImage,
+        }),
+        isEqual,
+    );
+    const { data, error, isValidating, mutate } = getServerStartup(uuid, {
+        ...variables,
+        dockerImages: { [variables.dockerImage]: variables.dockerImage },
+    });
+
+    const ITEMS_PER_PAGE = 6;
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [step, setStep] = useState(steps[0] && currentEgg === blankEggId ? 1 : 0);
     const [modalVisible, setModalVisible] = useState(false);
@@ -157,7 +176,6 @@ const ShellContainer = () => {
 
     const handleEggSelect = (egg: Egg) => {
         setSelectedEgg(egg);
-        setModalVisible(true);
     };
     
     const toggleDescriptionVisibility = (index: number) => {
@@ -191,6 +209,8 @@ const ShellContainer = () => {
         );
     };
 
+    const paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
+
     return (
         <ServerContentBlock title='Shell'>
             <FlashMessageRender byKey='Shell' />
@@ -210,31 +230,30 @@ const ShellContainer = () => {
                 Your server will be stopped and some files may be deleted or modified during this process, are you sure
                 you wish to continue?
             </Dialog.Confirm>
-            
-            <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
-                <div className='w-full h-full'>
-                    <div className='flex items-center justify-between pb-4 p-2'>
-                        <div className='flex items-center gap-2'>
-                            <HugeIconsEggs fill='currentColor' />
-                            <div className='flex flex-col'>
-                                <h1 className='text-2xl'>Current Egg</h1>
-                                {currentEggName}
+            {!visible && (
+                <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
+                    <div className='w-full h-full'>
+                        <div className='flex items-center justify-between pb-4 p-2'>
+                            <div className='flex items-center gap-2'>
+                                <HugeIconsEggs fill='currentColor' />
+                                <div className='flex flex-col'>
+                                    <h1 className='text-2xl'>Current Egg</h1>
+                                    {currentEggName}
+                                </div>
                             </div>
-                        </div>
-                        {!visible && (
                             <button
                                 className='rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
                             >
                                 Change Egg
                             </button>
-                        )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
             
             {visible && (
-            <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 h-[52svh]'>
+            <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] h-[73svh]'>
                 <div className='w-full h-full'>
                     <div className='flex items-center justify-between p-4 pr-5 mb-2'>
                         {steps.map((cstep, index) => index <= 0 && currentEgg === blankEggId ? null : (
@@ -250,7 +269,7 @@ const ShellContainer = () => {
                         ))}
                     </div>
 
-                    <div className='border-t border-[#ffffff20] m-4 mt-0 mb-0'></div>
+                    <div className='border-t border-[#ffffff20] m-4 mt-0 mb-0' />
 
                     <div className='p-4 pt-2'>
                         {step == 0 && (
@@ -259,7 +278,7 @@ const ShellContainer = () => {
                                 {nests?.map((nest) => hidden_nests.includes(nest.attributes.name) ? null : (
                                     <div
                                         key={nest.attributes.uuid}
-                                        className={`cursor-pointer bg-[#0f0f0f] border-[1px] p-4 rounded-lg w-full text-left ${
+                                        className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${
                                             selectedNest?.attributes.uuid === nest.attributes.uuid ? 'border-[#555555ef]' : 'border-[#55555540]'
                                         }`}
                                     >
@@ -284,7 +303,7 @@ const ShellContainer = () => {
                                     {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => currentEgg === egg.attributes.uuid ? null :(
                                         <div
                                             key={egg.attributes.uuid}
-                                            className='cursor-pointer border border-neutral-800 hover:border-neutral-700 p-4 rounded-lg bg-[#0f0f0f] w-full'
+                                            className='cursor-pointer border border-neutral-800 hover:border-neutral-700 p-4 rounded-lg bg-[#3333332a] w-full'
                                         >
                                             <div className='flex items-center justify-between'>
                                                 <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
@@ -306,25 +325,59 @@ const ShellContainer = () => {
                         )}
 
                         {step == 2 && currentEgg !== blankEggId && (
-                            <div className='grid grid-cols-2 gap-4 mt-4'>
-                                <div className='flex items-center justify-between gap-2 bg-[#0000002a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
-                                    <div className='flex flex-col'>
-                                        <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
-                                        <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>Would you like to create a backup before continuing? Some data may be modified for removed during the process.</label>
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid grid-cols-2 gap-4 mt-4'>
+                                    <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
+                                        <div className='flex flex-col'>
+                                            <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
+                                            <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>Would you like to create a backup before continuing? Some data may be modified for removed during the process.</label>
+                                        </div>
+                                        <Switch 
+                                            name='backup'
+                                            defaultChecked={shouldBackup}
+                                            onCheckedChange={() => setShouldBackup(!shouldBackup)} 
+                                        />
                                     </div>
-                                    <Switch 
-                                        name='backup'
-                                        defaultChecked={shouldBackup}
-                                        onCheckedChange={() => setShouldBackup(!shouldBackup)} 
-                                    />
-                                </div>
-                                <div className='flex items-center justify-between gap-2 bg-[#0000002a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
-                                    <div className='flex flex-col'>
-                                        <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
-                                        <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
+                                    <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
+                                        <div className='flex flex-col'>
+                                            <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
+                                            <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
+                                        </div>
+                                        <Switch />
                                     </div>
-                                    <Switch />
                                 </div>
+
+                                <div className='border-t border-[#ffffff20]' />
+
+                                {data && (
+                                    <div className='h-[42svh] flex flex-col justify-between'>
+                                        <div className={`grid gap-2 md:grid-cols-3`}>
+                                            {paginatedVariables.map((variable) => (
+                                                <VariableBox key={variable.envVariable} variable={variable} />
+                                            ))}
+                                        </div>
+                                        <Pagination
+                                            data={{
+                                                items: paginatedVariables,
+                                                pagination: {
+                                                    currentPage,
+                                                    totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE)
+                                                }
+                                            }}
+                                            onPageSelect={setCurrentPage}
+                                        >
+                                            {() => <></>}
+                                        </Pagination>
+                                    </div>
+                                )}
+
+                                <div className='border-t border-[#ffffff20]' />
+
+                                <Button
+                                    onClick={() => setModalVisible(true)}
+                                >
+                                    Confirm
+                                </Button>
                             </div>
                         )}
                     </div>
@@ -332,6 +385,7 @@ const ShellContainer = () => {
             </div>
             )}
 
+            {!visible && (
             <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
                 <div className='flex flex-row items-center gap-2'>
                     <HugeIconsAlert fill='currentColor' className='pl-1 text-brand' />
@@ -341,6 +395,7 @@ const ShellContainer = () => {
                     </div>
                 </div>
             </div>
+            )}
         </ServerContentBlock>
     );
 };

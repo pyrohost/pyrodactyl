@@ -16,6 +16,7 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 import { usePermissions } from '@/plugins/usePermissions';
+import { Input } from '@/components/elements/TextInput';
 
 interface Props {
     variable: ServerEggVariable;
@@ -61,13 +62,14 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <TitledGreyBox>
+        <div className={`flex flex-col gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
                 {!variable.isEditable && (
                     <span className={`bg-neutral-700 text-xs py-1 px-2 rounded-full mr-2 mb-1`}>Read Only</span>
                 )}
                 {variable.name}
+                <p className={`mt-1 text-xs text-neutral-300`}>{variable.description}</p>
             </div>
             <InputSpinner visible={loading}>
                 {useSwitch ? (
@@ -111,8 +113,8 @@ const VariableBox = ({ variable }: Props) => {
                             </>
                         ) : (
                             <>
-                                <input
-                                    className='px-4 py-2 rounded-lg outline-none bg-[#ffffff17] text-sm w-full'
+                                <Input
+                                    className='w-1/2'
                                     onKeyUp={(e) => {
                                         if (canEdit && variable.isEditable) {
                                             setVariableValue(e.currentTarget.value);
@@ -128,8 +130,7 @@ const VariableBox = ({ variable }: Props) => {
                     </>
                 )}
             </InputSpinner>
-            <p className={`mt-1 text-xs text-neutral-300`}>{variable.description}</p>
-        </TitledGreyBox>
+        </div>
     );
 };
 

@@ -75,5 +75,6 @@ const Switch = ({ name, label, description, defaultChecked, readOnly, onChange, 
         </div>
     );
 };
+Switch.displayName = 'Switch';
 
 export default Switch;
