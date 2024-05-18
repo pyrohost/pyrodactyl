@@ -8,7 +8,6 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { Dialog } from '@/components/elements/dialog';
 import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import HugeIconsArrowRight from '@/components/elements/hugeicons/ArrowRight';
 
 import { httpErrorToHuman } from '@/api/http';
 import getNests from '@/api/nests/getNests';
@@ -252,27 +251,6 @@ const ShellContainer = () => {
                     </div>
 
                     <div className='border-t border-[#ffffff20] m-4 mt-0 mb-0'></div>
-
-                    {/*
-                    <div className='flex items-center justify-between p-4 pb-0'>
-                        <button
-                            onClick={() => step > 0 && setStep(step - 1)}
-                            className={`rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg`
-                                + (step == 0 || currentEgg === blankEggId && step == 1 ? ' cursor-not-allowed bg-neutral-800' : '')
-                            }
-                        >
-                            Previous
-                        </button>
-                        <button
-                            onClick={() => step < steps.length - 1 && setStep(step + 1)}
-                            className={`rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg`
-                                + (step == 3 ? ' cursor-not-allowed bg-neutral-800' : '')
-                            }
-                        >
-                            Next
-                        </button>
-                    </div>
-                    */}
 
                     <div className='p-4 pt-2'>
                         {step == 0 && (
