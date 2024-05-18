@@ -19,6 +19,8 @@ import createServerBackup from '@/api/server/backups/createServerBackup';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
+import { Switch } from '@/components/elements/SwitchV2';
+import Button from '@/components/elements/ButtonV2';
 
 interface Egg {
     object: string;
@@ -51,25 +53,17 @@ interface Nest {
 const MAX_DESCRIPTION_LENGTH = 100;
 const steps = [
     {
-        slug: 'Backup',
-        title: 'Do you want to make a backup?',
-        description: 'This process may modify or delete some files.',
+        slug: 'game',
+        title: 'Game',
     },
     {
-        slug: 'Nest',
-        title: 'Select a Game/Sofware',
-        description: 'Select your preferred game or software.',
+        slug: 'sofware',
+        title: 'Sofware',
     },
     {
-        slug: 'Version',
-        title: 'Version',
-        description: 'Confirm your selection.',
-    },
-    {
-        slug: 'Egg',
-        title: 'Select the sub-set',
-        description: 'Select the sub-set of the game or software.',
-    },
+        slug: 'options-variables',
+        title: 'Options & Variables',
+    }
 ]
 const hidden_nests = ['Pyro']; // Hardcoded
 const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
@@ -230,120 +224,135 @@ const ShellContainer = () => {
                         </div>
                         {!visible && (
                             <button
-                                style={{
-                                    background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                }}
-                                className='rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg'
+                                className='rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
                             >
                                 Change Egg
                             </button>
                         )}
                     </div>
-                    {visible && (
-                    <div className='bg-[#0f0f0f] rounded-lg border-[1px] border-[#ffffff07]'>
-                        <div className='flex items-center justify-between bg-[#1d1d1d] mb-2'>
-                            {steps[step] && (
-                            <div className='p-1 pl-4'>
-                                <h1 className='text-xl'>{steps[step].title} <span className='p-2 text-neutral-600'>•</span> <span className='text-neutral-400 text-sm'>{steps[step].description}</span></h1>
+                </div>
+            </div>
+            
+            {visible && (
+            <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 h-[52svh]'>
+                <div className='w-full h-full'>
+                    <div className='flex items-center justify-between p-4 pr-5 mb-2'>
+                        {steps.map((cstep, index) => index <= 0 && currentEgg === blankEggId ? null : (
+                            <div key={cstep.slug}>
+                                <div className='flex items-center gap-2' onClick={() => setStep(index)} style={{ cursor: 'pointer' }}>
+                                    <div className={`${index < step+1 ? 'border-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF343C] to-[#F06F53] text-brand' : 'border-[#ffffff20] text-[#ffffff20]'} border-[2px] rounded-full p-1 w-8 h-8 text-sm font-bold shadow-md hover:shadow-lg items-center text-center`}>
+                                        {index + 1}
+                                    </div>
+                                    <h2  className={`${index < step+1 ? 'text-white' : 'text-[#ffffff20]'} text-sm font-bold`}>{cstep.title}</h2>
+                                    {index !== steps.length - 1 && <div className={`${index < step ? 'border-brand' : 'border-[#ffffff12]'} border-t-2 border-dashed ml-4 w-[430px]`}></div>}
+                                </div>
                             </div>
-                            )}
-                            <div className='flex items-center gap-2 p-4 pr-5'>
-                                {steps.map((cstep, index) => index <= 0 && currentEgg === blankEggId ? null : (
-                                    <div key={cstep.slug} className='flex items-center gap-2' onClick={() => setStep(index)} style={{ cursor: 'pointer' }}>
-                                        <h2 className={`text-lg1 ${index === step ? 'text-brand font-bold' : 'text-neutral-300'}`}>{cstep.slug}</h2>
-                                        {index < steps.length - 1 && <span className='text-neutral-300'><HugeIconsArrowRight fill='currentColor' className='text-neutral-600' /></span>}
+                        ))}
+                    </div>
+
+                    <div className='border-t border-[#ffffff20] m-4 mt-0 mb-0'></div>
+
+                    {/*
+                    <div className='flex items-center justify-between p-4 pb-0'>
+                        <button
+                            onClick={() => step > 0 && setStep(step - 1)}
+                            className={`rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg`
+                                + (step == 0 || currentEgg === blankEggId && step == 1 ? ' cursor-not-allowed bg-neutral-800' : '')
+                            }
+                        >
+                            Previous
+                        </button>
+                        <button
+                            onClick={() => step < steps.length - 1 && setStep(step + 1)}
+                            className={`rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg`
+                                + (step == 3 ? ' cursor-not-allowed bg-neutral-800' : '')
+                            }
+                        >
+                            Next
+                        </button>
+                    </div>
+                    */}
+
+                    <div className='p-4 pt-2'>
+                        {step == 0 && (
+                        <div>
+                            <div className='grid grid-cols-3 gap-4 mt-4'>
+                                {nests?.map((nest) => hidden_nests.includes(nest.attributes.name) ? null : (
+                                    <div
+                                        key={nest.attributes.uuid}
+                                        className={`cursor-pointer bg-[#0f0f0f] border-[1px] p-4 rounded-lg w-full text-left ${
+                                            selectedNest?.attributes.uuid === nest.attributes.uuid ? 'border-[#555555ef]' : 'border-[#55555540]'
+                                        }`}
+                                    >
+                                        <div className='flex items-center justify-between'>
+                                            <p className='text-neutral-200 text-md'>{nest.attributes.name}</p>
+                                            <Button
+                                                onClick={() => handleNestSelect(nest)}
+                                            >
+                                                Select
+                                            </Button>
+                                        </div>
+                                        <p className='text-neutral-400 text-xs mt-2'>{nest.attributes.description}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
+                        )}
 
-                        <div className='p-4'>
-                            {step == 0 && currentEgg !== blankEggId && (
-                                <div className='flex items-center justify-between'>
-                                    <div className='flex items-center justify-between gap-2'>
-                                        <label className='autoSaverSwitch relative inline-flex cursor-pointer select-none items-center'>
-                                            <input
-                                                type='checkbox'
-                                                name='backup'
-                                                className='sr-only'
-                                                checked={shouldBackup}
-                                                onChange={() => setShouldBackup(!shouldBackup)}
-                                            />
-                                            <span
-                                                className={`slider mr-3 flex h-[26px] w-[50px] items-center rounded-full p-1 duration-200 ${
-                                                    shouldBackup ? 'bg-brand' : 'bg-[#252525]'
-                                                }`}
-                                            >
-                                            <span
-                                                className={`dot h-[18px] w-[18px] rounded-full bg-white duration-200 ${
-                                                    shouldBackup ? 'translate-x-6' : ''
-                                                }`}
-                                            ></span>
-                                            </span>
-                                        </label>
-                                        <label htmlFor='backup' className='text-neutral-300'>Create a backup before changing the egg</label>
-                                    </div>
-                                </div>
-                            )}
-                            {step == 1 && (
+                        {step == 1 && selectedNest && (
                             <div>
                                 <div className='grid grid-cols-3 gap-4 mt-4'>
-                                    {nests?.map((nest) => hidden_nests.includes(nest.attributes.name) ? null : (
-                                        <button
-                                            key={nest.attributes.uuid}
-                                            onClick={() => handleNestSelect(nest)}
-                                            className={`cursor-pointer border border-neutral-500 hover:border-neutral-400 p-4 rounded-lg w-full ${
-                                                selectedNest?.attributes.uuid === nest.attributes.uuid ? 'bg-[#1a1a1a]' : 'bg-[#0f0f0f]'
-                                            }`}
+                                    {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => currentEgg === egg.attributes.uuid ? null :(
+                                        <div
+                                            key={egg.attributes.uuid}
+                                            className='cursor-pointer border border-neutral-800 hover:border-neutral-700 p-4 rounded-lg bg-[#0f0f0f] w-full'
                                         >
-                                            <p className='text-neutral-300 text-sm'>{nest.attributes.name}</p>
-                                            <p className='text-neutral-300 text-xs mt-2'>{nest.attributes.description}</p>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            )}
-                            {step == 2 && (
-                                <div>
-                                    soon:tm:
-                                </div>
-                            )}
-                            {step == 3 && selectedNest && (
-                                <div>
-                                    <div className='grid grid-cols-3 gap-4 mt-4'>
-                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => currentEgg === egg.attributes.uuid ? null :(
-                                            <div
-                                                key={egg.attributes.uuid}
-                                                className='cursor-pointer border border-neutral-500 hover:border-neutral-400 p-4 rounded-lg bg-[#0f0f0f] w-full'
-                                            >
+                                            <div className='flex items-center justify-between'>
                                                 <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
-                                                <p className='text-neutral-300 text-xs mt-2'>{renderEggDescription(egg.attributes.description, eggIndex)}</p>
-                                                <div className='flex justify-end '>
-                                                <button
-                                                    style={{
-                                                        background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                                    }}
-                                                    className='rounded-full border-[1px] border-[#ffffff12] px-3 py-1 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg mt-2'
+                                                <Button
                                                     onClick={() => handleEggSelect(egg)}
                                                 >
                                                     Select
-                                                </button>
-                                                </div>
+                                                </Button>
                                             </div>
-                                        ))}
+                                            <p className='text-neutral-300 text-xs mt-2'>{renderEggDescription(egg.attributes.description, eggIndex)}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) || step == 1 && (
+                            <div className='flex items-center justify-center h-100%'>
+                                <p className='text-neutral-300'>Please select a game first</p>
+                            </div>
+                        )}
+
+                        {step == 2 && currentEgg !== blankEggId && (
+                            <div className='grid grid-cols-2 gap-4 mt-4'>
+                                <div className='flex items-center justify-between gap-2 bg-[#0000002a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
+                                    <div className='flex flex-col'>
+                                        <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
+                                        <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>Would you like to create a backup before continuing? Some data may be modified for removed during the process.</label>
                                     </div>
+                                    <Switch 
+                                        name='backup'
+                                        defaultChecked={shouldBackup}
+                                        onCheckedChange={() => setShouldBackup(!shouldBackup)} 
+                                    />
                                 </div>
-                            ) || step == 3 && (
-                                <div className='flex items-center justify-center'>
-                                    <p className='text-neutral-300'>Select a category to choose a game/software from.</p>
+                                <div className='flex items-center justify-between gap-2 bg-[#0000002a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
+                                    <div className='flex flex-col'>
+                                        <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
+                                        <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
+                                    </div>
+                                    <Switch />
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
-                    )}
-                </div>
+                </div>  
             </div>
+            )}
 
             <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
                 <div className='flex flex-row items-center gap-2'>

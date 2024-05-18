@@ -5,7 +5,7 @@ import isEqual from 'react-fast-compare';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Select from '@/components/elements/Select';
-import Switch from '@/components/elements/Switch';
+import { Switch } from '@/components/elements/SwitchV2';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 
 import { ServerEggVariable } from '@/api/server/types';
@@ -73,12 +73,12 @@ const VariableBox = ({ variable }: Props) => {
                 {useSwitch ? (
                     <>
                         <Switch
-                            readOnly={!canEdit || !variable.isEditable}
+                            disabled={!canEdit || !variable.isEditable}
                             name={variable.envVariable}
                             defaultChecked={
                                 isStringSwitch ? variable.serverValue === 'true' : variable.serverValue === '1'
                             }
-                            onChange={() => {
+                            onCheckedChange={() => {
                                 if (canEdit && variable.isEditable) {
                                     if (isStringSwitch) {
                                         setVariableValue(variable.serverValue === 'true' ? 'false' : 'true');
