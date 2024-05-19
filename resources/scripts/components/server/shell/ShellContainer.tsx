@@ -101,7 +101,6 @@ const ShellContainer = () => {
     let paginatedVariables
 
     const updateVarsData = () => {
-        
         paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
     };
 
