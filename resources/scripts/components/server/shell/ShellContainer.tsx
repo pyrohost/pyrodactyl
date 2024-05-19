@@ -24,6 +24,7 @@ import getServerStartup from '@/api/swr/getServerStartup';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 interface Egg {
     object: string;
@@ -79,6 +80,7 @@ const ShellContainer = () => {
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
+
     const variables = ServerContext.useStoreState(
         ({ server }) => ({
             variables: server.data!.variables,
@@ -87,6 +89,7 @@ const ShellContainer = () => {
         }),
         isEqual,
     );
+
     const { data, error, isValidating, mutate } = getServerStartup(uuid, {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
@@ -94,6 +97,15 @@ const ShellContainer = () => {
 
     const ITEMS_PER_PAGE = 6;
     const [currentPage, setCurrentPage] = useState(1);
+
+    let paginatedVariables
+
+    const updateVarsData = () => {
+        
+        paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
+    };
+
+    updateVarsData();
 
     const [step, setStep] = useState(steps[0] && currentEgg === blankEggId ? 1 : 0);
     const [modalVisible, setModalVisible] = useState(false);
@@ -145,39 +157,39 @@ const ShellContainer = () => {
         setStep(1);
     };
 
-    const changeEgg = (eggId: number, nestId: number) => {
-        setSelectedEggImage(uuid, eggId, nestId)
-        .then(() => {
-            reinstall();
-            setModalVisible(false);
-        })
-        .catch((error) => {
-            console.error(error);
-            addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
-        });
-    };
-
     const confirmSelection = () => {
-        const nestId = nests?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid))?.attributes.id;
-        const eggId = eggs?.findIndex((egg) => egg.attributes.uuid === selectedEgg?.attributes.uuid) + 1 || 0;
-        
         if (shouldBackup) {
             createServerBackup(uuid, {name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`, isLocked: false})
                 .then(() => {
-                    changeEgg(eggId, nestId);
+                    reinstall();
+                    setModalVisible(false);
                 })
                 .catch((error) => {
                     toast.error(httpErrorToHuman(error));
                 });
         } else if (shouldBackup === false) {
-            changeEgg(eggId, nestId);
+            reinstall();
+            setModalVisible(false);
         }
         
     };
 
     const handleEggSelect = (egg: Egg) => {
         setSelectedEgg(egg);
-        setStep(2);
+
+        const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) || 0;
+        const eggId = eggs?.findIndex((eo) => eo.attributes.uuid === egg?.attributes.uuid) + 1 || 0;
+
+        console.log(nestId, eggId);
+        setSelectedEggImage(uuid, eggId, nestId)
+            .catch((error) => {
+                console.error(error);
+                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            });
+        updateVarsData();
+        setTimeout(() => {
+            setStep(2);
+        }, 500);
     };
     
     const toggleDescriptionVisibility = (index: number) => {
@@ -210,8 +222,6 @@ const ShellContainer = () => {
             </div>
         );
     };
-
-    const paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
 
     return (
         <ServerContentBlock title='Shell'>
