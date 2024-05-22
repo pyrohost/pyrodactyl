@@ -6,7 +6,13 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Select from '@/components/elements/Select';
 import { Switch } from '@/components/elements/SwitchV2';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenu';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -17,6 +23,7 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 import { usePermissions } from '@/plugins/usePermissions';
 import { Input } from '@/components/elements/TextInput';
+import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 
 interface Props {
     variable: ServerEggVariable;
@@ -65,10 +72,12 @@ const VariableBox = ({ variable }: Props) => {
         <div className={`flex flex-col gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
-                {!variable.isEditable && (
-                    <span className={`bg-neutral-700 text-xs py-1 px-2 rounded-full mr-2 mb-1`}>Read Only</span>
-                )}
-                {variable.name}
+                <div className={`flex items-center gap-2`}>
+                    {!variable.isEditable && (
+                        <HugeIconsSquareLock fill={'currentColor'} className={`text-neutral-600`} />
+                    )}
+                    {variable.name}
+                </div>
                 <p className={`mt-1 text-xs text-neutral-300`}>{variable.description}</p>
             </div>
             <InputSpinner visible={loading}>
@@ -95,21 +104,25 @@ const VariableBox = ({ variable }: Props) => {
                     <>
                         {selectValues.length > 0 ? (
                             <>
-                                <Select
-                                    onChange={(e) => setVariableValue(e.target.value)}
-                                    name={variable.envVariable}
-                                    defaultValue={variable.serverValue}
-                                    disabled={!canEdit || !variable.isEditable}
-                                >
-                                    {selectValues.map((selectValue) => (
-                                        <option
-                                            key={selectValue.replace('in:', '')}
-                                            value={selectValue.replace('in:', '')}
-                                        >
-                                            {selectValue.replace('in:', '')}
-                                        </option>
-                                    ))}
-                                </Select>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-full shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!canEdit || !variable.isEditable}>
+                                            {variable.serverValue.replace('in:', '')}
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                                        <DropdownMenuRadioGroup value={variable.serverValue} onValueChange={setVariableValue}>
+                                            {selectValues.map((selectValue) => (
+                                                <DropdownMenuRadioItem
+                                                    key={selectValue.replace('in:', '')}
+                                                    value={selectValue.replace('in:', '')}
+                                                >
+                                                    {selectValue.replace('in:', '')}
+                                                </DropdownMenuRadioItem>
+                                            ))}
+                                        </DropdownMenuRadioGroup>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </>
                         ) : (
                             <>
@@ -124,6 +137,7 @@ const VariableBox = ({ variable }: Props) => {
                                     name={variable.envVariable}
                                     defaultValue={variable.serverValue}
                                     placeholder={variable.defaultValue}
+                                    disabled={!canEdit || !variable.isEditable}
                                 />
                             </>
                         )}

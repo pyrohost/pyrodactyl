@@ -24,7 +24,6 @@ import getServerStartup from '@/api/swr/getServerStartup';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 interface Egg {
     object: string;
@@ -81,6 +80,15 @@ const ShellContainer = () => {
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getNests();
+            setNests(data);
+        };
+
+        fetchData();
+    }, []);
+
     const variables = ServerContext.useStoreState(
         ({ server }) => ({
             variables: server.data!.variables,
@@ -116,15 +124,6 @@ const ShellContainer = () => {
     const [showFullDescriptions, setShowFullDescriptions] = useState<boolean[]>([]);
 
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getNests();
-            setNests(data);
-        };
-
-        fetchData();
-    }, []);
 
     useEffect(() => {
         if (backups) {
@@ -174,6 +173,7 @@ const ShellContainer = () => {
     };
 
     const handleEggSelect = (egg: Egg) => {
+        if (!eggs || !nests) { return; }
         setSelectedEgg(egg);
 
         const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
@@ -274,7 +274,7 @@ const ShellContainer = () => {
                                         {index + 1}
                                     </div>
                                     <h2  className={`${index < step+1 ? 'text-white' : 'text-[#ffffff20]'} text-sm font-bold`}>{cstep.title}</h2>
-                                    {index !== steps.length - 1 && <div className={`${index < step ? 'border-brand' : 'border-[#ffffff12]'} border-t-2 border-dashed ml-4 w-[430px]`}></div>}
+                                    {index !== steps.length - 1 && <div className={`${index < step ? 'border-brand' : 'border-[#ffffff12]'} border-t-2 border-dashed ml-4 w-[25svw]`}></div>}
                                 </div>
                             </div>
                         ))}

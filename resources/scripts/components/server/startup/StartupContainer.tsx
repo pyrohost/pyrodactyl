@@ -176,7 +176,7 @@ const StartupContainer = () => {
                         </>
                     ) : (
                         <>
-                            <Input disabled readOnly value={variables.dockerImage} />
+                            <span className={`text-neutral-400`}>{variables.dockerImage}</span>
                             {isCustomImage && (
                                 <p className={`text-xs text-zinc-300 mt-2`}>
                                     This {"server's"} Docker image has been manually set by an administrator and cannot
