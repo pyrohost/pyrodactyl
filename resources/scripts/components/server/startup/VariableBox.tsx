@@ -4,7 +4,6 @@ import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import InputSpinner from '@/components/elements/InputSpinner';
-import Select from '@/components/elements/Select';
 import { Switch } from '@/components/elements/SwitchV2';
 import {
     DropdownMenu,

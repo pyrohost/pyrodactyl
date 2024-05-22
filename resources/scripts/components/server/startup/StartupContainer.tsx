@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import CopyOnClick from '@/components/elements/CopyOnClick';
-import Input from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { ServerError } from '@/components/elements/ScreenBlock';

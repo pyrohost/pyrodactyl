@@ -98,7 +98,7 @@ const ShellContainer = () => {
         isEqual,
     );
 
-    const { data, error, isValidating, mutate } = getServerStartup(uuid, {
+    const { data } = getServerStartup(uuid, {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
     });
