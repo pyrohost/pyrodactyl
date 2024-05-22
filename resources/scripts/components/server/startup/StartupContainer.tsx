@@ -206,7 +206,10 @@ const StartupContainer = () => {
                             items: paginatedVariables,
                             pagination: {
                                 currentPage,
-                                totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE)
+                                totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE),
+                                total: data.variables.length,
+                                count: data.variables.length,
+                                perPage: ITEMS_PER_PAGE,
                             }
                         }}
                         onPageSelect={setCurrentPage}
