@@ -74,7 +74,7 @@ const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change f
 
 const ShellContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const [nests, setNests] = useState<Nest | null>(null);
+    const [nests, setNests] = useState<Nest[]>();
     const eggs = nests?.reduce((eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data], [] as Egg[]);
     const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
