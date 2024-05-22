@@ -176,7 +176,7 @@ const ShellContainer = () => {
     const handleEggSelect = (egg: Egg) => {
         setSelectedEgg(egg);
 
-        const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) || 0;
+        const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
         const eggId = eggs?.findIndex((eo) => eo.attributes.uuid === egg?.attributes.uuid) + 1 || 0;
 
         console.log(nestId, eggId);
@@ -363,7 +363,7 @@ const ShellContainer = () => {
                                 <div className='border-t border-[#ffffff20]' />
 
                                 {data && (
-                                    <div className='h-[42svh] flex flex-col justify-between'>
+                                    <div className='h-[40svh] flex flex-col justify-between'>
                                         <div className={`grid gap-2 md:grid-cols-3`}>
                                             {paginatedVariables.map((variable) => (
                                                 <VariableBox key={variable.envVariable} variable={variable} />
