@@ -11,6 +11,7 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import VariableBox from '@/components/server/startup/VariableBox';
+import Pagination from '@/components/elements/Pagination';
 
 import { httpErrorToHuman } from '@/api/http';
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
@@ -47,6 +48,11 @@ const StartupContainer = () => {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
     });
+
+    const ITEMS_PER_PAGE = 6;
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
 
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
     const isCustomImage =
@@ -103,15 +109,15 @@ const StartupContainer = () => {
                     settings as they can cause your server to become inoperable.
                 </h2>
             </MainPageHeader>
-            <div className={`flex flex-col gap-8`}>
-                <TitledGreyBox title={'Startup Command'} className={`flex-1`}>
+            <div className={`grid grid-cols-3 gap-8`}>
+                <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
                     <CopyOnClick text={data.invocation}>
                         <div className={`px-1 py-2`}>
                             <p className={`font-mono bg-zinc-900 rounded py-2 px-4`}>{data.invocation}</p>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className={`flex-1 lg:flex-none lg:w-1/3 mt-8 md:mt-0 md:ml-10`}>
+                <TitledGreyBox title={'Docker Image'}>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>
@@ -187,12 +193,28 @@ const StartupContainer = () => {
                     )}
                 </TitledGreyBox>
             </div>
-            <h3 className={`mt-8 mb-2 text-2xl font-extrabold`}>Variables</h3>
-            <div className={`grid gap-8 md:grid-cols-2`}>
-                {data.variables.map((variable) => (
-                    <VariableBox key={variable.envVariable} variable={variable} />
-                ))}
-            </div>
+            <h3 className={`mt-8 mb-4 text-2xl font-extrabold`}>Variables</h3>
+            {data && (
+                <div className='h-[47svh] flex flex-col justify-between'>
+                    <div className={`grid gap-2 md:grid-cols-2`}>
+                        {paginatedVariables.map((variable) => (
+                            <VariableBox key={variable.envVariable} variable={variable} />
+                        ))}
+                    </div>
+                    <Pagination
+                        data={{
+                            items: paginatedVariables,
+                            pagination: {
+                                currentPage,
+                                totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE)
+                            }
+                        }}
+                        onPageSelect={setCurrentPage}
+                    >
+                        {() => <></>}
+                    </Pagination>
+                </div>
+            )}
         </ServerContentBlock>
     );
 };

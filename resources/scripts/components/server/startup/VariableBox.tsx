@@ -13,6 +13,10 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import { Input } from '@/components/elements/TextInput';
+import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
+import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
+import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -22,8 +26,6 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 import { usePermissions } from '@/plugins/usePermissions';
-import { Input } from '@/components/elements/TextInput';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 
 interface Props {
     variable: ServerEggVariable;
@@ -37,6 +39,7 @@ const VariableBox = ({ variable }: Props) => {
     const [canEdit] = usePermissions(['startup.update']);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { mutate } = getServerStartup(uuid);
+    const [dropDownOpen, setDropDownOpen] = useState(false);
 
     const setVariableValue = debounce((value: string) => {
         setLoading(true);
@@ -104,10 +107,11 @@ const VariableBox = ({ variable }: Props) => {
                     <>
                         {selectValues.length > 0 ? (
                             <>
-                                <DropdownMenu>
+                                <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-full shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!canEdit || !variable.isEditable}>
+                                        <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!canEdit || !variable.isEditable}>
                                             {variable.serverValue.replace('in:', '')}
+                                            {dropDownOpen ? <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} /> : <HugeIconsArrowDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />}
                                         </button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className='z-[99999]' sideOffset={8}>
