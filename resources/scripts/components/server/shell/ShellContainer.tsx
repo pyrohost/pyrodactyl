@@ -21,6 +21,9 @@ import setSelectedEggImage from '@/api/server/setSelectedEggImage';
 import getServerBackups from '@/api/swr/getServerBackups';
 import createServerBackup from '@/api/server/backups/createServerBackup';
 import getServerStartup from '@/api/swr/getServerStartup';
+import deleteFiles from '@/api/server/files/deleteFiles';
+
+import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
@@ -79,6 +82,11 @@ const ShellContainer = () => {
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
+    const directory = ServerContext.useStoreState((state) => state.files.directory);
+    const selectedFiles = ServerContext.useStoreState((state) => state.files.selectedFiles);
+    const setSelectedFiles = ServerContext.useStoreActions((actions) => actions.files.setSelectedFiles);
+    const selectedFilesLength = ServerContext.useStoreState((state) => state.files.selectedFiles.length);
+    const { data: files, mutate } = useFileManagerSwr();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -119,6 +127,7 @@ const ShellContainer = () => {
     const [visible, setVisible] = useState(false);
 
     const [shouldBackup, setShouldBackup] = useState(false);
+    const [shouldWipe, setShouldWipe] = useState(false);
     const [selectedNest, setSelectedNest] = useState<Nest | null>(null);
     const [selectedEgg, setSelectedEgg] = useState<Egg | null>(null);
     const [showFullDescriptions, setShowFullDescriptions] = useState<boolean[]>([]);
@@ -155,20 +164,34 @@ const ShellContainer = () => {
         setStep(1);
     };
 
-    const confirmSelection = () => {
+    const confirmSelection = async () => {
         if (shouldBackup) {
-            createServerBackup(uuid, {name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`, isLocked: false})
-                .then(() => {
-                    reinstall();
-                    setModalVisible(false);
-                })
+            await createServerBackup(uuid, {name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`, isLocked: false})
                 .catch((error) => {
                     toast.error(httpErrorToHuman(error));
                 });
-        } else if (shouldBackup === false) {
-            reinstall();
-            setModalVisible(false);
         }
+        if (shouldWipe) {
+            await setSelectedFiles(
+                selectedFilesLength === (files?.length === 0 ? -1 : files?.length)
+                    ? []
+                    : files?.map((file) => file.name) || [],
+            );
+
+            await deleteFiles(uuid, directory, selectedFiles)
+                .then(async () => {
+                    await mutate((files) => files!.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
+                    setSelectedFiles([]);
+                })
+                .catch(async (error) => {
+                    await mutate();
+                    console.error(error);
+                    addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                });
+        }
+
+        reinstall();
+        setModalVisible(false);
         
     };
 
@@ -369,7 +392,11 @@ const ShellContainer = () => {
                                             <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
                                             <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
                                         </div>
-                                        <Switch disabled={true} />
+                                        <Switch
+                                            name='wipe'
+                                            defaultChecked={shouldWipe}
+                                            onCheckedChange={() => setShouldWipe(!shouldWipe)}
+                                        />
                                     </div>
                                 </div>
 
