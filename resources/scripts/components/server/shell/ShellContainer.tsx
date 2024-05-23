@@ -60,15 +60,15 @@ const steps = [
         title: 'Game',
     },
     {
-        slug: 'sofware',
-        title: 'Sofware',
+        slug: 'software',
+        title: 'Software',
     },
     {
         slug: 'options-variables',
         title: 'Options & Variables',
     }
 ]
-const hidden_nests = ['Pyro']; // Hardcoded
+const hidden_nest_prefix = '!'; // Hardcoded
 const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
 
 const ShellContainer = () => {
@@ -299,7 +299,7 @@ const ShellContainer = () => {
                         {step == 0 && (
                         <div>
                             <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
-                                {nests?.map((nest) => hidden_nests.includes(nest.attributes.name) ? null : (
+                                {nests?.map((nest) => nest.attributes.name.includes(hidden_nest_prefix) ? null : (
                                     <div
                                         key={nest.attributes.uuid}
                                         className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${
