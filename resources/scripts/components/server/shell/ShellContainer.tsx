@@ -222,6 +222,19 @@ const ShellContainer = () => {
         );
     };
 
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            event.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     return (
         <ServerContentBlock title='Shell'>
             <FlashMessageRender byKey='Shell' />
@@ -264,7 +277,7 @@ const ShellContainer = () => {
             )}
             
             {visible && (
-            <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] h-[73svh]'>
+            <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
                 <div className='w-full h-full'>
                     <div className='flex items-center justify-between p-4 pr-5 mb-2'>
                         {steps.map((cstep, index) => index <= 0 && currentEgg === blankEggId ? null : (
@@ -285,7 +298,7 @@ const ShellContainer = () => {
                     <div className='p-4 pt-2'>
                         {step == 0 && (
                         <div>
-                            <div className='grid grid-cols-3 gap-4 mt-4'>
+                            <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
                                 {nests?.map((nest) => hidden_nests.includes(nest.attributes.name) ? null : (
                                     <div
                                         key={nest.attributes.uuid}
@@ -310,7 +323,7 @@ const ShellContainer = () => {
 
                         {step == 1 && selectedNest && (
                             <div>
-                                <div className='grid grid-cols-3 gap-4 mt-4'>
+                                <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
                                     {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => currentEgg === egg.attributes.uuid ? null :(
                                         <div
                                             key={egg.attributes.uuid}
@@ -339,7 +352,7 @@ const ShellContainer = () => {
 
                         {step == 2 && selectedEgg && currentEgg !== blankEggId && (
                             <div className='flex flex-col gap-4'>
-                                <div className='grid grid-cols-2 gap-4 mt-4'>
+                                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4'>
                                     <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
                                         <div className='flex flex-col'>
                                             <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
@@ -363,8 +376,8 @@ const ShellContainer = () => {
                                 <div className='border-t border-[#ffffff20]' />
 
                                 {data && (
-                                    <div className='h-[40svh] flex flex-col justify-between'>
-                                        <div className={`grid gap-2 md:grid-cols-3`}>
+                                    <div className='h-max lg:h-[39svh] flex flex-col justify-between'>
+                                        <div className={`grid gap-2 grid-cols-1 lg:grid-cols-3`}>
                                             {paginatedVariables.map((variable) => (
                                                 <VariableBox key={variable.envVariable} variable={variable} />
                                             ))}
@@ -407,9 +420,9 @@ const ShellContainer = () => {
 
             {!visible && (
             <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
-                <div className='flex flex-row items-center gap-2'>
-                    <HugeIconsAlert fill='currentColor' className='pl-1 text-brand' />
-                    <div className='flex flex-col pb-1'>
+                <div className='flex flex-row items-center gap-2 h-full'>
+                    <HugeIconsAlert fill='currentColor' className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block' />
+                    <div className='flex flex-col pb-1  m-2'>
                         <h1 className='text-xl'>Danger Zone</h1>
                         <p className='text-sm text-neutral-300'>During this process some files may be deleted or modified either make a backup before hand or pick the option when prompted.</p>
                     </div>
