@@ -245,19 +245,6 @@ const ShellContainer = () => {
         );
     };
 
-    useEffect(() => {
-        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            event.preventDefault();
-            event.returnValue = '';
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
-
     return (
         <ServerContentBlock title='Shell'>
             <FlashMessageRender byKey='Shell' />
