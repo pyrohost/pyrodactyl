@@ -122,7 +122,7 @@ const ShellContainer = () => {
 
     updateVarsData();
 
-    const [step, setStep] = useState(steps[0] && currentEgg === blankEggId ? 1 : 0);
+    const [step, setStep] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -290,7 +290,7 @@ const ShellContainer = () => {
             <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
                 <div className='w-full h-full'>
                     <div className='flex items-center justify-between p-4 pr-5 mb-2'>
-                        {steps.map((cstep, index) => index <= 0 && currentEgg === blankEggId ? null : (
+                        {steps.map((cstep, index) => (
                             <div key={cstep.slug}>
                                 <div className='flex items-center gap-2' onClick={() => setStep(index)} style={{ cursor: 'pointer' }}>
                                     <div className={`${index < step+1 ? 'border-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF343C] to-[#F06F53] text-brand' : 'border-[#ffffff20] text-[#ffffff20]'} border-[2px] rounded-full p-1 w-8 h-8 text-sm font-bold shadow-md hover:shadow-lg items-center text-center`}>
