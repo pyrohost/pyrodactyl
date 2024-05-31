@@ -22,11 +22,14 @@ import getServerBackups from '@/api/swr/getServerBackups';
 import createServerBackup from '@/api/server/backups/createServerBackup';
 import getServerStartup from '@/api/swr/getServerStartup';
 import deleteFiles from '@/api/server/files/deleteFiles';
-
-import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
+
+import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
+import useFlash from '@/plugins/useFlash';
 
 interface Egg {
     object: string;
@@ -75,18 +78,18 @@ const hidden_nest_prefix = '!'; // Hardcoded
 const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
 
 const ShellContainer = () => {
+    const { addFlash, clearFlashes, clearAndAddHttpError } = useFlash();
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest[]>();
     const eggs = nests?.reduce((eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data], [] as Egg[]);
     const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
+    const originalEgg = currentEgg;
     const currentEggName = nests && nests.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const { data: backups } = getServerBackups();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const selectedFiles = ServerContext.useStoreState((state) => state.files.selectedFiles);
-    const setSelectedFiles = ServerContext.useStoreActions((actions) => actions.files.setSelectedFiles);
-    const selectedFilesLength = ServerContext.useStoreState((state) => state.files.selectedFiles.length);
-    const { data: files, mutate } = useFileManagerSwr();
+    const { data: files, mutate: filemutate } = useFileManagerSwr();
+    const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -106,10 +109,25 @@ const ShellContainer = () => {
         isEqual,
     );
 
-    const { data } = getServerStartup(uuid, {
+    let { data, mutate } = getServerStartup(uuid, {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
     });
+
+    useEffect(() => {
+        mutate();
+        filemutate();
+    }, []);
+
+    useDeepCompareEffect(() => {
+        if (!data) return;
+
+        setServerFromState((s) => ({
+            ...s,
+            invocation: data.invocation,
+            variables: data.variables,
+        }));
+    }, [data]);
 
     const ITEMS_PER_PAGE = 6;
     const [currentPage, setCurrentPage] = useState(1);
@@ -132,8 +150,6 @@ const ShellContainer = () => {
     const [selectedEgg, setSelectedEgg] = useState<Egg | null>(null);
     const [showFullDescriptions, setShowFullDescriptions] = useState<boolean[]>([]);
 
-    const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
-
     useEffect(() => {
         if (backups) {
             if (backupLimit <= 0 || backups.backupCount >= backupLimit) {
@@ -141,6 +157,19 @@ const ShellContainer = () => {
             }
         }
     }, [backups, backupLimit]);
+
+    const restoreOriginalEgg = () => {
+        if (!nests || !eggs) return;
+        clearFlashes('shell');
+        const originalNestId = nests?.findIndex((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === originalEgg)) + 1 || 0;
+        const originalEggId = eggs?.findIndex((eo) => eo.attributes.uuid === originalEgg) + 1 || 0;
+
+        setSelectedEggImage(uuid, originalEggId, originalNestId)
+            .catch((error) => {
+                console.error(error);
+                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            });
+    };
 
     const reinstall = () => {
         clearFlashes('shell');
@@ -158,6 +187,27 @@ const ShellContainer = () => {
             })
     };
 
+    const wipeFiles = async () => {
+        filemutate();
+        const selectedFiles = files?.map((file) => file.name) || [];
+        if (selectedFiles.length === 0) return;
+
+        clearFlashes('shell');
+        await deleteFiles(uuid, directory, selectedFiles)
+            .then(() => {
+                addFlash({
+                    key: 'shell',
+                    type: 'success',
+                    message: 'Your servers egg has changed and the reinstallation process has begun.',
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            })
+        return;
+    };
+
     const handleNestSelect = (nest: Nest) => {
         setSelectedNest(nest);
         setSelectedEgg(null);
@@ -172,48 +222,58 @@ const ShellContainer = () => {
                 });
         }
         if (shouldWipe) {
-            await setSelectedFiles(
-                selectedFilesLength === (files?.length === 0 ? -1 : files?.length)
-                    ? []
-                    : files?.map((file) => file.name) || [],
-            );
-
-            await deleteFiles(uuid, directory, selectedFiles)
-                .then(async () => {
-                    await mutate((files) => files!.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
-                    setSelectedFiles([]);
-                })
-                .catch(async (error) => {
-                    await mutate();
-                    console.error(error);
-                    addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
-                });
+            wipeFiles();
         }
+
+        if (!data) return;
+        
+        const image = Object.values(data.dockerImages)[0] as string;
+
+        setSelectedDockerImage(uuid, image)
+            .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
+            .catch((error) => {
+                console.error(error);
+            })
 
         reinstall();
         setModalVisible(false);
         
     };
 
-    const handleEggSelect = (egg: Egg) => {
-        if (!eggs || !nests) { return; }
+    const handleEggSelect = async (egg: Egg) => {
+        if (!eggs || !nests) return;
         setSelectedEgg(egg);
 
         const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
         const eggId = eggs?.findIndex((eo) => eo.attributes.uuid === egg?.attributes.uuid) + 1 || 0;
 
-        console.log(nestId, eggId);
         setSelectedEggImage(uuid, eggId, nestId)
             .catch((error) => {
                 console.error(error);
                 addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            })
+            .then(async () => { 
+                await mutate();
+                updateVarsData();
+                
+                setTimeout(() => setStep(2), 500);
             });
-        updateVarsData();
-        setTimeout(() => {
-            setStep(2);
-        }, 500);
     };
-    
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            event.returnValue = '';
+            restoreOriginalEgg();
+        };
+        
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     const toggleDescriptionVisibility = (index: number) => {
         setShowFullDescriptions((prev) => {
             const newVisibility = [...prev];
@@ -245,6 +305,8 @@ const ShellContainer = () => {
         );
     };
 
+    addFlash({ key: 'shell', type: 'error', message: 'test' });
+
     return (
         <ServerContentBlock title='Shell'>
             <FlashMessageRender byKey='Shell' />
@@ -264,6 +326,7 @@ const ShellContainer = () => {
                 Your server will be stopped and some files may be deleted or modified during this process, are you sure
                 you wish to continue?
             </Dialog.Confirm>
+            
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
                     <div className='w-full h-full'>
@@ -288,17 +351,17 @@ const ShellContainer = () => {
             
             {visible && (
             <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
-                <div className='w-full h-full'>
-                    <div className='flex items-center justify-between p-4 pr-5 mb-2'>
+                <div className='max-[480px]:flex max-[480px]:flex-col max-[480px]:items-center w-full h-full'>
+                    <div className='flex max-[480px]:flex-col max-[480px]:gap-4 min-[480px]:items-center justify-between p-4 pr-5 mb-2'>
                         {steps.map((cstep, index) => (
-                            <div key={cstep.slug}>
+                            <div key={cstep.slug} className={`${index !== steps.length - 1 ? 'w-full' : 'min-[480px]:w-[420px] min-[480px]:ml-4 min-[480px]:mr-4'} flex items-center gap-4`}>
                                 <div className='flex items-center gap-2' onClick={() => setStep(index)} style={{ cursor: 'pointer' }}>
                                     <div className={`${index < step+1 ? 'border-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF343C] to-[#F06F53] text-brand' : 'border-[#ffffff20] text-[#ffffff20]'} border-[2px] rounded-full p-1 w-8 h-8 text-sm font-bold shadow-md hover:shadow-lg items-center text-center`}>
                                         {index + 1}
                                     </div>
-                                    <h2  className={`${index < step+1 ? 'text-white' : 'text-[#ffffff20]'} text-sm font-bold`}>{cstep.title}</h2>
-                                    {index !== steps.length - 1 && <div className={`${index < step ? 'border-brand' : 'border-[#ffffff12]'} border-t-2 border-dashed ml-4 w-[25svw]`}></div>}
+                                    <h2  className={`${index < step+1 ? 'text-white' : 'text-[#ffffff20]'} text-sm font-bold min-[480px]:whitespace-nowrap`}>{cstep.title}</h2>
                                 </div>
+                                {index !== steps.length - 1 && <div className={`${index < step ? 'border-brand' : 'border-[#ffffff12]'} border-t-2 border-dashed ml-4 w-[75%] hidden min-[480px]:block`}></div>}
                             </div>
                         ))}
                     </div>
@@ -364,20 +427,36 @@ const ShellContainer = () => {
                             <div className='flex flex-col gap-4'>
                                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4'>
                                     <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
-                                        <div className='flex flex-col'>
-                                            <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
-                                            <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>Would you like to create a backup before continuing? Some data may be modified for removed during the process.</label>
-                                        </div>
-                                        <Switch 
-                                            name='backup'
-                                            defaultChecked={shouldBackup}
-                                            onCheckedChange={() => setShouldBackup(!shouldBackup)} 
-                                        />
+                                        {backups && ( backupLimit <= 0 || backups.backupCount < backupLimit ) ? (
+                                            <>
+                                                <div className='flex flex-col'>
+                                                    <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
+                                                    <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>Would you like to create a backup before continuing? Some data may be modified for removed during the process.</label>
+                                                </div>
+                                                <Switch 
+                                                    name='backup'
+                                                    defaultChecked={shouldBackup}
+                                                    onCheckedChange={() => setShouldBackup(!shouldBackup)} 
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className='flex flex-col'>
+                                                    <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Backups</label>
+                                                    <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>You have reached the backup limit for this server. If you wish to create a backup cancel now and delete one or more existing backups</label>
+                                                </div>
+                                                <Switch 
+                                                    name='backup'
+                                                    disabled
+                                                />
+                                            </>
+                                        )}
+                                        
                                     </div>
                                     <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
                                         <div className='flex flex-col'>
-                                            <label htmlFor='backup' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
-                                            <label htmlFor='backup' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
+                                            <label htmlFor='wipe' className='text-neutral-300 text-md font-bold'>Wipe Data</label>
+                                            <label htmlFor='wipe' className='text-neutral-500 text-sm font-semibold'>In some cases you might want to completely wipe  your server like if you are changing to a different game.</label>
                                         </div>
                                         <Switch
                                             name='wipe'

@@ -108,7 +108,7 @@ const StartupContainer = () => {
                     settings as they can cause your server to become inoperable.
                 </h2>
             </MainPageHeader>
-            <div className={`grid lg:grid-cols-2 gap-8`}>
+            <div className={`grid lg:grid-cols-3 gap-8`}>
                 <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
                     <CopyOnClick text={data.invocation}>
                         <div className={`px-1 py-2`}>

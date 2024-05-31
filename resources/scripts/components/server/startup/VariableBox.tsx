@@ -71,7 +71,7 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <div className={`flex flex-col gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}>
+        <div className={`flex flex-col justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
                 <div className={`flex items-center gap-2`}>
@@ -104,12 +104,12 @@ const VariableBox = ({ variable }: Props) => {
                     </>
                 ) : (
                     <>
-                        {selectValues.length > 0 ? (
+                        {selectValues.length > 0 && variable.serverValue ? (
                             <>
                                 <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                     <DropdownMenuTrigger asChild>
                                         <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!canEdit || !variable.isEditable}>
-                                            {variable.serverValue.replace('in:', '')}
+                                            {variable.serverValue}
                                             {dropDownOpen ? <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} /> : <HugeIconsArrowDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />}
                                         </button>
                                     </DropdownMenuTrigger>
