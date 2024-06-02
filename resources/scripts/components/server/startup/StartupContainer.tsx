@@ -4,13 +4,13 @@ import isEqual from 'react-fast-compare';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import Pagination from '@/components/elements/Pagination';
 import { ServerError } from '@/components/elements/ScreenBlock';
 import Select from '@/components/elements/Select';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import VariableBox from '@/components/server/startup/VariableBox';
-import Pagination from '@/components/elements/Pagination';
 
 import { httpErrorToHuman } from '@/api/http';
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
@@ -51,7 +51,9 @@ const StartupContainer = () => {
     const ITEMS_PER_PAGE = 6;
     const [currentPage, setCurrentPage] = useState(1);
 
-    const paginatedVariables = data ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE) : [];
+    const paginatedVariables = data
+        ? data.variables.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+        : [];
 
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
     const isCustomImage =
@@ -209,7 +211,7 @@ const StartupContainer = () => {
                                 total: data.variables.length,
                                 count: data.variables.length,
                                 perPage: ITEMS_PER_PAGE,
-                            }
+                            },
                         }}
                         onPageSelect={setCurrentPage}
                     >

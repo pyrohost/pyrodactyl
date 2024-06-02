@@ -13,8 +13,8 @@ import FileManagerContainer from '@/components/server/files/FileManagerContainer
 import NetworkContainer from '@/components/server/network/NetworkContainer';
 import ScheduleContainer from '@/components/server/schedules/ScheduleContainer';
 import SettingsContainer from '@/components/server/settings/SettingsContainer';
-import StartupContainer from '@/components/server/startup/StartupContainer';
 import ShellContainer from '@/components/server/shell/ShellContainer';
+import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
 
 // Each of the router files is already code split out appropriately — so

@@ -1,5 +1,6 @@
 // FIXME: add icons back
 import clsx from 'clsx';
+
 import HugeIconsAlert from '../hugeicons/Alert';
 
 interface AlertProps {

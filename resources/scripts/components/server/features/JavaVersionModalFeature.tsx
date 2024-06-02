@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
-import InputSpinner from '@/components/elements/InputSpinner';
-import Modal from '@/components/elements/Modal';
-import Select from '@/components/elements/Select';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,8 +9,11 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import InputSpinner from '@/components/elements/InputSpinner';
+import Modal from '@/components/elements/Modal';
 import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
 import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import getServerStartup from '@/api/swr/getServerStartup';
@@ -102,23 +100,37 @@ const JavaVersionModalFeature = () => {
                         <InputSpinner visible={!data || isValidating}>
                             <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                 <DropdownMenuTrigger asChild>
-                                    <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!data}>
-                                        {selectedVersion.split(':').pop()?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') || 'Select a version'}
-                                        {dropDownOpen ? <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} /> : <HugeIconsArrowDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />}
+                                    <button
+                                        className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]'
+                                        disabled={!data}
+                                    >
+                                        {selectedVersion
+                                            .split(':')
+                                            .pop()
+                                            ?.split('_')
+                                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                            .join(' ') || 'Select a version'}
+                                        {dropDownOpen ? (
+                                            <HugeIconsArrowUp
+                                                fill={'currentColor'}
+                                                className={`ml-2 w-[16px] h-[16px]`}
+                                            />
+                                        ) : (
+                                            <HugeIconsArrowDown
+                                                fill={'currentColor'}
+                                                className={`ml-2 w-[16px] h-[16px]`}
+                                            />
+                                        )}
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-[99999]' sideOffset={8}>
                                     <DropdownMenuRadioGroup value={selectedVersion} onValueChange={setSelectedVersion}>
-                                    {data && (
-                                        Object.keys(data.dockerImages).map((key) => (
-                                            <DropdownMenuRadioItem
-                                                key={key}
-                                                value={data.dockerImages[key] || ''}
-                                            >
-                                                {key}
-                                            </DropdownMenuRadioItem>
-                                        ))
-                                    )}
+                                        {data &&
+                                            Object.keys(data.dockerImages).map((key) => (
+                                                <DropdownMenuRadioItem key={key} value={data.dockerImages[key] || ''}>
+                                                    {key}
+                                                </DropdownMenuRadioItem>
+                                            ))}
                                     </DropdownMenuRadioGroup>
                                 </DropdownMenuContent>
                             </DropdownMenu>

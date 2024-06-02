@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 import Button from '@/components/elements/Button';
-import HugeIconsArrowRight from './hugeicons/ArrowRight';
-import HugeIconsArrowLeft from './hugeicons/ArrowLeft';
 
 import { PaginatedResult } from '@/api/http';
-import { cn } from '@/lib/utils';
+
+import HugeIconsArrowLeft from './hugeicons/ArrowLeft';
+import HugeIconsArrowRight from './hugeicons/ArrowRight';
 
 interface RenderFuncProps<T> {
     items: T[];
@@ -44,10 +44,19 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
             {children({ items, isFirstPage, isLastPage })}
             {pages.length > 1 && (
                 <div className={`flex justify-center mt-4`}>
-                    <div className={`flex justify-center gap-3 p-[4px] w-fit bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#00000017] rounded-md`}>
-                        <Block isSecondary color={'primary'} onClick={() => (pagination.currentPage > 1 && pagination.totalPages > 1) && (onPageSelect(pagination.currentPage - 1))}
+                    <div
+                        className={`flex justify-center gap-3 p-[4px] w-fit bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#00000017] rounded-md`}
+                    >
+                        <Block
+                            isSecondary
+                            color={'primary'}
+                            onClick={() =>
+                                pagination.currentPage > 1 &&
+                                pagination.totalPages > 1 &&
+                                onPageSelect(pagination.currentPage - 1)
+                            }
                         >
-                            <HugeIconsArrowLeft 
+                            <HugeIconsArrowLeft
                                 fill={'currentColor'}
                                 className={`${pagination.currentPage === 1 ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
                             />
@@ -59,11 +68,22 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
                                 key={`block_page_${i}`}
                                 onClick={() => onPageSelect(i)}
                             >
-                                {i === pagination.currentPage ? <span className='text-neutral-500 cursor-not-allowed'>{i}</span> : i}
+                                {i === pagination.currentPage ? (
+                                    <span className='text-neutral-500 cursor-not-allowed'>{i}</span>
+                                ) : (
+                                    i
+                                )}
                             </Block>
                         ))}
-                        <Block isSecondary color={'primary'} onClick={() => (pagination.currentPage < pagination.totalPages) && (onPageSelect(pagination.currentPage + 1))}>
-                            <HugeIconsArrowRight 
+                        <Block
+                            isSecondary
+                            color={'primary'}
+                            onClick={() =>
+                                pagination.currentPage < pagination.totalPages &&
+                                onPageSelect(pagination.currentPage + 1)
+                            }
+                        >
+                            <HugeIconsArrowRight
                                 fill={'currentColor'}
                                 className={`${pagination.currentPage === pagination.totalPages ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
                             />

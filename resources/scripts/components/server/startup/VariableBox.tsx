@@ -3,8 +3,6 @@ import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import InputSpinner from '@/components/elements/InputSpinner';
-import { Switch } from '@/components/elements/SwitchV2';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,10 +10,12 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import InputSpinner from '@/components/elements/InputSpinner';
+import { Switch } from '@/components/elements/SwitchV2';
 import { Input } from '@/components/elements/TextInput';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
 import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
+import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -71,7 +71,9 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <div className={`flex flex-col justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}>
+        <div
+            className={`flex flex-col justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}
+        >
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
                 <div className={`flex items-center gap-2`}>
@@ -108,13 +110,29 @@ const VariableBox = ({ variable }: Props) => {
                             <>
                                 <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]' disabled={!canEdit || !variable.isEditable}>
+                                        <button
+                                            className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]'
+                                            disabled={!canEdit || !variable.isEditable}
+                                        >
                                             {variable.serverValue}
-                                            {dropDownOpen ? <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} /> : <HugeIconsArrowDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />}
+                                            {dropDownOpen ? (
+                                                <HugeIconsArrowUp
+                                                    fill={'currentColor'}
+                                                    className={`ml-2 w-[16px] h-[16px]`}
+                                                />
+                                            ) : (
+                                                <HugeIconsArrowDown
+                                                    fill={'currentColor'}
+                                                    className={`ml-2 w-[16px] h-[16px]`}
+                                                />
+                                            )}
                                         </button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className='z-[99999]' sideOffset={8}>
-                                        <DropdownMenuRadioGroup value={variable.serverValue} onValueChange={setVariableValue}>
+                                        <DropdownMenuRadioGroup
+                                            value={variable.serverValue}
+                                            onValueChange={setVariableValue}
+                                        >
                                             {selectValues.map((selectValue) => (
                                                 <DropdownMenuRadioItem
                                                     key={selectValue.replace('in:', '')}

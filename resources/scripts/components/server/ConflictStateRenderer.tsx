@@ -1,6 +1,7 @@
 import ScreenBlock from '@/components/elements/ScreenBlock';
 
 import { ServerContext } from '@/state/server';
+
 import Spinner from '../elements/Spinner';
 
 export default () => {
@@ -15,7 +16,9 @@ export default () => {
             <Spinner size={'large'} />
             <div className='flex flex-col ml-4'>
                 <label className='text-neutral-100 text-lg font-bold'>Server is Installing</label>
-                <label className='text-neutral-500 text-md font-semibold'>Your server should be ready soon, for more details visit the home page.</label>
+                <label className='text-neutral-500 text-md font-semibold'>
+                    Your server should be ready soon, for more details visit the home page.
+                </label>
             </div>
         </div>
     ) : status === 'suspended' ? (
