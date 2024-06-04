@@ -191,11 +191,10 @@ const SoftwareContainer = () => {
         const selectedFiles = files?.map((file) => file.name) || [];
         if (selectedFiles.length === 0) return;
 
-        await deleteFiles(uuid, directory, selectedFiles)
-            .catch((error) => {
-                console.error(error);
-                toast.error(httpErrorToHuman(error));
-            });
+        await deleteFiles(uuid, directory, selectedFiles).catch((error) => {
+            console.error(error);
+            toast.error(httpErrorToHuman(error));
+        });
         return;
     };
 
@@ -295,7 +294,10 @@ const SoftwareContainer = () => {
     return (
         <ServerContentBlock title='Software'>
             <MainPageHeader direction='column' title='Software'>
-                <h2 className='text-sm'>Welcome to the software management page. Here you can change the game or software that is running on your server.</h2>
+                <h2 className='text-sm'>
+                    Welcome to the software management page. Here you can change the game or software that is running on
+                    your server.
+                </h2>
             </MainPageHeader>
 
             <Dialog.Confirm
@@ -317,11 +319,12 @@ const SoftwareContainer = () => {
                                 <HugeIconsEggs fill='currentColor' />
                                 <div className='flex flex-col'>
                                     <h1 className='text-2xl'>Current Egg</h1>
-                                    {currentEggName && (currentEggName?.includes(blank_egg_prefix) ? (
-                                        <p className='text-neutral-300 text-sm'>Please select a egg</p>
-                                    ) : (
-                                        <p className='text-neutral-300 text-sm'>{currentEggName}</p>
-                                    ))}
+                                    {currentEggName &&
+                                        (currentEggName?.includes(blank_egg_prefix) ? (
+                                            <p className='text-neutral-300 text-sm'>Please select a egg</p>
+                                        ) : (
+                                            <p className='text-neutral-300 text-sm'>{currentEggName}</p>
+                                        ))}
                                 </div>
                             </div>
                             <button
@@ -439,7 +442,7 @@ const SoftwareContainer = () => {
                                 <div className='flex flex-col gap-4'>
                                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4'>
                                         <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
-                                            {backups && (backupLimit > 0 && backups.backupCount < backupLimit) ? (
+                                            {backups && backupLimit > 0 && backups.backupCount < backupLimit ? (
                                                 <>
                                                     <div className='flex flex-col'>
                                                         <label

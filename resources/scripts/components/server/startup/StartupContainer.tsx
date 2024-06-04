@@ -2,6 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import CopyOnClick from '@/components/elements/CopyOnClick';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenu';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Pagination from '@/components/elements/Pagination';
@@ -18,13 +25,6 @@ import getServerStartup from '@/api/swr/getServerStartup';
 import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
 import useFlash from '@/plugins/useFlash';
 
 const StartupContainer = () => {

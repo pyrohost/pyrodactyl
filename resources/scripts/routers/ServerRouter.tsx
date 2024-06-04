@@ -80,7 +80,7 @@ export default () => {
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
     const [nests, setNests] = useState<Nest[]>();
-    const egg_name = 
+    const egg_name =
         nests &&
         nests
             .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
@@ -272,7 +272,7 @@ export default () => {
                                 <HugeIconsHome fill='currentColor' />
                                 <p>Home</p>
                             </NavLink>
-                            {egg_name && (!(egg_name?.includes(blank_egg_prefix)) && (
+                            {egg_name && !egg_name?.includes(blank_egg_prefix) && (
                                 <>
                                     <Can action={'file.*'} matchAny>
                                         <NavLink
@@ -361,7 +361,7 @@ export default () => {
                                         </NavLink>
                                     </Can>
                                 </>
-                            ))}
+                            )}
                             <Can action={'startup.software'}>
                                 <NavLink
                                     className='flex flex-row items-center'
