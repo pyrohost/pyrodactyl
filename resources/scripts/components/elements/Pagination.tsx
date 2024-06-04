@@ -4,6 +4,9 @@ import Button from '@/components/elements/Button';
 
 import { PaginatedResult } from '@/api/http';
 
+import HugeIconsArrowLeft from './hugeicons/ArrowLeft';
+import HugeIconsArrowRight from './hugeicons/ArrowRight';
+
 interface RenderFuncProps<T> {
     items: T[];
     isLastPage: boolean;
@@ -40,29 +43,52 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
         <>
             {children({ items, isFirstPage, isLastPage })}
             {pages.length > 1 && (
-                <div className={`mt-4 flex justify-center`}>
-                    {(pages?.[0] ?? 0) > 1 && !isFirstPage && (
-                        <Block isSecondary color={'primary'} onClick={() => onPageSelect(1)}>
-                            {/* <FontAwesomeIcon icon={faAngleDoubleLeft} /> */}
-                            FIXME: Left
-                        </Block>
-                    )}
-                    {pages.map((i) => (
+                <div className={`flex justify-center mt-4`}>
+                    <div
+                        className={`flex justify-center gap-3 p-[4px] w-fit bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#00000017] rounded-md`}
+                    >
                         <Block
-                            isSecondary={pagination.currentPage !== i}
+                            isSecondary
                             color={'primary'}
-                            key={`block_page_${i}`}
-                            onClick={() => onPageSelect(i)}
+                            onClick={() =>
+                                pagination.currentPage > 1 &&
+                                pagination.totalPages > 1 &&
+                                onPageSelect(pagination.currentPage - 1)
+                            }
                         >
-                            {i}
+                            <HugeIconsArrowLeft
+                                fill={'currentColor'}
+                                className={`${pagination.currentPage === 1 ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
+                            />
                         </Block>
-                    ))}
-                    {(pages?.[4] ?? 0) < pagination.totalPages && !isLastPage && (
-                        <Block isSecondary color={'primary'} onClick={() => onPageSelect(pagination.totalPages)}>
-                            {/* <FontAwesomeIcon icon={faAngleDoubleRight} /> */}
-                            FIXME: Right
+                        {pages.map((i) => (
+                            <Block
+                                isSecondary={pagination.currentPage !== i}
+                                color={'primary'}
+                                key={`block_page_${i}`}
+                                onClick={() => onPageSelect(i)}
+                            >
+                                {i === pagination.currentPage ? (
+                                    <span className='text-neutral-500 cursor-not-allowed'>{i}</span>
+                                ) : (
+                                    i
+                                )}
+                            </Block>
+                        ))}
+                        <Block
+                            isSecondary
+                            color={'primary'}
+                            onClick={() =>
+                                pagination.currentPage < pagination.totalPages &&
+                                onPageSelect(pagination.currentPage + 1)
+                            }
+                        >
+                            <HugeIconsArrowRight
+                                fill={'currentColor'}
+                                className={`${pagination.currentPage === pagination.totalPages ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
+                            />
                         </Block>
-                    )}
+                    </div>
                 </div>
             )}
         </>

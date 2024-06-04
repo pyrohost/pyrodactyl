@@ -19,6 +19,12 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 
+
+Route::prefix('/nests')->group(function () {
+    Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
+    Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');
+});
+
 Route::prefix('/account')->middleware(AccountSubject::class)->group(function () {
     Route::prefix('/')->withoutMiddleware(RequireTwoFactorAuthentication::class)->group(function () {
         Route::get('/', [Client\AccountController::class, 'index'])->name('api:client.account');
@@ -138,5 +144,6 @@ Route::group([
         Route::post('/rename', [Client\Servers\SettingsController::class, 'rename']);
         Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall']);
         Route::put('/docker-image', [Client\Servers\SettingsController::class, 'dockerImage']);
+        Route::put('/egg', [Client\Servers\SettingsController::class, 'changeEgg']);
     });
 });

@@ -1,5 +1,5 @@
 import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense, useEffect, useState, useRef } from 'react';
+import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import routes from '@/routers/routes';
@@ -23,6 +23,7 @@ import HugeIconsClock from '@/components/elements/hugeicons/Clock';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
 import HugeIconsConsole from '@/components/elements/hugeicons/Console';
+import HugeIconsController from '@/components/elements/hugeicons/Controller';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
@@ -35,8 +36,34 @@ import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
+import getNests from '@/api/nests/getNests';
 
 import { ServerContext } from '@/state/server';
+
+const blank_egg_prefix = '@';
+
+interface Egg {
+    object: string;
+    attributes: {
+        uuid: string;
+        name: string;
+        description: string;
+    };
+}
+
+interface Nest {
+    object: string;
+    attributes: {
+        id: number;
+        name: string;
+        relationships: {
+            eggs: {
+                object: string;
+                data: Egg[];
+            };
+        };
+    };
+}
 
 export default () => {
     const params = useParams<'id'>();
@@ -51,6 +78,22 @@ export default () => {
     const serverId = ServerContext.useStoreState((state) => state.server.data?.internalId);
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
+    const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
+    const [nests, setNests] = useState<Nest[]>();
+    const egg_name =
+        nests &&
+        nests
+            .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
+            ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id)?.attributes.name;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getNests();
+            setNests(data);
+        };
+
+        fetchData();
+    }, []);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -97,6 +140,7 @@ export default () => {
     const NavigationStartup = useRef(null);
     const NavigationSchedules = useRef(null);
     const NavigationSettings = useRef(null);
+    const NavigationShell = useRef(null);
 
     const calculateTop = (pathname: string) => {
         if (!id) return '0';
@@ -111,22 +155,36 @@ export default () => {
         const ButtonStartup = NavigationStartup.current;
         const ButtonSchedules = NavigationSchedules.current;
         const ButtonSettings = NavigationSettings.current;
+        const ButtonShell = NavigationShell.current;
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
-        const HighlightOffset : number = 8
+        const HighlightOffset: number = 8;
 
-        if (pathname.endsWith(`/server/${id}`) && ButtonHome != null) return (ButtonHome as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/files`) && ButtonFiles != null) return (ButtonFiles as any).offsetTop+HighlightOffset;
-        if (new RegExp(`^/server/${id}/files(/(new|edit).*)?$`).test(pathname) && ButtonFiles != null) return (ButtonFiles as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/databases`) && ButtonDatabases != null) return (ButtonDatabases as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/backups`) && ButtonBackups != null) return (ButtonBackups as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/network`) && ButtonNetworking != null) return (ButtonNetworking as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/users`) && ButtonUsers != null) return (ButtonUsers as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/startup`) && ButtonStartup != null) return (ButtonStartup as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/schedules`) && ButtonSchedules != null) return (ButtonSchedules as any).offsetTop+HighlightOffset;
-        if (new RegExp(`^/server/${id}/schedules/\\d+$`).test(pathname) && ButtonSchedules != null) return (ButtonSchedules as any).offsetTop+HighlightOffset;
-        if (pathname.endsWith(`/server/${id}/settings`) && ButtonSettings != null) return (ButtonSettings as any).offsetTop+HighlightOffset;
+        if (pathname.endsWith(`/server/${id}`) && ButtonHome != null)
+            return (ButtonHome as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/files`) && ButtonFiles != null)
+            return (ButtonFiles as any).offsetTop + HighlightOffset;
+        if (new RegExp(`^/server/${id}/files(/(new|edit).*)?$`).test(pathname) && ButtonFiles != null)
+            return (ButtonFiles as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/databases`) && ButtonDatabases != null)
+            return (ButtonDatabases as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/backups`) && ButtonBackups != null)
+            return (ButtonBackups as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/network`) && ButtonNetworking != null)
+            return (ButtonNetworking as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/users`) && ButtonUsers != null)
+            return (ButtonUsers as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/startup`) && ButtonStartup != null)
+            return (ButtonStartup as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/schedules`) && ButtonSchedules != null)
+            return (ButtonSchedules as any).offsetTop + HighlightOffset;
+        if (new RegExp(`^/server/${id}/schedules/\\d+$`).test(pathname) && ButtonSchedules != null)
+            return (ButtonSchedules as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/settings`) && ButtonSettings != null)
+            return (ButtonSettings as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/shell`) && ButtonShell != null)
+            return (ButtonShell as any).offsetTop + HighlightOffset;
         return '0';
     };
 
@@ -205,56 +263,114 @@ export default () => {
                         <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                         <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                             {/* lord forgive me for hardcoding this */}
-                            <NavLink className='flex flex-row items-center' ref={NavigationHome} to={`/server/${id}`} end>
+                            <NavLink
+                                className='flex flex-row items-center'
+                                ref={NavigationHome}
+                                to={`/server/${id}`}
+                                end
+                            >
                                 <HugeIconsHome fill='currentColor' />
                                 <p>Home</p>
                             </NavLink>
-                            <Can action={'file.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationFiles} to={`/server/${id}/files`}>
-                                    <HugeIconsFolder fill='currentColor' />
-                                    <p>Files</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'database.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationDatabases} to={`/server/${id}/databases`} end>
-                                    <HugeIconsDatabase fill='currentColor' />
-                                    <p>Databases</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'backup.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationBackups} to={`/server/${id}/backups`} end>
-                                    <HugeIconsCloudUp fill='currentColor' />
-                                    <p>Backups</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'allocation.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationNetworking} to={`/server/${id}/network`} end>
-                                    <HugeIconsConnections fill='currentColor' />
-                                    <p>Networking</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'user.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationUsers} to={`/server/${id}/users`} end>
-                                    <HugeIconsPeople fill='currentColor' />
-                                    <p>Users</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'startup.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationStartup} to={`/server/${id}/startup`} end>
-                                    <HugeIconsConsole fill='currentColor' />
-                                    <p>Startup</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={'schedule.*'} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationSchedules} to={`/server/${id}/schedules`}>
-                                    <HugeIconsClock fill='currentColor' />
-                                    <p>Schedules</p>
-                                </NavLink>
-                            </Can>
-                            <Can action={['settings.*', 'file.sftp']} matchAny>
-                                <NavLink className='flex flex-row items-center' ref={NavigationSettings} to={`/server/${id}/settings`} end>
-                                    <HugeIconsDashboardSettings fill='currentColor' />
-                                    <p>Settings</p>
+                            {egg_name && !egg_name?.includes(blank_egg_prefix) && (
+                                <>
+                                    <Can action={'file.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationFiles}
+                                            to={`/server/${id}/files`}
+                                        >
+                                            <HugeIconsFolder fill='currentColor' />
+                                            <p>Files</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'database.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationDatabases}
+                                            to={`/server/${id}/databases`}
+                                            end
+                                        >
+                                            <HugeIconsDatabase fill='currentColor' />
+                                            <p>Databases</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'backup.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationBackups}
+                                            to={`/server/${id}/backups`}
+                                            end
+                                        >
+                                            <HugeIconsCloudUp fill='currentColor' />
+                                            <p>Backups</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'allocation.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationNetworking}
+                                            to={`/server/${id}/network`}
+                                            end
+                                        >
+                                            <HugeIconsConnections fill='currentColor' />
+                                            <p>Networking</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'user.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationUsers}
+                                            to={`/server/${id}/users`}
+                                            end
+                                        >
+                                            <HugeIconsPeople fill='currentColor' />
+                                            <p>Users</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={['startup.read', 'startup.update', 'startup.docker-image']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationStartup}
+                                            to={`/server/${id}/startup`}
+                                            end
+                                        >
+                                            <HugeIconsConsole fill='currentColor' />
+                                            <p>Startup</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'schedule.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationSchedules}
+                                            to={`/server/${id}/schedules`}
+                                        >
+                                            <HugeIconsClock fill='currentColor' />
+                                            <p>Schedules</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={['settings.*', 'file.sftp']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationSettings}
+                                            to={`/server/${id}/settings`}
+                                            end
+                                        >
+                                            <HugeIconsDashboardSettings fill='currentColor' />
+                                            <p>Settings</p>
+                                        </NavLink>
+                                    </Can>
+                                </>
+                            )}
+                            <Can action={'startup.software'}>
+                                <NavLink
+                                    className='flex flex-row items-center'
+                                    ref={NavigationShell}
+                                    to={`/server/${id}/shell`}
+                                    end
+                                >
+                                    <HugeIconsController fill='currentColor' />
+                                    <p>Software</p>
                                 </NavLink>
                             </Can>
                             {/* {rootAdmin && (

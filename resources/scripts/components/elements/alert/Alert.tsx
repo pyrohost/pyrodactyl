@@ -1,6 +1,8 @@
 // FIXME: add icons back
 import clsx from 'clsx';
 
+import HugeIconsAlert from '../hugeicons/Alert';
+
 interface AlertProps {
     type: 'warning' | 'danger';
     className?: string;
@@ -23,8 +25,7 @@ export default ({ type, className, children }: AlertProps) => {
                 // <ShieldExclamationIcon className={'w-6 h-6 text-red-400 mr-2'} />
                 <div>FIXME: ShieldExclamationIcon</div>
             ) : (
-                // <ExclamationIcon className={'w-6 h-6 text-yellow-500 mr-2'} />
-                <div>FIXME: ExclamationIcon</div>
+                <HugeIconsAlert fill='currentColor' className='pl-2 mr-3 text-yellow-500' />
             )}
             {children}
         </div>

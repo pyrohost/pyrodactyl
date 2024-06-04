@@ -13,6 +13,7 @@ import FileManagerContainer from '@/components/server/files/FileManagerContainer
 import NetworkContainer from '@/components/server/network/NetworkContainer';
 import ScheduleContainer from '@/components/server/schedules/ScheduleContainer';
 import SettingsContainer from '@/components/server/settings/SettingsContainer';
+import ShellContainer from '@/components/server/shell/ShellContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
 
@@ -146,7 +147,7 @@ export default {
         {
             route: 'startup/*',
             path: 'startup',
-            permission: 'startup.*',
+            permission: ['startup.read', 'startup.update', 'startup.docker-image'],
             name: 'Startup',
             component: StartupContainer,
         },
@@ -156,6 +157,13 @@ export default {
             permission: ['settings.*', 'file.sftp'],
             name: 'Settings',
             component: SettingsContainer,
+        },
+        {
+            route: 'shell/*',
+            path: 'shell',
+            permission: 'startup.software',
+            name: 'Software',
+            component: ShellContainer,
         },
         {
             route: 'activity/*',
