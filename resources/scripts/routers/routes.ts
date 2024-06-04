@@ -147,7 +147,7 @@ export default {
         {
             route: 'startup/*',
             path: 'startup',
-            permission: 'startup.*',
+            permission: ['startup.read', 'startup.update', 'startup.docker-image'],
             name: 'Startup',
             component: StartupContainer,
         },
@@ -161,8 +161,8 @@ export default {
         {
             route: 'shell/*',
             path: 'shell',
-            permission: 'settings.*', // FIX ME: Add permission
-            name: 'Web Console',
+            permission: 'startup.software',
+            name: 'Software',
             component: ShellContainer,
         },
         {

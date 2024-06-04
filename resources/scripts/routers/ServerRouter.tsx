@@ -36,10 +36,35 @@ import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
+import getNests from '@/api/nests/getNests';
 
 import { ServerContext } from '@/state/server';
 
-const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
+const blank_egg_prefix = '@';
+
+interface Egg {
+    object: string;
+    attributes: {
+        uuid: string;
+        name: string;
+        description: string;
+    };
+}
+
+interface Nest {
+    object: string;
+    attributes: {
+        id: number;
+        name: string;
+        relationships: {
+            eggs: {
+                object: string;
+                data: Egg[];
+            };
+        };
+    };
+}
+
 export default () => {
     const params = useParams<'id'>();
     const location = useLocation();
@@ -54,6 +79,21 @@ export default () => {
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
+    const [nests, setNests] = useState<Nest[]>();
+    const egg_name = 
+        nests &&
+        nests
+            .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
+            ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id)?.attributes.name;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getNests();
+            setNests(data);
+        };
+
+        fetchData();
+    }, []);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -232,7 +272,7 @@ export default () => {
                                 <HugeIconsHome fill='currentColor' />
                                 <p>Home</p>
                             </NavLink>
-                            {egg_id !== blankEggId && (
+                            {egg_name && (!(egg_name?.includes(blank_egg_prefix)) && (
                                 <>
                                     <Can action={'file.*'} matchAny>
                                         <NavLink
@@ -288,7 +328,7 @@ export default () => {
                                             <p>Users</p>
                                         </NavLink>
                                     </Can>
-                                    <Can action={'startup.*'} matchAny>
+                                    <Can action={['startup.read', 'startup.update', 'startup.docker-image']} matchAny>
                                         <NavLink
                                             className='flex flex-row items-center'
                                             ref={NavigationStartup}
@@ -321,8 +361,8 @@ export default () => {
                                         </NavLink>
                                     </Can>
                                 </>
-                            )}
-                            <Can action={'startup.egg'} matchAny>
+                            ))}
+                            <Can action={'startup.software'}>
                                 <NavLink
                                     className='flex flex-row items-center'
                                     ref={NavigationShell}

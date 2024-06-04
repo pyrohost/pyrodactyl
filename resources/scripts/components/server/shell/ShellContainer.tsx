@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
-import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/ButtonV2';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Pagination from '@/components/elements/Pagination';
@@ -26,7 +25,6 @@ import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
-import useFlash from '@/plugins/useFlash';
 
 interface Egg {
     object: string;
@@ -71,11 +69,10 @@ const steps = [
         title: 'Options & Variables',
     },
 ];
-const hidden_nest_prefix = '!'; // Hardcoded
-const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
+const hidden_nest_prefix = '!';
+const blank_egg_prefix = '@';
 
-const ShellContainer = () => {
-    const { addFlash, clearFlashes } = useFlash();
+const SoftwareContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest[]>();
     const eggs = nests?.reduce(
@@ -166,7 +163,6 @@ const ShellContainer = () => {
 
     const restoreOriginalEgg = () => {
         if (!nests || !eggs) return;
-        clearFlashes('shell');
         const originalNestId =
             nests?.findIndex((nest) =>
                 nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === originalEgg),
@@ -175,23 +171,18 @@ const ShellContainer = () => {
 
         setSelectedEggImage(uuid, originalEggId, originalNestId).catch((error) => {
             console.error(error);
-            addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+            toast.error(httpErrorToHuman(error));
         });
     };
 
     const reinstall = () => {
-        clearFlashes('shell');
         reinstallServer(uuid)
             .then(() => {
-                addFlash({
-                    key: 'shell',
-                    type: 'success',
-                    message: 'Your servers egg has changed and the reinstallation process has begun.',
-                });
+                toast.success('Server has been reinstalled successfully.');
             })
             .catch((error) => {
                 console.error(error);
-                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                toast.error(httpErrorToHuman(error));
             });
     };
 
@@ -200,18 +191,10 @@ const ShellContainer = () => {
         const selectedFiles = files?.map((file) => file.name) || [];
         if (selectedFiles.length === 0) return;
 
-        clearFlashes('shell');
         await deleteFiles(uuid, directory, selectedFiles)
-            .then(() => {
-                addFlash({
-                    key: 'shell',
-                    type: 'success',
-                    message: 'Your servers egg has changed and the reinstallation process has begun.',
-                });
-            })
             .catch((error) => {
                 console.error(error);
-                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                toast.error(httpErrorToHuman(error));
             });
         return;
     };
@@ -225,10 +208,11 @@ const ShellContainer = () => {
     const confirmSelection = async () => {
         if (shouldBackup) {
             await createServerBackup(uuid, {
-                name: `${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`,
+                name: `${currentEggName} -> ${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`,
                 isLocked: false,
             }).catch((error) => {
                 toast.error(httpErrorToHuman(error));
+                return;
             });
         }
         if (shouldWipe) {
@@ -249,7 +233,7 @@ const ShellContainer = () => {
         setSelectedEggImage(uuid, eggId, nestId)
             .catch((error) => {
                 console.error(error);
-                addFlash({ key: 'shell', type: 'error', message: httpErrorToHuman(error) });
+                toast.error(httpErrorToHuman(error));
             })
             .then(async () => {
                 await mutate();
@@ -308,13 +292,10 @@ const ShellContainer = () => {
         );
     };
 
-    addFlash({ key: 'shell', type: 'error', message: 'test' });
-
     return (
-        <ServerContentBlock title='Shell'>
-            <FlashMessageRender byKey='Shell' />
-            <MainPageHeader direction='column' title='Shell'>
-                <h2 className='text-sm'>The shell is a powerful tool that allows you to edit your server egg.</h2>
+        <ServerContentBlock title='Software'>
+            <MainPageHeader direction='column' title='Software'>
+                <h2 className='text-sm'>Welcome to the software management page. Here you can change the game or software that is running on your server.</h2>
             </MainPageHeader>
 
             <Dialog.Confirm
@@ -336,7 +317,11 @@ const ShellContainer = () => {
                                 <HugeIconsEggs fill='currentColor' />
                                 <div className='flex flex-col'>
                                     <h1 className='text-2xl'>Current Egg</h1>
-                                    {currentEggName}
+                                    {currentEggName && (currentEggName?.includes(blank_egg_prefix) ? (
+                                        <p className='text-neutral-300 text-sm'>Please select a egg</p>
+                                    ) : (
+                                        <p className='text-neutral-300 text-sm'>{currentEggName}</p>
+                                    ))}
                                 </div>
                             </div>
                             <button
@@ -450,11 +435,11 @@ const ShellContainer = () => {
                                     </div>
                                 ))}
 
-                            {(step == 2 && selectedEgg && currentEgg !== blankEggId && (
+                            {(step == 2 && selectedEgg && !currentEggName?.includes(blank_egg_prefix) && (
                                 <div className='flex flex-col gap-4'>
                                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4'>
                                         <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
-                                            {backups && (backupLimit <= 0 || backups.backupCount < backupLimit) ? (
+                                            {backups && (backupLimit > 0 && backups.backupCount < backupLimit) ? (
                                                 <>
                                                     <div className='flex flex-col'>
                                                         <label
@@ -552,7 +537,7 @@ const ShellContainer = () => {
                                     <Button onClick={() => setModalVisible(true)}>Confirm</Button>
                                 </div>
                             )) ||
-                                (step == 2 && currentEgg !== blankEggId && (
+                                (step == 2 && !currentEggName?.includes(blank_egg_prefix) && (
                                     <div className='flex items-center justify-center h-[63svh]'>
                                         <p className='text-neutral-300 '>Please select a egg first</p>
                                     </div>
@@ -583,4 +568,4 @@ const ShellContainer = () => {
     );
 };
 
-export default ShellContainer;
+export default SoftwareContainer;

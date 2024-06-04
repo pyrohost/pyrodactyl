@@ -95,6 +95,17 @@ class SettingsController extends ClientApiController
     }
 
     /**
+     * Reset Startup Command
+     */
+    private function resetStartupCommand(Server $server): JsonResponse
+    {
+        $server->startup = $server->egg->startup;
+        $server->save();
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
     * Changes the egg for a server.
     *
     * @throws \Throwable
@@ -116,6 +127,9 @@ class SettingsController extends ClientApiController
             Activity::event('server:settings.egg')
                 ->property(['original_egg_id' => $originalEggId, 'new_egg_id' => $eggId, 'original_nest_id' => $originalNestId, 'new_nest_id' => $nestId])
                 ->log();
+
+            // Reset the server's startup command
+            $this->resetStartupCommand($server);
         }
     
         return new JsonResponse([], Response::HTTP_NO_CONTENT);

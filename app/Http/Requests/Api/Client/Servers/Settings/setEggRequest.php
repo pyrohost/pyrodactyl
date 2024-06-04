@@ -13,7 +13,7 @@ class SetEggRequest extends ClientApiRequest implements ClientPermissionsRequest
 {
     public function permission(): string
     {
-        return Permission::ACTION_STARTUP_DOCKER_IMAGE;
+        return Permission::ACTION_STARTUP_SOFTWARE;
     }
 
     public function rules(): array
