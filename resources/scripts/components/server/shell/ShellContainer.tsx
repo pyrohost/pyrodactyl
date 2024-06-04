@@ -18,7 +18,6 @@ import getNests from '@/api/nests/getNests';
 import createServerBackup from '@/api/server/backups/createServerBackup';
 import deleteFiles from '@/api/server/files/deleteFiles';
 import reinstallServer from '@/api/server/reinstallServer';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import setSelectedEggImage from '@/api/server/setSelectedEggImage';
 import getServerBackups from '@/api/swr/getServerBackups';
 import getServerStartup from '@/api/swr/getServerStartup';
@@ -76,7 +75,7 @@ const hidden_nest_prefix = '!'; // Hardcoded
 const blankEggId = 'ab151eec-ab55-4de5-a162-e8ce854b3b60'; // Hardcoded change for prod
 
 const ShellContainer = () => {
-    const { addFlash, clearFlashes, clearAndAddHttpError } = useFlash();
+    const { addFlash, clearFlashes } = useFlash();
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest[]>();
     const eggs = nests?.reduce(
@@ -235,16 +234,6 @@ const ShellContainer = () => {
         if (shouldWipe) {
             wipeFiles();
         }
-
-        if (!data) return;
-
-        const image = Object.values(data.dockerImages)[0] as string;
-
-        setSelectedDockerImage(uuid, image)
-            .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
-            .catch((error) => {
-                console.error(error);
-            });
 
         reinstall();
         setModalVisible(false);
