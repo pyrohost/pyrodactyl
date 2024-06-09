@@ -105,7 +105,7 @@ function LoginContainer() {
                     <div className='text-sm mb-6'>
                         New to Pyro?{' '}
                         <a
-                            href='https://pay.pyro.host/register'
+                            href='https://pyro.host/register'
                             target='_blank'
                             className='text-[#fa4e49]'
                             rel='noreferrer'
