@@ -77,22 +77,18 @@ const StartupContainer = () => {
         }));
     }, [data]);
 
-    const updateSelectedDockerImage = useCallback(
-        (v: React.ChangeEvent<HTMLSelectElement>) => {
-            setLoading(true);
-            clearFlashes('startup:image');
+    const updateSelectedDockerImage = (image: string) => {
+        setLoading(true);
+        clearFlashes('startup:image');
 
-            const image = v.currentTarget.value;
-            setSelectedDockerImage(uuid, image)
-                .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
-                .catch((error) => {
-                    console.error(error);
-                    clearAndAddHttpError({ key: 'startup:image', error });
-                })
-                .then(() => setLoading(false));
-        },
-        [uuid],
-    );
+        setSelectedDockerImage(uuid, image)
+            .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:image', error });
+            })
+            .then(() => setLoading(false));
+    }
 
     return !data ? (
         !error || (error && isValidating) ? (
@@ -144,7 +140,7 @@ const StartupContainer = () => {
                                     <DropdownMenuContent className='flex flex-col gap-1 z-[99999]' sideOffset={8}>
                                         <DropdownMenuRadioGroup
                                             value={variables.dockerImage}
-                                            onValueChange={() => updateSelectedDockerImage}
+                                            onValueChange={(value) => updateSelectedDockerImage(value)}
                                         >
                                             {Object.keys(data.dockerImages).map((key) => (
                                                 <DropdownMenuRadioItem
