@@ -3,6 +3,7 @@ import http from '@/api/http';
 interface Egg {
     object: string;
     attributes: {
+        id: number;
         uuid: string;
         name: string;
         description: string;

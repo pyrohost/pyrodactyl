@@ -29,6 +29,7 @@ import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 interface Egg {
     object: string;
     attributes: {
+        id: number;
         uuid: string;
         name: string;
         description: string;
@@ -167,7 +168,7 @@ const SoftwareContainer = () => {
             nests?.findIndex((nest) =>
                 nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === originalEgg),
             ) + 1 || 0;
-        const originalEggId = eggs?.findIndex((eo) => eo.attributes.uuid === originalEgg) + 1 || 0;
+        const originalEggId = eggs?.find((eo) => eo.attributes.uuid === originalEgg)?.attributes.id || 0;
 
         setSelectedEggImage(uuid, originalEggId, originalNestId).catch((error) => {
             console.error(error);
@@ -227,7 +228,7 @@ const SoftwareContainer = () => {
         setSelectedEgg(egg);
 
         const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
-        const eggId = eggs?.findIndex((eo) => eo.attributes.uuid === egg?.attributes.uuid) + 1 || 0;
+        const eggId = eggs?.find((eo) => eo.attributes.uuid === egg?.attributes.uuid)?.attributes.id || 0;
 
         setSelectedEggImage(uuid, eggId, nestId)
             .catch((error) => {
