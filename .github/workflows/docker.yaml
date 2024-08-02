@@ -3,15 +3,16 @@ name: Docker
 on:
   push:
     branches:
-      - develop
-      - 1.0-develop
+      - main
   pull_request:
     branches:
-      - develop
-      - 1.0-develop
+      - main
   release:
     types:
       - published
+
+permissions:
+  packages: write
 
 jobs:
   push:
@@ -26,7 +27,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/pterodactyl/panel
+          images: ghcr.io/pyrohost/panel
           flavor: |
             latest=false
           tags: |
@@ -46,7 +47,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update version
         if: "github.event_name == 'release' && github.event.action == 'published'"
