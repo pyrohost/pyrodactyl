@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class UpgradeCommand extends Command
 {
-    protected const GITHUB_URL = 'https://github.com/pyrohost/panel/';
+    protected const GITHUB_URL = 'https://github.com/pyrohost/pyrodactyl/';
 
     protected $signature = 'p:upgrade
         {--user= : The user that PHP runs under. All files will be owned by this user.}

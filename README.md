@@ -25,9 +25,9 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 ## Running Pyrodactyl
 
 > [!TIP]
-> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/panel/pkgs/container/panel), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
+> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/panel), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
 >
-> If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/panel/blob/main/docker-compose.example.yml).
+> If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml).
 
 ### Prerequisites
 
@@ -42,7 +42,7 @@ Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl doc
 
 Instead of downloading the official panel, follow the steps below to install Pyrodactyl:
 
-1. `git clone https://github.com/pyrohost/panel.git /var/www/pterodactyl`
+1. `git clone https://github.com/pyrohost/pyrodactyl.git /var/www/pterodactyl`
 2. `cd /var/www/pterodactyl`
 3. `npm i`
 4. `npm run ship`
@@ -78,11 +78,11 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 ## Star History
 
-<a href="https://star-history.com/#pyrohost/panel&Date">
+<a href="https://star-history.com/#pyrohost/pyrodactyl&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/panel&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date" />
   </picture>
 </a>
 

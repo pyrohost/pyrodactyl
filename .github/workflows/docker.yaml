@@ -27,7 +27,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/pyrohost/panel
+          images: ghcr.io/pyrohost/pyrodactyl
           flavor: |
             latest=false
           tags: |
