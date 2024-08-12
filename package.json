@@ -15,6 +15,7 @@
         "@codemirror/search": "^6.5.6",
         "@codemirror/state": "^6.4.1",
         "@codemirror/view": "^6.26.3",
+        "@eslint/compat": "^1.1.1",
         "@headlessui/react": "^1.7.18",
         "@preact/signals-react": "^2.0.1",
         "@radix-ui/react-checkbox": "^1.0.4",
@@ -43,6 +44,7 @@
         "events": "^3.3.0",
         "formik": "^2.4.5",
         "framer-motion": "^11.0.28",
+        "globals": "^15.9.0",
         "laravel-vite-plugin": "^1.0.2",
         "million": "^3.0.6",
         "pathe": "^1.1.2",
@@ -100,7 +102,7 @@
         "vite-plugin-manifest-sri": "^0.2.0"
     },
     "scripts": {
-        "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --ext .ts,.tsx --fix",
+        "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --fix",
         "lint:turbo": "turbo lint",
         "dev": "vite",
         "build": "vite build",

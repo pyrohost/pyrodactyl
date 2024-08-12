@@ -10,7 +10,7 @@ export default (description: string, allowedIps: string): Promise<ApiKey & { sec
             .then(({ data }) =>
                 resolve({
                     ...rawDataToApiKey(data.attributes),
-                    // eslint-disable-next-line camelcase
+
                     secretToken: data.meta?.secret_token ?? '',
                 }),
             )

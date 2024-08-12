@@ -80,7 +80,7 @@ export default (uuid: string): Promise<[Server, string[]]> => {
             .then(({ data }) =>
                 resolve([
                     rawDataToServerObject(data),
-                    // eslint-disable-next-line camelcase
+
                     data.meta?.is_server_owner ? ['*'] : data.meta?.user_permissions || [],
                 ]),
             )

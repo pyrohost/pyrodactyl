@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dialog as HDialog } from '@headlessui/react';
 // FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
@@ -63,7 +62,7 @@ export const ModalMask = styled.div`
 
 const Modal: React.FC<ModalProps> = ({ visible, dismissable = true, showSpinnerOverlay, onDismissed, children }) => {
     const isDismissable = useMemo(() => {
-        return (dismissable || true) && !(showSpinnerOverlay || false);
+        return dismissable && !showSpinnerOverlay;
     }, [dismissable, showSpinnerOverlay]);
 
     const container = useRef<HTMLDivElement>(null);

@@ -1,8 +1,6 @@
 // I know it's deprecated! We need to fix it!!!
-// eslint-disable-next-line react/no-deprecated
 import * as Sentry from '@sentry/react';
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from '@/components/App';
 
@@ -13,4 +11,10 @@ Sentry.init({
     integrations: [],
 });
 
-render(<App />, document.getElementById('app'));
+const container = document.getElementById('app');
+if (container) {
+    const root = createRoot(container);
+    root.render(<App />);
+} else {
+    console.error('Failed to find the root element');
+}
