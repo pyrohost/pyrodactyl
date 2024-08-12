@@ -14,7 +14,6 @@ import {
 } from '@/components/elements/DropdownMenu';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
@@ -89,7 +88,7 @@ export default () => {
                 />
                 <div className='relative flex flex-row items-center justify-between h-8'>
                     <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                        <Logo />
+                        Panel
                     </NavLink>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{ config('app.name', 'pyro.host') }} - @yield('title')</title>
+        <title>{{ config('app.name', 'pyrodactyl') }} - @yield('title')</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <meta name="_token" content="{{ csrf_token() }}">
 
@@ -161,7 +161,7 @@
                     <strong><i class="fa fa-fw {{ $appIsGit ? 'fa-git-square' : 'fa-code-fork' }}"></i></strong> {{ $appVersion }}<br />
                     <strong><i class="fa fa-fw fa-clock-o"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s
                 </div>
-                Copyright &copy; 2015 - {{ date('Y') }} <a href="https://pyro.host">Pyro Inc.</a> and <a href="https://pterodactyl.io/">parent collaborators</a>.
+                Copyright &copy; 2015 - {{ date('Y') }} <a href="https://pyro.host">Pyro Host Inc.</a> and <a href="https://pterodactyl.io/">parent collaborators</a>.
             </footer>
         </div>
         @section('footer-scripts')

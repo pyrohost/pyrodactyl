@@ -21,7 +21,6 @@
                 <h3 class="box-title">System Information</h3>
             </div>
             <div class="box-body">
-                <!-- TODO: in config\pterodactyl.php we need to update the CDN URL and add version checking again. -->
                     You are running pyrodactyl panel version <code>{{ config('app.version') }}</code>.
             </div>
         </div>

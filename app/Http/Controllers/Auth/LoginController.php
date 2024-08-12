@@ -46,10 +46,6 @@ class LoginController extends AbstractLoginController
             $this->sendLockoutResponse($request);
         }
 
-        if (!$this->validateLoginIntegrity()) {
-            $this->sendFailedLoginResponse($request);
-        }
-
         try {
             $username = $request->input('user');
 

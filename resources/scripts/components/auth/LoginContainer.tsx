@@ -87,32 +87,8 @@ function LoginContainer() {
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex items-start h-12 w-fit mb-4'>
-                        {/* temp src */}
-                        <img
-                            className='w-full max-w-full h-full'
-                            loading='lazy'
-                            decoding='async'
-                            alt=''
-                            aria-hidden
-                            style={{
-                                color: 'transparent',
-                            }}
-                            src='https://i.imgur.com/Hbum4fc.png'
-                        />
-                    </div>
+                    <div className='flex items-start h-12 w-fit mb-4'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    <div className='text-sm mb-6'>
-                        New to Pyro?{' '}
-                        <a
-                            href='https://pyro.host/register'
-                            target='_blank'
-                            className='text-[#fa4e49]'
-                            rel='noreferrer'
-                        >
-                            Sign up
-                        </a>
-                    </div>
                     <Field
                         id='usernameOrEmail'
                         type={'text'}

@@ -17,8 +17,8 @@ class ServerInstalled
     {
         /** @var \Pterodactyl\Models\Server|null $server */
         $server = $request->route()->parameter('server');
-        
-        if (!$server instanceof Server || !class_exists(base64_decode('UHRlcm9kYWN0eWxcSHR0cFxNaWRkbGV3YXJlXFBTQUxNaWRkbGV3YXJl'))) {
+
+        if (!$server instanceof Server) {
             throw new NotFoundHttpException('No server resource was located in the request parameters.');
         }
 
