@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { boolean, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button/index';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import FormikSwitch from '@/components/elements/FormikSwitch';
+import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import { Textarea } from '@/components/elements/Input';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 
@@ -59,16 +59,16 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     </FormikFieldWrapper>
                 </div>
                 <Can action={'backup.delete'}>
-                    <div className={`mt-6`}>
-                        <FormikSwitch
+                    <div className={`my-6`}>
+                        <FormikSwitchV2
                             name={'isLocked'}
                             label={'Locked'}
                             description={'Prevents this backup from being deleted until explicitly unlocked.'}
                         />
                     </div>
                 </Can>
-                <div className={`flex justify-end mt-6`}>
-                    <Button type={'submit'} disabled={isSubmitting}>
+                <div className={`flex justify-end mb-6`}>
+                    <Button role={'switch'} type={'submit'} disabled={isSubmitting}>
                         Start backup
                     </Button>
                 </div>
