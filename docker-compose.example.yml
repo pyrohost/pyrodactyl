@@ -15,6 +15,7 @@ x-common:
     # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
     # to generate an SSL certificate for the Panel.
     # LE_EMAIL: ""
+    HASHIDS_SALT: "CHANGE_ME_TO_A_RANDOM_20_CHAR_STRING"
   mail:
     &mail-environment
     MAIL_FROM: "noreply@example.com"
@@ -47,7 +48,7 @@ services:
     image: redis:alpine
     restart: always
   panel:
-    image: ghcr.io/pterodactyl/panel:latest
+    image: ghcr.io/pyrohost/panel:main
     restart: always
     ports:
       - "80:80"
@@ -71,6 +72,7 @@ services:
       REDIS_HOST: "cache"
       DB_HOST: "database"
       DB_PORT: "3306"
+      HASHIDS_LENGTH: 8
 networks:
   default:
     ipam:
