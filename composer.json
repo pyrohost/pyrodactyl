@@ -1,13 +1,13 @@
 {
     "name": "pyrohost/panel",
     "description": "pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
-    "license": "PSAL",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
-            "name": "Pyro Inc.",
+            "name": "Pyro Host Inc.",
             "email": "team@pyro.host",
             "homepage": "https://pyro.host",
-            "role": "Product Owner"
+            "role": "Former Maintainer"
         }
     ],
     "require": {
