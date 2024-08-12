@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { v4 } from 'uuid';
-
 import { Switch } from '@/components/elements/SwitchV2';
 
 export interface SwitchProps {
@@ -22,7 +21,10 @@ const SwitchV2Wrapper = ({ name, label, description, defaultChecked, readOnly, o
                 <label htmlFor={uuid} className='text-neutral-300 text-md font-bold'>
                     {label}
                 </label>
-                <label htmlFor={uuid} className='text-neutral-500 text-sm font-semibold'>
+                <label
+                    htmlFor={uuid}
+                    className='text-neutral-500 text-sm font-semibold'
+                >
                     {description}
                 </label>
             </div>
@@ -32,7 +34,7 @@ const SwitchV2Wrapper = ({ name, label, description, defaultChecked, readOnly, o
                     onCheckedChange={(checked) => {
                         if (onChange) {
                             onChange({
-                                target: { checked } as HTMLInputElement,
+                                target: { checked } as HTMLInputElement
                             } as React.ChangeEvent<HTMLInputElement>);
                         }
                     }}
