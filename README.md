@@ -3,7 +3,6 @@
 <p align="center">
  <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
  <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
- <a aria-label="Licensed under AGPLv3" href="https://github.com/pyrohost/panel/blob/main/LICENSE.md"><img alt="" src="https://i.imgur.com/UrJMbDk.png"></a>
 </p>
 
 <h1 align="center">Pyrodactyl</h1>
