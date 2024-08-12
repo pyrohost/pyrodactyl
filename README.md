@@ -3,15 +3,12 @@
 <p align="center">
  <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
  <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
- <a aria-label="Licensed under Business Source License 1.1" href="https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md"><img alt="" src="https://i.imgur.com/UrJMbDk.png"></a>
+ <a aria-label="Licensed under AGPLv3" href="https://github.com/pyrohost/panel/blob/main/LICENSE.md"><img alt="" src="https://i.imgur.com/UrJMbDk.png"></a>
 </p>
 
-<h1 align="center">Pyrodactyl by Pyro Host Inc.</h1>
+<h1 align="center">Pyrodactyl</h1>
 
 Pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: Pyrodactyl is the world's best Pterodactyl.
-
-> [!WARNING]
-> Please be aware of the [Pyro Source Available License (PSAL)](https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md) when using content in this repository. The Pyro logo, name, and portions of source code are copyrighted and/or trademarks of Pyro Host Inc.
 
 [![Dashboard Image](https://i.imgur.com/YqfgMYs.jpeg)](https://panel.pyro.host)
 
@@ -50,7 +47,7 @@ Proceed with the rest of the installation as you would with the official panel.
 
 ### Windows
 
-It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to wings being incompatible, but we are [actively working on a replacement](https://github.com/pyrohost/alerion). If you know a little Rust, we would love your help!
+It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to wings being incompatible.
 
 ## Local Development on Windows
 
@@ -89,6 +86,6 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
 
-Pyrodactyl™ Copyright © 2024 Pyro Host Inc.
+Pyrodactyl™ Copyright © 2024 Pyro Host Inc. and contributors.
 
-Pyrodactyl™ is licensed by Pyro Host Inc. under the [Pyro Source Available License (PSAL)](https://github.com/pyrohost/legal/blob/main/licenses/PSAL.md). Your access to and use of content in this repository is governed by the terms of the PSAL. If you don't agree to the terms of the PSAL, you are not permitted to access or use content available in this repository.
+AGPL-3.0-or-later
