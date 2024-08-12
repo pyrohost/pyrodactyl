@@ -1,6 +1,6 @@
 {
     "name": "pyrohost/pyrodactyl",
-    "description": "pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
+    "description": "Pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
     "license": "AGPL-3.0-or-later",
     "authors": [
         {

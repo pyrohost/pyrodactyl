@@ -88,7 +88,7 @@ const StartupContainer = () => {
                 clearAndAddHttpError({ key: 'startup:image', error });
             })
             .then(() => setLoading(false));
-    }
+    };
 
     return !data ? (
         !error || (error && isValidating) ? (

@@ -88,7 +88,7 @@ export default () => {
                 />
                 <div className='relative flex flex-row items-center justify-between h-8'>
                     <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                        Panel
+                        <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1>
                     </NavLink>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
