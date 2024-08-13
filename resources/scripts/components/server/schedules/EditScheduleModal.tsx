@@ -1,14 +1,17 @@
 import ModalContext from '@/context/ModalContext';
+import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { useContext, useEffect, useState } from 'react';
+// import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
-import FormikSwitch from '@/components/elements/FormikSwitch';
-import Switch from '@/components/elements/Switch';
+import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
+import ItemContainer from '@/components/elements/ItemContainer';
 import { Button } from '@/components/elements/button/index';
-import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
 
+// import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
 import asModal from '@/hoc/asModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -40,7 +43,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    const [showCheatsheet, setShowCheetsheet] = useState(false);
+    // const [showCheatsheet, setShowCheetsheet] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -112,35 +115,36 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         The schedule system supports the use of Cronjob syntax when defining when tasks should begin
                         running. Use the fields above to specify when these tasks should begin running.
                     </p>
-                    <div className={`mt-6 bg-[#ffffff11] p-4 rounded-xl`}>
-                        <Switch
-                            name={'show_cheatsheet'}
-                            description={'Show the cron cheatsheet for some examples.'}
-                            label={'Show Cheatsheet'}
-                            defaultChecked={showCheatsheet}
-                            onChange={() => setShowCheetsheet((s) => !s)}
-                        />
-                        {showCheatsheet && (
+                    <div className={`space-y-3 my-6`}>
+                        <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
+                            <ItemContainer
+                                description={'Online Editor for cron schedule experessions.'}
+                                label={'Crontab Guru'}
+                                // defaultChecked={showCheatsheet}
+                                // onChange={() => setShowCheetsheet((s) => !s)}
+                                labelClasses='cursor-pointer'
+                            >
+                                <FontAwesomeIcon icon={faUpRightFromSquare} className={`px-5`} size='lg' />
+                            </ItemContainer>
+                        </a>
+                        {/* This table would be pretty awkward to make look nice */}
+                        {/* {showCheatsheet && (
                             <div className={`block md:flex w-full`}>
                                 <ScheduleCheatsheetCards />
                             </div>
-                        )}
-                    </div>
-                    <div className={`mt-6 bg-[#ffffff11] p-4 rounded-xl`}>
-                        <FormikSwitch
+                        )} */}
+                        <FormikSwitchV2
                             name={'onlyWhenOnline'}
-                            description={'Only execute this schedule when the server is in a running state.'}
+                            description={'Only execute this schedule when the server is running.'}
                             label={'Only When Server Is Online'}
                         />
-                    </div>
-                    <div className={`mt-6 bg-[#ffffff11] p-4 rounded-xl`}>
-                        <FormikSwitch
+                        <FormikSwitchV2
                             name={'enabled'}
                             description={'This schedule will be executed automatically if enabled.'}
                             label={'Schedule Enabled'}
                         />
                     </div>
-                    <div className={`mt-6 text-right`}>
+                    <div className={`mb-6 text-right`}>
                         <Button className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
                             {schedule ? 'Save changes' : 'Create schedule'}
                         </Button>

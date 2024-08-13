@@ -6,7 +6,7 @@ import { boolean, number, object, string } from 'yup';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import FormikSwitch from '@/components/elements/FormikSwitch';
+import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import { Textarea } from '@/components/elements/Input';
 import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
@@ -212,14 +212,12 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             </div>
                         )}
                     </div>
-                    <div className={`mt-6 bg-zinc-700 border border-zinc-800 shadow-inner p-4 rounded`}>
-                        <FormikSwitch
-                            name={'continueOnFailure'}
-                            description={'Future tasks will be run when this task fails.'}
-                            label={'Continue on Failure'}
-                        />
-                    </div>
-                    <div className={`flex justify-end mt-6`}>
+                    <FormikSwitchV2
+                        name={'continueOnFailure'}
+                        description={'Future tasks will be run when this task fails.'}
+                        label={'Continue on Failure'}
+                    />
+                    <div className={`flex justify-end my-6`}>
                         <Button type={'submit'} disabled={isSubmitting}>
                             {task ? 'Save Changes' : 'Create Task'}
                         </Button>

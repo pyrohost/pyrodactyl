@@ -1,14 +1,14 @@
 import { Field, FieldProps } from 'formik';
 
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import SwitchV2Wrapper, { SwitchProps } from '@/components/elements/SwitchV2Wrapper';
+import SwitchV2Container, { SwitchProps } from '@/components/elements/SwitchV2Container';
 
 const FormikSwitch = ({ name, label, ...props }: SwitchProps) => {
     return (
         <FormikFieldWrapper name={name}>
             <Field name={name}>
                 {({ field, form }: FieldProps) => (
-                    <SwitchV2Wrapper
+                    <SwitchV2Container
                         name={name}
                         label={label}
                         onChange={() => {

@@ -1,3 +1,5 @@
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import Can from '@/components/elements/Can';
@@ -116,7 +118,8 @@ export default ({ schedule, task }: Props) => {
                         className={`block text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 ml-auto sm:ml-0`}
                         onClick={() => setIsEditing(true)}
                     >
-                        FIXME: Edit
+                        <FontAwesomeIcon icon={faPen} className={`px-5`} size='lg' />
+                        Edit
                     </button>
                 </Can>
                 <Can action={'schedule.update'}>
@@ -126,7 +129,8 @@ export default ({ schedule, task }: Props) => {
                         className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150`}
                         onClick={() => setVisible(true)}
                     >
-                        FIXME: Delete
+                        <FontAwesomeIcon icon={faTrash} className={`px-5`} size='lg' />
+                        Delete
                     </button>
                 </Can>
             </div>
