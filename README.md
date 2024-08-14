@@ -1,4 +1,14 @@
-[![Logo Image](https://i.imgur.com/Xyyb4IJ.png)](https://panel.pyro.host)
+<p align="center">
+  <a href="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml">
+    <img src="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml/badge.svg" alt="Docker">
+  </a>
+</p>
+<p align="center">
+  <a href="https://panel.pyro.host">
+    <img src="https://i.imgur.com/Xyyb4IJ.png" alt="Logo Image">
+  </a>
+
+</p>
 
 <p align="center">
  <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
