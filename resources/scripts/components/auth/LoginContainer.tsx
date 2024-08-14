@@ -129,7 +129,10 @@ function LoginContainer() {
                             sitekey={siteKey || '_invalid_key'}
                             onVerify={(response) => {
                                 setToken(response);
-                                submitForm();
+                                // Ensure submitForm is called after token is updated
+                                setTimeout(() => {
+                                    submitForm();
+                                }, 0);
                             }}
                             onExpire={() => {
                                 setSubmitting(false);
