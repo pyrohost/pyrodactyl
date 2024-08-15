@@ -70,11 +70,11 @@ export default () => {
                             resetForm();
                             setVisible(false);
                         }}
+                        title='Create new database'
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
-                            <h2 className={`text-2xl mb-6`}>Create new database</h2>
-                            <Form className={`m-0 flex flex-col`}>
+                            <Form>
                                 <Field
                                     type={'string'}
                                     id={'database_name'}
@@ -93,10 +93,7 @@ export default () => {
                                         }
                                     />
                                 </div>
-                                <div className={`flex gap-6 justify-end my-6`}>
-                                    <Button type={'button'} onClick={() => setVisible(false)}>
-                                        Cancel
-                                    </Button>
+                                <div className={`flex gap-3 justify-end my-6`}>
                                     <Button type={'submit'}>Create Database</Button>
                                 </div>
                             </Form>

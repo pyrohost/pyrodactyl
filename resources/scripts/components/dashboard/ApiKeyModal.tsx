@@ -15,7 +15,6 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 
     return (
         <>
-            <h3 className={`mb-6 text-2xl`}>Your API Key</h3>
             <p className={`text-sm mb-6`}>
                 The API key you have requested is shown below. Please store this in a safe location, it will not be
                 shown again.
@@ -37,6 +36,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 ApiKeyModal.displayName = 'ApiKeyModal';
 
 export default asModal<Props>({
+    title: 'Your API Key',
     closeOnEscape: false,
     closeOnBackground: false,
 })(ApiKeyModal);

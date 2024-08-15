@@ -38,6 +38,7 @@ export default ({ onFileNamed, onDismissed, ...props }: Props) => {
                         resetForm();
                         onDismissed();
                     }}
+                    title='New file'
                     {...props}
                 >
                     <Form className='m-0 w-full flex flex-col gap-4'>

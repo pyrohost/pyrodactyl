@@ -57,17 +57,27 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
     return (
         <Formik onSubmit={submit} initialValues={{ mode: files.length > 1 ? '' : (files[0]?.mode ?? '') }}>
             {({ isSubmitting }) => (
-                <Modal {...props} dismissable={!isSubmitting} showSpinnerOverlay={isSubmitting}>
+                <Modal
+                    {...props}
+                    title='Configure permissions'
+                    dismissable={!isSubmitting}
+                    showSpinnerOverlay={isSubmitting}
+                >
                     <Form className={`w-full m-0`}>
                         <div className={`flex flex-col`}>
                             <div className={`w-full`}>
-                                <Field type={'string'} id={'file_mode'} name={'mode'} label={'File Mode'} autoFocus />
-                                <h2 className='mb-4 my-4 text-sm'>
-                                    This is intended for advanced users. You may irreperably damage your server by
-                                    changing file permissions.
-                                </h2>
+                                <Field
+                                    type={'string'}
+                                    id={'file_mode'}
+                                    name={'mode'}
+                                    label={'File Mode'}
+                                    description={
+                                        'This is intended for advanced users. You may irreperably damage your server by changing file permissions.'
+                                    }
+                                    autoFocus
+                                />
                             </div>
-                            <div className={`flex justify-end w-full my-4`}>
+                            <div className={`flex justify-end w-full my-6`}>
                                 <Button>Update</Button>
                             </div>
                         </div>

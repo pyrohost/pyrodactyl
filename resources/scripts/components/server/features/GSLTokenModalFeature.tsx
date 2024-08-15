@@ -2,9 +2,9 @@ import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import Field from '@/components/elements/Field';
 import Modal from '@/components/elements/Modal';
+import { Button } from '@/components/elements/button/index';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -75,18 +75,16 @@ const GSLTokenModalFeature = () => {
                 onDismissed={() => setVisible(false)}
                 closeOnBackground={false}
                 showSpinnerOverlay={loading}
+                title='Invalid GSL token!'
             >
                 <FlashMessageRender key={'feature:gslToken'} />
                 <Form>
-                    <h2 className={`text-2xl mb-4 text-zinc-100`}>Invalid GSL token!</h2>
-                    <p className={`mt-4`}>
-                        It seems like your Gameserver Login Token (GSL token) is invalid or has expired.
-                    </p>
-                    <p className={`mt-4`}>
+                    <p>It seems like your Gameserver Login Token (GSL token) is invalid or has expired.</p>
+                    <p className={`mt-3`}>
                         You can either generate a new one and enter it below or leave the field blank to remove it
                         completely.
                     </p>
-                    <div className={`sm:flex items-center mt-4`}>
+                    <div className={`sm:flex items-center mt-6`}>
                         <Field
                             name={'gslToken'}
                             label={'GSL Token'}
@@ -94,7 +92,7 @@ const GSLTokenModalFeature = () => {
                             autoFocus
                         />
                     </div>
-                    <div className={`mt-8 sm:flex items-center justify-end`}>
+                    <div className={`my-6 sm:flex items-center justify-end`}>
                         <Button type={'submit'}>Update GSL Token</Button>
                     </div>
                 </Form>

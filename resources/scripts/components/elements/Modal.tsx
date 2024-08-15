@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import Spinner from '@/components/elements/Spinner';
+import { Button } from '@/components/elements/button/index';
 import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
 
 import HugeIconsX from './hugeicons/X';
@@ -44,6 +45,8 @@ export interface RequiredModalProps {
 }
 
 export interface ModalProps extends RequiredModalProps {
+    title?: string;
+    closeButton?: boolean;
     dismissable?: boolean;
     closeOnEscape?: boolean;
     closeOnBackground?: boolean;
@@ -60,7 +63,15 @@ export const ModalMask = styled.div`
     backdrop-filter: blur(3px);
 `;
 
-const Modal: React.FC<ModalProps> = ({ visible, dismissable = true, showSpinnerOverlay, onDismissed, children }) => {
+const Modal: React.FC<ModalProps> = ({
+    title,
+    visible,
+    closeButton,
+    dismissable = true,
+    showSpinnerOverlay,
+    onDismissed,
+    children,
+}) => {
     const isDismissable = useMemo(() => {
         return dismissable && !showSpinnerOverlay;
     }, [dismissable, showSpinnerOverlay]);
@@ -128,31 +139,42 @@ const Modal: React.FC<ModalProps> = ({ visible, dismissable = true, showSpinnerO
                                         variants={variants}
                                         className={styles.panel}
                                     >
-                                        <div className={'flex p-6 pb-0 overflow-y-auto'}>
+                                        <div className='place-content-between flex items-center m-6'>
+                                            {title && <h2 className={`text-2xl text-zinc-100`}>{title}</h2>}
+                                            {dismissable && (
+                                                <button
+                                                    onClick={onDismissed}
+                                                    className={'opacity-45 hover:opacity-100 p-6 -m-6'}
+                                                >
+                                                    <HugeIconsX fill='currentColor' />
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div className={'flex px-6 overflow-y-auto'}>
+                                            <hr
+                                                style={{
+                                                    boxShadow: 'inset 0 0 .4rem .4rem #fff',
+                                                }}
+                                            />
                                             {iconPosition === 'container' && icon}
                                             <div className={'flex-1 max-h-[70vh] min-w-0'}>
                                                 <div className={'flex items-center'}>
                                                     {iconPosition !== 'container' && icon}
                                                     {children}
-                                                    <div className={'invisible h-6'} />
+                                                    {/* <div className={'invisible h-6'} /> */}
                                                 </div>
+                                                {closeButton && (
+                                                    <div className={`my-6 sm:flex items-center justify-end`}>
+                                                        <Button onClick={onDismissed} className={`min-w-full`}>
+                                                            <div>Close</div>
+                                                        </Button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-
-                                        {dismissable && (
-                                            <div
-                                                className={
-                                                    'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'
-                                                }
-                                            >
-                                                <button onClick={onDismissed}>
-                                                    <HugeIconsX fill='currentColor' />
-                                                </button>
-                                            </div>
-                                        )}
                                     </HDialog.Panel>
                                 </div>
-                            </div>{' '}
+                            </div>
                         </HDialog>
                     </DialogContext.Provider>
                 )}

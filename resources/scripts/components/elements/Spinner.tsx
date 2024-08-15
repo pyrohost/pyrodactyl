@@ -7,6 +7,7 @@ export type SpinnerSize = 'small' | 'base' | 'large';
 
 interface Props {
     size?: SpinnerSize;
+    visible?: boolean;
     centered?: boolean;
     isBlue?: boolean;
     children?: React.ReactNode;
@@ -44,14 +45,15 @@ const SpinnerComponent = styled.div<Props>`
     border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
 `;
 
-const Spinner: Spinner = ({ centered, ...props }) =>
-    centered ? (
+const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
+    visible &&
+    (centered ? (
         <div className={`flex justify-center items-center`}>
             <SpinnerComponent {...props} />
         </div>
     ) : (
         <SpinnerComponent {...props} />
-    );
+    ));
 Spinner.displayName = 'Spinner';
 
 Spinner.Size = {

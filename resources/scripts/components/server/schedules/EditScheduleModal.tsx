@@ -39,11 +39,15 @@ interface Values {
 
 const EditScheduleModal = ({ schedule }: Props) => {
     const { addError, clearFlashes } = useFlash();
-    const { dismiss } = useContext(ModalContext);
+    const { dismiss, setPropOverrides } = useContext(ModalContext);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
     // const [showCheatsheet, setShowCheetsheet] = useState(false);
+
+    useEffect(() => {
+        setPropOverrides({ title: schedule ? 'Edit schedule' : 'Create new schedule' });
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -97,7 +101,6 @@ const EditScheduleModal = ({ schedule }: Props) => {
         >
             {({ isSubmitting }) => (
                 <Form>
-                    <h3 className={`text-2xl mb-6`}>{schedule ? 'Edit schedule' : 'Create new schedule'}</h3>
                     <FlashMessageRender byKey={'schedule:edit'} />
                     <Field
                         name={'name'}
@@ -127,7 +130,8 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                 <FontAwesomeIcon icon={faUpRightFromSquare} className={`px-5`} size='lg' />
                             </ItemContainer>
                         </a>
-                        {/* This table would be pretty awkward to make look nice */}
+                        {/* This table would be pretty awkward to make look nice
+                            Maybe there could be an element for a dropdown later? */}
                         {/* {showCheatsheet && (
                             <div className={`block md:flex w-full`}>
                                 <ScheduleCheatsheetCards />

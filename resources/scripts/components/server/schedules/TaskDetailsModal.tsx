@@ -1,6 +1,7 @@
 import ModalContext from '@/context/ModalContext';
 import { Form, Formik, Field as FormikField, FormikHelpers, useField } from 'formik';
 import { useContext, useEffect } from 'react';
+import styled from 'styled-components';
 import { boolean, number, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -8,7 +9,6 @@ import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import { Textarea } from '@/components/elements/Input';
-import Label from '@/components/elements/Label';
 import Select from '@/components/elements/Select';
 import { Button } from '@/components/elements/button/index';
 
@@ -21,6 +21,18 @@ import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+
+// TODO: Port modern dropdowns to Formik and integrate them
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/elements/DropdownMenu';
+// import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+// import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
+
+const Label = styled.label`
+    display: inline-block;
+    color: #ffffff77;
+    font-size: 0.875rem;
+    padding-bottom: 0.5rem;
+`;
 
 interface Props {
     schedule: Schedule;
@@ -69,7 +81,7 @@ const ActionListener = () => {
 };
 
 const TaskDetailsModal = ({ schedule, task }: Props) => {
-    const { dismiss } = useContext(ModalContext);
+    const { dismiss, setPropOverrides } = useContext(ModalContext);
     const { clearFlashes, addError } = useFlash();
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -80,6 +92,10 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
         return () => {
             clearFlashes('schedule:task');
         };
+    }, []);
+
+    useEffect(() => {
+        setPropOverrides({ title: task ? 'Edit Task' : 'Create Task' });
     }, []);
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
@@ -110,121 +126,122 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
     };
 
     return (
-        <Formik
-            onSubmit={submit}
-            validationSchema={schema}
-            initialValues={{
-                action: task?.action || 'command',
-                payload: task?.payload || '',
-                timeOffset: task?.timeOffset.toString() || '0',
-                continueOnFailure: task?.continueOnFailure || false,
-            }}
-        >
-            {({ isSubmitting, values }) => (
-                <Form>
-                    <FlashMessageRender byKey={'schedule:task'} />
-                    <h2 className={`text-2xl mb-6`}>{task ? 'Edit Task' : 'Create Task'}</h2>
-                    <div className={`flex`}>
-                        <div className={`mr-2 w-1/3`}>
-                            <Label>Action</Label>
-                            <ActionListener />
-                            <FormikFieldWrapper name={'action'}>
-                                <FormikField
-                                    className='px-4 py-2 bg-[#ffffff11] rounded-sm'
-                                    as={Select}
-                                    name={'action'}
-                                >
-                                    <option className='bg-black' value={'command'}>
-                                        Send command
-                                    </option>
-                                    <option className='bg-black' value={'power'}>
-                                        Send power action
-                                    </option>
-                                    <option className='bg-black' value={'backup'}>
-                                        Create backup
-                                    </option>
-                                </FormikField>
-                            </FormikFieldWrapper>
-                        </div>
-                        <div className={`flex-1 ml-6`}>
-                            <Field
-                                name={'timeOffset'}
-                                label={'Time offset (in seconds)'}
-                                description={
-                                    'The amount of time to wait after the previous task executes before running this one. If this is the first task on a schedule this will not be applied.'
-                                }
-                            />
-                        </div>
-                    </div>
-                    <div className={`mt-6`}>
-                        {values.action === 'command' ? (
+        <div className='min-w-full'>
+            <Formik
+                onSubmit={submit}
+                validationSchema={schema}
+                initialValues={{
+                    action: task?.action || 'command',
+                    payload: task?.payload || '',
+                    timeOffset: task?.timeOffset.toString() || '0',
+                    continueOnFailure: task?.continueOnFailure || false,
+                }}
+            >
+                {({ isSubmitting, values }) => (
+                    <Form>
+                        <FlashMessageRender byKey={'schedule:task'} />
+                        <div className={`flex flex-col gap-3`}>
                             <div>
-                                <Label>Payload</Label>
-                                <FormikFieldWrapper name={'payload'}>
+                                <Label>Action</Label>
+                                <ActionListener />
+                                <FormikFieldWrapper name={'action'}>
                                     <FormikField
-                                        className='w-full rounded-2xl p-2 bg-[#ffffff11]'
-                                        as={Textarea}
-                                        name={'payload'}
-                                        rows={6}
-                                    />
-                                </FormikFieldWrapper>
-                            </div>
-                        ) : values.action === 'power' ? (
-                            <div>
-                                <Label>Payload</Label>
-                                <FormikFieldWrapper name={'payload'}>
-                                    <FormikField
-                                        className='px-4 py-2 bg-[#ffffff11] rounded-sm'
+                                        className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
                                         as={Select}
-                                        name={'payload'}
+                                        name={'action'}
                                     >
-                                        <option className='bg-black' value={'start'}>
-                                            Start the server
+                                        <option className='bg-black' value={'command'}>
+                                            Send command
                                         </option>
-                                        <option className='bg-black' value={'restart'}>
-                                            Restart the server
+                                        <option className='bg-black' value={'power'}>
+                                            Power
                                         </option>
-                                        <option className='bg-black' value={'stop'}>
-                                            Stop the server
-                                        </option>
-                                        <option className='bg-black' value={'kill'}>
-                                            Terminate the server
+                                        <option className='bg-black' value={'backup'}>
+                                            Create backup
                                         </option>
                                     </FormikField>
                                 </FormikFieldWrapper>
                             </div>
-                        ) : (
                             <div>
-                                <Label>Ignored Files</Label>
-                                <FormikFieldWrapper
-                                    name={'payload'}
+                                <Field
+                                    name={'timeOffset'}
+                                    label={'Time offset (in seconds)'}
                                     description={
-                                        'Optional. Include the files and folders to be excluded in this backup. By default, the contents of your .pteroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
+                                        'The amount of time to wait after the previous task executes before running this one. If this is the first task on a schedule this will not be applied.'
                                     }
-                                >
-                                    <FormikField
-                                        className='w-full rounded-2xl p-2 bg-[#ffffff11]'
-                                        as={Textarea}
-                                        name={'payload'}
-                                        rows={6}
-                                    />
-                                </FormikFieldWrapper>
+                                />
                             </div>
-                        )}
-                    </div>
-                    <FormikSwitchV2
-                        name={'continueOnFailure'}
-                        description={'Future tasks will be run when this task fails.'}
-                        label={'Continue on Failure'}
-                    />
-                    <div className={`flex justify-end my-6`}>
-                        <Button type={'submit'} disabled={isSubmitting}>
-                            {task ? 'Save Changes' : 'Create Task'}
-                        </Button>
-                    </div>
-                </Form>
-            )}
-        </Formik>
+                        </div>
+                        <div className={`my-6`}>
+                            {values.action === 'command' ? (
+                                <div>
+                                    <Label>Payload</Label>
+                                    <FormikFieldWrapper name={'payload'}>
+                                        <FormikField
+                                            className='w-full rounded-xl p-2 bg-[#ffffff11]'
+                                            as={Textarea}
+                                            name={'payload'}
+                                            rows={6}
+                                        />
+                                    </FormikFieldWrapper>
+                                </div>
+                            ) : values.action === 'power' ? (
+                                <div>
+                                    <Label>Payload</Label>
+                                    <FormikFieldWrapper name={'payload'}>
+                                        <FormikField
+                                            className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
+                                            as={Select}
+                                            name={'payload'}
+                                        >
+                                            <option className='bg-black' value={'start'}>
+                                                Start the server
+                                            </option>
+                                            <option className='bg-black' value={'restart'}>
+                                                Restart the server
+                                            </option>
+                                            <option className='bg-black' value={'stop'}>
+                                                Stop the server
+                                            </option>
+                                            <option className='bg-black' value={'kill'}>
+                                                Terminate the server
+                                            </option>
+                                        </FormikField>
+                                    </FormikFieldWrapper>
+                                </div>
+                            ) : (
+                                <div>
+                                    <Label>Ignored files (optional)</Label>
+                                    <FormikFieldWrapper
+                                        name={'payload'}
+                                        description={
+                                            'Include the files and folders to be excluded in this backup. By default, the contents of your .pteroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
+                                        }
+                                    >
+                                        <FormikField
+                                            className='w-full rounded-2xl bg-[#ffffff11]'
+                                            as={Textarea}
+                                            name={'payload'}
+                                            rows={6}
+                                        />
+                                    </FormikFieldWrapper>
+                                </div>
+                            )}
+                        </div>
+                        <FormikSwitchV2
+                            name={'continueOnFailure'}
+                            description={'Future tasks will be run when this task fails.'}
+                            label={'Continue on Failure'}
+                        />
+                        <div className={`flex justify-end my-6`}>
+                            <Button type={'submit'} disabled={isSubmitting}>
+                                {task ? 'Save Changes' : 'Create Task'}
+                            </Button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </div>
     );
 };
 

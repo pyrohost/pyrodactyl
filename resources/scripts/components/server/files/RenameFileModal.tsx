@@ -1,6 +1,7 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
+import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import { Button } from '@/components/elements/button/index';
@@ -60,31 +61,30 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
     return (
         <Formik onSubmit={submit} initialValues={{ name: files.length > 1 ? '' : files[0] || '' }}>
             {({ isSubmitting, values }) => (
-                <Modal {...props} dismissable={!isSubmitting} showSpinnerOverlay={isSubmitting}>
-                    <Form className={`m-0 w-full`}>
+                <Modal
+                    {...props}
+                    dismissable={!isSubmitting}
+                    showSpinnerOverlay={isSubmitting}
+                    title={useMoveTerminology ? 'Moving files/folders' : 'Renaming file/folder'}
+                >
+                    <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field
-                                type={'string'}
-                                id={'file_name'}
-                                name={'name'}
-                                label={'File Name'}
-                                description={
-                                    useMoveTerminology
-                                        ? 'Enter the new name and directory of this file or folder, relative to the current directory.'
-                                        : undefined
-                                }
-                                autoFocus
-                            />
-                            <div className={`flex justify-end w-full my-4`}>
+                            <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
+                            {useMoveTerminology && (
+                                <p className={`mt-2 !text-xs break-all`}>
+                                    <strong className={`text-zinc-200`}>New location: </strong>
+                                    <Code>
+                                        /root/
+                                        <span className={`text-blue-200`}>
+                                            {join(directory, values.name).replace(/^(\.\.\/|\/)+/, '')}
+                                        </span>
+                                    </Code>
+                                </p>
+                            )}
+                            <div className={`flex justify-end w-full my-6`}>
                                 <Button>{useMoveTerminology ? 'Move' : 'Rename'}</Button>
                             </div>
                         </div>
-                        {useMoveTerminology && (
-                            <p className={`text-xs mt-2 text-zinc-400`}>
-                                <strong className={`text-zinc-200`}>New location:</strong>
-                                &nbsp;/home/container/{join(directory, values.name).replace(/^(\.\.\/|\/)+/, '')}
-                            </p>
-                        )}
                     </Form>
                 </Modal>
             )}

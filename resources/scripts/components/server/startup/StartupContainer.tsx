@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import CopyOnClick from '@/components/elements/CopyOnClick';

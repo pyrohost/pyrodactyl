@@ -2,7 +2,6 @@ import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
 
@@ -45,42 +44,35 @@ const SteamDiskSpaceFeature = () => {
         <Modal
             visible={visible}
             onDismissed={() => setVisible(false)}
-            closeOnBackground={false}
             showSpinnerOverlay={loading}
+            dismissable={false}
+            closeOnBackground={false}
+            closeButton={true}
+            title='Out of available disk space'
         >
             <FlashMessageRender key={'feature:steamDiskSpace'} />
-            {isAdmin ? (
-                <>
-                    <div className={`mt-4 sm:flex items-center`}>
-                        <h2 className={`text-2xl mb-4 text-zinc-100 `}>Out of available disk space...</h2>
-                    </div>
-                    <p className={`mt-4`}>
-                        This server has run out of available disk space and cannot complete the install or update
-                        process.
-                    </p>
-                    <p className={`mt-4`}>
-                        Ensure the machine has enough disk space by typing{' '}
-                        <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> on the machine hosting
-                        this server. Delete files or increase the available disk space to resolve the issue.
-                    </p>
-                    <div className={`mt-8 sm:flex items-center justify-end`}>
-                        <Button onClick={() => setVisible(false)}>Close</Button>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className={`mt-4 sm:flex items-center`}>
-                        <h2 className={`text-2xl mb-4 text-zinc-100`}>Out of available disk space...</h2>
-                    </div>
-                    <p className={`mt-4`}>
-                        This server has run out of available disk space and cannot complete the install or update
-                        process. Please get in touch with the administrator(s) and inform them of disk space issues.
-                    </p>
-                    <div className={`mt-8 sm:flex items-center justify-end`}>
-                        <Button onClick={() => setVisible(false)}>Close</Button>
-                    </div>
-                </>
-            )}
+            <div className={`flex-col`}>
+                {isAdmin ? (
+                    <>
+                        <p>
+                            This server has run out of available disk space and cannot complete the install or update
+                            process.
+                        </p>
+                        <p className='mt-3'>
+                            Ensure the machine has enough disk space by typing{' '}
+                            <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> on the machine
+                            hosting this server. Delete files or increase the available disk space to resolve the issue.
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <p className={`mt-4`}>
+                            This server has run out of available disk space and cannot complete the install or update
+                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
+                        </p>
+                    </>
+                )}
+            </div>
         </Modal>
     );
 };

@@ -47,6 +47,10 @@ const EditSubuserModal = ({ subuser }: Props) => {
     const loggedInPermissions = ServerContext.useStoreState((state) => state.server.permissions);
     const [canEditUser] = usePermissions(subuser ? ['user.update'] : ['user.create']);
 
+    useEffect(() => {
+        setPropOverrides({ title: subuser ? `Permissions for ${subuser.email}` : 'Create new subuser' });
+    }, []);
+
     // The permissions that can be modified by this user.
     const editablePermissions = useDeepCompareMemo(() => {
         const cleaned = Object.keys(permissions).map((key) =>
@@ -107,9 +111,6 @@ const EditSubuserModal = ({ subuser }: Props) => {
             })}
         >
             <Form>
-                <h2 className={`text-2xl tracking-tight font-extrabold mb-2 pr-4`} ref={ref}>
-                    {subuser ? `Permissions for ${subuser.email}` : 'Create new subuser'}
-                </h2>
                 <FlashMessageRender byKey={'user:edit'} />
                 {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                     <div className={`mt-4 pl-4 py-2 border-l-4 border-blue-400`}>
@@ -120,7 +121,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
                     </div>
                 )}
                 {!subuser && (
-                    <div className={`mt-6`}>
+                    <div className={`mb-6`}>
                         <Field
                             name={'email'}
                             label={'User Email'}

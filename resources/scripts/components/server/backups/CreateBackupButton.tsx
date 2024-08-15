@@ -29,10 +29,9 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     const { isSubmitting } = useFormikContext<Values>();
 
     return (
-        <Modal {...props} showSpinnerOverlay={isSubmitting}>
+        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Create server backup'>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
-                <h2 className={`text-2xl mb-6`}>Create server backup</h2>
                 <Field
                     name={'name'}
                     label={'Backup name'}

@@ -66,25 +66,25 @@ const EulaModalFeature = () => {
             onDismissed={() => setVisible(false)}
             closeOnBackground={false}
             showSpinnerOverlay={loading}
+            title='Accept Minecraft EULA'
         >
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
-                <h2 className={`text-2xl mb-4 text-zinc-100`}>Accept Minecraft EULA</h2>
                 <p className={`text-zinc-200`}>
                     Before starting your Minecraft server, you need to accept the{' '}
                     <a
                         target={'_blank'}
                         className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
                         rel={'noreferrer noopener'}
-                        href='https://account.mojang.com/documents/minecraft_eula'
+                        href='https://www.minecraft.net/eula'
                     >
                         Minecraft EULA
                     </a>
                     .
                 </p>
-                <div className={`my-4 gap-4 flex items-center justify-end`}>
-                    <Button.Text onClick={() => setVisible(false)}>Cancel</Button.Text>
-                    <Button onClick={onAcceptEULA}>I Accept</Button>
+                <div className={`my-6 gap-3 flex items-center justify-end`}>
+                    <Button.Text onClick={() => setVisible(false)}>I don&apos;t accept</Button.Text>
+                    <Button onClick={onAcceptEULA}>I accept</Button>
                 </div>
             </div>
         </Modal>

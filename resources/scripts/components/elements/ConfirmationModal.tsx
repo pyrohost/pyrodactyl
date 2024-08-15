@@ -13,13 +13,12 @@ type Props = {
     children: React.ReactNode;
 };
 
-const ConfirmationModal: React.FC<Props> = ({ title, children, buttonText, onConfirmed }) => {
+const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed }) => {
     const { dismiss } = useContext(ModalContext);
 
     return (
         <>
             <div className='flex flex-col w-full'>
-                <h2 className={`text-2xl tracking-tight font-extrabold pr-4 mb-2`}>{title}</h2>
                 <div className={`text-zinc-300`}>{children}</div>
                 <div className={`flex gap-4 items-center justify-end my-6`}>
                     <Button.Text onClick={() => dismiss()}>Cancel</Button.Text>
@@ -33,5 +32,6 @@ const ConfirmationModal: React.FC<Props> = ({ title, children, buttonText, onCon
 ConfirmationModal.displayName = 'ConfirmationModal';
 
 export default asModal<Props>((props) => ({
+    title: props.title,
     showSpinnerOverlay: props.showSpinnerOverlay,
 }))(ConfirmationModal);

@@ -13,7 +13,7 @@
     }
 
     &.secondary {
-        @apply bg-transparent text-zinc-50;
+        @apply bg-white bg-opacity-10;
 
         &:disabled {
             background: transparent !important;
@@ -38,7 +38,7 @@
     @apply hover:bg-brand/70 focus:ring-brand/50 focus:ring-opacity-75 active:bg-brand;
 
     &.secondary {
-        @apply hover:bg-brand/70 active:bg-brand;
+        @apply hover:bg-opacity-10 active:bg-brand;
     }
 
     &:disabled {
