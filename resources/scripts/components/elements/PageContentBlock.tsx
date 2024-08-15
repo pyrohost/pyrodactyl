@@ -13,7 +13,7 @@ export interface PageContentBlockProps {
 const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey, className, children }) => {
     useEffect(() => {
         if (title) {
-            document.title = title + ' | pyrodactyl';
+            document.title = title + ' | Pyrodactyl';
         }
     }, [title]);
 
