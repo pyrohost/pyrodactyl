@@ -1,9 +1,4 @@
 <p align="center">
-  <a href="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml">
-    <img src="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml/badge.svg" alt="Docker">
-  </a>
-</p>
-<p align="center">
   <a href="https://panel.pyro.host">
     <img src="https://i.imgur.com/Xyyb4IJ.png" alt="Logo Image">
   </a>
@@ -15,7 +10,16 @@
  <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml">
+    <img src="https://github.com/pyrohost/pyrodactyl/actions/workflows/docker.yaml/badge.svg" alt="Docker">
+  </a>
+</p>
+
 <h1 align="center">Pyrodactyl</h1>
+
+> [!IMPORTANT]
+> Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
 
 Pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: Pyrodactyl is the world's best Pterodactyl.
 
@@ -61,7 +65,7 @@ Proceed with the rest of the installation as you would with the official panel.
 
 ### Windows
 
-It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to wings being incompatible.
+It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to Wings being incompatible.
 
 ## Local Development on Windows
 
@@ -84,7 +88,8 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 -   We recommend setting up [Remote Caching via turbo](https://turbo.build/repo/docs/core-concepts/remote-caching). When you run `npm run ship` on your local development machine, its results will be cached and uploaded, allowing you to finish a build on your production server in milliseconds.
 
--   We do not recommend using Hyper-V as your virtualization layer. If your vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
+-   We do not recommend using Hyper-V as your virtualization layer. If your Vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
+    - We recommend using VMWare Workstation or VirtualBox instead.
 
 ## Star History
 
