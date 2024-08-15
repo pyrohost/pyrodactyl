@@ -98,6 +98,7 @@ export default () => {
         <>
             <FadeTransition show={visible} duration='duration-75' key='upload_modal_mask' appear unmount>
                 <ModalMask
+                    className='flex'
                     onClick={() => setVisible(false)}
                     onDragOver={(e) => e.preventDefault()}
                     // why doesn't vanilla pterodactyl have this?
