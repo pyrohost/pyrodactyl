@@ -121,7 +121,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     <div className={`space-y-3 my-6`}>
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                             <ItemContainer
-                                description={'Online Editor for cron schedule experessions.'}
+                                description={'Online editor for cron schedule experessions.'}
                                 label={'Crontab Guru'}
                                 // defaultChecked={showCheatsheet}
                                 // onChange={() => setShowCheetsheet((s) => !s)}

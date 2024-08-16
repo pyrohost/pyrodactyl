@@ -230,7 +230,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                         </div>
                         <FormikSwitchV2
                             name={'continueOnFailure'}
-                            description={'Future tasks will be run when this task fails.'}
+                            description={'Future tasks will be run if this task fails.'}
                             label={'Continue on Failure'}
                         />
                         <div className={`flex justify-end my-6`}>
