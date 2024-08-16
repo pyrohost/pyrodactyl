@@ -39,7 +39,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 ## Running Pyrodactyl
 
 > [!TIP]
-> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/panel), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
+> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
 >
 > If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml).
 
