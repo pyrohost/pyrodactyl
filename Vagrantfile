@@ -12,7 +12,11 @@ Vagrant.configure("2") do |config|
         v.vmx["memsize"] = "4096"
         v.vmx["numvcpus"] = "4"
     end
-    
+    # Libvirt provider
+    config.vm.provider "libvirt" do |libvirt|
+        libvirt.memory = 4096
+        libvirt.cpus = 4
+    end
     # setup the synced folder and provision the VM
     config.vm.synced_folder ".", "/var/www/pterodactyl"
     config.vm.provision "shell", path: "vagrant/provision.sh"
