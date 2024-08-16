@@ -91,6 +91,50 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 -   We do not recommend using Hyper-V as your virtualization layer. If your Vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
     - We recommend using VMWare Workstation or VirtualBox instead.
 
+### Linux Dev Requirements
+
+-   Latest LTS version of NodeJS
+-   Pnpm (`npm i -g pnpm`)
+-   Turbo (`pnpm i -g turbo`)
+-   Git
+-   Vagrant
+-   libvirtd
+
+### Notes about Local Development on Linux
+
+Using [Vagrant](https://www.vagrantup.com) on Linux Is incredibly simple. Verify you met the prerequisits above, then follow these simple steps.
+
+
+1. Clone the Pyrodactyl panel repository
+2. Run `npm i` to install all required packages
+3. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
+> [!IMPORTANT]
+> In order for vagrant up to work, your files must be in the /var/www/pterodactyl Directory unless manually changed in the Vagrantfile!
+4. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
+5. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl!
+
+### Notes about Local Development on Linux
+
+-    It should be stated that when running on linux, if you are using a virtual machine manager other than libvirtd, you will have to add your configuration to the [Vagrantfile](https://github.com/pyrohost/pyrodactyl/blob/main/Vagrantfile). If not, it will boot the VM with 512 mb of ram, which is not enough to build Pyrodactyl!
+
+-    Might be a weird bug where first time you build pyrodactyl with `vagrant up` you get an error like this,
+```
+The following SSH command responded with a non-zero exit status.
+Vagrant assumes that this means the command failed!
+
+mount -o vers=3,udp xxx.xxx.xxx.x:/home/user/pyrodactyl /var/www/pterodactyl
+
+Stdout from the command:
+
+Stderr from the command:
+
+mount.nfs: Connection refused
+```
+if this happens, just rerun vagrant up and it should work.
+
+-    If your having Permission errors, try running as root through sudo. eg: `sudo vagrant up`
+
+
 ## Star History
 
 <a href="https://star-history.com/#pyrohost/pyrodactyl&Date">
