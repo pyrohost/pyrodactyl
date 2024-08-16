@@ -526,6 +526,14 @@ body {
 .skin-blue .main-sidebar,
 .skin-blue .main-header .logo {
     border-right: 1px solid #222222;
+    display: flex;
+    align-items: center;
+
+    .innerLogo {
+        min-width: 100%;
+        min-height: 100%;
+        padding: 8px;
+    }
 }
 
 .skin-blue .main-header .logo {

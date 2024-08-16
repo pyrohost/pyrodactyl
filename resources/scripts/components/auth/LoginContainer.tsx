@@ -13,6 +13,7 @@ import Field from '@/components/elements/Field';
 import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
+import Logo from '../elements/PyroLogo';
 
 interface Values {
     username: string;
@@ -87,7 +88,23 @@ function LoginContainer() {
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex items-start h-12 w-fit mb-4'></div>
+                    <div className='flex h-12 mb-4 items-center w-full'>
+                        {/* temp src */}
+                        {/* <img
+                            className='w-full max-w-full h-full'
+                            loading='lazy'
+                            decoding='async'
+                            alt=''
+                            aria-hidden
+                            style={{
+                                color: 'transparent',
+                            }}
+                            src='https://i.imgur.com/Hbum4fc.png'
+                        /> */}
+                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
+                        <Logo />
+                    </div>
+                    <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Login</h2>
                     <Field
                         id='usernameOrEmail'

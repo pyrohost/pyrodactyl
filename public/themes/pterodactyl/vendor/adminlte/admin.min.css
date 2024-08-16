@@ -588,7 +588,9 @@ a:focus {
         -webkit-transform: translateZ(0);
     }
     .sidebar-mini.sidebar-collapse .main-header .logo {
-        width: 50px;
+        position: absolute;
+        width: 140px;
+        padding: unset;
     }
     .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini {
         display: block;

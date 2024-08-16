@@ -1,12 +1,12 @@
 <p align="center">
   <a href="https://panel.pyro.host">
-    <img src="https://i.imgur.com/Xyyb4IJ.png" alt="Logo Image">
+    <img src="https://i.imgur.com/R10ivg9.png" alt="Banner with Pyrodactyl Logo">
   </a>
 
 </p>
 
 <p align="center">
- <a aria-label="Pyro logo" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
+ <a aria-label="Made by Pyro" href="https://pyro.host"><img src="https://i.imgur.com/uvIy6cI.png"></a>
  <a aria-label="Join the Pyro community on Discord" href="https://discord.gg/fxeRFRbhQh?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH"><img alt="" src="https://i.imgur.com/qSfKisV.png"></a>
 </p>
 
