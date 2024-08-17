@@ -14,6 +14,7 @@ import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+import ItemContainer from '@/components/elements/ItemContainer';
 
 interface Props {
     schedule: Schedule;
@@ -61,7 +62,7 @@ export default ({ schedule, task }: Props) => {
     const [title] = getActionDetails(task.action);
 
     return (
-        <div className={`sm:flex items-center p-3 sm:p-6 border-b border-zinc-800`}>
+        <ItemContainer title={title} description={task.payload} divClasses={`mb-2`}>
             <SpinnerOverlay visible={isLoading} fixed size={'large'} />
             <TaskDetailsModal
                 schedule={schedule}
@@ -79,7 +80,7 @@ export default ({ schedule, task }: Props) => {
                 Are you sure you want to delete this task? This action cannot be undone.
             </ConfirmationModal>
             {/* <FontAwesomeIcon icon={icon} className={`text-lg text-white hidden md:block`} /> */}
-            <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
+            {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
                 <p className={`md:ml-6 text-zinc-200 uppercase text-sm`}>{title}</p>
                 {task.payload && (
                     <div className={`md:ml-6 mt-2`}>
@@ -93,20 +94,20 @@ export default ({ schedule, task }: Props) => {
                         </div>
                     </div>
                 )}
-            </div>
-            <div className={`mt-3 sm:mt-0 flex items-center w-full sm:w-auto`}>
+            </div> */}
+            <div className={`flex flex-none items-end flex-col sm:flex-row`}>
                 {task.continueOnFailure && (
-                    <div className={`mr-6`}>
+                    <div className={`sm:mr-6`}>
                         <div
-                            className={`flex items-center px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}
+                            className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}
                         >
                             Continues on Failure
                         </div>
                     </div>
                 )}
                 {task.sequenceId > 1 && task.timeOffset > 0 && (
-                    <div className={`mr-6`}>
-                        <div className={`flex items-center px-2 py-1 bg-zinc-500 text-sm rounded-full`}>
+                    <div className={`sm:mr-6`}>
+                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>
                             {task.timeOffset}s later
                         </div>
                     </div>
@@ -134,6 +135,6 @@ export default ({ schedule, task }: Props) => {
                     </button>
                 </Can>
             </div>
-        </div>
+        </ItemContainer>
     );
 };

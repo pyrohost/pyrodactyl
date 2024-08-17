@@ -122,7 +122,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                             <ItemContainer
                                 description={'Online editor for cron schedule experessions.'}
-                                label={'Crontab Guru'}
+                                title={'Crontab Guru'}
                                 // defaultChecked={showCheatsheet}
                                 // onChange={() => setShowCheetsheet((s) => !s)}
                                 labelClasses='cursor-pointer'

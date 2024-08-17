@@ -12,7 +12,7 @@ export interface SwitchProps {
 
 const SwitchV2Container = ({ name, label, description, defaultChecked, readOnly, onChange }: SwitchProps) => {
     return (
-        <ItemContainer label={label} description={description}>
+        <ItemContainer title={label} description={description}>
             <Switch
                 name={name}
                 onCheckedChange={(checked) => {
