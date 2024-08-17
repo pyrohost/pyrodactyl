@@ -26,11 +26,11 @@ const ItemContainer = ({
         <div
             className={`flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg ${divClasses}`}
         >
-            <div className={`flex flex-col ${labelClasses}`}>
-                <label htmlFor={uuid} className={`text-neutral-300 text-md font-bold ${titleClasses}`}>
+            <div className={`flex flex-col`}>
+                <label htmlFor={uuid} className={`text-neutral-300 text-md font-bold ${titleClasses} ${labelClasses}`}>
                     {title}
                 </label>
-                <label htmlFor={uuid} className={`text-neutral-500 text-sm font-semibold ${descriptionClasses}`}>
+                <label htmlFor={uuid} className={`text-neutral-500 text-sm font-semibold ${descriptionClasses} ${labelClasses}`}>
                     {description}
                 </label>
             </div>
