@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
@@ -14,7 +15,6 @@ import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-import ItemContainer from '@/components/elements/ItemContainer';
 
 interface Props {
     schedule: Schedule;
@@ -98,18 +98,14 @@ export default ({ schedule, task }: Props) => {
             <div className={`flex flex-none items-end flex-col sm:flex-row`}>
                 {task.continueOnFailure && (
                     <div className={`sm:mr-6`}>
-                        <div
-                            className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}
-                        >
+                        <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
                             Continues on Failure
                         </div>
                     </div>
                 )}
                 {task.sequenceId > 1 && task.timeOffset > 0 && (
                     <div className={`sm:mr-6`}>
-                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>
-                            {task.timeOffset}s later
-                        </div>
+                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{task.timeOffset}s later</div>
                     </div>
                 )}
                 <Can action={'schedule.update'}>

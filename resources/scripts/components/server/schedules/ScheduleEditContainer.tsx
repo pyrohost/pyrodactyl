@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
+import ItemContainer from '@/components/elements/ItemContainer';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Button } from '@/components/elements/button/index';
@@ -19,10 +20,9 @@ import getServerSchedule from '@/api/server/schedules/getServerSchedule';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-import ItemContainer from '@/components/elements/ItemContainer';
 
 const CronBox = ({ title, value }: { title: string; value: string }) => (
-    <ItemContainer title={title} description={value} children={undefined} />
+    <ItemContainer title={title} description={value} />
 );
 
 const ActivePill = ({ active }: { active: boolean }) => (
@@ -101,7 +101,7 @@ export default () => {
                                     )}
 
                                     <br className={`sm:invisible`} />
-                                    
+
                                     <strong>Next run at:&nbsp;</strong>
                                     {schedule.nextRunAt ? (
                                         format(schedule.nextRunAt, "MMM do 'at' h:mma")
@@ -129,16 +129,16 @@ export default () => {
                         <div>
                             {schedule.tasks.length > 0
                                 ? schedule.tasks
-                                    .sort((a, b) =>
-                                        a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
-                                    )
-                                    .map((task) => (
-                                        <ScheduleTaskRow
-                                            key={`${schedule.id}_${task.id}`}
-                                            task={task}
-                                            schedule={schedule}
-                                        />
-                                    ))
+                                      .sort((a, b) =>
+                                          a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
+                                      )
+                                      .map((task) => (
+                                          <ScheduleTaskRow
+                                              key={`${schedule.id}_${task.id}`}
+                                              task={task}
+                                              schedule={schedule}
+                                          />
+                                      ))
                                 : null}
                         </div>
                     </div>
