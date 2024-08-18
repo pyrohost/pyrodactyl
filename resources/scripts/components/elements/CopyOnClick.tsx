@@ -12,10 +12,13 @@ interface CopyOnClickProps {
 
 const CopyOnClick = ({ text, children }: CopyOnClickProps) => {
     const [copied, setCopied] = useState(false);
+    const length = 80;
+    const stringText = String(text);
+    const truncatedText = stringText && stringText.length > length ? `${stringText.substring(0, length - 3)}...` : text;
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${text} to clipboard`);
+        toast(`Copied "${truncatedText}" to clipboard`);
 
         const timeout = setTimeout(() => {
             setCopied(false);
