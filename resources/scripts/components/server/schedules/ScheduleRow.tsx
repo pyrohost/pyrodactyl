@@ -14,7 +14,9 @@ export default ({ schedule }: { schedule: Schedule }) => (
         </div>
         <ScheduleCronRow cron={schedule.cron} />
         <div>
-            <p className='ml-4'>{schedule.isProcessing ? 'Processing' : schedule.isActive ? 'Active' : 'Inactive'}</p>
+            <p className='ml-4 flex items-center rounded-full px-2 py-px text-xs uppercase bg-neutral-600 text-white'>
+                {schedule.isProcessing ? 'Processing' : schedule.isActive ? 'Active' : 'Inactive'}
+            </p>
         </div>
     </>
 );

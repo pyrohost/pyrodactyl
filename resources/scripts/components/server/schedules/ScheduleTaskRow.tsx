@@ -1,4 +1,12 @@
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+    IconDefinition,
+    faClone,
+    faPen,
+    faPowerOff,
+    faQuestion,
+    faTerminal,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
@@ -21,16 +29,16 @@ interface Props {
     task: Task;
 }
 
-const getActionDetails = (action: string): [string] => {
+const getActionDetails = (action: string): [string, IconDefinition, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command'];
+            return ['Send Command', faTerminal, true];
         case 'power':
-            return ['Send Power Action'];
+            return ['Send Power Action', faPowerOff];
         case 'backup':
-            return ['Create Backup'];
+            return ['Create Backup', faClone];
         default:
-            return ['Unknown Action'];
+            return ['Unknown Action', faQuestion];
     }
 };
 
@@ -59,10 +67,17 @@ export default ({ schedule, task }: Props) => {
             });
     };
 
-    const [title] = getActionDetails(task.action);
+    const [title, icon, copyOnClick] = getActionDetails(task.action);
 
     return (
-        <ItemContainer title={title} description={task.payload} divClasses={`mb-2`}>
+        <ItemContainer
+            title={title}
+            description={task.payload}
+            icon={icon}
+            divClasses={`mb-2 gap-6`}
+            copyDescription={copyOnClick}
+            descriptionClasses={`whitespace-nowrap overflow-hidden overflow-ellipsis`}
+        >
             <SpinnerOverlay visible={isLoading} fixed size={'large'} />
             <TaskDetailsModal
                 schedule={schedule}
@@ -95,19 +110,17 @@ export default ({ schedule, task }: Props) => {
                     </div>
                 )}
             </div> */}
-            <div className={`flex flex-none items-end flex-col sm:flex-row`}>
-                {task.continueOnFailure && (
-                    <div className={`sm:mr-6`}>
+            <div className={`flex flex-none items-end sm:items-center flex-col sm:flex-row`}>
+                <div className='mr-0 sm:mr-6'>
+                    {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
                             Continues on Failure
                         </div>
-                    </div>
-                )}
-                {task.sequenceId > 1 && task.timeOffset > 0 && (
-                    <div className={`sm:mr-6`}>
+                    )}
+                    {task.sequenceId > 1 && task.timeOffset > 0 && (
                         <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{task.timeOffset}s later</div>
-                    </div>
-                )}
+                    )}
+                </div>
                 <Can action={'schedule.update'}>
                     <button
                         type={'button'}

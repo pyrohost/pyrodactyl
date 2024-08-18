@@ -77,7 +77,7 @@ export default () => {
                 <>
                     <div className={`rounded shadow`}>
                         <div
-                            className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl mb-6`}
+                            className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl mb-6 overflow-hidden`}
                         >
                             <div className={`flex-none self-start`}>
                                 <h3 className={`flex items-center text-neutral-100 text-2xl`}>
@@ -100,7 +100,8 @@ export default () => {
                                         <span>N/A</span>
                                     )}
 
-                                    <br className={`sm:invisible`} />
+                                    <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
+                                    <br className={`sm:hidden`} />
 
                                     <strong>Next run at:&nbsp;</strong>
                                     {schedule.nextRunAt ? (
@@ -110,12 +111,12 @@ export default () => {
                                     )}
                                 </p>
                             </div>
-                            <div className={`flex flex-col gap-2 md:min-w-60 min-w-full`}>
+                            <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                                 <Can action={'schedule.update'}>
-                                    <Button.Text onClick={toggleEditModal} className={'flex-1'}>
+                                    <Button.Text onClick={toggleEditModal} className={'flex-1 min-w-max'}>
                                         Edit
                                     </Button.Text>
-                                    <NewTaskButton schedule={schedule} />
+                                    <NewTaskButton schedule={schedule} className={'flex-1 min-w-max'} />
                                 </Can>
                             </div>
                         </div>

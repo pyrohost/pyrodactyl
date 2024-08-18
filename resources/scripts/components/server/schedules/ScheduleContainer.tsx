@@ -72,7 +72,7 @@ function ScheduleContainer() {
                             <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
                                 {schedules.map((schedule) => (
                                     <NavLink key={schedule.id} to={`${schedule.id}`} end>
-                                        <div className='flex items-center rounded-md bg-[#ffffff11] px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0'>
+                                        <div className='flex items-center rounded-md bg-[#ffffff11] px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'>
                                             <ScheduleRow schedule={schedule} />
                                         </div>
                                     </NavLink>
