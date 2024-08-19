@@ -28,7 +28,7 @@
         "@radix-ui/react-switch": "^1.0.3",
         "@radix-ui/react-tabs": "^1.0.4",
         "@sentry/react": "^7.110.0",
-        "@sentry/vite-plugin": "^2.16.1",
+        "@sentry/vite-plugin": "^2.22.2",
         "@tanstack/react-virtual": "^3.2.1",
         "@xterm/addon-fit": "^0.10.0",
         "@xterm/addon-search": "^0.15.0",
