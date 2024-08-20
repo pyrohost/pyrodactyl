@@ -8,24 +8,24 @@ interface Props {
 }
 
 const ScheduleCronRow = ({ cron, className }: Props) => (
-    <div className={clsx('flex', className)}>
-        <div className={'w-1/5 sm:w-auto text-center'}>
+    <div className={clsx('flex flex-wrap gap-4 justify-center m-auto', className)}>
+        <div className={'text-center'}>
             <p className={'font-medium'}>{cron.minute}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Minute</p>
         </div>
-        <div className={'w-1/5 sm:w-auto text-center ml-4'}>
+        <div className={'text-center'}>
             <p className={'font-medium'}>{cron.hour}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Hour</p>
         </div>
-        <div className={'w-1/5 sm:w-auto text-center ml-4'}>
+        <div className={'text-center'}>
             <p className={'font-medium'}>{cron.dayOfMonth}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Day (Month)</p>
         </div>
-        <div className={'w-1/5 sm:w-auto text-center ml-4'}>
+        <div className={'text-center'}>
             <p className={'font-medium'}>{cron.month}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Month</p>
         </div>
-        <div className={'w-1/5 sm:w-auto text-center ml-4'}>
+        <div className={'text-center'}>
             <p className={'font-medium'}>{cron.dayOfWeek}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Day (Week)</p>
         </div>

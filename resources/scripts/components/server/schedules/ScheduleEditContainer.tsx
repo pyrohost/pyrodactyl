@@ -74,79 +74,77 @@ export default () => {
             {!schedule || isLoading ? (
                 <Spinner size={'large'} centered />
             ) : (
-                <>
-                    <div className={`rounded shadow`}>
-                        <div
-                            className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl mb-6 overflow-hidden`}
-                        >
-                            <div className={`flex-none self-start`}>
-                                <h3 className={`flex items-center text-neutral-100 text-2xl`}>
-                                    {schedule.name}
-                                    {schedule.isProcessing ? (
-                                        <span
-                                            className={`flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white`}
-                                        >
-                                            Processing
-                                        </span>
-                                    ) : (
-                                        <ActivePill active={schedule.isActive} />
-                                    )}
-                                </h3>
-                                <p className={`mt-1 text-sm`}>
-                                    <strong>Last run at:&nbsp;</strong>
-                                    {schedule.lastRunAt ? (
-                                        format(schedule.lastRunAt, "MMM do 'at' h:mma")
-                                    ) : (
-                                        <span>N/A</span>
-                                    )}
-
+                <div className={`rounded shadow flex flex-col gap-6`}>
+                    <div
+                        className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden`}
+                    >
+                        <div className={`flex-none self-start`}>
+                            <h3 className={`flex items-center text-neutral-100 text-2xl`}>
+                                {schedule.name}
+                                {schedule.isProcessing ? (
                                     <span
-                                        className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`}
-                                    />
-                                    <br className={`sm:hidden`} />
+                                        className={`flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white`}
+                                    >
+                                        Processing
+                                    </span>
+                                ) : (
+                                    <ActivePill active={schedule.isActive} />
+                                )}
+                            </h3>
+                            <p className={`mt-1 text-sm`}>
+                                <strong>Last run at:&nbsp;</strong>
+                                {schedule.lastRunAt ? (
+                                    format(schedule.lastRunAt, "MMM do 'at' h:mma")
+                                ) : (
+                                    <span>N/A</span>
+                                )}
 
-                                    <strong>Next run at:&nbsp;</strong>
-                                    {schedule.nextRunAt ? (
-                                        format(schedule.nextRunAt, "MMM do 'at' h:mma")
-                                    ) : (
-                                        <span>N/A</span>
-                                    )}
-                                </p>
-                            </div>
-                            <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
-                                <Can action={'schedule.update'}>
-                                    <Button.Text onClick={toggleEditModal} className={'flex-1 min-w-max'}>
-                                        Edit
-                                    </Button.Text>
-                                    <NewTaskButton schedule={schedule} className={'flex-1 min-w-max'} />
-                                </Can>
-                            </div>
+                                <span
+                                    className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`}
+                                />
+                                <br className={`sm:hidden`} />
+
+                                <strong>Next run at:&nbsp;</strong>
+                                {schedule.nextRunAt ? (
+                                    format(schedule.nextRunAt, "MMM do 'at' h:mma")
+                                ) : (
+                                    <span>N/A</span>
+                                )}
+                            </p>
                         </div>
-                        <div className={`hidden sm:grid grid-cols-5 md:grid-cols-5 gap-4 mb-6`}>
-                            <CronBox title={'Minute'} value={schedule.cron.minute} />
-                            <CronBox title={'Hour'} value={schedule.cron.hour} />
-                            <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
-                            <CronBox title={'Month'} value={schedule.cron.month} />
-                            <CronBox title={'Day (Week)'} value={schedule.cron.dayOfWeek} />
-                        </div>
-                        <div>
-                            {schedule.tasks.length > 0
-                                ? schedule.tasks
-                                      .sort((a, b) =>
-                                          a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
-                                      )
-                                      .map((task) => (
-                                          <ScheduleTaskRow
-                                              key={`${schedule.id}_${task.id}`}
-                                              task={task}
-                                              schedule={schedule}
-                                          />
-                                      ))
-                                : null}
+                        <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
+                            <Can action={'schedule.update'}>
+                                <Button.Text onClick={toggleEditModal} className={'flex-1 min-w-max'}>
+                                    Edit
+                                </Button.Text>
+                                <NewTaskButton schedule={schedule} className={'flex-1 min-w-max'} />
+                            </Can>
                         </div>
                     </div>
+                    <div className={`grid grid-cols-3 sm:grid-cols-5 gap-4`}>
+                        <CronBox title={'Minute'} value={schedule.cron.minute} />
+                        <CronBox title={'Hour'} value={schedule.cron.hour} />
+                        <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
+                        <CronBox title={'Month'} value={schedule.cron.month} />
+                        <CronBox title={'Day (Week)'} value={schedule.cron.dayOfWeek} />
+                    </div>
+                    <div>
+                        {schedule.tasks.length > 0
+                            ? schedule.tasks
+                                    .sort((a, b) =>
+                                        a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
+                                    )
+                                    .map((task) => (
+                                        <ScheduleTaskRow
+                                            key={`${schedule.id}_${task.id}`}
+                                            task={task}
+                                            schedule={schedule}
+                                        />
+                                    ))
+                            : null}
+                    </div>
                     <EditScheduleModal visible={showEditModal} schedule={schedule} onModalDismissed={toggleEditModal} />
-                    <div className={`mt-6 gap-3 flex sm:justify-end`}>
+                    <div className={`gap-3 flex sm:justify-end`}>
                         <Can action={'schedule.delete'}>
                             <DeleteScheduleButton
                                 scheduleId={schedule.id}
@@ -159,7 +157,7 @@ export default () => {
                             </Can>
                         )}
                     </div>
-                </>
+                </div>
             )}
         </PageContentBlock>
     );
