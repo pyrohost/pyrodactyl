@@ -100,7 +100,9 @@ export default () => {
                                         <span>N/A</span>
                                     )}
 
-                                    <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
+                                    <span
+                                        className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`}
+                                    />
                                     <br className={`sm:hidden`} />
 
                                     <strong>Next run at:&nbsp;</strong>

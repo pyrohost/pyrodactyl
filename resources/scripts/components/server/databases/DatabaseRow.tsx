@@ -1,15 +1,15 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
+import styled from 'styled-components';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
-import Label from '@/components/elements/Label';
 import Modal from '@/components/elements/Modal';
+import { Button } from '@/components/elements/button/index';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -19,6 +19,13 @@ import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+
+const Label = styled.label`
+    display: inline-block;
+    color: #ffffff77;
+    font-size: 0.875rem;
+    padding-bottom: 0.5rem;
+`;
 
 interface Props {
     database: ServerDatabase;
@@ -73,70 +80,81 @@ export default ({ database, className }: Props) => {
                         title='Confirm database deletion'
                     >
                         <FlashMessageRender byKey={'database:delete'} />
-                        <p className={`text-sm`}>
-                            Deleting a database is a permanent action, it cannot be undone. This will permanently delete
-                            the <strong>{database.name}</strong> database and remove all associated data.
-                        </p>
-                        <Form className={`m-0 mt-6`}>
-                            <Field
-                                type={'text'}
-                                id={'confirm_name'}
-                                name={'confirm'}
-                                label={'Confirm Database Name'}
-                                description={'Enter the database name to confirm deletion.'}
-                            />
-                            <div className={`mt-6 text-right`}>
-                                <Button type={'button'} isSecondary onClick={() => setVisible(false)}>
-                                    Cancel
-                                </Button>
-                                <Button type={'submit'} color={'red'} disabled={!isValid}>
+                        <div className='flex flex-col'>
+                            <p>
+                                Deleting a database is a permanent action, it cannot be undone. This will permanently
+                                delete the <strong>{database.name}</strong> database and remove all its data.
+                            </p>
+                            <Form className='mt-6'>
+                                <Field
+                                    type={'text'}
+                                    id={'confirm_name'}
+                                    name={'confirm'}
+                                    label={'Confirm Database Name'}
+                                    description={'Enter the database name to confirm deletion.'}
+                                />
+                                <Button type={'submit'} color={'red'} className='min-w-full my-6' disabled={!isValid}>
                                     Delete Database
                                 </Button>
-                            </div>
-                        </Form>
+                            </Form>
+                        </div>
                     </Modal>
                 )}
             </Formik>
-            <Modal visible={connectionVisible} onDismissed={() => setConnectionVisible(false)}>
+            <Modal
+                visible={connectionVisible}
+                title='Database connection details'
+                closeButton={true}
+                onDismissed={() => setConnectionVisible(false)}
+            >
                 <FlashMessageRender byKey={'database-connection-modal'} />
-                <h3 className={`mb-6 text-2xl`}>Database connection details</h3>
-                <div>
-                    <Label>Endpoint</Label>
-                    <CopyOnClick text={database.connectionString}>
-                        <Input type={'text'} readOnly value={database.connectionString} />
-                    </CopyOnClick>
-                </div>
-                <div className={`mt-6`}>
-                    <Label>Connections from</Label>
-                    <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
-                </div>
-                <div className={`mt-6`}>
-                    <Label>Username</Label>
-                    <CopyOnClick text={database.username}>
-                        <Input type={'text'} readOnly value={database.username} />
-                    </CopyOnClick>
-                </div>
-                <Can action={'database.view_password'}>
-                    <div className={`mt-6`}>
-                        <Label>Password</Label>
-                        <CopyOnClick text={database.password} showInNotification={false}>
-                            <Input type={'text'} readOnly value={database.password} />
+                <div className='flex flex-col min-w-full gap-4'>
+                    <div className='grid gap-4 grid-cols-2 min-w-full'>
+                        <div className='flex flex-col'>
+                            <Label>Endpoint</Label>
+                            <CopyOnClick text={database.connectionString}>
+                                <Input type={'text'} readOnly value={database.connectionString} />
+                            </CopyOnClick>
+                        </div>
+                        <div className='flex flex-col'>
+                            <Label>Connections from</Label>
+                            <CopyOnClick text={database.allowConnectionsFrom}>
+                                <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
+                            </CopyOnClick>
+                        </div>
+                        <div className='flex flex-col'>
+                            <Label>Username</Label>
+                            <CopyOnClick text={database.username}>
+                                <Input type={'text'} readOnly value={database.username} />
+                            </CopyOnClick>
+                        </div>
+                        <Can action={'database.view_password'}>
+                            <div className='flex flex-col'>
+                                <Label>Password</Label>
+                                <div className='flex flex-row min-w-full gap-2'>
+                                    <CopyOnClick text={database.password} showInNotification={false}>
+                                        <Input
+                                            type={'password'}
+                                            readOnly
+                                            value={database.password}
+                                            className='flex-auto'
+                                        />
+                                    </CopyOnClick>
+                                    <Can action={'database.update'}>
+                                        <RotatePasswordButton databaseId={database.id} onUpdate={appendDatabase} />
+                                    </Can>
+                                </div>
+                            </div>
+                        </Can>
+                    </div>
+                    <div className='flex flex-col'>
+                        <div className='flex flex-row gap-2 align-middle items-center'>
+                            <Label>JDBC Connection String</Label>
+                        </div>
+                        <CopyOnClick text={jdbcConnectionString} showInNotification={false}>
+                            <Input type={'password'} readOnly value={jdbcConnectionString} />
                         </CopyOnClick>
                     </div>
-                </Can>
-                <div className={`mt-6`}>
-                    <Label>JDBC Connection String</Label>
-                    <CopyOnClick text={jdbcConnectionString} showInNotification={false}>
-                        <Input type={'text'} readOnly value={jdbcConnectionString} />
-                    </CopyOnClick>
-                </div>
-                <div className={`mt-6 text-right`}>
-                    <Can action={'database.update'}>
-                        <RotatePasswordButton databaseId={database.id} onUpdate={appendDatabase} />
-                    </Can>
-                    <Button isSecondary onClick={() => setConnectionVisible(false)}>
-                        Close
-                    </Button>
                 </div>
             </Modal>
             <div className={className}>

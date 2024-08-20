@@ -10,15 +10,20 @@ interface CopyOnClickProps {
     children: React.ReactNode;
 }
 
-const CopyOnClick = ({ text, children }: CopyOnClickProps) => {
+const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) => {
     const [copied, setCopied] = useState(false);
-    const length = 80;
-    const stringText = String(text);
-    const truncatedText = stringText && stringText.length > length ? `${stringText.substring(0, length - 3)}...` : text;
+    let truncatedText;
+    if (showInNotification == false) {
+        truncatedText = '';
+    } else {
+        const length = 80;
+        const stringText = String(text);
+        truncatedText = stringText.length > length ? `"${stringText.substring(0, length - 3)}..."` : `"${stringText}"`;
+    }
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied "${truncatedText}" to clipboard`);
+        toast(`Copied ${truncatedText} to clipboard.`);
 
         const timeout = setTimeout(() => {
             setCopied(false);

@@ -1,10 +1,10 @@
+import clsx from 'clsx';
 import { useState } from 'react';
 
 import { Button } from '@/components/elements/button/index';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import clsx from 'clsx';
 
 interface Props {
     schedule: Schedule;

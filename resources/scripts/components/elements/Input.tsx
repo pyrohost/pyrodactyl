@@ -39,6 +39,15 @@ const inputStyle = css<Props>`
 
     &:disabled {
     }
+
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.09); /* Converted the hex color with alpha to rgba */
+    font-size: 0.875rem; /* 14px */
 `;
 
 const Input = styled.input<Props>`

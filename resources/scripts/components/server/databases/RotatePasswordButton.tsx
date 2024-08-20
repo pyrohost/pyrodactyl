@@ -1,7 +1,10 @@
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import Button from '@/components/elements/Button';
+import Spinner from '@/components/elements/Spinner';
+import { Button } from '@/components/elements/button/index';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
@@ -38,8 +41,11 @@ export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (datab
     };
 
     return (
-        <Button isSecondary color={'primary'} onClick={rotate} isLoading={loading}>
-            Rotate Password
+        <Button onClick={rotate}>
+            <div className='flex justify-center items-center h-4 w-4'>
+                {!loading && <FontAwesomeIcon icon={faRotateRight}></FontAwesomeIcon>}
+                {loading && <Spinner size={'small'} />}
+            </div>
         </Button>
     );
 };
