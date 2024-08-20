@@ -44,7 +44,7 @@ export default () => {
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader title={'Databases'}>
                 <Can action={'database.create'}>
-                    <div className={`flex items-center justify-end`}>
+                    <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                 {databases.length} of {databaseLimit} databases

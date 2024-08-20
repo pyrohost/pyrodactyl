@@ -59,7 +59,7 @@ const NetworkContainer = () => {
                     <>
                         {allocationLimit > 0 && (
                             <Can action={'allocation.create'}>
-                                <div className={`sm:flex items-center justify-end`}>
+                                <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                                     <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                         {data.length} of {allocationLimit} allowed allocations
                                     </p>

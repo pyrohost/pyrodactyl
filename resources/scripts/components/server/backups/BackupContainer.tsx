@@ -44,7 +44,7 @@ const BackupContainer = () => {
         <ServerContentBlock title={'Backups'}>
             <MainPageHeader title={'Backups'}>
                 <Can action={'backup.create'}>
-                    <div className={`sm:flex items-center justify-end`}>
+                    <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {backupLimit > 0 && backups.backupCount > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
                                 {backups.backupCount} of {backupLimit} backups

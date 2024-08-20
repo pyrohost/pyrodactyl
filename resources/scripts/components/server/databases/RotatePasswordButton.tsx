@@ -37,7 +37,11 @@ export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (datab
                     key: 'database-connection-modal',
                 });
             })
-            .then(() => setLoading(false));
+            .then(() => {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 500);
+            });
     };
 
     return (
