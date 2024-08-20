@@ -99,9 +99,7 @@ export default () => {
                                     <span>N/A</span>
                                 )}
 
-                                <span
-                                    className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`}
-                                />
+                                <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
                                 <br className={`sm:hidden`} />
 
                                 <strong>Next run at:&nbsp;</strong>
@@ -131,16 +129,16 @@ export default () => {
                     <div>
                         {schedule.tasks.length > 0
                             ? schedule.tasks
-                                    .sort((a, b) =>
-                                        a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
-                                    )
-                                    .map((task) => (
-                                        <ScheduleTaskRow
-                                            key={`${schedule.id}_${task.id}`}
-                                            task={task}
-                                            schedule={schedule}
-                                        />
-                                    ))
+                                  .sort((a, b) =>
+                                      a.sequenceId === b.sequenceId ? 0 : a.sequenceId > b.sequenceId ? 1 : -1,
+                                  )
+                                  .map((task) => (
+                                      <ScheduleTaskRow
+                                          key={`${schedule.id}_${task.id}`}
+                                          task={task}
+                                          schedule={schedule}
+                                      />
+                                  ))
                             : null}
                     </div>
                     <EditScheduleModal visible={showEditModal} schedule={schedule} onModalDismissed={toggleEditModal} />

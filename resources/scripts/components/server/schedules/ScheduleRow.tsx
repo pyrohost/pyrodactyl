@@ -1,10 +1,10 @@
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default ({ schedule }: { schedule: Schedule }) => (
     <>
