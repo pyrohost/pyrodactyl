@@ -76,10 +76,10 @@ const BackupContainer = () => {
                             }}
                             className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
                         >
-                            <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                                <For each={items} memo>
-                                    {(backup) => <BackupRow key={backup.uuid} backup={backup} />}
-                                </For>
+                            <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
+                                {items.map((backup) => (
+                                    <BackupRow key={backup.uuid} backup={backup} />
+                                ))}
                             </div>
                         </div>
                     )
