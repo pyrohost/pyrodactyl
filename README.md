@@ -99,7 +99,20 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 -   Git
 -   Vagrant
 -   libvirtd
+-   nfs-utils
 
+### Install nfs-utils
+-   Fedora
+`sudo dnf install nfs-utils`
+
+-   Ubuntu/Debian
+`sudo apt-get install nfs-kernel-server`
+
+Now Start the tool
+
+-    `sudo systemctl start nfs-server`
+To have it start when your computer start's do.
+-    `sudo systemctl enable nfs-server`
 ### Notes about Local Development on Linux
 
 Using [Vagrant](https://www.vagrantup.com) on Linux Is incredibly simple. Verify you met the prerequisits above, then follow these simple steps.
@@ -115,6 +128,7 @@ Using [Vagrant](https://www.vagrantup.com) on Linux Is incredibly simple. Verify
 
 ### Notes about Local Development on Linux
 
+-    If your having trouble installing Virtualbox on linux, you can try to follow instructions in these [docs](https://github.com/pyrohost/pyrodactyl/blob/main/VirtualBoxSetup.md)
 -    It should be stated that when running on linux, if you are using a virtual machine manager other than libvirtd, you will have to add your configuration to the [Vagrantfile](https://github.com/pyrohost/pyrodactyl/blob/main/Vagrantfile). If not, it will boot the VM with 512 mb of ram, which is not enough to build Pyrodactyl!
 
 -    Might be a weird bug where first time you build pyrodactyl with `vagrant up` you get an error like this,
