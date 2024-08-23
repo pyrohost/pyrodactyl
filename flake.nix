@@ -21,6 +21,8 @@
           pkgs.docker
           pkgs.cowsay
           pkgs.lolcat
+          pkgs.php
+          pkgs.php83Packages.composer
 
         ];
 
@@ -41,7 +43,8 @@
           pkgs.docker
           pkgs.cowsay
           pkgs.lolcat
-          # other packages
+          pkgs.php
+          pkgs.php83Packages.composer
         ];
 
         shellHook = ''
