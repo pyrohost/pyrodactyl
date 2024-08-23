@@ -46,7 +46,7 @@ export default () => {
                 <Can action={'database.create'}>
                     <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
-                            <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0`}>
+                            <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
                                 {databases.length} of {databaseLimit} databases
                             </p>
                         )}
@@ -58,15 +58,27 @@ export default () => {
             {!databases.length && loading ? null : (
                 <>
                     {databases.length > 0 ? (
-                        <For each={databases} memo>
-                            {(database, index) => (
-                                <DatabaseRow
-                                    key={database.id}
-                                    database={database}
-                                    className={index > 0 ? 'mt-1' : undefined}
-                                />
-                            )}
-                        </For>
+                        <div
+                            data-pyro-databases
+                            style={{
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
+                            }}
+                            className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
+                        >
+                            <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
+                                <For each={databases} memo>
+                                    {(database, index) => (
+                                        <div
+                                            key={index}
+                                            className='flex items-center rounded-md bg-[#ffffff11] px-2 sm:px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'
+                                        >
+                                            <DatabaseRow key={database.id} database={database} />
+                                        </div>
+                                    )}
+                                </For>
+                            </div>
+                        </div>
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0

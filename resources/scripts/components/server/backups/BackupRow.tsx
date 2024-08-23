@@ -79,21 +79,23 @@ export default ({ backup }: Props) => {
                                         <p className='break-words truncate text-lg'>{backup.name}</p>
                                     </div>
                                 </div>
-                                {backup.checksum && (<p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>
-                                    {backup.checksum}
-                                </p>)}
+                                {backup.checksum && (
+                                    <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>
+                                        {backup.checksum}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full sm:w-96 sm:min-w-40'>
+                <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full lg:w-96 sm:min-w-40'>
                     {backup.completedAt !== null && backup.isSuccessful && (
                         <>
                             <span className={`text-xs sm:flex-initial sm:ml-0`}>{bytesToString(backup.bytes)}</span>
                             <p className={`text-xs inline sm:hidden`}>,&nbsp;</p>
                         </>
-                    )}                    
+                    )}
                     <p
                         title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
                         className={`text-xs sm:flex-initial`}
