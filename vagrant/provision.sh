@@ -123,7 +123,8 @@ php artisan p:environment:database -n --host localhost --port 3306 --database pa
 php artisan migrate --seed --force
 
 # Create a developer user
-php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password
+# Addin --admin tag just in case it ever gets fixed
+php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password --admin
 mysql -u root -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
 
 # Make a location and node for the panel
