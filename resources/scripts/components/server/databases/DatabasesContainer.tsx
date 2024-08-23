@@ -69,11 +69,10 @@ export default () => {
                             <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
                                 <For each={databases} memo>
                                     {(database, index) => (
-                                        <div className='flex items-center rounded-md bg-[#ffffff11] px-2 sm:px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'>
+                                        <div key={index} className='flex items-center rounded-md bg-[#ffffff11] px-2 sm:px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'>
                                             <DatabaseRow
                                                 key={database.id}
                                                 database={database}
-                                                className={index > 0 ? 'mt-1' : undefined}
                                             />
                                         </div>
                                     )}
