@@ -19,6 +19,9 @@ import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { For } from 'million/react';
 
 const Label = styled.label`
     display: inline-block;
@@ -29,10 +32,9 @@ const Label = styled.label`
 
 interface Props {
     database: ServerDatabase;
-    className?: string;
 }
 
-export default ({ database, className }: Props) => {
+export default ({ database }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { addError, clearFlashes } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -41,9 +43,8 @@ export default ({ database, className }: Props) => {
     const appendDatabase = ServerContext.useStoreActions((actions) => actions.databases.appendDatabase);
     const removeDatabase = ServerContext.useStoreActions((actions) => actions.databases.removeDatabase);
 
-    const jdbcConnectionString = `jdbc:mysql://${database.username}${
-        database.password ? `:${encodeURIComponent(database.password)}` : ''
-    }@${database.connectionString}/${database.name}`;
+    const jdbcConnectionString = `jdbc:mysql://${database.username}${database.password ? `:${encodeURIComponent(database.password)}` : ''
+        }@${database.connectionString}/${database.name}`;
 
     const schema = object().shape({
         confirm: string()
@@ -101,6 +102,7 @@ export default ({ database, className }: Props) => {
                     </Modal>
                 )}
             </Formik>
+
             <Modal
                 visible={connectionVisible}
                 title='Database connection details'
@@ -109,7 +111,7 @@ export default ({ database, className }: Props) => {
             >
                 <FlashMessageRender byKey={'database-connection-modal'} />
                 <div className='flex flex-col min-w-full gap-4'>
-                    <div className='grid gap-4 grid-cols-2 min-w-full'>
+                    <div className='grid gap-4 sm:grid-cols-2 min-w-full'>
                         <div className='flex flex-col'>
                             <Label>Endpoint</Label>
                             <CopyOnClick text={database.connectionString}>
@@ -157,44 +159,73 @@ export default ({ database, className }: Props) => {
                     </div>
                 </div>
             </Modal>
-            <div className={className}>
-                <div className={`hidden md:block`}>
-                    {/* <FontAwesomeIcon icon={faDatabase} fixedWidth /> */}
-                    FIXME: Database Icon
+
+            {/* Title */}
+            <div className={`flex-auto box-border min-w-fit`}>
+                <div className='flex flex-row flex-none align-middle items-center gap-6'>
+                    <FontAwesomeIcon icon={faDatabase} className='flex-none' />
+                    <div>
+                        <CopyOnClick text={database.name}>
+                            <p className='text-lg'>{database.name}</p>
+                        </CopyOnClick>
+                        <CopyOnClick text={database.connectionString}>
+                            <p className={`text-xs text-zinc-400 font-mono`}>
+                                {database.connectionString}
+                            </p>
+                        </CopyOnClick>
+                    </div>
                 </div>
-                <div className={`flex-1 ml-4`}>
-                    <CopyOnClick text={database.name}>
-                        <p className={`text-lg`}>{database.name}</p>
-                    </CopyOnClick>
+            </div>
+
+            {/* Properties + buttons */}
+            <div className={`flex flex-col items-center sm:gap-12 gap-4 sm:flex-row`}>
+                <div className='flex flex-wrap gap-4 justify-center m-auto'>
+                    <For each={[
+                        { label: 'Endpoint', value: database.connectionString },
+                        { label: 'From', value: database.allowConnectionsFrom },
+                        { label: 'Username', value: database.username },
+                    ]} memo>
+                        {(db, index) => (
+                            <div key={index} className="text-center">
+                                <CopyOnClick text={db.value}>
+                                    <p className="text-sm">{db.value}</p>
+                                </CopyOnClick>
+                                <p className="mt-1 text-xs text-zinc-500 uppercase select-none">{db.label}</p>
+                            </div>
+                        )}
+                    </For>
                 </div>
-                <div className={`ml-8 text-center hidden md:block`}>
-                    <CopyOnClick text={database.connectionString}>
-                        <p className={`text-sm`}>{database.connectionString}</p>
-                    </CopyOnClick>
-                    <p className={`mt-1 text-xs text-zinc-500 uppercase select-none`}>Endpoint</p>
-                </div>
-                <div className={`ml-8 text-center hidden md:block`}>
-                    <p className={`text-sm`}>{database.allowConnectionsFrom}</p>
-                    <p className={`mt-1 text-xs text-zinc-500 uppercase select-none`}>Connections from</p>
-                </div>
-                <div className={`ml-8 text-center hidden md:block`}>
-                    <CopyOnClick text={database.username}>
-                        <p className={`text-sm`}>{database.username}</p>
-                    </CopyOnClick>
-                    <p className={`mt-1 text-xs text-zinc-500 uppercase select-none`}>Username</p>
-                </div>
-                <div className={`ml-8`}>
-                    <Button isSecondary onClick={() => setConnectionVisible(true)}>
-                        {/* <FontAwesomeIcon icon={faEye} fixedWidth /> */}
-                        FIXME: Visible Eye Icon
-                    </Button>
+
+                <div className='flex align-middle items-center justify-center'>
+                    <button
+                        type={'button'}
+                        aria-label={'View database connection details'}
+                        className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 flex align-middle items-center justify-center flex-col`}
+                        onClick={() => setConnectionVisible(true)}
+                    >
+                        <FontAwesomeIcon icon={faEye} className={`px-5`} size='lg' />
+                        Details
+                    </button>
                     <Can action={'database.delete'}>
-                        <Button color={'red'} isSecondary onClick={() => setVisible(true)}>
-                            {/* <FontAwesomeIcon icon={faTrashAlt} fixedWidth /> */}
-                            FIXME: Trash Icon
-                        </Button>
+                        <button
+                            type={'button'}
+                            aria-label={'Delete database'}
+                            className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
+                            onClick={() => setVisible(true)}
+                        >
+                            <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                            Delete
+                        </button>
                     </Can>
                 </div>
+                {/* <Button onClick={() => setConnectionVisible(true)}>
+                        <FontAwesomeIcon icon={faEye} fixedWidth />
+                    </Button>
+                    <Can action={'database.delete'}>
+                        <Button color={'red'} onClick={() => setVisible(true)}>
+                            <FontAwesomeIcon icon={faTrashAlt} fixedWidth />
+                        </Button>
+                    </Can> */}
             </div>
         </>
     );

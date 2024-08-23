@@ -45,7 +45,7 @@ export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (datab
     };
 
     return (
-        <Button onClick={rotate}>
+        <Button onClick={rotate} className='flex-none'>
             <div className='flex justify-center items-center h-4 w-4'>
                 {!loading && <FontAwesomeIcon icon={faRotateRight}></FontAwesomeIcon>}
                 {loading && <Spinner size={'small'} />}

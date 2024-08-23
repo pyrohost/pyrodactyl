@@ -87,7 +87,7 @@ export default ({ backup }: Props) => {
                     </div>
                 </div>
 
-                <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full sm:w-96 sm:min-w-40'>
+                <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full lg:w-96 sm:min-w-40'>
                     {backup.completedAt !== null && backup.isSuccessful && (
                         <>
                             <span className={`text-xs sm:flex-initial sm:ml-0`}>{bytesToString(backup.bytes)}</span>

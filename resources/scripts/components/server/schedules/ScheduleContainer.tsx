@@ -62,7 +62,7 @@ function ScheduleContainer() {
                         </p>
                     ) : (
                         <div
-                            data-pyro-backups
+                            data-pyro-schedules
                             style={{
                                 background:
                                     'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',

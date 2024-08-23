@@ -12,7 +12,7 @@ export default ({ schedule }: { schedule: Schedule }) => (
             <div className='flex flex-row flex-none align-middle items-center gap-6'>
                 <FontAwesomeIcon icon={faCalendarAlt} className='flex-none' />
                 <div>
-                    <div className='flex flex-row items-center gap-2'>
+                    <div className='flex flex-row items-center gap-2 text-lg'>
                         <p>{schedule.name}</p>
                     </div>
                     <p className={`text-xs text-zinc-400`}>
