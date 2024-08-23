@@ -1,4 +1,7 @@
+import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Formik, FormikHelpers } from 'formik';
+import { For } from 'million/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { object, string } from 'yup';
@@ -19,9 +22,6 @@ import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { For } from 'million/react';
 
 const Label = styled.label`
     display: inline-block;
@@ -43,8 +43,9 @@ export default ({ database }: Props) => {
     const appendDatabase = ServerContext.useStoreActions((actions) => actions.databases.appendDatabase);
     const removeDatabase = ServerContext.useStoreActions((actions) => actions.databases.removeDatabase);
 
-    const jdbcConnectionString = `jdbc:mysql://${database.username}${database.password ? `:${encodeURIComponent(database.password)}` : ''
-        }@${database.connectionString}/${database.name}`;
+    const jdbcConnectionString = `jdbc:mysql://${database.username}${
+        database.password ? `:${encodeURIComponent(database.password)}` : ''
+    }@${database.connectionString}/${database.name}`;
 
     const schema = object().shape({
         confirm: string()
@@ -169,9 +170,7 @@ export default ({ database }: Props) => {
                             <p className='text-lg'>{database.name}</p>
                         </CopyOnClick>
                         <CopyOnClick text={database.connectionString}>
-                            <p className={`text-xs text-zinc-400 font-mono`}>
-                                {database.connectionString}
-                            </p>
+                            <p className={`text-xs text-zinc-400 font-mono`}>{database.connectionString}</p>
                         </CopyOnClick>
                     </div>
                 </div>
@@ -180,17 +179,20 @@ export default ({ database }: Props) => {
             {/* Properties + buttons */}
             <div className={`flex flex-col items-center sm:gap-12 gap-4 sm:flex-row`}>
                 <div className='flex flex-wrap gap-4 justify-center m-auto'>
-                    <For each={[
-                        { label: 'Endpoint', value: database.connectionString },
-                        { label: 'From', value: database.allowConnectionsFrom },
-                        { label: 'Username', value: database.username },
-                    ]} memo>
+                    <For
+                        each={[
+                            { label: 'Endpoint', value: database.connectionString },
+                            { label: 'From', value: database.allowConnectionsFrom },
+                            { label: 'Username', value: database.username },
+                        ]}
+                        memo
+                    >
                         {(db, index) => (
-                            <div key={index} className="text-center">
+                            <div key={index} className='text-center'>
                                 <CopyOnClick text={db.value}>
-                                    <p className="text-sm">{db.value}</p>
+                                    <p className='text-sm'>{db.value}</p>
                                 </CopyOnClick>
-                                <p className="mt-1 text-xs text-zinc-500 uppercase select-none">{db.label}</p>
+                                <p className='mt-1 text-xs text-zinc-500 uppercase select-none'>{db.label}</p>
                             </div>
                         )}
                     </For>
