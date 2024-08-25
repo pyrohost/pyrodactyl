@@ -17,8 +17,16 @@
         src = ./.;
 
         buildInputs = [
-          pkgs.cowsay
-          pkgs.lolcat
+          pkgs.php
+          pkgs.php83Packages.composer
+          pkgs.php82Extensions.tokenizer
+          pkgs.nodejs_20
+          pkgs.mariadb_110
+          pkgs.redis
+          pkgs.nginx
+          pkgs.docker
+          pkgs.docker-compose
+          pkgs.openssl
         ];
 
         buildPhase = ''
@@ -42,8 +50,7 @@
 
       devShells.${system} = pkgs.mkShell {
         buildInputs = [
-          pkgs.cowsay
-          pkgs.lolcat
+          pkgs.neovim
           pkgs.php
           pkgs.php83Packages.composer
           pkgs.php82Extensions.tokenizer
@@ -57,7 +64,7 @@
         ];
 
         shellHook = ''
-          echo "Welcome to the development environment for Pyrodactyl Panel!" | cowsay | lolcat
+          echo "Welcome to the development environment for Pyrodactyl Panel!"
         '';
       };
 
