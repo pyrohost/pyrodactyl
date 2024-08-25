@@ -119,8 +119,10 @@
     "firefox esr",
     "not dead"
   ],
-  "packageManager": "npm@10.8.1",
+  "packageManager": "yarn@bun@1.1.26",
   "trustedDependencies": [
-    "@sentry/cli"
+    "@sentry/cli",
+    "@swc/core",
+    "esbuild"
   ]
 }
