@@ -1,10 +1,12 @@
 # Stage 0:
 # Build the frontend
-FROM --platform=$TARGETOS/$TARGETARCH oven/bun:alpine
+FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine
 WORKDIR /app
 COPY . ./
-RUN bun i --frozen-lockfile \
-    && bun ship
+RUN apk add --no-cache --update git \
+    && npm install -g turbo \
+    && npm ci \
+    && npm run ship
 
 # Stage 1:
 # Build the actual container with all of the needed PHP dependencies that will run the application.
