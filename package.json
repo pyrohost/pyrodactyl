@@ -42,7 +42,7 @@
         "copy-to-clipboard": "^3.3.3",
         "date-fns": "^3.6.0",
         "debounce": "^2.0.0",
-        "deepmerge-ts": "^5.1.0",
+        "deepmerge-ts": "^7.1.0",
         "easy-peasy": "^6.0.4",
         "events": "^3.3.0",
         "formik": "^2.4.5",
