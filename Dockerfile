@@ -1,11 +1,9 @@
 # Stage 0:
 # Build the frontend
-FROM --platform=$TARGETOS/$TARGETARCH alpine:latest
+FROM --platform=$TARGETOS/$TARGETARCH oven/bun:alpine
 WORKDIR /app
 COPY . ./
-RUN apk add --no-cache --update curl bash \
-    && curl -fsSL https://bun.sh/install | bash && exec bash \
-    && bun i --frozen-lockfile \
+RUN bun i --frozen-lockfile \
     && bun ship
 
 # Stage 1:
