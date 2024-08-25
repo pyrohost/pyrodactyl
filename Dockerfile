@@ -3,7 +3,8 @@
 FROM --platform=$TARGETOS/$TARGETARCH alpine:latest
 WORKDIR /app
 COPY . ./
-RUN curl -fsSL https://bun.sh/install | bash && exec bash \
+RUN apk add --no-cache --update curl \
+    && curl -fsSL https://bun.sh/install | sh && exec sh \
     && bun i --frozen-lockfile \
     && bun ship
 

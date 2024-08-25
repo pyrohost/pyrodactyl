@@ -136,8 +136,10 @@ Using [Vagrant](https://www.vagrantup.com) on Linux is incredibly simple. Verify
 1. Clone the Pyrodactyl panel repository
 2. Run `bun i` to install all required packages
 3. Run `bun ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
+
 > [!IMPORTANT]
 > In order for `vagrant up` to work, your files must be in the `/var/www/pterodactyl` directory unless manually changed in the `Vagrantfile`!
+
 4. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
 5. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
 
