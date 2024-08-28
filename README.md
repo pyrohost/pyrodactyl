@@ -43,6 +43,10 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 >
 > If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml).
 
+> [!WARNING]
+> Nothing is Perfect, that apply's to this panel.
+> If you are migrating your data from pterodactyl, always make sure you take a backup of your pterodactyl database and other relevant data.
+
 ### Prerequisites
 
 -   Latest LTS version of NodeJS
@@ -51,6 +55,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 -   Git
 
 ### Linux
+
 
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
 
