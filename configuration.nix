@@ -72,9 +72,10 @@
     }
   ];
 
-  # Configure Nginx
-  services.nginx.enable = true;
-  services.nginx.virtualHosts = {
+services.nginx = {
+  enable = true;
+  user = "nginx"; # Replace with the correct user if needed
+  virtualHosts = {
     "localhost" = {
       root = "${pyrodactylPath}/public";
       index = "index.html index.htm index.php";
@@ -107,6 +108,7 @@
       '';
     };
   };
+};
 
   # Configure Composer
   environment.systemPackages = with pkgs; [ composer ];
