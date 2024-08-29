@@ -1,5 +1,3 @@
-{ config, pkgs, ... }:
-
 {
   # Define the system packages
   environment.systemPackages = with pkgs; [
@@ -9,21 +7,48 @@
     phpPackages.composer
     redis
     nginx
-    mariadb
+    mysql
     docker
     docker-compose
   ];
 
   users.users = {
-   nix = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ]; # Example groups
+    nix = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "docker" ]; # Example groups
     };
   };
+
   # Configure Redis
   services.redis.enable = true;
+
   # Configure MySQL
-  services.mysql.enable = true;
+  services.mysql = {
+    enable = true;
+    package = pkgs.mysql;  # Ensure you are using MySql
+    dataDir = "/var/lib/mysql";
+    ensureDatabases = [
+      { name = "panel"; }
+    ];
+    ensureUsers = [
+      {
+        name = "pyrodactyl";
+        password = "password";
+        grants = [
+          "ALL PRIVILEGES ON panel.*"
+        ];
+      }
+      {
+        name = "pyrodactyluser";
+        password = "pyrodactyl";
+        grants = [
+          "ALL PRIVILEGES ON *.*"
+        ];
+      }
+    ];
+    initialRootPassword = "uvrYDZJ92X7QnbAwU7xvabL";
+  };
+
   # Configure PHP-FPM
   services.phpfpm.enable = true;
   services.phpfpm.pools = [
@@ -80,30 +105,6 @@
       '';
     };
   };
-
-  # Configure MariaDB
-  services.mysql.enable = true;
-  services.mysql.package = pkgs.mariadb;
-  services.mysql.dataDir = "/var/lib/mysql";
-  services.mysql.ensureDatabases = [
-    { name = "panel"; }
-  ];
-  services.mysql.ensureUsers = [
-    {
-      name = "pyrodactyl";
-      password = "password";
-      grants = [
-        "ALL PRIVILEGES ON panel.*"
-      ];
-    }
-    {
-      name = "pyrodactyluser";
-      password = "pyrodactyl";
-      grants = [
-        "ALL PRIVILEGES ON *.*"
-      ];
-    }
-  ];
 
   # Configure Composer
   environment.systemPackages = with pkgs; [ composer ];
