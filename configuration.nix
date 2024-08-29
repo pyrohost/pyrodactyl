@@ -12,6 +12,7 @@
     docker-compose
   ];
 
+  pyrodactylPath = builtins.toString ./.;
   users.users = {
     nix = {
       isNormalUser = true;
@@ -74,7 +75,7 @@
   services.nginx.enable = true;
   services.nginx.virtualHosts = {
     "localhost" = {
-      root = "/var/www/pterodactyl/public";
+      root = "${pyrodactylPath}/public";
       index = "index.html index.htm index.php";
       location = ''
         try_files $uri $uri/ /index.php?$query_string;
@@ -118,7 +119,7 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.php}/bin/php /var/www/pterodactyl/artisan schedule:run";
+      ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan schedule:run";
       User = "nix";
       Group = "nix";
     };
@@ -131,7 +132,7 @@
     serviceConfig = {
       User = "nix";
       Group = "nix";
-      ExecStart = "${pkgs.php}/bin/php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3";
+      ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3";
       Restart = "always";
     };
     wantedBy = [ "multi-user.target" ];
