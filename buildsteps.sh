@@ -1,23 +1,21 @@
 #!/bin/bash
 
-composer update
-
 mysqlrootpass="pyro"
 
 #? All Mysql commands have to be run as root in the NixOS Environment
 # Create the database for the panel
-sudo mysql -u root -p$mysqlrootpass -e "CREATE DATABASE panel;" \
+sudo mysql -u root -p$mysqlrootpass -e "CREATE DATABASE IF NOT EXISTS panel;" \
     -e "CREATE USER 'pyrodactyl'@'*' IDENTIFIED BY 'password';" \
-    -e "GRANT ALL PRIVILEGES ON panel.* TO 'pyrodactyl'@'*' WITH GRANT OPTION;" \
+    -e "GRANT ALL PRIVILEGES ON panel.* TO 'pyrodactyl'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Create the database host user
-sudo mysql -u root -p$mysqlrootpass -e "CREATE USER 'pyrodactyluser'@'*' IDENTIFIED BY 'pyrodactyl';" \
-    -e "GRANT ALL PRIVILEGES ON *.* TO 'pyrodactyluser'@'*' WITH GRANT OPTION;" \
+sudo mysql -u root -p$mysqlrootpass -e "CREATE USER IF NOT EXISTS 'pyrodactyluser'@'*' IDENTIFIED BY 'pyrodactyl';" \
+    -e "GRANT ALL PRIVILEGES ON *.* TO 'pyrodactyluser'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Initialize the Pterodactyl panel
-cp .env.example .env
+# cp .env.example .env
 php /usr/local/bin/composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
