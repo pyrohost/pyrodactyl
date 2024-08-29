@@ -10,6 +10,7 @@
     mysql
     docker
     docker-compose
+    nodejs_20
   ];
 
   pyrodactylPath = builtins.toString ./.;
@@ -139,16 +140,16 @@
   };
 
   # Configure Wings
-  systemd.services.wings = {
-    description = "Pterodactyl Wings Daemon";
-    after = [ "docker.service" ];
-    requires = [ "docker.service" ];
-    workingDirectory = "/etc/pterodactyl";
-    execStart = "/usr/local/bin/wings";
-    restart = "on-failure";
-    user = "root";
-    limitNOFILE = 4096;
-    pidFile = "/var/run/wings/daemon.pid";
-  };
+  #  systemd.services.wings = {
+  #  description = "Pterodactyl Wings Daemon";
+  #after = [ "docker.service" ];
+  #  requires = [ "docker.service" ];
+  #workingDirectory = "/etc/pterodactyl";
+  #  execStart = "/usr/local/bin/wings";
+  #  restart = "on-failure";
+  #  user = "root";
+  #  limitNOFILE = 4096;
+  #  pidFile = "/var/run/wings/daemon.pid";
+  #};
 }
 

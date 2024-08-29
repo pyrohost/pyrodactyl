@@ -1,5 +1,6 @@
 {
   description = "PyroPanel";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -9,11 +10,12 @@
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs { inherit system; };
 
-
       pyrodactylPath = builtins.toString ./.;
+
+      # Define the NixOS configuration if using NixOS
       configurationNix = {
         imports = [
-          ./configuration.nix # Include your configuration.nix here
+          ./configuration.nix # Import your configuration.nix here
         ];
 
         systemd.timers.pterodactyl-cron.timer = {
@@ -24,8 +26,6 @@
           };
         };
 
-
-        # Example to ensure the systemd services are only in the Nix environment
         systemd.services.pterodactyl-cron = {
           description = "Pterodactyl Scheduler";
           wantedBy = [ "multi-user.target" ];
@@ -62,14 +62,29 @@
         };
       };
 
+      # Define the NixOS system
       nixosSystem = pkgs.nixosSystem {
         inherit system;
         modules = [ configurationNix ];
       };
 
     in {
+      # For NixOS users
       defaultPackage = nixosSystem.config.system.build.toplevel;
-      devShell = import ./shell.nix { inherit pkgs; };
+
+      # Define the development shell
+      devShell = pkgs.mkShell {
+        buildInputs = [
+          pkgs.php
+          pkgs.phpPackages.composer
+          pkgs.redis
+          pkgs.nginx
+          pkgs.mysql
+          pkgs.docker
+          pkgs.docker-compose
+          pkgs.nodejs_20
+        ];
+      };
     });
 }
 

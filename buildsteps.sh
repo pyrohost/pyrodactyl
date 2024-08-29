@@ -5,16 +5,18 @@ mysqlrootpass="pyro"
 #? All Mysql commands have to be run as root in the NixOS Environment
 # Create the database for the panel
 sudo mysql -u root -p$mysqlrootpass -e "CREATE DATABASE IF NOT EXISTS panel;" \
-    -e "CREATE USER 'pyrodactyl'@'*' IDENTIFIED BY 'password';" \
-    -e "GRANT ALL PRIVILEGES ON panel.* TO 'pyrodactyl'@'%' WITH GRANT OPTION;" \
+    -e "CREATE USER 'pyrodactyl'@'%' IDENTIFIED BY 'password';" \
+    -e "GRANT ALL PRIVILEGES ON panel.% TO 'pyrodactyl'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Create the database host user
-sudo mysql -u root -p$mysqlrootpass -e "CREATE USER IF NOT EXISTS 'pyrodactyluser'@'*' IDENTIFIED BY 'pyrodactyl';" \
+sudo mysql -u root -p$mysqlrootpass -e "CREATE USER IF NOT EXISTS 'pyrodactyluser'@'%' IDENTIFIED BY 'pyrodactyl';" \
     -e "GRANT ALL PRIVILEGES ON *.* TO 'pyrodactyluser'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Initialize the Pterodactyl panel
+
+# This cp command breaks my configuration, that is why it's commented
 # cp .env.example .env
 php /usr/local/bin/composer install --no-dev --optimize-autoloader
 
@@ -37,64 +39,34 @@ php artisan p:node:make -n --name local --description "Development Node" --locat
 # Add some dummy allocations to the node
 sudo mysql -u root -p$mysqlrootpass -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
 
-# Set the crontab for the panel
-(
-    crontab -l 2>/dev/null
-    echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"
-) | crontab -
-
-# Install the queue worker
-cat >/etc/systemd/system/pteroq.service <<EOF
-[Unit]
-Description=Pterodactyl Queue Worker
-After=redis-server.service
-
-[Service]
-User=vagrant
-Group=vagrant
-Restart=always
-ExecStart=/usr/bin/php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
-StartLimitInterval=180
-StartLimitBurst=30
-RestartSec=5s
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-systemctl enable --now pteroq
-
-# Install Docker
-systemctl enable --now docker
-
 # Setup wings
-mkdir -p /etc/pterodactyl
-curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
-chmod u+x /usr/local/bin/wings
+#curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
+#chmod u+x /usr/local/bin/wings
 
 # Configure wings
-php artisan p:node:configuration 1 >/etc/pterodactyl/config.yml
-cat >/etc/systemd/system/wings.service <<EOF
-[Unit]
-Description=Pterodactyl Wings Daemon
-After=docker.service
-Requires=docker.service
-PartOf=docker.service
+# This needs to be changed into a docker-compose file probably, or just a docker cli command
+mkdir $(pwd)/nix/pterodactyl
+mkdir $(pwd)/nix/pterodactyl/etc
+mkdir $(pwd)/nix/pterodactyl/var
+mkdir $(pwd)/nix/pterodactyl/tmp
 
-[Service]
-User=root
-WorkingDirectory=/etc/pterodactyl
-LimitNOFILE=4096
-PIDFile=/var/run/wings/daemon.pid
-ExecStart=/usr/local/bin/wings
-Restart=on-failure
-StartLimitInterval=180
-StartLimitBurst=30
-RestartSec=5s
+php artisan p:node:configuration 1 >$(pwd)/nix/pterodactyl/etc/config.yml
 
-[Install]
-WantedBy=multi-user.target
-EOF
+docker run -d \
+  --name pterodactyl-wings \
+  --restart always \
+  --network wings \
+  -p 8080:8080 \
+  -p 2022:2022 \
+  -e TZ="America/Los_Angeles" \
+  -e WINGS_UID=1001 \
+  -e WINGS_GID=1001 \
+  -e WINGS_USERNAME=pyrodactyl \
+  -v "/var/run/docker.sock:/var/run/docker.sock" \
+  -v "/var/lib/docker/containers:/var/lib/docker/containers" \
+  -v "$(pwd)/nix/pterodactyl/etc:/etc/pterodactyl" \
+  -v "$(pwd)/nix/pterodactyl/lib:/var/lib/pterodactyl" \
+  -v "$(pwd)/nix/pterodactyl/log:/var/log/pterodactyl" \
+  -v "$(pwd)/nix/pterodactyl/tmp:/tmp/pterodactyl" \
+  ghcr.io/pterodactyl/wings:latest
 
-# Enable and start wings
-systemctl enable --now wings
