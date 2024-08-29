@@ -54,6 +54,7 @@ php artisan p:node:configuration 1 >$(pwd)/nix/pterodactyl/etc/config.yml
 
 docker run -d \
   --name pterodactyl-wings \
+  --rm \
   --restart always \
   --network wings \
   -p 8080:8080 \
@@ -68,5 +69,6 @@ docker run -d \
   -v "$(pwd)/nix/pterodactyl/lib:/var/lib/pterodactyl" \
   -v "$(pwd)/nix/pterodactyl/log:/var/log/pterodactyl" \
   -v "$(pwd)/nix/pterodactyl/tmp:/tmp/pterodactyl" \
+  --rm
   ghcr.io/pterodactyl/wings:latest
 
