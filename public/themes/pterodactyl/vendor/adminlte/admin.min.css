@@ -407,6 +407,10 @@ a:focus {
     -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
+/* FIXME: Temporary workaround for the admin sidebar buttons not being full width */
+.slimScrollDiv {
+    width: 100% !important;
+}
 @media (max-width: 767px) {
     .main-sidebar {
         padding-top: 100px;
