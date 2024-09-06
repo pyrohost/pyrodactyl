@@ -36,7 +36,7 @@
         "@xterm/xterm": "^5.5.0",
         "axios": "^1.7.4",
         "browserslist": "^4.23.0",
-        "chart.js": "^4.4.2",
+        "chart.js": "^4.4.4",
         "clsx": "^2.1.0",
         "cmdk": "^1.0.0",
         "copy-to-clipboard": "^3.3.3",
