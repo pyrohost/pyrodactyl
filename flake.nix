@@ -12,18 +12,15 @@
 
       pyrodactylPath = builtins.toString ./.;
 
-      # Define the NixOS configuration if using NixOS
       configurationNix = {
         imports = [
-          ./configuration.nix # Import your configuration.nix here
+          ./configuration.nix
         ];
 
         systemd.timers.pterodactyl-cron.timer = {
           description = "Run Pterodactyl Scheduler every minute";
           wantedBy = [ "timers.target" ];
-          timerConfig = {
-            OnUnitActiveSec = "1m";
-          };
+          timerConfig.OnUnitActiveSec = "1m";
         };
 
         systemd.services.pterodactyl-cron = {
@@ -62,29 +59,49 @@
         };
       };
 
-      # Define the NixOS system
       nixosSystem = pkgs.nixosSystem {
         inherit system;
         modules = [ configurationNix ];
       };
 
     in {
-      # For NixOS users
       defaultPackage = nixosSystem.config.system.build.toplevel;
 
-      # Define the development shell
-      devShell = pkgs.mkShell {
-        buildInputs = [
-          pkgs.php
-          pkgs.phpPackages.composer
-          pkgs.redis
-          pkgs.nginx
-          pkgs.mysql
-          pkgs.docker
-          pkgs.docker-compose
-          pkgs.nodejs_20
-        ];
-      };
-    });
+    devShell = pkgs.mkShell {
+      buildInputs = [
+        pkgs.php
+        pkgs.phpPackages.composer
+        pkgs.redis
+        pkgs.nginx
+        pkgs.mysql
+        pkgs.docker
+        pkgs.docker-compose
+        pkgs.nodejs_20
+      ];
+
+      # Hook to start services when entering the shell and stop them when exiting
+      shellHook = ''
+        echo "Starting Redis and MySQL in the dev shell..."
+
+        # Start Redis in the background
+        redis-server --daemonize yes
+
+        # Start MySQL (mariadb) in the background
+        #mysqld_safe --datadir=${builtins.toString ./data} &
+        mysqld_safe --datadir=${dataDir} --log-error=${logDir}/mysqld.log &
+        echo "Redis and MySQL are running!"
+
+        # Define cleanup function
+        cleanup() {
+          echo "Stopping Redis and MySQL..."
+          pkill redis-server
+          pkill mysqld_safe
+        }
+
+        # Register cleanup on shell exit
+        trap cleanup EXIT
+  '';
+};
+});
 }
 
