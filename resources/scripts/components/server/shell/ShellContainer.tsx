@@ -220,15 +220,14 @@ const SoftwareContainer = () => {
         }
 
         reinstall();
-        setModalVisible(false);
     };
 
-    const handleEggSelect = async (egg: Egg) => {
-        if (!eggs || !nests) return;
-        setSelectedEgg(egg);
+    // FIXME: Make it so that getting the variables doesn't actually change the egg
+    const handleEggSelect = async () => {
+        if (!eggs || !nests || !selectedEgg) return;
 
         const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
-        const eggId = eggs?.find((eo) => eo.attributes.uuid === egg?.attributes.uuid)?.attributes.id || 0;
+        const eggId = eggs?.find((eo) => eo.attributes.uuid === selectedEgg?.attributes.uuid)?.attributes.id || 0;
 
         setSelectedEggImage(uuid, eggId, nestId)
             .catch((error) => {
@@ -239,6 +238,7 @@ const SoftwareContainer = () => {
                 await mutate();
                 updateVarsData();
 
+                setModalVisible(false);
                 setTimeout(() => setStep(2), 500);
             });
     };
@@ -306,7 +306,7 @@ const SoftwareContainer = () => {
                 title={'Confirm server reinstallation'}
                 confirm={'Yes, reinstall server'}
                 onClose={() => setModalVisible(false)}
-                onConfirmed={() => confirmSelection()}
+                onConfirmed={() => handleEggSelect()}
             >
                 Your server will be stopped and some files may be deleted or modified during this process, are you sure
                 you wish to continue?
@@ -422,7 +422,12 @@ const SoftwareContainer = () => {
                                                         <p className='text-neutral-300 text-md'>
                                                             {egg.attributes.name}
                                                         </p>
-                                                        <Button onClick={() => handleEggSelect(egg)}>Select</Button>
+                                                        <Button onClick={() => { 
+                                                            setSelectedEgg(egg); 
+                                                            setModalVisible(true); 
+                                                        }}>
+                                                            Select
+                                                        </Button>
                                                     </div>
                                                     <p className='text-neutral-400 text-xs mt-2'>
                                                         {renderEggDescription(egg.attributes.description, eggIndex)}
@@ -538,7 +543,7 @@ const SoftwareContainer = () => {
 
                                     <div className='border-t border-[#ffffff20]' />
 
-                                    <Button onClick={() => setModalVisible(true)}>Confirm</Button>
+                                    <Button onClick={() => confirmSelection()}>Confirm</Button>
                                 </div>
                             )) ||
                                 (step == 2 && !currentEggName?.includes(blank_egg_prefix) && (
