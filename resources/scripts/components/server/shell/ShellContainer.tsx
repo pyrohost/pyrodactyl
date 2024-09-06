@@ -422,10 +422,12 @@ const SoftwareContainer = () => {
                                                         <p className='text-neutral-300 text-md'>
                                                             {egg.attributes.name}
                                                         </p>
-                                                        <Button onClick={() => { 
-                                                            setSelectedEgg(egg); 
-                                                            setModalVisible(true); 
-                                                        }}>
+                                                        <Button
+                                                            onClick={() => {
+                                                                setSelectedEgg(egg);
+                                                                setModalVisible(true);
+                                                            }}
+                                                        >
                                                             Select
                                                         </Button>
                                                     </div>
