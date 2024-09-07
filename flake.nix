@@ -78,29 +78,37 @@
         pkgs.docker-compose
         pkgs.nodejs_20
       ];
+    shellHook = let
+      dataDir = "./data";
+      logDir = "mysqllogs";
+    in ''
+      echo "Starting Redis and MySQL in the dev shell..."
 
-      # Hook to start services when entering the shell and stop them when exiting
-      shellHook = ''
-        echo "Starting Redis and MySQL in the dev shell..."
+      # Create necessary directories
+      mkdir -p ${dataDir}
+      mkdir -p ${logDir}
 
-        # Start Redis in the background
-        redis-server --daemonize yes
+      # Start Redis in the background
+      redis-server --daemonize yes
 
-        # Start MySQL (mariadb) in the background
-        #mysqld_safe --datadir=${builtins.toString ./data} &
-        mysqld_safe --datadir=${dataDir} --log-error=${logDir}/mysqld.log &
-        echo "Redis and MySQL are running!"
+      # Start MySQL (MariaDB) in the background
+      mysqld_safe --datadir=${dataDir} --log-error=${logDir}/mysqld.log
 
-        # Define cleanup function
-        cleanup() {
-          echo "Stopping Redis and MySQL..."
-          pkill redis-server
-          pkill mysqld_safe
-        }
+      echo "Redis and MySQL are running!"
 
-        # Register cleanup on shell exit
-        trap cleanup EXIT
-  '';
+      # Define cleanup function to stop services
+      cleanup() {
+        echo "Stopping Redis and MySQL..."
+        pkill redis-server
+        pkill mysqld_safe
+      }
+
+      # Register cleanup on shell exit
+      trap cleanup EXIT
+    '';
+
+
+
 };
 });
 }
