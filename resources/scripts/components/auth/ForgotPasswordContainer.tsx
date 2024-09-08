@@ -13,6 +13,7 @@ import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
 import { httpErrorToHuman } from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
+import Logo from '../elements/PyroLogo';
 
 interface Values {
     email: string;
@@ -76,9 +77,9 @@ export default () => {
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex items-start h-12 w-fit mb-4'>
+                    <div className='flex h-12 mb-4 items-center w-full'>
                         {/* temp src */}
-                        <img
+                        {/* <img
                             className='w-full max-w-full h-full'
                             loading='lazy'
                             decoding='async'
@@ -88,8 +89,11 @@ export default () => {
                                 color: 'transparent',
                             }}
                             src='https://i.imgur.com/Hbum4fc.png'
-                        />
+                        /> */}
+                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
+                        <Logo />
                     </div>
+                    <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
                     <div className='text-sm mb-6'>We&apos;ll send you an email with a link to reset your password.</div>
                     <Field id='email' label={'Email'} name={'email'} type={'email'} />
