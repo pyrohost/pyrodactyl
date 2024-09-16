@@ -3,7 +3,7 @@
 mysqlrootpass="password"
 mysqluser="root"
 
-docker-compose --project-directory ./docker/ up -d
+docker-compose --project-directory ./docker/maria up -d
 
 
 # Create the database for the panel
@@ -46,32 +46,12 @@ mysql -u $mysqluser  -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; INSERT INTO allo
 #curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 #chmod u+x /usr/local/bin/wings
 
-# Configure wings
-# This needs to be changed into a docker-compose file probably for better and easier editing
-mkdir $(pwd)/nix/pterodactyl
-mkdir $(pwd)/nix/pterodactyl/etc
-mkdir $(pwd)/nix/pterodactyl/var
-mkdir $(pwd)/nix/pterodactyl/tmp
 
-php artisan p:node:configuration 1 >$(pwd)/nix/pterodactyl/etc/config.yml
+mkdir $(pwd)/nix/wings/etc
+mkdir $(pwd)/nix/wings/var
+mkdir $(pwd)/nix/wings/tmp
 
-docker run -d \
-  --name pterodactyl-wings \
-  --rm \
-  --restart always \
-  --network wings \
-  -p 8080:8080 \
-  -p 2022:2022 \
-  -e TZ="America/Los_Angeles" \
-  -e WINGS_UID=1001 \
-  -e WINGS_GID=1001 \
-  -e WINGS_USERNAME=pyrodactyl \
-  -v "/var/run/docker.sock:/var/run/docker.sock" \
-  -v "/var/lib/docker/containers:/var/lib/docker/containers" \
-  -v "$(pwd)/nix/pterodactyl/etc:/etc/pterodactyl" \
-  -v "$(pwd)/nix/pterodactyl/lib:/var/lib/pterodactyl" \
-  -v "$(pwd)/nix/pterodactyl/log:/var/log/pterodactyl" \
-  -v "$(pwd)/nix/pterodactyl/tmp:/tmp/pterodactyl" \
-  --rm
-  ghcr.io/pterodactyl/wings:latest
+php artisan p:node:configuration 1 >$(pwd)/nix/docker/wings/etc/config.yml
+
+docker-compose --project-directory ./docker/wings up -d
 
