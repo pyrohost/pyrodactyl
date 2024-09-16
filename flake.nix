@@ -2,7 +2,7 @@
   description = "PyroPanel";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -57,7 +57,31 @@
           limitNOFILE = 4096;
           pidFile = "/var/run/wings/daemon.pid";
         };
+
+      services.mysql = {
+        enable = true;
+        package = pkgs.mariadb;
+        ensureDatabases = [
+          { name = "panel"; }
+        ];
+        ensureUsers = [
+          {
+            name = "pyrodactyl";
+            password = "password";
+            grants = [
+              "ALL PRIVILEGES ON panel.*"
+            ];
+          }
+          {
+            name = "pyrodactyluser";
+            password = "pyrodactyl";
+            grants = [
+              "ALL PRIVILEGES ON *.*"
+            ];
+          }
+        ];
       };
+          };
 
       nixosSystem = pkgs.nixosSystem {
         inherit system;
@@ -75,7 +99,7 @@
         pkgs.nginx
         pkgs.docker
         pkgs.docker-compose
-        pkgs.mysql
+        pkgs.mariadb
         pkgs.nodejs_20
       ];
     shellHook = let
@@ -92,7 +116,10 @@
       cleanup() {
         echo "Stopping Redis..."
         pkill redis-server
-      }
+
+        echo "Stopping mariadb-docker..."
+        docker-compose --project-directory ./nix/docker/ down
+        }
 
       # Register cleanup on shell exit
       trap cleanup EXIT
