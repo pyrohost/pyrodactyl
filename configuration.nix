@@ -114,43 +114,5 @@
 
   # Docker
   services.docker.enable = true;
-
-  # Pterodactyl Cron Service
-  systemd.services.pterodactyl-cron = {
-    description = "Pterodactyl Scheduler";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan schedule:run";
-      User = "nix";
-      Group = "nix";
-    };
-  };
-
-  # Pterodactyl Queue Worker
-  systemd.services.pteroq = {
-    description = "Pterodactyl Queue Worker";
-    after = [ "redis.service" ];
-    serviceConfig = {
-      User = "nix";
-      Group = "nix";
-      ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3";
-      Restart = "always";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
-
-  # Wings Daemon (Commented out)
-  # systemd.services.wings = {
-  #   description = "Pterodactyl Wings Daemon";
-  #   after = [ "docker.service" ];
-  #   requires = [ "docker.service" ];
-  #   workingDirectory = "/etc/pterodactyl";
-  #   execStart = "/usr/local/bin/wings";
-  #   restart = "on-failure";
-  #   user = "root";
-  #   limitNOFILE = 4096;
-  #   pidFile = "/var/run/wings/daemon.pid";
-  # };
 }
 
