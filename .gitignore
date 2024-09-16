@@ -19,8 +19,6 @@ _ide_helper_models.php
 public/assets/manifest.json
 
 # For local development with docker
-# Remove if we ever put the Dockerfile in the repo
-.dockerignore
 docker-compose.yml
 
 # for image related files
@@ -40,4 +38,5 @@ docker-compose.yaml
 .env.sentry-build-plugin
 
 # Nix specific stuff
-nix/pterodactyl
+./nix/docker/wings/pterodactyl
+./nix/docker/maria/mariadata

@@ -1,0 +1,5 @@
+Vagrantfile
+vagrant/
+.swc/
+.turbo/
+
