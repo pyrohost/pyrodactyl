@@ -40,16 +40,16 @@ php artisan p:location:make -n --short local --long Local
 php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
 
 # Add some dummy allocations to the node
-mysql -u $mysqluser  -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
+mysql -u $mysqluser -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
 
 # Setup wings
 #curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 #chmod u+x /usr/local/bin/wings
 
 
-mkdir $(pwd)/nix/wings/etc
-mkdir $(pwd)/nix/wings/var
-mkdir $(pwd)/nix/wings/tmp
+mkdir $(pwd)/nix/docker/wings/etc
+mkdir $(pwd)/nix/docker/wings/var
+mkdir $(pwd)/nix/docker/tmp
 
 php artisan p:node:configuration 1 >$(pwd)/nix/docker/wings/etc/config.yml
 
