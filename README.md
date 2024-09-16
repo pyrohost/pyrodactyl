@@ -38,6 +38,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ## Running Pyrodactyl
 
+<<<<<<< HEAD
 > [!TIP]
 > Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
 >
@@ -47,24 +48,44 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 > Nothing is Perfect, that apply's to this panel.
 > If you are migrating your data from pterodactyl, always make sure you take a backup of your pterodactyl database and other relevant data.
 
+=======
+>>>>>>> main
 ### Prerequisites
 
 -   Latest LTS version of NodeJS
--   Pnpm (`npm i -g pnpm`)
--   Turbo (`pnpm i -g turbo`)
 -   Git
 
 ### Linux
 
+<<<<<<< HEAD
 
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
+=======
+> [!TIP]
+> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
+>
+> If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml). You can follow [Pterodactyl's instructions](https://github.com/pterodactyl/panel/tree/1.0-develop/.github/docker#pterodactyl-panel---docker-image) on setting it up.
+>>>>>>> main
 
-Instead of downloading the official panel, follow the steps below to install Pyrodactyl:
+Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the **Download Files** step.
 
-1. `git clone https://github.com/pyrohost/pyrodactyl.git /var/www/pterodactyl`
-2. `cd /var/www/pterodactyl`
-3. `npm i`
-4. `npm run ship`
+Instead of downloading the official panel, use the commands below to download Pyrodactyl:
+
+```sh
+# Make directories
+mkdir -p /var/www/pterodactyl
+cd /var/www/pterodactyl
+
+# Download and extract panel
+curl -Lo main.tar.gz https://github.com/pyrohost/pyrodactyl/archive/refs/heads/main.tar.gz
+tar -xzf main.tar.gz --strip-components=1 -C /var/www/pterodactyl pyrodactyl-main/
+
+# Permissions for caches
+chmod -R 755 storage/* bootstrap/cache/
+
+# Install dependencies & build panel
+npm ci && npm run ship
+```
 
 Proceed with the rest of the installation as you would with the official panel.
 
@@ -72,16 +93,19 @@ Proceed with the rest of the installation as you would with the official panel.
 
 It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to Wings being incompatible.
 
-## Local Development on Windows
+## Local Development
+
+<details><summary>On Windows</summary>
+<p>
 
 Pyrodactyl is the world's first Pterodactyl panel that can be developed and run locally (with Wings) on Windows machines through [Vagrant](https://www.vagrantup.com/). Verify you have met the prerequisites above, then follow the steps below.
 
 1. Clone the Pyrodactyl panel repository
-2. Run `npm i` to install all the packages necessary.
-3. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
-4. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
-5. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
-6. Visit localhost:3000/admin to provision your first server on Pyrodactyl!
+1. Run `npm i` to install all the packages necessary.
+1. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
+1. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
+1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
+1. Visit https://localhost:3000/admin to provision your first server on Pyrodactyl!
 
 ### Notes about Local Development on Windows
 
@@ -95,7 +119,6 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 -   We do not recommend using Hyper-V as your virtualization layer. If your Vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
     - We recommend using VMWare Workstation or VirtualBox instead.
-
 
 ## Star History
 
