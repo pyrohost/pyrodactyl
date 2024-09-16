@@ -73,34 +73,25 @@
         pkgs.phpPackages.composer
         pkgs.redis
         pkgs.nginx
-        pkgs.mysql
         pkgs.docker
         pkgs.docker-compose
+        pkgs.mysql
         pkgs.nodejs_20
       ];
     shellHook = let
       dataDir = "./data";
-      logDir = "mysqllogs";
     in ''
-      echo "Starting Redis and MySQL in the dev shell..."
-
-      # Create necessary directories
-      mkdir -p ${dataDir}
-      mkdir -p ${logDir}
+      echo "Starting Redis in the dev shell..."
 
       # Start Redis in the background
       redis-server --daemonize yes
 
-      # Start MySQL (MariaDB) in the background
-      mysqld_safe --datadir=${dataDir} --log-error=${logDir}/mysqld.log
-
-      echo "Redis and MySQL are running!"
+      echo "Redis is running!"
 
       # Define cleanup function to stop services
       cleanup() {
-        echo "Stopping Redis and MySQL..."
+        echo "Stopping Redis..."
         pkill redis-server
-        pkill mysqld_safe
       }
 
       # Register cleanup on shell exit
