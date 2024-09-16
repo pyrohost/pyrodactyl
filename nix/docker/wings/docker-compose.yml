@@ -18,10 +18,10 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/var/lib/docker/containers:/var/lib/docker/containers"
-      - "./nix/pterodactyl/etc:/etc/pterodactyl"
-      - "./nix/pterodactyl/lib:/var/lib/pterodactyl"
-      - "./nix/pterodactyl/log:/var/log/pterodactyl"
-      - "./nix/pterodactyl/tmp:/tmp/pterodactyl"
+      - "./etc:/etc/pterodactyl"
+      - "./lib:/var/lib/pterodactyl"
+      - "./log:/var/log/pterodactyl"
+      - "./tmp:/tmp/pterodactyl"
 
 networks:
   wings:
