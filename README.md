@@ -53,7 +53,8 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 -   Git
 
 ### Linux
-
+<details><summary>Running on Linux</summary>
+<p>
 
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
 > [!TIP]
@@ -82,6 +83,7 @@ npm ci && npm run ship
 ```
 
 Proceed with the rest of the installation as you would with the official panel.
+</p></details>
 
 ### Windows
 
@@ -117,6 +119,12 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 <details><summary>On Linux</summary>
 <p>
+
+### Prerequisites
+
+- Nix
+
+
 Local Development on Linux is A little different, because vagrant is the buggy software that it is, I couldn't get it to run properly... Anywhere, and on no Distro.
 So I decided that instead of using Vagrant, I would use nix. This turned out to be a very good idea. Now, using nix the development boots faster because we aren't using
 an entire vm to host a development server, it also uses way less resources, and is much easier to configure exactly how you want through the nix/buildsteps.sh file.
