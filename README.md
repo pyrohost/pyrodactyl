@@ -38,7 +38,6 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ## Running Pyrodactyl
 
-<<<<<<< HEAD
 > [!TIP]
 > Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
 >
@@ -48,8 +47,6 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 > Nothing is Perfect, that apply's to this panel.
 > If you are migrating your data from pterodactyl, always make sure you take a backup of your pterodactyl database and other relevant data.
 
-=======
->>>>>>> main
 ### Prerequisites
 
 -   Latest LTS version of NodeJS
@@ -57,15 +54,12 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ### Linux
 
-<<<<<<< HEAD
 
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
-=======
 > [!TIP]
 > Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
 >
 > If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml). You can follow [Pterodactyl's instructions](https://github.com/pterodactyl/panel/tree/1.0-develop/.github/docker#pterodactyl-panel---docker-image) on setting it up.
->>>>>>> main
 
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the **Download Files** step.
 
@@ -119,6 +113,25 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 
 -   We do not recommend using Hyper-V as your virtualization layer. If your Vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
     - We recommend using VMWare Workstation or VirtualBox instead.
+</p></details>
+<details><p>
+  Local Development on Linux is A little different, because vagrant is the buggy software that it is, I couldn't get it to run properly... Anywhere, and on no Distro.
+  So I decided that instead of using Vagrant, I would use nix. This turned out to be a very good idea. Now, using nix the development boots faster because we aren't using
+  an entire vm to host a development server, it also uses way less resources, and is much easier to configure exactly how you want through the nix/buildsteps.sh file.
+
+  ### How to get started
+
+  To get started, you obviously need nix on your system, and you need to configure nix to support flake files. Depending on your OS, this can vary
+
+  1. Clone the Pyrodactyl panel repository
+  1. run `npm i` to install all the packages necessary.
+  1. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
+  1. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
+  1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
+  1. Visit https://localhost:8000/admin to provision your first server on Pyrodactyl!
+
+  
+</p></details>
 
 ## Star History
 
