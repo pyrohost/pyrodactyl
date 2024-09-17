@@ -130,7 +130,7 @@ To get started, you obviously need nix on your system, and you need to configure
 1. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
 1. Run `nix develop`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
 1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:8000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
-1. Visit https://localhost:8000/admin to provision your first server on Pyrodactyl!
+1. Visit http://localhost:8000/admin to provision your first server on Pyrodactyl!
 
   
 </p></details>
