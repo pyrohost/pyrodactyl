@@ -112,13 +112,27 @@
 
       echo "Redis is running!"
 
+      echo "Resetting MariaDB Data"
+      # Delete Maria Folders
+      echo "Delete maria Folders"
+      rm -fR $(pwd)/nix/docker/maria/mariadb_data
+
+      # Create Maria Folders
+      echo "Create maria Folders"
+      mkdir $(pwd)/nix/docker/maria/mariadb_data
+
+      echo "Starting Pyrodactyl"
+      bash ./nix/buildsteps.sh
       # Define cleanup function to stop services
+
       cleanup() {
         echo "Stopping Redis..."
         pkill redis-server
 
         echo "Stopping mariadb-docker..."
-        docker-compose --project-directory ./nix/docker/ down
+        docker-compose --project-directory ./nix/docker/maria/ down
+        echo "Stopping Pterodactyl wings..."
+        docker-compose --project-directory ./nix/docker/wings/ down
         }
 
       # Register cleanup on shell exit
