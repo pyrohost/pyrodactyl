@@ -1,15 +1,9 @@
-version: "3.8"
-
 services:
   pterodactyl-wings:
     image: ghcr.io/pterodactyl/wings:latest
     container_name: pterodactyl-wings
     restart: unless-stopped
-    networks:
-      - wings
-    ports:
-      - "8080:8080"
-      - "2022:2022"
+    network_mode: 'host'
     environment:
       - TZ=America/Los_Angeles
       - WINGS_UID=1001
@@ -23,7 +17,4 @@ services:
       - "./log:/var/log/pterodactyl"
       - "./tmp:/tmp/pterodactyl"
 
-networks:
-  wings:
-    driver: bridge
 
