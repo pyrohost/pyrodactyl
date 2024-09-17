@@ -4,7 +4,8 @@ mysqlrootpass="password"
 mysqluser="root"
 
 docker-compose --project-directory ./nix/docker/maria/ up -d --force-recreate
-
+echo "20 second Sleep"
+sleep 20
 
 # Create the database for the panel
 mysql -u "$mysqluser" -p"$mysqlrootpass" -h 127.0.0.1 -e "
@@ -55,12 +56,6 @@ mysql -u $mysqluser -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; INSERT INTO alloc
 rm -fR $(pwd)/nix/docker/wings/etc
 rm -fR $(pwd)/nix/docker/wings/var
 rm -fR $(pwd)/nix/docker/wings/tmp
-
-# Delete Maria Folders
-rm -fR $(pwd)/nix/docker/maria/mariadb_data
-
-# Create Maria Folders
-mkdir $(pwd)/nix/docker/maria/mariadb_data
 
 
 # create Wings folders
