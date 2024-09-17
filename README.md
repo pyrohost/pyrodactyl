@@ -56,12 +56,6 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 <details><summary>Running on Linux</summary>
 <p>
 
-Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the point where you need to download the panel.
-> [!TIP]
-> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
->
-> If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml). You can follow [Pterodactyl's instructions](https://github.com/pterodactyl/panel/tree/1.0-develop/.github/docker#pterodactyl-panel---docker-image) on setting it up.
-
 Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the **Download Files** step.
 
 Instead of downloading the official panel, use the commands below to download Pyrodactyl:
