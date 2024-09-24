@@ -12,84 +12,7 @@
 
       pyrodactylPath = builtins.toString ./.;
 
-      configurationNix = {
-        imports = [
-          ./configuration.nix
-        ];
-
-        systemd.timers.pterodactyl-cron.timer = {
-          description = "Run Pterodactyl Scheduler every minute";
-          wantedBy = [ "timers.target" ];
-          timerConfig.OnUnitActiveSec = "1m";
-        };
-
-        systemd.services.pterodactyl-cron = {
-          description = "Pterodactyl Scheduler";
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan schedule:run";
-            User = "nix";
-            Group = "nix";
-          };
-        };
-
-        systemd.services.pteroq = {
-          description = "Pterodactyl Queue Worker";
-          after = [ "redis.service" ];
-          serviceConfig = {
-            User = "nix";
-            Group = "nix";
-            ExecStart = "${pkgs.php}/bin/php ${pyrodactylPath}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3";
-            Restart = "always";
-          };
-          wantedBy = [ "multi-user.target" ];
-        };
-
-        systemd.services.wings = {
-          description = "Pterodactyl Wings Daemon";
-          after = [ "docker.service" ];
-          requires = [ "docker.service" ];
-          workingDirectory = "/etc/pterodactyl";
-          execStart = "/usr/local/bin/wings";
-          restart = "on-failure";
-          user = "root";
-          limitNOFILE = 4096;
-          pidFile = "/var/run/wings/daemon.pid";
-        };
-
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        ensureDatabases = [
-          { name = "panel"; }
-        ];
-        ensureUsers = [
-          {
-            name = "pyrodactyl";
-            password = "password";
-            grants = [
-              "ALL PRIVILEGES ON panel.*"
-            ];
-          }
-          {
-            name = "pyrodactyluser";
-            password = "pyrodactyl";
-            grants = [
-              "ALL PRIVILEGES ON *.*"
-            ];
-          }
-        ];
-      };
-          };
-
-      nixosSystem = pkgs.nixosSystem {
-        inherit system;
-        modules = [ configurationNix ];
-      };
-
     in {
-      defaultPackage = nixosSystem.config.system.build.toplevel;
 
     devShell = pkgs.mkShell {
       buildInputs = [
@@ -101,6 +24,7 @@
         pkgs.docker-compose
         pkgs.mariadb
         pkgs.nodejs_20
+        pkgs.tmux
       ];
     shellHook = let
       dataDir = "./data";
@@ -138,9 +62,6 @@
       # Register cleanup on shell exit
       trap cleanup EXIT
     '';
-
-
-
 };
 });
 }
