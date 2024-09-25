@@ -138,8 +138,9 @@ To get started, you obviously need nix on your system, and you need to configure
 
 ### Notes about Local Development on Linux
 
-Do to a slight bug or two, pterodactyl wings does not as present work properly using the nixos development environment
-This will hopefully be fixed later, but for now just be warned
+> [!IMPORTANT]
+> Do to a slight bug or two, pterodactyl wings does not as present work properly using the nixos development environment
+> This will hopefully be fixed later, but for now just be warned
 
 </p></details>
 
