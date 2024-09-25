@@ -117,7 +117,7 @@ Pyrodactyl is the world's first Pterodactyl panel that can be developed and run 
 ### Prerequisites
 
 - Nix
-
+- Docker
 
 Local Development on Linux is A little different, because vagrant is the buggy software that it is, I couldn't get it to run properly... Anywhere, and on no Distro.
 So I decided that instead of using Vagrant, I would use nix. This turned out to be a very good idea. Now, using nix the development boots faster because we aren't using
@@ -134,7 +134,13 @@ To get started, you obviously need nix on your system, and you need to configure
 1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:8000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
 1. Visit http://localhost:8000/admin to provision your first server on Pyrodactyl!
 
-  
+
+
+### Notes about Local Development on Linux
+
+Do to a slight bug or two, pterodactyl wings does not as present work properly using the nixos development environment
+This will hopefully be fixed later, but for now just be warned
+
 </p></details>
 
 ## Star History
