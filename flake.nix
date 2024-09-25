@@ -32,6 +32,9 @@
       echo "Starting Redis in the dev shell..."
 
       # Start Redis in the background
+      # These damn variables causing all sorts of issues when not here
+      export LC_ALL=C.UTF-8
+      export LANG=C.UTF-8
       redis-server --daemonize yes
 
       echo "Redis is running!"

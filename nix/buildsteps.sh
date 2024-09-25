@@ -27,7 +27,7 @@ mysql -u "$mysqluser" -p"$mysqlrootpass" -h 127.0.0.1 -e "
 
 # This cp command breaks my configuration, that is why it's commented
 # cp .env.example .env
-php /usr/local/bin/composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
 php artisan key:generate --force
