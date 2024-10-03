@@ -3,9 +3,17 @@
 mysqlrootpass="password"
 mysqluser="root"
 
+CONTAINER_NAME="mariadb"
+
+
 docker-compose --project-directory ./nix/docker/maria/ up -d --force-recreate
-echo "20 second Sleep"
-sleep 20
+
+until [ "$(docker inspect --format='{{.State.Health.Status}}' $CONTAINER_NAME)" == "healthy" ]; do
+    echo "Waiting for MariaDB container to be healthy..."
+    sleep 5
+done
+
+echo "MariaDB container is healthy. Proceeding with the script."
 
 # Create the database for the panel
 mysql -u "$mysqluser" -p"$mysqlrootpass" -h 127.0.0.1 -e "

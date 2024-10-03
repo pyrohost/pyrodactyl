@@ -4,6 +4,12 @@ services:
     container_name: mariadb
     restart: always
     user: "1000:1000"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: panel
