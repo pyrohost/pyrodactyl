@@ -66,8 +66,7 @@ mkdir -p /var/www/pterodactyl
 cd /var/www/pterodactyl
 
 # Download and extract panel
-curl -Lo main.tar.gz https://github.com/pyrohost/pyrodactyl/archive/refs/heads/main.tar.gz
-tar -xzf main.tar.gz --strip-components=1 -C /var/www/pterodactyl pyrodactyl-main/
+git clone https://github.com/pyrohost/pyrodactyl.git /var/www/pterodactyl --depth=2
 
 # Permissions for caches
 chmod -R 755 storage/* bootstrap/cache/
