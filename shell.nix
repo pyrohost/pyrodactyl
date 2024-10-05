@@ -1,19 +1,19 @@
-{
-  composer ? null,
-  php81WithExtensions ? null,
-  pkgs ? import <nixpkgs> {},
-}:
-with pkgs;
-  mkShell rec {
-    buildInputs = [
-      alejandra
-      composer
-      nodejs_18
-      nodePackages.yarn
-      php81WithExtensions
-    ];
+{ pkgs ? import <nixpkgs> {} }:
 
-    shellHook = ''
-      PATH="$PATH:${pkgs.docker-compose}/libexec/docker/cli-plugins"
-    '';
-  }
+pkgs.mkShell {
+  buildInputs = [
+    pkgs.php
+    pkgs.php83Packages.composer
+    pkgs.mysql
+    pkgs.redis
+    pkgs.docker
+    pkgs.systemd
+    pkgs.curl
+    pkgs.cron
+  ];
+
+  shellHook = ''
+  composer update
+  '';
+}
+

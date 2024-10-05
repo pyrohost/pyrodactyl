@@ -19,9 +19,7 @@ _ide_helper_models.php
 public/assets/manifest.json
 
 # For local development with docker
-# Remove if we ever put the Dockerfile in the repo
-.dockerignore
-docker-compose.yml
+#docker-compose.yml
 
 # for image related files
 misc
@@ -33,8 +31,15 @@ resources/lang/locales.js
 /public/build
 /public/hot
 result
-docker-compose.yaml
+#docker-compose.yaml
 .swc/
 .turbo
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Nix specific stuff
+nix/docker/wings/pterodactyl
+nix/docker/maria/mariadata
+nix/docker/wings/etc/
+nix/docker/wings/lib/
+nix/docker/maria/mariadb_data/
