@@ -38,27 +38,39 @@ mysql -u "$mysqluser" -p"$mysqlrootpass" -h 127.0.0.1 -e "
 composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
+echo "Generating keys"
 php artisan key:generate --force --no-interaction
+echo "Configuring panel"
 php artisan p:environment:setup -n --author dev@pyro.host --url http://localhost:8000 --cache redis --session redis --queue redis
+echo "Setting up database"
 php artisan p:environment:database -n --host 127.0.0.1 --port 3306 --database panel --username pyrodactyluser --password pyrodactyl
+echo "Seeding migrations"
 php artisan migrate --seed --force
 
 # Create a developer user
 # Adding --admin tag just in case it ever gets fixed
+echo "Creating User"
 php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password --admin
 # --admin probably won't be fixed due to security concerns
-mysql -u $mysqluser -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
+echo "Setting user to admin"
+mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
 
 # Make a location and node for the panel
 php artisan p:location:make -n --short local --long Local
+echo "Creating wings node"
 php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
 
 # Add some dummy allocations to the node
-mysql -u "$mysqluser" -p"$mysqlrootpass" -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
+echo "Added allocations to wings"
+mysql -u "$mysqluser" -p"$mysqlrootpass" -h 127.0.0.1 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
 
 
 # Disable Recaptcha
-mysql -u $mysqluser -p$mysqlrootpass -h 0.0.0.0 -e "USE panel; UPDATE settings SET \`key\`='settings::recaptcha:enabled', value='false' WHERE id=1;"
+echo "Disabling recaptcha"
+
+mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; INSERT INTO settings (\`key\`, value) VALUES ('settings::recaptcha:enabled', 'false');"
+
+mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; UPDATE settings SET \`key\`='settings::recaptcha:enabled', value='false' WHERE id=1;"
 
 
 # Setup wings
@@ -81,7 +93,13 @@ php artisan p:node:configuration 1 >$(pwd)/nix/docker/wings/etc/config.yml
 
 docker-compose --project-directory ./nix/docker/wings up -d --force-recreate
 
-php artisan serve
+tmux new-session -s pyrodevelopment -d
+tmux send-keys -t pyrodevelopment 'npm run dev' C-m
+
+tmux new-window -t pyrodevelopment
+tmux send-keys -t pyrodevelopment 'php artisan serve' C-m
+
+tmux attach-session -t pyrodevelopment
 
 
 docker-compose --project-directory ./nix/docker/wings down
