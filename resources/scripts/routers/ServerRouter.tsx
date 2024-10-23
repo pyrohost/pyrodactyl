@@ -68,6 +68,7 @@ interface Nest {
 export default () => {
     const params = useParams<'id'>();
     const location = useLocation();
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
 
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [error, setError] = useState('');
@@ -80,6 +81,11 @@ export default () => {
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
     const [nests, setNests] = useState<Nest[]>();
+
+    const toggleSidebar = () => {
+        setSidebarVisible(!isSidebarVisible);
+    };
+
     const egg_name =
         nests &&
         nests
@@ -206,9 +212,32 @@ export default () => {
                 ) : null
             ) : (
                 <>
-                    <MainSidebar className='hidden lg:flex'>
+                    <button
+                        id='sidebarToggle'
+                        className={`lg:hidden fixed top-4 z-50 bg-transparent p-2 rounded-md text-white ${
+                            isSidebarVisible ? 'left-[300px]' : 'left-4'
+                        }`}
+                        onClick={toggleSidebar}
+                    >
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth='1.5'
+                            stroke='currentColor'
+                            className='size-6'
+                        >
+                            <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+                            />
+                        </svg>
+                    </button>
+
+                    <MainSidebar className={`${isSidebarVisible ? '' : 'hidden'} lg:flex`}>
                         <div
-                            className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
+                            className='absolute bg-white w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
                                 height,
@@ -218,7 +247,7 @@ export default () => {
                             }}
                         />
                         <div
-                            className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
+                            className='absolute bg-zinc-900 w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
                                 opacity: top === '0' ? 0 : 0.5,
@@ -228,12 +257,10 @@ export default () => {
                         />
                         <div className='flex flex-row items-center justify-between h-8'>
                             <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                                {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>
-                                    Panel
-                                </h1> */}
                                 <Logo />
                             </NavLink>
                             <DropdownMenu>
+                                
                                 <DropdownMenuTrigger asChild>
                                     <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2'>
                                         <svg
@@ -253,7 +280,7 @@ export default () => {
                                     {rootAdmin && (
                                         <DropdownMenuItem onSelect={onSelectManageServer}>
                                             Manage Server
-                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                            <span className='ml-2 z-10 rounded-full bg-white px-2 py-1 text-xs text-black'>
                                                 Staff
                                             </span>
                                         </DropdownMenuItem>
@@ -379,7 +406,7 @@ export default () => {
                             {/* {rootAdmin && (
                                 <a href={`/admin/servers/view/${serverId}`} target={'_blank'} rel='noreferrer'>
                                     <div className='ml-1'>Manage Server </div>
-                                    <span className='z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                    <span className='z-10 rounded-full bg-zinc-600 px-2 py-1 text-xs text-white'>
                                         Staff
                                     </span>
                                 </a>
