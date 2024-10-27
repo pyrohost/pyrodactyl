@@ -9,7 +9,6 @@ on:
     branches:
       - "dev"
       - "main"
-  workflow_dispatch:
 
 jobs:
   tests:
@@ -20,13 +19,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [8.2, 8.3]
+        #php: [8.2, 8.3]
+        php: [8.2]
         database:
-          - mariadb:10.5
-          - mariadb:10.11
+          #- mariadb:10.5
+          #- mariadb:10.11
           - mariadb:11.5
-          - mysql:8
-          - mysql:9
+          #- mysql:8
+          #- mysql:9
     services:
       database:
         image: ${{ matrix.database }}
