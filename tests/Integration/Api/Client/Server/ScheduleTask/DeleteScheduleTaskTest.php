@@ -1,13 +1,13 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Api\Client\Server\ScheduleTask;
+namespace Pterodactyl\Tests\Integration\Api\Client\Server\ScheduleTask;
 
-use Pyrodactyl\Models\Task;
-use Pyrodactyl\Models\User;
+use Pterodactyl\Models\Task;
+use Pterodactyl\Models\User;
 use Illuminate\Http\Response;
-use Pyrodactyl\Models\Schedule;
-use Pyrodactyl\Models\Permission;
-use Pyrodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
+use Pterodactyl\Models\Schedule;
+use Pterodactyl\Models\Permission;
+use Pterodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
 
 class DeleteScheduleTaskTest extends ClientApiIntegrationTestCase
 {

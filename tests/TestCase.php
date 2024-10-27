@@ -1,6 +1,6 @@
 <?php
 
-namespace Pyrodactyl\Tests;
+namespace Pterodactyl\Tests;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;

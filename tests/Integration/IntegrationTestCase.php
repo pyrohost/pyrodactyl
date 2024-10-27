@@ -1,15 +1,15 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration;
+namespace Pterodactyl\Tests\Integration;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Pyrodactyl\Tests\TestCase;
+use Pterodactyl\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
-use Pyrodactyl\Events\ActivityLogged;
-use Pyrodactyl\Tests\Assertions\AssertsActivityLogged;
-use Pyrodactyl\Tests\Traits\Integration\CreatesTestModels;
-use Pyrodactyl\Transformers\Api\Application\BaseTransformer;
+use Pterodactyl\Events\ActivityLogged;
+use Pterodactyl\Tests\Assertions\AssertsActivityLogged;
+use Pterodactyl\Tests\Traits\Integration\CreatesTestModels;
+use Pterodactyl\Transformers\Api\Application\BaseTransformer;
 
 abstract class IntegrationTestCase extends TestCase
 {

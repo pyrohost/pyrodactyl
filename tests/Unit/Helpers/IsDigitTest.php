@@ -1,8 +1,8 @@
 <?php
 
-namespace Pyrodactyl\Tests\Unit\Helpers;
+namespace Pterodactyl\Tests\Unit\Helpers;
 
-use Pyrodactyl\Tests\TestCase;
+use Pterodactyl\Tests\TestCase;
 
 class IsDigitTest extends TestCase
 {

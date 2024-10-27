@@ -1,12 +1,12 @@
 <?php
 
-namespace Pyrodactyl\Tests\Unit\Http\Middleware;
+namespace Pterodactyl\Tests\Unit\Http\Middleware;
 
 use Mockery as m;
 use Mockery\MockInterface;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\RedirectResponse;
-use Pyrodactyl\Http\Middleware\RedirectIfAuthenticated;
+use Pterodactyl\Http\Middleware\RedirectIfAuthenticated;
 
 class RedirectIfAuthenticatedTest extends MiddlewareTestCase
 {

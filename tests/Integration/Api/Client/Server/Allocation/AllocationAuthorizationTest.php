@@ -1,10 +1,10 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Api\Client\Server\Allocation;
+namespace Pterodactyl\Tests\Integration\Api\Client\Server\Allocation;
 
-use Pyrodactyl\Models\Subuser;
-use Pyrodactyl\Models\Allocation;
-use Pyrodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
+use Pterodactyl\Models\Subuser;
+use Pterodactyl\Models\Allocation;
+use Pterodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
 
 class AllocationAuthorizationTest extends ClientApiIntegrationTestCase
 {

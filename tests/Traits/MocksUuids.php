@@ -1,6 +1,6 @@
 <?php
 
-namespace Pyrodactyl\Tests\Traits;
+namespace Pterodactyl\Tests\Traits;
 
 use Mockery as m;
 use Ramsey\Uuid\Uuid;

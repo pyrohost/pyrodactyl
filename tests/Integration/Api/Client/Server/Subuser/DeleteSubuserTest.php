@@ -1,13 +1,13 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Api\Client\Server\Subuser;
+namespace Pterodactyl\Tests\Integration\Api\Client\Server\Subuser;
 
 use Ramsey\Uuid\Uuid;
-use Pyrodactyl\Models\User;
-use Pyrodactyl\Models\Subuser;
-use Pyrodactyl\Models\Permission;
-use Pyrodactyl\Repositories\Wings\DaemonServerRepository;
-use Pyrodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
+use Pterodactyl\Models\User;
+use Pterodactyl\Models\Subuser;
+use Pterodactyl\Models\Permission;
+use Pterodactyl\Repositories\Wings\DaemonServerRepository;
+use Pterodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
 
 class DeleteSubuserTest extends ClientApiIntegrationTestCase
 {
@@ -20,7 +20,7 @@ class DeleteSubuserTest extends ClientApiIntegrationTestCase
      * it to an integer. Then, in the deep API middlewares you would end up trying to load a user
      * with an ID of 12, which may or may not exist and be wrongly assigned to the model object.
      *
-     * @see https://github.com/pyrodactyl/panel/issues/2359
+     * @see https://github.com/pterodactyl/panel/issues/2359
      */
     public function testCorrectSubuserIsDeletedFromServer()
     {
