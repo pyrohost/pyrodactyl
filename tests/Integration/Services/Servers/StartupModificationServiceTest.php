@@ -1,16 +1,16 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Services\Servers;
+namespace Pterodactyl\Tests\Integration\Services\Servers;
 
 use Exception;
-use Pyrodactyl\Models\Nest;
-use Pyrodactyl\Models\User;
-use Pyrodactyl\Models\Server;
-use Pyrodactyl\Models\ServerVariable;
+use Pterodactyl\Models\Nest;
+use Pterodactyl\Models\User;
+use Pterodactyl\Models\Server;
+use Pterodactyl\Models\ServerVariable;
 use Illuminate\Validation\ValidationException;
-use Pyrodactyl\Tests\Integration\IntegrationTestCase;
+use Pterodactyl\Tests\Integration\IntegrationTestCase;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Pyrodactyl\Services\Servers\StartupModificationService;
+use Pterodactyl\Services\Servers\StartupModificationService;
 
 class StartupModificationServiceTest extends IntegrationTestCase
 {
@@ -70,7 +70,7 @@ class StartupModificationServiceTest extends IntegrationTestCase
      */
     public function testServerIsProperlyModifiedAsAdminUser()
     {
-        /** @var \Pyrodactyl\Models\Egg $nextEgg */
+        /** @var \Pterodactyl\Models\Egg $nextEgg */
         $nextEgg = Nest::query()->findOrFail(2)->eggs()->firstOrFail();
 
         $server = $this->createServerModel(['egg_id' => 1]);

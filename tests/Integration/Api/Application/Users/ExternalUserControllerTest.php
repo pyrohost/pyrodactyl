@@ -1,11 +1,11 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Api\Application\Users;
+namespace Pterodactyl\Tests\Integration\Api\Application\Users;
 
 use Illuminate\Support\Str;
-use Pyrodactyl\Models\User;
+use Pterodactyl\Models\User;
 use Illuminate\Http\Response;
-use Pyrodactyl\Tests\Integration\Api\Application\ApplicationApiIntegrationTestCase;
+use Pterodactyl\Tests\Integration\Api\Application\ApplicationApiIntegrationTestCase;
 
 class ExternalUserControllerTest extends ApplicationApiIntegrationTestCase
 {

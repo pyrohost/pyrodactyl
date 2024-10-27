@@ -1,12 +1,12 @@
 <?php
 
-namespace Pyrodactyl\Tests\Integration\Api\Client;
+namespace Pterodactyl\Tests\Integration\Api\Client;
 
 use Carbon\Carbon;
-use Pyrodactyl\Models\User;
+use Pterodactyl\Models\User;
 use Illuminate\Http\Response;
 use PragmaRX\Google2FA\Google2FA;
-use Pyrodactyl\Models\RecoveryToken;
+use Pterodactyl\Models\RecoveryToken;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class TwoFactorControllerTest extends ClientApiIntegrationTestCase
@@ -105,7 +105,7 @@ class TwoFactorControllerTest extends ClientApiIntegrationTestCase
         // Ensure the recovery tokens that were created include a "created_at" timestamp
         // value on them.
         //
-        // @see https://github.com/pyrodactyl/panel/issues/3163
+        // @see https://github.com/pterodactyl/panel/issues/3163
         $this->assertNotNull($tokens[0]->created_at);
 
         $tokens = $tokens->pluck('token')->toArray();
