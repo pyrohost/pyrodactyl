@@ -1,14 +1,14 @@
 <?php
 
-namespace Pterodactyl\Tests\Integration\Api\Client\Server\Subuser;
+namespace Pyrodactyl\Tests\Integration\Api\Client\Server\Subuser;
 
 use Illuminate\Support\Str;
-use Pterodactyl\Models\User;
+use Pyrodactyl\Models\User;
 use Illuminate\Http\Response;
-use Pterodactyl\Models\Subuser;
-use Pterodactyl\Models\Permission;
+use Pyrodactyl\Models\Subuser;
+use Pyrodactyl\Models\Permission;
 use Illuminate\Foundation\Testing\WithFaker;
-use Pterodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
+use Pyrodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
 
 class CreateServerSubuserTest extends ClientApiIntegrationTestCase
 {

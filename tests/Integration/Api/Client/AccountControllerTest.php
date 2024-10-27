@@ -1,9 +1,9 @@
 <?php
 
-namespace Pterodactyl\Tests\Integration\Api\Client;
+namespace Pyrodactyl\Tests\Integration\Api\Client;
 
 use Illuminate\Support\Str;
-use Pterodactyl\Models\User;
+use Pyrodactyl\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
