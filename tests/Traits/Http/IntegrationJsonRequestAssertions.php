@@ -1,6 +1,6 @@
 <?php
 
-namespace Pterodactyl\Tests\Traits\Http;
+namespace Pyrodactyl\Tests\Traits\Http;
 
 use Illuminate\Http\Response;
 use Illuminate\Testing\TestResponse;

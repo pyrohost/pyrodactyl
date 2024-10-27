@@ -1,12 +1,12 @@
 <?php
 
-namespace Pterodactyl\Tests\Integration\Api\Client;
+namespace Pyrodactyl\Tests\Integration\Api\Client;
 
-use Pterodactyl\Models\User;
+use Pyrodactyl\Models\User;
 use Illuminate\Http\Response;
-use Pterodactyl\Models\ApiKey;
+use Pyrodactyl\Models\ApiKey;
 use Illuminate\Support\Facades\Event;
-use Pterodactyl\Events\ActivityLogged;
+use Pyrodactyl\Events\ActivityLogged;
 
 class ApiKeyControllerTest extends ClientApiIntegrationTestCase
 {
@@ -98,8 +98,8 @@ class ApiKeyControllerTest extends ClientApiIntegrationTestCase
      * Test that no more than 25 API keys can exist at any one time for an account. This prevents
      * a DoS attack vector against the panel.
      *
-     * @see https://github.com/pterodactyl/panel/security/advisories/GHSA-pjmh-7xfm-r4x9
-     * @see https://github.com/pterodactyl/panel/issues/4394
+     * @see https://github.com/pyrodactyl/panel/security/advisories/GHSA-pjmh-7xfm-r4x9
+     * @see https://github.com/pyrodactyl/panel/issues/4394
      */
     public function testApiKeyLimitIsApplied()
     {
@@ -121,7 +121,7 @@ class ApiKeyControllerTest extends ClientApiIntegrationTestCase
     /**
      * Test that a bad request results in a validation error being returned by the API.
      *
-     * @see https://github.com/pterodactyl/panel/issues/2457
+     * @see https://github.com/pyrodactyl/panel/issues/2457
      */
     public function testValidationErrorIsReturnedForBadRequests()
     {

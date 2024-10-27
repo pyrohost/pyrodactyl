@@ -1,11 +1,11 @@
 <?php
 
-namespace Pterodactyl\Tests\Integration\Api\Client\Server\Allocation;
+namespace Pyrodactyl\Tests\Integration\Api\Client\Server\Allocation;
 
 use Illuminate\Http\Response;
-use Pterodactyl\Models\Allocation;
-use Pterodactyl\Models\Permission;
-use Pterodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
+use Pyrodactyl\Models\Allocation;
+use Pyrodactyl\Models\Permission;
+use Pyrodactyl\Tests\Integration\Api\Client\ClientApiIntegrationTestCase;
 
 class DeleteAllocationTest extends ClientApiIntegrationTestCase
 {
@@ -16,7 +16,7 @@ class DeleteAllocationTest extends ClientApiIntegrationTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('permissionDataProvider')]
     public function testAllocationCanBeDeletedFromServer(array $permission)
     {
-        /** @var \Pterodactyl\Models\Server $server */
+        /** @var \Pyrodactyl\Models\Server $server */
         [$user, $server] = $this->generateTestAccount($permission);
         $server->update(['allocation_limit' => 2]);
 
@@ -37,7 +37,7 @@ class DeleteAllocationTest extends ClientApiIntegrationTestCase
      */
     public function testErrorIsReturnedIfUserDoesNotHavePermission()
     {
-        /** @var \Pterodactyl\Models\Server $server */
+        /** @var \Pyrodactyl\Models\Server $server */
         [$user, $server] = $this->generateTestAccount([Permission::ACTION_ALLOCATION_CREATE]);
 
         /** @var Allocation $allocation */
@@ -58,7 +58,7 @@ class DeleteAllocationTest extends ClientApiIntegrationTestCase
      */
     public function testErrorIsReturnedIfAllocationIsPrimary()
     {
-        /** @var \Pterodactyl\Models\Server $server */
+        /** @var \Pyrodactyl\Models\Server $server */
         [$user, $server] = $this->generateTestAccount();
         $server->update(['allocation_limit' => 2]);
 
@@ -89,7 +89,7 @@ class DeleteAllocationTest extends ClientApiIntegrationTestCase
      */
     public function testErrorIsReturnedIfAllocationDoesNotBelongToServer()
     {
-        /** @var \Pterodactyl\Models\Server $server */
+        /** @var \Pyrodactyl\Models\Server $server */
         [$user, $server] = $this->generateTestAccount();
         [, $server2] = $this->generateTestAccount();
 
