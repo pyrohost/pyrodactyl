@@ -136,7 +136,7 @@ class AppSettingsCommand extends Command
         $this->variables['VITE_STATUS_PAGE'] = $this->ask('Status Page') ?? ''; // Default to empty string if null cuz idk php bro
 
         $this->output->comment('Please provide the status page title. The title of the status page ');
-        $this->variables['VITE_STATUS_PAGE_TITLE'] = $this->ask('Status Page Title') ?? ''; // Default to empty string if null cuz idk php bro
+        $this->variables['VITE_STATUS_PAGE_TITLE_NATE'] = $this->ask('Status Page Title') ?? ''; // Default to empty string if null cuz idk php bro
         $this->output->comment('Your panel Has been configured to Use these Option, you can change it via the .env file');
 
         $this->checkForRedis();
