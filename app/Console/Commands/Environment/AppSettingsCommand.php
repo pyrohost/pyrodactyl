@@ -130,7 +130,7 @@ class AppSettingsCommand extends Command
         ) ?? ''; // Default to empty string if null
 
         $this->output->comment('Please provide the Name of your company / The name you want the panel to show next to the logo');
-        $this->variables['VITE_SITE_NAME'] = $this->ask('Panel Name') ?? ''; // Default to empty string if null cuz idk php bro
+        $this->variables['VITE_SITE_NAME'] = $this->ask('Panel Name') ?? 'NOT SET'; // Default to empty string if null cuz idk php bro
 
         $this->output->comment('Please provide A link for the status page of your Host ');
         $this->variables['VITE_STATUS_PAGE'] = $this->ask('Status Page') ?? ''; // Default to empty string if null cuz idk php bro
@@ -140,7 +140,7 @@ class AppSettingsCommand extends Command
         $this->output->comment('Your panel Has been configured to Use these Option, you can change it via the .env file');
 
         $this->checkForRedis();
-        $this->output->comment('WARNING!!: PLEASE DUPLICATE YOUR .ENV OR STORE IT AT A SAFE PLACE, IF ITS LOST AT ANY TIME YOUR WHOLE APPLICATION WILL BE COOKED');
+        $this->output->comment('WARNING!! PLEASE DUPLICATE YOUR .ENV OR STORE IT AT A SAFE PLACE, IF ITS LOST AT ANY TIME YOUR WHOLE APPLICATION WILL BE COOKED');
         $this->writeToEnvironment($this->variables);
 
 
