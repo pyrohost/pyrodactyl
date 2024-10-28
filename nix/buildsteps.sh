@@ -101,7 +101,7 @@ tmux send-keys -t pyrodevelopment 'php artisan serve' C-m
 
 tmux attach-session -t pyrodevelopment
 
-
+tmux kill-session -t pyrodevelopment
 docker-compose --project-directory ./nix/docker/wings down
 docker-compose --project-directory ./nix/docker/maria/ down
 
