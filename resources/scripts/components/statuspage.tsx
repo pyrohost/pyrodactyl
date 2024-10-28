@@ -7,7 +7,7 @@ const StatusPage: React.FC = () => {
         <div className='w-full h-screen'>
             <iframe
                 src={import.meta.env.VITE_STATUS_PAGE}
-                title='Astral - Service Status'
+                title={import.meta.env.VITE_STATUS_PAGE_TITLE_NATE} // WOW NATE I DID IT SUPER COOL, IM VERY GOOD CODER OFC OFC 😎😎😎😎😎😎😎😎😎
                 className='w-full h-full border-none'
                 loading='lazy'
             />

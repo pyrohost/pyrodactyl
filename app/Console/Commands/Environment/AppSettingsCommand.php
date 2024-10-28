@@ -123,8 +123,26 @@ class AppSettingsCommand extends Command
             $this->variables['SESSION_SECURE_COOKIE'] = 'true';
         }
 
+        $this->output->comment('Please provide the URL for the logo.');
+        $this->variables['VITE_LOGO_URL'] = $this->ask(
+            'Logo URL',
+            'https://th.bing.com/th/id/OIP.3Uga86L53WxiVL_n6Ldi9QHaHa?rs=1&pid=ImgDetMain'
+        ) ?? ''; // Default to empty string if null
+
+        $this->output->comment('Please provide the Name of your company / The name you want the panel to show next to the logo');
+        $this->variables['VITE_SITE_NAME'] = $this->ask('Panel Name') ?? ''; // Default to empty string if null cuz idk php bro
+
+        $this->output->comment('Please provide A link for the status page of your Host ');
+        $this->variables['VITE_STATUS_PAGE'] = $this->ask('Status Page') ?? ''; // Default to empty string if null cuz idk php bro
+
+        $this->output->comment('Please provide the status page title. The title of the status page ');
+        $this->variables['VITE_STATUS_PAGE_TITLE'] = $this->ask('Status Page Title') ?? ''; // Default to empty string if null cuz idk php bro
+        $this->output->comment('Your panel Has been configured to Use these Option, you can change it via the .env file');
+
         $this->checkForRedis();
+        $this->output->comment('WARNING!!: PLEASE DUPLICATE YOUR .ENV OR STORE IT AT A SAFE PLACE, IF ITS LOST AT ANY TIME YOUR WHOLE APPLICATION WILL BE COOKED');
         $this->writeToEnvironment($this->variables);
+
 
         $this->info($this->console->output());
 
