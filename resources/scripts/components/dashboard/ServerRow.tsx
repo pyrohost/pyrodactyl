@@ -172,7 +172,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                                     {bytesToString(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
-                            {/* Pyro has unlimited storage */}
+                            {/*Oh bro you got trollede */}
                             {/* ░░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄░░░░░░░
                             ░░░░░█░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄░░░░
                             ░░░░█░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█░░░

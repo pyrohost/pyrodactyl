@@ -1,4 +1,6 @@
+//million-ignore
 import { useStoreState } from 'easy-peasy';
+import { Loader, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
@@ -152,7 +154,12 @@ export default () => {
                     </div>
                 </MainPageHeader>
                 {!servers ? (
-                    <></>
+                    <>
+                        <div className='flex flex-col items-center justify-center h-64'>
+                            <Loader2 className='w-16 h-16 text-zinc-500 animate-spin mb-4' />
+                            <p className='text-zinc-500 text-lg'>Fetching your servers...</p>
+                        </div>
+                    </>
                 ) : (
                     <>
                         <TabsContent value='list'>

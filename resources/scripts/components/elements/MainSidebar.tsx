@@ -10,13 +10,14 @@ const MainSidebar = styled.nav`
     position: relative;
     margin-right: 8px;
     user-select: none;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.06); /* Dark background for black-and-white theme */
     border: 1px solid rgba(255, 255, 255, 0.08);
 
     & > .pyro-subnav-routes-wrapper {
         display: flex;
         flex-direction: column;
         font-size: 14px;
+        color: white; /* Text color for links */
 
         & > a,
         & > div {
@@ -33,10 +34,16 @@ const MainSidebar = styled.nav`
             -moz-user-drag: none;
             -webkit-user-drag: none;
             transition: 200ms all ease-in-out;
+            color: #ccc; /* Default link color in black-and-white */
+            background: transparent; /* Transparent background for links */
 
             &.active {
-                color: #fa4e49;
-                fill: #fa4e49;
+                color: #fa4e49; /* Highlight color for active link */
+                fill: #fa4e49; /* Ensure active fill color is set if using SVG icons */
+            }
+
+            &:hover {
+                color: #fff; /* Change color on hover for better visibility */
             }
         }
     }

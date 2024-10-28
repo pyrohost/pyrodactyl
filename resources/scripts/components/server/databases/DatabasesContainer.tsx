@@ -1,3 +1,5 @@
+import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { ArrowBigRight, CheckCircle, DollarSign } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 
@@ -79,13 +81,29 @@ export default () => {
                                 </For>
                             </div>
                         </div>
+                    ) : databaseLimit > 0 ? (
+                        <p className={`text-center text-sm text-zinc-300`}>Your server does not have any databases.</p>
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
-                            {databaseLimit > 0
-                                ? 'Your server does not have any databases.'
-                                : 'Databases cannot be created for this server.'}
+                            Databases cannot be created for this server.
                         </p>
                     )}
+                    <div className='flex flex-col items-center space-y-4 mt-6'>
+                        <button
+                            className='flex items-center justify-center bg-zinc-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-stone-700 transition duration-200 transform hover:scale-105 ease-in-out'
+                            onClick={() => window.open('https://dashbeta.astralaxis.tech', '_blank')}
+                        >
+                            <DollarSign className='w-5 h-5 mr-2 ' />
+                            Purchase more
+                        </button>
+                        <button
+                            className='flex items-center justify-center bg-red-900 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-red-700 transition duration-200 transform hover:scale-105 ease-in-out'
+                            onClick={() => navigate(-1)}
+                        >
+                            <ArrowBigRight className='w-5 h-5 mr-2' />
+                            Go back
+                        </button>
+                    </div>
                 </>
             )}
         </ServerContentBlock>

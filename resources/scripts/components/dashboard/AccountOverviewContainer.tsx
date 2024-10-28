@@ -35,15 +35,10 @@ export default () => {
                 </ContentBox>
                 <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
                 <ContentBox title={'Panel Version'}>
-                    <p className='text-sm mb-4'>
-                        This is useful to provide Pyro staff if you run into an unexpected issue.
-                    </p>
+                    <p className='text-sm mb-4'>Below is useful information for debugging</p>
                     <div className='flex flex-col gap-4'>
-                        <Code>{import.meta.env.VITE_PYRODACTYL_VERSION}</Code>
-                        <Code>
-                            Build {import.meta.env.VITE_PYRODACTYL_BUILD_NUMBER}, Commit{' '}
-                            {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}
-                        </Code>
+                        <Code>Based on {import.meta.env.VITE_PYRODACTYL_VERSION}</Code>
+                        <Code>Build Astraldactyl beta</Code>
                     </div>
                 </ContentBox>
             </div>

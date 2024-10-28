@@ -1,5 +1,13 @@
 <!DOCTYPE html>
-<!-- Copyright (c) 2023-2024 Pyro Host Inc., parent collaborators, and contributors -->
+<!-- Astraltactly is a Performance and Looks based Edit by Nadhi.dev 
+_____            __                .__   
+  /  _  \   _______/  |_____________  |  |  
+ /  /_\  \ /  ___/\   __\_  __ \__  \ |  |  
+/    |    \\___ \  |  |  |  | \// __ \|  |__
+\____|__  /____  > |__|  |__|  (____  /____/
+        \/     \/                   \/      
+
+Please thank Pyrodactyl for this -->
 <html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
         <title>{{ config('app.name', 'Panel') }}</title>

@@ -13,6 +13,7 @@ import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
 import { httpErrorToHuman } from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
+
 import Logo from '../elements/PyroLogo';
 
 interface Values {
@@ -99,7 +100,7 @@ export default () => {
                     <Field id='email' label={'Email'} name={'email'} type={'email'} />
                     <div className={`mt-6`}>
                         <Button
-                            className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`w-full mt-4 rounded-full bg-zinc-600 border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}

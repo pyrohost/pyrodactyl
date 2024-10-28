@@ -34,15 +34,15 @@
 }
 
 .primary {
-    @apply bg-brand text-blue-50;
-    @apply hover:bg-brand/70 focus:ring-brand/50 focus:ring-opacity-75 active:bg-brand;
+    @apply bg-zinc-600 text-blue-50;
+    @apply hover:bg-zinc-600/70 focus:ring-brand/50 focus:ring-opacity-75 active:bg-zinc-600;
 
     &.secondary {
-        @apply hover:bg-opacity-10 active:bg-brand;
+        @apply hover:bg-opacity-10 active:bg-zinc-600;
     }
 
     &:disabled {
-        @apply bg-brand/25;
+        @apply bg-zinc-600/25;
     }
 }
 
@@ -60,11 +60,11 @@
 }
 
 .danger {
-    @apply bg-red-600 text-zinc-50;
-    @apply hover:bg-red-500 focus:ring-red-400 focus:ring-opacity-75 active:bg-red-500;
+    @apply bg-blue-600 text-zinc-50;
+    @apply hover:bg-blue-500 focus:ring-red-400 focus:ring-opacity-75 active:bg-red-500;
 
     &.secondary {
-        @apply hover:bg-red-600 active:bg-red-600;
+        @apply hover:bg-blue-500 active:bg-blue-600;
     }
 
     &:disabled {

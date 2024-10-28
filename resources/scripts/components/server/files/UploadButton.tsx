@@ -118,7 +118,7 @@ export default () => {
                     <div className={'w-full flex items-center justify-center pointer-events-none'}>
                         <div
                             className={
-                                'relative flex flex-col items-center gap-4 bg-brand w-full rounded-2xl py-12 px-4 mx-10 max-w-sm'
+                                'relative flex flex-col items-center gap-4 bg-zinc-600 w-full rounded-2xl py-12 px-4 mx-10 max-w-sm'
                             }
                         >
                             <div className='absolute inset-4 border-dashed border-[#ffffff88] border-2 rounded-xl'></div>

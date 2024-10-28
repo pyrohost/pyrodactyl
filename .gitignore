@@ -1,45 +1,24 @@
-/vendor
-*.DS_Store*
-!.env.ci
-!.env.example
-.env*
-.vagrant/
-.vscode/
-storage/framework/*
-/.idea
-/nbproject
-/.direnv
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
 
-node_modules
-*.log
-_ide_helper.php
-_ide_helper_models.php
-.phpstorm.meta.php
-.yarn
-public/assets/manifest.json
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
 
-# For local development with docker
-#docker-compose.yml
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
 
-# for image related files
-misc
-.php-cs-fixer.cache
-coverage.xml
-resources/lang/locales.js
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+
+storage/*.key
+.env
+/.gitold
+Homestead.yaml
+Homestead.json
+/.vagrant
 .phpunit.result.cache
-
-/public/build
-/public/hot
-result
-#docker-compose.yaml
-.swc/
-.turbo
-# Sentry Config File
-.env.sentry-build-plugin
-
-# Nix specific stuff
-nix/docker/wings/pterodactyl
-nix/docker/maria/mariadata
-nix/docker/wings/etc/
-nix/docker/wings/lib/
-nix/docker/maria/mariadb_data/

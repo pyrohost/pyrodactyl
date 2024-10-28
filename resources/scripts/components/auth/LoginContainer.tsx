@@ -1,3 +1,4 @@
+//million-ignore
 import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
@@ -15,6 +16,7 @@ import login from '@/api/auth/login';
 import useFlash from '@/plugins/useFlash';
 
 import Logo from '../elements/PyroLogo';
+import LogoLogin from '../elements/PyroLogoLogin';
 
 interface Values {
     username: string;
@@ -89,7 +91,7 @@ function LoginContainer() {
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
                 <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
+                    <div className='flex h-12 mb-4 items-center justify-center w-full'>
                         {/* temp src */}
                         {/* <img
                             className='w-full max-w-full h-full'
@@ -103,7 +105,9 @@ function LoginContainer() {
                             src='https://i.imgur.com/Hbum4fc.png'
                         /> */}
                         {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
-                        <Logo />
+                        <div className='w-32 h-62'>
+                            <LogoLogin /> {/* Logo component should be inside the div for size control */}
+                        </div>
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Login</h2>
@@ -131,7 +135,7 @@ function LoginContainer() {
                     </div>
                     <div className={`mt-6`}>
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`relative mt-4 w-full rounded-full bg-zinc-600 border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}

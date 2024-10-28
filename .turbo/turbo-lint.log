@@ -1,0 +1,47 @@
+
+> pyrodactyl@3.0.0 lint
+> eslint ./resources/scripts/**/*.{ts,tsx} --fix
+
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\auth\LoginContainer.tsx
+  18:8  warning  'Logo' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\dashboard\DashboardContainer.tsx
+  3:10  warning  'Loader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\elements\PyroLogo.tsx
+  2:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\elements\PyroLogoLogin.tsx
+  2:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\elements\ScreenBlock.tsx
+  4:10  warning  'ArrowBigRight' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  4:25  warning  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  6:10  warning  'Fragment' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  6:20  warning  'Suspense' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  6:49  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  7:10  warning  'Link' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\server\ConflictStateRenderer.tsx
+  3:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\server\console\StatusPill.tsx
+  5:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\server\databases\DatabasesContainer.tsx
+  1:10  warning  'DiscordLogoIcon' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  2:25  warning  'CheckCircle' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\components\server\shell\ShellContainer.tsx
+   1:8   warning  'React' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  12:12  warning  'visible' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  12:21  warning  'setVisible' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Nadhi\Downloads\asrtizz-major\pyrodactyl\resources\scripts\routers\DashboardRouter.tsx
+  4:5  warning  'ArrowUpLeftFromCircleIcon' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  5:5  warning  'ClockArrowUp' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  6:5  warning  'LucideCalendarArrowUp' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+
+✖ 20 problems (0 errors, 20 warnings)
+
