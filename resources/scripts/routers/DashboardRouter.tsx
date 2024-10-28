@@ -20,7 +20,7 @@ import HugeIconsDashboardSettings from '@/components/elements/hugeicons/Dashboar
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 
 import http from '@/api/http';
-import StatusPage from '@/components/statuspage';
+import StatusPage from '@/components/Additonal/statuspage';
 import { AlarmClockCheckIcon, ArrowUpLeftFromCircleIcon, ClockArrowUp, LucideCalendarArrowUp, LucideLayoutDashboard } from 'lucide-react';
 import DashPage from '@/components/dashboard';
 
