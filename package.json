@@ -41,7 +41,7 @@
         "cmdk": "^1.0.0",
         "copy-to-clipboard": "^3.3.3",
         "date-fns": "^3.6.0",
-        "debounce": "^2.0.0",
+        "debounce": "^2.2.0",
         "deepmerge-ts": "^7.1.0",
         "easy-peasy": "^6.0.4",
         "events": "^3.3.0",
