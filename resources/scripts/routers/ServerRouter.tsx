@@ -237,7 +237,7 @@ export default () => {
 
                     <MainSidebar className={`${isSidebarVisible ? '' : 'hidden'} lg:flex`}>
                         <div
-                            className='absolute bg-white w-[3px] h-10 left-0 rounded-full pointer-events-none'
+                            className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
                                 top,
                                 height,
@@ -260,7 +260,6 @@ export default () => {
                                 <Logo />
                             </NavLink>
                             <DropdownMenu>
-                                
                                 <DropdownMenuTrigger asChild>
                                     <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2'>
                                         <svg
