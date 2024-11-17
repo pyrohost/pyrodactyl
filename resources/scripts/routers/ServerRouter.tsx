@@ -279,7 +279,7 @@ export default () => {
                                     {rootAdmin && (
                                         <DropdownMenuItem onSelect={onSelectManageServer}>
                                             Manage Server
-                                            <span className='ml-2 z-10 rounded-full bg-white px-2 py-1 text-xs text-black'>
+                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs'>
                                                 Staff
                                             </span>
                                         </DropdownMenuItem>
