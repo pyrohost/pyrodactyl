@@ -1,14 +1,14 @@
 name: Tests
 
-on:
-  push:
-    branches:
-      - "dev"
-      - "main"
-  pull_request:
-    branches:
-      - "dev"
-      - "main"
+#on:
+  #push:
+    #branches:
+    #- "dev"
+    #- "main"
+  #pull_request:
+    #  branches:
+    #- "dev"
+    #- "main"
 
 jobs:
   tests:
