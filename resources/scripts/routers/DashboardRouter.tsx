@@ -161,10 +161,6 @@ export default () => {
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
                     </NavLink>
-                    <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                        <HugeIconsDashboardSettings fill='currentColor' />
-                        <p>Settings</p>
-                    </NavLink>
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                         <HugeIconsApi fill='currentColor' />
                         <p>Api Keys</p>
@@ -173,6 +169,11 @@ export default () => {
                         <HugeIconsSsh fill='currentColor' />
                         <p>SSH Keys</p>
                     </NavLink>
+                    <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
+                        <HugeIconsDashboardSettings fill='currentColor' />
+                        <p>Settings</p>
+                    </NavLink>
+
                 </ul>
                 
             </MainSidebar>
