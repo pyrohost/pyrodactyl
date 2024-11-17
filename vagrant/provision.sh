@@ -16,8 +16,8 @@ dnf -y config-manager --add-repo https://download.docker.com/linux/centos/docker
 dnf -y install redis
 systemctl enable --now redis
 
-# Install PHP 8.1 and configure PHP-FPM
-dnf -y module enable php:remi-8.1
+# Install PHP 8.3 and configure PHP-FPM
+dnf -y module enable php:remi-8.3
 dnf -y install php php-{cli,gd,mysqlnd,mbstring,bcmath,xml,fpm,curl,zip,posix}
 cat >/etc/php-fpm.d/pterodactyl.conf <<EOF
 [pterodactyl]
