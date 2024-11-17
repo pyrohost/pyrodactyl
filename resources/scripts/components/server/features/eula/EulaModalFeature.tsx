@@ -76,7 +76,7 @@ const EulaModalFeature = () => {
                         target={'_blank'}
                         className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
                         rel={'noreferrer noopener'}
-                        href='https://www.minecraft.net/eula'
+                        href='https://www.aka.ms/MinecraftEULA'
                     >
                         Minecraft EULA
                     </a>
