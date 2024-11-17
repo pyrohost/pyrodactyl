@@ -106,7 +106,7 @@ const VariableBox = ({ variable }: Props) => {
                     </>
                 ) : (
                     <>
-                        {selectValues.length > 0 && variable.serverValue ? (
+                        {selectValues.length > 0 && (variable.serverValue ?? variable.defaultValue) ? (
                             <>
                                 <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                     <DropdownMenuTrigger asChild>
@@ -156,7 +156,7 @@ const VariableBox = ({ variable }: Props) => {
                                     }}
                                     readOnly={!canEdit || !variable.isEditable}
                                     name={variable.envVariable}
-                                    defaultValue={variable.serverValue}
+                                    defaultValue={variable.serverValue ?? ''}
                                     placeholder={variable.defaultValue}
                                     disabled={!canEdit || !variable.isEditable}
                                 />
