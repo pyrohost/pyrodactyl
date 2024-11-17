@@ -13,6 +13,7 @@ import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
 import { httpErrorToHuman } from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
+
 import Logo from '../elements/PyroLogo';
 
 interface Values {

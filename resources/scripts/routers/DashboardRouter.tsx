@@ -16,24 +16,21 @@ import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
+import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 
 import http from '@/api/http';
-
-
-
 
 export default () => {
     const location = useLocation();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
-    const [isSidebarVisible, setSidebarVisible] = useState(false); 
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
 
     const toggleSidebar = () => {
-      setSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
+        setSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
     };
 
     const onTriggerLogout = () => {
@@ -72,7 +69,6 @@ export default () => {
         return '0';
     };
 
-    
     const top = calculateTop(location.pathname);
 
     const [height, setHeight] = useState('40px');
@@ -83,21 +79,28 @@ export default () => {
         return () => clearTimeout(timeoutId);
     }, [top]);
 
-    
-
-
-    
     return (
         <Fragment key={'dashboard-router'}>
             <button
-                id="sidebarToggle"
+                id='sidebarToggle'
                 className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${
                     isSidebarVisible ? 'left-[300px]' : 'left-4'
                 }`}
                 onClick={toggleSidebar}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth='1.5'
+                    stroke='currentColor'
+                    className='size-6'
+                >
+                    <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+                    />
                 </svg>
             </button>
 
@@ -163,7 +166,7 @@ export default () => {
                     </NavLink>
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                         <HugeIconsApi fill='currentColor' />
-                        <p>Api Keys</p>
+                        <p>API Keys</p>
                     </NavLink>
                     <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
                         <HugeIconsSsh fill='currentColor' />
@@ -173,9 +176,7 @@ export default () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
-
                 </ul>
-                
             </MainSidebar>
 
             <Suspense fallback={null}>
@@ -201,7 +202,6 @@ export default () => {
                     </main>
                 </MainWrapper>
             </Suspense>
-            </Fragment>
-  );
-
+        </Fragment>
+    );
 };
