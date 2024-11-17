@@ -11,6 +11,7 @@ use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Extensions\Backups\BackupManager;
 use Pterodactyl\Extensions\Filesystem\S3Filesystem;
+use Pterodactyl\Exceptions\Http\HttpForbiddenException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Pterodactyl\Http\Requests\Api\Remote\ReportBackupCompleteRequest;
 
@@ -30,8 +31,22 @@ class BackupStatusController extends Controller
      */
     public function index(ReportBackupCompleteRequest $request, string $backup): JsonResponse
     {
-        /** @var \Pterodactyl\Models\Backup $model */
-        $model = Backup::query()->where('uuid', $backup)->firstOrFail();
+        // Get the node associated with the request.
+        /** @var \Pterodactyl\Models\Node $node */
+        $node = $request->attributes->get('node');
+
+        /** @var Backup $model */
+        $model = Backup::query()
+            ->where('uuid', $backup)
+            ->firstOrFail();
+
+        // Check that the backup is "owned" by the node making the request. This avoids other nodes
+        // from messing with backups that they don't own.
+        /** @var \Pterodactyl\Models\Server $server */
+        $server = $model->server;
+        if ($server->node_id !== $node->id) {
+            throw new HttpForbiddenException('You do not have permission to access that backup.');
+        }
 
         if ($model->is_successful) {
             throw new BadRequestHttpException('Cannot update the status of a backup that is already marked as completed.');
@@ -77,7 +92,7 @@ class BackupStatusController extends Controller
      */
     public function restore(Request $request, string $backup): JsonResponse
     {
-        /** @var \Pterodactyl\Models\Backup $model */
+        /** @var Backup $model */
         $model = Backup::query()->where('uuid', $backup)->firstOrFail();
 
         $model->server->update(['status' => null]);
@@ -95,7 +110,7 @@ class BackupStatusController extends Controller
      * the given backup.
      *
      * @throws \Exception
-     * @throws \Pterodactyl\Exceptions\DisplayException
+     * @throws DisplayException
      */
     protected function completeMultipartUpload(Backup $backup, S3Filesystem $adapter, bool $successful, ?array $parts): void
     {
