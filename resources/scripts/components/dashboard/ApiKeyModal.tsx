@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import ModalContext from '@/context/ModalContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import FlashMessageRender from '@/components/FlashMessageRender';

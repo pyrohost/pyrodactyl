@@ -5,6 +5,7 @@ import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Pagination from '@/components/elements/Pagination';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { PageListContainer } from '@/components/elements/pages/PageList';
 import BackupRow from '@/components/server/backups/BackupRow';
 import CreateBackupButton from '@/components/server/backups/CreateBackupButton';
 
@@ -67,20 +68,11 @@ const BackupContainer = () => {
                             </p>
                         )
                     ) : (
-                        <div
-                            data-pyro-backups
-                            style={{
-                                background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                            }}
-                            className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                        >
-                            <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
-                                {items.map((backup) => (
-                                    <BackupRow key={backup.uuid} backup={backup} />
-                                ))}
-                            </div>
-                        </div>
+                        <PageListContainer>
+                            {items.map((backup) => (
+                                <BackupRow key={backup.uuid} backup={backup} />
+                            ))}
+                        </PageListContainer>
                     )
                 }
             </Pagination>

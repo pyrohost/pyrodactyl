@@ -6,6 +6,7 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { PageListContainer } from '@/components/elements/pages/PageList';
 import AddSubuserButton from '@/components/server/users/AddSubuserButton';
 import UserRow from '@/components/server/users/UserRow';
 
@@ -67,20 +68,11 @@ export default () => {
                     Your server does not have any additional users. Add others to help you manage your server.
                 </p>
             ) : (
-                <div
-                    data-pyro-users-container-users
-                    style={{
-                        background:
-                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                    }}
-                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                >
-                    <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                        <For each={subusers} memo>
-                            {(subuser) => <UserRow key={subuser.uuid} subuser={subuser} />}
-                        </For>
-                    </div>
-                </div>
+                <PageListContainer data-pyro-users-container-users>
+                    <For each={subusers} memo>
+                        {(subuser) => <UserRow key={subuser.uuid} subuser={subuser} />}
+                    </For>
+                </PageListContainer>
             )}
         </ServerContentBlock>
     );

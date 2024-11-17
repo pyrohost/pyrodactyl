@@ -5,6 +5,7 @@ import isEqual from 'react-fast-compare';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
 
 import createServerAllocation from '@/api/server/network/createServerAllocation';
@@ -83,25 +84,13 @@ const NetworkContainer = () => {
             </MainPageHeader>
             {!data ? null : (
                 <>
-                    <div
-                        data-pyro-network-container-allocations
-                        style={{
-                            background:
-                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                        }}
-                        className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                    >
-                        <div className='w-full h-full overflow-hidden rounded-lg flex flex-col gap-1'>
-                            <For each={data} memo>
-                                {(allocation) => (
-                                    <AllocationRow
-                                        key={`${allocation.ip}:${allocation.port}`}
-                                        allocation={allocation}
-                                    />
-                                )}
-                            </For>
-                        </div>
-                    </div>
+                    <PageListContainer data-pyro-network-container-allocations>
+                        <For each={data} memo>
+                            {(allocation) => (
+                                <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
+                            )}
+                        </For>
+                    </PageListContainer>
                 </>
             )}
         </ServerContentBlock>

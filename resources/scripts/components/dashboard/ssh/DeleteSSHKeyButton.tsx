@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import Code from '@/components/elements/Code';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 

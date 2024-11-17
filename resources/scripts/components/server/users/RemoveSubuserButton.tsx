@@ -1,3 +1,5 @@
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
@@ -48,10 +50,11 @@ export default ({ subuser }: { subuser: Subuser }) => {
             <button
                 type={'button'}
                 aria-label={'Delete subuser'}
-                className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 mx-4`}
+                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
                 onClick={() => setShowConfirmation(true)}
             >
-                Remove
+                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                Delete
             </button>
         </>
     );

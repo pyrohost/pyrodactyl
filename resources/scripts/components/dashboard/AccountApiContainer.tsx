@@ -1,4 +1,5 @@
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 
@@ -14,8 +15,6 @@ import deleteApiKey from '@/api/account/deleteApiKey';
 import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 
 import { useFlashKey } from '@/plugins/useFlash';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
@@ -46,12 +45,12 @@ export default () => {
     return (
         <PageContentBlock title={'Account API'}>
             {/* Flash messages will now appear at the top of the page */}
-            <FlashMessageRender byKey="account" />
-            <div className="md:flex flex-nowrap my-10 space-x-8">
-                <ContentBox title={'Create API Key'} className="flex-none w-full md:w-1/2">
+            <FlashMessageRender byKey='account' />
+            <div className='md:flex flex-nowrap my-10 space-x-8'>
+                <ContentBox title={'Create API Key'} className='flex-none w-full md:w-1/2'>
                     <CreateApiKeyForm onKeyCreated={(key) => setKeys((s) => [...s!, key])} />
                 </ContentBox>
-                <ContentBox title={'API Keys'} className="flex-1 overflow-hidden mt-8 md:mt-0">
+                <ContentBox title={'API Keys'} className='flex-1 overflow-hidden mt-8 md:mt-0'>
                     <SpinnerOverlay visible={loading} />
                     <Dialog.Confirm
                         title={'Delete API Key'}
@@ -63,29 +62,30 @@ export default () => {
                         All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
                     </Dialog.Confirm>
                     {keys.length === 0 ? (
-                        <p className="text-center text-sm text-gray-500">
+                        <p className='text-center text-sm text-gray-500'>
                             {loading ? 'Loading...' : 'No API keys exist for this account.'}
                         </p>
                     ) : (
                         keys.map((key) => (
-                            <div key={key.identifier} className="flex flex-col mb-6 space-y-4">
-                                <div className="flex items-center justify-between space-x-4 border border-gray-300 rounded-lg p-4 transition duration-200">
-                                    <div className="flex-1">
-                                        <p className="text-sm font-medium">{key.description}</p>
-                                        <p className="text-xs text-gray-500 uppercase">
-                                            Last used: {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : 'Never'}
+                            <div key={key.identifier} className='flex flex-col mb-6 space-y-4'>
+                                <div className='flex items-center justify-between space-x-4 border border-gray-300 rounded-lg p-4 transition duration-200'>
+                                    <div className='flex-1'>
+                                        <p className='text-sm font-medium'>{key.description}</p>
+                                        <p className='text-xs text-gray-500 uppercase'>
+                                            Last used:{' '}
+                                            {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : 'Never'}
                                         </p>
                                     </div>
-                                    <p className="text-sm text-gray-600 hidden md:block">
-                                        <code className="font-mono py-1 px-2 bg-gray-800 rounded text-white">
+                                    <p className='text-sm text-gray-600 hidden md:block'>
+                                        <code className='font-mono py-1 px-2 bg-gray-800 rounded text-white'>
                                             {key.identifier}
                                         </code>
                                     </p>
                                     <button
-                                        className="p-2 text-red-500 hover:text-red-700"
+                                        className='p-2 text-red-500 hover:text-red-700'
                                         onClick={() => setDeleteIdentifier(key.identifier)}
                                     >
-                                        <FontAwesomeIcon icon={faTrashAlt} size="lg" />
+                                        <FontAwesomeIcon icon={faTrashAlt} size='lg' />
                                     </button>
                                 </div>
                             </div>
