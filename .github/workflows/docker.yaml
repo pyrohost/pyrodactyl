@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
   pull_request:
     branches:
       - main
@@ -21,18 +22,18 @@ jobs:
     if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
     steps:
       - name: Code checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Docker metadata
         id: docker_meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/pyrohost/pyrodactyl
           flavor: |
             latest=false
           tags: |
-            type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && github.event.release.prerelease == false }}
-            type=ref,event=tag
+            type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && github.event.release.prerelease == false && github.ref != 'refs/heads/dev' }}
+            type=ref,event=tag,enable=${{ github.ref != 'refs/heads/dev' }}
             type=ref,event=branch
 
       - name: Setup QEMU
@@ -57,7 +58,7 @@ jobs:
           sed -i "s/    'version' => 'canary',/    'version' => '${REF:1}',/" config/app.php
 
       - name: Build and Push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
