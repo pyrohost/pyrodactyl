@@ -8,6 +8,7 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { Button } from '@/components/elements/button/index';
+import { PageListItem } from '@/components/elements/pages/PageList';
 import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
 
 import { ip } from '@/lib/formatters';
@@ -56,11 +57,7 @@ const AllocationRow = ({ allocation }: Props) => {
     };
 
     return (
-        <div
-            className={
-                'flex rounded-sm p-1 transition bg-[#ffffff08] border-[1px] border-[#ffffff07] px-6 py-4 items-center'
-            }
-        >
+        <PageListItem>
             <div className={'flex items-center w-full md:w-auto'}>
                 <div className={'mr-4 flex-1 md:w-40'}>
                     {allocation.alias ? (
@@ -115,7 +112,7 @@ const AllocationRow = ({ allocation }: Props) => {
                     </>
                 )}
             </div>
-        </div>
+        </PageListItem>
     );
 };
 

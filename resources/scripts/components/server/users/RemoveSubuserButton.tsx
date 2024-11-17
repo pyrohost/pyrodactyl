@@ -9,6 +9,8 @@ import deleteSubuser from '@/api/server/users/deleteSubuser';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);
@@ -48,10 +50,11 @@ export default ({ subuser }: { subuser: Subuser }) => {
             <button
                 type={'button'}
                 aria-label={'Delete subuser'}
-                className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 mx-4`}
+                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
                 onClick={() => setShowConfirmation(true)}
             >
-                Remove
+                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                Delete
             </button>
         </>
     );

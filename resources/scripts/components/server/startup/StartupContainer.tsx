@@ -104,7 +104,7 @@ const StartupContainer = () => {
                     settings as they can cause your server to become inoperable.
                 </h2>
             </MainPageHeader>
-            <div className={`grid lg:grid-cols-3 gap-8`}>
+            <div className={`flex gap-8 lg:flex-row flex-col`}>
                 <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
                     <CopyOnClick text={data.invocation}>
                         <div className={`px-1 py-2`}>
@@ -112,7 +112,7 @@ const StartupContainer = () => {
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'}>
+                <TitledGreyBox title={'Docker Image'} className='overflow-x-auto'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>

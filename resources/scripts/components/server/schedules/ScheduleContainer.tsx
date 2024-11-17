@@ -5,6 +5,7 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
 
@@ -61,24 +62,15 @@ function ScheduleContainer() {
                             There are no schedules configured for this server.
                         </p>
                     ) : (
-                        <div
-                            data-pyro-schedules
-                            style={{
-                                background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                            }}
-                            className='rounded-xl border-[1px] border-[#ffffff12] p-1'
-                        >
-                            <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
-                                {schedules.map((schedule) => (
-                                    <NavLink key={schedule.id} to={`${schedule.id}`} end>
-                                        <div className='flex items-center rounded-md bg-[#ffffff11] px-2 sm:px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'>
-                                            <ScheduleRow schedule={schedule} />
-                                        </div>
-                                    </NavLink>
-                                ))}
-                            </div>
-                        </div>
+                        <PageListContainer data-pyro-schedules>
+                            {schedules.map((schedule) => (
+                                <NavLink key={schedule.id} to={`${schedule.id}`} end>
+                                    <PageListItem>
+                                        <ScheduleRow schedule={schedule} />
+                                    </PageListItem>
+                                </NavLink>
+                            ))}
+                        </PageListContainer>
                     )}
                 </>
             )}

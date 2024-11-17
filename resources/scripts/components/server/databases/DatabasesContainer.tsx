@@ -5,6 +5,7 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import CreateDatabaseButton from '@/components/server/databases/CreateDatabaseButton';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 
@@ -58,27 +59,15 @@ export default () => {
             {!databases.length && loading ? null : (
                 <>
                     {databases.length > 0 ? (
-                        <div
-                            data-pyro-databases
-                            style={{
-                                background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                            }}
-                            className='p-1 border-[1px] border-[#ffffff12] rounded-xl'
-                        >
-                            <div className='flex h-full w-full flex-col gap-1 overflow-hidden rounded-lg'>
-                                <For each={databases} memo>
-                                    {(database, index) => (
-                                        <div
-                                            key={index}
-                                            className='flex items-center rounded-md bg-[#ffffff11] px-2 sm:px-6 py-4 transition duration-100 hover:bg-[#ffffff19] hover:duration-0 gap-4 flex-col sm:flex-row'
-                                        >
-                                            <DatabaseRow key={database.id} database={database} />
-                                        </div>
-                                    )}
-                                </For>
-                            </div>
-                        </div>
+                        <PageListContainer data-pyro-backups>
+                            <For each={databases} memo>
+                                {(database, index) => (
+                                    <PageListItem key={index}>
+                                        <DatabaseRow key={database.id} database={database} />
+                                    </PageListItem>
+                                )}
+                            </For>
+                        </PageListContainer>
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
