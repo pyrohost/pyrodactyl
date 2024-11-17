@@ -18,6 +18,8 @@ import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import HugeIconsApi from '@/components/elements/hugeicons/Api';
+import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 
 import http from '@/api/http';
 
@@ -48,11 +50,15 @@ export default () => {
     // Define refs for navigation buttons.
     const NavigationHome = useRef(null);
     const NavigationSettings = useRef(null);
+    const NavigationApi = useRef(null);
+    const NavigationSSH = useRef(null);
 
     const calculateTop = (pathname: string) => {
         // Get currents of navigation refs.
         const ButtonHome = NavigationHome.current;
         const ButtonSettings = NavigationSettings.current;
+        const ButtonApi = NavigationApi.current;
+        const ButtonSSH = NavigationSSH.current;
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
@@ -61,11 +67,12 @@ export default () => {
         if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop + HighlightOffset;
         if (pathname.endsWith(`/account`) && ButtonSettings != null)
             return (ButtonSettings as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith('/api') && ButtonApi != null) return (ButtonApi as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith('/ssh') && ButtonSSH != null) return (ButtonSSH as any).offsetTop + HighlightOffset;
         return '0';
     };
 
     
-
     const top = calculateTop(location.pathname);
 
     const [height, setHeight] = useState('40px');
@@ -154,10 +161,19 @@ export default () => {
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
                     </NavLink>
+                    <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
+                        <HugeIconsApi fill='currentColor' />
+                        <p>Api Keys</p>
+                    </NavLink>
+                    <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
+                        <HugeIconsSsh fill='currentColor' />
+                        <p>SSH Keys</p>
+                    </NavLink>
                     <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
+
                 </ul>
                 
             </MainSidebar>
