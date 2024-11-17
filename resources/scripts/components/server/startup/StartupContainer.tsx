@@ -112,7 +112,7 @@ const StartupContainer = () => {
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className='overflow-x-auto'>
+                <TitledGreyBox title={'Docker Image'} className='min-w-80'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>
