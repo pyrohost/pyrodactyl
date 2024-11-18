@@ -14,7 +14,7 @@
         "@codemirror/lint": "^6.5.0",
         "@codemirror/search": "^6.5.7",
         "@codemirror/state": "^6.4.1",
-        "@codemirror/view": "^6.26.3",
+        "@codemirror/view": "^6.34.3",
         "@eslint/compat": "^1.2.2",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
         "@fortawesome/free-solid-svg-icons": "^6.6.0",
