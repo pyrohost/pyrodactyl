@@ -60,7 +60,7 @@
         "reaptcha": "^1.12.1",
         "sockette": "^2.0.6",
         "sonner": "^1.4.41",
-        "styled-components": "^6.1.8",
+        "styled-components": "^6.1.13",
         "swr": "^2.2.5",
         "tailwind-merge": "^2.2.2",
         "tailwindcss": "^3.4.10",
