@@ -13,6 +13,8 @@ import PaginationFooter from '@/components/elements/table/PaginationFooter';
 import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
 
 import { useFlashKey } from '@/plugins/useFlash';
+// FIXME: replace with radix tooltip
+// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import useLocationHash from '@/plugins/useLocationHash';
 
 export default () => {
@@ -52,7 +54,11 @@ export default () => {
                 <div className={'bg-zinc-700'}>
                     {data?.items.map((activity) => (
                         <ActivityLogEntry key={activity.id} activity={activity}>
-                            {typeof activity.properties.useragent === 'string' && <span></span>}
+                            {typeof activity.properties.useragent === 'string' && (
+                                // <Tooltip content={activity.properties.useragent} placement={'top'}>
+                                <span>{/* <DesktopComputerIcon /> */}</span>
+                                // </Tooltip>
+                            )}
                         </ActivityLogEntry>
                     ))}
                 </div>

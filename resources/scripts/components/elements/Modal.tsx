@@ -1,4 +1,5 @@
 import { Dialog as HDialog } from '@headlessui/react';
+// FIXME: add icons back
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
