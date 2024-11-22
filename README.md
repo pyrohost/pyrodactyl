@@ -18,8 +18,11 @@
 
 <h1 align="center">Pyrodactyl</h1>
 
-> [!IMPORTANT]
+> [!WARNING]
 > Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
+
+> [!IMPORTANT]
+> For Pyrodactyl-specific issues, please use [Pyrodactyl GitHub Discussions](https://github.com/pyrohost/pyrodactyl/discussions) instead of Pterodactyl or Pelican support channels.
 
 Pyrodactyl is the Pterodactyl-based game server management panel that focuses on performance enhancements, a reimagined, accessible interface, and top-tier developer experience. Builds faster, compiles smaller: Pyrodactyl is the world's best Pterodactyl.
 
@@ -36,112 +39,21 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 [![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)](https://panel.pyro.host)
 
-## Running Pyrodactyl
+## Installing Pyrodactyl
 
-> [!TIP]
-> Pyrodactyl now [has a Docker image avaliable](https://github.com/pyrohost/pyrodactyl/pkgs/container/pyrodactyl), which for previous users of the Pterodactyl panel in Docker, should make it easy to migrate.
->
-> If you want to setup Pyrodactyl in Docker from scratch, see the [`docker-compose.example.yml`](https://github.com/pyrohost/pyrodactyl/blob/main/docker-compose.example.yml).
+See our [Installation](https://github.com/pyrohost/pyrodactyl/wiki/Installation) wiki page on how to get started.
 
-> [!WARNING]
-> Nothing is Perfect, that apply's to this panel.
-> If you are migrating your data from pterodactyl, always make sure you take a backup of your pterodactyl database and other relevant data.
-
-### Prerequisites
-
--   Latest LTS version of NodeJS
--   Git
-
-### Linux
-<details><summary>Running on Linux</summary>
-<p>
-
-Setting up Pyrodactyl is a breeze on Linux. Follow the [official Pterodactyl documentation](https://pterodactyl.io/panel/1.0/getting_started.html) for your distribution up to the **Download Files** step.
-
-Instead of downloading the official panel, use the commands below to download Pyrodactyl:
-
-```sh
-# Make directories
-mkdir -p /var/www/pterodactyl
-cd /var/www/pterodactyl
-
-# Download and extract panel
-git clone https://github.com/pyrohost/pyrodactyl.git /var/www/pterodactyl --depth=2
-
-# Permissions for caches
-chmod -R 755 storage/* bootstrap/cache/
-
-# Install dependencies & build panel
-npm ci && npm run ship
-```
-
-Proceed with the rest of the installation as you would with the official panel.
-</p></details>
-
-### Windows
-
-It is not currently possible to run Pyrodactyl in a **production environment** on Windows due to Wings being incompatible.
+> [!NOTE]
+> Windows is currently only supported for development purposes.
 
 ## Local Development
 
-<details><summary>On Windows</summary>
-<p>
+See our development pages on how to get started:
 
-Pyrodactyl is the world's first Pterodactyl panel that can be developed and run locally (with Wings) on Windows machines through [Vagrant](https://www.vagrantup.com/). Verify you have met the prerequisites above, then follow the steps below.
-
-1. Clone the Pyrodactyl panel repository
-1. Run `npm i` to install all the packages necessary.
-1. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
-1. Run `vagrant up`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
-1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:3000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
-1. Visit https://localhost:3000/admin to provision your first server on Pyrodactyl!
-
-### Notes about Local Development on Windows
-
--   If you have the dev server running (`npm run dev`), a development build of the app will be served at localhost:3000 with HMR. If you want to preview a production build of Pyrodactyl, terminate the dev server and run `npm run ship`. Once it finishes, it will also be served at localhost:3000.
-
--   If you're running the development server or have built a production version of Pyrodactyl, but visiting localhost:3000 hangs permanently, ensure you don't have any other apps or games open that may interfere with any of the ports in the Vagrantfile. For example, Steam may use port 8080, or another development server may be using a port used by Pyrodactyl. Run `vagrant reload` to re-point ports to your virtual machine after ensuring nothing may be using it, and try again.
-
--   If you receive a message like `Vagrant was unable to mount VirtualBox shared folders`, you [may need to install the vbguest plugin for VirtualBox](https://stackoverflow.com/a/48569055/11537010) with `vagrant plugin install vagrant-vbguest`. If it's already installed, run `vagrant plugin update vagrant-vbguest`.
-
--   We recommend setting up [Remote Caching via turbo](https://turbo.build/repo/docs/core-concepts/remote-caching). When you run `npm run ship` on your local development machine, its results will be cached and uploaded, allowing you to finish a build on your production server in milliseconds.
-
--   We do not recommend using Hyper-V as your virtualization layer. If your Vagrant installation asks you for a password, this is because you used Hyper-V. The password will be your Windows password.
-    - We recommend using VMWare Workstation or VirtualBox instead.
-</p></details>
-
-<details><summary>On Linux</summary>
-<p>
-
-### Prerequisites
-
-- Nix
-- Docker
-
-Local Development on Linux is A little different, because vagrant is the buggy software that it is, I couldn't get it to run properly... Anywhere, and on no Distro.
-So I decided that instead of using Vagrant, I would use nix. This turned out to be a very good idea. Now, using nix the development boots faster because we aren't using
-an entire vm to host a development server, it also uses way less resources, and is much easier to configure exactly how you want through the nix/buildsteps.sh file.
-
-### How to get started
-
-To get started, you obviously need nix on your system, and you need to configure nix to support flake files. Depending on your OS, this can vary
-
-1. Clone the Pyrodactyl panel repository
-1. run `npm i` to install all the packages necessary.
-1. Run `npm run ship` to build Pyrodactyl. This will cache the results of the build and upload sourcemaps to Sentry. Subsequent builds without code changes will finish in milliseconds.
-1. Copy `.env.nix` to `.env`
-1. Run `nix develop`. This will setup wings and the necessary services in order to run Pyrodactyl's databases, services, and app. This process could take up to 15 minutes.
-1. Once you receive a message that says "Pyrodactyl is now up and running at localhost:8000", visit that URL in your browser and login with the default credentials provided in your console. **It's important that you use localhost to connect to Pyrodactyl! If you use 127.0.0.1, you will run into CORS issues and other issues that will not be fixed.**
-1. Visit http://localhost:8000/admin to provision your first server on Pyrodactyl!
-
-
-
-### Notes about Local Development on Linux
-
-Due to a slight bug or two, pterodactyl wings does not as present work properly using the nixos development environment\
-This will hopefully be fixed later, but for now just be warned
-
-</p></details>
+-   [Local Dev on Windows (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Windows-(Vagrant)>)
+-   [Local Dev on Linux (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Vagrant)>)
+-   [Local Dev on Linux (Nix)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Nix)>)
+    -   Nix is recommended if you can't get Vagrant working
 
 ## Star History
 
