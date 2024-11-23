@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import ContentBox from '@/components/elements/ContentBox';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Button } from '@/components/elements/button/index';
 
 import { createSSHKey } from '@/api/account/ssh-keys';
 import { useSSHKeys } from '@/api/account/ssh-keys';
@@ -85,11 +85,7 @@ export default () => {
 
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
-                                <Button
-                                    type='submit'
-                                    className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500'
-                                    disabled={isSubmitting}
-                                >
+                                <Button type='submit' disabled={isSubmitting}>
                                     {isSubmitting ? 'Creating...' : 'Create SSH Key'}
                                 </Button>
                             </div>
