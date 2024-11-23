@@ -2,7 +2,7 @@ import { HugeIconProps } from './props';
 
 const HugeIconsMetaData = (props: HugeIconProps) => {
     return (
-        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' color='#000000' fill='none'>
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' color='#ffffff' fill='none'>
             <path
                 d='M7 11V11.5M5 4C5 2.89543 5.89543 2 7 2C8.07458 2 9 2.80976 9 3.91898C9 4.29783 8.88786 4.66821 8.67771 4.98344L7.5547 6.66795C7.19301 7.21049 7 7.84795 7 8.5'
                 stroke='currentColor'
