@@ -93,11 +93,17 @@ php artisan p:node:configuration 1 >$(pwd)/nix/docker/wings/etc/config.yml
 
 docker-compose --project-directory ./nix/docker/wings up -d --force-recreate
 
+
+
 tmux new-session -s pyrodevelopment -d
 tmux send-keys -t pyrodevelopment 'npm run dev' C-m
 
 tmux new-window -t pyrodevelopment
+tmux send-keys -t pyrodevelopment 'caddy run --config ./nix/caddyfile' C-m
+
+tmux new-window -t pyrodevelopment
 tmux send-keys -t pyrodevelopment 'php artisan serve' C-m
+
 
 tmux attach-session -t pyrodevelopment
 

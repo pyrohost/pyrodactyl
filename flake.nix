@@ -17,12 +17,25 @@
       export PATH=${pkgs.mariadb}/bin:$PATH
       export PATH=${pkgs.docker}/bin:$PATH
       export PATH=${pkgs.docker-compose}/bin:$PATH
+      export PATH=${pkgs.caddy}/bin:$PATH
+
 
       redis-server --daemonize yes
+      redis-server --daemonize yes
       redis-cli ping
+      sleep 5
       #mariadb-install-server
       #php artisan serve --host=127.0.0.1 --port=8000
+
+      # Clean up and create directories for MariaDB data
+      echo "Deleting MariaDB data directory"
+      rm -rf $(pwd)/nix/docker/maria/mariadb_data
+
+      echo "Creating MariaDB data directory"
+      mkdir -p $(pwd)/nix/docker/maria/mariadb_data
+
       bash ./nix/buildsteps.sh
+      redis-cli shutdown
     '';
 
     # Development shell
@@ -30,7 +43,7 @@
       nativeBuildInputs = [
         pkgs.php
         pkgs.phpPackages.composer
-        pkgs.nginx
+        pkgs.caddy
         pkgs.nodejs_20
         pkgs.tmux
         pkgs.redis
@@ -49,30 +62,17 @@
 
         # Clean up and create directories for MariaDB data
         echo "Deleting MariaDB data directory"
-        #rm -rf $(pwd)/nix/docker/maria/mariadb_data
+        rm -rf $(pwd)/nix/docker/maria/mariadb_data
 
-        #echo "Creating MariaDB data directory"
-        #mkdir -p $(pwd)/nix/docker/maria/mariadb_data
+        echo "Creating MariaDB data directory"
+        mkdir -p $(pwd)/nix/docker/maria/mariadb_data
+
+
 
         echo "Run 'php artisan serve' to start the application."
       '';
     };
 
-    # NGINX configuration
-    nginxConfig = pkgs.writeText "nginx.conf" ''
-      server {
-          listen 80;
-          server_name localhost;
-
-          location / {
-              proxy_pass http://127.0.0.1:8000;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-          }
-      }
-    '';
 
     # Systemd services
     nixosConfigurations.default = pkgs.lib.nixosSystem {
@@ -114,3 +114,4 @@
     };
   };
 }
+
