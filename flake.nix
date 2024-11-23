@@ -1,71 +1,116 @@
 {
-  description = "PyroPanel";
+  description = "Laravel application with artisan serve behind a proxy";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs { inherit system; };
+  outputs = { self, nixpkgs }: let
+    pkgs = import nixpkgs { system = "x86_64-linux"; };
+  in {
+    # Define the default package
+    defaultPackage.x86_64-linux = pkgs.writeShellScriptBin "laravel-server" ''
+      #!/usr/bin/env bash
+      export PATH=${pkgs.php}/bin:$PATH
+      export PATH=${pkgs.redis}/bin:$PATH
+      export PATH=${pkgs.git}/bin:$PATH
+      export PATH=${pkgs.mariadb}/bin:$PATH
+      export PATH=${pkgs.docker}/bin:$PATH
+      export PATH=${pkgs.docker-compose}/bin:$PATH
 
-      pyrodactylPath = builtins.toString ./.;
+      redis-server --daemonize yes
+      redis-cli ping
+      #mariadb-install-server
+      #php artisan serve --host=127.0.0.1 --port=8000
+      bash ./nix/buildsteps.sh
+    '';
 
-    in {
-
-    devShell = pkgs.mkShell {
-      buildInputs = [
+    # Development shell
+    devShell.x86_64-linux = pkgs.mkShell {
+      nativeBuildInputs = [
         pkgs.php
         pkgs.phpPackages.composer
-        pkgs.redis
         pkgs.nginx
-        pkgs.docker
-        pkgs.docker-compose
-        pkgs.mariadb
         pkgs.nodejs_20
         pkgs.tmux
+        pkgs.redis
+        pkgs.mariadb
+        pkgs.docker
+        pkgs.docker-compose
       ];
-    shellHook = let
-      dataDir = "./data";
-    in ''
-      echo "Starting Redis in the dev shell..."
 
-      # Start Redis in the background
-      # These damn variables causing all sorts of issues when not here
-      export LC_ALL=C.UTF-8
-      export LANG=C.UTF-8
-      redis-server --daemonize yes
+      shellHook = ''
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+        echo "Laravel environment loaded."
+        # Start Redis server as a background process
+        redis-server --daemonize yes
+        echo "Resetting MariaDB Data"
 
-      echo "Redis is running!"
+        # Clean up and create directories for MariaDB data
+        echo "Deleting MariaDB data directory"
+        #rm -rf $(pwd)/nix/docker/maria/mariadb_data
 
-      echo "Resetting MariaDB Data"
-      # Delete Maria Folders
-      echo "Delete maria Folders"
-      rm -fR $(pwd)/nix/docker/maria/mariadb_data
+        #echo "Creating MariaDB data directory"
+        #mkdir -p $(pwd)/nix/docker/maria/mariadb_data
 
-      # Create Maria Folders
-      echo "Create maria Folders"
-      mkdir $(pwd)/nix/docker/maria/mariadb_data
+        echo "Run 'php artisan serve' to start the application."
+      '';
+    };
 
-      echo "Starting Pyrodactyl"
-      bash ./nix/buildsteps.sh
-      # Define cleanup function to stop services
+    # NGINX configuration
+    nginxConfig = pkgs.writeText "nginx.conf" ''
+      server {
+          listen 80;
+          server_name localhost;
 
-      cleanup() {
-        echo "Stopping Redis..."
-        pkill redis-server
-
-        echo "Stopping mariadb-docker..."
-        docker-compose --project-directory ./nix/docker/maria/ down
-        echo "Stopping Pterodactyl wings..."
-        docker-compose --project-directory ./nix/docker/wings/ down
-        }
-
-      # Register cleanup on shell exit
-      trap cleanup EXIT
+          location / {
+              proxy_pass http://127.0.0.1:8000;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+          }
+      }
     '';
-};
-});
-}
 
+    # Systemd services
+    nixosConfigurations.default = pkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        {
+          systemd.services.laravel = {
+            enabled=true;
+            description = "Laravel PHP Artisan Service";
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              ExecStart = "${self.defaultPackage.x86_64-linux}";
+              Restart = "always";
+              WorkingDirectory = ./app;
+            };
+          };
+
+          systemd.services.nginx-proxy = {
+            enabled=true;
+            description = "NGINX Proxy for Laravel";
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              ExecStart = "${pkgs.nginx}/bin/nginx -c ${self.nginxConfig}";
+              Restart = "always";
+            };
+
+          services.mariadb = {
+            enable = true;
+            package = nixpkgs.pkgs.mariadb; # Ensure you have the correct version of MariaDB
+            dataDir = "/var/lib/mysql";
+            socket = "/var/run/mysqld/mysqld.sock";
+            port = 3306;
+            # Additional configuration settings
+            rootPassword = "your_secure_password"; # Set the root password
+          };
+          };
+        }
+      ];
+    };
+  };
+}
