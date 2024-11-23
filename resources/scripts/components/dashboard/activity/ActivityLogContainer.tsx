@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 // FIXME: add icons back
 import Spinner from '@/components/elements/Spinner';
@@ -34,35 +35,37 @@ export default () => {
 
     return (
         <PageContentBlock title={'Account Activity Log'}>
-            <FlashMessageRender byKey={'account'} />
-            {(filters.filters?.event || filters.filters?.ip) && (
-                <div className={'flex justify-end mb-2'}>
-                    <Link
-                        to={'#'}
-                        className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
-                        onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
-                    >
-                        Clear Filters
-                    </Link>
-                </div>
-            )}
-            {!data && isValidating ? (
-                <Spinner centered />
-            ) : (
-                <div className={'bg-zinc-700'}>
-                    {data?.items.map((activity) => (
-                        <ActivityLogEntry key={activity.id} activity={activity}>
-                            {typeof activity.properties.useragent === 'string' && <span></span>}
-                        </ActivityLogEntry>
-                    ))}
-                </div>
-            )}
-            {data && (
-                <PaginationFooter
-                    pagination={data.pagination}
-                    onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
-                />
-            )}
+            <ContentBox title='Account Activity Log'>
+                <FlashMessageRender byKey={'account'} />
+                {(filters.filters?.event || filters.filters?.ip) && (
+                    <div className={'flex justify-end mb-2'}>
+                        <Link
+                            to={'#'}
+                            className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
+                            onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
+                        >
+                            Clear Filters
+                        </Link>
+                    </div>
+                )}
+                {!data && isValidating ? (
+                    <Spinner centered />
+                ) : (
+                    <div>
+                        {data?.items.map((activity) => (
+                            <ActivityLogEntry key={activity.id} activity={activity}>
+                                {typeof activity.properties.useragent === 'string' && <span></span>}
+                            </ActivityLogEntry>
+                        ))}
+                    </div>
+                )}
+                {data && (
+                    <PaginationFooter
+                        pagination={data.pagination}
+                        onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
+                    />
+                )}
+            </ContentBox>
         </PageContentBlock>
     );
 };

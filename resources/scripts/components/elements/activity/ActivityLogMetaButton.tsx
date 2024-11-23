@@ -28,7 +28,7 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
                 }
                 onClick={() => setOpen(true)}
             >
-                <MetaDataIcon className={'w-5 h-5'} />
+                <MetaDataIcon fill='currentColor' className={'w-5 h-5'} />
             </button>
         </div>
     );
