@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ContentBox from '@/components/elements/ContentBox';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
@@ -37,37 +38,39 @@ export default () => {
     return (
         <ServerContentBlock title={'Activity Log'}>
             <FlashMessageRender byKey={'server:activity'} />
-            {(filters.filters?.event || filters.filters?.ip) && (
-                <div className={'flex justify-end mb-2'}>
-                    <Link
-                        to={'#'}
-                        className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
-                        onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
-                    >
-                        Clear Filters
-                        {/* FIXME: X icon */}
-                    </Link>
-                </div>
-            )}
-            {!data && isValidating ? (
-                <Spinner centered />
-            ) : !data?.items.length ? (
-                <p className={'text-sm text-center text-zinc-400'}>No activity logs available for this server.</p>
-            ) : (
-                <div className={'bg-zinc-700'}>
-                    {data?.items.map((activity) => (
-                        <ActivityLogEntry key={activity.id} activity={activity}>
-                            <span />
-                        </ActivityLogEntry>
-                    ))}
-                </div>
-            )}
-            {data && (
-                <PaginationFooter
-                    pagination={data.pagination}
-                    onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
-                />
-            )}
+            <ContentBox title='Server Activity Logs'>
+                {(filters.filters?.event || filters.filters?.ip) && (
+                    <div className={'flex justify-end mb-2'}>
+                        <Link
+                            to={'#'}
+                            className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
+                            onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
+                        >
+                            Clear Filters
+                            {/* FIXME: X icon */}
+                        </Link>
+                    </div>
+                )}
+                {!data && isValidating ? (
+                    <Spinner centered />
+                ) : !data?.items.length ? (
+                    <p className={'text-sm text-center text-zinc-400'}>No activity logs available for this server.</p>
+                ) : (
+                    <div>
+                        {data?.items.map((activity) => (
+                            <ActivityLogEntry key={activity.id} activity={activity}>
+                                <span />
+                            </ActivityLogEntry>
+                        ))}
+                    </div>
+                )}
+                {data && (
+                    <PaginationFooter
+                        pagination={data.pagination}
+                        onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
+                    />
+                )}
+            </ContentBox>
         </ServerContentBlock>
     );
 };

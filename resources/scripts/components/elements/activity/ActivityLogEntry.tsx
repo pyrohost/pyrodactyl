@@ -7,6 +7,8 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
+import FolderIcon from '@/components/elements/hugeicons/Folder';
+import TerminalIcon from '@/components/elements/hugeicons/Terminal';
 
 import useLocationHash from '@/plugins/useLocationHash';
 
@@ -61,22 +63,15 @@ export default ({ activity, children }: Props) => {
                         <span className={'text-zinc-400'}>&nbsp;&mdash;&nbsp;</span>
                         <Link
                             to={`#${pathTo({ event: activity.event })}`}
-                            className={'transition-colors duration-75 active:text-blue-400 hover:text-blue-400'}
+                            className={'transition-colors duration-75 active:text-blue-400 hover:text-red-400'}
                         >
                             {activity.event}
                         </Link>
                         <div className={clsx(style.icons, 'group-hover:text-zinc-300')}>
-                            {activity.isApi && (
-                                // <Tooltip placement={'top'} content={'Using API Key'}>
-                                // <TerminalIcon />
-                                <div>terminal icon</div>
-                                // </Tooltip>
-                            )}
+                            {activity.isApi && <TerminalIcon fill='contentColor' />}
                             {activity.event.startsWith('server:sftp.') && (
                                 // <Tooltip placement={'top'} content={'Using SFTP'}>
-                                // <FolderOpenIcon />
-                                <div>folder open icon</div>
-                                // </Tooltip>
+                                <FolderIcon fill='contentColor' />
                             )}
                             {children}
                         </div>
