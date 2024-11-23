@@ -28,6 +28,7 @@ import HugeIconsDashboardSettings from '@/components/elements/hugeicons/Dashboar
 import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import HugeIconsPeople from '@/components/elements/hugeicons/People';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import InstallListener from '@/components/server/InstallListener';
@@ -146,6 +147,7 @@ export default () => {
     const NavigationStartup = useRef(null);
     const NavigationSchedules = useRef(null);
     const NavigationSettings = useRef(null);
+    const NavigationActivity = useRef(null);
     const NavigationShell = useRef(null);
 
     const calculateTop = (pathname: string) => {
@@ -162,6 +164,7 @@ export default () => {
         const ButtonSchedules = NavigationSchedules.current;
         const ButtonSettings = NavigationSettings.current;
         const ButtonShell = NavigationShell.current;
+        const ButtonActivity = NavigationActivity.current;
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
@@ -191,6 +194,8 @@ export default () => {
             return (ButtonSettings as any).offsetTop + HighlightOffset;
         if (pathname.endsWith(`/server/${id}/shell`) && ButtonShell != null)
             return (ButtonShell as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/activity`) && ButtonActivity != null)
+            return (ButtonActivity as any).offsetTop + HighlightOffset;
         return '0';
     };
 
@@ -389,6 +394,17 @@ export default () => {
                                             <p>Settings</p>
                                         </NavLink>
                                     </Can>
+                                    <Can action={['activity.*', 'activity.read']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationActivity}
+                                            to={`/server/${id}/activity`}
+                                            end
+                                        >
+                                            <HugeIconsPencil fill='currentColor' />
+                                            <p>Activity</p>
+                                        </NavLink>
+                                    </Can>
                                 </>
                             )}
                             <Can action={'startup.software'}>
@@ -402,14 +418,6 @@ export default () => {
                                     <p>Software</p>
                                 </NavLink>
                             </Can>
-                            {/* {rootAdmin && (
-                                <a href={`/admin/servers/view/${serverId}`} target={'_blank'} rel='noreferrer'>
-                                    <div className='ml-1'>Manage Server </div>
-                                    <span className='z-10 rounded-full bg-zinc-600 px-2 py-1 text-xs text-white'>
-                                        Staff
-                                    </span>
-                                </a>
-                            )} */}
                         </ul>
                     </MainSidebar>
                     <CommandMenu />
