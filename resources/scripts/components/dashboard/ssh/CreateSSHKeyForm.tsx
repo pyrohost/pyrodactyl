@@ -5,6 +5,7 @@ import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
+import ContentBox from '@/components/elements/ContentBox';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -50,50 +51,52 @@ export default () => {
             {/* Add your modal logic here to display the SSH key details after creation */}
 
             {/* Form for creating SSH key */}
-            <Formik
-                onSubmit={submit}
-                initialValues={{ name: '', publicKey: '' }}
-                validationSchema={object().shape({
-                    name: string().required('SSH Key Name is required'),
-                    publicKey: string().required('Public Key is required'),
-                })}
-            >
-                {({ isSubmitting }) => (
-                    <Form className='space-y-6'>
-                        {/* Show spinner overlay when submitting */}
-                        <SpinnerOverlay visible={isSubmitting} />
+            <ContentBox>
+                <Formik
+                    onSubmit={submit}
+                    initialValues={{ name: '', publicKey: '' }}
+                    validationSchema={object().shape({
+                        name: string().required('SSH Key Name is required'),
+                        publicKey: string().required('Public Key is required'),
+                    })}
+                >
+                    {({ isSubmitting }) => (
+                        <Form className='space-y-6'>
+                            {/* Show spinner overlay when submitting */}
+                            <SpinnerOverlay visible={isSubmitting} />
 
-                        {/* SSH Key Name Field */}
-                        <FormikFieldWrapper
-                            label='SSH Key Name'
-                            name='name'
-                            description='A name to identify this SSH key.'
-                        >
-                            <Field name='name' as={Input} />
-                        </FormikFieldWrapper>
-
-                        {/* Public Key Field */}
-                        <FormikFieldWrapper
-                            label='Public Key'
-                            name='publicKey'
-                            description='Enter your public SSH key.'
-                        >
-                            <Field name='publicKey' as={Input} />
-                        </FormikFieldWrapper>
-
-                        {/* Submit Button below form fields */}
-                        <div className='flex justify-end mt-6'>
-                            <Button
-                                type='submit'
-                                className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500'
-                                disabled={isSubmitting}
+                            {/* SSH Key Name Field */}
+                            <FormikFieldWrapper
+                                label='SSH Key Name'
+                                name='name'
+                                description='A name to identify this SSH key.'
                             >
-                                {isSubmitting ? 'Creating...' : 'Create SSH Key'}
-                            </Button>
-                        </div>
-                    </Form>
-                )}
-            </Formik>
+                                <Field name='name' as={Input} className='w-full' />
+                            </FormikFieldWrapper>
+
+                            {/* Public Key Field */}
+                            <FormikFieldWrapper
+                                label='Public Key'
+                                name='publicKey'
+                                description='Enter your public SSH key.'
+                            >
+                                <Field name='publicKey' as={Input} className='w-full' />
+                            </FormikFieldWrapper>
+
+                            {/* Submit Button below form fields */}
+                            <div className='flex justify-end mt-6'>
+                                <Button
+                                    type='submit'
+                                    className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500'
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'Creating...' : 'Create SSH Key'}
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </ContentBox>
         </>
     );
 };

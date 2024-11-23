@@ -1,3 +1,5 @@
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import Code from '@/components/elements/Code';
@@ -35,7 +37,9 @@ export default ({ name, fingerprint }: { name: string; fingerprint: string }) =>
             >
                 Removing the <Code>{name}</Code> SSH key will invalidate its usage across the Panel.
             </Dialog.Confirm>
-            <button className={`ml-4 p-2 text-sm`} onClick={() => setVisible(true)}></button>
+            <button className={`p-2 text-red-500 hover:text-red-700`} onClick={() => setVisible(true)}>
+                <FontAwesomeIcon icon={faTrashAlt} size='lg' />{' '}
+            </button>
         </>
     );
 };
