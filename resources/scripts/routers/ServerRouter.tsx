@@ -15,6 +15,7 @@ import {
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
+import ModrinthLogo from '@/components/elements/ModrinthLogo';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
@@ -148,6 +149,7 @@ export default () => {
     const NavigationSchedules = useRef(null);
     const NavigationSettings = useRef(null);
     const NavigationActivity = useRef(null);
+    const NavigationMod = useRef(null);
     const NavigationShell = useRef(null);
 
     const calculateTop = (pathname: string) => {
@@ -165,6 +167,7 @@ export default () => {
         const ButtonSettings = NavigationSettings.current;
         const ButtonShell = NavigationShell.current;
         const ButtonActivity = NavigationActivity.current;
+        const ButtonMod = NavigationMod.current;
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
@@ -196,6 +199,9 @@ export default () => {
             return (ButtonShell as any).offsetTop + HighlightOffset;
         if (pathname.endsWith(`/server/${id}/activity`) && ButtonActivity != null)
             return (ButtonActivity as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith(`/server/${id}/mods`) && ButtonMod != null)
+            return (ButtonMod as any).offsetTop + HighlightOffset;
+
         return '0';
     };
 
@@ -266,7 +272,7 @@ export default () => {
                             </NavLink>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2'>
+                                    <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 select-none'>
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
                                             width='16'
@@ -280,11 +286,11 @@ export default () => {
                                         </svg>
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                                <DropdownMenuContent className='z-[99999] select-none' sideOffset={8}>
                                     {rootAdmin && (
                                         <DropdownMenuItem onSelect={onSelectManageServer}>
                                             Manage Server
-                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs'>
+                                            <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs select-none'>
                                                 Staff
                                             </span>
                                         </DropdownMenuItem>
@@ -403,6 +409,17 @@ export default () => {
                                         >
                                             <HugeIconsPencil fill='currentColor' />
                                             <p>Activity</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={['modrinth.*', 'modrinth.download']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center'
+                                            ref={NavigationMod}
+                                            to={`/server/${id}/mods`}
+                                            end
+                                        >
+                                            <ModrinthLogo />
+                                            <p>Mods</p>
                                         </NavLink>
                                     </Can>
                                 </>

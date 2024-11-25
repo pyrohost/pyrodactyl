@@ -27,5 +27,6 @@ module.exports = {
             },
         },
     },
-    plugins: [require('tailwindcss-animate'), require("tailwindcss-inner-border")],
+    plugins: [require('tailwindcss-animate'), require("tailwindcss-inner-border"), require('tailwind-scrollbar'),
+    ],
 };
