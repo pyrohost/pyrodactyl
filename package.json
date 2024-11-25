@@ -17,7 +17,7 @@
         "@codemirror/view": "^6.26.3",
         "@eslint/compat": "^1.2.2",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
-        "@fortawesome/free-solid-svg-icons": "^6.6.0",
+        "@fortawesome/free-solid-svg-icons": "^6.7.1",
         "@fortawesome/react-fontawesome": "^0.2.2",
         "@headlessui/react": "^1.7.18",
         "@preact/signals-react": "^2.0.1",
