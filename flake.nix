@@ -11,6 +11,9 @@
     # Define the default package
     defaultPackage.x86_64-linux = pkgs.writeShellScriptBin "laravel-server" ''
       #!/usr/bin/env bash
+      export LC_ALL=C.UTF-8
+      export LANG=C.UTF-8
+
       export PATH=${pkgs.php}/bin:$PATH
       export PATH=${pkgs.redis}/bin:$PATH
       export PATH=${pkgs.git}/bin:$PATH
@@ -20,7 +23,6 @@
       export PATH=${pkgs.caddy}/bin:$PATH
 
 
-      redis-server --daemonize yes
       redis-server --daemonize yes
       redis-cli ping
       sleep 5
