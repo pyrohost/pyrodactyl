@@ -41,7 +41,7 @@ composer install --no-dev --optimize-autoloader
 echo "Generating keys"
 php artisan key:generate --force --no-interaction
 echo "Configuring panel"
-php artisan p:environment:setup -n --author dev@pyro.host --url http://localhost:8000 --cache redis --session redis --queue redis
+php artisan p:environment:setup -n --author dev@pyro.host --url http://localhost --cache redis --session redis --queue redis
 echo "Setting up database"
 php artisan p:environment:database -n --host 127.0.0.1 --port 3306 --database panel --username pyrodactyluser --password pyrodactyl
 echo "Seeding migrations"
@@ -58,7 +58,7 @@ mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; UPDATE users SE
 # Make a location and node for the panel
 php artisan p:location:make -n --short local --long Local
 echo "Creating wings node"
-php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
+php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn wings.localhost --public 1 --scheme http --proxy 1 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
 
 # Add some dummy allocations to the node
 echo "Added allocations to wings"
@@ -72,6 +72,7 @@ mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; INSERT INTO set
 
 mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "USE panel; UPDATE settings SET \`key\`='settings::recaptcha:enabled', value='false' WHERE id=1;"
 
+mysql -u $mysqluser -p$mysqlrootpass -h 127.0.0.1 -e "INSERT INTO panel.servers (id, external_id, uuid, uuidShort, node_id, name, description, status, skip_scripts, owner_id, memory, swap, disk, io, cpu, threads, oom_disabled, allocation_id, nest_id, egg_id, startup, image, allocation_limit, database_limit, backup_limit, created_at, updated_at, installed_at) VALUES(1, NULL, '7f38298b-d3be-4096-bde0-ee612d2d8257', '7f38298b', 1, 'Dev-Server', '', NULL, 0, 1, 14336, -1, 51200, 500, 0, NULL, 1, 1, 1, 1, 'java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}', 'ghcr.io/pterodactyl/yolks:java_21', 0, 10, 100, '2024-11-17 00:22:44.000', '2024-11-18 10:30:49.000', '2024-11-18 10:29:39.000');"
 
 # Setup wings
 #curl -L -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
@@ -98,8 +99,8 @@ docker-compose --project-directory ./nix/docker/wings up -d --force-recreate
 tmux new-session -s pyrodevelopment -d
 tmux send-keys -t pyrodevelopment 'npm run dev' C-m
 
-tmux new-window -t pyrodevelopment
-tmux send-keys -t pyrodevelopment 'caddy run --config ./nix/caddyfile' C-m
+#tmux new-window -t pyrodevelopment
+#tmux send-keys -t pyrodevelopment 'caddy run --config ./nix/caddyfile' C-m
 
 tmux new-window -t pyrodevelopment
 tmux send-keys -t pyrodevelopment 'php artisan serve' C-m
