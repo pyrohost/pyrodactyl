@@ -20,11 +20,12 @@ interface Project {
 }
 
 interface Props {
-    appVersion: string;
+    appVersion;
     baseUrl: string;
+    nonApiUrl: string;
 }
 
-const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
+const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const apiUrl = `${baseUrl}/search`;
 
@@ -47,7 +48,6 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                     if (x['icon_url'] == '') {
                         x['icon_url'] = 'N/A';
                     }
-                    console.log(x.icon_url);
                 }
 
                 setProjects(data.hits || []); // Safely access hits
@@ -103,7 +103,9 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                                     )}
                                 </ContentBox>
                                 <div className=''>
-                                    <h2 className='text-lg font-semibold text-white'>{project.title}</h2>
+                                    <a href={`${nonApiUrl}/mod/${project.project_id}`} target='_blank' rel='noreferrer'>
+                                        <h2 className='text-lg font-semibold text-white'>{project.title}</h2>
+                                    </a>
                                     <p className='text-sm text-gray-300 mb-2'>
                                         Author: <span className='font-medium'>{project.author}</span>
                                     </p>

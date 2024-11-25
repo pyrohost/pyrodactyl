@@ -16,6 +16,7 @@ import LoaderSelector from './LoaderSelector';
 export default () => {
     const headers: Headers = new Headers();
     const url = 'https://staging-api.modrinth.com/v2';
+    const nonApiUrl = 'https://staging.modrinth.com';
     async function getAppVersion(): Promise<string> {
         const response = await fetch('/api/client/version');
         const data = await response.json();
@@ -56,7 +57,7 @@ export default () => {
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full md:w-4/5'
                     title='Modrinth'
                 >
-                    <ProjectSelector appVersion={appVersion} baseUrl={url}></ProjectSelector>
+                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl}></ProjectSelector>
                 </ContentBox>
             </div>
         </PageContentBlock>
