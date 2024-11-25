@@ -38,7 +38,7 @@
         "browserslist": "^4.23.0",
         "chart.js": "^4.4.4",
         "clsx": "^2.1.0",
-        "cmdk": "^1.0.0",
+        "cmdk": "^1.0.4",
         "copy-to-clipboard": "^3.3.3",
         "date-fns": "^3.6.0",
         "debounce": "^2.2.0",
