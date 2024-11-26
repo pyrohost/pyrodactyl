@@ -3,6 +3,8 @@ import { toast } from 'sonner';
 
 import { ScrollMenu } from '@/components/elements/ScrollMenu';
 
+import EnvironmentSelector from './ItemSelector';
+
 interface GameLoaders {
     icon: string; // SVG data(I probably wont use this)
     name: string;
@@ -43,7 +45,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
 
         if (appVersion) {
             fetchLoaders();
-            console.log();
+            // console.log();
         }
     }, [appVersion]);
 
@@ -54,7 +56,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     return (
         <div>
             {filterLoaders.length > 0 ? (
-                <ScrollMenu items={filterLoaders.map((loaders) => loaders.name)} />
+                <EnvironmentSelector items={filterLoaders.map((loaders) => loaders.name)} />
             ) : (
                 <p>No Loaders available...</p>
             )}

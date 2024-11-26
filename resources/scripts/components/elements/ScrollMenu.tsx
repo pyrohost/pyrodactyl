@@ -4,21 +4,24 @@ import { Checkbox } from '@/components/elements/CheckboxLabel';
 
 import { cn } from '@/lib/utils';
 
+interface Props {
+    appVersion;
+    baseUrl: string;
+}
+
 const ScrollMenu = React.forwardRef<
     React.ElementRef<'div'>,
     React.ComponentPropsWithoutRef<'div'> & { items: string[] }
 >(({ className, items, ...props }, ref) => {
     const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
 
-    // Handle checkbox change
     const handleCheckboxChange = (item: string) => {
-        // Update the checked state
         setCheckedItems((prev) => {
             const updatedItems = prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item];
 
             // Log the name of the item that was selected/deselected
-            console.log(`${item} is now ${updatedItems.includes(item) ? 'selected' : 'deselected'}`);
-            console.log(updatedItems);
+            // console.log(`${item} is now ${updatedItems.includes(item) ? 'selected' : 'deselected'}`);
+            // console.log(updatedItems);
 
             return updatedItems;
         });
@@ -32,8 +35,8 @@ const ScrollMenu = React.forwardRef<
                         <li key={item}>
                             <Checkbox
                                 label={item}
-                                // checked={checkedItems.includes(item)} // Set checked state
-                                onChange={() => handleCheckboxChange(item)} // Handle change
+                                // checked={checkedItems.includes(item)}
+                                onChange={() => handleCheckboxChange(item)}
                             />
                         </li>
                     ))}

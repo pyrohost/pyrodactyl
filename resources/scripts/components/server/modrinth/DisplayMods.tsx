@@ -1,4 +1,5 @@
 //? https://api.modrinth.com/v2/search?facets=[[%22categories:forge%22],[%22versions:1.17.1%22,%20%22versions:1.21.3%22],[%22project_type:mod%22],[%22license:mit%22]]&index=relevance
+//? ?offset=40 Offset is where to start in the index. assuming we show 20 results per page. it should be 0, 20, 40, 60, 80, 100, So on and so forth
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
