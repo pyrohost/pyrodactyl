@@ -1,6 +1,4 @@
 import ModalContext from '@/context/ModalContext';
-import { faClone } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -35,13 +33,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
                     </CopyOnClick>
 
                     {/* Copy button with icon */}
-                    <div className='absolute top-2 right-2'>
-                        <FontAwesomeIcon
-                            icon={faClone}
-                            size='lg'
-                            className='text-gray-400 hover:text-gray-600 cursor-pointer'
-                        />
-                    </div>
+                    <div className='absolute top-2 right-2'></div>
                 </pre>
             </div>
 

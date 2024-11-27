@@ -1,7 +1,7 @@
-// FIXME: add icons back
 import clsx from 'clsx';
 import { useContext, useEffect } from 'react';
 
+import HugeIconsUserShield from '../hugeicons/UserShield';
 import { DialogContext, DialogIconProps, styles } from './';
 
 // const icons = {
@@ -20,7 +20,7 @@ export default ({ type, position, className }: DialogIconProps) => {
         setIcon(
             <div className={clsx(styles.dialog_icon, styles[type], className)}>
                 {/* <Icon className={'w-6 h-6'} /> */}
-                <div>FIXME: Icons</div>
+                <HugeIconsUserShield fill='currentColor'></HugeIconsUserShield>
             </div>,
         );
     }, [type, className]);

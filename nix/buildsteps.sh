@@ -8,9 +8,9 @@ CONTAINER_NAME="mariadb"
 
 docker-compose --project-directory ./nix/docker/maria/ up -d --force-recreate
 
+echo "Waiting for MariaDB container to be healthy..."
 until [ "$(docker inspect --format='{{.State.Health.Status}}' $CONTAINER_NAME)" == "healthy" ]; do
-    echo "Waiting for MariaDB container to be healthy..."
-    sleep 5
+    sleep 1
 done
 
 echo "MariaDB container is healthy. Proceeding with the script."
