@@ -54,7 +54,7 @@ export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
             {/* Form for creating API key */}
-            <ContentBox title={'Api Key'}>
+            <ContentBox>
                 <Formik
                     onSubmit={submit}
                     initialValues={{ description: '', allowedIps: '' }}
