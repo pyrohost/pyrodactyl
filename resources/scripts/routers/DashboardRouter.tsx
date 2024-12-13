@@ -21,7 +21,7 @@ import HugeIconsHome from '@/components/elements/hugeicons/Home';
 
 import http from '@/api/http';
 import StatusPage from '@/components/Additonal/statuspage';
-import { AlarmClockCheckIcon, ArrowUpLeftFromCircleIcon, ClockArrowUp, LucideCalendarArrowUp, LucideLayoutDashboard } from 'lucide-react';
+import { AlarmClockCheckIcon, ArrowUpLeftFromCircleIcon, ClockArrowUp, LucideCalendarArrowUp, LucideHam, LucideHome, LucideLayoutDashboard, LucideSettings, LucideUserCircle2 } from 'lucide-react';
 import DashPage from '@/components/dashboard';
 
 export default () => {
@@ -102,80 +102,124 @@ export default () => {
                 </svg>
             </button>
 
-            <MainSidebar className={`lg:flex ${isSidebarVisible ? '' : 'hidden'}`}>
-                <div
-                    className='absolute bg-blue-500 w-[3px] h-10 left-0 rounded-full pointer-events-none'
-                    style={{
-                        top,
-                        height,
-                        opacity: top === '0' ? 0 : 1,
-                        transition:
-                            'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                    }}
-                />
-                <div
-                    className='absolute bg-blue-500 w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
-                    style={{
-                        top,
-                        opacity: top === '0' ? 0 : 0.5,
-                        transition:
-                            'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                    }}
-                />
-                <div className='relative flex flex-row items-center justify-between h-8'>
-                    <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                        <Logo />
-                        {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
-                    </NavLink>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='16'
-                                    height='15'
-                                    fill='currentColor'
-                                    viewBox='0 0 16 15'
-                                    className='flex shrink-0 h-full w-full'
-                                >
-                                    <path d='M8.9375 7.3775C8.9375 7.56341 8.88252 7.74515 8.7795 7.89974C8.67649 8.05432 8.53007 8.1748 8.35877 8.24595C8.18746 8.31709 7.99896 8.33571 7.8171 8.29944C7.63525 8.26317 7.4682 8.17364 7.33709 8.04218C7.20598 7.91072 7.11669 7.74323 7.08051 7.56088C7.04434 7.37854 7.06291 7.18954 7.13386 7.01778C7.20482 6.84601 7.32498 6.69921 7.47915 6.59592C7.63332 6.49263 7.81458 6.4375 8 6.4375C8.24864 6.4375 8.4871 6.53654 8.66291 6.71282C8.83873 6.8891 8.9375 7.1282 8.9375 7.3775ZM1.625 6.4375C1.43958 6.4375 1.25832 6.49263 1.10415 6.59592C0.949982 6.69921 0.829821 6.84601 0.758863 7.01778C0.687906 7.18954 0.669341 7.37854 0.705514 7.56088C0.741688 7.74323 0.830976 7.91072 0.962088 8.04218C1.0932 8.17364 1.26025 8.26317 1.4421 8.29944C1.62396 8.33571 1.81246 8.31709 1.98377 8.24595C2.15507 8.1748 2.30149 8.05432 2.4045 7.89974C2.50752 7.74515 2.5625 7.56341 2.5625 7.3775C2.5625 7.1282 2.46373 6.8891 2.28791 6.71282C2.1121 6.53654 1.87364 6.4375 1.625 6.4375ZM14.375 6.4375C14.1896 6.4375 14.0083 6.49263 13.8542 6.59592C13.7 6.69921 13.5798 6.84601 13.5089 7.01778C13.4379 7.18954 13.4193 7.37854 13.4555 7.56088C13.4917 7.74323 13.581 7.91072 13.7121 8.04218C13.8432 8.17364 14.0102 8.26317 14.1921 8.29944C14.374 8.33571 14.5625 8.31709 14.7338 8.24595C14.9051 8.1748 15.0515 8.05432 15.1545 7.89974C15.2575 7.74515 15.3125 7.56341 15.3125 7.3775C15.3125 7.1282 15.2137 6.8891 15.0379 6.71282C14.8621 6.53654 14.6236 6.4375 14.375 6.4375Z' />
-                                </svg>
-                            </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className='z-[99999]' sideOffset={8}>
-                            {rootAdmin && (
-                                <DropdownMenuItem onSelect={onSelectAdminPanel}>
-                                    Admin Panel
-                                    <span className='ml-2 z-10 rounded-full bg-zinc-600 px-2 py-1 text-xs text-white'>
-                                        Staff
-                                    </span>
-                                </DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
-                    <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
-                        <HugeIconsHome fill='currentColor' />
-                        <p>Servers</p>
-                    </NavLink>
-                    <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                        <HugeIconsDashboardSettings fill='currentColor' />
-                        <p>Settings</p>
-                    </NavLink>
-                    <NavLink to={'/status'} end className='flex flex-row items-center'  ref={NavigationStatus}>
-                        <AlarmClockCheckIcon fill='currentColor' />
-                        <p>Status</p>
-                    </NavLink>
-                    <NavLink to={'/dashboard'} end className='flex flex-row items-center'>
-                        <LucideLayoutDashboard fill='currentColor' />
-                        <p>Beta Dash</p>
-                    </NavLink>
-                </ul>
-            </MainSidebar>
+        
+            <MainSidebar className={`
+    fixed left-0 top-0 z-40 px-4 py-6 h-screen w-64 
+    bg-zinc-950 border-r border-zinc-800
+    transition-transform duration-300 ease-in-out
+    lg:translate-x-0 lg:flex
+    ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'}
+`}>
+    {/* Logo section */}
+    <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+        <NavLink to={'/'} className="flex items-center gap-2">
+            <Logo />
+        </NavLink>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button className="rounded-md p-2 hover:bg-zinc-800 transition-colors">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="h-5 w-5"
+                    >
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="19" cy="12" r="1" />
+                        <circle cx="5" cy="12" r="1" />
+                    </svg>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-zinc-900 border border-zinc-800">
+                {rootAdmin && (
+                    <DropdownMenuItem className="flex items-center gap-2 text-sm">
+                        Admin Panel
+                        <span className="ml-auto text-xs bg-zinc-800 px-2 py-1 rounded">Staff</span>
+                    </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator className="bg-zinc-800" />
+                <DropdownMenuItem className="text-sm text-red-400">Log Out</DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    </div>
+
+    {/* Navigation section */}
+    <nav className="py-4">
+        <div className="">
+            <NavLink 
+                to="/" 
+                end
+                ref={NavigationHome}
+                className={({isActive}) => `
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm mb-1
+                    transition-colors hover:bg-zinc-800/50
+                    ${isActive ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400'}
+                `}
+            >
+                <LucideHome className="h-4 w-4" />
+                <span>Servers</span>
+            </NavLink>
+
+            <NavLink 
+                to="/account"
+                end
+                ref={NavigationSettings}
+                className={({isActive}) => `
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm mt-1
+                    transition-colors hover:bg-zinc-800/50
+                    ${isActive ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400'}
+                `}
+            >
+                <LucideUserCircle2 className="h-4 w-4" />
+                <span>Settings / Account</span>
+            </NavLink>
+
+            <NavLink 
+                to="/status"
+                end
+                ref={NavigationStatus}
+                className={({isActive}) => `
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm mt-1
+                    transition-colors hover:bg-zinc-800/50
+                    ${isActive ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400'}
+                `}
+            >
+                <AlarmClockCheckIcon className="h-4 w-4" />
+                <span>Status</span>
+            </NavLink>
+
+            <NavLink 
+                to="/dashboard"
+                end
+                className={({isActive}) => `
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm mt-1
+                    transition-colors hover:bg-zinc-800/50
+                    ${isActive ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400'}
+                `}
+            >
+                <LucideLayoutDashboard className="h-4 w-4" />
+                <span>Beta Dash</span>
+            </NavLink>
+
+            {rootAdmin && (
+            <NavLink 
+                to="/admin"
+                end
+                className={({isActive}) => `
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm mt-1
+                    transition-colors hover:bg-zinc-800/50
+                    ${isActive ? 'bg-zinc-800 text-zinc-50' : 'text-zinc-400'}
+                `}
+            >
+                <LucideSettings className="h-4 w-4" />
+                <span>Admin Panel</span>
+                <span className="ml-auto text-xs bg-zinc-800 px-2 py-1 rounded">Staff</span>
+            </NavLink>
+        )}
+        </div>
+    </nav>
+</MainSidebar>
 
             <Suspense fallback={null}>
                 <MainWrapper>

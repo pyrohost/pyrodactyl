@@ -14,7 +14,9 @@ use Pterodactyl\Http\Controllers\Auth;
 
 // These routes are defined so that we can continue to reference them programmatically.
 // They all route to the same controller function which passes off to React.
-Route::get('/login', [Auth\LoginController::class, 'index'])->name('auth.login');
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login');
+})->name('login');
 Route::get('/password', [Auth\LoginController::class, 'index'])->name('auth.forgot-password');
 Route::get('/password/reset/{token}', [Auth\LoginController::class, 'index'])->name('auth.reset');
 

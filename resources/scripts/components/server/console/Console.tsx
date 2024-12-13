@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { Card, CardContent } from "@/components/ui/card";
 
 import { ServerContext } from '@/state/server';
 
@@ -193,39 +194,49 @@ export default () => {
     }, [connected, instance]);
 
     return (
-        <div
-            className='transform-gpu skeleton-anim-2'
-            style={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                animationDelay: `250ms`,
-                animationTimingFunction:
-                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-            }}
-        >
-            <div className={clsx(styles.terminal, 'relative')}>
-                <SpinnerOverlay visible={!connected} size={'large'} />
-                <div className={clsx(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}>
-                    <div className={'h-full'}>
-                        <div id={styles.terminal} ref={ref} />
+        <Card className="transform-gpu skeleton-anim-2 bg-black backdrop-blur-md border-zinc-800/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <CardContent className="p-0">
+                <div
+                    style={{
+                        display: 'flex',
+                        width: '100%',
+                        height: '100%',
+                        animationDelay: `250ms`,
+                        animationTimingFunction:
+                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                    }}
+                >
+                    <div className={clsx(styles.terminal, 'relative transition-all duration-300 hover:scale-[1.01]')}>
+                        <SpinnerOverlay visible={!connected} size={'large'} />
+                        <div className={clsx(styles.container, styles.overflows_container, 'bg-zinc-900/50 backdrop-blur-sm transition-colors duration-300 hover:bg-zinc-900/70', { 'rounded-b': !canSendCommands })}>
+                            <div className={'h-full'}>
+                                <div id={styles.terminal} ref={ref} className="transition-all duration-300" />
+                            </div>
+                        </div>
+                        {canSendCommands && (
+                            <div className={clsx('relative', styles.overflows_container)}>
+                                <input
+                                    className={clsx(
+                                        'peer',
+                                        styles.command_input,
+                                        'bg-zinc-800/50 backdrop-blur-sm border-zinc-700/50',
+                                        'focus:border-white/50 focus:ring-2 focus:ring-white/10',
+                                        'transition-all duration-300',
+                                        'placeholder:text-zinc-500'
+                                    )}
+                                    type={'text'}
+                                    placeholder={'Enter a command'}
+                                    aria-label={'Console command input.'}
+                                    disabled={!instance || !connected}
+                                    onKeyDown={handleCommandKeyDown}
+                                    autoCorrect={'off'}
+                                    autoCapitalize={'none'}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
-                {canSendCommands && (
-                    <div className={clsx('relative', styles.overflows_container)}>
-                        <input
-                            className={clsx('peer', styles.command_input)}
-                            type={'text'}
-                            placeholder={'Enter a command'}
-                            aria-label={'Console command input.'}
-                            disabled={!instance || !connected}
-                            onKeyDown={handleCommandKeyDown}
-                            autoCorrect={'off'}
-                            autoCapitalize={'none'}
-                        />
-                    </div>
-                )}
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };

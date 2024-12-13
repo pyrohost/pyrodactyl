@@ -3,6 +3,7 @@ import anime from 'animejs';
 import clsx from 'clsx';
 import { CheckCircle, LucideCircleAlert, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
 
 import { ServerContext } from '@/state/server';
 

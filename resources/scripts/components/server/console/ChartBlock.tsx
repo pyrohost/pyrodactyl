@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import styles from '@/components/server/console/style.module.css';
 
 interface ChartBlockProps {
@@ -9,11 +9,24 @@ interface ChartBlockProps {
 }
 
 export default ({ title, legend, children }: ChartBlockProps) => (
-    <div className={clsx(styles.chart_container, 'group !p-8')}>
-        <div className={'flex items-center justify-between mb-4'}>
-            <h3 className={'font-extrabold text-sm'}>{title}</h3>
-            {legend && <p className={'text-sm flex items-center'}>{legend}</p>}
-        </div>
-        <div className={'z-10 overflow-hidden rounded-lg'}>{children}</div>
-    </div>
+    <Card className={clsx(
+        "bg-black/80 border-zinc-800/50 shadow-lg p-8",
+        "transition-all duration-300 ease-in-out",
+        "hover:scale-[1.02] hover:shadow-xl hover:bg-black",
+        "transform-gpu will-change-transform"
+    )}>
+        <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-sm font-extrabold text-zinc-100">{title}</CardTitle>
+            {legend && (
+                <div className="text-sm flex items-center text-zinc-400 transition-colors duration-200 hover:text-zinc-200">
+                    {legend}
+                </div>
+            )}
+        </CardHeader>
+        <CardContent className="p-0">
+            <div className="overflow-hidden rounded-lg transition-transform duration-300">
+                {children}
+            </div>
+        </CardContent>
+    </Card>
 );

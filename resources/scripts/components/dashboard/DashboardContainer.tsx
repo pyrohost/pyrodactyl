@@ -1,6 +1,7 @@
 //million-ignore
 import { useStoreState } from 'easy-peasy';
 import { Loader, Loader2 } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';

@@ -207,6 +207,11 @@ return [
          * Additional Dependencies
          */
         Prologue\Alerts\AlertsServiceProvider::class,
+
+        /*
+         * Inertia Service Providers
+         */
+        Inertia\ServiceProvider::class,
     ],
 
     /*

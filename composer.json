@@ -22,6 +22,7 @@
         "doctrine/dbal": "~3.6.0",
         "guzzlehttp/guzzle": "~7.5.0",
         "hashids/hashids": "~5.0.0",
+        "inertiajs/inertia-laravel": "^2.0",
         "laracasts/utilities": "~3.2.2",
         "laravel/framework": "~10.1.3",
         "laravel/helpers": "~1.6.0",

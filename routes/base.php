@@ -4,7 +4,15 @@ use Illuminate\Support\Facades\Route;
 use Pterodactyl\Http\Controllers\Base;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 
-Route::get('/', [Base\IndexController::class, 'index'])->name('index')->fallback();
+
+Route::inertia('/case/login', 'Dashboard')->name('login');
+
+Route::middleware('guest')->group(function () {
+    
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::inertia('/', 'Auth/Login')->name('login');
+});
+
 Route::get('/account', [Base\IndexController::class, 'index'])
     ->withoutMiddleware(RequireTwoFactorAuthentication::class)
     ->name('account');

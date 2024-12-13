@@ -1,28 +1,15 @@
-// Because of how react-router, react lazy, and signals work with each other
-// the only way to prevent mismatching and weird errors is to import the lib
-// in the root first. The github issue for this is still open. Stupid.
-// https://github.com/preactjs/signals/issues/414
+import { createInertiaApp } from '@inertiajs/react';
+import { createRoot } from 'react-dom/client';
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
-import { lazy } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
-import { NotFound } from '@/components/elements/ScreenBlock';
-import Spinner from '@/components/elements/Spinner';
-
 import { store } from '@/state';
-import { ServerContext } from '@/state/server';
 import { SiteSettings } from '@/state/settings';
 
 import PyrodactylProvider from './PyrodactylProvider';
-
-const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
-const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
-const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 
 interface ExtendedWindow extends Window {
     SiteConfiguration?: SiteSettings;
@@ -30,7 +17,6 @@ interface ExtendedWindow extends Window {
         uuid: string;
         username: string;
         email: string;
-
         root_admin: boolean;
         use_totp: boolean;
         language: string;
@@ -39,8 +25,9 @@ interface ExtendedWindow extends Window {
     };
 }
 
-const App = () => {
+const App = ({ Component, pageProps }) => {
     const { PterodactylUser, SiteConfiguration } = window as ExtendedWindow;
+
     if (PterodactylUser && !store.getState().user.data) {
         store.getActions().user.setUserData({
             uuid: PterodactylUser.uuid,
@@ -63,10 +50,7 @@ const App = () => {
             <GlobalStylesheet />
             <StoreProvider store={store}>
                 <PyrodactylProvider>
-                    <div
-                        data-pyro-routerwrap=''
-                        className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
-                    >
+                    <div data-pyro-routerwrap='' className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg bg-black'>
                         <Toaster
                             theme='dark'
                             toastOptions={{
@@ -76,49 +60,22 @@ const App = () => {
                                 },
                             }}
                         />
-                        <BrowserRouter>
-                            <Routes>
-                                <Route
-                                    path='/auth/*'
-                                    element={
-                                        <Spinner.Suspense>
-                                            <AuthenticationRouter />
-                                        </Spinner.Suspense>
-                                    }
-                                />
-
-                                <Route
-                                    path='/server/:id/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <ServerContext.Provider>
-                                                    <ServerRouter />
-                                                </ServerContext.Provider>
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
-
-                                <Route
-                                    path='/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <DashboardRouter />
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
-
-                                <Route path='*' element={<NotFound />} />
-                            </Routes>
-                        </BrowserRouter>
+                        <Component {...pageProps} />
                     </div>
                 </PyrodactylProvider>
             </StoreProvider>
         </>
     );
 };
+
+createInertiaApp({
+    resolve: name => {
+        const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
+        return pages[`./Pages/${name}.jsx`];
+    },
+    setup({ el, App: InertiaApp, props }) {
+        createRoot(el).render(<App {...props} />);
+    },
+});
 
 export default App;

@@ -22,7 +22,7 @@
     @apply flex flex-col w-full h-full relative;
 
     & > .container {
-        @apply min-h-[453px] rounded-t-xl pt-8 pl-8 bg-[#131313] border-x-[1px] border-[#ffffff11] border-t-[1px] font-mono text-sm h-full;
+        @apply min-h-[453px] rounded-t-xl pt-8 pl-8 bg-[#020202] border-x-[1px] border-[#ffffff11] border-t-[1px] font-mono text-sm h-full;
 
         & #terminal {
             @apply h-full w-full;
@@ -42,7 +42,7 @@
     }
 
     & .command_input {
-        @apply relative bg-[#131313] border-[#ffffff11] border-x-[1px] border-b-[1px] px-4 pb-6 pt-2 text-zinc-100 pl-8 pr-4 w-full font-mono text-sm rounded-b-xl;
+        @apply relative bg-[#000000] border-[#ffffff11] border-x-[1px] border-b-[1px] px-4 pb-6 pt-2 text-zinc-100 pl-8 pr-4 w-full font-mono text-sm rounded-b-xl;
         @apply focus:ring-0 outline-none focus-visible:outline-none;
         @apply active:border-b-blue-500 focus:border-b-blue-500;
     }
