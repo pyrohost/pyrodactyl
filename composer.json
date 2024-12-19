@@ -47,6 +47,7 @@
         "symfony/mailgun-mailer": "~6.2.5",
         "symfony/postmark-mailer": "~6.2.5",
         "symfony/yaml": "~6.2.5",
+        "tightenco/ziggy": "^2.4",
         "webmozart/assert": "~1.11.0"
     },
     "require-dev": {

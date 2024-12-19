@@ -14,17 +14,21 @@ use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 abstract class AbstractLoginController extends Controller
 {
     use AuthenticatesUsers;
+    use ThrottlesLogins;
 
     protected AuthManager $auth;
+
+    protected int $lockoutTime;
 
     /**
      * Lockout time for failed login requests.
      */
-    protected int $lockoutTime;
+    
 
     /**
      * After how many attempts should logins be throttled and locked.
@@ -39,11 +43,12 @@ abstract class AbstractLoginController extends Controller
     /**
      * LoginController constructor.
      */
-    public function __construct()
+    public function __construct(int $lockoutTime = 300) // Default to 5 minutes
     {
         $this->lockoutTime = config('auth.lockout.time');
         $this->maxLoginAttempts = config('auth.lockout.attempts');
         $this->auth = Container::getInstance()->make(AuthManager::class);
+        
     }
 
     /**

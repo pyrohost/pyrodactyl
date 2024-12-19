@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Pterodactyl\Extensions\Themes\Theme;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Inertia\Inertia;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,21 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('appVersion', $this->versionData()['version'] ?? 'undefined');
         View::share('appIsGit', $this->versionData()['is_git'] ?? false);
+        Inertia::share([
+            'flash' => function () {
+                return [
+                    'status'         => session('status'),
+                    'error'          => session('error'),
+                    'res'            => session('res'),
+                    'servers'        => session('servers'),
+                    'success'        => session('success'),
+                    'users'          => session('users'),
+                    'server_url'     => session('server_url'),
+                    'secerts'        => session('secerts'),
+                    'linkvertiseUrl' => session('linkvertiseUrl'),
+                ];
+            },
+        ]);
 
         Paginator::useBootstrap();
 
@@ -50,6 +67,9 @@ class AppServiceProvider extends ServiceProvider
             'user' => Models\User::class,
         ]);
     }
+
+
+    
 
     /**
      * Register application service providers.

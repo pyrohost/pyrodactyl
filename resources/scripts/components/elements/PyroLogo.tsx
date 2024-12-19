@@ -51,13 +51,7 @@ const Logo = () => {
             onMouseEnter={() => handleHover(true)}
             onMouseLeave={() => handleHover(false)}
         >
-            <div ref={logoRef}>
-                <img
-                    src={import.meta.env.VITE_LOGO_URL} // don't fucking change this!!! I will find you and fuck you up
-                    alt='Logo'
-                    className='flex h-10 w-10 shrink-0'
-                />
-            </div>
+            
 
             <span ref={textRef} className='ml-2 text-lg font-bold'>
                 {import.meta.env.VITE_SITE_NAME}

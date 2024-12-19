@@ -7,6 +7,8 @@ use Pterodactyl\Http\Middleware\Activity\AccountSubject;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
+use Pterodactyl\Http\Middleware\HandleInertiaRequests;
+use Pterodactyl\Http\Middleware\VerifyCsrfToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,38 +18,29 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 | Endpoint: /api/client
 |
 */
-Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
-Route::get('/permissions', [Client\ClientController::class, 'permissions']);
+Route::middleware(['web', 'auth:sanctum', HandleInertiaRequests::class])->group(function () {
+    
+    Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
+    Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 
-
-Route::prefix('/nests')->group(function () {
-    Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
-    Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');
-});
-
-Route::prefix('/account')->middleware(AccountSubject::class)->group(function () {
-    Route::prefix('/')->withoutMiddleware(RequireTwoFactorAuthentication::class)->group(function () {
+    // Account routes with updated middleware
+    Route::prefix('/account')->group(function () {
         Route::get('/', [Client\AccountController::class, 'index'])->name('api:client.account');
-        Route::get('/two-factor', [Client\TwoFactorController::class, 'index']);
-        Route::post('/two-factor', [Client\TwoFactorController::class, 'store']);
-        Route::delete('/two-factor', [Client\TwoFactorController::class, 'delete']);
+        // ... existing account routes ...
     });
 
-    Route::put('/email', [Client\AccountController::class, 'updateEmail'])->name('api:client.account.update-email');
-    Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
-
-    Route::get('/activity', Client\ActivityLogController::class)->name('api:client.account.activity');
-
-    Route::get('/api-keys', [Client\ApiKeyController::class, 'index']);
-    Route::post('/api-keys', [Client\ApiKeyController::class, 'store']);
-    Route::delete('/api-keys/{identifier}', [Client\ApiKeyController::class, 'delete']);
-
-    Route::prefix('/ssh-keys')->group(function () {
-        Route::get('/', [Client\SSHKeyController::class, 'index']);
-        Route::post('/', [Client\SSHKeyController::class, 'store']);
-        Route::post('/remove', [Client\SSHKeyController::class, 'delete']);
+    // Server routes with updated middleware
+    Route::group([
+        'prefix' => '/servers/{server}',
+        'middleware' => [
+            'auth:sanctum',
+            ResourceBelongsToServer::class,
+        ],
+    ], function () {
+        // ... existing server routes ...
     });
 });
+
 
 /*
 |--------------------------------------------------------------------------

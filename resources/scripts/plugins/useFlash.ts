@@ -1,6 +1,4 @@
-import { Actions, useStoreActions } from 'easy-peasy';
-
-import { ApplicationStore } from '@/state';
+import { useStoreActions } from '@/state/hooks';
 import { FlashStore } from '@/state/flashes';
 
 interface KeyedFlashStore {
@@ -9,8 +7,8 @@ interface KeyedFlashStore {
     clearAndAddHttpError: (error?: Error | string | null) => void;
 }
 
-const useFlash = (): Actions<FlashStore> => {
-    return useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+const useFlash = () => {
+    return useStoreActions((actions: FlashStore) => actions);
 };
 
 const useFlashKey = (key: string): KeyedFlashStore => {
@@ -23,5 +21,4 @@ const useFlashKey = (key: string): KeyedFlashStore => {
     };
 };
 
-export { useFlashKey };
-export default useFlash;
+export { useFlashKey, useFlash };

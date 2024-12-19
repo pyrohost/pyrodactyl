@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Pterodactyl\Http\Controllers\Auth;
+use App\Http\Controllers\Controller;
+use Pterodactyl\Http\Controllers\Auth\LoginController;
+use Pterodactyl\Http\Controllers\Auth\LogoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,13 +15,16 @@ use Pterodactyl\Http\Controllers\Auth;
 |
 */
 
-// These routes are defined so that we can continue to reference them programmatically.
-// They all route to the same controller function which passes off to React.
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login');
-})->name('login');
-Route::get('/password', [Auth\LoginController::class, 'index'])->name('auth.forgot-password');
-Route::get('/password/reset/{token}', [Auth\LoginController::class, 'index'])->name('auth.reset');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+    
+});
+
+
+
+Route::get('profile/edit', [LoginController::class, 'editProfile'])->name('profile.edit');
+Route::post('profile/update', [LoginController::class, 'updateProfile'])->name('profile.update');
 
 // Apply a throttle to authentication action endpoints, in addition to the
 // recaptcha endpoints to slow down manual attack spammers even more. 🤷‍
@@ -36,6 +42,8 @@ Route::middleware(['throttle:authentication'])->group(function () {
         ->middleware('recaptcha');
 });
 
+
+
 // Password reset routes. This endpoint is hit after going through
 // the forgot password routes to acquire a token (or after an account
 // is created).
@@ -43,10 +51,9 @@ Route::post('/password/reset', Auth\ResetPasswordController::class)->name('auth.
 
 // Remove the guest middleware and apply the authenticated middleware to this endpoint,
 // so it cannot be used unless you're already logged in.
-Route::post('/logout', [Auth\LoginController::class, 'logout'])
-    ->withoutMiddleware('guest')
-    ->middleware('auth')
-    ->name('auth.logout');
+
 
 // Catch any other combinations of routes and pass them off to the React component.
-Route::fallback([Auth\LoginController::class, 'index']);
+Route::fallback(function () {
+    return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
+});

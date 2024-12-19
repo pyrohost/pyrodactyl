@@ -4,7 +4,7 @@ import anime from 'animejs/lib/anime.es.js';
 import { ArrowBigRight, DollarSign, ServerCrash } from 'lucide-react';
 import { AlertOctagon, Server, Wifi } from 'lucide-react';
 import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@inertiajs/react'
 
 const ScreenBlock = ({ title, message }) => {
     return (

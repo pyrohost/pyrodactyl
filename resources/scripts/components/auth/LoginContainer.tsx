@@ -28,6 +28,7 @@ import login from '@/api/auth/login';
 import useFlash from '@/plugins/useFlash';
 import LogoLogin from '../elements/PyroLogoLogin';
 
+
 interface Values {
   username: string;
   password: string;
@@ -47,7 +48,7 @@ function LoginContainer() {
 
   useEffect(() => {
     clearFlashes();
-  }, []);
+  }, [clearFlashes]);
 
   useEffect(() => {
     if (error) setShowErrorDialog(true);
@@ -87,12 +88,14 @@ function LoginContainer() {
 
   return (
     <>
-      <div className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 lg:px-8"
+      <div
+        className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 lg:px-8"
         style={{
           backgroundImage: `url('${backgroundImage}')`,
           backgroundColor: 'rgba(0,0,0,0.7)',
           backgroundBlendMode: 'overlay',
-        }}>
+        }}
+      >
         <Formik
           initialValues={{ username: '', password: '' }}
           validationSchema={object().shape({
@@ -111,7 +114,7 @@ function LoginContainer() {
                 />
               </div>
 
-              <Card className="w-full max-w-[450px] lg:max-w-[650px] bg-black border-black p-4 sm:p-6 lg:p-8 ">
+              <Card className="w-full max-w-[450px] lg:max-w-[650px] bg-black border-black p-4 sm:p-6 lg:p-8">
                 <CardHeader className="space-y-2">
                   <div className="flex justify-start mb-1">
                     <div className="w-10 h-10 sm:w-10 sm:h-10 lg:w-24 lg:h-24 transition-transform hover:scale-105">
@@ -129,12 +132,12 @@ function LoginContainer() {
                     <Label htmlFor="username" className="text-base sm:text-lg text-zinc-200">Username or Email</Label>
                     <div className="relative group">
                       <User2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 group-hover:text-white transition-colors" />
-                      <Field 
+                      <Field
                         id="username"
-                        name="username" 
-                        as={Input} 
-                        className="pl-10 h-12 w-full bg-zinc-900/50 border-zinc-700 focus:border-white transition-all text-white" 
-                        disabled={isSubmitting} 
+                        name="username"
+                        as={Input}
+                        className="pl-10 h-12 w-full bg-zinc-900/50 border-zinc-700 focus:border-white transition-all text-white"
+                        disabled={isSubmitting}
                       />
                     </div>
                     {errors.username && touched.username && (
@@ -174,7 +177,7 @@ function LoginContainer() {
                 </CardContent>
 
                 <CardFooter className="flex flex-col gap-4 mt-6">
-                  <Button 
+                  <Button
                     type="submit"
                     disabled={isSubmitting}
                     className="w-full bg-white hover:bg-zinc-200 text-black h-12 text-lg font-medium transition-all duration-300 hover:scale-[1.02]"
@@ -218,7 +221,7 @@ function LoginContainer() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button 
+            <Button
               onClick={() => setShowErrorDialog(false)}
               variant="destructive"
             >

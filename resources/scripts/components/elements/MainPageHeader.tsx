@@ -43,7 +43,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
             )}
         >
             <div className='flex items-center gap-4 flex-wrap'>
-                <h1 ref={titleRef} className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] opacity-0'>
+                <h1 ref={titleRef} className='text-[32px] leading-[98%] tracking-[-0.14rem] opacity-0 font-kanit'>
                     {title}
                 </h1>
                 {titleChildren}

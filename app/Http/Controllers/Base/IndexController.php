@@ -2,27 +2,47 @@
 
 namespace Pterodactyl\Http\Controllers\Base;
 
-use Illuminate\View\View;
-use Illuminate\View\Factory as ViewFactory;
-use Pterodactyl\Http\Controllers\Controller;
-use Pterodactyl\Contracts\Repository\ServerRepositoryInterface;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
+use Illuminate\Http\RedirectResponse;
+
 
 class IndexController extends Controller
 {
-    /**
-     * IndexController constructor.
-     */
-    public function __construct(
-        protected ServerRepositoryInterface $repository,
-        protected ViewFactory $view
-    ) {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'dashboard']);
     }
 
-    /**
-     * Returns listing of user's servers.
-     */
-    public function index(): View
+    public function index(): RedirectResponse
     {
-        return $this->view->make('templates/base.core');
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+        
+        return redirect('/auth/login');
+    }
+
+    public function dashboard(Request $request): Response
+    {
+        if (!Auth::check()) {
+            return redirect('/auth/login'); // Or your home route
+        }
+
+        return Inertia::render('Dashboard', [
+            'auth' => [
+                'user' => Auth::user() ? [
+                    'uuid' => Auth::user()->uuid,
+                    'username' => Auth::user()->username,
+                    'email' => Auth::user()->email,
+                    'rootAdmin' => Auth::user()->root_admin,
+                    'useTotp' => Auth::user()->use_totp,
+                    'language' => Auth::user()->language,
+                ] : null,
+            ]
+        ]);
     }
 }

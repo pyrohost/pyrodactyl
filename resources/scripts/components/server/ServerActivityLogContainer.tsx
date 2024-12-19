@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@inertiajs/react'
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';

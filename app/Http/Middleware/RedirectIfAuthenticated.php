@@ -1,28 +1,49 @@
 <?php
-
 namespace Pterodactyl\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Auth\AuthManager;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RedirectIfAuthenticated
 {
-    /**
-     * RedirectIfAuthenticated constructor.
-     */
-    public function __construct(private AuthManager $authManager)
-    {
-    }
+    public function handle(Request $request, Closure $next, ...$guards)
 
-    /**
-     * Handle an incoming request.
-     */
-    public function handle(Request $request, \Closure $next, string $guard = null): mixed
-    {
-        if ($this->authManager->guard($guard)->check()) {
-            return redirect()->route('index');
+
+    /*
+|--------------------------------------------------------------------------
+| Why Does this Exist?
+|--------------------------------------------------------------------------
+|
+| Well pterodactyl had this annoying Bullshit, Just keep it here 
+| Removing it will break a lot of things 
+| SImply, in the auth, until authenticated, it will keep redirecting 
+|to the dashboard
+|
+*/
+
+
+{
+    \Log::debug('RedirectIfAuthenticated check', [
+        'guards' => $guards,
+        'authenticated' => Auth::check(),
+        'intended_url' => $request->url(),
+        'session' => $request->session()->all()
+    ]);
+
+    $guards = empty($guards) ? [null] : $guards;
+
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            \Log::debug('User still authenticated, redirecting to dashboard jk doing nothing rn', [
+                'guard' => $guard
+            ]);
+        
         }
-
-        return $next($request);
     }
+
+    \Log::debug('Allowing through RedirectIfAuthenticated');
+    return null;
+}
 }

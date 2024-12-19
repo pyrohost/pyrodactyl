@@ -1,29 +1,22 @@
-import { useStoreState } from 'easy-peasy';
-import { Fragment } from 'react';
+import React from 'react';
+import { usePage } from '@inertiajs/react'; // Import usePage
 
-import MessageBox from '@/components/MessageBox';
+const FlashMessageRender = () => {
+    const { props: { flash } } = usePage(); // Access flash messages from Inertia props
 
-type Props = Readonly<{
-    byKey?: string;
-}>;
+    if (!flash || !flash.messages) {
+        return null;
+    }
 
-const FlashMessageRender = ({ byKey }: Props) => {
-    const flashes = useStoreState((state) =>
-        state.flashes.items.filter((flash) => (byKey ? flash.key === byKey : true)),
-    );
-
-    return flashes.length ? (
-        <>
-            {flashes.map((flash, index) => (
-                <Fragment key={flash.id || flash.type + flash.message}>
-                    {index > 0 && <div></div>}
-                    <MessageBox type={flash.type} title={flash.title}>
-                        {flash.message}
-                    </MessageBox>
-                </Fragment>
+    return (
+        <div>
+            {flash.messages.map((message, index) => (
+                <div key={index} className={`flash-message ${message.type}`}>
+                    {message.text}
+                </div>
             ))}
-        </>
-    ) : null;
+        </div>
+    );
 };
 
 export default FlashMessageRender;
