@@ -12,6 +12,7 @@ export const apiEndpoints = {
 export const settings = {
     loaders: [''],
     versions: [''],
+    environments: [''],
 };
 
 export const fetchHeaders = (appVersion) => ({

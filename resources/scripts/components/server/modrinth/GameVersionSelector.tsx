@@ -12,7 +12,7 @@ interface GameVersion {
 }
 
 interface Props {
-    appVersion;
+    appVersion: string;
     baseUrl: string;
 }
 
@@ -21,18 +21,11 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     const [isSnapshotSelected, setIsSnapshotSelected] = useState<boolean>(false);
     const apiUrl = `${baseUrl}${apiEndpoints.versions}`;
 
-    function delay(ms: number) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
     useEffect(() => {
         async function fetchGameVersions() {
             try {
                 const response = await fetch(apiUrl, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'User-Agent': `pyrohost/pyrodactyl/${appVersion} (pyro.host)`,
-                    },
+                    headers: fetchHeaders(appVersion),
                 });
 
                 const data = await response.json();
@@ -56,10 +49,19 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
         }
     });
 
+    const handleSelectionChange = (selectedItems: string[]) => {
+        // Update `settings.versions` with the selected items
+        settings.versions = selectedItems;
+        console.log('Updated settings.versions:', settings.versions);
+    };
+
     return (
         <div>
             {filteredVersions.length > 0 ? (
-                <ScrollMenu items={filteredVersions.map((version) => version.version)} />
+                <ScrollMenu
+                    items={filteredVersions.map((version) => version.version)}
+                    onSelectionChange={handleSelectionChange}
+                />
             ) : (
                 <p>No versions available...</p>
             )}

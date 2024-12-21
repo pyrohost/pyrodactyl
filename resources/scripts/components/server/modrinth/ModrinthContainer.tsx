@@ -12,10 +12,9 @@ import ProjectSelector from './DisplayMods';
 import EnvironmentSelector from './EnvironmentSelector';
 import GameVersionSelector from './GameVersionSelector';
 import LoaderSelector from './LoaderSelector';
-import { apiEndpoints, fetchHeaders, gameLoaders } from './config';
+import { apiEndpoints, fetchHeaders, gameLoaders, settings } from './config';
 
 export default () => {
-    console.log(apiEndpoints.projects);
     const environment = ['Client', 'Server'];
     const headers: Headers = new Headers();
     const url = 'https://staging-api.modrinth.com/v2';
@@ -56,7 +55,12 @@ export default () => {
                     </ModBox>
                     <ModBox>
                         <ContentBox title='Environment' className=''>
-                            <EnvironmentSelector items={environment}></EnvironmentSelector>
+                            <EnvironmentSelector
+                                items={environment}
+                                onSelectionChange={(selectedItems) => {
+                                    console.log('Selected environments:', selectedItems);
+                                }}
+                            />
                         </ContentBox>
                     </ModBox>
                 </ContentBox>

@@ -6,16 +6,20 @@ import ArrowDownIcon from '@/components/elements/hugeicons/ArrowDown';
 
 interface Props {
     items: string[];
+    onSelectionChange: (selectedItems: string[]) => void;
 }
 
-const EnvironmentSelector: React.FC<Props> = ({ items }) => {
-    const [checked, setChecked] = React.useState(false);
-
+const EnvironmentSelector: React.FC<Props> = ({ items, onSelectionChange }) => {
     const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
     const [showAll, setShowAll] = React.useState(false);
 
     const handleToggle = (item: string) => {
-        setSelectedItems((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]));
+        setSelectedItems((prev) => {
+            const updatedItems = prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item];
+
+            onSelectionChange(updatedItems); // Notify parent about the changes
+            return updatedItems;
+        });
     };
 
     return (
