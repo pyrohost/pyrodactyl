@@ -33,11 +33,7 @@ export default () => {
                     <RenameServerBox />
                 </div>
             </Can>
-            <Can action={'modrinth.settings'}>
-                <TitledGreyBox title={'Modrinth Settings'} className={`mb-6 md:mb-10`}>
-                    <div></div>
-                </TitledGreyBox>
-            </Can>
+
             <div className='w-full h-full flex flex-col gap-8'>
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />

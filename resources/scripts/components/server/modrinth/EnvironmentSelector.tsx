@@ -4,8 +4,6 @@ import { CheckboxArrow } from '@/components/elements/CheckBoxArrow';
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import ArrowDownIcon from '@/components/elements/hugeicons/ArrowDown';
 
-import { cn } from '@/lib/utils';
-
 interface Props {
     items: string[];
 }

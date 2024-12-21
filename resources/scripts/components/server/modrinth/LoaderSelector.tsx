@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { ScrollMenu } from '@/components/elements/ScrollMenu';
-
-import EnvironmentSelector from './ItemSelector';
+import EnvironmentSelector from './EnvironmentSelector';
+import { apiEndpoints, fetchHeaders, gameLoaders } from './config';
 
 interface GameLoaders {
     icon: string; // SVG data(I probably wont use this)
@@ -18,7 +17,7 @@ interface Props {
 //! FIXME: We only want to show actual loaders like Fabric, Paper, Forge, not datapacks, Iris, Optifine
 const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     const [loaders, setLoaders] = useState<GameLoaders[]>([]);
-    const apiUrl = baseUrl + '/tag/loader';
+    const apiUrl = `${baseUrl}${apiEndpoints.loaders}`;
 
     useEffect(() => {
         async function fetchLoaders() {

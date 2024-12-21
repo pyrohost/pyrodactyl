@@ -1,10 +1,16 @@
+//! This is how to fetch mods using modrinth api
 //? https://api.modrinth.com/v2/search?facets=[[%22categories:forge%22],[%22versions:1.17.1%22,%20%22versions:1.21.3%22],[%22project_type:mod%22],[%22license:mit%22]]&index=relevance
 //? ?offset=40 Offset is where to start in the index. assuming we show 20 results per page. it should be 0, 20, 40, 60, 80, 100, So on and so forth
+//? https://api.modrinth.com/v2/search?facets=[[%22categories:forge%22],[%22versions:1.17.1%22,%20%22versions:1.21.3%22],[%22project_type:mod%22],[%22license:mit%22]]&index=relevance&offset=20
+// ^ This is how to do it
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import ContentBox from '@/components/elements/ContentBox';
 import { ScrollMenu } from '@/components/elements/ScrollMenu';
+import HugeIconsDownload from '@/components/elements/hugeicons/Download';
+
+import { apiEndpoints, offset } from './config';
 
 interface Project {
     project_id: string;
@@ -28,7 +34,7 @@ interface Props {
 
 const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) => {
     const [projects, setProjects] = useState<Project[]>([]);
-    const apiUrl = `${baseUrl}/search`;
+    const apiUrl = `${baseUrl}${apiEndpoints.projects}`;
 
     useEffect(() => {
         async function fetchProjects() {
@@ -51,7 +57,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                     }
                 }
 
-                setProjects(data.hits || []); // Safely access hits
+                setProjects(data.hits || []);
             } catch (error) {
                 toast.error('Failed to fetch projects.');
                 console.error(error);
@@ -75,7 +81,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                         // <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4'>
                         <ContentBox
                             key={project.project_id}
-                            className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4'
+                            className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4 relative'
                         >
                             <div className='flex items-center'>
                                 <ContentBox className='p-3  rounded-xl  mr-4'>
@@ -111,10 +117,23 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                         Author: <span className='font-medium'>{project.author}</span>
                                     </p>
                                     <p className='text-sm text-gray-400'>{project.description}</p>
-                                    <p className='text-sm text-gray-500 mt-2'>
-                                        Downloads: {project.downloads} | Follows: {project.follows}
-                                    </p>
                                 </div>
+                            </div>
+                            <div className=''>
+                                <p className='absolute right-4 top-4'>
+                                    <p>
+                                        {project.downloads} <a className='text-gray-500'>downloads</a>
+                                    </p>
+                                    <p>
+                                        {project.follows} <a className='text-gray-500'>followers</a>
+                                    </p>
+                                </p>
+                                <p className='absolute right-4 bottom-4'>
+                                    <button className='flex align-bottom text-end border-2 border-solid rounded py-1 px-6 border-brand hover:border-red-600'>
+                                        <HugeIconsDownload className='px-2 mx-2' fill='currentColor' />
+                                        Install
+                                    </button>
+                                </p>
                             </div>
                         </ContentBox>
                     ))}
