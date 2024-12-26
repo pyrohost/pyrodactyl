@@ -1,6 +1,4 @@
-// TODO: Make another page/component to open the mod on pyrodactyl and show all compatible versions for the current mod
 import { useEffect, useState } from 'react';
-import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
 import { Checkbox } from '@/components/elements/CheckboxLabel';
@@ -12,27 +10,47 @@ import ProjectSelector from './DisplayMods';
 import EnvironmentSelector from './EnvironmentSelector';
 import GameVersionSelector from './GameVersionSelector';
 import LoaderSelector from './LoaderSelector';
-import { apiEndpoints, fetchHeaders, gameLoaders, settings } from './config';
+import { apiEndpoints } from './config';
 
 export default () => {
+    const [appVersion, setAppVersion] = useState<string | null>(null);
+    const [settings, setSettings] = useState({
+        loaders: [],
+        versions: [],
+        environments: [],
+    });
+
     const environment = ['Client', 'Server'];
-    const headers: Headers = new Headers();
-    const url = 'https://staging-api.modrinth.com/v2';
-    const nonApiUrl = 'https://staging.modrinth.com';
-    async function getAppVersion(): Promise<string> {
-        const response = await fetch('/api/client/version');
-        const data = await response.json();
-        return data.version;
+    const url = 'https://api.modrinth.com/v2';
+    const nonApiUrl = 'https://modrinth.com';
+
+    // Fetch app version
+    useEffect(() => {
+        async function getAppVersion() {
+            try {
+                const response = await fetch('/api/client/version');
+                const data = await response.json();
+                setAppVersion(data.version); // Set the app version state
+            } catch (error) {
+                toast.error('Failed to fetch app version.');
+            }
+        }
+        getAppVersion();
+    }, []);
+
+    // Ensure components only render once appVersion is available
+    if (!appVersion) {
+        return <div>Loading...</div>; // Wait until appVersion is fetched
     }
 
-    const appVersion = getAppVersion();
-
-    headers.set('Content-Type', 'application/json');
-    headers.set('User-Agent', 'pyrohost/pyrodactyl/' + appVersion + ' (pyro.host)');
+    // Function to update settings
+    const updateSettings = (key: keyof typeof settings, value: any) => {
+        setSettings((prevSettings) => ({ ...prevSettings, [key]: value }));
+    };
 
     return (
         <PageContentBlock title={'Mods/Plugins'}>
-            <div className='flex justify-center items-center  w-full'>
+            <div className='flex justify-center items-center w-full'>
                 <ModBox>
                     <ContentBox className='text-center'>Search Bar</ContentBox>
                 </ModBox>
@@ -44,31 +62,41 @@ export default () => {
                 >
                     <ModBox>
                         <ContentBox title='Loader' className=''>
-                            <LoaderSelector appVersion={appVersion} baseUrl={url} />
+                            <LoaderSelector
+                                appVersion={appVersion}
+                                baseUrl={url}
+                                onSelectionChange={(selectedLoaders) => updateSettings('loaders', selectedLoaders)}
+                            />
                         </ContentBox>
                     </ModBox>
 
                     <ModBox>
-                        <ContentBox title='Version' className='scrollbar-thumb-red-700 '>
-                            <GameVersionSelector appVersion={appVersion} baseUrl={url} />
+                        <ContentBox title='Version' className='scrollbar-thumb-red-700'>
+                            <GameVersionSelector
+                                appVersion={appVersion}
+                                baseUrl={url}
+                                onSelectionChange={(selectedVersions) => updateSettings('versions', selectedVersions)}
+                            />
                         </ContentBox>
                     </ModBox>
+
                     <ModBox>
                         <ContentBox title='Environment' className=''>
                             <EnvironmentSelector
                                 items={environment}
-                                onSelectionChange={(selectedItems) => {
-                                    console.log('Selected environments:', selectedItems);
-                                }}
+                                onSelectionChange={(selectedEnvironments) =>
+                                    updateSettings('environments', selectedEnvironments)
+                                }
                             />
                         </ContentBox>
                     </ModBox>
                 </ContentBox>
+
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full md:w-4/5'
                     title='Modrinth'
                 >
-                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl}></ProjectSelector>
+                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl} settings={settings} />
                 </ContentBox>
             </div>
         </PageContentBlock>

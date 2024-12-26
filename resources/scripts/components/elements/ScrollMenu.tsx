@@ -11,17 +11,15 @@ interface Props {
 
 const ScrollMenu = React.forwardRef<
     React.ElementRef<'div'>,
-    React.ComponentPropsWithoutRef<'div'> & { items: string[] }
->(({ className, items, ...props }, ref) => {
+    React.ComponentPropsWithoutRef<'div'> & { items: string[]; onSelectionChange: (selectedItems: string[]) => void }
+>(({ className, items, onSelectionChange, ...props }, ref) => {
     const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
 
     const handleCheckboxChange = (item: string) => {
         setCheckedItems((prev) => {
             const updatedItems = prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item];
 
-            // Log the name of the item that was selected/deselected
-            // console.log(`${item} is now ${updatedItems.includes(item) ? 'selected' : 'deselected'}`);
-            // console.log(updatedItems);
+            onSelectionChange(updatedItems);
 
             return updatedItems;
         });
@@ -35,7 +33,7 @@ const ScrollMenu = React.forwardRef<
                         <li key={item}>
                             <Checkbox
                                 label={item}
-                                // checked={checkedItems.includes(item)}
+                                checked={checkedItems.includes(item)}
                                 onChange={() => handleCheckboxChange(item)}
                             />
                         </li>

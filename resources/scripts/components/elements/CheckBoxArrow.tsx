@@ -11,7 +11,7 @@ const CheckboxArrow = React.forwardRef<
     const toggleChecked = () => {
         setChecked((prev) => {
             const newCheckedState = !prev;
-            if (onChange) onChange(); // Call the onChange handler when the checkbox is toggled
+            if (onChange) onChange();
             return newCheckedState;
         });
     };

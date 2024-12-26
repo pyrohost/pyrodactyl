@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import EnvironmentSelector from './EnvironmentSelector';
-import { apiEndpoints } from './config';
+import { apiEndpoints, settings } from './config';
 
 interface GameLoaders {
     icon: string; // SVG data (probably won't use this)
@@ -50,12 +50,12 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     }, [appVersion]);
 
     const handleSelectionChange = (selectedItems: string[]) => {
-        setSelectedLoaders(selectedItems);
+        settings.loaders = selectedItems;
         console.log('Selected loaders updated:', selectedItems);
     };
 
     const filterLoaders = loaders.filter((loader) => {
-        return loader.name; // Add any additional filtering logic here
+        return loader.name;
     });
 
     return (
@@ -63,7 +63,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
             {filterLoaders.length > 0 ? (
                 <EnvironmentSelector
                     items={filterLoaders.map((loader) => loader.name)}
-                    onSelectionChange={handleSelectionChange} // Pass the callback
+                    onSelectionChange={handleSelectionChange}
                 />
             ) : (
                 <p>No Loaders available...</p>

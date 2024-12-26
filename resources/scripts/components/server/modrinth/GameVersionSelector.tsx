@@ -50,7 +50,6 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     });
 
     const handleSelectionChange = (selectedItems: string[]) => {
-        // Update `settings.versions` with the selected items
         settings.versions = selectedItems;
         console.log('Updated settings.versions:', settings.versions);
     };
