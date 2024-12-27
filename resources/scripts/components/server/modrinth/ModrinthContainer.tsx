@@ -54,8 +54,6 @@ export default () => {
         getAppVersion();
     }, []);
 
-    // console.log(settings.searchTerms);
-
     useEffect(() => {
         setSearchTerm('');
     }, [location]);
