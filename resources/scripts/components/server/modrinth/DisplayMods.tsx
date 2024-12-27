@@ -36,9 +36,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
         setIsLoading(true); // Start loading
         try {
             const facets = [
-                settings.loaders.length > 0
-                    ? settings.loaders.map((loader) => `categories:${loader}`)
-                    : ['categories:paper', 'categories:fabric'],
+                settings.loaders.length > 0 ? settings.loaders.map((loader) => `categories:${loader}`) : null,
                 settings.versions.length > 0 ? settings.versions.map((version) => `versions:${version}`) : null,
                 settings.environments.length > 0
                     ? settings.environments.map((environment) => `project_type:${environment}`)
@@ -54,7 +52,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
             });
             const query = settings.searchTerms.replace(/ /g, '-');
             const apiUrl = `${baseUrl}${apiEndpoints.projects}?${searchParams.toString()}&query=${query}`;
-            console.log('Constructed API URL:', apiUrl);
+            // console.log('Constructed API URL:', apiUrl);
 
             const response = await fetch(apiUrl, {
                 headers: {
