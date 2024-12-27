@@ -4,6 +4,8 @@ import { Checkbox } from '@/components/elements/CheckboxLabel';
 
 import { cn } from '@/lib/utils';
 
+import { fetchNewProjects } from '../server/modrinth/config';
+
 interface Props {
     appVersion;
     baseUrl: string;
@@ -28,7 +30,7 @@ const ScrollMenu = React.forwardRef<
     return (
         <div ref={ref} className={cn('relative', className)} {...props}>
             <div className='overflow-y-auto max-h-48 scrollbar-thin scrollbar-thumb-[#FF343C] hover:scrollbar-thumb-[#F06F53] scrollbar-track-[#000000]'>
-                <ul>
+                <ul onClick={fetchNewProjects()}>
                     {items.map((item) => (
                         <li key={item}>
                             <Checkbox

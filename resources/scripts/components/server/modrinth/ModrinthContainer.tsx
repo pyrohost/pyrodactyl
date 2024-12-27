@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { Checkbox } from '@/components/elements/CheckboxLabel';
 import ContentBox from '@/components/elements/ContentBox';
 import { ModBox } from '@/components/elements/ModBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -10,7 +9,7 @@ import ProjectSelector from './DisplayMods';
 import EnvironmentSelector from './EnvironmentSelector';
 import GameVersionSelector from './GameVersionSelector';
 import LoaderSelector from './LoaderSelector';
-import { apiEndpoints } from './config';
+import { fetchNewProjects } from './config';
 
 export default () => {
     const [appVersion, setAppVersion] = useState<string | null>(null);
@@ -65,7 +64,7 @@ export default () => {
                             <LoaderSelector
                                 appVersion={appVersion}
                                 baseUrl={url}
-                                onSelectionChange={(selectedLoaders) => updateSettings('loaders', selectedLoaders)}
+                                // onSelectionChange={(selectedLoaders) => updateSettings('loaders', selectedLoaders)}
                             />
                         </ContentBox>
                     </ModBox>
@@ -75,7 +74,7 @@ export default () => {
                             <GameVersionSelector
                                 appVersion={appVersion}
                                 baseUrl={url}
-                                onSelectionChange={(selectedVersions) => updateSettings('versions', selectedVersions)}
+                                // onSelectionChange={(selectedVersions) => updateSettings('versions', selectedVersions)}
                             />
                         </ContentBox>
                     </ModBox>
@@ -96,7 +95,7 @@ export default () => {
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full md:w-4/5'
                     title='Modrinth'
                 >
-                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl} settings={settings} />
+                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl} />
                 </ContentBox>
             </div>
         </PageContentBlock>

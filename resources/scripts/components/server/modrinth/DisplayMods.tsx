@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import ContentBox from '@/components/elements/ContentBox';
 import HugeIconsDownload from '@/components/elements/hugeicons/Download';
 
+// import { useProjects } from './FetchProjects';
 import { apiEndpoints, offset, settings } from './config';
 
 interface Project {
@@ -25,9 +26,6 @@ interface Props {
     appVersion: string;
     baseUrl: string;
     nonApiUrl: string;
-    selectedLoaders?: string[];
-    selectedVersions?: string[];
-    selectedEnvironments?: string[];
 }
 
 const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) => {
@@ -37,8 +35,6 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
     const fetchProjects = async () => {
         setIsLoading(true); // Start loading
         try {
-            console.log('Fetching projects with appVersion:', appVersion);
-
             const facets = [
                 settings.loaders.length > 0
                     ? settings.loaders.map((loader) => `categories:${loader}`)
@@ -49,7 +45,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                     : ['project_type:mod'],
             ].filter(Boolean);
 
-            console.log('Constructed facets:', facets);
+            // console.log('Constructed facets:', facets);
 
             const searchParams = new URLSearchParams({
                 facets: JSON.stringify(facets),
@@ -58,7 +54,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
             });
 
             const apiUrl = `${baseUrl}${apiEndpoints.projects}?${searchParams.toString()}`;
-            console.log('Constructed API URL:', apiUrl);
+            // console.log('Constructed API URL:', apiUrl);
 
             const response = await fetch(apiUrl, {
                 headers: {
@@ -67,13 +63,13 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 },
             });
 
-            console.log('Response status:', response.status);
+            // console.log('Response status:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('Fetched projects data:', data);
+            // console.log('Fetched projects data:', data);
 
             const updatedProjects = data.hits.map((project: Project) => ({
                 ...project,
@@ -85,11 +81,14 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
             toast.error('Failed to fetch projects.');
             console.error('Error fetching projects:', error);
         } finally {
-            setIsLoading(false); // Stop loading
+            setIsLoading(false);
         }
     };
 
-    // Format the download number
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
     const formatNumber = (num: number): string => {
         if (num >= 1_000_000_000) {
             return (num / 1_000_000_000).toFixed(1) + 'B';
@@ -109,11 +108,15 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
 
     return (
         <div>
-            <button onClick={fetchProjects} className='btn btn-primary mb-4' disabled={isLoading}>
+            <button
+                onClick={fetchProjects}
+                id='fetchNewProjects'
+                className='btn btn-primary mb-4 flex hidden'
+                disabled={isLoading}
+            >
                 {isLoading ? 'Loading...' : 'Fetch Projects'}
             </button>
             <p></p>
-            <button onClick={getData}>Get Data</button>
             {isLoading ? (
                 <p className='text-white'>Loading projects...</p>
             ) : projects.length > 0 ? (
@@ -159,17 +162,17 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                 </p>
                                 <p className='text-sm text-gray-400'>{project.description}</p>
                             </div>
-                            <div className='text-right flex flex-col py-2'>
+                            <div className='text-right flex flex-col py-2 whitespace-nowrap'>
                                 <p className='text-sm inline-block '>
                                     <p className='text-gray-600 inline'>Downloads: </p>
                                     {formatNumber(project.downloads)}
                                 </p>
-                                <p className='text-sm inline inline-block pt-2  '>
+                                <p className='text-sm inline inline-block pt-2 whitespace-nowrap'>
                                     <p className='text-gray-600 inline'>Latest: </p>
                                     {project.versions[project.versions.length - 1]}
                                 </p>
-                                <a href='#' className='pt-3'>
-                                    <button className='flex text-right border-2 border-solid rounded py-1 px-6 border-brand hover:border-red-600'>
+                                <a href='#' className='pt-4'>
+                                    <button className='flex text-right border-2 border-solid rounded py-1 px-6 border-brand hover:border-white transition ease-in-out delay-300 hover:bg-red-600 hover:scale-110'>
                                         <HugeIconsDownload className='px-2 mx-2' fill='currentColor' />
                                         Install
                                     </button>

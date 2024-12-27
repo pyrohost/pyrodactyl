@@ -5,6 +5,7 @@ import { ScrollMenu } from '@/components/elements/ScrollMenu';
 import Checkbox from '@/components/elements/inputs/Checkbox';
 
 import { apiEndpoints, fetchHeaders, gameLoaders, settings } from './config';
+import { fetchNewProjects } from './config';
 
 interface GameVersion {
     version: string;
@@ -70,6 +71,7 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                         label='Show Snapshots'
                         checked={isSnapshotSelected}
                         onChange={() => setIsSnapshotSelected((prev) => !prev)}
+                        onClick={fetchNewProjects()}
                     />
                 </div>
             ) : (

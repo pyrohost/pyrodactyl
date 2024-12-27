@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import EnvironmentSelector from './EnvironmentSelector';
-import { apiEndpoints, settings } from './config';
+import { apiEndpoints, fetchNewProjects, settings } from './config';
 
 interface GameLoaders {
     icon: string; // SVG data (probably won't use this)
@@ -18,7 +18,6 @@ interface Props {
 //! FIXME: We only want to show actual loaders like Fabric, Paper, Forge, not datapacks, Iris, Optifine
 const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     const [loaders, setLoaders] = useState<GameLoaders[]>([]);
-    const [selectedLoaders, setSelectedLoaders] = useState<string[]>([]);
     const apiUrl = `${baseUrl}${apiEndpoints.loaders}`;
 
     useEffect(() => {
@@ -32,6 +31,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                 });
 
                 if (!response.ok) {
+                    toast(`HTTP Error! Status: ${response.status}`);
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
@@ -51,6 +51,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
 
     const handleSelectionChange = (selectedItems: string[]) => {
         settings.loaders = selectedItems;
+        // fetchProjectsGlobal(baseUrl, appVersion);
         console.log('Selected loaders updated:', selectedItems);
     };
 
@@ -59,7 +60,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     });
 
     return (
-        <div>
+        <div onClick={fetchNewProjects()}>
             {filterLoaders.length > 0 ? (
                 <EnvironmentSelector
                     items={filterLoaders.map((loader) => loader.name)}
