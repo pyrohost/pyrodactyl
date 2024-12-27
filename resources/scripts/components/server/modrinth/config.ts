@@ -1,3 +1,10 @@
+interface Settings {
+    loaders: any[];
+    versions: any[];
+    environments: any[];
+    searchTerms: string;
+}
+
 export const gameLoaders = [];
 export const gamerVersions = [];
 
@@ -9,10 +16,11 @@ export const apiEndpoints = {
     versions: `/tag/game_version`,
 };
 
-export const settings = {
+export const settings: Settings = {
     loaders: [],
     versions: [],
     environments: [],
+    searchTerms: '',
 };
 
 export const fetchHeaders = (appVersion) => ({
