@@ -13,7 +13,8 @@ import ProjectSelector from './DisplayMods';
 import EnvironmentSelector from './EnvironmentSelector';
 import GameVersionSelector from './GameVersionSelector';
 import LoaderSelector from './LoaderSelector';
-import { settings } from './config';
+import { fetchNewProjects } from './config';
+import { settings as localSettings } from './config';
 
 export default () => {
     const [appVersion, setAppVersion] = useState<string | null>(null);
@@ -29,8 +30,8 @@ export default () => {
     const updateSearchTerms = () => {
         // settings.searchTerms = setSearchTerm;
         // settings.searchTerms = setSearchTerm;
-        settings.searchTerms = searchTerm;
-        console.log(settings.searchTerms);
+        localSettings.searchTerms = searchTerm;
+        fetchNewProjects();
         return debounce(setSearchTerm, 50);
     };
     const debouncedSearchTerm = updateSearchTerms();

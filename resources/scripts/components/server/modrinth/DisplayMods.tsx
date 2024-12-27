@@ -53,7 +53,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 offset: `${offset}`,
             });
 
-            const apiUrl = `${baseUrl}${apiEndpoints.projects}?${searchParams.toString()}`;
+            const apiUrl = `${baseUrl}${apiEndpoints.projects}?${searchParams.toString()}&query=${settings.searchTerms}`;
             // console.log('Constructed API URL:', apiUrl);
 
             const response = await fetch(apiUrl, {
