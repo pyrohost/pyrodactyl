@@ -129,7 +129,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                             <ContentBox className='p-3 rounded-xl mr-4'>
                                 <a href={`${nonApiUrl}/mod/${project.project_id}`} target='_blank' rel='noreferrer'>
                                     {project.icon_url && project.icon_url !== 'N/A' ? (
-                                        <img src={project.icon_url} className='mt-4 w-16 h-16 object-cover rounded' />
+                                        <img src={project.icon_url} className='mt-4 w-20 h-16 object-cover rounded' />
                                     ) : (
                                         <svg
                                             fillRule='evenodd'
@@ -162,15 +162,18 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                 </p>
                                 <p className='text-sm text-gray-400'>{project.description}</p>
                             </div>
-                            <div className='text-right flex flex-col py-2 whitespace-nowrap'>
-                                <p className='text-sm inline-block '>
-                                    <p className='text-gray-600 inline'>Downloads: </p>
-                                    {formatNumber(project.downloads)}
+                            <div className='flex flex-col py-2 whitespace-nowrap px-6 mx-6 justify-end'>
+                                {/* Downloads */}
+                                <p className='text-sm inline-block whitespace-nowrap'>
+                                    {formatNumber(project.downloads)}{' '}
+                                    <p className='text-gray-600 inline ml-1'>Downloads</p>
                                 </p>
+                                {/* Version */}
                                 <p className='text-sm inline inline-block pt-2 whitespace-nowrap'>
-                                    <p className='text-gray-600 inline'>Latest: </p>
                                     {project.versions[project.versions.length - 1]}
+                                    <p className='text-gray-600 inline ml-2'>Latest</p>
                                 </p>
+                                {/* Install */}
                                 <a href='#' className='pt-4'>
                                     <button className='flex text-right border-2 border-solid rounded py-1 px-6 border-brand hover:border-white transition ease-in-out delay-300 hover:bg-red-600 hover:scale-110'>
                                         <HugeIconsDownload className='px-2 mx-2' fill='currentColor' />
