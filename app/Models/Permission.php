@@ -202,7 +202,6 @@ class Permission extends Model
             'description' => 'Permissions that control a user\'s access to the settings for this server.',
             'keys' => [
                 'rename' => 'Allows a user to rename this server and change the description of it.',
-                'modrinth' => 'Allows a user to change what loader/version of mods to download',
                 'reinstall' => 'Allows a user to trigger a reinstall of this server.',
 
             ],
@@ -214,10 +213,13 @@ class Permission extends Model
                 'read' => 'Allows a user to view the activity logs for the server.',
             ],
         ],
+
         'modrinth' => [
           'description' => 'Permissions that control a user\'s access to downloading mods using in app modrinth',
           'keys' => [
-              'download' => 'Allows a user to download mods to the server using modrinth',
+            'version' => 'Allows a user to change what version to download for',
+            'loader' => 'Allows a user to change what loader to download for',
+            'download' => 'Allows a user to download mods to the server using modrinth',
           ],
       ],
     ];
