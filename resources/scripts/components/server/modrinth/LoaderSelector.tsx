@@ -55,9 +55,9 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
         console.log('Selected loaders updated:', selectedItems);
     };
 
-    const filterLoaders = loaders.filter((loader) => {
-        return loader.name;
-    });
+    const filterLoaders = loaders.filter(
+        (loader) => loader.supported_project_types.includes('mod') || loader.supported_project_types.includes('plugin'),
+    );
 
     return (
         <div onClick={fetchNewProjects()}>
