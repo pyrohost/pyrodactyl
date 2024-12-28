@@ -118,13 +118,29 @@ export default () => {
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full md:w-4/5'
                     title='Modrinth'
                 >
-                    <input
-                        className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold mb-4'
-                        type='text'
-                        placeholder='Search'
-                        onChange={(event) => debouncedSearchTerm(event.target.value)}
-                        // onChange={(event) => console.log(event.target.value)}
-                    />
+                    <div className='relative w-full h-full mb-4'>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-5 opacity-40'
+                        >
+                            <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+                            />
+                        </svg>
+                        <input
+                            className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
+                            type='text'
+                            placeholder='Search'
+                            onChange={(event) => debouncedSearchTerm(event.target.value)}
+                            // onChange={(event) => console.log(event.target.value)}
+                        />
+                    </div>
 
                     <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl} />
                 </ContentBox>

@@ -4,6 +4,8 @@ import { toast } from 'sonner';
 import ContentBox from '@/components/elements/ContentBox';
 import HugeIconsDownload from '@/components/elements/hugeicons/Download';
 
+import { ServerContext } from '@/state/server';
+
 // import { useProjects } from './FetchProjects';
 import { apiEndpoints, offset, settings } from './config';
 
@@ -31,6 +33,8 @@ interface Props {
 const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const uuid = ServerContext.useStoreState((state) => state.server.data!);
 
     const fetchProjects = async () => {
         setIsLoading(true); // Start loading
@@ -74,6 +78,8 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 icon_url: project.icon_url || 'N/A',
             }));
 
+            // console.log(uuid);
+
             setProjects(updatedProjects);
         } catch (error) {
             toast.error('Failed to fetch projects.');
@@ -99,11 +105,6 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
         }
     };
 
-    const getData = (): null => {
-        console.log(settings);
-        return null;
-    };
-
     return (
         <div>
             <button
@@ -121,13 +122,13 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 projects.map((project) => (
                     <ContentBox
                         key={project.project_id}
-                        className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4 relative'
+                        className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4 relative'
                     >
                         <div className='flex items-center'>
-                            <ContentBox className='p-3 rounded-xl mr-4'>
+                            <ContentBox className='p-3 pt-1 rounded-xl mr-4'>
                                 <a href={`${nonApiUrl}/mod/${project.project_id}`} target='_blank' rel='noreferrer'>
                                     {project.icon_url && project.icon_url !== 'N/A' ? (
-                                        <img src={project.icon_url} className='mt-4 w-20 h-16 object-cover rounded' />
+                                        <img src={project.icon_url} className='mt-4 w-24 h-20 object-cover rounded' />
                                     ) : (
                                         <svg
                                             fillRule='evenodd'
