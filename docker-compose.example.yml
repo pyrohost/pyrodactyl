@@ -35,7 +35,7 @@ services:
         restart: always
         command: --default-authentication-plugin=mysql_native_password
         volumes:
-            - '/srv/pterodactyl/database:/var/lib/mysql'
+          - '/srv/pterodactyl/database:/var/lib/mysql'
         environment:
             <<: *db-environment
             MYSQL_DATABASE: 'panel'
@@ -48,7 +48,6 @@ services:
         restart: always
         ports:
             - '80:80'
-            - '443:443'
         links:
             - database
             - cache
@@ -66,6 +65,7 @@ services:
             SESSION_DRIVER: 'redis'
             QUEUE_DRIVER: 'redis'
             REDIS_HOST: 'cache'
+            DB_CONNECTION: 'mariadb'
             DB_HOST: 'database'
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
