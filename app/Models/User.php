@@ -266,11 +266,11 @@ class User extends Model implements
     public function accessibleServers(): Builder
     {
         return Server::query()
-            ->select('servers.*')
+            ->select('servers.id', 'servers.name', 'servers.owner_id') 
             ->leftJoin('subusers', 'subusers.server_id', '=', 'servers.id')
             ->where(function (Builder $builder) {
                 $builder->where('servers.owner_id', $this->id)->orWhere('subusers.user_id', $this->id);
             })
-            ->groupBy('servers.id');
+            ->groupBy('servers.id', 'servers.name', 'servers.owner_id');
     }
 }
