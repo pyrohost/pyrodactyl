@@ -13,11 +13,12 @@ class CreateActivityLogsTable extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->uuid('batch')->nullable();
+            // $table->uuid('batch')->nullable();
+            $table->binary('batch', 16)->nullable();
             $table->string('event')->index();
             $table->string('ip');
             $table->text('description')->nullable();
-            $table->nullableNumericMorphs('actor');
+            $table->nullableMorphs('actor');
             $table->json('properties');
             $table->timestamp('timestamp')->useCurrent()->onUpdate(null);
         });
