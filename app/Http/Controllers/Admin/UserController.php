@@ -43,22 +43,34 @@ class UserController extends Controller
     /**
      * Display user index page.
      */
-    public function index(Request $request): View
-    {
-        $users = QueryBuilder::for(
-            User::query()->select('users.*')
-                ->selectRaw('COUNT(DISTINCT(subusers.id)) as subuser_of_count')
-                ->selectRaw('COUNT(DISTINCT(servers.id)) as servers_count')
-                ->leftJoin('subusers', 'subusers.user_id', '=', 'users.id')
-                ->leftJoin('servers', 'servers.owner_id', '=', 'users.id')
-                ->groupBy('users.id')
-        )
-            ->allowedFilters(['username', 'email', 'uuid'])
-            ->allowedSorts(['id', 'uuid'])
-            ->paginate(50);
+public function index(Request $request): View
+{
+    $users = QueryBuilder::for(
+        User::query()->select([
+            'users.id',
+            'users.username',
+            'users.email',
+            'users.created_at',
+            'users.updated_at',
+        ])
+            ->selectRaw('COUNT(DISTINCT(subusers.id)) as subuser_of_count')
+            ->selectRaw('COUNT(DISTINCT(servers.id)) as servers_count')
+            ->leftJoin('subusers', 'subusers.user_id', '=', 'users.id')
+            ->leftJoin('servers', 'servers.owner_id', '=', 'users.id')
+            ->groupBy([
+                'users.id',
+                'users.username',
+                'users.email',
+                'users.created_at',
+                'users.updated_at',
+            ])
+    )
+        ->allowedFilters(['username', 'email', 'uuid'])
+        ->allowedSorts(['id', 'uuid'])
+        ->paginate(50);
 
-        return $this->view->make('admin.users.index', ['users' => $users]);
-    }
+    return $this->view->make('admin.users.index', ['users' => $users]);
+}
 
     /**
      * Display new user page.
