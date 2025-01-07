@@ -1,0 +1,80 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-01-07T23:17:29+00:00",
+    "name": "Fabric",
+    "author": "noreply@example.com",
+    "description": "Fabric Server. Fabric is a lightweight mod loader for Minecraft, with support for snapshots and fast updates to new versions.",
+    "features": [
+        "eula",
+        "java_version",
+        "pid_limit"
+    ],
+    "docker_images": {
+        "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",
+        "Java 17": "ghcr.io\/pterodactyl\/yolks:java_17",
+        "Java 16": "ghcr.io\/pterodactyl\/yolks:java_16",
+        "Java 11": "ghcr.io\/pterodactyl\/yolks:java_11",
+        "Java 8": "ghcr.io\/pterodactyl\/yolks:java_8"
+    },
+    "file_denylist": [],
+    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+    "config": {
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"query.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \")! For help, type \"\r\n}",
+        "logs": "{}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# Vanilla MC Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\nLATEST_MC_VERSION=$(curl https:\/\/meta.fabricmc.net\/v2\/versions\/game | jq -r 'map(select(.stable == true)) | first.version')\r\nLATEST_MC_SNAPSHOT_VERSION=$(curl https:\/\/meta.fabricmc.net\/v2\/versions\/game | jq -r '.[0].version')\r\n\r\nLATEST_LOADER_VERSION=$(curl https:\/\/meta.fabricmc.net\/v2\/versions\/loader | jq -r 'map(select(.stable == true)) | first.version')\r\nLATEST_INSTALLER=$(curl https:\/\/meta.fabricmc.net\/v2\/versions\/installer | jq -r 'map(select(.stable == true)) | first')\r\nLATEST_INSTALLER_VERSION=$(echo \"$LATEST_INSTALLER\" | jq -r \".version\")\r\nLATEST_INSTALLER_URL=$(echo \"$LATEST_INSTALLER\" | jq -r \".url\")\r\n\r\necho -e \"Latest MC version is $LATEST_MC_VERSION\"\r\necho -e \"Latest MC snapshot is $LATEST_MC_SNAPSHOT_VERSION\"\r\necho -e \"Latest loader version is $LATEST_LOADER_VERSION\"\r\necho -e \"Latest installer version is $LATEST_INSTALLER_VERSION\"\r\n\r\nif [ -z \"$MINECRAFT_VERSION\" ] || [ \"$MINECRAFT_VERSION\" == \"latest\" ]; then\r\n  MC_VERSION=$LATEST_MC_VERSION\r\nelif [ \"$MINECRAFT_VERSION\" == \"snapshot\" ]; then\r\n  MC_VERSION=$LATEST_MC_SNAPSHOT_VERSION\r\nelse\r\n  MC_VERSION=$MINECRAFT_VERSION\r\nfi\r\n\r\nif [ -z \"$FABRIC_VERSION\" ] || [ \"$FABRIC_VERSION\" == \"latest\" ]; then\r\n  LOADER_VERSION=$LATEST_LOADER_VERSION\r\nelse\r\n  LOADER_VERSION=$FABRIC_VERSION\r\nfi\r\n\r\nif [ -z \"$FABRIC_INSTALLER_VERSION\" ] || [ \"$FABRIC_INSTALLER_VERSION\" == \"latest\" ]; then\r\n  INSTALLER_VERSION=$LATEST_INSTALLER_VERSION\r\nelse\r\n  INSTALLER_VERSION=$VANILLA_VERSION\r\nfi\r\n\r\nDOWNLOAD_URL=\"https:\/\/meta.fabricmc.net\/v2\/versions\/loader\/$MC_VERSION\/$LOADER_VERSION\/$INSTALLER_VERSION\/server\/jar\"\r\n\r\necho -e \"running: curl -o ${SERVER_JARFILE} $DOWNLOAD_URL\"\r\ncurl -o \"${SERVER_JARFILE}\" \"$DOWNLOAD_URL\"\r\n\r\necho -e \"Install Complete\"",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Minecraft Version",
+            "description": "The version of Minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+            "env_variable": "MINECRAFT_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Jar File",
+            "description": "The name of the .jar file to run the server with.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "server.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/",
+            "field_type": "text"
+        },
+        {
+            "name": "Fabric Version",
+            "description": "The version of FabricMC to use",
+            "env_variable": "FABRIC_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Fabric Installer Version",
+            "description": "The version of the Fabric Installer to use",
+            "env_variable": "FABRIC_INSTALLER_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}
