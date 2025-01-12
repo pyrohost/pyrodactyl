@@ -5,51 +5,57 @@ import * as React from 'react';
 import { toast } from 'sonner';
 
 interface CopyOnClickProps {
-    text: string | number | null | undefined;
+    text?: string | number | null;
     showInNotification?: boolean;
     children: React.ReactNode;
 }
 
-const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) => {
+const CopyOnClick = ({ text, children, showInNotification = true }: CopyOnClickProps) => {
     const [copied, setCopied] = useState(false);
-    let truncatedText;
-    if (showInNotification == false) {
-        truncatedText = '';
-    } else {
+
+    const truncatedText = React.useMemo(() => {
+        if (!showInNotification || !text) return '';
         const length = 80;
         const stringText = String(text);
-        truncatedText = stringText.length > length ? `"${stringText.substring(0, length - 3)}..."` : `"${stringText}"`;
-    }
+        return stringText.length > length 
+            ? `"${stringText.substring(0, length - 3)}..."` 
+            : `"${stringText}"`;
+    }, [text, showInNotification]);
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${truncatedText} to clipboard.`);
+
+        if (showInNotification) {
+            toast.success(`Copied ${truncatedText} to clipboard`);
+        }
 
         const timeout = setTimeout(() => {
             setCopied(false);
         }, 2500);
 
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [copied]);
+        return () => clearTimeout(timeout);
+    }, [copied, truncatedText, showInNotification]);
 
     if (!React.isValidElement(children)) {
         throw new Error('Component passed to <CopyOnClick/> must be a valid React element.');
     }
 
+    const handleCopy = (e: React.MouseEvent<HTMLElement>) => {
+        if (text) {
+            copy(String(text));
+            setCopied(true);
+        }
+        
+        if (React.isValidElement(children) && typeof children.props.onClick === 'function') {
+            children.props.onClick(e);
+        }
+    };
+
     const child = !text
         ? React.Children.only(children)
         : React.cloneElement(React.Children.only(children), {
-              // @ts-ignore
-              className: clsx(children.props.className || '', 'cursor-pointer'),
-              onClick: (e: React.MouseEvent<HTMLElement>) => {
-                  copy(String(text));
-                  setCopied(true);
-                  if (typeof children.props.onClick === 'function') {
-                      children.props.onClick(e);
-                  }
-              },
+              className: clsx(children.props.className, 'cursor-pointer'),
+              onClick: handleCopy,
           });
 
     return <>{child}</>;

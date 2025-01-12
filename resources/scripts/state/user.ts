@@ -1,6 +1,4 @@
-import { Action, Thunk, action, thunk } from 'easy-peasy';
-
-import updateAccountEmail from '@/api/account/updateAccountEmail';
+import { useForm } from '@inertiajs/react';
 
 export interface UserData {
     uuid: string;
@@ -13,29 +11,29 @@ export interface UserData {
     updatedAt: Date;
 }
 
-export interface UserStore {
-    data?: UserData;
-    setUserData: Action<UserStore, UserData>;
-    updateUserData: Action<UserStore, Partial<UserData>>;
-    updateUserEmail: Thunk<UserStore, { email: string; password: string }, any, UserStore, Promise<void>>;
+export interface EmailUpdateData {
+    email: string;
+    password: string;
 }
 
-const user: UserStore = {
-    data: undefined,
-    setUserData: action((state, payload) => {
-        state.data = payload;
-    }),
-
-    updateUserData: action((state, payload) => {
-        // @ts-expect-error limitation of Typescript, can't do much about that currently unfortunately.
-        state.data = { ...state.data, ...payload };
-    }),
-
-    updateUserEmail: thunk(async (actions, payload) => {
-        await updateAccountEmail(payload.email, payload.password);
-
-        actions.updateUserData({ email: payload.email });
-    }),
+export const useEmailUpdate = (initialData: EmailUpdateData) => {
+    return useForm({
+        email: initialData.email,
+        password: initialData.password,
+    });
 };
 
-export default user;
+export const handleEmailUpdate = (form: ReturnType<typeof useEmailUpdate>) => {
+    form.post(route('account.email'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset('password');
+        }
+    });
+};
+
+// Add default export
+export default {
+    useEmailUpdate,
+    handleEmailUpdate
+};

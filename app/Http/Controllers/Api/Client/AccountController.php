@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\JsonResponse;
+use Inertia\Inertia;
+use Illuminate\Http\RedirectResponse;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Services\Users\UserUpdateService;
 use Pterodactyl\Transformers\Api\Client\AccountTransformer;
 use Pterodactyl\Http\Requests\Api\Client\Account\UpdateEmailRequest;
 use Pterodactyl\Http\Requests\Api\Client\Account\UpdatePasswordRequest;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends ClientApiController
 {
-    /**
-     * AccountController constructor.
-     */
     public function __construct(private AuthManager $manager, private UserUpdateService $updateService)
     {
         parent::__construct();
@@ -29,47 +29,82 @@ class AccountController extends ClientApiController
             ->toArray();
     }
 
-    /**
-     * Update the authenticated user's email address.
-     */
-    public function updateEmail(UpdateEmailRequest $request): JsonResponse
+
+    public function updateEmail(UpdateEmailRequest $request): JsonResponse|RedirectResponse
     {
         $original = $request->user()->email;
-        $this->updateService->handle($request->user(), $request->validated());
+        
+        try {
+            $this->updateService->handle($request->user(), $request->validated());
+        
+            if ($original !== $request->input('email')) {
+                Activity::event('user:account.email-changed')
+                    ->property(['old' => $original, 'new' => $request->input('email')])
+                    ->log();
+            }
+        
+            if ($request->isMethod('put')) {
+                return new JsonResponse([], Response::HTTP_NO_CONTENT);
+            }
 
-        if ($original !== $request->input('email')) {
-            Activity::event('user:account.email-changed')
-                ->property(['old' => $original, 'new' => $request->input('email')])
-                ->log();
+            Log::error('Log testing', [
+            ]);
+        
+            return redirect()->back()->with('res', 'Your email has been updated successfully.');
+        
+        } catch (\Exception $e) {
+            Log::error('Failed to update user email', [
+                'user' => $request->user()->id,
+                'old_email' => $original,
+                'new_email' => $request->input('email'),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        
+            if ($request->isMethod('put')) {
+                throw $e;
+            }
+            return redirect()->back()->with('error', 'There was an error while updating your email address.');
         }
-
-        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * Update the authenticated user's password. All existing sessions will be logged
-     * out immediately.
-     *
-     * @throws \Throwable
-     */
-    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
-    {
+ * Update the authenticated user's password. All existing sessions will be logged
+ * out immediately.
+ *
+ * @throws \Throwable
+ */
+public function updatePassword(UpdatePasswordRequest $request): JsonResponse|RedirectResponse
+{
+    try {
         $user = $this->updateService->handle($request->user(), $request->validated());
 
         $guard = $this->manager->guard();
-        // If you do not update the user in the session you'll end up working with a
-        // cached copy of the user that does not include the updated password. Do this
-        // to correctly store the new user details in the guard and allow the logout
-        // other devices functionality to work.
         $guard->setUser($user);
 
-        // This method doesn't exist in the stateless Sanctum world.
         if (method_exists($guard, 'logoutOtherDevices')) {
             $guard->logoutOtherDevices($request->input('password'));
         }
 
         Activity::event('user:account.password-changed')->log();
 
-        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+        if ($request->isMethod('put')) {
+            return new JsonResponse([], Response::HTTP_NO_CONTENT);
+        }
+
+        return redirect()->back()->with('success', 'Your password has been updated successfully.');
+    } catch (\Exception $e) {
+        Log::error('Failed to update user password', [
+            'user' => $request->user()->id,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        if ($request->isMethod('put')) {
+            throw $e;
+        }
+
+        return redirect()->back()->with('error', 'There was an error while updating your password.');
     }
+}
 }

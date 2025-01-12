@@ -1,129 +1,268 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-
-import Can from '@/components/elements/Can';
-import { Dialog } from '@/components/elements/dialog';
-import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
-
-import { ServerContext } from '@/state/server';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from '@/components/ui/dialog';
+import sendPowerSignal from '@/api/server/ServerPower';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, usePage } from "@inertiajs/react";
+import { LucideMessageCircleWarning, LucideMessageSquareWarning, LucideTerminal } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 interface PowerButtonProps {
+    serverId: string;
     className?: string;
 }
 
-export default ({ className }: PowerButtonProps) => {
+type ServerState = 'running' | 'stopping' | 'starting' | 'offline';
+
+const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
     const [open, setOpen] = useState(false);
-    const status = ServerContext.useStoreState((state) => state.status.value);
-    const instance = ServerContext.useStoreState((state) => state.socket.instance);
-
-    const killable = status === 'stopping';
-    const onButtonClick = (
-        action: PowerAction | 'kill-confirmed',
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ): void => {
-        e.preventDefault();
-        if (action === 'kill') {
-            return setOpen(true);
-        }
-
-        if (instance) {
-            if (action === 'start') {
-                toast.success('Your server is starting!');
-            } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
-            } else {
-                toast.success('Your server is being stopped.');
-            }
-            setOpen(false);
-            instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
-        }
-    };
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<ServerState | null>(null);
+    const [isNodeOffline, setIsNodeOffline] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const eventSourceRef = useRef<EventSource | null>(null);
+    const { server } = usePage().props as { server: { uuid: string } };
+    const { toast } = useToast(); // Add useToast hook
 
     useEffect(() => {
-        if (status === 'offline') {
-            setOpen(false);
-        }
-    }, [status]);
+        const setupEventSource = () => {
+            try {
+                if (eventSourceRef.current) {
+                    eventSourceRef.current.close();
+                }
 
-    if (!status) {
-        return null;
-    }
+                eventSourceRef.current = new EventSource(`/api/client/servers/${serverId}/resources/stream`);
+
+                eventSourceRef.current.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        const newState = data.attributes.current_state as ServerState;
+                        console.log('Server state:', newState);
+                        setStatus(newState);
+                        setIsNodeOffline(false);
+                        
+                        if (loading && newState !== status) {
+                            setLoading(false);
+                        }
+                    } catch (err) {
+                        console.error('Error parsing stats:', err);
+                        setIsNodeOffline(true);
+                    }
+                };
+
+                eventSourceRef.current.onerror = () => {
+                    console.error('EventSource connection failed');
+                    setIsNodeOffline(true);
+                    eventSourceRef.current?.close();
+                    setTimeout(setupEventSource, 1000);
+                };
+            } catch (err) {
+                console.error('Failed to setup EventSource:', err);
+                setIsNodeOffline(true);
+            }
+        };
+
+        setupEventSource();
+        return () => eventSourceRef.current?.close();
+    }, [serverId, loading, status]);
+
+    useEffect(() => {
+        setErrorDialogOpen(isNodeOffline);
+    }, [isNodeOffline]);
+
+    const handlePowerAction = async (action: 'start' | 'stop' | 'restart' | 'kill') => {
+        setLoading(true);
+        try {
+            toast({
+                title: (
+                    <div className="flex items-center">
+                        <LucideMessageCircleWarning className="w-4 h-4 mr-2 text-red-500" />
+                        Power Action: {action.charAt(0).toUpperCase() + action.slice(1)}
+                    </div>
+                ),
+                description: `Server power signal sent successfully. Action: ${action}`,
+            });
+            await sendPowerSignal(serverId, action);
+            
+        } catch (error) {
+            toast({
+                title: (
+                    <div className="flex items-center">
+                        <LucideMessageSquareWarning className="w-4 h-4 mr-2 text-red-500" />
+                        Error
+                    </div>
+                ),
+                description: "Failed to send power signal to the server",
+                variant: "destructive",
+            });
+            setLoading(false);
+        }
+        setOpen(false);
+    };
+
+    const buttonVariants = {
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.8 }
+    };
 
     return (
-        <div
-            className={className}
-            style={{
-                animationTimingFunction:
-                    'linear(0 0%, 0.01 0.8%, 0.04 1.6%, 0.161 3.3%, 0.816 9.4%, 1.046 11.9%, 1.189 14.4%, 1.231 15.7%, 1.254 17%, 1.259 17.8%, 1.257 18.6%, 1.236 20.45%, 1.194 22.3%, 1.057 27%, 0.999 29.4%, 0.955 32.1%, 0.942 33.5%, 0.935 34.9%, 0.933 36.65%, 0.939 38.4%, 1 47.3%, 1.011 49.95%, 1.017 52.6%, 1.016 56.4%, 1 65.2%, 0.996 70.2%, 1.001 87.2%, 1 100%)',
-            }}
+        <div className="flex items-center justify-end gap-2 right-9">
+            <Dialog open={open} onOpenChange={setOpen} className='bg-white dark:bg-black '>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Kill Server</DialogTitle>
+                        <img 
+              src="/assets/svgs/bad.svg"
+              alt="Create New"
+              className="w-120 h-60 object-contain"
+            />
+                        <DialogDescription>
+                            This power action will forcibly stop the server, which is considered unsafe and may result in data loss.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setOpen(false)} className='mb-3'>
+                            Cancel
+                        </Button>
+                        <Button 
+                            variant="destructive" 
+                            onClick={() => handlePowerAction('kill')}
+                            disabled={loading}
+                        >
+                            Kill Server
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={errorDialogOpen} onOpenChange={setErrorDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="text-destructive text-center">Node Connection Lost</DialogTitle>
+                        <img 
+              src="/assets/svgs/noc.svg"
+              alt="Create New"
+              className="w-120 h-60 object-contain"
+            />
+                        <DialogDescription className='text-center'>
+                            We couldn't connect to the node. Please contact support if this issue persists.
+                        </DialogDescription>
+                        
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setErrorDialogOpen(false)}>
+                            Close
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <AnimatePresence>
+                <motion.div
+                    key="start"
+                    variants={buttonVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                >
+                    <Button
+                        variant="default"
+                        onClick={() => handlePowerAction('start')}
+                        disabled={loading || status !== 'offline' || isNodeOffline}
+                        className="w-24"
+                    >
+                        Start
+                    </Button>
+                </motion.div>
+
+                <motion.div
+                    key="restart"
+                    variants={buttonVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                >
+                    <Button
+                        variant="outline"
+                        onClick={() => handlePowerAction('restart')}
+                        disabled={loading || status !== 'running' || isNodeOffline}
+                        className="w-24"
+                    >
+                        Restart
+                    </Button>
+                </motion.div>
+
+                <motion.div
+                    key="stop"
+                    variants={buttonVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                >
+                    <Button
+                        variant="destructive"
+                        onClick={() => status === 'stopping' ? setOpen(true) : handlePowerAction('stop')}
+                        disabled={loading || (status !== 'running' && status !== 'starting') || isNodeOffline}
+                        className="w-24"
+                    >
+                        {status === 'stopping' ? 'Killing' : 'Stop'}
+                    </Button>
+                </motion.div>
+
+                <motion.div
+                    key="kill"
+                    variants={buttonVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                >
+                    <Button
+                        variant="destructive"
+                        onClick={() => setOpen(true)}
+                        disabled={loading || status === 'offline' || isNodeOffline}
+                        className="w-24 dark:bg-black bg-white shadow-lg text-red-900 font-bold dark:hover:bg-zinc-800"
+                    >
+                        Kill
+                    </Button>
+                </motion.div>
+
+                <motion.div
+            key="console"
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ duration: 0.2 }}
         >
-            <Dialog.Confirm
-                open={open}
-                hideCloseIcon
-                onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
-                onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
+            <Button
+                asChild
+                variant="default"
+                className="w-24 dark:bg-black bg-white dark:text-zinc-100 text-black hover:bg-primary/10  dark:hover:bg-primary/10"
             >
-                Forcibly stopping a server can lead to data corruption.
-            </Dialog.Confirm>
-            <Can action={'control.start'}>
-                <button
-                    style={
-                        status === 'offline'
-                            ? {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
-                            : {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
-                    }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md'
-                    disabled={status !== 'offline'}
-                    onClick={onButtonClick.bind(this, 'start')}
-                >
-                    Start
-                </button>
-            </Can>
-            <Can action={'control.restart'}>
-                <button
-                    style={{
-                        background:
-                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                    }}
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-none text-sm font-bold shadow-md'
-                    disabled={!status}
-                    onClick={onButtonClick.bind(this, 'restart')}
-                >
-                    Restart
-                </button>
-            </Can>
-            <Can action={'control.stop'}>
-                <button
-                    style={
-                        status === 'offline'
-                            ? {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
-                            : {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
-                    }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all'
-                    disabled={status === 'offline'}
-                    onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
-                >
-                    {killable ? 'Kill' : 'Stop'}
-                </button>
-            </Can>
+                <Link href={`/server/${server.identifier}/console`}>
+                    <LucideTerminal className="w-4 h-4 mr-2" />
+                    Console
+                </Link>
+            </Button>
+        </motion.div>
+
+                
+            </AnimatePresence>
         </div>
     );
 };
+
+export default PowerButtons;

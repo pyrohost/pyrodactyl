@@ -23,6 +23,18 @@ export default {
     			md: 'calc(var(--radius) - 2px)',
     			sm: 'calc(var(--radius) - 4px)'
     		},
+			animation: {
+				'spin-slow': 'rotate 0.8s infinite linear',
+				'blink': 'blink 0.8s infinite ease-in-out'
+			  },
+			  keyframes: {
+				rotate: {
+				  '0%': { transform: 'rotate(360deg)' }
+				},
+				blink: {
+				  '50%': { opacity: '0.8' }
+				}
+			  },
     		colors: {
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',
@@ -30,6 +42,7 @@ export default {
     				DEFAULT: 'hsl(var(--card))',
     				foreground: 'hsl(var(--card-foreground))'
     			},
+				brand: '#fa4e49',
     			popover: {
     				DEFAULT: 'hsl(var(--popover))',
     				foreground: 'hsl(var(--popover-foreground))'

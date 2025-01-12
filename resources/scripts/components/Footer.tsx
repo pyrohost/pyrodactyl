@@ -16,7 +16,7 @@ export default function Footer() {
       <div className="pb-[100px]">
         {/* Main content wrapper */}
       </div>
-      <footer className="absolute bottom-0 left-0 right-0 w-full py-6 px-4 bg-gray-100 dark:bg-black rounded-lg transition-colors duration-200">
+      <footer className="absolute bottom-0 left-0 right-0 w-full py-6 px-4 bg-white dark:bg-black rounded-lg transition-colors duration-200">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-600 dark:text-gray-300 text-sm">

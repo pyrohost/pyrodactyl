@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight, ChevronLeft } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -180,7 +180,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                             onClick={toggleSidebarCollapse}
                             className="hidden lg:flex"
                         >
-                            <ChevronRight className={cn(
+                            <ChevronLeft className={cn(
                                 "h-4 w-4 transition-transform duration-200",
                                 isSidebarCollapsed && "rotate-180"
                             )} />
@@ -206,9 +206,16 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                     />
                     <MenuItem
                             icon={LucideMonitorUp}
-                            label="Deploy"
-                            href="/deploy"
-                            isActive={sidebartab === 'deploy'}
+                            label="Servers"
+                            href="/servers"
+                            isActive={sidebartab === 'servers'}
+                            collapsed={isSidebarCollapsed}
+                        />
+                        <MenuItem
+                            icon={auth.user.rank === 'premium' ? Crown : UserIcon}
+                            label="Profile"
+                            href="/account"
+                            isActive={sidebartab === 'profile'}
                             collapsed={isSidebarCollapsed}
                         />
                         <MenuItem
@@ -239,13 +246,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                             isActive={sidebartab === 'earn'}
                             collapsed={isSidebarCollapsed}
                         />
-                        <MenuItem
-                            icon={auth.user.rank === 'premium' ? Crown : UserIcon}
-                            label="Profile"
-                            href="/profile"
-                            isActive={sidebartab === 'profile'}
-                            collapsed={isSidebarCollapsed}
-                        />
+                        
                         {auth.user.rank === 'admin' && (
                         <MenuItem
                         icon={CogIcon}
@@ -295,16 +296,16 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
-                                className="w-56 bg-white dark:bg-black"
+                                className="w-56 bg-zinc-200 dark:bg-black"
                                 align="start"
                             >
-                                <DropdownMenuItem className="hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                                <DropdownMenuItem className="hover:bg-zinc-900 bg-zinc-400 dark:bg-black  dark:hover:bg-zinc-800">
                                     <Link href='/profile/edit' className="flex items-center w-full">
                                         <Settings className="mr-2 h-4 w-4"/>
                                         Profile
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-red-900  dark:hover:bg-rose-950">
+                                <DropdownMenuItem className="hover:bg-red-900 bg-zinc-400 dark:bg-black mt-1   dark:hover:bg-rose-950">
                                     <Link
                                         href='/auth/logout'
                                         method="post"
@@ -350,7 +351,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                     </CardContent>
                 </Card>
 
-                <div className="flex-1 overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+                <div className="flex-1 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
                     <div className="h-full overflow-y-auto p-4">
                         <div className="mx-auto ">
                             {children}

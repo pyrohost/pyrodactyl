@@ -56,7 +56,6 @@ class Kernel extends HttpKernel
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-            ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             LanguageMiddleware::class,
@@ -64,6 +63,7 @@ class Kernel extends HttpKernel
         ],
         'api' => [
             EnsureStatefulRequests::class,
+            \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
             'auth:sanctum',
             IsValidJson::class,
             TrackAPIKey::class,
@@ -98,5 +98,6 @@ class Kernel extends HttpKernel
         'bindings' => SubstituteBindings::class,
         'recaptcha' => VerifyReCaptcha::class,
         'node.maintenance' => MaintenanceMiddleware::class,
+        'inerstia' => \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
     ];
 }

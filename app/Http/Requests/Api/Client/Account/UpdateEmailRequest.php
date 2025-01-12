@@ -2,7 +2,6 @@
 
 namespace Pterodactyl\Http\Requests\Api\Client\Account;
 
-use Pterodactyl\Models\User;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Hashing\Hasher;
 use Pterodactyl\Http\Requests\Api\Client\ClientApiRequest;
@@ -21,7 +20,6 @@ class UpdateEmailRequest extends ClientApiRequest
 
         $hasher = Container::getInstance()->make(Hasher::class);
 
-        // Verify password matches when changing password or email.
         if (!$hasher->check($this->input('password'), $this->user()->password)) {
             throw new InvalidPasswordProvidedException(trans('validation.internal.invalid_password'));
         }
@@ -31,8 +29,9 @@ class UpdateEmailRequest extends ClientApiRequest
 
     public function rules(): array
     {
-        $rules = User::getRulesForUpdate($this->user());
-
-        return ['email' => $rules['email']];
+        return [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
+            'password' => ['required', 'string'],
+        ];
     }
-}
+} 

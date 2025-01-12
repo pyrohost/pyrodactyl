@@ -1,5 +1,5 @@
-//resources/scripts/state/hooks.ts
 import { createTypedHooks } from 'easy-peasy';
+
 import { ApplicationStore } from '@/state/index';
 
 const hooks = createTypedHooks<ApplicationStore>();

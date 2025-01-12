@@ -26,19 +26,30 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('appVersion', $this->versionData()['version'] ?? 'undefined');
         View::share('appIsGit', $this->versionData()['is_git'] ?? false);
+
+
+        
         Inertia::share([
             'flash' => function () {
-                return [
-                    'status'         => session('status'),
-                    'error'          => session('error'),
-                    'res'            => session('res'),
-                    'servers'        => session('servers'),
-                    'success'        => session('success'),
-                    'users'          => session('users'),
-                    'server_url'     => session('server_url'),
-                    'secerts'        => session('secerts'),
-                    'linkvertiseUrl' => session('linkvertiseUrl'),
+                $flash = [];
+                
+                // Map session values to flash types
+                $types = [
+                    'success', 'error', 'status', 'res', 
+                    'servers', 'users', 'server_url', 
+                    'secerts', 'linkvertiseUrl'
                 ];
+                
+                foreach ($types as $type) {
+                    if (session()->has($type)) {
+                        $flash[$type] = [
+                            'message' => session($type),
+                            'type' => $type
+                        ];
+                    }
+                }
+                
+                return $flash;
             },
         ]);
 

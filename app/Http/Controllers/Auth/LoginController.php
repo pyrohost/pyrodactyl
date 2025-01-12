@@ -73,10 +73,12 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
 
         if (!$user->use_totp) {
-            Auth::login($user, $request->filled('remember'));
-            
-            return to_route('dashboard');
-        }
+    Auth::login($user, $request->filled('remember'));
+    
+    return Inertia::render('Auth/Login', [
+        'success' => 'Successfully Authenticated'
+    ]);
+}
 
         Activity::event('auth:checkpoint')->withRequestMetadata()->subject($user)->log();
 

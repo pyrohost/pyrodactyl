@@ -62,7 +62,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
         <Card className={cn(
             "transition-all duration-300 cursor-pointer group rounded-2xl ",
             "dark:bg-black hover:shadow-xl dark:hover:shadow-xl dark:hover:shadow-700",
-            "bg-zinc-200",
+            "bg-white",
             className
         )}>
             <CardContent className="p-6">
@@ -98,7 +98,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                         href={`/server/${server.id}`} 
                         className={cn(
                             "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
-                            "bg-zinc-400 text-zinc-900 hover:bg-zinc-300 hover:text-black dark:hover:text-black",
+                            "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 hover:text-black dark:hover:text-black",
                             "dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-200"
                         )}
                     >
@@ -110,15 +110,15 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
 
                 <div className="mt-4 flex items-center justify-center">
                     {hasNAStats ? (
-                        <span className="text-xs text-black dark:text-zinc-200 rounded-full dark:bg-zinc-800 bg-zinc-400 px-5">Sit tight!</span>
+                        <span className="text-xs text-black dark:text-zinc-200 rounded-full dark:bg-zinc-800 bg-zinc-200 px-5">Sit tight!</span>
                     ) : isSuspended || server.status ? (
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger>
                                     <span className={cn(
                                         "px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
-                                        "bg-zinc-300 text-zinc-900",
-                                        "dark:bg-zinc-800 dark:text-zinc-100"
+                                        "bg-zinc-100 text-zinc-900",
+                                        "dark:bg-zinc-200 dark:text-zinc-100"
                                     )}>
                                         {isSuspended ? 'Suspended' : 
                                         server.isTransferring ? 'Transferring' :
@@ -177,14 +177,12 @@ const ServerStat: React.FC<{
     };
 
     return (
-        <div className="flex flex-col items-center">
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {label}
-            </span>
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {value} / {getLimitDisplay()}
-            </span>
-        </div>
+        <div className="flex flex-col items-center ">
+    
+    <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 px-3 py-1 dark:bg-zinc-700 rounded-lg bg-zinc-200">
+        {label} : {value} {/* {getLimitDisplay()}*/ }
+    </span>
+</div>
     );
 };
 

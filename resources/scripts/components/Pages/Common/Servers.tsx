@@ -16,6 +16,7 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import CreateNew from '@/components/Additonal/CreateNew';
+import LogoLoader from '@/components/elements/ServerLoad';
 
 export default () => {
     const { props: { page: defaultPage = 1, auth } } = usePage();
@@ -110,7 +111,7 @@ export default () => {
                                     {showOnlyAdmin ? "Other's Servers" : "Personal Servers"}
                                     <ChevronDown className="ml-2 h-4 w-4" />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-48">
+                                <DropdownMenuContent className="w-48 bg-zinc-200 text-zinc-900 dark:bg-black dark:text-zinc-200 ">
                                     <DropdownMenuRadioGroup value={showOnlyAdmin ? "others" : "personal"} onValueChange={(value) => setShowOnlyAdmin(value === "others")}>
                                         <DropdownMenuRadioItem value="personal">Personal Servers</DropdownMenuRadioItem>
                                         <DropdownMenuRadioItem value="others">Other's Servers</DropdownMenuRadioItem>
@@ -118,8 +119,8 @@ export default () => {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         )}
-                        <TabsList>
-                            <TabsTrigger value='list'>List View</TabsTrigger>
+                        <TabsList className='flex gap-4'>
+                            <TabsTrigger value='list' className=''>List View</TabsTrigger>
                             <TabsTrigger value='grid'>Grid View</TabsTrigger>
                         </TabsList>
                     </div>
@@ -127,6 +128,7 @@ export default () => {
 
                 {!servers ? (
                     <div className='w-full flex items-center justify-center p-6'>
+                        <LogoLoader size='80px'/>
                         <span className='text-sm text-zinc-400'>Loading servers...</span>
 
                     </div>

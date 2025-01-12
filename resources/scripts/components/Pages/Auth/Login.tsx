@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Head, usePage } from '@inertiajs/react';
+import { useForm, Head, usePage, router } from '@inertiajs/react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -17,8 +17,10 @@ interface PageProps {
 const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [processing, setProcessing] = useState(false);
+    const { props } = usePage();
     const { flash, errors } = usePage().props as any;
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post} = useForm({
         user: '',
         password: '',
     });
@@ -47,8 +49,17 @@ const Login: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setProcessing(true);
         post('/auth/login');
+        setProcessing(false);
     };
+
+    useEffect(() => {
+        if (props.success === 'Successfully Authenticated') {
+            setProcessing(true);
+            router.get('/dashboard');
+        }
+    }, [props.success]);
 
     const lightBackgroundImage = 'https://i.ibb.co/xqd8t98/image-2024-12-17-105608122.png';
     const darkBackgroundImage = 'https://images4.alphacoders.com/131/thumb-1920-1318503.jpeg';
@@ -165,7 +176,7 @@ const Login: React.FC = () => {
 
                     {/* Dark Mode Toggle pLEASE replace Soon */}
 
-                    <div className="fixed bottom-4 right-4">
+                    <div className="fixed bottom-2 right-4">
     <button
         onClick={toggleTheme}
         className={`

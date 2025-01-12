@@ -30,6 +30,9 @@ Route::post('profile/update', [LoginController::class, 'updateProfile'])->name('
 // recaptcha endpoints to slow down manual attack spammers even more. 🤷‍
 //
 // @see \Pterodactyl\Providers\RouteServiceProvider
+
+
+
 Route::middleware(['throttle:authentication'])->group(function () {
     // Login endpoints.
     Route::post('/login', [Auth\LoginController::class, 'login'])->middleware('recaptcha');
@@ -54,6 +57,4 @@ Route::post('/password/reset', Auth\ResetPasswordController::class)->name('auth.
 
 
 // Catch any other combinations of routes and pass them off to the React component.
-Route::fallback(function () {
-    return Inertia::render('Errors/404')->toResponse(request())->setStatusCode(404);
-});
+Route::get('/', [IndexController::class, 'index'])->name('index');

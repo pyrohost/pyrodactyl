@@ -134,16 +134,14 @@
                 <section class="content">
                     <div class="row">
                         <div class="col-xs-12">
-                            @if (count($errors) > 0)
+                            
                                 <div class="alert alert-danger">
                                     There was an error validating the data provided.<br><br>
                                     <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
+                                       
                                     </ul>
                                 </div>
-                            @endif
+                           
                             @foreach (Alert::getMessages() as $type => $messages)
                                 @foreach ($messages as $message)
                                     <div class="alert alert-{{ $type }} alert-dismissable" role="alert">

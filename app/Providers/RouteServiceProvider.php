@@ -9,6 +9,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 use Pterodactyl\Http\Middleware\TrimStrings;
 use Pterodactyl\Http\Middleware\AdminAuthenticate;
+use Pterodactyl\Http\Middleware\InerstiaMiddleware;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -36,7 +37,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::middleware('web')->group(function () {
-                Route::middleware(['auth.session', RequireTwoFactorAuthentication::class])
+                Route::middleware(['auth', RequireTwoFactorAuthentication::class])
                     ->group(base_path('routes/base.php'));
 
                 Route::middleware(['auth.session', RequireTwoFactorAuthentication::class, AdminAuthenticate::class])
@@ -57,6 +58,14 @@ class RouteServiceProvider extends ServiceProvider
                     ->scopeBindings()
                     ->group(base_path('routes/api-client.php'));
             });
+
+            Route::middleware('inerstia')
+                ->prefix('/api/inerstia')
+                ->scopeBindings()
+                ->group(base_path('routes/api-inerstia.php'));
+
+
+            
 
             Route::middleware('daemon')
                 ->prefix('/api/remote')

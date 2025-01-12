@@ -1,242 +1,224 @@
-import { FitAddon } from '@xterm/addon-fit';
-import { SearchAddon } from '@xterm/addon-search';
-import { WebLinksAddon } from '@xterm/addon-web-links';
-import { ITerminalOptions, Terminal } from '@xterm/xterm';
-import '@xterm/xterm/css/xterm.css';
+import { usePage } from '@inertiajs/react';
 import clsx from 'clsx';
 import debounce from 'debounce';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import parse from 'ansi-to-html';
 
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { Card, CardContent } from "@/components/ui/card";
-
-import { ServerContext } from '@/state/server';
+import { ServerWebSocket } from '@/api/console/websocket';
 
 import useEventListener from '@/plugins/useEventListener';
-import { usePermissions } from '@/plugins/usePermissions';
-import { usePersistedState } from '@/plugins/usePersistedState';
 
-import styles from './style.module.css';
+interface ServerPageProps {
+  server: {
+    id: string;
+    uuid: string;
+    isTransferring: boolean;
+  };
+}
 
-const theme = {
-    // background: 'rgba(0, 0, 0, 0)',
-    background: '#131313',
-    cursor: 'transparent',
-    black: '#000000',
-    red: '#E54B4B',
-    green: '#9ECE58',
-    yellow: '#FAED70',
-    blue: '#396FE2',
-    magenta: '#BB80B3',
-    cyan: '#2DDAFD',
-    white: '#d0d0d0',
-    brightBlack: 'rgba(255, 255, 255, 0.2)',
-    brightRed: '#FF5370',
-    brightGreen: '#C3E88D',
-    brightYellow: '#FFCB6B',
-    brightBlue: '#82AAFF',
-    brightMagenta: '#C792EA',
-    brightCyan: '#89DDFF',
-    brightWhite: '#ffffff',
-    selection: '#FAF089',
-};
+interface TerminalLine {
+  id: number;
+  content: string;
+  type: 'input' | 'output';
+}
 
-const terminalProps: ITerminalOptions = {
-    disableStdin: true,
-    cursorStyle: 'underline',
-    allowTransparency: true,
-    fontSize: 12,
-    fontFamily: 'monospace, monospace',
-    // rows: 30,
-    theme: theme,
-};
+const CustomTerminal: React.FC = () => {
+  const [lines, setLines] = useState<TerminalLine[]>([]);
+  const [currentInput, setCurrentInput] = useState('');
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { server } = usePage<ServerPageProps>().props;
+  const [connected, setConnected] = useState(false);
+  const [serverStatus, setServerStatus] = useState('offline');
+  const wsService = useRef<ServerWebSocket | null>(null);
+  const ansiToHtml = new parse();
 
-export default () => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mdatacenter@space~ \u001b[0m';
-    const ref = useRef<HTMLDivElement>(null);
-    const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
-    const fitAddon = new FitAddon();
-    const searchAddon = new SearchAddon();
-    const webLinksAddon = new WebLinksAddon();
-    const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const [canSendCommands] = usePermissions(['control.console']);
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
-    const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
-    const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
-    const [historyIndex, setHistoryIndex] = useState(-1);
+  const TERMINAL_PRELUDE = 'Pastel-Package@datacenter~ ';
 
-    const handleConsoleOutput = (line: string, prelude = false) =>
-        terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
+  const handleConsoleOutput = (line: string) => {
+    const htmlContent = ansiToHtml.toHtml(line);
+    setLines(prev => [...prev, { id: Date.now(), content: htmlContent, type: 'output' }]);
+    scrollToBottom();
+  };
 
-    const handleTransferStatus = (status: string) => {
-        switch (status) {
-            // Sent by either the source or target node if a failure occurs.
-            case 'failure':
-                terminal.writeln(TERMINAL_PRELUDE + '[Nadhi.dev] Transfer has failed. [Server-New] \u001b[0m');
-                return;
+  const handlePowerChangeEvent = (state: string) => {
+    console.log(`Server status changed to: ${state}`);
+    setServerStatus(state);
+    if (state === 'offline') {
+      setLines([{ id: Date.now(), content: 'Server offline', type: 'output' }]);
+    }
+  };
+
+  useEffect(() => {
+    console.log(`Initializing WebSocket connection for server: ${server.uuid}`);
+    
+    wsService.current = new ServerWebSocket({
+        onStatusChange: handlePowerChangeEvent,
+        onConsoleOutput: handleConsoleOutput,
+        onConnectionChange: (state) => {
+            setConnected(state);
+            console.log(`WebSocket connection state: ${state ? 'connected' : 'disconnected'}`);
         }
+    });
+    console.log("SERVER UUID, ", server.uuid)
+
+    wsService.current.connect(server.uuid);
+    
+
+    return () => {
+        console.log('Cleaning up WebSocket connection');
+        wsService.current?.disconnect();
     };
+}, [server.uuid]);
 
-    const handleDaemonErrorOutput = (line: string) =>
-        terminal.writeln(
-            TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m',
-        );
+  const scrollToBottom = () => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  };
 
-    const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + '[Nadhi.dev] Your Servers is  ' + state + '...\u001b[0m');
+  useEffect(() => {
+    scrollToBottom();
+  }, [lines]);
 
-    const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'ArrowUp') {
-            const newIndex = Math.min(historyIndex + 1, history!.length - 1);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentInput(e.target.value);
+  };
 
-            setHistoryIndex(newIndex);
-            e.currentTarget.value = history![newIndex] || '';
+  const handleInputSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (currentInput.trim() && serverStatus === 'running') {
+      setLines(prev => [...prev, { id: Date.now(), content: currentInput, type: 'input' }]);
+      
+      if (currentInput === '>>restart') {
+        setLines([{ id: Date.now(), content: 'Restarting terminal...', type: 'output' }]);
+      } else if (currentInput === '>>ver') {
+        handleConsoleOutput('Terminal Version: Pastelix-1');
+      } else if (currentInput === '>>stop') {
+        wsService.current?.sendRaw(JSON.stringify({event:"set state",args:["kill"]}));
+      } else {
+        wsService.current?.sendCommand(currentInput);
+      }
+      
+      setCurrentInput('');
+    }
+  };
 
-            // By default up arrow will also bring the cursor to the start of the line,
-            // so we'll preventDefault to keep it at the end.
-            e.preventDefault();
-        }
+  useEventListener(
+    'resize',
+    debounce(() => {
+      scrollToBottom();
+    }, 100),
+  );
 
-        if (e.key === 'ArrowDown') {
-            const newIndex = Math.max(historyIndex - 1, -1);
-
-            setHistoryIndex(newIndex);
-            e.currentTarget.value = history![newIndex] || '';
-        }
-
-        const command = e.currentTarget.value;
-        if (e.key === 'Enter' && command.length > 0) {
-            setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
-            setHistoryIndex(-1);
-
-            instance && instance.send('send command', command);
-            e.currentTarget.value = '';
-        }
-    };
-
-    useEffect(() => {
-        if (connected && ref.current && !terminal.element) {
-            terminal.loadAddon(fitAddon);
-            terminal.loadAddon(searchAddon);
-            terminal.loadAddon(webLinksAddon);
-
-            terminal.open(ref.current);
-            fitAddon.fit();
-
-            // Add support for capturing keys
-            terminal.attachCustomKeyEventHandler((e: KeyboardEvent) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-                    document.execCommand('copy');
-                    return false;
-                }
-                // } else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-                //     e.preventDefault();
-                //     searchBar.show();
-                //     return false;
-                // } else if (e.key === 'Escape') {
-                //     searchBar.hidden();
-                // }
-                return true;
-            });
-        }
-    }, [terminal, connected]);
-
-    useEventListener(
-        'resize',
-        debounce(() => {
-            if (terminal.element) {
-                fitAddon.fit();
-            }
-        }, 100),
-    );
-
-    useEffect(() => {
-        const listeners: Record<string, (s: string) => void> = {
-            [SocketEvent.STATUS]: handlePowerChangeEvent,
-            [SocketEvent.CONSOLE_OUTPUT]: handleConsoleOutput,
-            [SocketEvent.INSTALL_OUTPUT]: handleConsoleOutput,
-            [SocketEvent.TRANSFER_LOGS]: handleConsoleOutput,
-            [SocketEvent.TRANSFER_STATUS]: handleTransferStatus,
-            [SocketEvent.DAEMON_MESSAGE]: (line) => handleConsoleOutput(line, true),
-            [SocketEvent.DAEMON_ERROR]: handleDaemonErrorOutput,
-        };
-
-        if (connected && instance) {
-            // Do not clear the console if the server is being transferred.
-            if (!isTransferring) {
-                terminal.clear();
-            }
-
-            Object.keys(listeners).forEach((key: string) => {
-                const listener = listeners[key];
-                if (listener === undefined) {
-                    return;
-                }
-
-                instance.addListener(key, listener);
-            });
-            instance.send(SocketRequest.SEND_LOGS);
-        }
-
-        return () => {
-            if (instance) {
-                Object.keys(listeners).forEach((key: string) => {
-                    const listener = listeners[key];
-                    if (listener === undefined) {
-                        return;
-                    }
-
-                    instance.removeListener(key, listener);
-                });
-            }
-        };
-    }, [connected, instance]);
-
-    return (
-        <Card className="transform-gpu skeleton-anim-2 bg-black backdrop-blur-md border-zinc-800/50 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <CardContent className="p-0">
-                <div
-                    style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: '100%',
-                        animationDelay: `250ms`,
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
+  return (
+    <Card className="transform-gpu skeleton-anim-2 bg-white dark:bg-black backdrop-blur-md border-gray-200 dark:border-zinc-800/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+      <CardContent className="p-0">
+        <div className="flex flex-col w-full h-full">
+          <motion.div 
+            className="relative transition-all duration-300 hover:scale-[1.01] flex flex-col w-full h-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AnimatePresence>
+              {!connected && (
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center bg-white dark:bg-black bg-opacity-75 dark:bg-opacity-75 z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                    <div className={clsx(styles.terminal, 'relative transition-all duration-300 hover:scale-[1.01]')}>
-                        <SpinnerOverlay visible={!connected} size={'large'} />
-                        <div className={clsx(styles.container, styles.overflows_container, 'bg-zinc-900/50 backdrop-blur-sm transition-colors duration-300 hover:bg-zinc-900/70', { 'rounded-b': !canSendCommands })}>
-                            <div className={'h-full'}>
-                                <div id={styles.terminal} ref={ref} className="transition-all duration-300" />
-                            </div>
-                        </div>
-                        {canSendCommands && (
-                            <div className={clsx('relative', styles.overflows_container)}>
-                                <input
-                                    className={clsx(
-                                        'peer',
-                                        styles.command_input,
-                                        'bg-zinc-800/50 backdrop-blur-sm border-zinc-700/50',
-                                        'focus:border-white/50 focus:ring-2 focus:ring-white/10',
-                                        'transition-all duration-300',
-                                        'placeholder:text-zinc-500'
-                                    )}
-                                    type={'text'}
-                                    placeholder={'Enter a command'}
-                                    aria-label={'Console command input.'}
-                                    disabled={!instance || !connected}
-                                    onKeyDown={handleCommandKeyDown}
-                                    autoCorrect={'off'}
-                                    autoCapitalize={'none'}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    );
+                  <Card className="p-6 bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-white">
+                    <CardContent>
+                      <div className="flex flex-col items-center space-y-4">
+                        <div className="w-16 h-16 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+                        <p className="text-lg font-semibold">Connecting...</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div className={clsx('h-[453px] rounded-t-xl pt-4 px-4 bg-gray-50 dark:bg-black transition-colors duration-300 border-x border-t border-gray-200 dark:border-zinc-800', { 'rounded-b': serverStatus !== 'running' })}>
+              <div ref={terminalRef} className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                {lines.map((line) => (
+                  <div key={line.id} className={clsx('font-mono text-sm', {
+                    'text-gray-800 dark:text-gray-200': line.type === 'output',
+                    'text-blue-600 dark:text-blue-400': line.type === 'input'
+                  })}>
+                    {line.type === 'input' ? (
+                      `${TERMINAL_PRELUDE}${line.content}`
+                    ) : (
+                      <span dangerouslySetInnerHTML={{ __html: line.content }} />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <AnimatePresence>
+              {serverStatus === 'offline' && (
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center bg-white dark:bg-black bg-opacity-75 dark:bg-opacity-75 z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Card className="p-6 bg-white dark:bg-black shadow-lg text-gray-800 dark:text-white">
+                    <CardContent>
+                      <div className="flex flex-col items-center space-y-4">
+                        <img 
+                          src="/assets/svgs/spy.svg"
+                          alt="Server Offline"
+                          className="w-120 h-60 object-contain"
+                        />
+                        <p className="text-lg font-semibold">Searching for a connection, Is the server offline?</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {serverStatus === 'running' && (
+                <motion.form 
+                  onSubmit={handleInputSubmit} 
+                  className="relative"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <input
+                    ref={inputRef}
+                    className="peer w-full bg-gray-100 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all duration-300 placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-800 dark:text-white px-4 py-2 rounded-b-xl font-mono text-sm"
+                    type="text"
+                    placeholder="Enter a command"
+                    aria-label="Console command input"
+                    value={currentInput}
+                    onChange={handleInputChange}
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                  />
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </CardContent>
+      <motion.div 
+        className={`absolute top-4 right-4 px-3 py-1 rounded-full ${serverStatus === 'running' ? 'bg-green-500' : 'bg-red-500'} text-white`}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {serverStatus}
+      </motion.div>
+    </Card>
+  );
 };
+
+export default CustomTerminal;
+

@@ -1,126 +1,255 @@
-// FIXME: add icons back
-import { useEffect, useRef } from 'react';
-import { Line } from 'react-chartjs-2';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from 'lucide-react';
+import { debounce } from 'lodash';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import LogoLoader from '@/components/elements/ServerLoad';
 
-import ChartBlock from '@/components/server/console/ChartBlock';
-import { useChart, useChartTickLabel } from '@/components/server/console/chart';
-import { SocketEvent } from '@/components/server/events';
+interface ServerStats {
+    attributes: {
+        resources: {
+            cpu_absolute: number;
+            memory_bytes: number;
+            disk_bytes: number;
+            network_rx_bytes: number;
+            network_tx_bytes: number;
+        }
+    }
+}
 
-import { bytesToString } from '@/lib/formatters';
-import { hexToRgba } from '@/lib/helpers';
+interface StatChartsProps {
+    serverId: string;
+}
 
-import { ServerContext } from '@/state/server';
+const StatCharts = ({ serverId }: StatChartsProps) => {
+    const [stats, setStats] = useState<ServerStats | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const eventSourceRef = useRef<EventSource | null>(null);
 
-import useWebsocketEvent from '@/plugins/useWebsocketEvent';
+    const [chartData, setChartData] = useState<Array<{
+        timestamp: string;
+        cpu: number;
+        memory: number;
+        disk: number;
+        networkRx: number;
+        networkTx: number;
+    }>>([]);
 
-export default () => {
-    const status = ServerContext.useStoreState((state) => state.status.value);
-    const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
-    const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
+    const updateChartData = useCallback((newStats: ServerStats) => {
+        const timestamp = new Date().toLocaleTimeString();
+        const cpu = newStats?.attributes.resources.cpu_absolute || 0;
+        const memory = (newStats?.attributes.resources.memory_bytes || 0) / (1024 * 1024); // Convert bytes to MB
+        const disk = (newStats?.attributes.resources.disk_bytes || 0) / (1024 * 1024);
+        const networkRx = (newStats?.attributes.resources.network_rx_bytes || 0) / (1024 * 1024);
+        const networkTx = (newStats?.attributes.resources.network_tx_bytes || 0) / (1024 * 1024);
 
-    const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
-    const memory = useChartTickLabel('Memory', limits.memory, 'MiB');
-    const network = useChart('Network', {
-        sets: 2,
-        options: {
-            scales: {
-                y: {
-                    ticks: {
-                        callback(value) {
-                            return bytesToString(typeof value === 'string' ? parseInt(value, 10) : value);
-                        },
-                    },
-                },
-            },
-        },
-        callback(opts, index) {
-            return {
-                ...opts,
-                label: !index ? 'Network In' : 'Network Out',
-                borderColor: !index ? '#facc15' : '#60a5fa',
-                // backgroundColor: hexToRgba(!index ? theme('colors.cyan.700') : theme('colors.yellow.700'), 0.5),
-                backgroundColor: hexToRgba(!index ? '#facc15' : '#60a5fa', 0.09),
+        setChartData(prev => [...prev.slice(-19), { timestamp, cpu, memory, disk, networkRx, networkTx }]);
+    }, []);
+
+    const debouncedUpdateCharts = useCallback(
+        debounce((data: ServerStats) => {
+            updateChartData(data);
+        }, 100),
+        [updateChartData]
+    );
+
+    const setupEventSource = useCallback(() => {
+        try {
+            if (eventSourceRef.current) {
+                eventSourceRef.current.close();
+            }
+
+            setIsLoading(true);
+            eventSourceRef.current = new EventSource(`/api/client/servers/${serverId}/resources/stream`);
+
+            eventSourceRef.current.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    setStats(data);
+                    debouncedUpdateCharts(data);
+                    setIsLoading(false);
+                } catch (err) {
+                    console.error('Error parsing stats:', err);
+                    setError('Failed to parse server stats');
+                }
             };
-        },
-    });
+
+            eventSourceRef.current.onerror = () => {
+                setError('Connection lost');
+                setIsLoading(true);
+                setTimeout(setupEventSource, 5000);
+            };
+        } catch (err) {
+            console.error('Failed to setup EventSource:', err);
+            setError('Failed to connect to server');
+        }
+    }, [serverId, debouncedUpdateCharts]);
 
     useEffect(() => {
-        if (status === 'offline') {
-            cpu.clear();
-            memory.clear();
-            network.clear();
-        }
-    }, [status]);
+        setupEventSource();
+        return () => {
+            eventSourceRef.current?.close();
+            debouncedUpdateCharts.cancel();
+        };
+    }, [setupEventSource]);
 
-    useWebsocketEvent(SocketEvent.STATS, (data: string) => {
-        let values: any = {};
-        try {
-            values = JSON.parse(data);
-        } catch (e) {
-            return;
-        }
-        cpu.push(values.cpu_absolute);
-        memory.push(Math.floor(values.memory_bytes / 1024 / 1024));
-        network.push([
-            previous.current.tx < 0 ? 0 : Math.max(0, values.network.tx_bytes - previous.current.tx),
-            previous.current.rx < 0 ? 0 : Math.max(0, values.network.rx_bytes - previous.current.rx),
-        ]);
-
-        previous.current = { tx: values.network.tx_bytes, rx: values.network.rx_bytes };
-    });
+    const renderChart = (dataKey: string, label: string, color: string, unit: string) => (
+        <ChartContainer
+            config={{
+                [dataKey]: {
+                    label: label,
+                    color: color,
+                },
+            }}
+            className="h-[200px] w-full"
+        >
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                    <XAxis
+                        dataKey="timestamp"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                    />
+                    <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${value}${unit}`}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Line
+                        type="monotone"
+                        dataKey={dataKey}
+                        strokeWidth={2}
+                        activeDot={{
+                            r: 6,
+                            style: { fill: color, opacity: 0.8 },
+                        }}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </ChartContainer>
+    );
 
     return (
-        <>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `250ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <ChartBlock title={'CPU'}>
-                    <Line aria-label='CPU Usage' role='img' {...cpu.props} />
-                </ChartBlock>
-            </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `275ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <ChartBlock title={'RAM'}>
-                    <Line aria-label='Memory Usage' role='img' {...memory.props} />
-                </ChartBlock>
-            </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `300ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <ChartBlock
-                    title={'Network Activity'}
-                    legend={
-                        <>
-                            {/* FIXME: add icons legend back */}
-                            {/* FIXME: replace with radix tooltip */}
-                            {/* <Tooltip arrow content={'Inbound'}> */}
-                            {/* <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} /> */}
-                            {/* </Tooltip> */}
-                            {/* <Tooltip arrow content={'Outbound'}> */}
-                            {/* <CloudUploadIcon className={'w-4 h-4 text-blue-400'} /> */}
-                            {/* </Tooltip> */}
-                        </>
-                    }
-                >
-                    <Line aria-label='Network Activity. Download and upload activity' role='img' {...network.props} />
-                </ChartBlock>
-            </div>
-        </>
+        <div className="grid gap-4 grid-cols-2">
+            <Card className='w-full'>
+                <CardHeader>
+                    <CardTitle>CPU Usage</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-[200px]">
+                            <LogoLoader size='80px' className='animate-pulse'/>
+                        </div>
+                    ) : (
+                        renderChart("cpu", "CPU Usage", "hsl(var(--chart-1))", "%")
+                    )}
+                </CardContent>
+            </Card>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Memory Usage</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-[200px]">
+                            <LogoLoader size='80px'/>
+                        </div>
+                    ) : (
+                        renderChart("memory", "Memory Usage", "hsl(var(--chart-2))", "MB")
+                    )}
+                </CardContent>
+            </Card>
+    
+            <Card>
+                <CardHeader>
+                    <CardTitle>Disk Usage</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-[200px]">
+                            <LogoLoader size='80px'/>
+                        </div>
+                    ) : (
+                        renderChart("disk", "Disk Usage", "hsl(var(--chart-3))", "MB")
+                    )}
+                </CardContent>
+            </Card>
+    
+            <Card>
+                <CardHeader>
+                    <CardTitle>Network Traffic</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-[200px]">
+                            <LogoLoader size='80px'/>
+                        </div>
+                    ) : (
+                        <ChartContainer
+                            config={{
+                                networkRx: {
+                                    label: "Network RX",
+                                    color: "hsl(var(--chart-4))",
+                                },
+                                networkTx: {
+                                    label: "Network TX",
+                                    color: "hsl(var(--chart-5))",
+                                },
+                            }}
+                            className="h-[200px] w-full"
+                        >
+                            <ResponsiveContainer width="220%" height="100%">
+                                <LineChart data={chartData}>
+                                    <XAxis
+                                        dataKey="timestamp"
+                                        stroke="#888888"
+                                        fontSize={12}
+                                        tickLine={false}
+                                        axisLine={false}
+                                    />
+                                    <YAxis
+                                        stroke="#888888"
+                                        fontSize={12}
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickFormatter={(value) => `${value}MB/s`}
+                                    />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="networkRx"
+                                        strokeWidth={2}
+                                        activeDot={{
+                                            r: 6,
+                                            style: { fill: "hsl(var(--chart-4))", opacity: 0.8 },
+                                        }}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="networkTx"
+                                        strokeWidth={2}
+                                        activeDot={{
+                                            r: 6,
+                                            style: { fill: "hsl(var(--chart-5))", opacity: 0.8 },
+                                        }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </ChartContainer>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     );
 };
+
+export default StatCharts;
+

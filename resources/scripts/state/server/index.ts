@@ -120,4 +120,7 @@ export const ServerContext = createContextStore<ServerStore>({
         state.socket.instance = null;
         state.socket.connected = false;
     }),
+}, {
+    name: 'server-store',
+    subscriptionEnabled: true,
 });

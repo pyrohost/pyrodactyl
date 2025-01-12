@@ -1,10 +1,12 @@
 <?php
 
+
 namespace Pterodactyl\Http\Controllers\Api\Client\Servers;
 
 use Carbon\Carbon;
 use Pterodactyl\Models\Server;
 use Illuminate\Cache\Repository;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Pterodactyl\Transformers\Api\Client\StatsTransformer;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
@@ -37,5 +39,31 @@ class ResourceUtilizationController extends ClientApiController
         return $this->fractal->item($stats)
             ->transformWith($this->getTransformer(StatsTransformer::class))
             ->toArray();
+    }
+
+    public function stream(GetServerRequest $request, Server $server): StreamedResponse 
+    {
+        return new StreamedResponse(function () use ($server) {
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+            header('Connection: keep-alive');
+            header('X-Accel-Buffering: no');
+
+            while (true) {
+                $key = "resources:$server->uuid";
+                $stats = $this->cache->remember($key, Carbon::now()->addSeconds(5), function () use ($server) {
+                    return $this->repository->setServer($server)->getDetails();
+                });
+
+                $transformed = $this->fractal->item($stats)
+                    ->transformWith($this->getTransformer(StatsTransformer::class))
+                    ->toArray();
+
+                echo "data: " . json_encode($transformed) . "\n\n";
+                ob_flush();
+                flush();
+                sleep(1);
+            }
+        });
     }
 }

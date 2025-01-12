@@ -7,8 +7,10 @@ use Pterodactyl\Http\Middleware\Activity\AccountSubject;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
+use Pterodactyl\Http\Controllers\Base\AccountControllerView;
 use Pterodactyl\Http\Middleware\HandleInertiaRequests;
 use Pterodactyl\Http\Middleware\VerifyCsrfToken;
+use Pterodactyl\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,15 +20,28 @@ use Pterodactyl\Http\Middleware\VerifyCsrfToken;
 | Endpoint: /api/client
 |
 */
-Route::middleware(['web', 'auth:sanctum', HandleInertiaRequests::class])->group(function () {
-    
+Route::prefix('/')->middleware([
+    'web',
+    \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
+    'auth'
+])->group(function () {
     Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
     Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 
     // Account routes with updated middleware
-    Route::prefix('/account')->group(function () {
+    Route::prefix('/account')->middleware([
+    'web',
+    'auth',
+    \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
+    
+])->group(function () {
         Route::get('/', [Client\AccountController::class, 'index'])->name('api:client.account');
-        // ... existing account routes ...
+        Route::post('/email', [Client\AccountController::class, 'updateEmail']);
+        
+        Route::put('/email', [Client\AccountController::class, 'updateEmail']);
+        Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
+        Route::post('/test', [TestController::class, 'testFlash'])->name('api:client.account.update-password');
+        
     });
 
     // Server routes with updated middleware
@@ -37,7 +52,7 @@ Route::middleware(['web', 'auth:sanctum', HandleInertiaRequests::class])->group(
             ResourceBelongsToServer::class,
         ],
     ], function () {
-        // ... existing server routes ...
+        // ...existing code...
     });
 });
 
@@ -62,9 +77,14 @@ Route::group([
     Route::get('/websocket', Client\Servers\WebsocketController::class)->name('api:client:server.ws');
     Route::get('/resources', Client\Servers\ResourceUtilizationController::class)->name('api:client:server.resources');
     Route::get('/activity', Client\Servers\ActivityLogController::class)->name('api:client:server.activity');
+    Route::post('/console/logging', [Client\Servers\WebsocketController::class,  'startLogging']);
+    Route::get('console/logs', [Client\Servers\WebsocketController::class, 'getLogs']);
 
     Route::post('/command', [Client\Servers\CommandController::class, 'index']);
     Route::post('/power', [Client\Servers\PowerController::class, 'index']);
+
+    Route::get('/resources/stream', [Client\Servers\ResourceUtilizationController::class, 'stream'])
+        ->name('api.client.servers.resources.stream');
 
     Route::group(['prefix' => '/databases'], function () {
         Route::get('/', [Client\Servers\DatabaseController::class, 'index']);

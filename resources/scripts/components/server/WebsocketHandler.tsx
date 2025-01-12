@@ -1,23 +1,16 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect } from 'react';
+import { usePage, router } from '@inertiajs/react';
 import Spinner from '@/components/elements/Spinner';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
-
 import getWebsocketToken from '@/api/server/getWebsocketToken';
-
-import { ServerContext } from '@/state/server';
-
 import { Websocket } from '@/plugins/Websocket';
 
 const reconnectErrors = ['jwt: exp claim is invalid', 'jwt: created too far in past (denylist)'];
 
 function WebsocketHandler() {
     let updatingToken = false;
-    const [error, setError] = useState<'connecting' | string>('');
-    const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
-    const setServerStatus = ServerContext.useStoreActions((actions) => actions.status.setServerStatus);
-    const { setInstance, setConnectionState } = ServerContext.useStoreActions((actions) => actions.socket);
+    const { props } = usePage();
+    const { server, socket } = props;
 
     const updateToken = (uuid: string, socket: Websocket) => {
         if (updatingToken) {
@@ -36,13 +29,12 @@ function WebsocketHandler() {
     const connect = (uuid: string) => {
         const socket = new Websocket();
 
-        socket.on('auth success', () => setConnectionState(true));
-        socket.on('SOCKET_CLOSE', () => setConnectionState(false));
+        socket.on('auth success', () => router.reload({ only: ['socket'] }));
+        socket.on('SOCKET_CLOSE', () => router.reload({ only: ['socket'] }));
         socket.on('SOCKET_ERROR', () => {
-            setError('connecting');
-            setConnectionState(false);
+            router.reload({ only: ['socket'], data: { error: 'connecting' } });
         });
-        socket.on('status', (status) => setServerStatus(status));
+        socket.on('status', (status) => router.reload({ only: ['server'], data: { status } }));
 
         socket.on('daemon error', (message) => {
             console.warn('Got error message from daemon socket:', message);
@@ -51,15 +43,18 @@ function WebsocketHandler() {
         socket.on('token expiring', () => updateToken(uuid, socket));
         socket.on('token expired', () => updateToken(uuid, socket));
         socket.on('jwt error', (error: string) => {
-            setConnectionState(false);
+            router.reload({ only: ['socket'], data: { connected: false } });
             console.warn('JWT validation error from wings:', error);
 
             if (reconnectErrors.find((v) => error.toLowerCase().indexOf(v) >= 0)) {
                 updateToken(uuid, socket);
             } else {
-                setError(
-                    'There was an error validating the credentials provided for the websocket. Please refresh the page.',
-                );
+                router.reload({
+                    only: ['socket'],
+                    data: {
+                        error: 'There was an error validating the credentials provided for the websocket. Please refresh the page.',
+                    },
+                });
             }
         });
 
@@ -71,9 +66,7 @@ function WebsocketHandler() {
             // This code forces a reconnection to the websocket which will connect us to the target node instead of the source node
             // in order to be able to receive transfer logs from the target node.
             socket.close();
-            setError('connecting');
-            setConnectionState(false);
-            setInstance(null);
+            router.reload({ only: ['socket'], data: { error: 'connecting', connected: false, instance: null } });
             connect(uuid);
         });
 
@@ -83,45 +76,47 @@ function WebsocketHandler() {
                 socket.setToken(data.token).connect(data.socket);
 
                 // Once that is done, set the instance.
-                setInstance(socket);
+                router.reload({ only: ['socket'], data: { instance: socket } });
             })
             .catch((error) => console.error(error));
     };
 
     useEffect(() => {
-        connected && setError('');
-    }, [connected]);
+        if (socket.connected) {
+            router.reload({ only: ['socket'], data: { error: '' } });
+        }
+    }, [socket.connected]);
 
     useEffect(() => {
         return () => {
-            instance && instance.close();
+            socket.instance && socket.instance.close();
         };
-    }, [instance]);
+    }, [socket.instance]);
 
     useEffect(() => {
         // If there is already an instance or there is no server, just exit out of this process
         // since we don't need to make a new connection.
-        if (instance || !uuid) {
+        if (socket.instance || !server.uuid) {
             return;
         }
 
-        connect(uuid);
-    }, [uuid]);
+        connect(server.uuid);
+    }, [server.uuid]);
 
-    return error ? (
+    return socket.error ? (
         <FadeTransition duration='duration-150' show>
             <div
                 className={`flex items-center px-4 rounded-full fixed w-fit mx-auto left-0 right-0 top-4 bg-red-500 py-2 z-[9999]`}
             >
-                {error === 'connecting' ? (
+                {socket.error === 'connecting' ? (
                     <>
                         <Spinner size={'small'} />
                         <p className={`ml-2 text-sm text-red-100`}>
-                            We&apos;re having some trouble connecting to your server, please wait...
+                            We're having some trouble connecting to your server, please wait...
                         </p>
                     </>
                 ) : (
-                    <p className={`ml-2 text-sm text-white`}>{error}</p>
+                    <p className={`ml-2 text-sm text-white`}>{socket.error}</p>
                 )}
             </div>
         </FadeTransition>
@@ -130,4 +125,3 @@ function WebsocketHandler() {
 
 export default WebsocketHandler;
 
-//top red part
