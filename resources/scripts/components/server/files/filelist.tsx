@@ -9,6 +9,7 @@ import loadDirectory from '@/api/server/files/loadDirectory';
 import { router } from '@inertiajs/react';
 import { FileButton } from './filebuttons';
 import FileEditor from './FileEditor';
+import LogoLoader from '@/components/elements/ServerLoad';
 
 interface FileManagerProps {
     serverId: string;
@@ -176,11 +177,9 @@ export default function FileManager({ serverId }: FileManagerProps) {
     if (loading) {
         return (
             <div className="p-6 w-full">
-                <Skeleton className="h-12 w-full mb-6 rounded-lg" />
-                <div className="grid grid-cols-1 gap-3">
-                    {[...Array(5)].map((_, i) => (
-                        <Skeleton key={i} className="h-16 w-full rounded-lg" />
-                    ))}
+                <div className="items-center justify-center flex h-full w-full animate-bounce">
+                    <LogoLoader size="160px"/>
+                    
                 </div>
             </div>
         );

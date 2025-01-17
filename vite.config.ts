@@ -17,4 +17,7 @@ export default defineConfig({
             '@': path.resolve(__dirname, 'resources/scripts'),
         },
     },
+    esbuild: {
+        drop: ['console', 'debugger'],
+      },
 });

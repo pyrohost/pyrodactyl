@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import AuthenticatedLayout from "../Layouts/AuthenticatedLayout";
+import AuthenticatedLayout from "@/components/Layouts/AuthenticatedLayout";
 import { Cog, Crown, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import useSWR from 'swr';
@@ -8,7 +8,7 @@ import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
 import ServerRow from '../dashboard/ServerRow';
-import ServerList from './Common/Servers';
+import ServerList from '@/components/Pages/Common/Servers';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -25,10 +25,9 @@ interface PageProps {
 
 export default function AdminDashboard(): JSX.Element {
   const { props } = usePage<PageProps>();
-  const { auth, companyDesc, AppConfig } = props;
+  const { auth, companyDesc } = props;
   const username = auth.user.username;
   const userRank = auth.user.rank;
-  const banner_clr = AppConfig.dashColor;
   const pterodactylId = auth.user.pterodactyl_id;
 
   const [currentTime, setCurrentTime] = useState<string>(new Date().toLocaleTimeString());
@@ -45,8 +44,8 @@ export default function AdminDashboard(): JSX.Element {
 
   // Fetch Active Projects
   const { data: servers, error } = useSWR<PaginatedResult<Server>>(
-    ['/api/client/'],
-    () => getServers({ page: 1, perPage: 256 }) // Who knows how many server you have but there you do lmao
+    ['/api/client/', userRank === 'admin', 1],
+    () => getServers({ page: 1, type: userRank === 'admin' ? 'admin' : undefined })
   );
 
   //console.log(servers.items.length)
@@ -96,18 +95,18 @@ export default function AdminDashboard(): JSX.Element {
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Home
+          Home / Servers
         </h2>
       }
-      sidebartab="home"
+      sidebartab="servers"
     >
-      <Head title="Dashboard" />
+      <Head title="Servers" />
 
       {/* Dashboard Card */}
-      <Card className="w-full mb-6 overflow-hidden">
+      {/*<Card className="w-full mb-6 overflow-hidden">
         <CardContent className="p-0">
           <div className="relative h-[160px] w-full">
-            <div className={`absolute inset-0 ${banner_clr} opacity-80 `} />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-400 to-stone-00 dark:from-purple-800 dark:to-zinc-800 opacity-80" />
             <img
               src="https://cdn.dribbble.com/users/2433051/screenshots/4872252/media/93fa4ea6accf793c6c64b4d7f20786ac.gif"
               alt="Dashboard Banner"
@@ -137,7 +136,7 @@ export default function AdminDashboard(): JSX.Element {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card>*/}
 
       {/* Resources and Servers */}
       <ServerList/>

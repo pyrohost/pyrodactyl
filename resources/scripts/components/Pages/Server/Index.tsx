@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Head } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
 import ServerLayout from '@/components/Layouts/ServerLayout';
@@ -64,7 +64,12 @@ export default function Show() {
                 />
                 <OverviewServerCard serverId={server.uuid}/>
                 
-                <ResourceUsage/>
+                {/*stop from random debounce errors, methodically load it */}
+                <Suspense>
+                   <ResourceUsage/>
+                </Suspense>
+
+
                 <ServerSpecifications/>
             </div>
         </ServerLayout>

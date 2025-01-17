@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import AuthenticatedLayout from "../Layouts/AuthenticatedLayout";
-import { Cog, Crown, User } from 'lucide-react';
+import AuthenticatedLayout from "@/components/Layouts/AuthenticatedLayout";
+import { Cog, Crown, LucideMonitorCheck, LucideMonitorCog, LucideServerOff, LucideWatch, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import useSWR from 'swr';
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
 import ServerRow from '../dashboard/ServerRow';
-import ServerList from './Common/Servers';
+import ServerList from '@/components/Pages/Common/Servers';
+import StatCharts from '@/components/server/console/StatGraphs';
+import Spinner from '@/components/elements/Spinner';
+import LogoLoader from '@/components/elements/ServerLoad';
+import { TbHeartbeat } from 'react-icons/tb';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -21,14 +25,24 @@ interface PageProps {
   };
   darkMode: boolean;
   companyDesc: string;
+  server: {
+    uuid: string;
+    name: string;
+    identifier: string;
 }
+}
+
+interface Server {
+    id: number;
+    identifier: string;
+    name: string;
+  }
 
 export default function AdminDashboard(): JSX.Element {
   const { props } = usePage<PageProps>();
   const { auth, companyDesc, AppConfig } = props;
   const username = auth.user.username;
   const userRank = auth.user.rank;
-  const banner_clr = AppConfig.dashColor;
   const pterodactylId = auth.user.pterodactyl_id;
 
   const [currentTime, setCurrentTime] = useState<string>(new Date().toLocaleTimeString());
@@ -46,7 +60,7 @@ export default function AdminDashboard(): JSX.Element {
   // Fetch Active Projects
   const { data: servers, error } = useSWR<PaginatedResult<Server>>(
     ['/api/client/'],
-    () => getServers({ page: 1, perPage: 256 }) // Who knows how many server you have but there you do lmao
+    () => getServers({ page: 1})
   );
 
   //console.log(servers.items.length)
@@ -96,18 +110,18 @@ export default function AdminDashboard(): JSX.Element {
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Home
+          Home / Watch
         </h2>
       }
-      sidebartab="home"
+      sidebartab="watch"
     >
-      <Head title="Dashboard" />
+      <Head title="Servers" />
 
       {/* Dashboard Card */}
-      <Card className="w-full mb-6 overflow-hidden">
+      {/*<Card className="w-full mb-6 overflow-hidden">
         <CardContent className="p-0">
           <div className="relative h-[160px] w-full">
-            <div className={`absolute inset-0 ${banner_clr} opacity-80 `} />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-400 to-stone-00 dark:from-purple-800 dark:to-zinc-800 opacity-80" />
             <img
               src="https://cdn.dribbble.com/users/2433051/screenshots/4872252/media/93fa4ea6accf793c6c64b4d7f20786ac.gif"
               alt="Dashboard Banner"
@@ -137,10 +151,65 @@ export default function AdminDashboard(): JSX.Element {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card>*/}
+
 
       {/* Resources and Servers */}
-      <ServerList/>
+    <Card className='py-3 px-4 w-1/3'>
+    <div className="flex  items-center justify-start h-full">
+      <TbHeartbeat className="h-16 w-16 mb-4" />
+      
+      <div className='flex flex-col'>
+      <h1 className="text-start text-xl font-semibold ml-3 ">
+      {AppConfig.appName} Watch
+      </h1>
+      <p className="text-start text-sm  ml-3 pb-5">
+       Monitor multiple servers all at once. 
+      </p>
+
+      </div>
+    </div>
+    </Card>
+
+    {error && (
+        <div className="text-red-500">
+          Connection Error
+        </div>
+      )}
+
+      {!servers && (
+        <div className="flex items-center justify-center p-4">
+          <LogoLoader size="lg" />
+        </div>
+      )}
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-10">
+  {servers?.items.map((server) => (
+    <div key={server.identifier} className="bg-card rounded-lg shadow p-4">
+      <h2 className="text-lg font-semibold mb-2">{server.name}</h2>
+      {server.status === 'suspended' ? (
+        <div className="flex flex-col items-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+          <img 
+              src="/assets/svgs/bad.svg"
+              alt="Create New"
+              className="w-1/2 h-full object-contain"
+            />
+          <span className="text-red-600 dark:text-red-400 font-medium rounded-full bg-red-900 py-1 px-2 ">
+            Server Suspended
+          </span>
+        </div>
+      ) : (
+        <>
+        <div className='max-h-1/2'>
+           <StatCharts serverId={server.uuid} />
+        </div>
+        </>
+      )}
+    </div>
+  ))}
+</div>
+      
+    
       
       
     </AuthenticatedLayout>

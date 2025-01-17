@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import PowerButtons from '@/components/server/console/PowerButtons';
 import FileManager from '@/components/server/files/filelist';
 import { FileButton } from '@/components/server/files/filebuttons';
+import LogoLoader from '@/components/elements/ServerLoad';
 
 export default function Show() {
     const { server } = usePage<ServerPageProps>().props;
@@ -38,10 +39,9 @@ export default function Show() {
     if (loading) {
         return (
             <ServerLayout>
-                <div className="grid grid-cols-4 gap-4 p-4">
-                    {[...Array(8)].map((_, i) => (
-                        <Skeleton key={i} className="h-[100px] w-full" />
-                    ))}
+                <div className="items-center justify-center flex h-full w-full animate-bounce">
+                    <LogoLoader size="160px"/>
+                    
                 </div>
             </ServerLayout>
         );

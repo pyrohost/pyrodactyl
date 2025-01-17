@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Copy, Server } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from 'sonner'; //replace with shadcn toast soon 
 
 export default function SFTPDetails() {
     const { server } = usePage().props as { 

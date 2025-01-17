@@ -7,6 +7,8 @@ import saveFileContents from '@/api/server/files/saveFileContents';
 import { router } from '@inertiajs/react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from 'lucide-react';
+import LogoLoader from '@/components/elements/ServerLoad';
+import CustomTerminal from '../console/Console';
 
 interface FileEditorProps {
     serverId: string;
@@ -78,11 +80,9 @@ export default function FileEditor({ serverId, file }: FileEditorProps) {
 
     if (loading) {
         return (
-            <Card className="p-4 mt-4">
-                <div className="flex items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-            </Card>
+            <div className="items-center justify-center flex h-full w-full">
+                <LogoLoader size="160px"/>
+            </div>
         );
     }
 
@@ -95,6 +95,7 @@ export default function FileEditor({ serverId, file }: FileEditorProps) {
     }
 
     return (
+        <>
         <Card className="flex flex-col h-[80vh] mt-4">
             <div className="flex items-center justify-between p-4 border-b">
                 <h2 className="text-lg font-semibold">Editing: root{file}</h2>
@@ -148,5 +149,12 @@ export default function FileEditor({ serverId, file }: FileEditorProps) {
                 />
             </div>
         </Card>
+        
+        <div>
+            <h1 className='py-4 text-lg'>Debug Terminal </h1>
+            <CustomTerminal/>
+        </div>
+        </>
+        
     );
 }

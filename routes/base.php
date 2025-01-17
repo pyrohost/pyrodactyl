@@ -48,6 +48,10 @@ Route::prefix('/')->group(function () {
         Route::get('/account', [AccountControllerView::class, 'index'])->name('account');
         Route::post('/account/update', [AccountController::class, 'update'])->name('account.update');
 
+        //dashboard Extra routes
+
+        Route::get('/servers', [DashboardController::class, 'servers']) ->name('servers');
+        Route::get('/watch', [DashboardController::class, 'watch']) ->name('watch');
         // server frontend
 
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');

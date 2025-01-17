@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { Link } from '@inertiajs/react';
+
+import { Link, usePage } from '@inertiajs/react';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { bytesToString, ip } from '@/lib/formatters';
@@ -25,6 +26,9 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
     const interval = useRef<ReturnType<typeof setInterval>>(null) as React.MutableRefObject<ReturnType<typeof setInterval>>;
     const [stats, setStats] = useState<ServerStats | null>(null);
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
+    const { props } = usePage<PageProps>();
+    
+    const { auth, companyDesc, AppConfig } = props;
 
     const getStats = () =>
         getServerResourceUsage(server.uuid)

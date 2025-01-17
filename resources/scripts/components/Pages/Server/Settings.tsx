@@ -1,9 +1,11 @@
+import { FcSettings } from "react-icons/fc"; 
+import { TbPlanet } from "react-icons/tb"; 
 import { useState, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
 import ServerLayout from '@/components/Layouts/ServerLayout';
 import loadDirectory from '@/api/server/files/loadDirectory';
-import { FileIcon, FolderIcon, Flame } from 'lucide-react';
+import { FileIcon, FolderIcon, Flame, LucidePlaneTakeoff, LucideSettings } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import PowerButtons from '@/components/server/console/PowerButtons';
@@ -15,6 +17,7 @@ import RenameServerDialog from '../Common/Rename';
 import SFTPDetails from '../Common/SFPT';
 import LogoLoader from '@/components/elements/ServerLoad';
 import DebugInfo from '../Common/Debug';
+import StartupVariables from '../Common/Startup';
 
 export default function Show() {
     const { server } = usePage<ServerPageProps>().props;
@@ -44,8 +47,9 @@ export default function Show() {
     if (loading) {
         return (
             <ServerLayout>
-                <div className="items-center justify-center flex h-full w-full">
-                <LogoLoader size="160px"/>
+                <div className="items-center justify-center flex h-full w-full animate-bounce">
+                    <LogoLoader size="160px"/>
+                    
                 </div>
             </ServerLayout>
         );
@@ -60,7 +64,18 @@ export default function Show() {
             <Head title="Settings" />
             <PowerButtons serverId={server.uuid} />
             <div className="p-6">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+    <div>
+        <h2 className="text-4xl font-semibold flex items-center gap-2 mb-5">
+        <TbPlanet  className="h-9 w-9" />
+            Server Settings
+        </h2>
+    </div>
+    <StartupVariables/>
+    <h2 className="text-4xl font-semibold flex items-center gap-2 py-5">
+        <LucideSettings className="h-9 w-9" />
+            Advance  Settings
+        </h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 ">
         <ReinstallButton />
         <RenameServerDialog />
         <SFTPDetails/>

@@ -47,6 +47,8 @@ class HandleInertiaRequests extends Middleware
             'appTheme' => env('APP_THEME'),
             'appLogo'  => env('VITE_LOGO_URL'),
             'appVer'  => env('VERSION'),
+            'dashColor' => env('BANNER_CLR'),
+            'ServerList' => env('SVR_LIST_TSX'),
         ],
         'flash' => [
             'status'         => fn () => $request->session()->get('status'),

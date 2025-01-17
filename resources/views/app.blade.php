@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Copyright, Nadhi.dev -->
+<!-- Copyright, Nadhi.dev 2024-present -->
 <!--
   _   _           _ _     _      _            
  | \ | |         | | |   (_)    | |           
@@ -8,7 +8,8 @@
  | |\  | (_| | (_| | | | | || (_| |  __/\ V / 
  |_| \_|\__,_|\__,_|_| |_|_(_)__,_|\___| \_/  
 -->
-<!-- If this instance is running on something shady, Please notify -->
+<!-- Powered by Pyrodactyl.  -->
+ <!-- Images by undraw, storyset. Icons by React icons and LucideReact  -->
  
 
     <head>

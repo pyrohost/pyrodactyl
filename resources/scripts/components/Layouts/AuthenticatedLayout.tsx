@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight, ChevronLeft, LucideCircle, LucideClock } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -219,10 +219,10 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                             collapsed={isSidebarCollapsed}
                         />
                         <MenuItem
-                            icon={LucideKeySquare}
-                            label="Control Panel"
-                            href="/panel"
-                            isActive={sidebartab === 'customers'}
+                            icon={LucideClock}
+                            label="Watch"
+                            href="/watch"
+                            isActive={sidebartab === 'watch'}
                             collapsed={isSidebarCollapsed}
                         />
                         <MenuItem
