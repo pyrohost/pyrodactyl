@@ -150,7 +150,7 @@ export default () => {
                         ? 'No matches found - Deploy a new server?'
                         : showOnlyAdmin 
                             ? 'No other servers - Deploy a new one?'
-                            : 'No servers found - Deploy your first server!'
+                            : 'Deploy your first server!'
                     }
                 />
             </div>

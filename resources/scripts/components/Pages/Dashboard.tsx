@@ -107,7 +107,7 @@ export default function AdminDashboard(): JSX.Element {
       <Card className="w-full mb-6 overflow-hidden">
         <CardContent className="p-0">
           <div className="relative h-[160px] w-full">
-            <div className={`absolute inset-0 ${banner_clr} opacity-80 `} />
+            <div className={`absolute inset-0 bg-gradient-to-r ss from-zinc-400 to-stone-300 dark:from-pink-500 dark:to-zinc-800 opacity-80 `} />
             <img
               src="https://cdn.dribbble.com/users/2433051/screenshots/4872252/media/93fa4ea6accf793c6c64b4d7f20786ac.gif"
               alt="Dashboard Banner"

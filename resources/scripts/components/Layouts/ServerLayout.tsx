@@ -3,24 +3,24 @@
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
 import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft } from 'lucide-react'
-import ApplicationLogo from '@/Components/ApplicationLogo'
-import { Button } from '@/Components/ui/button'
+import ApplicationLogo from '@/components/ApplicationLogo'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/Components/ui/dropdown-menu'
-import { Switch } from "@/Components/ui/switch"
-import { Card, CardHeader, CardContent, CardFooter } from "@/Components/ui/card"
+} from '@/components/ui/dropdown-menu'
+import { Switch } from "@/components/ui/switch"
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import Footer from '@/Components/Footer'
+import Footer from '@/components/Footer'
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@/Components/ui/tooltip"
+} from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/toaster"
 
 interface MenuItemProps {
