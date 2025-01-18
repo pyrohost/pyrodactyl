@@ -1,70 +1,91 @@
-server {
-    # Replace the example <domain> with your domain name or IP address
-    listen 80;
-    server_name panel.nadhi.dev;
-    return 301 https://$server_name$request_uri;
-}
+APP_ENV=local
+APP_DEBUG=true
+APP_KEY=base64:2IY74O6Vd/vG3uysnIVf27FaKXTlrgga0T/5p1T4knI=
+APP_THEME=nothing
+APP_NAME=Pastel
+VERSION=1.0.0
+APP_TIMEZONE=UTC
+APP_URL="https://panel.nadhi.dev/"
+APP_LOCALE=en
+APP_ENVIRONMENT_ONLY=false
 
-server {
-    # Replace the example <domain> with your domain name or IP address
-    listen 443 ssl http2;
-    server_name panel.nadhi.dev;
+# Using tailwind Color patterns default - bg-gradient-to-r from-zinc-400 to-stone-300 dark:from-pink-500 dark:to-zinc-800
 
-    root /var/www/pterodactyl/public;
-    index index.php;
+BANNER_CLR="bg-pink-300"
 
-    access_log /var/log/nginx/pterodactyl.app-access.log;
-    error_log  /var/log/nginx/pterodactyl.app-error.log error;
+SVR_LIST_TSX="" 
+# Later adding customizabilty to how the servers must be rendered.
 
-    # allow larger file uploads and longer script runtimes
-    client_max_body_size 100m;
-    client_body_timeout 120s;
+# If you are using a proxy server set this to be
+# the Proxy server's ip adddress.
+# TRUSTED_PROXIES=*
 
-    sendfile off;
+LOG_CHANNEL=daily
+LOG_LEVEL=debug
 
-    # SSL Configuration - Replace the example <domain> with your domain
-    ssl_certificate /etc/letsencrypt/live/panel.nadhi.dev/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/panel.nadhi.dev/privkey.pem;
-    ssl_session_cache shared:SSL:10m;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
-    ssl_prefer_server_ciphers on;
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=panel
+DB_USERNAME=pterodactyl
+DB_PASSWORD=Lapizcumpo123
 
-    # See https://hstspreload.org/ before uncommenting the line below.
-    # add_header Strict-Transport-Security "max-age=15768000; preload;";
-    add_header X-Content-Type-Options nosniff;
-    add_header X-XSS-Protection "1; mode=block";
-    add_header X-Robots-Tag none;
-    add_header Content-Security-Policy "frame-ancestors 'self'";
-    add_header X-Frame-Options DENY;
-    add_header Referrer-Policy same-origin;
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
+CACHE_DRIVER=file
+QUEUE_CONNECTION=database
+SESSION_DRIVER=database
 
-    location ~ \.php$ {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param HTTP_PROXY "";
-        fastcgi_intercept_errors off;
-        fastcgi_buffer_size 16k;
-        fastcgi_buffers 4 16k;
-        fastcgi_connect_timeout 300;
-        fastcgi_send_timeout 300;
-        fastcgi_read_timeout 300;
-        include /etc/nginx/fastcgi_params;
-    }
+HASHIDS_SALT=VClPgM8JSEv8WwCEJ1FI
+HASHIDS_LENGTH=8
 
-    location ~ /\.ht {
-        deny all;
-    }
-}
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=25
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=no-reply@example.com
+MAIL_FROM_NAME="Pterodactyl Panel"
+# You should set this to your domain to prevent it defaulting to 'localhost', causing
+# mail servers such as Gmail to reject your mail.
+#
+# @see: https://github.com/pterodactyl/panel/pull/3110
+# MAIL_EHLO_DOMAIN=panel.example.com
+
+APP_SERVICE_AUTHOR="unknown@unknown.com"
+SESSION_SECURE_COOKIE=true
+RECAPTCHA=false
 
 
+#  $$$$$$\             $$\     $$\     $$\
+# $$  __$$\            $$ |    $$ |    \__|
+# $$ /  \__| $$$$$$\ $$$$$$\ $$$$$$\   $$\ $$$$$$$\   $$$$$$\   $$$$$$$\
+# \$$$$$$\  $$  __$$\\_$$  _|\_$$  _|  $$ |$$  __$$\ $$  __$$\ $$  _____|
+#  \____$$\ $$$$$$$$ | $$ |    $$ |    $$ |$$ |  $$ |$$ /  $$ |\$$$$$$\
+# $$\   $$ |$$   ____| $$ |$$\ $$ |$$\ $$ |$$ |  $$ |$$ |  $$ | \____$$\
+# \$$$$$$  |\$$$$$$$\  \$$$$  |\$$$$  |$$ |$$ |  $$ |\$$$$$$$ |$$$$$$$  |
+#  \______/  \_______|  \____/  \____/ \__|\__|  \__| \____$$ |\_______/
+#                                                    $$\   $$ |
+#                                                    \$$$$$$  |
+#                                                     \______/  Made by Kushi :(
 
-certbot certonly --standalone -d panel.nadhi.dev
+
+
+VITE_LOGO_URL="https://i.ibb.co/cCM1XT8/Untitled-design.png"
+# This could either be /<public asset png> or an link, highly recommend making some random CDN and making it a link tho :D. Cuz im not very good at cooding
+VITE_SITE_NAME=Nadhi.dev
+# Logo Name will be registered here please don't enter it like this VITE_SITE_NAME="My Site name" but rather like VITE_SITE_NAME=My site name
+VITE_STATUS_PAGE=
+# This part was requested by Nate, Please remember his discord ID - 358720980669038592
+# It changes the status page title, don't make it some sus BS please
+VITE_STATUS_PAGE_TITLE_NATE=
+VITE_APP_NAME=Pastel
+
+CHANGEME332
+
+
+
+
