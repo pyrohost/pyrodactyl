@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { ScrollMenu } from '@/components/elements/ScrollMenu';
 import Checkbox from '@/components/elements/inputs/Checkbox';
 
-import { apiEndpoints, fetchHeaders, gameLoaders, settings } from './config';
-import { fetchNewProjects } from './config';
+import { apiEndpoints, fetchHeaders, settings } from './config';
 
 interface GameVersion {
     version: string;
@@ -20,62 +19,80 @@ interface Props {
 const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     const [minecraftVersions, setMinecraftVersions] = useState<GameVersion[]>([]);
     const [isSnapshotSelected, setIsSnapshotSelected] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const apiUrl = `${baseUrl}${apiEndpoints.versions}`;
 
     useEffect(() => {
-        async function fetchGameVersions() {
+        const fetchGameVersions = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(apiUrl, {
                     headers: fetchHeaders(appVersion),
                 });
 
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch versions: ${response.statusText}`);
+                }
+
                 const data = await response.json();
-                setMinecraftVersions(data);
+                if (Array.isArray(data)) {
+                    setMinecraftVersions(data);
+                } else {
+                    throw new Error('Invalid data format received from API.');
+                }
             } catch (error) {
                 toast.error('Failed to fetch Minecraft versions.');
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
-        }
+        };
 
         if (appVersion) {
             fetchGameVersions();
         }
     }, [appVersion]);
 
-    const filteredVersions = minecraftVersions.filter((version) => {
-        if (isSnapshotSelected) {
-            return version.version_type === 'snapshot';
-        } else {
-            return version.version_type !== 'snapshot';
-        }
-    });
+    const filteredVersions = useMemo(() => {
+        return minecraftVersions.filter((version) =>
+            isSnapshotSelected ? version.version_type === 'snapshot' : version.version_type === 'release',
+        );
+    }, [minecraftVersions, isSnapshotSelected]);
 
     const handleSelectionChange = (selectedItems: string[]) => {
         settings.versions = selectedItems;
         console.log('Updated settings.versions:', settings.versions);
     };
 
+    const handleSnapshotToggle = () => {
+        setIsSnapshotSelected((prev) => !prev);
+    };
+
     return (
         <div>
-            {filteredVersions.length > 0 ? (
-                <ScrollMenu
-                    items={filteredVersions.map((version) => version.version)}
-                    onSelectionChange={handleSelectionChange}
-                />
+            {isLoading ? (
+                <p>Loading versions...</p>
             ) : (
-                <p>No versions available...</p>
-            )}
-            {filteredVersions.length > 0 ? (
-                <div className='mb-4'>
-                    <Checkbox
-                        label='Show Snapshots'
-                        checked={isSnapshotSelected}
-                        onChange={() => setIsSnapshotSelected((prev) => !prev)}
-                        onClick={fetchNewProjects()}
-                    />
-                </div>
-            ) : (
-                <p></p>
+                <>
+                    {filteredVersions.length > 0 ? (
+                        <>
+                            <ScrollMenu
+                                items={filteredVersions.map((version) => version.version)}
+                                onSelectionChange={handleSelectionChange}
+                            />
+                            <div className='mb-4'>
+                                <Checkbox
+                                    label='Show Snapshots'
+                                    checked={isSnapshotSelected}
+                                    onChange={handleSnapshotToggle}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <p>No versions found</p>
+                    )}
+                </>
             )}
         </div>
     );

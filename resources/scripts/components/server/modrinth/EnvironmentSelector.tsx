@@ -21,7 +21,7 @@ const EnvironmentSelector: React.FC<Props> = ({ items, onSelectionChange }) => {
         setSelectedItems((prev) => {
             const updatedItems = prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item];
 
-            onSelectionChange(updatedItems); // Notify parent about the changes
+            onSelectionChange(updatedItems);
             return updatedItems;
         });
     };

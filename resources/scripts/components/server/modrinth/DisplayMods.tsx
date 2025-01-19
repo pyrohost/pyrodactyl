@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -37,6 +38,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
     const [isModalVisible, setModalVisible] = useState(false);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!);
+
     const fetchProjects = async () => {
         setIsLoading(true); // Start loading
         try {
@@ -48,8 +50,6 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                     : ['project_type:mod'],
             ].filter(Boolean);
 
-            // console.log('Constructed facets:', facets);
-
             const searchParams = new URLSearchParams({
                 facets: JSON.stringify(facets),
                 index: 'relevance',
@@ -57,29 +57,18 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
             });
             const query = settings.searchTerms.replace(/ /g, '-');
             const apiUrl = `${baseUrl}${apiEndpoints.projects}?${searchParams.toString()}&query=${query}`;
-            // console.log('Constructed API URL:', apiUrl);
 
-            const response = await fetch(apiUrl, {
+            const response = await axios.get(apiUrl, {
                 headers: {
                     'Content-Type': 'application/json',
                     'User-Agent': `pyrohost/pyrodactyl/${appVersion} (pyro.host)`,
                 },
             });
 
-            // console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            // console.log('Fetched projects data:', data);
-
-            const updatedProjects = data.hits.map((project: Project) => ({
+            const updatedProjects = response.data.hits.map((project: Project) => ({
                 ...project,
                 icon_url: project.icon_url || 'N/A',
             }));
-
-            // console.log(uuid);
 
             setProjects(updatedProjects);
         } catch (error) {

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -5,7 +6,7 @@ import EnvironmentSelector from './EnvironmentSelector';
 import { apiEndpoints, fetchNewProjects, settings } from './config';
 
 interface GameLoaders {
-    icon: string; // SVG data (probably won't use this)
+    icon: string;
     name: string;
     supported_project_types: string[];
 }
@@ -23,23 +24,20 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     useEffect(() => {
         async function fetchLoaders() {
             try {
-                const response = await fetch(apiUrl, {
+                const { data } = await axios.get(apiUrl, {
                     headers: {
                         'Content-Type': 'application/json',
                         'User-Agent': `pyrohost/pyrodactyl/${appVersion} (pyro.host)`,
                     },
                 });
 
-                if (!response.ok) {
-                    toast(`HTTP Error! Status: ${response.status}`);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
                 setLoaders(data);
-            } catch (error) {
-                toast.error('Failed to fetch game loaders.');
+            } catch (error: any) {
+                if (error.response) {
+                    toast(`HTTP Error! Status: ${error.response.status}`);
+                } else {
+                    toast.error('Failed to fetch game loaders.');
+                }
                 console.error(error);
             }
         }
@@ -51,7 +49,6 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
 
     const handleSelectionChange = (selectedItems: string[]) => {
         settings.loaders = selectedItems;
-        // fetchProjectsGlobal(baseUrl, appVersion);
         console.log('Selected loaders updated:', selectedItems);
     };
 

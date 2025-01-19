@@ -1,5 +1,6 @@
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -29,10 +30,10 @@ const DownloadModModal = ({ modid, modName }: Props) => {
     // Fetch mod versions from Modrinth API
     useEffect(() => {
         setLoading(true);
-        fetch(`https://api.modrinth.com/v2/project/${modid}/version`)
-            .then((response) => response.json())
-            .then((data) => {
-                setVersions(data);
+        axios
+            .get(`https://api.modrinth.com/v2/project/${modid}/version`)
+            .then((response) => {
+                setVersions(response.data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
