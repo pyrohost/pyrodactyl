@@ -6,6 +6,7 @@ import HugeIconsDownload from '@/components/elements/hugeicons/Download';
 
 import { ServerContext } from '@/state/server';
 
+import DownloadModModel from './DownloadModel';
 // import { useProjects } from './FetchProjects';
 import { apiEndpoints, offset, settings } from './config';
 
@@ -33,9 +34,9 @@ interface Props {
 const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!);
-
     const fetchProjects = async () => {
         setIsLoading(true); // Start loading
         try {
@@ -105,6 +106,11 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
         }
     };
 
+    const handleDownload = () => {
+        // Implement your download logic here
+        console.log('Downloading mod...');
+    };
+
     return (
         <div>
             <button
@@ -122,13 +128,13 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 projects.map((project) => (
                     <ContentBox
                         key={project.project_id}
-                        className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full mb-4 relative'
+                        className='p-4 bg-[#ffffff09] border-[1px] border-white shadow-sm rounded-xl w-full mb-4 relative'
                     >
                         <div className='flex items-center'>
-                            <ContentBox className='p-3 pt-1 rounded-xl mr-4'>
+                            <ContentBox className=' pt-1 rounded-xl mr-4 '>
                                 <a href={`${nonApiUrl}/mod/${project.project_id}`} target='_blank' rel='noreferrer'>
                                     {project.icon_url && project.icon_url !== 'N/A' ? (
-                                        <img src={project.icon_url} className='mt-4 w-24 h-20 object-cover rounded' />
+                                        <img src={project.icon_url} className='w-24 h-20 object-contain rounded' />
                                     ) : (
                                         <svg
                                             fillRule='evenodd'
@@ -172,12 +178,24 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                     {project.versions[project.versions.length - 1]}
                                     <p className='text-gray-600 inline ml-2'>Latest</p>
                                 </p>
+                            </div>
+                            <div className='flex flex-col py-2 whitespace-nowrap px-6 mx-6 justify-end'>
                                 {/* Install */}
-                                <a href='#' className='pt-4'>
-                                    <button className='flex text-right border-2 border-solid rounded py-1 px-6 border-brand hover:border-white transition ease-in-out delay-300 hover:bg-red-600 hover:scale-110'>
+                                <a className='pt-4'>
+                                    <button
+                                        className='flex text-right border-2 border-solid rounded py-1 px-6 border-brand hover:border-white transition ease-in-out delay-300 hover:bg-red-600 hover:scale-110'
+                                        onClick={() => setModalVisible(true)}
+                                    >
                                         <HugeIconsDownload className='px-2 mx-2' fill='currentColor' />
                                         Install
                                     </button>
+                                    {isModalVisible && (
+                                        <DownloadModModel
+                                            modid={project.project_id}
+                                            visible={isModalVisible} // This is needed if `asModal` adds extra props
+                                            onModalDismissed={() => setModalVisible(false)}
+                                        />
+                                    )}
                                 </a>
                             </div>
                         </div>
