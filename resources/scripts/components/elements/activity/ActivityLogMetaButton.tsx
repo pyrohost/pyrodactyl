@@ -4,6 +4,8 @@ import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
 import MetaDataIcon from '@/components/elements/hugeicons/MetaData';
 
+import { formatObjectToIdentString } from '@/lib/objects';
+
 export default ({ meta }: { meta: Record<string, unknown> }) => {
     const [open, setOpen] = useState(false);
 
@@ -15,7 +17,7 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
                         'bg-zinc-900 rounded p-2 font-mono text-sm leading-relaxed overflow-x-scroll whitespace-pre-wrap'
                     }
                 >
-                    {JSON.stringify(meta, null, 2)}
+                    {formatObjectToIdentString(meta)}
                 </pre>
                 <Dialog.Footer>
                     <Button.Text onClick={() => setOpen(false)}>Close</Button.Text>
