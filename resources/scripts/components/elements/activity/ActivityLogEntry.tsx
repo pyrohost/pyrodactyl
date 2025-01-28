@@ -54,7 +54,6 @@ export default ({ activity, children }: Props) => {
                             {children}
                         </div>
                     </div>
-                    {/* We really don't need an i18n lib to translate what the activity log does */}
                     {!activity.hasAdditionalMetadata && (
                         <p className={style.description}>
                             <pre>{formatObjectToIdentString(activity.properties)}</pre>
