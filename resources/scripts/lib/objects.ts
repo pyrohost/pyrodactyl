@@ -38,19 +38,19 @@ function formatObjectToIdentString(object: any, indentLevel: number = 0): string
     }
 
     if (isObject(object)) {
-        return (
-            (indentLevel > 0 ? '\n' : '') +
-            getObjectKeys(object)
+        return getObjectKeys(object)
                 .map((key) => {
                     const value = object[key];
                     return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
                 })
-                .join('\n')
-        );
+                .join('\n');
     }
 
     if (Array.isArray(object)) {
-        return object.map((item) => formatObjectToIdentString(item, indentLevel)).join('\n');
+        return (
+            (indentLevel > 0 ? '\n' : '') +
+            object.map((item) => formatObjectToIdentString(item, indentLevel)).join('\n')
+        );
     }
 
     return `${indent}${String(object)}`;
