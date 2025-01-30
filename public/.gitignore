@@ -1,4 +1,15 @@
-build/*
-assets/*
-!assets/svgs
-!assets/svgs/*.svg
+# Build artifacts
+/build
+/build/*
+/build/manifest.json
+manifest.json
+
+# Assets
+/assets/*
+!/assets/svgs
+!/assets/svgs/*.svg
+
+# Distribution files
+/dist
+/dist/*
+*.map
