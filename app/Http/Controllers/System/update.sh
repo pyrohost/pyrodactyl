@@ -8,6 +8,8 @@ git pull origin main
 
 # Dependencies
 composer install --no-dev --optimize-autoloader
+
+echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
 npm install
 npm run build
 
