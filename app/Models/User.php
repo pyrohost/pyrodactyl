@@ -201,10 +201,10 @@ class User extends Model implements
         'disk' => 0,
         'allocations' => 0,
         'databases' => 0,
-        'backups' => 0
+        'backups' => 0,
+        'servers' => $this->servers()->count() // Add actual server count
     ];
 
-    // Sum all resources from user's servers
     foreach ($this->servers as $server) {
         $resources['cpu'] += $server->cpu;
         $resources['memory'] += $server->memory;
@@ -214,7 +214,6 @@ class User extends Model implements
         $resources['backups'] += $server->backup_limit;
     }
 
-    // Update resources array if different
     if ($this->resources !== $resources) {
         $this->resources = $resources;
         $this->save();
@@ -228,7 +227,7 @@ class User extends Model implements
     });
 }
 
-    public function getAvailableResources(): array
+public function getAvailableResources(): array
 {
     $this->updateResourceUsage();
     
@@ -239,6 +238,7 @@ class User extends Model implements
         'allocations' => $this->limits['allocations'] - $this->resources['allocations'], 
         'databases' => $this->limits['databases'] - $this->resources['databases'],
         'backups' => $this->limits['backups'] - $this->resources['backups'],
+        'servers' => $this->limits['servers'] - $this->resources['servers']
     ];
 }
 
