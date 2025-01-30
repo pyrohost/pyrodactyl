@@ -15,7 +15,6 @@ class ResourceValidatorService
 {
     public function validate(array $data, Server $server, User $user): void 
 {
-    
     // Calculate how much resources are being added/removed
     $resourceChanges = [
         'memory' => $data['memory'] - $server->memory,
@@ -26,17 +25,32 @@ class ResourceValidatorService
         'backups' => $data['backup_limit'] - $server->backup_limit,
     ];
 
-    // Calculate ACTUAL available resources
-    $availableResources = [
-        'memory' => $user->limits['memory'] - $user->resources['memory'],
-        'disk' => $user->limits['disk'] - $user->resources['disk'],
-        'cpu' => $user->limits['cpu'] - $user->resources['cpu'],
-        'allocations' => $user->limits['allocations'] - $user->resources['allocations'],
-        'databases' => $user->limits['databases'] - $user->resources['databases'],
-        'backups' => $user->limits['backups'] - $user->resources['backups'],
+    // Calculate resources used by other servers (excluding current server)
+    $usedByOthers = [
+        'memory' => $user->resources['memory'] - $server->memory,
+        'disk' => $user->resources['disk'] - $server->disk,
+        'cpu' => $user->resources['cpu'] - $server->cpu,
+        'allocations' => $user->resources['allocations'] - $server->allocation_limit,
+        'databases' => $user->resources['databases'] - $server->database_limit,
+        'backups' => $user->resources['backups'] - $server->backup_limit,
     ];
 
-    // Check if the CHANGES exceed what's actually available
+    // Calculate what's actually available for this server
+    $availableResources = [
+        'memory' => $user->limits['memory'] - $usedByOthers,
+        'disk' => $user->limits['disk'] - $usedByOthers,
+        'cpu' => $user->limits['cpu'] - $usedByOthers['cpu'],
+        'allocations' => $user->limits['allocations'] - $usedByOthers['allocations'],
+        'databases' => $user->limits['databases'] - $usedByOthers['databases'],
+        'backups' => $user->limits['backups'] - $usedByOthers['backups'],
+    ];
+
+    // Validate against available resources
+    if ($data['cpu'] > $availableResources['cpu']) {
+        throw new DisplayException('Insufficient CPU available. You can use up to ' . $availableResources['cpu'] . '% for this server');
+    }
+
+    // Check if the CHANGES exceed what's actually available 
     if ($resourceChanges['memory'] > $availableResources['memory']) {
         throw new DisplayException('Insufficient memory available. You can only add up to ' . $availableResources['memory'] . 'MB more');
     }
