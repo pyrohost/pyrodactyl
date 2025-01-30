@@ -7,22 +7,36 @@ use Pterodactyl\Http\Controllers\Controller;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
+
 class SystemUpdateController extends Controller
 {
     protected $baseScript = <<<'BASH'
 #!/bin/bash
 set -e
 echo "🚀 Starting deployment..."
+
+# Configure git safe directory
+git config --global --add safe.directory /var/www/pterodactyl
+
+# Ensure correct permissions
+sudo chown -R www-data:www-data /var/www/pterodactyl
+
+# Pull latest changes
 git pull origin main
+
+# Install dependencies
 composer install --no-dev --optimize-autoloader
 npm install
 npm run build
+
+# Laravel maintenance and updates
 php artisan down
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan migrate --force
 php artisan up
+
 echo "✅ Deployment completed successfully!"
 BASH;
 
@@ -34,7 +48,7 @@ BASH;
                 $script .= "\n" . $extra;
             }
 
-            $process = new Process(['bash', '-c', $script]);
+            $process = new Process(['sudo', 'bash', '-c', $script]);
             $process->setWorkingDirectory(base_path());
             $process->setTimeout(300);
             $process->run(function ($type, $buffer) {
