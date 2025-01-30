@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Services\Server;
+namespace Pterodactyl\Exceptions\Service\Server;
 
-use App\Exceptions\DisplayException;
+use Pterodactyl\Models\User;
+use Pterodactyl\Models\Server;
+use Pterodactyl\Exceptions\DisplayException;
 
 class ResourceValidatorService
+
 {
     public function validate(array $data, object $server, object $user): void
     {
