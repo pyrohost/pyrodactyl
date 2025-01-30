@@ -3,24 +3,37 @@
 # Error handling
 set -e
 
-# Store password
+# Environment variables
+export DEBIAN_FRONTEND=noninteractive
 PASSWORD="Asuna#2024~S4O!"
 
-# Function to run sudo with password
+# Helper function for sudo commands
 run_sudo() {
-    echo $PASSWORD | sudo -S $@
+    echo "$PASSWORD" | sudo -S -u root "$@"
 }
+
+# Ensure script is run as www-data
+if [ "$(whoami)" != "www-data" ]; then
+    echo "Script must be run as www-data"
+    exit 1
+fi
 
 echo "🚀 Starting system update..."
 
-# Authenticate sudo
-echo $PASSWORD | sudo -S echo "Authentication successful"
+# Initial authentication
+echo "$PASSWORD" | sudo -S echo "Authentication successful"
 
-# Git operations
-run_sudo git pull origin main
+# Git operations with error handling
+run_sudo git pull origin main || {
+    echo "Git pull failed"
+    exit 1
+}
 
 # Dependencies
-run_sudo composer install --no-dev --optimize-autoloader
+run_sudo composer install --no-dev --optimize-autoloader || {
+    echo "Composer install failed"
+    exit 1
+}
 
 echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
 
@@ -30,7 +43,10 @@ source /root/.nvm/nvm.sh
 nvm use 22
 npm install
 npm run build
-"
+" || {
+    echo "Node.js build failed"
+    exit 1
+}
 
 # Laravel updates
 run_sudo php artisan down
