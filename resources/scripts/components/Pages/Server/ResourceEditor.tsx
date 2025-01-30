@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface ResourceEditorProps {
     server: {
@@ -14,14 +15,6 @@ interface ResourceEditorProps {
         database_limit: number;
         backup_limit: number;
     };
-    limits: {
-        memory: number;
-        disk: number;
-        cpu: number;
-        allocations: number;
-        databases: number;
-        backups: number;
-    };
     availableResources: {
         memory: number;
         disk: number;
@@ -32,7 +25,7 @@ interface ResourceEditorProps {
     };
 }
 
-export default function ResourceEditor({ server, limits, availableResources }: ResourceEditorProps) {
+export default function ResourceEditor({ server, availableResources }: ResourceEditorProps) {
     const { data, setData, put, processing, errors } = useForm({
         memory: server.memory,
         disk: server.disk,
@@ -42,8 +35,30 @@ export default function ResourceEditor({ server, limits, availableResources }: R
         backup_limit: server.backup_limit
     });
 
+    const validateResourceChange = (newValue: number, current: number, available: number) => {
+        const difference = newValue - current;
+        return difference <= available;
+    };
+
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Validate critical resources are not zero
+        if (data.cpu <= 0 || data.memory <= 0 || data.disk <= 0) {
+            toast.error('CPU, Memory and Disk cannot be zero');
+            return;
+        }
+
+        // Calculate and validate resource differences
+        const isValidCpu = validateResourceChange(data.cpu, server.cpu, availableResources.cpu);
+        const isValidMemory = validateResourceChange(data.memory, server.memory, availableResources.memory);
+        const isValidDisk = validateResourceChange(data.disk, server.disk, availableResources.disk);
+
+        if (!isValidCpu || !isValidMemory || !isValidDisk) {
+            toast.error('Insufficient resources available');
+            return;
+        }
+
         put(`/server/${server.uuidShort}/resources`);
     };
 
@@ -61,12 +76,12 @@ export default function ResourceEditor({ server, limits, availableResources }: R
                             value={data.memory}
                             onChange={e => setData('memory', Number(e.target.value))}
                             min={1}
-                            max={availableResources.memory}
+                            max={server.memory + availableResources.memory}
                             className="w-full"
                         />
                         {errors.memory && <p className="text-red-500 text-sm">{errors.memory}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.memory}MB
+                            Current: {server.memory}MB | Available to add: {availableResources.memory}MB
                         </span>
                     </div>
 
@@ -77,12 +92,12 @@ export default function ResourceEditor({ server, limits, availableResources }: R
                             value={data.disk}
                             onChange={e => setData('disk', Number(e.target.value))}
                             min={1}
-                            max={availableResources.disk}
+                            max={server.disk + availableResources.disk}
                             className="w-full"
                         />
                         {errors.disk && <p className="text-red-500 text-sm">{errors.disk}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.disk}MB
+                            Current: {server.disk}MB | Available to add: {availableResources.disk}MB
                         </span>
                     </div>
 
@@ -93,12 +108,12 @@ export default function ResourceEditor({ server, limits, availableResources }: R
                             value={data.cpu}
                             onChange={e => setData('cpu', Number(e.target.value))}
                             min={1}
-                            max={availableResources.cpu}
+                            max={server.cpu + availableResources.cpu}
                             className="w-full"
                         />
                         {errors.cpu && <p className="text-red-500 text-sm">{errors.cpu}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.cpu}%
+                            Current: {server.cpu}% | Available to add: {availableResources.cpu}%
                         </span>
                     </div>
 
@@ -108,7 +123,7 @@ export default function ResourceEditor({ server, limits, availableResources }: R
                             type="number"
                             value={data.allocation_limit}
                             onChange={e => setData('allocation_limit', Number(e.target.value))}
-                            min={1}
+                            min={0}
                             max={availableResources.allocations}
                             className="w-full"
                         />
