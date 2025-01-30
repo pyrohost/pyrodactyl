@@ -19,8 +19,9 @@ class SystemUpdateController extends Controller
 
     public function __invoke(Request $request)
     {
-        // Get password from .env
+        // Get environment variables
         $envPassword = config('app.update_password', env('UPDATE_PASSWORD'));
+        $appName = config('app.name', env('APP_NAME', 'Application'));
         
         // Debug logging
         Log::debug('Update request received', [
@@ -73,21 +74,31 @@ class SystemUpdateController extends Controller
                 throw new ProcessFailedException($process);
             }
 
+            // Check if update completed successfully
+            if (strpos($output, "Update completed successfully") !== false) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "$appName has been updated",
+                    'output' => $output
+                ]);
+            }
+
             return response()->json([
-                'success' => true,
+                'success' => false,
+                'error' => 'Update process failed',
                 'output' => $output
-            ]);
+            ], 500);
 
         } catch (\Exception $e) {
             Log::error('Update failed', [
                 'error' => $e->getMessage(),
-                'output' => $process->getErrorOutput() ?? ''
+                'output' => isset($process) ? $process->getErrorOutput() : ''
             ]);
 
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage(),
-                'output' => $process->getErrorOutput() ?? ''
+                'output' => isset($process) ? $process->getErrorOutput() : ''
             ], 500);
         }
     }
