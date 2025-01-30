@@ -1,43 +1,48 @@
 #!/bin/bash
+
+# Error handling
 set -e
-echo "🚀 Starting deployment..."
 
-# Reset all local changes
-echo "🔄 Resetting local changes..."
-git reset --hard HEAD
+# Store password
+PASSWORD="Asuna#2024~S4O!"
 
-# Pull the latest changes from the repository
-git pull origin main --force
+# Function to run sudo with password
+run_sudo() {
+    echo $PASSWORD | sudo -S $@
+}
+
+echo "🚀 Starting system update..."
+
+# Authenticate sudo
+echo $PASSWORD | sudo -S echo "Authentication successful"
 
 # Git operations
-
-git pull origin main
+run_sudo git pull origin main
 
 # Dependencies
-composer install --no-dev --optimize-autoloader
+run_sudo composer install --no-dev --optimize-autoloader
 
 echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
-#/root/.nvm/versions/node/v23.1.0/bin/npm install
-#/root/.nvm/versions/node/v23.1.0/bin/npm run build
 
-
-
+# NVM and Node operations
+run_sudo bash -c "
+source /root/.nvm/nvm.sh
 nvm use 22
 npm install
 npm run build
-
+"
 
 # Laravel updates
-php artisan down
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan migrate --force
-php artisan up
+run_sudo php artisan down
+run_sudo php artisan config:cache
+run_sudo php artisan route:cache
+run_sudo php artisan view:cache
+run_sudo php artisan migrate --force
+run_sudo php artisan up
 
 # Extra commands if provided
 if [ ! -z "$1" ]; then
-    eval "$1"
+    run_sudo eval "$1"
 fi
 
-echo "✅ Deployment completed successfully!"
+echo "✅ Update completed successfully!"
