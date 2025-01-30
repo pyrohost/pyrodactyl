@@ -72,7 +72,7 @@ export default function ResourceEditor({availableResources }: ResourceEditorProp
 
     return (
         <ServerManagementLayout
-            serverId={server.identifier}
+            serverId={server.uuidShort}
             serverName={`Server / ${server.name} / Resources`}
             sidebarTab="home"
         >
