@@ -170,7 +170,7 @@ const CustomTerminal: React.FC = () => {
                     <CardContent>
                       <div className="flex flex-col items-center space-y-4">
                         <img 
-                          src="/assets/svgs/spy.svg"
+                          src="/assets/svgs/Bad-Request.svg"
                           alt="Server Offline"
                           className="w-120 h-60 object-contain"
                         />
