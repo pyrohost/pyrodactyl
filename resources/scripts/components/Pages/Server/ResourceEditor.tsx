@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 interface ResourceEditorProps {
     server: {
-        id: number;
+        uuidShort: string;
         memory: number;
         disk: number;
         cpu: number;
@@ -44,7 +44,7 @@ export default function ResourceEditor({ server, limits, availableResources }: R
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('servers.resources.update', server.id));
+        put(`/server/${server.uuidShort}/resources`);
     };
 
     return (

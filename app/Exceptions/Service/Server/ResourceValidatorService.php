@@ -1,6 +1,8 @@
 <?php
 
-namespace Pterodactyl\Services\Servers;
+namespace Pterodactyl\Exceptions\Service\Server;
+
+
 
 use Pterodactyl\Models\User;
 use Pterodactyl\Models\Server;

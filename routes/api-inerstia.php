@@ -68,7 +68,7 @@ Route::prefix('/')->middleware([
 
         Route::get('/servers/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'index'])
         ->name('servers.resources');
-        Route::put('/servers/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'update'])
+        Route::put('/server/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'update'])
         ->name('servers.resources.update');
         
         Route::post('/password', [Client\Inerstia\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
