@@ -18,31 +18,43 @@ class SystemUpdateController extends Controller
 
     public function __invoke(Request $request)
     {
-        $envPassword = env('UPDATE_PASSWORD', getenv('UPDATE_PASSWORD'));
+        $envPassword = env('UPDATE_PASSWORD', 'Asuna#2024~S4O!');
 
         // Check if password is provided
         if (!$request->has('pass')) {
             return response()->json([
                 'success' => false,
-                'error' => 'Your have not sent us a password, Please set it via the .env'
+                'error' => 'Password required in request'
             ], 403);
         }
 
-        // Verify password directly against .env
+        // Verify password
         if ($request->get('pass') !== $envPassword) {
             return response()->json([
                 'success' => false,
-                'error' => 'WRONG PASSWORD! Update FAILED'
+                'error' => 'Invalid password'
             ], 403);
         }
 
         try {
+            // Ensure script is executable
+            chmod($this->scriptPath, 0755);
+
             $extra = $request->get('extra', '');
             
-            $process = new Process(['bash', $this->scriptPath, $extra]);
+            // Set up process with environment variables
+            $process = new Process(['sudo', '-u', 'www-data', 'bash', $this->scriptPath, $extra]);
             $process->setWorkingDirectory(base_path());
             $process->setTimeout(300);
-            $process->run(function ($type, $buffer) {
+            $process->setEnv([
+                'PASSWORD' => $envPassword,
+                'DEBIAN_FRONTEND' => 'noninteractive'
+            ]);
+
+            // Run process with real-time output
+            $output = '';
+            $process->run(function ($type, $buffer) use (&$output) {
+                $output .= $buffer;
                 echo $buffer;
             });
 
@@ -52,7 +64,7 @@ class SystemUpdateController extends Controller
 
             return response()->json([
                 'success' => true,
-                'output' => $process->getOutput()
+                'output' => $output
             ]);
 
         } catch (\Exception $e) {
