@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import RenameServerDialog from '../Common/Rename';
 
 interface ResourceEditorProps {
     server: {
@@ -63,6 +64,8 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
     };
 
     return (
+        <>
+        <RenameServerDialog/>
         <Card className="w-full max-w-2xl mx-auto mt-6">
             <CardHeader>
                 <CardTitle>Edit Server Resources</CardTitle>
@@ -171,5 +174,6 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
                 </form>
             </CardContent>
         </Card>
+        </>
     );
 }
