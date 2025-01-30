@@ -20,6 +20,9 @@ echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
 #/root/.nvm/versions/node/v23.1.0/bin/npm install
 #/root/.nvm/versions/node/v23.1.0/bin/npm run build
 
+
+
+nvm use 22
 npm install
 npm run build
 
