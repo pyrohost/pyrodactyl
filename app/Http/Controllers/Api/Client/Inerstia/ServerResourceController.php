@@ -33,13 +33,13 @@ class ServerResourceController extends Controller
             'limits' => auth()->user()->limits,
             'resources' => auth()->user()->resources,
             'availableResources' => [
-                'memory' => auth()->user()->limits['memory'] - auth()->user()->resources['memory'] + $server->memory,
-                'disk' => auth()->user()->limits['disk'] - auth()->user()->resources['disk'] + $server->disk,
-                'cpu' => auth()->user()->limits['cpu'] - auth()->user()->resources['cpu'] + $server->cpu,
-                'allocations' => auth()->user()->limits['allocations'] - auth()->user()->resources['allocations'] + $server->allocation_limit,
-                'databases' => auth()->user()->limits['databases'] - auth()->user()->resources['databases'] + $server->database_limit,
-                'backups' => auth()->user()->limits['backups'] - auth()->user()->resources['backups'] + $server->backup_limit
-            ]
+    'memory' => auth()->user()->limits['memory'] - auth()->user()->resources['memory'],
+    'disk' => auth()->user()->limits['disk'] - auth()->user()->resources['disk'],
+    'cpu' => auth()->user()->limits['cpu'] - auth()->user()->resources['cpu'],
+    'allocations' => auth()->user()->limits['allocations'] - auth()->user()->resources['allocations'],
+    'databases' => auth()->user()->limits['databases'] - auth()->user()->resources['databases'],
+    'backups' => auth()->user()->limits['backups'] - auth()->user()->resources['backups']
+]
         ]);
     }
 
