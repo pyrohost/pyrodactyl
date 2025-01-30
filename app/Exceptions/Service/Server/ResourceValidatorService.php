@@ -15,6 +15,7 @@ class ResourceValidatorService
 {
     public function validate(array $data, Server $server, User $user): void 
 {
+    
     // Calculate how much resources are being added/removed
     $resourceChanges = [
         'memory' => $data['memory'] - $server->memory,
@@ -25,14 +26,14 @@ class ResourceValidatorService
         'backups' => $data['backup_limit'] - $server->backup_limit,
     ];
 
-    // Calculate ACTUAL available resources (including current server resources)
+    // Calculate ACTUAL available resources
     $availableResources = [
-        'memory' => $user->limits['memory'] - ($user->resources['memory'] - $server->memory),
-        'disk' => $user->limits['disk'] - ($user->resources['disk'] - $server->disk),
-        'cpu' => $user->limits['cpu'] - ($user->resources['cpu'] - $server->cpu),
-        'allocations' => $user->limits['allocations'] - ($user->resources['allocations'] - $server->allocation_limit),
-        'databases' => $user->limits['databases'] - ($user->resources['databases'] - $server->database_limit),
-        'backups' => $user->limits['backups'] - ($user->resources['backups'] - $server->backup_limit),
+        'memory' => $user->limits['memory'] - $user->resources['memory'],
+        'disk' => $user->limits['disk'] - $user->resources['disk'],
+        'cpu' => $user->limits['cpu'] - $user->resources['cpu'],
+        'allocations' => $user->limits['allocations'] - $user->resources['allocations'],
+        'databases' => $user->limits['databases'] - $user->resources['databases'],
+        'backups' => $user->limits['backups'] - $user->resources['backups'],
     ];
 
     // Check if the CHANGES exceed what's actually available
