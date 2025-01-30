@@ -23,9 +23,14 @@ interface ResourceEditorProps {
         databases: number;
         backups: number;
     };
+    userLimits: {
+        memory: number;
+        disk: number;
+        cpu: number;
+    };
 }
 
-export default function ResourceEditor({ server, availableResources }: ResourceEditorProps) {
+export default function ResourceEditor({ server, availableResources, userLimits }: ResourceEditorProps) {
     const { data, setData, put, processing, errors } = useForm({
         memory: server.memory,
         disk: server.disk,
@@ -35,27 +40,11 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
         backup_limit: server.backup_limit
     });
 
-    const validateResourceChange = (newValue: number, current: number, available: number) => {
-        const difference = newValue - current;
-        return difference <= available;
-    };
-
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validate critical resources are not zero
         if (data.cpu <= 0 || data.memory <= 0 || data.disk <= 0) {
             toast.error('CPU, Memory and Disk cannot be zero');
-            return;
-        }
-
-        // Calculate and validate resource differences
-        const isValidCpu = validateResourceChange(data.cpu, server.cpu, availableResources.cpu);
-        const isValidMemory = validateResourceChange(data.memory, server.memory, availableResources.memory);
-        const isValidDisk = validateResourceChange(data.disk, server.disk, availableResources.disk);
-
-        if (!isValidCpu || !isValidMemory || !isValidDisk) {
-            toast.error('Insufficient resources available');
             return;
         }
 
@@ -65,10 +54,26 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
     return (
         <Card className="w-full max-w-2xl mx-auto mt-6">
             <CardHeader>
-                <CardTitle>Edit Server Resources</CardTitle>
+                <CardTitle>Server Resources</CardTitle>
+                <p className="text-sm text-gray-500">Adjust resource limits for this server</p>
             </CardHeader>
             <CardContent>
                 <form onSubmit={onSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">CPU (%)</label>
+                        <Input 
+                            type="number"
+                            value={data.cpu}
+                            onChange={e => setData('cpu', Number(e.target.value))}
+                            min={1}
+                            max={server.cpu + availableResources.cpu}
+                            className="w-full"
+                        />
+                        <div className="text-sm text-gray-500">
+                            Current: {server.cpu}% | Available: {availableResources.cpu}% | Total Limit: {userLimits.cpu}%
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Memory (MB)</label>
                         <Input 
@@ -79,10 +84,9 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
                             max={server.memory + availableResources.memory}
                             className="w-full"
                         />
-                        {errors.memory && <p className="text-red-500 text-sm">{errors.memory}</p>}
-                        <span className="text-sm text-gray-500">
-                            Current: {server.memory}MB | Available to add: {availableResources.memory}MB
-                        </span>
+                        <div className="text-sm text-gray-500">
+                            Current: {server.memory}MB | Available: {availableResources.memory}MB | Total Limit: {userLimits.memory}MB
+                        </div>
                     </div>
 
                     <div className="space-y-2">
@@ -95,74 +99,9 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
                             max={server.disk + availableResources.disk}
                             className="w-full"
                         />
-                        {errors.disk && <p className="text-red-500 text-sm">{errors.disk}</p>}
-                        <span className="text-sm text-gray-500">
-                            Current: {server.disk}MB | Available to add: {availableResources.disk}MB
-                        </span>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">CPU (%)</label>
-                        <Input 
-                            type="number"
-                            value={data.cpu}
-                            onChange={e => setData('cpu', Number(e.target.value))}
-                            min={1}
-                            max={server.cpu + availableResources.cpu}
-                            className="w-full"
-                        />
-                        {errors.cpu && <p className="text-red-500 text-sm">{errors.cpu}</p>}
-                        <span className="text-sm text-gray-500">
-                            Current: {server.cpu}% | Available to add: {availableResources.cpu}%
-                        </span>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Allocation Limit</label>
-                        <Input 
-                            type="number"
-                            value={data.allocation_limit}
-                            onChange={e => setData('allocation_limit', Number(e.target.value))}
-                            min={0}
-                            max={availableResources.allocations}
-                            className="w-full"
-                        />
-                        {errors.allocation_limit && <p className="text-red-500 text-sm">{errors.allocation_limit}</p>}
-                        <span className="text-sm text-gray-500">
-                            Available: {availableResources.allocations}
-                        </span>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Database Limit</label>
-                        <Input 
-                            type="number"
-                            value={data.database_limit}
-                            onChange={e => setData('database_limit', Number(e.target.value))}
-                            min={0}
-                            max={availableResources.databases}
-                            className="w-full"
-                        />
-                        {errors.database_limit && <p className="text-red-500 text-sm">{errors.database_limit}</p>}
-                        <span className="text-sm text-gray-500">
-                            Available: {availableResources.databases}
-                        </span>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Backup Limit</label>
-                        <Input 
-                            type="number"
-                            value={data.backup_limit}
-                            onChange={e => setData('backup_limit', Number(e.target.value))}
-                            min={0}
-                            max={availableResources.backups}
-                            className="w-full"
-                        />
-                        {errors.backup_limit && <p className="text-red-500 text-sm">{errors.backup_limit}</p>}
-                        <span className="text-sm text-gray-500">
-                            Available: {availableResources.backups}
-                        </span>
+                        <div className="text-sm text-gray-500">
+                            Current: {server.disk}MB | Available: {availableResources.disk}MB | Total Limit: {userLimits.disk}MB
+                        </div>
                     </div>
 
                     <Button type="submit" disabled={processing}>

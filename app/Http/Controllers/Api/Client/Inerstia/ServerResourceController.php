@@ -5,6 +5,7 @@ namespace Pterodactyl\Http\Controllers\Api\Client\Inerstia;
 use Inertia\Inertia;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Http\Controllers\Controller;
+use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Exceptions\Service\Server\ResourceValidatorService;
 
 class ServerResourceController extends Controller 
@@ -44,45 +45,37 @@ class ServerResourceController extends Controller
 
 
     public function update($uuidShort)
-{
-    $server = Server::where('uuidShort', $uuidShort)->first();
+    {
+        $server = Server::where('uuidShort', $uuidShort)->first();
 
-    if (!$server || !$server->exists) {
-        return back()->with('error', 'Server not found');
+        if (!$server || !$server->exists) {
+            return back()->with('error', 'Server not found');
+        }
+
+        $validated = request()->validate([
+            'memory' => 'required|numeric|min:1',
+            'disk' => 'required|numeric|min:1',
+            'cpu' => 'required|numeric|min:1',
+            'allocation_limit' => 'required|numeric|min:1',
+            'database_limit' => 'required|numeric|min:0',
+            'backup_limit' => 'required|numeric|min:0'
+        ]);
+
+        try {
+            $this->validatorService->validate($validated, $server, auth()->user());
+
+            $server->update([
+                'memory' => $validated['memory'],
+                'disk' => $validated['disk'],
+                'cpu' => $validated['cpu'],
+                'allocation_limit' => $validated['allocation_limit'],
+                'database_limit' => $validated['database_limit'],
+                'backup_limit' => $validated['backup_limit']
+            ]);
+
+            return back()->with('success', 'Server resources updated successfully');
+        } catch (DisplayException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
-
-    $validated = request()->validate([
-        'memory' => 'required|numeric|min:1',
-        'disk' => 'required|numeric|min:1',
-        'cpu' => 'required|numeric|min:1',
-        'allocation_limit' => 'required|numeric|min:1',
-        'database_limit' => 'required|numeric|min:0',
-        'backup_limit' => 'required|numeric|min:0'
-    ]);
-
-    // Calculate resource differences
-    $cpuDiff = $validated['cpu'] - $server->cpu;
-    $memoryDiff = $validated['memory'] - $server->memory;
-    $diskDiff = $validated['disk'] - $server->disk;
-
-    // Check if differences can be accommodated
-    $this->validatorService->validate($validated, $server, auth()->user());
-    
-    if ($cpuDiff > $availableResources->cpu || 
-        $memoryDiff > $availableResources->memory || 
-        $diskDiff > $availableResources->disk) {
-        return back()->with('error', 'Insufficient resources available');
-    }
-
-    $server->update([
-        'memory' => $validated['memory'],
-        'disk' => $validated['disk'],
-        'cpu' => $validated['cpu'],
-        'allocation_limit' => $validated['allocation_limit'],
-        'database_limit' => $validated['database_limit'],
-        'backup_limit' => $validated['backup_limit']
-    ]);
-
-    return back()->with('success', 'Server resources updated successfully');
-}
 }

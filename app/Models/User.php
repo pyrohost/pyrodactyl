@@ -223,12 +223,12 @@ class User extends Model implements
     public function getAvailableResources(): array
     {
         return [
-            'cpu' => $this->limits['cpu'] - $this->resources['cpu'],
-            'memory' => $this->limits['memory'] - $this->resources['memory'],
-            'disk' => $this->limits['disk'] - $this->resources['disk'],
-            'allocations' => $this->limits['allocations'] - $this->resources['allocations'],
-            'databases' => $this->limits['databases'] - $this->resources['databases'],
-            'backups' => $this->limits['backups'] - $this->resources['backups'],
+            'cpu' => $this->resources['cpu'] - $this->limits['cpu'],
+            'memory' => $this->resources['memory'] - $this->limits['memory'],
+            'disk' => $this->resources['disk'] - $this->limits['disk'],
+            'allocations' => $this->resources['allocations'] - $this->limits['allocations'],
+            'databases' => $this->resources['databases'] - $this->limits['databases'],
+            'backups' => $this->resources['backups'] - $this->limits['backups'],
         ];
     }
 
