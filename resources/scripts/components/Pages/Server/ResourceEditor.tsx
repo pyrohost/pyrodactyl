@@ -17,6 +17,17 @@ interface Server {
     backup_limit: number;
 }
 
+interface ServerPageProps {
+    server: Server;
+    auth: {
+        user: {
+            id: number;
+            name: string;
+            email: string;
+        };
+    };
+}
+
 interface AvailableResources {
     memory: number;
     disk: number;
@@ -40,7 +51,9 @@ interface FormData {
     backup_limit: number;
 }
 
-export default function ResourceEditor({ server, availableResources }: ResourceEditorProps) {
+export default function ResourceEditor({availableResources }: ResourceEditorProps) {
+    let { server, auth } = usePage<ServerPageProps>().props;
+    
     const { data, setData, put, processing, errors } = useForm<FormData>({
         memory: server.memory,
         disk: server.disk,
@@ -49,6 +62,9 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
         database_limit: server.database_limit,
         backup_limit: server.backup_limit
     });
+    
+    
+    
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
