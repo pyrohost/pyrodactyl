@@ -2,6 +2,12 @@
 set -e
 echo "🚀 Starting deployment..."
 
+# Reset all local changes
+git reset --hard HEAD
+
+# Pull the latest changes from the repository
+git pull origin main --force
+
 # Git operations
 
 git pull origin main
