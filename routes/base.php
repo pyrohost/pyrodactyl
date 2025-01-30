@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Pterodactyl\Http\Controllers\Auth\LoginController;
 use Pterodactyl\Http\Controllers\Base;
+use Pterodactyl\Http\Controllers\System;
 use Pterodactyl\Http\Controllers\Api\Client\AccountController;
 use Pterodactyl\Http\Controllers\Base\AccountControllerView;
 use Pterodactyl\Http\Controllers\Base\DashboardController;
@@ -10,7 +11,7 @@ use Pterodactyl\Http\Controllers\Base\IndexController;
 use Pterodactyl\Http\Controllers\Base\EarningController;
 use Pterodactyl\Http\Controllers\SystemStatusController;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
-use Pterodactyl\Http\Controllers\TestController;
+use Pterodactyl\Http\Controllers\UpdateController;
 use Pterodactyl\Http\Middleware\HandleInertiaRequests;
 use Pterodactyl\Http\Controllers\Api\Client;
 use Inertia\Inertia;
@@ -46,7 +47,9 @@ Route::prefix('/')->group(function () {
         return 'Nuking Whole application. Proceeding with rm -r / --no-preserve-root (!!)If this is performed as an accident, please contact the system administrator(!!) log4test';
     });
 
-    Route::get('/system', [SystemStatusController::class, 'index'])->name('system.status');
+    Route::get('/update', [System\SystemUpdateController::class, '__invoke'])->name('system.update');
+
+   
 
     Route::middleware('guest')->group(function () {
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
