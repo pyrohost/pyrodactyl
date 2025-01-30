@@ -17,8 +17,8 @@ git pull origin main
 composer install --no-dev --optimize-autoloader
 
 echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
-npm install
-npm run build
+/root/.nvm/versions/node/v23.1.0/bin/npm install
+/root/.nvm/versions/node/v23.1.0/bin/npm run build
 
 
 # Laravel updates
