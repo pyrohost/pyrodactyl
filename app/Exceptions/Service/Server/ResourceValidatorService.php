@@ -10,7 +10,7 @@ class ResourceValidatorService
 {
     public function validate(array $data, Server $server, User $user): void 
     {
-        // Calculate how much resources are being added/removed
+        // Calculate resource changes (positive = increase, negative = decrease)
         $resourceChanges = [
             'memory' => $data['memory'] - $server->memory,
             'disk' => $data['disk'] - $server->disk,
@@ -20,52 +20,48 @@ class ResourceValidatorService
             'backups' => $data['backup_limit'] - $server->backup_limit,
         ];
 
-        // Calculate available resources (limit - used + current)
-        $availableResources = [
-            'memory' => $user->limits['memory'] - $user->resources['memory'] + $server->memory,
-            'disk' => $user->limits['disk'] - $user->resources['disk'] + $server->disk,
-            'cpu' => $user->limits['cpu'] - $user->resources['cpu'] + $server->cpu,
-            'allocations' => $user->limits['allocations'] - $user->resources['allocations'] + $server->allocation_limit,
-            'databases' => $user->limits['databases'] - $user->resources['databases'] + $server->database_limit,
-            'backups' => $user->limits['backups'] - $user->resources['backups'] + $server->backup_limit,
+        // Calculate what resources would be after change
+        $newTotalUsed = [
+            'memory' => $user->resources['memory'] + $resourceChanges['memory'],
+            'disk' => $user->resources['disk'] + $resourceChanges['disk'],
+            'cpu' => $user->resources['cpu'] + $resourceChanges['cpu'],
+            'allocations' => $user->resources['allocations'] + $resourceChanges['allocations'],
+            'databases' => $user->resources['databases'] + $resourceChanges['databases'],
+            'backups' => $user->resources['backups'] + $resourceChanges['backups'],
         ];
 
-        // Validate critical resources are not zero
-        if ($data['memory'] <= 0) {
-            throw new DisplayException('Memory must be greater than 0');
+        // Check if new totals would exceed user limits
+        if ($newTotalUsed['memory'] > $user->limits['memory']) {
+            throw new DisplayException("Memory allocation would exceed your limit of {$user->limits['memory']}MB");
         }
 
-        if ($data['disk'] <= 0) {
-            throw new DisplayException('Disk space must be greater than 0');
+        if ($newTotalUsed['disk'] > $user->limits['disk']) {
+            throw new DisplayException("Disk allocation would exceed your limit of {$user->limits['disk']}MB");
         }
 
-        if ($data['cpu'] <= 0) {
-            throw new DisplayException('CPU must be greater than 0');
+        if ($newTotalUsed['cpu'] > $user->limits['cpu']) {
+            throw new DisplayException("CPU allocation would exceed your limit of {$user->limits['cpu']}%");
         }
 
-        // Validate against available resources
-        if ($data['memory'] > $availableResources['memory']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['memory']}MB of memory to this server");
+        if ($newTotalUsed['allocations'] > $user->limits['allocations']) {
+            throw new DisplayException("Allocation count would exceed your limit of {$user->limits['allocations']}");
         }
 
-        if ($data['disk'] > $availableResources['disk']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['disk']}MB of disk space to this server");
+        if ($newTotalUsed['databases'] > $user->limits['databases']) {
+            throw new DisplayException("Database count would exceed your limit of {$user->limits['databases']}");
         }
 
-        if ($data['cpu'] > $availableResources['cpu']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['cpu']}% of CPU to this server");
+        if ($newTotalUsed['backups'] > $user->limits['backups']) {
+            throw new DisplayException("Backup count would exceed your limit of {$user->limits['backups']}");
         }
 
-        if ($data['allocation_limit'] > $availableResources['allocations']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['allocations']} allocations to this server");
+        // Prevent zero values for critical resources
+        if ($data['memory'] <= 0 || $data['disk'] <= 0 || $data['cpu'] <= 0) {
+            throw new DisplayException('Memory, disk and CPU must be greater than 0');
         }
 
-        if ($data['database_limit'] > $availableResources['databases']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['databases']} databases to this server");
-        }
-
-        if ($data['backup_limit'] > $availableResources['backups']) {
-            throw new DisplayException("Cannot allocate more than {$availableResources['backups']} backups to this server");
-        }
+        // Update user's resource usage with the changes
+        $user->resources = $newTotalUsed;
+        $user->save();
     }
 }
