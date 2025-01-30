@@ -53,6 +53,7 @@ interface FormData {
 
 export default function ResourceEditor({availableResources }: ResourceEditorProps) {
     const { server, auth } = usePage<ServerPageProps>().props;
+    console.log(server)
     
     const { data, setData, put, processing, errors } = useForm<FormData>({
         memory: server.memory,

@@ -11,6 +11,8 @@ import { Toaster as SonnerToaster } from 'sonner'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+console.log("!! PASTEL BETA, DEBUG LOGS WILL BE PRESENT HERE. DO NOT SHARE THIS INFORMATION WITH ANYONE !!")
+
 const App = ({ Component, pageProps }) => {
     useEffect(() => {
         const handleNavigate = (event) => {
