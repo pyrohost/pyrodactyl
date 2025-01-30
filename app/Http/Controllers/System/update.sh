@@ -3,6 +3,7 @@ set -e
 echo "🚀 Starting deployment..."
 
 # Reset all local changes
+echo "🔄 Resetting local changes..."
 git reset --hard HEAD
 
 # Pull the latest changes from the repository
