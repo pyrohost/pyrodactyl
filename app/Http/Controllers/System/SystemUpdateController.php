@@ -14,15 +14,12 @@ class SystemUpdateController extends Controller
 set -e
 echo "🚀 Starting deployment..."
 
-# Configure git for this repository only
-git config core.fileMode false
-git config safe.directory "$(pwd)"
+
 
 # Pull latest changes
 git pull origin main
 
 # Install dependencies
-composer install --no-dev --optimize-autoloader
 npm install
 npm run build
 
