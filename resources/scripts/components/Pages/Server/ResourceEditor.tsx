@@ -19,13 +19,7 @@ interface Server {
 
 interface ServerPageProps {
     server: Server;
-    auth: {
-        user: {
-            id: number;
-            name: string;
-            email: string;
-        };
-    };
+    
 }
 
 interface AvailableResources {
@@ -52,7 +46,7 @@ interface FormData {
 }
 
 export default function ResourceEditor({availableResources }: ResourceEditorProps) {
-    const { server, auth } = usePage<ServerPageProps>().props;
+    const { server} = usePage<ServerPageProps>().props;
     console.log(server)
     
     const { data, setData, put, processing, errors } = useForm<FormData>({
