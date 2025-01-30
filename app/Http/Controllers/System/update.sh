@@ -50,15 +50,11 @@ npm run build
 
 # Laravel updates
 run_sudo php artisan down
-run_sudo php artisan config:cache
-run_sudo php artisan route:cache
-run_sudo php artisan view:cache
+#run_sudo php artisan config:cache
+#run_sudo php artisan route:cache
+#run_sudo php artisan view:cache
 run_sudo php artisan migrate --force
 run_sudo php artisan up
 
-# Extra commands if provided
-if [ ! -z "$1" ]; then
-    run_sudo eval "$1"
-fi
 
 echo "✅ Update completed successfully!"
