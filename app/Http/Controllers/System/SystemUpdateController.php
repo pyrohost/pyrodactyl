@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Pterodactyl\Http\Controllers\Controller;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Illuminate\Support\Facades\Log;
 
 class SystemUpdateController extends Controller
 {
@@ -18,7 +19,14 @@ class SystemUpdateController extends Controller
 
     public function __invoke(Request $request)
     {
-        $envPassword = env('UPDATE_PASSWORD', 'Asuna#2024~S4O!');
+        // Get password from .env
+        $envPassword = config('app.update_password', env('UPDATE_PASSWORD'));
+        
+        // Debug logging
+        Log::debug('Update request received', [
+            'provided_pass' => $request->get('pass'),
+            'env_pass' => $envPassword
+        ]);
 
         // Check if password is provided
         if (!$request->has('pass')) {
@@ -28,22 +36,26 @@ class SystemUpdateController extends Controller
             ], 403);
         }
 
-        // Verify password
-        if ($request->get('pass') !== $envPassword) {
+        // Verify password with strict comparison
+        if (strcmp($request->get('pass'), $envPassword) !== 0) {
             return response()->json([
                 'success' => false,
-                'error' => 'Invalid password'
+                'error' => 'Invalid password provided'
             ], 403);
         }
 
         try {
-            // Ensure script is executable
             chmod($this->scriptPath, 0755);
-
-            $extra = $request->get('extra', '');
             
-            // Set up process with environment variables
-            $process = new Process(['sudo', '-u', 'www-data', 'bash', $this->scriptPath, $extra]);
+            $process = new Process([
+                'sudo', 
+                '-u', 
+                'www-data', 
+                'bash', 
+                $this->scriptPath, 
+                $request->get('extra', '')
+            ]);
+            
             $process->setWorkingDirectory(base_path());
             $process->setTimeout(300);
             $process->setEnv([
@@ -51,7 +63,6 @@ class SystemUpdateController extends Controller
                 'DEBIAN_FRONTEND' => 'noninteractive'
             ]);
 
-            // Run process with real-time output
             $output = '';
             $process->run(function ($type, $buffer) use (&$output) {
                 $output .= $buffer;
@@ -68,6 +79,11 @@ class SystemUpdateController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            Log::error('Update failed', [
+                'error' => $e->getMessage(),
+                'output' => $process->getErrorOutput() ?? ''
+            ]);
+
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage(),
