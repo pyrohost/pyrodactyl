@@ -70,7 +70,7 @@ export default function RenameServerDialog() {
       <CardContent className="flex flex-col items-center space-y-4">
        
         <img 
-                    src="/assets/svgs/spy.svg"
+                    src="/assets/svgs/noc.svg"
                     alt="Create New"
                     className="w-120 h-60 object-contain"
                 />

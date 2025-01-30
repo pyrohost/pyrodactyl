@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
+import ResourceCard from '../Common/ResourceEdit.card';
 import ServerManagementLayout from '@/components/Layouts/ServerLayout';
-import ResourceCard from '@/components/Server/ResourceCard';
+
 
 interface Server {
     identifier: string;
