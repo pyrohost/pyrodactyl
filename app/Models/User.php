@@ -193,40 +193,50 @@ class User extends Model implements
         ];
     }
 
-    public function updateResourceUsage(): void 
-    {
-        $servers = $this->servers()->get();
-        
-        $resources = [
-            'cpu' => 0,
-            'memory' => 0,
-            'disk' => 0,
-            'servers' => $servers->count(),
-            'allocations' => 0,
-            'databases' => 0,
-            'backups' => 0,
-        ];
+    public function updateResourceUsage(): void
+{
+    $resources = [
+        'cpu' => 0,
+        'memory' => 0,
+        'disk' => 0,
+        'allocations' => 0,
+        'databases' => 0,
+        'backups' => 0
+    ];
 
-        foreach ($servers as $server) {
-            $resources['cpu'] += $server->cpu;
-            $resources['memory'] += $server->memory;
-            $resources['disk'] += $server->disk;
-            $resources['allocations'] += $server->allocation_limit;
-            $resources['databases'] += $server->database_limit;
-            $resources['backups'] += $server->backup_limit;
-        }
+    // Sum all resources from user's servers
+    foreach ($this->servers as $server) {
+        $resources['cpu'] += $server->cpu;
+        $resources['memory'] += $server->memory;
+        $resources['disk'] += $server->disk;
+        $resources['allocations'] += $server->allocation_limit;
+        $resources['databases'] += $server->database_limit;
+        $resources['backups'] += $server->backup_limit;
+    }
 
+    // Update resources array if different
+    if ($this->resources !== $resources) {
         $this->resources = $resources;
         $this->save();
     }
+}
+
+    protected static function booted()
+{
+    static::retrieved(function ($user) {
+        $user->updateResourceUsage();
+    });
+}
 
     public function getAvailableResources(): array
 {
+    $this->updateResourceUsage();
+    
     return [
         'cpu' => $this->limits['cpu'] - $this->resources['cpu'],
         'memory' => $this->limits['memory'] - $this->resources['memory'],
         'disk' => $this->limits['disk'] - $this->resources['disk'],
-        'allocations' => $this->limits['allocations'] - $this->resources['allocations'],
+        'allocations' => $this->limits['allocations'] - $this->resources['allocations'], 
         'databases' => $this->limits['databases'] - $this->resources['databases'],
         'backups' => $this->limits['backups'] - $this->resources['backups'],
     ];
