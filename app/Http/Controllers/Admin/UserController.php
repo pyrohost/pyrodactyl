@@ -4,6 +4,7 @@ namespace Pterodactyl\Http\Controllers\Admin;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use IInertia\Inertia;
 use Pterodactyl\Models\User;
 use Pterodactyl\Models\Model;
 use Illuminate\Support\Collection;
@@ -21,6 +22,9 @@ use Pterodactyl\Services\Users\UserDeletionService;
 use Pterodactyl\Http\Requests\Admin\UserFormRequest;
 use Pterodactyl\Http\Requests\Admin\NewUserFormRequest;
 use Pterodactyl\Contracts\Repository\UserRepositoryInterface;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -73,13 +77,12 @@ class UserController extends Controller
     /**
      * Display user view page.
      */
-    public function view(User $user): View
-    {
-        return $this->view->make('admin.users.view', [
-            'user' => $user,
-            'languages' => $this->getAvailableLanguages(true),
-        ]);
-    }
+    public function view(User $user)
+{
+    return inertia('Admin/User/user.view', [
+        'user' => $user->load(['servers'])->toArray()
+    ]);
+}
 
     /**
      * Delete a user from the system.
@@ -113,41 +116,88 @@ class UserController extends Controller
     }
 
     /**
-     * Update a user on the system.
+     * Update a user on the system. 
+     * The user's resources and limits are updated. later implment to update plans
      *
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
-    public function update(UserFormRequest $request, User $user): RedirectResponse
-    {
+    public function update(Request $request, User $user): RedirectResponse
+{
+    try {
+        $validated = $request->validate([
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'username' => 'required|string|min:1|unique:users,username,' . $user->id,
+            'name_first' => 'required|string',
+            'name_last' => 'required|string',
+            'coins' => 'numeric|min:0',
+            'language' => 'required|string',
+            'root_admin' => 'boolean',
+            'password' => 'nullable|string|min:8|confirmed',
+            'resources.cpu' => 'numeric|min:0',
+            'resources.memory' => 'numeric|min:0',
+            'resources.disk' => 'numeric|min:0',
+            'resources.allocations' => 'numeric|min:0',
+            'resources.backups' => 'numeric|min:0',
+            'resources.servers' => 'numeric|min:0',
+            'resources.databases' => 'numeric|min:0',
+            'limits.cpu' => 'numeric|min:0',
+            'limits.memory' => 'numeric|min:0',
+            'limits.disk' => 'numeric|min:0',
+            'limits.allocations' => 'numeric|min:0',
+            'limits.backups' => 'numeric|min:0',
+            'limits.servers' => 'numeric|min:0',
+            'limits.databases' => 'numeric|min:0',
+        ]);
+
+        $data = [
+            'email' => $validated['email'],
+            'username' => $validated['username'],
+            'name_first' => $validated['name_first'],
+            'name_last' => $validated['name_last'],
+            'coins' => $validated['coins'],
+            'language' => $validated['language'],
+            'root_admin' => $validated['root_admin'] ?? false,
+            'resources' => $request->input('resources'),
+            'limits' => $request->input('limits')
+        ];
+
+        // Add password to data if provided
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->input('password'));
+        }
+
         $this->updateService
             ->setUserLevel(User::USER_LEVEL_ADMIN)
-            ->handle($user, $request->normalize());
+            ->handle($user, $data);
 
-        $this->alert->success(trans('admin/user.notices.account_updated'))->flash();
-
-        return redirect()->route('admin.users.view', $user->id);
+        return redirect()->back()->with('success', 'User updated successfully');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
+}
 
     /**
      * Get a JSON response of users on the system.
      */
     public function json(Request $request): Model|Collection
-    {
-        $users = QueryBuilder::for(User::query())->allowedFilters(['email'])->paginate(25);
+{
+    $users = QueryBuilder::for(User::query())
+        ->allowedFilters(['email', 'username'])
+        ->select(['id', 'email', 'username', 'name_first', 'name_last', 'root_admin', 'language', 'resources', 'limits', 'purchases_plans', 'coins'])
+        ->paginate(25);
 
-        // Handle single user requests.
-        if ($request->query('user_id')) {
-            $user = User::query()->findOrFail($request->input('user_id'));
-            $user->md5 = md5(strtolower($user->email));
-
-            return $user;
-        }
-
-        return $users->map(function ($item) {
-            $item->md5 = md5(strtolower($item->email));
-
-            return $item;
-        });
+    if ($request->query('user_id')) {
+        $user = User::query()->findOrFail($request->input('user_id'));
+        $user->md5 = md5(strtolower($user->email));
+        return $user;
     }
+
+    return $users->map(function ($item) {
+        $item->md5 = md5(strtolower($item->email));
+        return $item;
+    });
+}
+
+    
 }

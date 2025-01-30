@@ -22,9 +22,12 @@ class LocationRepository extends EloquentRepository implements LocationRepositor
      * Return locations with a count of nodes and servers attached to it.
      */
     public function getAllWithDetails(): Collection
-    {
-        return $this->getBuilder()->withCount('nodes', 'servers')->get($this->getColumns());
-    }
+{
+    return $this->getBuilder()
+        ->withCount('nodes')
+        ->withCount('servers')
+        ->get($this->getColumns());
+}
 
     /**
      * Return all the available locations with the nodes as a relationship.

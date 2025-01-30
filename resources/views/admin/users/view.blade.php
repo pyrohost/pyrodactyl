@@ -14,110 +14,133 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <form action="{{ route('admin.users.view', $user->id) }}" method="post">
+<form action="{{ route('admin.users.view', $user->id) }}" method="POST">
+    @csrf
+    @method('PATCH')
+    
+    <div class="row">
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Identity</h3>
+                    <h3 class="box-title">User Identity</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="email" class="control-label">Email</label>
-                        <div>
-                            <input type="email" name="email" value="{{ $user->email }}" class="form-control form-autocomplete-stop">
-                        </div>
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" class="form-control" value="{{ $user->username }}">
                     </div>
                     <div class="form-group">
-                        <label for="registered" class="control-label">Username</label>
-                        <div>
-                            <input type="text" name="username" value="{{ $user->username }}" class="form-control form-autocomplete-stop">
-                        </div>
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}">
                     </div>
                     <div class="form-group">
-                        <label for="registered" class="control-label">Client First Name</label>
-                        <div>
-                            <input type="text" name="name_first" value="{{ $user->name_first }}" class="form-control form-autocomplete-stop">
-                        </div>
+                        <label for="name_first">First Name</label>
+                        <input type="text" name="name_first" id="name_first" class="form-control" value="{{ $user->name_first }}">
                     </div>
                     <div class="form-group">
-                        <label for="registered" class="control-label">Client Last Name</label>
-                        <div>
-                            <input type="text" name="name_last" value="{{ $user->name_last }}" class="form-control form-autocomplete-stop">
-                        </div>
+                        <label for="name_last">Last Name</label>
+                        <input type="text" name="name_last" id="name_last" class="form-control" value="{{ $user->name_last }}">
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Default Language</label>
-                        <div>
-                            <select name="language" class="form-control">
-                                @foreach($languages as $key => $value)
-                                    <option value="{{ $key }}" @if($user->language === $key) selected @endif>{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            <p class="text-muted"><small>The default language to use when rendering the Panel for this user.</small></p>
-                        </div>
+                        <label for="password">Password (optional)</label>
+                        <input type="password" name="password" id="password" class="form-control">
                     </div>
-                </div>
-                <div class="box-footer">
-                    {!! csrf_field() !!}
-                    {!! method_field('PATCH') !!}
-                    <input type="submit" value="Update User" class="btn btn-primary btn-sm">
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="root_admin" {{ $user->root_admin ? 'checked' : '' }}>
+                            Administrator Account
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Password</h3>
+                    <h3 class="box-title">Resources & Limits</h3>
                 </div>
                 <div class="box-body">
-                    <div class="alert alert-success" style="display:none;margin-bottom:10px;" id="gen_pass"></div>
-                    <div class="form-group no-margin-bottom">
-                        <label for="password" class="control-label">Password <span class="field-optional"></span></label>
-                        <div>
-                            <input type="password" id="password" name="password" class="form-control form-autocomplete-stop">
-                            <p class="text-muted small">Leave blank to keep this user's password the same. User will not receive any notification if password is changed.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Current Resources</h4>
+                            @foreach(['cpu', 'memory', 'disk', 'allocations', 'backups', 'servers'] as $resource)
+                                <div class="form-group">
+                                    <label>{{ ucfirst($resource) }}</label>
+                                    <input type="number" 
+                                           name="resources[{{ $resource }}]" 
+                                           class="form-control"
+                                           step="{{ $resource === 'cpu' ? '0.1' : '1' }}"
+                                           value="{{ $user->resources[$resource] ?? 0 }}">
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Resource Limits</h4>
+                            @foreach(['cpu', 'memory', 'disk', 'allocations', 'backups', 'servers'] as $limit)
+                                <div class="form-group">
+                                    <label>{{ ucfirst($limit) }} Limit</label>
+                                    <input type="number" 
+                                           name="limits[{{ $limit }}]" 
+                                           class="form-control"
+                                           step="{{ $limit === 'cpu' ? '0.1' : '1' }}"
+                                           value="{{ $user->limits[$limit] ?? 0 }}">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="box">
+
+            <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Permissions</h3>
+                    <h3 class="box-title">Danger Zone</h3>
                 </div>
                 <div class="box-body">
-                    <div class="form-group">
-                        <label for="root_admin" class="control-label">Administrator</label>
-                        <div>
-                            <select name="root_admin" class="form-control">
-                                <option value="0">@lang('strings.no')</option>
-                                <option value="1" {{ $user->root_admin ? 'selected="selected"' : '' }}>@lang('strings.yes')</option>
-                            </select>
-                            <p class="text-muted"><small>Setting this to 'Yes' gives a user full administrative access.</small></p>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                        Delete User
+                    </button>
                 </div>
             </div>
         </div>
-    </form>
-    <div class="col-xs-12">
-        <div class="box box-danger">
-            <div class="box-header with-border">
-                <h3 class="box-title">Delete User</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-footer text-right">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
-            <div class="box-body">
-                <p class="no-margin">There must be no servers associated with this account in order for it to be deleted.</p>
+        </div>
+    </div>
+</form>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Delete User</h4>
             </div>
-            <div class="box-footer">
-                <form action="{{ route('admin.users.view', $user->id) }}" method="POST">
-                    {!! csrf_field() !!}
-                    {!! method_field('DELETE') !!}
-                    <input id="delete" type="submit" class="btn btn-sm btn-danger pull-right" {{ $user->servers->count() < 1 ?: 'disabled' }} value="Delete User" />
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <form action="{{ route('admin.users.view', $user->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 @endsection
+

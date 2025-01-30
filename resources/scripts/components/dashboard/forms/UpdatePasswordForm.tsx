@@ -60,7 +60,7 @@ export default () => {
                     <Fragment>
                         <SpinnerOverlay size={'large'} visible={processing} />
                         <form onSubmit={handleSubmit} className="m-0 space-y-6">
-                            <div className="space-y-2">
+                            <div className="space-y-2 py-4">
                                 <Label htmlFor="current_password">Current Password</Label>
                                 <Input
                                     id="current_password"

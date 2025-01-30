@@ -30,7 +30,7 @@ const CreateNew: React.FC<CreateNewProps> = ({
         "transition-colors duration-200 flex justify-center items-center",
         )}>
         <img 
-          src="/assets/svgs/empty.svg"
+          src="/assets/svgs/empty-box.svg"
           alt="Create New"
           className="w-120 h-60 object-contain"
         />

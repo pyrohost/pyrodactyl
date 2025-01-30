@@ -2,28 +2,28 @@
 
 namespace Pterodactyl\Services\Locations;
 
-use Pterodactyl\Models\Location;
 use Pterodactyl\Contracts\Repository\LocationRepositoryInterface;
 
 class LocationUpdateService
 {
-    /**
-     * LocationUpdateService constructor.
-     */
     public function __construct(protected LocationRepositoryInterface $repository)
     {
     }
 
-    /**
-     * Update an existing location.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
-     */
-    public function handle(Location|int $location, array $data): Location
+    public function handle(int $id, array $data): void
     {
-        $location = ($location instanceof Location) ? $location->id : $location;
+        $updateData = [];
+        
+        // Only include fields that exist in the data array
+        if (isset($data['short'])) $updateData['short'] = $data['short'];
+        if (isset($data['long'])) $updateData['long'] = $data['long'];
+        if (array_key_exists('flag_url', $data)) $updateData['flag_url'] = $data['flag_url'];
+        if (isset($data['maximum_servers'])) $updateData['maximum_servers'] = (int) $data['maximum_servers'];
+        if (isset($data['required_plans'])) $updateData['required_plans'] = $data['required_plans'];
+        if (isset($data['required_rank'])) $updateData['required_rank'] =  $data['required_rank'];
 
-        return $this->repository->update($location, $data);
+        if (!empty($updateData)) {
+            $this->repository->update($id, $updateData);
+        }
     }
 }

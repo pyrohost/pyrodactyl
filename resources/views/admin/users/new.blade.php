@@ -65,6 +65,18 @@
             </div>
         </div>
         <div class="col-md-6">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">User Resources</h3>
+        </div>
+        <div class="box-body">
+            <div class="alert alert-info mb-0">
+                <i class="fa fa-info-circle mr-2"></i> Resources for this user will be set to default values. You can modify these settings after creating the account through the user's management page.
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="col-md-6">
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Permissions</h3>
@@ -103,6 +115,7 @@
             </div>
         </div>
     </form>
+    
 </div>
 @endsection
 

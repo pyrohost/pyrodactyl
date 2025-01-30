@@ -82,6 +82,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             DaemonAuthenticate::class,
         ],
+        'pastel-key' => [ \Petrodactyl\Http\Middleware\PastelKeyMiddleware::class ],
     ];
 
     /**

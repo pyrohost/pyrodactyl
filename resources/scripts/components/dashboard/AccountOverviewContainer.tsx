@@ -14,6 +14,7 @@ import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm'
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Code from '../elements/Code';
 import FlashbackTester from '../elements/Flashback';
+import AccountSSHContainer from './ssh/AccountSSHContainer';
 
 export default () => {
     const { props } = usePage();
@@ -58,7 +59,7 @@ export default () => {
                 
                 
                 
-                <Card className='max-w-3xl'>
+                <Card className='max-w-3xl '>
                     <CardHeader>
                         <CardTitle>Build Version</CardTitle>
                         <CardDescription>Below is useful information for debugging</CardDescription>
@@ -67,10 +68,13 @@ export default () => {
                         <Code className='dark:bg-zinc-800 bg-zinc-200 '>Based on {Appver}</Code>
                         <Code className='dark:bg-zinc-800 bg-zinc-200'>Pastel Beta December 2024</Code>
                         
+                        
                     </CardContent>
                 </Card>
 
-                <FlashbackTester/>
+                
+
+                <FlashbackTester className='max-w-3xl'/>
             </div>
         </PageContentBlock>
     );

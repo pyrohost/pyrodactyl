@@ -85,19 +85,59 @@ class UserController extends ApplicationApiController
      * @throws \Exception
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      */
-    public function store(StoreUserRequest $request): JsonResponse
-    {
-        $user = $this->creationService->handle($request->validated());
 
-        return $this->fractal->item($user)
-            ->transformWith($this->getTransformer(UserTransformer::class))
-            ->addMeta([
-                'resource' => route('api.application.users.view', [
-                    'user' => $user->id,
-                ]),
-            ])
-            ->respond(201);
-    }
+     public function rules(): array
+     {
+         return [
+             'uuid' => 'sometimes|string|size:36|unique:users,uuid',
+             'email' => 'required|email|between:1,191|unique:users,email',
+             'username' => 'required|between:1,191|unique:users,username',
+             'name_first' => 'required|string|between:1,191',
+             'name_last' => 'required|string|between:1,191',
+             'password' => 'required|string|min:8',
+             'root_admin' => 'boolean',
+             'language' => 'string|in:' . implode(',', array_keys((new User)->getAvailableLanguages())),
+             'resources' => 'nullable|array',
+             'limits' => 'nullable|array',
+             'purchases_plans' => 'nullable|array',
+             'coins' => 'nullable|integer'
+         ];
+     }
+
+
+     public function store(StoreUserRequest $request): JsonResponse
+     {
+         $data = $request->validated();
+         
+         $data = array_merge([
+             'uuid' => Str::uuid()->toString(),
+             'external_id' => null,
+             'root_admin' => false,
+             'language' => 'en',
+             'use_totp' => false,
+             'totp_secret' => null,
+             'resources' => [],
+             'limits' => [],
+             'purchases_plans' => [],
+             'coins' => 0,
+             'gravatar' => true
+         ], $data);
+     
+         $user = $this->creationService->handle($data);
+     
+         return $this->fractal->item($user)
+             ->transformWith($this->getTransformer(UserTransformer::class))
+             ->addMeta([
+                 'resource' => route('api.application.users.view', [
+                     'user' => $user->id,
+                 ]),
+             ])
+             ->respond(201);
+     }
+
+
+    
+
 
     /**
      * Handle a request to delete a user from the Panel. Returns a HTTP/204 response

@@ -60,22 +60,61 @@
                         <div class="col-md-12">
                             <label for="pShortModal" class="form-label">Short Code</label>
                             <input type="text" name="short" id="pShortModal" class="form-control" />
-                            <p class="text-muted small">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters, for example, <code>us.nyc.lvl3</code>.</p>
+                            <p class="text-muted small">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters.</p>
                         </div>
                         <div class="col-md-12">
                             <label for="pLongModal" class="form-label">Description</label>
                             <textarea name="long" id="pLongModal" class="form-control" rows="4"></textarea>
                             <p class="text-muted small">A longer description of this location. Must be less than 191 characters.</p>
                         </div>
+                        <div class="col-md-12">
+                            <label for="pFlagUrlModal" class="form-label">Flag URL</label>
+                            <input type="url" name="flag_url" id="pFlagUrlModal" class="form-control" />
+                            <p class="text-muted small">A valid URL to an image file representing this location's flag.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pMaxServersModal" class="form-label">Maximum Servers</label>
+                            <input type="number" name="maximum_servers" id="pMaxServersModal" class="form-control" value="0" min="0" />
+                            <p class="text-muted small">Maximum number of servers allowed (0 for unlimited).</p>
+                        </div>
+                        <div class="col-md-12">
+    <label>Required Ranks</label>
+    <div class="form-group">
+        <div class="checkbox-inline">
+            <label class="mr-4">
+                <input type="checkbox" name="required_rank[]" value="free"> Free
+            </label>
+            <label class="mr-4">
+                <input type="checkbox" name="required_rank[]" value="premium"> Premium
+            </label>
+            <label>
+                <input type="checkbox" name="required_rank[]" value="staff"> Staff
+            </label>
+        </div>
+    </div>
+    <p class="text-muted small">Select ranks that can access this location.</p>
+</div>
+
+
+                        <div class="col-md-12">
+                            <label for="pRequiredPlansModal" class="form-label">Required Plans</label>
+                            <select name="required_plans[]" id="pRequiredPlansModal" class="form-control" multiple>
+                                <option value="basic">Basic</option>
+                                <option value="premium">Premium</option>
+                                <option value="enterprise">Enterprise</option>
+                            </select>
+                            <p class="text-muted small">Select plans that have access to this location (none for all plans).</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     {!! csrf_field() !!}
-                    <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success btn-sm">Create</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </div>
     </div>
+</div>
 </div>
 @endsection

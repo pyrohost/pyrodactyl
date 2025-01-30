@@ -36,8 +36,23 @@ class LocationController extends ApplicationApiController
     public function index(GetLocationsRequest $request): array
     {
         $locations = QueryBuilder::for(Location::query())
-            ->allowedFilters(['short', 'long'])
-            ->allowedSorts(['id'])
+            ->allowedFilters([
+                'short',
+                'long',
+                'flag_url',
+                'maximum_servers',
+                'required_plans',
+                'required_rank'
+            ])
+            ->allowedSorts([
+                'id',
+                'short',
+                'long',
+                'maximum_servers',
+                'required_rank',
+                'created_at',
+                'updated_at'
+            ])
             ->paginate($request->query('per_page') ?? 50);
 
         return $this->fractal->collection($locations)

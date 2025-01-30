@@ -18,6 +18,8 @@ use Pterodactyl\Http\Controllers\Auth\LogoutController;
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+    Route::get('/discord', [Auth\DiscordRegisterController::class, 'redirectToDiscord'])->name('auth.discord');
+Route::get('/discord/callback', [Auth\DiscordRegisterController::class, 'handleDiscordCallback'])->name('auth.discord.callback');
     
 });
 

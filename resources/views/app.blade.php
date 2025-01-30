@@ -8,15 +8,16 @@
  | |\  | (_| | (_| | | | | || (_| |  __/\ V / 
  |_| \_|\__,_|\__,_|_| |_|_(_)__,_|\___| \_/  
 -->
-<!-- Powered by Pyrodactyl.  -->
+<!-- All pastels instances are powered by Pyrodactyl  -->
  <!-- Images by undraw, storyset. Icons by React icons and LucideReact  -->
+ <!--<a href="https://storyset.com/work">Work illustrations by Storyset</a>-->
  
 
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Laravel configuruing Head / etc  -->
+        <!-- SSR Objects -->
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" href="{{ config('app.company_logo_url') }}" type="image/svg+xml">
@@ -43,7 +44,7 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        <!-- Interia App with react render -->
+        <!-- React frontend -->
         @inertia
     </body>
 </html>

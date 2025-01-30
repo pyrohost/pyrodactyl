@@ -47,5 +47,37 @@ class DashboardController extends BaseController
         'user' => Auth::user(),
         'servers' => Auth::user()->servers,
     ]);
+
 }
+
+public function shop(): Response
+{
+    if (!Auth::check()) {
+        return Inertia::location(route('auth.login'));
+    }
+
+    $resource = \Pterodactyl\Models\ShopResources::all();
+
+    return Inertia::render('Shop/Overview', [
+        'user' => Auth::user(),
+        'servers' => Auth::user()->servers,
+        'resource' => $resource,
+    ]);
+}
+
+public function logout(): Response
+{
+    if (!Auth::check()) {
+        return Inertia::location(route('auth.login'));
+    }
+
+    $resource = \Pterodactyl\Models\ShopResources::all();
+
+    return Inertia::render('Auth/Logout', [
+        'user' => Auth::user(),
+        'servers' => Auth::user()->servers,
+        'resource' => $resource,
+    ]);
+}
+
 }

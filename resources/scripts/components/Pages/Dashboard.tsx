@@ -9,6 +9,7 @@ import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
 import ServerRow from '../dashboard/ServerRow';
 import ServerList from './Common/Servers';
+import ResourceView from '../dashboard/Resource-Containers';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -21,6 +22,10 @@ interface PageProps {
   };
   darkMode: boolean;
   companyDesc: string;
+  AppConfig: {
+    dashColor: string;
+    bannerImg: string;
+  };
 }
 
 export default function AdminDashboard(): JSX.Element {
@@ -28,7 +33,7 @@ export default function AdminDashboard(): JSX.Element {
   const { auth, companyDesc, AppConfig } = props;
   const username = auth.user.username;
   const userRank = auth.user.rank;
-  const banner_clr = AppConfig.dashColor;
+  const [banner_clr, setBannerClr] = useState<string>(AppConfig.dashColor);
   const pterodactylId = auth.user.pterodactyl_id;
 
   const [currentTime, setCurrentTime] = useState<string>(new Date().toLocaleTimeString());
@@ -50,6 +55,10 @@ export default function AdminDashboard(): JSX.Element {
   );
 
   //console.log(servers.items.length)
+
+  useEffect(() => {
+    setBannerClr(AppConfig.dashColor);
+  }, [AppConfig.dashColor]);
 
 
 
@@ -93,6 +102,7 @@ export default function AdminDashboard(): JSX.Element {
   };
 
   return (
+    <>
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
@@ -107,9 +117,9 @@ export default function AdminDashboard(): JSX.Element {
       <Card className="w-full mb-6 overflow-hidden">
         <CardContent className="p-0">
           <div className="relative h-[160px] w-full">
-            <div className={`absolute inset-0 bg-gradient-to-r ss from-zinc-400 to-stone-300 dark:from-pink-500 dark:to-zinc-800 opacity-80 `} />
+            <div className={`absolute inset-0 ${banner_clr} }`} />
             <img
-              src="https://cdn.dribbble.com/users/2433051/screenshots/4872252/media/93fa4ea6accf793c6c64b4d7f20786ac.gif"
+              src={AppConfig.bannerImg}
               alt="Dashboard Banner"
               className="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
               loading="lazy"
@@ -140,9 +150,15 @@ export default function AdminDashboard(): JSX.Element {
       </Card>
 
       {/* Resources and Servers */}
+      <div className='h-1/6 py-4 mb-4 px-4'>
+        <ResourceView/>
+      </div>
+
       <ServerList/>
       
       
     </AuthenticatedLayout>
+    </>
   );
+
 }

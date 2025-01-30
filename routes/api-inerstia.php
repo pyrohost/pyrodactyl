@@ -11,6 +11,7 @@ use Pterodactyl\Http\Controllers\Base\AccountControllerView;
 use Pterodactyl\Http\Middleware\HandleInertiaRequests;
 use Pterodactyl\Http\Middleware\VerifyCsrfToken;
 use Pterodactyl\Http\Controllers\TestController;
+use Pterodactyl\Http\Controllers\Base;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,26 @@ Route::prefix('/')->middleware([
     Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
     Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 
+
+    Route::post('/shop/buy/{id}', [Base\ShopController::class, 'buy'])->name('api:client.shop.buy');
+
+    Route::get('/notifications', [Client\NotificationController::class, 'indexJson']);
+    Route::post('/notifications/{id}/read', [Client\NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/purge/{count}', [Client\NotificationController::class, 'purge']);
+
+
+    //`/api/inerstia/pastel-keys`
+    // DO NOT PUSH WITHOUT TESTING
+
+
+    Route::prefix('/pastel-keys')->group(function () {
+        Route::get('/', [Base\PastelKeyController::class, 'index']);
+        Route::post('/', [Base\PastelKeyController::class, 'store']);
+        Route::delete('/{key}', [Base\PastelKeyController::class, 'destroy']);
+        //Route::get('/demo-key', [Base\PastelKeyController::class, 'generateDemoKey']);
+    });
+
+
     // Account routes with updated middleware
     Route::prefix('/account')->middleware([
     'web',
@@ -44,8 +65,13 @@ Route::prefix('/')->middleware([
         
         Route::put('/email', [Client\AccountController::class, 'updateEmail']);
         Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
-        Route::post('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
-        Route::post('/password', [TestController::class, 'updatePassword'])->name('api:client.account.update-password');
+
+        Route::get('/servers/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'index'])
+        ->name('servers.resources');
+        Route::put('/servers/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'update'])
+        ->name('servers.resources.update');
+        
+        Route::post('/password', [Client\Inerstia\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
         Route::post('/test', [TestController::class, 'test'])->name('api:client.account.update-password');
     });
 

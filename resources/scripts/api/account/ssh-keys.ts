@@ -1,4 +1,4 @@
-import { SSHKey, Transformers } from '@definitions/user';
+import { SSHKey, Transformers } from '../definitions/user';
 import type { AxiosError } from 'axios';
 import type { SWRConfiguration } from 'swr';
 import useSWR from 'swr';

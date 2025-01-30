@@ -11,6 +11,7 @@ use Pterodactyl\Http\Controllers\Base\AccountControllerView;
 use Pterodactyl\Http\Middleware\HandleInertiaRequests;
 use Pterodactyl\Http\Middleware\VerifyCsrfToken;
 use Pterodactyl\Http\Controllers\TestController;
+use Pterodactyl\Http\Controllers\Base;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,12 @@ Route::prefix('/')->middleware([
     Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
     Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 
+    Route::get('/resources', [Base\ShopController::class, 'show'])->name('api:client.resources.json');
+    Route::post('/resources', [Base\ShopController::class, 'update'])->name('api:client.resources.update');
+
+    
+
+
     // Account routes with updated middleware
     Route::prefix('/account')->middleware([
     'web',
@@ -41,6 +48,7 @@ Route::prefix('/')->middleware([
         Route::put('/email', [Client\AccountController::class, 'updateEmail']);
         Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
         Route::post('/test', [TestController::class, 'testFlash'])->name('api:client.account.update-password');
+        
         
     });
 

@@ -7,20 +7,19 @@ use Pterodactyl\Contracts\Repository\LocationRepositoryInterface;
 
 class LocationCreationService
 {
-    /**
-     * LocationCreationService constructor.
-     */
     public function __construct(protected LocationRepositoryInterface $repository)
     {
     }
 
-    /**
-     * Create a new location.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     public function handle(array $data): Location
     {
-        return $this->repository->create($data);
+        return $this->repository->create([
+            'short' => $data['short'],
+            'long' => $data['long'],
+            'flag_url' => $data['flag_url'],
+            'maximum_servers' => $data['maximum_servers'],
+            'required_plans' => $data['required_plans'],
+            'required_rank' => $data['required_rank'],
+        ]);
     }
 }

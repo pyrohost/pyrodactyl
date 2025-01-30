@@ -223,8 +223,8 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="hover:bg-red-900 bg-zinc-400 dark:bg-black mt-1   dark:hover:bg-rose-950">
                                     <Link
-                                        href='/auth/logout'
-                                        method="post"
+                                        href='/logout'
+                                        method="get"
                                         as="button"
                                         className="flex items-center w-full"
                                     >

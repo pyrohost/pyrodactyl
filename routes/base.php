@@ -11,6 +11,7 @@ use Pterodactyl\Http\Controllers\SystemStatusController;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Controllers\TestController;
 use Pterodactyl\Http\Middleware\HandleInertiaRequests;
+use Pterodactyl\Http\Controllers\Api\Client;
 use Inertia\Inertia;
 use Pterodactyl\Http\Controllers\ServerController;
 
@@ -28,6 +29,10 @@ Route::prefix('/')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['auth'])
         ->name('dashboard');
+
+    Route::get('/logout', [DashboardController::class, 'logout'])
+        ->middleware(['auth'])
+        ->name('page.logout');
 
     Route::post('logout', [LoginController::class, 'logout'])->name('auth.logout');
 
@@ -52,15 +57,21 @@ Route::prefix('/')->group(function () {
 
         Route::get('/servers', [DashboardController::class, 'servers']) ->name('servers');
         Route::get('/watch', [DashboardController::class, 'watch']) ->name('watch');
+        Route::get('/shop', [DashboardController::class, 'shop']) ->name('shop');
+        
         // server frontend
 
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');
+        Route::get('/server/{server}/resources', [Client\Inerstia\ServerResourceController::class, 'index'])
+        ->name('servers.resources');
         Route::get('/server/{uuidShort}/utilization', [ServerController::class, 'util'])->name('server.utilnsole');
         Route::get('/server/{uuidShort}/console', [ServerController::class, 'console'])->name('server.console');
         Route::get('/server/{uuidShort}/files', [ServerController::class, 'files'])->name('server.files');
         Route::get('/server/{uuidShort}/settings', [ServerController::class, 'settings'])->name('server.settings');
         
     });
+
+    
 
     Route::get('/locales/locale.json', Base\LocaleController::class)
         ->withoutMiddleware(['auth', RequireTwoFactorAuthentication::class])

@@ -15,6 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose, DrawerFooter, DrawerDescription } from "@/components/ui/drawer"
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/elements/Spinner";
+import { LucideFolder, LucideLoader2 } from "lucide-react";
 
 interface Props {
   currentDirectory: string;
@@ -106,54 +108,71 @@ export function FileButton({ currentDirectory, onDirectoryCreate }: Props) {
 
 
     <Drawer open={open} onOpenChange={setOpen}>
-    <DrawerTrigger asChild>
-      <Button variant="default" size="sm">
-        Create Folder
-      </Button>
-    </DrawerTrigger>
-    <DrawerContent>
-      
-      <div className="flex flex-col items-center space-y-6 py-4">
-      <DrawerHeader className="items-center space-y-2">
-        <DrawerTitle className="text-xl font-semibold">Create New Folder</DrawerTitle>
-        
+  <DrawerTrigger asChild>
+    <Button variant="default" size="sm">
+      Create Folder
+    </Button>
+  </DrawerTrigger>
+  <DrawerContent className="max-w-md">
+    <div className="px-6 py-8">
+      <DrawerHeader className="mb-6 text-center">
+        <DrawerTitle className="text-2xl font-medium tracking-tight">
+          Create New Folder
+        </DrawerTitle>
       </DrawerHeader>
-        
-        <div className="flex flex-col items-center space-y-6 py-4">
-          <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md w-[450px]">
+      
+      <div className="space-y-6">
+        {/* Location display */}
+        <div className="rounded-lg bg-secondary/10 p-4">
+          <div className="flex items-center gap-2 text-sm text-secondary-foreground">
+            <LucideFolder className="h-4 w-4" />
             <span className="font-mono">
-              Location: root{currentDir === '/' ? '/' : currentDir + '/'}{dirName || '<folder name>'}
+              {currentDir === '/' ? '/' : currentDir + '/'}{dirName || '...'}
             </span>
           </div>
-          
-          <Input
-            className="w-[450px]"
-            placeholder="Enter folder name"
+        </div>
+
+        {/* Input field */}
+        <div className="space-y-2">
+          <label htmlFor="folderName" className="text-sm font-medium">
+            Folder Name
+          </label>
+          <input
+            id="folderName"
+            type="text"
             value={dirName}
             onChange={(e) => setDirName(e.target.value)}
             onKeyDown={handleKeyDown}
+            className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            placeholder="Enter folder name..."
           />
         </div>
 
-        <DrawerFooter className="sm:justify-center gap-2">
-          <div className="flex gap-2 justify-center">
-            <Button 
-              className="w-32"
-              onClick={handleCreate}
-              disabled={!dirName.trim() || isLoading}
-            >
-              Create Folder
-            </Button>
-            <DrawerClose asChild>
-              <Button variant="outline" className="w-32">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </div>
-        </DrawerFooter>
+        {/* Action buttons */}
+        <div className="flex justify-end gap-3 pt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleCreate}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <LucideLoader2 className="h-4 w-4" /> Creating...
+              </span>
+            ) : 'Create Folder'}
+          </Button>
+        </div>
       </div>
-    </DrawerContent>
-  </Drawer>
+    </div>
+  </DrawerContent>
+</Drawer>
 
     <Drawer open={isCreateFileOpen} onOpenChange={setIsCreateFileOpen}>
   <DrawerTrigger asChild>

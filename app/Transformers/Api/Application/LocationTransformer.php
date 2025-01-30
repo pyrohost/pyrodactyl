@@ -12,27 +12,28 @@ class LocationTransformer extends BaseTransformer
     /**
      * List of resources that can be included.
      */
-    protected array $availableIncludes = ['nodes', 'servers'];
+    protected array $availableIncludes = [
+        'nodes',
+        'servers',
+    ];
 
-    /**
-     * Return the resource name for the JSONAPI output.
-     */
     public function getResourceName(): string
     {
         return Location::RESOURCE_NAME;
     }
 
-    /**
-     * Return a generic transformed location array.
-     */
     public function transform(Location $location): array
     {
         return [
             'id' => $location->id,
             'short' => $location->short,
             'long' => $location->long,
-            $location->getUpdatedAtColumn() => $this->formatTimestamp($location->updated_at),
-            $location->getCreatedAtColumn() => $this->formatTimestamp($location->created_at),
+            'flag_url' => $location->flag_url,
+            'maximum_servers' => $location->maximum_servers,
+            'required_plans' => $location->required_plans,
+            'required_rank' => $location->required_rank,
+            'created_at' => $location->created_at->toIso8601String(),
+            'updated_at' => $location->updated_at->toIso8601String(),
         ];
     }
 

@@ -47,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
                 Route::middleware('guest')->prefix('/auth')->group(base_path('routes/auth.php'));
             });
 
-            Route::middleware(['api', RequireTwoFactorAuthentication::class])->group(function () {
+            Route::middleware(['api', 'auth', RequireTwoFactorAuthentication::class])->group(function () {
                 Route::middleware(['application-api', 'throttle:api.application'])
                     ->prefix('/api/application')
                     ->scopeBindings()

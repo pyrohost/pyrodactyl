@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use Pterodactyl\Extensions\Themes\Theme;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Inertia\Inertia;
+use Pterodactyl\Services\Server\ResourceValidatorService;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -96,6 +97,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('extensions.themes', function () {
             return new Theme();
         });
+
+        $this->app->singleton(ResourceValidatorService::class);
     }
 
     /**

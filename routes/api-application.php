@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Pterodactyl\Http\Controllers\Api\Application;
+use Pterodactyl\Http\Controllers\Base;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,6 +12,9 @@ use Pterodactyl\Http\Controllers\Api\Application;
 | Endpoint: /api/application/users
 |
 */
+
+
+Route::get('/status', [Base\SystemStatusController::class, 'index']);
 
 Route::group(['prefix' => '/users'], function () {
     Route::get('/', [Application\Users\UserController::class, 'index'])->name('api.application.users');

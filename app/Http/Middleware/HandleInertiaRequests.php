@@ -39,6 +39,9 @@ class HandleInertiaRequests extends Middleware
                 'useTotp'    => $user->use_totp,
                 'language'   => $user->language,
                 'rank'       => $user->root_admin ? 'admin' : 'user',
+                'limits'     => $user->limits,
+                'resources'  => $user->resources,
+                'coins'      => $user->coins,
             ] : null,
         ],
         'AppConfig' => [
@@ -48,7 +51,8 @@ class HandleInertiaRequests extends Middleware
             'appLogo'  => env('VITE_LOGO_URL'),
             'appVer'  => env('VERSION'),
             'dashColor' => env('BANNER_CLR'),
-            'ServerList' => env('SVR_LIST_TSX'),
+            'bannerImg' => env('APP_BANNER'),
+            'appLogin' => env('APPLOGIN', 'DISCORD'),
         ],
         'flash' => [
             'status'         => fn () => $request->session()->get('status'),

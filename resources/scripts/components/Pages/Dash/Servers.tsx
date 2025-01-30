@@ -103,40 +103,40 @@ export default function AdminDashboard(): JSX.Element {
       <Head title="Servers" />
 
       {/* Dashboard Card */}
-      {/*<Card className="w-full mb-6 overflow-hidden">
-        <CardContent className="p-0">
-          <div className="relative h-[160px] w-full">
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-400 to-stone-00 dark:from-purple-800 dark:to-zinc-800 opacity-80" />
-            <img
-              src="https://cdn.dribbble.com/users/2433051/screenshots/4872252/media/93fa4ea6accf793c6c64b4d7f20786ac.gif"
-              alt="Dashboard Banner"
-              className="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 flex items-center justify-between p-6">
-              <div className="flex items-center space-x-4">
-                <div>
-                  <h1 className="text-2xl font-bold font-doto dark:text-white text-white !opacity-100 mb-2">
-                    Welcome back, {username}!
-                  </h1>
-                  <span className="dark:text-white text-2xl font-doto mb-4 z-50 text-zinc-50 !opacity-100">
-                    {currentTime}
-                  </span>
-                  <div className="flex items-center space-x-2 mt-2">
-                    {getRankBadge()}
-                  </div>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center space-x-4">
-                <div className="dark:text-white text-black text-right z-50 !opacity-100">
-                  <p className="text-2xl font-bold font-doto">{activeProjects}</p>
-                  <p className="text-xl font-bold font-doto">Active Project(s)</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>*/}
+      <Card className="w-full mb-6 overflow-hidden">
+                    <CardContent className="p-0">
+                      <div className="relative h-[160px] w-full">
+                        <div className={`absolute inset-0 bg-gradient-to-r from-zinc-400 to-stone-300 dark:from-zinc-700 dark:to-zinc-800  }`} />
+                        <img
+                          src="https://cdnb.artstation.com/p/assets/images/images/046/731/549/large/lycanstar-art-findley-project1-painting.jpg?1645818229"
+                          alt="Dashboard Banner"
+                          className="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-between p-6">
+                          <div className="flex items-center space-x-4">
+                            <div>
+                              <h1 className="text-2xl font-bold  dark:text-white text-white !opacity-100 mb-2">
+                                Here are your Servers, {username}!
+                              </h1>
+                              <span className="dark:text-white text-2xl  mb-4 z-50 text-zinc-50 !opacity-100">
+                                {currentTime}
+                              </span>
+                              <div className="flex items-center space-x-2 mt-2">
+                                {getRankBadge()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="hidden md:flex items-center space-x-4">
+                            <div className="dark:text-white text-black text-right z-50 !opacity-100">
+                            <p className="text-2xl font-bold font-doto">{activeProjects}</p>
+                            <p className="text-xl font-bold font-doto">Your Server(s)</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
 
       {/* Resources and Servers */}
       <ServerList/>

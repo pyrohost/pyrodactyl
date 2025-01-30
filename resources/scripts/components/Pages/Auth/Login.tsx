@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Loader2, User2, KeyRound, Eye, EyeOff, AlertCircle, Moon, Sun, LucideSunMoon } from 'lucide-react';
+import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { Separator } from '@/components/ui/separator';
 
 interface PageProps {
     AppConfig: {
@@ -170,6 +172,19 @@ const Login: React.FC = () => {
                                         'Login'
                                     )}
                                 </Button>
+                                {AppConfig.appLogin === 'DISCORD' && (
+                                    <>
+                                        <Separator/>
+                                        <Button
+                                            type="button"
+                                            onClick={() => window.location.href = '/auth/discord'}
+                                            className="w-full h-12 text-lg font-medium transition-all duration-300 hover:scale-[1.02] text-white dark:text-black flex items-center justify-center gap-2"
+                                        >
+                                            <DiscordLogoIcon className="h-5 w-5" />
+                                            Login with Discord
+                                        </Button>
+                                    </>
+                                )}
                             </form>
                         </CardContent>
                     </Card>

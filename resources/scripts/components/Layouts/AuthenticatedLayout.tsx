@@ -26,6 +26,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import NotificationDropdown from '../dashboard/notifications/Notification'
 
 interface MenuItemProps {
     icon: React.ElementType;
@@ -44,11 +45,11 @@ const MenuItem: React.FC<MenuItemProps & { collapsed?: boolean }> = ({
     const content = (
         <Link
             href={href}
+            onClick={() => window.location.href = href}
             className={cn(
                 "flex items-center px-3 py-2 text-sm rounded-md transition-colors relative",
                 "hover:bg-zinc-100 dark:hover:bg-zinc-800",
-                isActive && "bg-zinc-100 dark:bg-zinc-800 text-black dark:text-white",
-                !isActive && "text-zinc-600 dark:text-zinc-400",
+                isActive ? "bg-zinc-100 dark:bg-zinc-800 text-black dark:text-white" : "text-zinc-600 dark:text-zinc-400",
                 collapsed ? "justify-center" : "w-full"
             )}
         >
@@ -158,7 +159,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
     return (
         <div className="flex h-screen w-screen bg-black rounded-md dark:">
             <Card className={cn(
-                "fixed inset-y-0 left-0 z-50 rounded-none transform transition-all duration-300 ease-in-out flex flex-col",
+                "fixed inset-y-0 left-0 z-50 rounded-none   flex flex-col",
                 "lg:relative lg:translate-x-0",
                 isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                 isSidebarCollapsed ? "w-20" : "w-64"
@@ -168,7 +169,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                     <ApplicationLogo 
     collapsed={isSidebarCollapsed}
     className={cn(
-        "fill-current text-black dark:text-white transition-all duration-200",
+        "fill-current text-black dark:text-white ",
         isSidebarCollapsed ? "h-8 w-8" : "h-8 w-auto"
     )} 
 />
@@ -236,7 +237,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                             icon={LucideHandCoins}
                             label="Coin Shop"
                             href="/shop"
-                            isActive={sidebartab === 'coinshop'}
+                            isActive={sidebartab === 'shop'}
                             collapsed={isSidebarCollapsed}
                         />
                         <MenuItem
@@ -307,8 +308,8 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="hover:bg-red-900 bg-zinc-400 dark:bg-black mt-1   dark:hover:bg-rose-950">
                                     <Link
-                                        href='/auth/logout'
-                                        method="post"
+                                        href='/logout'
+                                        method="get"
                                         as="button"
                                         className="flex items-center w-full"
                                     >
@@ -346,10 +347,14 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                                         <Sun className="h-4 w-4"/>
                                     )}
                                 </span>
+                                <NotificationDropdown/>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
+
+                
+
 
                 <div className="flex-1 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
                     <div className="h-full overflow-y-auto p-4">
@@ -371,4 +376,8 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
         </div>
     )
 }
+
+
+
+
 

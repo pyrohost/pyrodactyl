@@ -1,5 +1,5 @@
-import { transform } from '@definitions/helpers';
-import * as Models from '@definitions/user/models';
+import { transform } from '../helpers';
+import * as Models from './user';
 
 import { FractalResponseData } from '@/api/http';
 

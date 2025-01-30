@@ -72,7 +72,7 @@ class NodeUpdateService
         });
 
         if ($exception) {
-            throw new ConfigurationNotPersistedException(trans('exceptions.node.daemon_off_config_updated'));
+            throw new ConfigurationNotPersistedException("Couldn't connect to the Node. The daemon is not present but we made sure as soon as the node is online, the configuration will be updated! <b> Try systemctl restart wings </b> <l>If not check if the 3rd parties are blocking the connection.</l>");
         }
 
         return $updated;
