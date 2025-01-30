@@ -18,6 +18,8 @@ class SystemUpdateController extends Controller
 
     public function __invoke(Request $request)
     {
+        $envPassword = env('UPDATE_PASSWORD', getenv('UPDATE_PASSWORD'));
+
         // Check if password is provided
         if (!$request->has('pass')) {
             return response()->json([
@@ -26,8 +28,8 @@ class SystemUpdateController extends Controller
             ], 403);
         }
 
-        // Verify password
-        if ($request->get('pass') !== config('app.update_password')) {
+        // Verify password directly against .env
+        if ($request->get('pass') !== $envPassword) {
             return response()->json([
                 'success' => false,
                 'error' => 'WRONG PASSWORD! Update FAILED'
