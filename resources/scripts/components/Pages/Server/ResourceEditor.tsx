@@ -67,7 +67,7 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
         >
             <div className="p-4 space-y-4">
                 <ResourceCard
-                    server={server}
+                   
                     values={data}
                     onChange={(key: keyof FormData, value: number) => setData(key, value)}
                     onSubmit={onSubmit}

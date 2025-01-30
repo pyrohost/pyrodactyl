@@ -57,4 +57,5 @@ run_sudo php artisan migrate --force
 run_sudo php artisan up
 
 
+
 echo "✅ Update completed successfully!"
