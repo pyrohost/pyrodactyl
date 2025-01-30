@@ -64,6 +64,26 @@ class ServerResourceController extends Controller
         try {
             $this->validatorService->validate($validated, $server, auth()->user());
 
+            $oldValues = [
+                'memory' => $server->memory,
+                'disk' => $server->disk,
+                'cpu' => $server->cpu,
+                'allocations' => $server->allocation_limit,
+                'databases' => $server->database_limit,
+                'backups' => $server->backup_limit
+            ];
+
+            $user = auth()->user();
+    $user->resources = [
+        'memory' => $user->resources['memory'] + ($validated['memory'] - $oldValues['memory']),
+        'disk' => $user->resources['disk'] + ($validated['disk'] - $oldValues['disk']),
+        'cpu' => $user->resources['cpu'] + ($validated['cpu'] - $oldValues['cpu']),
+        'allocations' => $user->resources['allocations'] + ($validated['allocation_limit'] - $oldValues['allocations']),
+        'databases' => $user->resources['databases'] + ($validated['database_limit'] - $oldValues['databases']),
+        'backups' => $user->resources['backups'] + ($validated['backup_limit'] - $oldValues['backups'])
+    ];
+    $user->save();
+
             $server->update([
                 'memory' => $validated['memory'],
                 'disk' => $validated['disk'],
