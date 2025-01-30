@@ -56,7 +56,7 @@ export default function ResourceCard({
                         />
                         {errors.cpu && <p className="text-red-500 text-sm">{errors.cpu}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.cpu}%
+                            Resources left: {availableResources.cpu}%
                         </span>
                     </div>
 
@@ -72,7 +72,7 @@ export default function ResourceCard({
                         />
                         {errors.memory && <p className="text-red-500 text-sm">{errors.memory}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.memory}MB
+                            Resources left: {availableResources.memory}MB
                         </span>
                     </div>
 
@@ -88,7 +88,7 @@ export default function ResourceCard({
                         />
                         {errors.disk && <p className="text-red-500 text-sm">{errors.disk}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.disk}MB
+                            Resources left: {availableResources.disk}MB
                         </span>
                     </div>
 
@@ -104,7 +104,7 @@ export default function ResourceCard({
                         />
                         {errors.allocation_limit && <p className="text-red-500 text-sm">{errors.allocation_limit}</p>}
                         <span className="text-sm text-gray-500">
-                            Available: {availableResources.allocations}
+                            Resources left: {availableResources.allocations}
                         </span>
                     </div>
 
