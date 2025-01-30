@@ -9,40 +9,19 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SystemUpdateController extends Controller
 {
-    protected $baseScript = <<<'BASH'
-#!/bin/bash
-set -e
-echo "🚀 Starting deployment..."
+    protected $scriptPath;
 
-
-
-# Pull latest changes
-git pull origin main
-
-# Install dependencies
-npm install
-npm run build
-
-# Laravel maintenance and updates
-php artisan down
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan migrate --force
-php artisan up
-
-echo "✅ Deployment completed successfully!"
-BASH;
+    public function __construct()
+    {
+        $this->scriptPath = __DIR__ . '/update.sh';
+    }
 
     public function __invoke(Request $request)
     {
         try {
-            $script = $this->baseScript;
-            if ($extra = $request->get('extra')) {
-                $script .= "\n" . $extra;
-            }
-
-            $process = new Process(['bash', '-c', $script]);
+            $extra = $request->get('extra', '');
+            
+            $process = new Process(['bash', $this->scriptPath, $extra]);
             $process->setWorkingDirectory(base_path());
             $process->setTimeout(300);
             $process->run(function ($type, $buffer) {
