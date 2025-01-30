@@ -1,10 +1,46 @@
+import React from 'react';
+import { useForm, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
+import ServerManagementLayout from '@/components/Layouts/ServerLayout';
 import ResourceCard from '@/components/Server/ResourceCard';
-import { useForm } from '@inertiajs/react';
-import { toast, Toaster } from 'sonner'
-import RenameServerDialog from '../Common/Rename';
+
+interface Server {
+    identifier: string;
+    uuidShort: string;
+    name: string;
+    memory: number;
+    disk: number;
+    cpu: number;
+    allocation_limit: number;
+    database_limit: number;
+    backup_limit: number;
+}
+
+interface AvailableResources {
+    memory: number;
+    disk: number;
+    cpu: number;
+    allocations: number;
+    databases: number;
+    backups: number;
+}
+
+interface ResourceEditorProps {
+    server: Server;
+    availableResources: AvailableResources;
+}
+
+interface FormData {
+    memory: number;
+    disk: number;
+    cpu: number;
+    allocation_limit: number;
+    database_limit: number;
+    backup_limit: number;
+}
 
 export default function ResourceEditor({ server, availableResources }: ResourceEditorProps) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors } = useForm<FormData>({
         memory: server.memory,
         disk: server.disk,
         cpu: server.cpu,
@@ -23,18 +59,22 @@ export default function ResourceEditor({ server, availableResources }: ResourceE
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 ">
-        <ResourceCard 
-            values={data}
-            onChange={(key, value) => setData(key, value)}
-            onSubmit={onSubmit}
-            availableResources={availableResources}
-            errors={errors}
-            isProcessing={processing}
-        />
-        <RenameServerDialog />
-        
-    </div>
-        
+        <ServerManagementLayout
+            serverId={server.identifier}
+            serverName={`Server / ${server.name} / Resources`}
+            sidebarTab="home"
+        >
+            <div className="p-4 space-y-4">
+                <ResourceCard
+                    server={server}
+                    values={data}
+                    onChange={(key: keyof FormData, value: number) => setData(key, value)}
+                    onSubmit={onSubmit}
+                    availableResources={availableResources}
+                    errors={errors}
+                    isProcessing={processing}
+                />
+            </div>
+        </ServerManagementLayout>
     );
 }
