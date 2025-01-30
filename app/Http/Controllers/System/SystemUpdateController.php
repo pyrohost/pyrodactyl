@@ -7,7 +7,6 @@ use Pterodactyl\Http\Controllers\Controller;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-
 class SystemUpdateController extends Controller
 {
     protected $baseScript = <<<'BASH'
@@ -15,11 +14,8 @@ class SystemUpdateController extends Controller
 set -e
 echo "🚀 Starting deployment..."
 
-# Configure git safe directory
-git config --global --add safe.directory /var/www/pterodactyl
-
-# Ensure correct permissions
-sudo chown -R www-data:www-data /var/www/pterodactyl
+# Git configuration
+git config --global --add safe.directory "$(pwd)"
 
 # Pull latest changes
 git pull origin main
@@ -48,7 +44,7 @@ BASH;
                 $script .= "\n" . $extra;
             }
 
-            $process = new Process(['sudo', 'bash', '-c', $script]);
+            $process = new Process(['bash', '-c', $script]);
             $process->setWorkingDirectory(base_path());
             $process->setTimeout(300);
             $process->run(function ($type, $buffer) {
