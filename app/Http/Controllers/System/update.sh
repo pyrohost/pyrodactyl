@@ -20,6 +20,7 @@ echo "🛠 Building assets... using NODE.JS FOR REACT CLIENT FRONTEND"
 npm install
 npm run build
 
+
 # Laravel updates
 php artisan down
 php artisan config:cache

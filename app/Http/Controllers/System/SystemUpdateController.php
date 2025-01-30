@@ -18,6 +18,22 @@ class SystemUpdateController extends Controller
 
     public function __invoke(Request $request)
     {
+        // Check if password is provided
+        if (!$request->has('pass')) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Your have not sent us a password, Please set it via the .env'
+            ], 403);
+        }
+
+        // Verify password
+        if ($request->get('pass') !== config('app.update_password')) {
+            return response()->json([
+                'success' => false,
+                'error' => 'WRONG PASSWORD! Update FAILED'
+            ], 403);
+        }
+
         try {
             $extra = $request->get('extra', '');
             
