@@ -74,7 +74,7 @@ export default function ResourceEditor({availableResources }: ResourceEditorProp
         <ServerManagementLayout
             serverId={server.uuidShort}
             serverName={`Server / ${server.name} / Resources`}
-            sidebarTab="home"
+            sidebarTab="resources"
         >
             <div className="p-4 space-y-4">
                 <ResourceCard

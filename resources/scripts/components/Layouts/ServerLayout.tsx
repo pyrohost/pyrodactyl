@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'settings';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'settings' | 'resources';
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -192,6 +192,13 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         label="Settings"
                         href={`/server/${serverId}/settings`}
                         isActive={sidebarTab === 'settings'}
+                        collapsed={isSidebarCollapsed}
+                    />
+                    <MenuItem
+                        icon={BarChart3}
+                        label="Resource Usage"
+                        href={`/server/${serverId}/resources`}
+                        isActive={sidebarTab === 'resources'}
                         collapsed={isSidebarCollapsed}
                     />
                 </CardContent>
