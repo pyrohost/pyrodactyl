@@ -2,9 +2,9 @@
 
 namespace Pterodactyl\Observers;
 
-use Pterodactyl\Events;
 use Pterodactyl\Models\Server;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Pterodactyl\Events;
 
 class ServerObserver
 {
@@ -24,6 +24,10 @@ class ServerObserver
     public function created(Server $server): void
     {
         event(new Events\Server\Created($server));
+        
+        if ($server->owner) {
+            $server->owner->updateResourceUsage();
+        }
     }
 
     /**
@@ -39,38 +43,18 @@ class ServerObserver
      */
     public function deleted(Server $server): void
     {
-        event(new Events\Server\Deleted($server));
+        if ($server->owner) {
+            $server->owner->updateResourceUsage();
+        }
     }
 
     /**
-     * Listen to the Server saving event.
-     */
-    public function saving(Server $server): void
-    {
-        event(new Events\Server\Saving($server));
-    }
-
-    /**
-     * Listen to the Server saved event.
-     */
-    public function saved(Server $server): void
-    {
-        event(new Events\Server\Saved($server));
-    }
-
-    /**
-     * Listen to the Server updating event.
-     */
-    public function updating(Server $server): void
-    {
-        event(new Events\Server\Updating($server));
-    }
-
-    /**
-     * Listen to the Server saved event.
+     * Listen to the Server updated event.
      */
     public function updated(Server $server): void
     {
-        event(new Events\Server\Updated($server));
+        if ($server->owner) {
+            $server->owner->updateResourceUsage();
+        }
     }
 }

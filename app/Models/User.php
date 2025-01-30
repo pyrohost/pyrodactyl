@@ -193,6 +193,67 @@ class User extends Model implements
         ];
     }
 
+    public function updateResourceUsage(): void 
+    {
+        $servers = $this->servers()->get();
+        
+        $resources = [
+            'cpu' => 0,
+            'memory' => 0,
+            'disk' => 0,
+            'servers' => $servers->count(),
+            'allocations' => 0,
+            'databases' => 0,
+            'backups' => 0,
+        ];
+
+        foreach ($servers as $server) {
+            $resources['cpu'] += $server->cpu;
+            $resources['memory'] += $server->memory;
+            $resources['disk'] += $server->disk;
+            $resources['allocations'] += $server->allocation_limit;
+            $resources['databases'] += $server->database_limit;
+            $resources['backups'] += $server->backup_limit;
+        }
+
+        $this->resources = $resources;
+        $this->save();
+    }
+
+    public function getAvailableResources(): array
+    {
+        return [
+            'cpu' => $this->limits['cpu'] - $this->resources['cpu'],
+            'memory' => $this->limits['memory'] - $this->resources['memory'],
+            'disk' => $this->limits['disk'] - $this->resources['disk'],
+            'allocations' => $this->limits['allocations'] - $this->resources['allocations'],
+            'databases' => $this->limits['databases'] - $this->resources['databases'],
+            'backups' => $this->limits['backups'] - $this->resources['backups'],
+        ];
+    }
+
+    public function canAllocateResources(array $resources, ?Server $excludeServer = null): bool
+    {
+        $available = $this->getAvailableResources();
+        
+        // If updating existing server, add its current resources to available
+        if ($excludeServer) {
+            $available['cpu'] += $excludeServer->cpu;
+            $available['memory'] += $excludeServer->memory;
+            $available['disk'] += $excludeServer->disk;
+            $available['allocations'] += $excludeServer->allocation_limit;
+            $available['databases'] += $excludeServer->database_limit;
+            $available['backups'] += $excludeServer->backup_limit;
+        }
+
+        return $resources['cpu'] <= $available['cpu']
+            && $resources['memory'] <= $available['memory']
+            && $resources['disk'] <= $available['disk']
+            && $resources['allocation_limit'] <= $available['allocations']
+            && $resources['database_limit'] <= $available['databases']
+            && $resources['backup_limit'] <= $available['backups'];
+    }
+
     protected static function boot()
     {
         parent::boot();

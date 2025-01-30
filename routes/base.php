@@ -7,6 +7,7 @@ use Pterodactyl\Http\Controllers\Api\Client\AccountController;
 use Pterodactyl\Http\Controllers\Base\AccountControllerView;
 use Pterodactyl\Http\Controllers\Base\DashboardController;
 use Pterodactyl\Http\Controllers\Base\IndexController;
+use Pterodactyl\Http\Controllers\Base\EarningController;
 use Pterodactyl\Http\Controllers\SystemStatusController;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Controllers\TestController;
@@ -33,6 +34,8 @@ Route::prefix('/')->group(function () {
     Route::get('/logout', [DashboardController::class, 'logout'])
         ->middleware(['auth'])
         ->name('page.logout');
+
+    Route::get('/earn', [Base\EarningViewController::class, 'index'])->name('earning.index');
 
     Route::post('logout', [LoginController::class, 'logout'])->name('auth.logout');
 

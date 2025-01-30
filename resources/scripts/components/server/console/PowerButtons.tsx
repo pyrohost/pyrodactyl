@@ -149,7 +149,7 @@ const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
                     <DialogHeader>
                         <DialogTitle className="text-destructive text-center">Node Connection Lost</DialogTitle>
                         <img 
-              src="/assets/svgs/noc.svg"
+              src="/assets/svgs/connection-lost.svg"
               alt="Create New"
               className="w-120 h-60 object-contain"
             />
