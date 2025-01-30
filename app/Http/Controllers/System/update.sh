@@ -3,8 +3,7 @@ set -e
 echo "🚀 Starting deployment..."
 
 # Git operations
-git config core.fileMode false
-git config safe.directory "$(pwd)"
+
 git pull origin main
 
 # Dependencies
