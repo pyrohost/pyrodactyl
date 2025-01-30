@@ -66,7 +66,7 @@ class ServerResourceController extends Controller
     $diskDiff = $validated['disk'] - $server->disk;
 
     // Check if differences can be accommodated
-    $availableResources = $this->validatorService->getAvailableResources(auth()->user());
+    $this->validatorService->validate($validated, $server, auth()->user());
     
     if ($cpuDiff > $availableResources->cpu || 
         $memoryDiff > $availableResources->memory || 
