@@ -14,8 +14,9 @@ class SystemUpdateController extends Controller
 set -e
 echo "🚀 Starting deployment..."
 
-# Git configuration
-git config --global --add safe.directory "$(pwd)"
+# Configure git for this repository only
+git config core.fileMode false
+git config safe.directory "$(pwd)"
 
 # Pull latest changes
 git pull origin main
