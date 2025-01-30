@@ -22,14 +22,8 @@ class SystemUpdateController extends Controller
         // Get environment variables
         $envPassword = config('app.update_password', env('UPDATE_PASSWORD'));
         $appName = config('app.name', env('APP_NAME', 'Application'));
-        
-        // Debug logging
-        Log::debug('Update request received', [
-            'provided_pass' => $request->get('pass'),
-            'env_pass' => $envPassword
-        ]);
 
-        // Check if password is provided
+        // Authentication checks
         if (!$request->has('pass')) {
             return response()->json([
                 'success' => false,
@@ -37,7 +31,6 @@ class SystemUpdateController extends Controller
             ], 403);
         }
 
-        // Verify password with strict comparison
         if (strcmp($request->get('pass'), $envPassword) !== 0) {
             return response()->json([
                 'success' => false,
@@ -67,27 +60,26 @@ class SystemUpdateController extends Controller
             $output = '';
             $process->run(function ($type, $buffer) use (&$output) {
                 $output .= $buffer;
-                echo $buffer;
             });
 
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
 
-            // Check if update completed successfully
+            // Check for successful update
             if (strpos($output, "Update completed successfully") !== false) {
                 return response()->json([
                     'success' => true,
-                    'message' => "$appName has been updated",
-                    'output' => $output
+                    'message' => $appName . " has been updated",
+                    'details' => [
+                        'app_name' => $appName,
+                        'output' => $output,
+                        'status' => 'completed'
+                    ]
                 ]);
             }
 
-            return response()->json([
-                'success' => false,
-                'error' => 'Update process failed',
-                'output' => $output
-            ], 500);
+            throw new \Exception('Update process did not complete successfully');
 
         } catch (\Exception $e) {
             Log::error('Update failed', [
