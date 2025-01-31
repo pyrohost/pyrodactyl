@@ -26,7 +26,7 @@ Route::prefix('/')->group(function () {
         return Inertia::render('Auth/Logout');
     })->name('auth.logout')->middleware('auth');
 
-    Route::post('/auth/logout', [LoginController::class, 'logout'])->name('auth.logout');
+    Route::post('/auth/logout', [LoginController::class, 'logout'])->name('auth.logout.post');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['auth'])

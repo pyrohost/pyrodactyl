@@ -122,20 +122,20 @@ class UserController extends Controller
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(Request $request, User $user)
 {
     try {
         $validated = $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'username' => 'required|string|min:3|unique:users,username,' . $user->id,
+            'username' => 'required|string|unique:users,username,' . $user->id,
             'name_first' => 'required|string',
             'name_last' => 'required|string',
-            'password' => 'sometimes|string|min:8|confirmed',
             'language' => 'required|string',
-            'root_admin' => 'boolean',
-            'coins' => 'required|numeric',
+            'root_admin' => 'required|boolean',
+            'coins' => 'required|integer',
             'limits' => 'required|array',
-            'resources' => 'required|array'
+            'resources' => 'required|array',
+            'password' => 'nullable|string|min:8|confirmed'
         ]);
     
         // Update basic info
@@ -149,16 +149,12 @@ class UserController extends Controller
         $user->limits = $validated['limits'];
         $user->resources = $validated['resources'];
     
-        // Update password if provided
-        if (isset($validated['password'])) {
+        // Update password only if provided
+        if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
     
         $user->save();
-
-        
-
-        
 
         return redirect()->back()->with('success', 'User updated successfully');
     } catch (\Exception $e) {
