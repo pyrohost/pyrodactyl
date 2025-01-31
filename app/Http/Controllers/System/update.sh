@@ -24,8 +24,16 @@ echo "🚀 Starting system update... New"
 echo "$PASSWORD" | sudo -S echo "Authentication successful"
 
 # Git operations with error handling
-run_sudo git pull origin main || {
-    echo "Git pull failed"
+run_sudo bash -c "
+cd /var/www/pterodactyl
+git stash save 'Pre-update stash' || true # Stash local changes (skip error if no changes)
+git pull origin main || {
+    echo 'Git pull failed'
+    exit 1
+}
+git stash pop || true # Pop stashed changes after pulling
+" || {
+    echo "Git operations failed"
     exit 1
 }
 
@@ -56,7 +64,5 @@ run_sudo php artisan down
 run_sudo php artisan migrate --force
 run_sudo php artisan up
 php artisan queue:restart
-
-
 
 echo "✅ Update completed successfully!"
