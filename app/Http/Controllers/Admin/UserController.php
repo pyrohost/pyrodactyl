@@ -158,9 +158,7 @@ class UserController extends Controller
 
         
 
-        $this->updateService
-            ->setUserLevel(User::USER_LEVEL_ADMIN)
-            ->handle($user, $data);
+        
 
         return redirect()->back()->with('success', 'User updated successfully');
     } catch (\Exception $e) {
