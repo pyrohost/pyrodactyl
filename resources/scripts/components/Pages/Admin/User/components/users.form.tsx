@@ -127,11 +127,12 @@ export default function UserForm() {
     }
 
     // Rest of the JSX remains the same, but with one fix for the Coins label:
+
     
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Identity Section */}
+            
             <Card>
                 <CardHeader>
                     <CardTitle>User Identity</CardTitle>

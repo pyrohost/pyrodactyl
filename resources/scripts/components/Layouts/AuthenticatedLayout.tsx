@@ -198,11 +198,19 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                 </CardHeader>
 
                 <CardContent className="flex-grow overflow-y-auto p-2 space-y-2">
+                    
                     <MenuItem
                         icon={Home}
                         label="Home"
                         href='/dashboard'
                         isActive={sidebartab === 'home'}
+                        collapsed={isSidebarCollapsed}
+                    />
+                    <MenuItem
+                        icon={LucideMonitorUp}
+                        label="Deploy"
+                        href='/deploy'
+                        isActive={sidebartab === 'deploy'}
                         collapsed={isSidebarCollapsed}
                     />
                     <MenuItem
@@ -301,7 +309,7 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                                 align="start"
                             >
                                 <DropdownMenuItem className="hover:bg-zinc-900 bg-zinc-400 dark:bg-black  dark:hover:bg-zinc-800">
-                                    <Link href='/profile/edit' className="flex items-center w-full">
+                                    <Link href='/account' className="flex items-center w-full">
                                         <Settings className="mr-2 h-4 w-4"/>
                                         Profile
                                     </Link>

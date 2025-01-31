@@ -1,15 +1,19 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePage } from "@inertiajs/react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Cpu, MemoryStick, HardDrive, Server, LayoutGrid, List, BarChart } from "lucide-react"
+import { Cpu, MemoryStick, HardDrive, Server, LayoutGrid, List, BarChart, Table } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table as TableComponent, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Progress } from "@/components/ui/progress"
 
 const ListView = ({ type, resources, limits, percentage }) => {
   return (
-    <div className="flex items-center justify-between p-4 border-b last:border-b-0">
+    <Card>
+      <CardHeader>Resource Usage:</CardHeader>
+      <div className="flex items-center justify-between p-4 border-b last:border-b-0">
       <div className="flex items-center gap-3">
         <type.icon className="w-5 h-5" />
         <span className="font-medium">{type.label}</span>
@@ -30,6 +34,7 @@ const ListView = ({ type, resources, limits, percentage }) => {
         <span className="text-sm font-medium tabular-nums">{percentage.toFixed(0)}%</span>
       </div>
     </div>
+    </Card>
   )
 }
 
@@ -111,8 +116,82 @@ const CardView = ({ type, index, resources, limits, percentage, formattedPercent
   )
 }
 
+const TableView = ({ resourceTypes, resources, limits }) => {
+  return (
+    <Card>
+      <CardHeader className="text-2xl text-bold">Resource Usage </CardHeader>
+      <TableComponent>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Resource</TableHead>
+          <TableHead>Usage</TableHead>
+          <TableHead>Limit</TableHead>
+          <TableHead>Percentage</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {resourceTypes.map((type) => {
+          const percentage = (resources[type.key] / limits[type.key]) * 100
+          return (
+            <TableRow key={type.key}>
+              <TableCell className="font-medium">{type.label}</TableCell>
+              <TableCell>
+                {resources[type.key]}
+                {type.unit}
+              </TableCell>
+              <TableCell>
+                {limits[type.key]}
+                {type.unit}
+              </TableCell>
+              <TableCell>{percentage.toFixed(0)}%</TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </TableComponent>
+    </Card>
+  )
+}
+
+const ProgressView = ({ resourceTypes, resources, limits }) => {
+  return (
+    <div className="space-y-4">
+      {resourceTypes.map((type) => {
+        const percentage = (resources[type.key] / limits[type.key]) * 100
+        return (
+          <div key={type.key} className="space-y-2">
+            <div className="flex justify-between">
+              <span className="font-medium">{type.label}</span>
+              <span>{percentage.toFixed(0)}%</span>
+            </div>
+            <Progress value={percentage} className="w-full" />
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>
+                {resources[type.key]}
+                {type.unit}
+              </span>
+              <span>
+                {limits[type.key]}
+                {type.unit}
+              </span>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 const ResourceView = () => {
-  const [viewType, setViewType] = useState("cards")
+  const [viewType, setViewType] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("resourceViewType") || "cards"
+    }
+    return "cards"
+  })
+  useEffect(() => {
+    localStorage.setItem("resourceViewType", viewType)
+  }, [viewType])
   const { auth } = usePage().props
   const { limits, resources } = auth.user
   console.log(auth.user)
@@ -128,6 +207,8 @@ const ResourceView = () => {
     cards: CardView,
     list: ListView,
     chart: ChartView,
+    table: TableView,
+    progress: ProgressView,
   }
 
   return (
@@ -156,6 +237,18 @@ const ResourceView = () => {
                 <span>Chart</span>
               </div>
             </SelectItem>
+            <SelectItem value="table">
+              <div className="flex items-center gap-2">
+                <Table className="w-4 h-4" />
+                <span>Table</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="progress">
+              <div className="flex items-center gap-2">
+                <Table className="w-4 h-4" /> {/*Using Table icon as Activity icon is not provided*/}
+                <span>Progress</span>
+              </div>
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -171,29 +264,37 @@ const ResourceView = () => {
             ${viewType === "cards" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" : ""}
             ${viewType === "list" ? "border rounded-lg divide-y" : ""}
             ${viewType === "chart" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" : ""}
+            ${viewType === "table" ? "w-full" : ""}
+            ${viewType === "progress" ? "max-w-2xl mx-auto" : ""}
           `}
         >
-          {resourceTypes.map((type, index) => {
-            const percentage = (resources[type.key] / limits[type.key]) * 100
-            const ViewComponent = viewComponents[viewType]
-            return (
-              <motion.div
-                key={type.key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <ViewComponent
-                  type={type}
-                  index={index}
-                  resources={resources}
-                  limits={limits}
-                  percentage={percentage}
-                  formattedPercentage={percentage.toFixed(0)}
-                />
-              </motion.div>
-            )
-          })}
+          {viewType === "table" ? (
+            <TableView resourceTypes={resourceTypes} resources={resources} limits={limits} />
+          ) : viewType === "progress" ? (
+            <ProgressView resourceTypes={resourceTypes} resources={resources} limits={limits} />
+          ) : (
+            resourceTypes.map((type, index) => {
+              const percentage = (resources[type.key] / limits[type.key]) * 100
+              const ViewComponent = viewComponents[viewType]
+              return (
+                <motion.div
+                  key={type.key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <ViewComponent
+                    type={type}
+                    index={index}
+                    resources={resources}
+                    limits={limits}
+                    percentage={percentage}
+                    formattedPercentage={percentage.toFixed(0)}
+                  />
+                </motion.div>
+              )
+            })
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

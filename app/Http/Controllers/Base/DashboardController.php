@@ -24,6 +24,19 @@ class DashboardController extends BaseController
         return Inertia::render('Dashboard');
     }
 
+    public function deploy(): Response
+{
+    if (!Auth::check()) {
+        return Inertia::location(route('auth.login'));
+    }
+    
+    return Inertia::render('Dash/Deploy', [
+        'user' => Auth::user(),
+        'servers' => Auth::user()->servers,
+    ]);
+
+}
+
 
     public function watch(): Response
 {

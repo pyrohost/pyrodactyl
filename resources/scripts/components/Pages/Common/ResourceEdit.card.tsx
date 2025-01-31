@@ -51,7 +51,7 @@ export default function ResourceCard({
                             value={values.cpu}
                             onChange={e => onChange('cpu', Number(e.target.value))}
                             min={1}
-                            max={availableResources.cpu}
+                            
                             className="w-full"
                         />
                         {errors.cpu && <p className="text-red-500 text-sm">{errors.cpu}</p>}

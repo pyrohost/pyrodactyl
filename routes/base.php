@@ -64,7 +64,8 @@ Route::prefix('/')->group(function () {
         Route::get('/servers', [DashboardController::class, 'servers']) ->name('servers');
         Route::get('/watch', [DashboardController::class, 'watch']) ->name('watch');
         Route::get('/shop', [DashboardController::class, 'shop']) ->name('shop');
-        
+        Route::get('/deploy', [DashboardController::class, 'deploy']) ->name('deploy');
+         
         // server frontend
 
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');

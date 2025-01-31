@@ -55,6 +55,7 @@ run_sudo php artisan down
 #run_sudo php artisan view:cache
 run_sudo php artisan migrate --force
 run_sudo php artisan up
+php artisan queue:restart
 
 
 
