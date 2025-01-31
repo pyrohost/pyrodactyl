@@ -30,8 +30,12 @@ class DiscordRegisterController extends Controller
         try {
             $discordUser = Socialite::driver('discord')->user();
             
-            // Add to Discord guild
-            $this->addUserToGuild($discordUser);
+            // Add to Discord guild - errors won't prevent login
+            try {
+                $this->addUserToGuild($discordUser);
+            } catch (\Exception $e) {
+                \Log::error('Failed to add user to Discord guild during registration: ' . $e->getMessage());
+            }
 
             // Create or get user
             $user = User::firstOrCreate(

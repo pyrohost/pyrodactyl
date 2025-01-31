@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -195,7 +195,7 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         collapsed={isSidebarCollapsed}
                     />
                     <MenuItem
-                        icon={BarChart3}
+                        icon={LucideChartBarIncreasing}
                         label="Resource Usage"
                         href={`/server/${serverId}/resources`}
                         isActive={sidebarTab === 'resources'}
