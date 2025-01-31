@@ -127,45 +127,36 @@ class UserController extends Controller
     try {
         $validated = $request->validate([
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'username' => 'required|string|min:1|unique:users,username,' . $user->id,
+            'username' => 'required|string|min:3|unique:users,username,' . $user->id,
             'name_first' => 'required|string',
             'name_last' => 'required|string',
-            'coins' => 'numeric|min:0',
+            'password' => 'sometimes|string|min:8|confirmed',
             'language' => 'required|string',
             'root_admin' => 'boolean',
-            'password' => 'nullable|string|min:8|confirmed',
-            'resources.cpu' => 'numeric|min:0',
-            'resources.memory' => 'numeric|min:0',
-            'resources.disk' => 'numeric|min:0',
-            'resources.allocations' => 'numeric|min:0',
-            'resources.backups' => 'numeric|min:0',
-            'resources.servers' => 'numeric|min:0',
-            'resources.databases' => 'numeric|min:0',
-            'limits.cpu' => 'numeric|min:0',
-            'limits.memory' => 'numeric|min:0',
-            'limits.disk' => 'numeric|min:0',
-            'limits.allocations' => 'numeric|min:0',
-            'limits.backups' => 'numeric|min:0',
-            'limits.servers' => 'numeric|min:0',
-            'limits.databases' => 'numeric|min:0',
+            'coins' => 'required|numeric',
+            'limits' => 'required|array',
+            'resources' => 'required|array'
         ]);
-
-        $data = [
-            'email' => $validated['email'],
-            'username' => $validated['username'],
-            'name_first' => $validated['name_first'],
-            'name_last' => $validated['name_last'],
-            'coins' => $validated['coins'],
-            'language' => $validated['language'],
-            'root_admin' => $validated['root_admin'] ?? false,
-            'resources' => $request->input('resources'),
-            'limits' => $request->input('limits')
-        ];
-
-        // Add password to data if provided
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->input('password'));
+    
+        // Update basic info
+        $user->email = $validated['email'];
+        $user->username = $validated['username'];
+        $user->name_first = $validated['name_first'];
+        $user->name_last = $validated['name_last'];
+        $user->language = $validated['language'];
+        $user->root_admin = $validated['root_admin'];
+        $user->coins = $validated['coins'];
+        $user->limits = $validated['limits'];
+        $user->resources = $validated['resources'];
+    
+        // Update password if provided
+        if (isset($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
         }
+    
+        $user->save();
+
+        
 
         $this->updateService
             ->setUserLevel(User::USER_LEVEL_ADMIN)
