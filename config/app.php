@@ -13,6 +13,16 @@ return [
 
     'version' => '3.0.0',
 
+     /*
+    |--------------------------------------------------------------------------
+    | Application Favicon
+    |--------------------------------------------------------------------------
+    | Just drives the favicon for the app.blade.php to use
+    */
+
+    'company_logo_url' => env('VITE_LOGO_URL', 'default_favicon_url'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
