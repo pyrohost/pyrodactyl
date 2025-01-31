@@ -18,7 +18,7 @@ if [ "$(whoami)" != "www-data" ]; then
     exit 1
 fi
 
-echo "🚀 Starting system update... Ryz-Dev Version 1.0"
+echo "🚀 Starting system update... New"
 
 # Initial authentication
 echo "$PASSWORD" | sudo -S echo "Authentication successful"
