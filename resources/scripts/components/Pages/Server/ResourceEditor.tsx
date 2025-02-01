@@ -1,155 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import { useForm, usePage } from '@inertiajs/react';
-import { toast } from 'sonner';
-import ResourceCard from '../Common/ResourceEdit.card';
-import ServerManagementLayout from '@/components/Layouts/ServerLayout';
+import type React from "react"
+import { useEffect, useState } from "react"
+import { useForm, usePage } from "@inertiajs/react"
+import ResourceCard from "../Common/ResourceEdit.card"
+import ServerManagementLayout from "@/components/Layouts/ServerLayout"
 import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-  } from "@/components/ui/alert-dialog"
-import { LucideAlertCircle, LucideChartArea, LucideCheckCircle } from 'lucide-react';
-
-
-interface Server {
-    identifier: string;
-    uuidShort: string;
-    name: string;
-    memory: number;
-    disk: number;
-    cpu: number;
-    allocation_limit: number;
-    database_limit: number;
-    backup_limit: number;
-}
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog"
+import { LucideAlertCircle } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 interface ServerPageProps {
-    server: Server;
-    flash: {
-        success?: {
-            title?: string;
-            desc?: string;
-        };
-        error?: string;
-    };
-}
-
-
-interface AvailableResources {
-    memory: number;
-    disk: number;
-    cpu: number;
-    allocations: number;
-    databases: number;
-    backups: number;
-}
-
-interface ResourceEditorProps {
-    server: Server;
-    availableResources: AvailableResources;
+  server: {
+    uuidShort: string
+    memory: number
+    disk: number
+    cpu: number
+    allocation_limit: number
+    database_limit: number
+    backup_limit: number
+  }
+  flash: {
+    success?: {
+      title?: string
+      desc: string
+    }
+    error?: string
+  }
 }
 
 interface FormData {
-    memory: number;
-    disk: number;
-    cpu: number;
-    allocation_limit: number;
-    database_limit: number;
-    backup_limit: number;
+  memory: number
+  disk: number
+  cpu: number
+  allocation_limit: number
+  database_limit: number
+  backup_limit: number
 }
 
-export default function ResourceEditor({availableResources }: ResourceEditorProps) {
-    const { server} = usePage<ServerPageProps>().props;
-    const { flash } = usePage<ServerPageProps>().props
-    const [showError, setShowError] = useState(false)
-    const [showSuccess, setShowSuccess] = useState(false);
-    console.log(server)
-    
-    const { data, setData, put, processing, errors } = useForm<FormData>({
-        memory: server.memory,
-        disk: server.disk,
-        cpu: server.cpu,
-        allocation_limit: server.allocation_limit,
-        database_limit: server.database_limit,
-        backup_limit: server.backup_limit
-    });
+interface ResourceEditorProps {
+  availableResources: any[]
+}
 
-    
-    
+export default function ResourceEditor({ availableResources }: ResourceEditorProps) {
+  const { server } = usePage<ServerPageProps>().props
+  const { flash } = usePage<ServerPageProps>().props
+  const [showError, setShowError] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const { toast } = useToast()
 
-    useEffect(() => {
-        if (flash.success) {
-            setShowSuccess(true);
-        }
-        if (flash.error) {
-            setShowError(true);
-        }
-    }, [flash]);
-    
-    
+  const { data, setData, put, processing, errors } = useForm<FormData>({
+    memory: server.memory,
+    disk: server.disk,
+    cpu: server.cpu,
+    allocation_limit: server.allocation_limit,
+    database_limit: server.database_limit,
+    backup_limit: server.backup_limit,
+  })
 
-    const onSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (data.cpu <= 0 || data.memory <= 0 || data.disk <= 0) {
-            toast.error('CPU, Memory and Disk cannot be zero');
-            return;
-        }
-        put(`/server/${server.uuidShort}/resources`);
-    };
+  useEffect(() => {
+    if (flash.success) {
+      toast({
+        title: flash.success.title || "Success",
+        description: flash.success.desc,
+        variant: "default",
+      })
+    }
+    if (flash.error) {
+      setShowError(true)
+      toast({
+        title: "Error",
+        description: flash.error,
+        variant: "destructive",
+      })
+    }
+  }, [flash, toast])
 
-    return (
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (data.cpu <= 0 || data.memory <= 0 || data.disk <= 0) {
+      toast({
+        title: "Error",
+        description: "CPU, Memory and Disk cannot be zero",
+        variant: "destructive",
+      })
+      return
+    }
+    put(`/server/${server.uuidShort}/resources`)
+  }
 
-        <>
-
-<AlertDialog open={showSuccess} onOpenChange={setShowSuccess}>
-        <AlertDialogContent className="max-w-[425px]">
-          <AlertDialogHeader>
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
-                <LucideCheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
-              </div>
-              <AlertDialogTitle className="text-xl font-semibold">
-                {flash?.success?.title || 'Success'}
-              </AlertDialogTitle>
-            </div>
-            <AlertDialogDescription className="pt-4 text-base">
-              {flash?.success?.desc || 'Operation completed successfully'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-lg">Close</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={showError} onOpenChange={setShowError}>
-        <AlertDialogContent className="max-w-[425px]">
-          <AlertDialogHeader>
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-red-100 dark:bg-red-900/20">
-                <LucideAlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
-              </div>
-              <AlertDialogTitle className="text-xl font-semibold">
-                Error during transaction
-              </AlertDialogTitle>
-            </div>
-            <AlertDialogDescription className="pt-4 text-base">
-              {flash?.error || 'An unexpected error occurred'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-lg">Close</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-        
-
-    
-        <ServerManagementLayout
+  return (
+    <ServerManagementLayout
             serverId={server.uuidShort}
             serverName={`Server / ${server.name} / Resources`}
             sidebarTab="resources"
@@ -166,6 +112,6 @@ export default function ResourceEditor({availableResources }: ResourceEditorProp
                 />
             </div>
         </ServerManagementLayout>
-        </>
-    );
+  )
 }
+
