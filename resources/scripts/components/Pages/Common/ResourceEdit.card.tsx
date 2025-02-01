@@ -29,6 +29,8 @@ interface ResourceCardProps {
     isProcessing?: boolean;
 }
 
+
+
 export default function ResourceCard({
     values,
     onChange,

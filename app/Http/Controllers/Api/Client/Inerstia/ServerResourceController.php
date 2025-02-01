@@ -109,9 +109,16 @@ class ServerResourceController extends Controller
                 'database_limit' => $validated['database_limit'],
                 'backup_limit' => $validated['backup_limit']
             ]);
-            return back()->with('success', 'Server resources updated successfully');
+            return back()->with('success', [
+                'title' => 'Successfully Edited Resources',
+                'desc' => "You have changed your server's resources successfully."
+            ]);
         } catch (DisplayException $e) {
-            return back()->with('error', $e->getMessage());
+            
+            return back()->with('error', [
+                'title' => 'Oops. Something went wrong!',
+                'desc' => $e->getMessage()
+            ]);
         }
     }
 }
