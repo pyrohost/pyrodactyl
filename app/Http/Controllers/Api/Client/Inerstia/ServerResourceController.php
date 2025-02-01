@@ -56,14 +56,14 @@ class ServerResourceController extends Controller
             'memory' => 'required|numeric|min:1',
             'disk' => 'required|numeric|min:1',
             'cpu' => 'required|numeric|min:1',
-            'allocation_limit' => 'required|numeric|min:1',
+            'allocation_limit' => 'required|numeric|min:0',
             'database_limit' => 'required|numeric|min:0',
             'backup_limit' => 'required|numeric|min:0'
         ]);
 
         try {
             $this->validatorService->validate($validated, $server, auth()->user());
-
+        
             $oldValues = [
                 'memory' => $server->memory,
                 'disk' => $server->disk,
@@ -72,18 +72,33 @@ class ServerResourceController extends Controller
                 'databases' => $server->database_limit,
                 'backups' => $server->backup_limit
             ];
-
+        
             $user = auth()->user();
-    $user->resources = [
-        'memory' => $user->resources['memory'] + ($validated['memory'] - $oldValues['memory']),
-        'disk' => $user->resources['disk'] + ($validated['disk'] - $oldValues['disk']),
-        'cpu' => $user->resources['cpu'] + ($validated['cpu'] - $oldValues['cpu']),
-        'allocations' => $user->resources['allocations'] + ($validated['allocation_limit'] - $oldValues['allocations']),
-        'databases' => $user->resources['databases'] + ($validated['database_limit'] - $oldValues['databases']),
-        'backups' => $user->resources['backups'] + ($validated['backup_limit'] - $oldValues['backups'])
-    ];
-    $user->save();
-
+            
+            // Check if user has enough resources for each change
+            $requiredResources = [
+                'memory' => $validated['memory'] - $oldValues['memory'],
+                'disk' => $validated['disk'] - $oldValues['disk'],
+                'cpu' => $validated['cpu'] - $oldValues['cpu'],
+                'allocations' => $validated['allocation_limit'] - $oldValues['allocations'],
+                'databases' => $validated['database_limit'] - $oldValues['databases'],
+                'backups' => $validated['backup_limit'] - $oldValues['backups']
+            ];
+        
+            // Verify each resource availability
+            foreach ($requiredResources as $resource => $amount) {
+                if ($amount > 0 && $user->resources[$resource] < $amount) {
+                    throw new DisplayException("Insufficient {$resource} resources available. You need {$amount} more.");
+                }
+            }
+        
+            // Update user's resources
+            foreach ($requiredResources as $resource => $amount) {
+                $user->resources[$resource] -= $amount;
+            }
+            $user->save();
+        
+            // Update server resources
             $server->update([
                 'memory' => $validated['memory'],
                 'disk' => $validated['disk'],
@@ -92,7 +107,6 @@ class ServerResourceController extends Controller
                 'database_limit' => $validated['database_limit'],
                 'backup_limit' => $validated['backup_limit']
             ]);
-
             return back()->with('success', 'Server resources updated successfully');
         } catch (DisplayException $e) {
             return back()->with('error', $e->getMessage());

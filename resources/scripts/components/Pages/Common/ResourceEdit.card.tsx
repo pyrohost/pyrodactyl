@@ -98,8 +98,7 @@ export default function ResourceCard({
                             type="number"
                             value={values.allocation_limit}
                             onChange={e => onChange('allocation_limit', Number(e.target.value))}
-                            min={0}
-                            max={availableResources.allocations}
+                        
                             className="w-full"
                         />
                         {errors.allocation_limit && <p className="text-red-500 text-sm">{errors.allocation_limit}</p>}
