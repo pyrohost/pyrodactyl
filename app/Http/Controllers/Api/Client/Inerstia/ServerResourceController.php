@@ -44,60 +44,58 @@ class ServerResourceController extends Controller
     }
 
 
-    public function update($uuidShort)
-    {
-        $server = Server::where('uuidShort', $uuidShort)->first();
+    public function update(Request $request, Server $server)
+{
+    $validated = $request->validate([
+        'memory' => 'required|numeric|min:0',
+        'disk' => 'required|numeric|min:0',
+        'cpu' => 'required|numeric|min:0',
+        'allocation_limit' => 'required|numeric|min:0',
+        'database_limit' => 'required|numeric|min:0',
+        'backup_limit' => 'required|numeric|min:0'
+    ]);
 
-        if (!$server || !$server->exists) {
-            return back()->with('error', 'Server not found');
-        }
-
-        $validated = request()->validate([
-            'memory' => 'required|numeric|min:1',
-            'disk' => 'required|numeric|min:1',
-            'cpu' => 'required|numeric|min:1',
-            'allocation_limit' => 'required|numeric|min:0',
-            'database_limit' => 'required|numeric|min:0',
-            'backup_limit' => 'required|numeric|min:0'
-        ]);
-
+    try {
+        $this->validatorService->validate($validated, $server, auth()->user());
+        
+        $oldValues = [
+            'memory' => $server->memory,
+            'disk' => $server->disk,
+            'cpu' => $server->cpu,
+            'allocations' => $server->allocation_limit,
+            'databases' => $server->database_limit,
+            'backups' => $server->backup_limit
+        ];
+    
+        $user = auth()->user();
+        
+        $requiredResources = [
+            'memory' => $validated['memory'] - $oldValues['memory'],
+            'disk' => $validated['disk'] - $oldValues['disk'],
+            'cpu' => $validated['cpu'] - $oldValues['cpu'],
+            'allocations' => $validated['allocation_limit'] - $oldValues['allocations'],
+            'databases' => $validated['database_limit'] - $oldValues['databases'],
+            'backups' => $validated['backup_limit'] - $oldValues['backups']
+        ];
+    
+        DB::beginTransaction();
+        
         try {
-            $this->validatorService->validate($validated, $server, auth()->user());
-        
-            $oldValues = [
-                'memory' => $server->memory,
-                'disk' => $server->disk,
-                'cpu' => $server->cpu,
-                'allocations' => $server->allocation_limit,
-                'databases' => $server->database_limit,
-                'backups' => $server->backup_limit
-            ];
-        
-            $user = auth()->user();
-            
-            // Check if user has enough resources for each change
-            $requiredResources = [
-                'memory' => $validated['memory'] - $oldValues['memory'],
-                'disk' => $validated['disk'] - $oldValues['disk'],
-                'cpu' => $validated['cpu'] - $oldValues['cpu'],
-                'allocations' => $validated['allocation_limit'] - $oldValues['allocations'],
-                'databases' => $validated['database_limit'] - $oldValues['databases'],
-                'backups' => $validated['backup_limit'] - $oldValues['backups']
-            ];
-        
-            // Verify each resource availability
+            // Check resource availability and update user resources
             foreach ($requiredResources as $resource => $amount) {
-                if ($amount > 0 && $user->resources[$resource] < $amount) {
-                    throw new DisplayException("Insufficient {$resource} resources available. You need {$amount} more.");
+                if ($amount > 0) {
+                    if ($user->resources[$resource] < $amount) {
+                        throw new DisplayException("Insufficient {$resource} resources. Need {$amount} more.");
+                    }
+                    $user->resources[$resource] -= $amount;
+                } else if ($amount < 0) {
+                    // Return resources to user if reducing
+                    $user->resources[$resource] += abs($amount);
                 }
             }
-        
-            // Update user's resources
-            foreach ($requiredResources as $resource => $amount) {
-                $user->resources[$resource] -= $amount;
-            }
+            
             $user->save();
-        
+    
             // Update server resources
             $server->update([
                 'memory' => $validated['memory'],
@@ -107,9 +105,19 @@ class ServerResourceController extends Controller
                 'database_limit' => $validated['database_limit'],
                 'backup_limit' => $validated['backup_limit']
             ]);
+            
+            DB::commit();
             return back()->with('success', 'Server resources updated successfully');
-        } catch (DisplayException $e) {
-            return back()->with('error', $e->getMessage());
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
+        
+    } catch (DisplayException $e) {
+        return back()->with('error', $e->getMessage());
+    } catch (\Exception $e) {
+        return back()->with('error', 'An unexpected error occurred.');
     }
+}
 }
