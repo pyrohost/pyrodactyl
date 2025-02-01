@@ -63,6 +63,6 @@ run_sudo php artisan down
 #run_sudo php artisan view:cache
 run_sudo php artisan migrate --force
 run_sudo php artisan up
-php artisan queue:restart
-
+run_sudo php artisan queue:restart
+run_sudo chown -R www-data:www-data /var/www/pterodactyl/*
 echo "✅ Update completed successfully!"
