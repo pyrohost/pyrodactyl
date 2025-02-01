@@ -29,9 +29,15 @@ interface Server {
 
 interface ServerPageProps {
     server: Server;
-    flash: any;
-    
+    flash: {
+        success?: {
+            title?: string;
+            desc?: string;
+        };
+        error?: string;
+    };
 }
+
 
 interface AvailableResources {
     memory: number;
@@ -58,6 +64,9 @@ interface FormData {
 
 export default function ResourceEditor({availableResources }: ResourceEditorProps) {
     const { server} = usePage<ServerPageProps>().props;
+    const { flash } = usePage<ServerPageProps>().props
+    const [showError, setShowError] = useState(false)
+    const [showSuccess, setShowSuccess] = useState(false);
     console.log(server)
     
     const { data, setData, put, processing, errors } = useForm<FormData>({
@@ -69,22 +78,17 @@ export default function ResourceEditor({availableResources }: ResourceEditorProp
         backup_limit: server.backup_limit
     });
 
-    const { flash } = usePage<ServerPageProps>().props
-    const [showError, setShowError] = useState(false)
-    const [showSuccess, setShowSuccess] = useState(false);
+    \
     
 
     useEffect(() => {
-        if (flash.error) {
-          setShowError(true)
-        }
-      }, [flash.error])
-    
-      useEffect(() => {
         if (flash.success) {
-          setShowSuccess(true)
+            setShowSuccess(true);
         }
-      }, [flash.error])
+        if (flash.error) {
+            setShowError(true);
+        }
+    }, [flash]);
     
     
 
