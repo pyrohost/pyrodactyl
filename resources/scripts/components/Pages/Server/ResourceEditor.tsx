@@ -25,13 +25,7 @@ interface ServerPageProps {
     database_limit: number
     backup_limit: number
   }
-  flash: {
-    success?: {
-      title?: string
-      desc: string
-    }
-    error?: string
-  }
+  
 }
 
 interface FormData {

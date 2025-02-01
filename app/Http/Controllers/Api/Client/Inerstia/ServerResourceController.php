@@ -94,11 +94,13 @@ class ServerResourceController extends Controller
                 }
             }
         
-            // Update user's resources
-            foreach ($requiredResources as $resource => $amount) {
+            // Update user's resources (Not needed) 
+            // The user's resources are looked up in the database when needed
+            /*foreach ($requiredResources as $resource => $amount) {
                 $user->resources[$resource] -= $amount;
             }
-            $user->save();
+            $user->save();*/
+
         
             // Update server resources
             $server->update([
