@@ -83,7 +83,7 @@ export default function ResourceCard({
                             value={values.disk}
                             onChange={e => onChange('disk', Number(e.target.value))}
                             min={1}
-                            max={availableResources.disk}
+                            
                             className="w-full"
                         />
                         {errors.disk && <p className="text-red-500 text-sm">{errors.disk}</p>}
