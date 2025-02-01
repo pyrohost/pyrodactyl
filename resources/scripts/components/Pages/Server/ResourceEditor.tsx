@@ -78,7 +78,7 @@ export default function ResourceEditor({availableResources }: ResourceEditorProp
         backup_limit: server.backup_limit
     });
 
-    \
+    
     
 
     useEffect(() => {
