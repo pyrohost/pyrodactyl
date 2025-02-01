@@ -31,7 +31,7 @@ git pull origin main || {
     echo 'Git pull failed'
     exit 1
 }
-git stash pop || true # Pop stashed changes after pulling
+git stash || true # Pop stashed changes after pulling
 " || {
     echo "Git operations failed"
     exit 1

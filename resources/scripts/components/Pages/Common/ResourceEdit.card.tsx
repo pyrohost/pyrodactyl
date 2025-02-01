@@ -67,7 +67,7 @@ export default function ResourceCard({
                             value={values.memory}
                             onChange={e => onChange('memory', Number(e.target.value))}
                             min={1}
-                            max={availableResources.memory}
+                            
                             className="w-full"
                         />
                         {errors.memory && <p className="text-red-500 text-sm">{errors.memory}</p>}
