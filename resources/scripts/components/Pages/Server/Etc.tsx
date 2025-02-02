@@ -14,6 +14,8 @@ import MinecraftServerStatus from '@/components/server/MinecraftDetails';
 import ServerDatabases from '@/components/server/etc/databases';
 
 
+//etc
+
 interface ServerPageProps {
     server: {
         uuid: string;

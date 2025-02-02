@@ -124,7 +124,7 @@ class ServerController extends Controller
             $resource = new Item($server, $transformer);
             $transformed = $this->fractal->createData($resource)->toArray();
             
-            return Inertia::render('Server/ETC', [
+            return Inertia::render('Server/Etc', [
                 'server' => array_merge($transformed['data'], [
                     'is_server_owner' => $request->user()->id === $server->owner_id,
                     'user_permissions' => $this->permissionsService->handle($server, $request->user()),
