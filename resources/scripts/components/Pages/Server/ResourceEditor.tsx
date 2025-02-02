@@ -42,8 +42,8 @@ interface ResourceEditorProps {
 }
 
 export default function ResourceEditor({ availableResources }: ResourceEditorProps) {
-  const { server } = usePage<ServerPageProps>().props
-  const { flash } = usePage<ServerPageProps>().props
+  const { server, flash } = usePage<ServerPageProps>().props
+ 
   const [showError, setShowError] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const { toast } = useToast()
@@ -57,21 +57,32 @@ export default function ResourceEditor({ availableResources }: ResourceEditorPro
     backup_limit: server.backup_limit,
   })
 
+  const handleToastSuccess = (title: string, description: string) => {
+    toast({
+      title,
+      description,
+      variant: "default",
+    })
+  }
+
+  const handleToastError = (description: string) => {
+    setShowError(true)
+    toast({
+      title: "Error",
+      description,
+      variant: "destructive",
+    })
+  }
+
   useEffect(() => {
     if (flash.success) {
-      toast({
-        title: flash.success.title || "Success",
-        description: flash.success.desc,
-        variant: "default",
-      })
+      handleToastSuccess(
+        flash.success.title || "Success",
+        flash.success.desc
+      )
     }
     if (flash.error) {
-      setShowError(true)
-      toast({
-        title: "Error",
-        description: flash.error,
-        variant: "destructive",
-      })
+      handleToastError(flash.error)
     }
   }, [flash, toast])
 
