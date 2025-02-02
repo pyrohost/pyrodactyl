@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { usePage } from '@inertiajs/inertia-react';
+import { usePage } from '@inertiajs/react';
 import getServerDatabases, { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePassword';
 import createServerDatabase from '@/api/server/databases/createServerDatabase';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableHead, TableBody, TableRow, TableCell } from '@/components/ui/table';
 
 const ServerDatabases: React.FC = () => {
-  const { server } = usePage().props as { server: { uuid: string } };
+  const { server } = usePage().props
   const [databases, setDatabases] = useState<ServerDatabase[]>([]);
   const [newDbName, setNewDbName] = useState('');
   const [newConnectionsFrom, setNewConnectionsFrom] = useState('');
