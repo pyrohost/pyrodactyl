@@ -96,7 +96,7 @@ export default function MinecraftServerStatus() {
               )}
               {error && <p className="text-red-500 text-center py-4">{error}</p>}
               {mcStatus && (
-                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-3">
                   <ServerInfoItem
                     icon={<Server className="w-5 h-5" />}
                     label="Hostname / IP"
