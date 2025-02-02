@@ -15,6 +15,7 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import Code from '../elements/Code';
 import FlashbackTester from '../elements/Flashback';
 import AccountSSHContainer from './ssh/AccountSSHContainer';
+import { ManageApiKeys } from './Apikeys';
 
 export default () => {
     const { props } = usePage();
@@ -71,6 +72,8 @@ export default () => {
                         
                     </CardContent>
                 </Card>
+
+                <ManageApiKeys/>
 
                 
 

@@ -48,6 +48,9 @@ Route::prefix('/')->middleware([
         Route::put('/email', [Client\AccountController::class, 'updateEmail']);
         Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
         Route::post('/test', [TestController::class, 'testFlash'])->name('api:client.account.update-password');
+        Route::get('/api-keys', [Client\ApiKeyController::class, 'index']);
+        Route::post('/api-keys', [Client\ApiKeyController::class, 'store']);
+        Route::delete('/api-keys/{identifier}', [Client\ApiKeyController::class, 'delete']);
         
         
     });

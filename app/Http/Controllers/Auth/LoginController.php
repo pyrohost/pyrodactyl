@@ -38,7 +38,7 @@ class LoginController extends Controller
         ]);
 
         if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
+            
             
             return Inertia::render('Auth/Login', [
                 'errors' => [
