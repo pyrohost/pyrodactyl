@@ -14,7 +14,10 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from "@/hooks/use-toast";
 import { motion } from 'framer-motion';
+import compressFiles from '@/api/server/files/compressFiles';
+import decompressFiles from '@/api/server/files/decompressFiles';
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose, DrawerFooter, DrawerDescription } from "@/components/ui/drawer"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import loadDirectory from '@/api/server/files/loadDirectory';
@@ -42,6 +45,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { TbZip } from 'react-icons/tb';
+import { EyeOpenIcon } from '@radix-ui/react-icons';
 
 interface FileManagerProps {
     serverId: string;
@@ -83,7 +88,16 @@ export default function FileManager({ serverId }: FileManagerProps) {
     const [files, setFiles] = useState<{ name: string; isFile: boolean; key: string; mimetype?: string; size?: number; modifiedAt: string }[]>([]);
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
     const [fileToRename, setFileToRename] = useState("");
+    const {toast} = useToast();
     const [newFileName, setNewFileName] = useState("");
+    // Add new state variables
+const [isCompressDialogOpen, setIsCompressDialogOpen] = useState(false);
+const [isDecompressDialogOpen, setIsDecompressDialogOpen] = useState(false);
+const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+    
+
+    
+
     
     const [editingFile, setEditingFile] = useState<string | null>(() => {
         const params = new URLSearchParams(window.location.search);
@@ -145,13 +159,57 @@ export default function FileManager({ serverId }: FileManagerProps) {
         if (window.confirm(`Are you sure you want to delete ${fileName}?`)) {
           deleteFiles(serverId, currentDirectory, [fileName])
             .then(async () => {
-              const updatedFiles = await loadDirectory(serverId, currentDirectory);
-              setFiles(updatedFiles);
+                window.location.reload();
             })
             .catch(() => { /* handle error */ });
         }
     };
 
+    // Add new functions for compressing and decompressing files
+
+    const handleCompress = async (fileName: string) => {
+        try {
+            const response = await compressFiles(serverId, currentDirectory, [fileName]);
+            if (response.status === 204 || response.ok) {
+                toast({
+                    title: "Success",
+                    description: "File compressed successfully",
+                    variant: "default",
+                });
+                window.location.reload();
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to compress file",
+                variant: "destructive",
+            });
+            w
+            console.error("Compression failed:", error);
+        }
+    };
+
+    const handleDecompress = async (fileName: string) => {
+        try {
+            const response = await decompressFiles(serverId, currentDirectory, fileName);
+            if (response.ok) {
+                toast({
+                    title: "Success",
+                    description: "File decompressed successfully",
+                    variant: "default",
+                });
+                window.location.reload();
+            }
+        } catch (error) {
+            toast({
+                title: "Successfully added task!",
+                description: "Your server will be decompressed fully shortly!",
+                variant: "default",
+            });
+            window.location.reload();
+            console.error("Decompression failed:", error);
+        }
+    };
     const isEditable = (mimetype: string | undefined) => {
         if (!mimetype) {
             console.debug('🔍 isEditable check - mimetype is undefined');
@@ -241,6 +299,34 @@ export default function FileManager({ serverId }: FileManagerProps) {
         );
     }
 
+    const FileActions = ({ file }: { file: FileObject }) => {
+        return (
+            <div className="flex space-x-2">
+                {/* Existing actions */}
+                {file.isFile && file.mimetype?.includes('compressed') && (
+                    <button
+                        onClick={() => {
+                            setIsDecompressDialogOpen(true);
+                            setSelectedFiles([file.name]);
+                        }}
+                        className="text-gray-600 hover:text-gray-900"
+                    >
+                        <EyeOpenIcon className="h-5 w-5" />
+                    </button>
+                )}
+                <button
+                    onClick={() => {
+                        setIsCompressDialogOpen(true);
+                        setSelectedFiles([file.name]);
+                    }}
+                    className="text-gray-600 hover:text-gray-900"
+                >
+                    <TbZip className="h-5 w-5" />
+                </button>
+            </div>
+        );
+    };
+
     const pathParts = currentDirectory === '/' ? [] : currentDirectory.split('/').filter(Boolean);
 
     return (
@@ -276,6 +362,8 @@ export default function FileManager({ serverId }: FileManagerProps) {
                 currentDirectory={currentDirectory} 
                 onDirectoryCreate={() => fetchFiles(currentDirectory)}
             />
+
+
 
             <motion.div 
                 className="grid grid-cols-1 gap-3 mt-4"
@@ -339,6 +427,25 @@ export default function FileManager({ serverId }: FileManagerProps) {
                                             >
                                                 Rename
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem
+            onClick={(e) => {
+                e.stopPropagation();
+                handleCompress(file.name);
+            }}
+        >
+            Compress
+        </DropdownMenuItem> 
+
+                                            {file.isFile && file.mimetype?.includes('gzip') && (
+            <DropdownMenuItem
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecompress(file.name);
+                }}
+            >
+                Decompress
+            </DropdownMenuItem>
+        )}
                                             <DropdownMenuItem 
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -347,6 +454,7 @@ export default function FileManager({ serverId }: FileManagerProps) {
                                             >
                                                 Delete
                                             </DropdownMenuItem>
+
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
