@@ -54,39 +54,41 @@ class ServerResourceController extends Controller
             return back()->with('error', 'Server not found');
         }
 
-        $validated = request()->validate([
-            'memory' => 'required|numeric|min:1',
-            'disk' => 'required|numeric|min:1',
-            'cpu' => 'required|numeric|min:1',
+        $validated = $request->validate([
+            'memory'           => 'required|numeric|min:0',
+            'disk'             => 'required|numeric|min:0',
+            'cpu'              => 'required|numeric|min:0',
             'allocation_limit' => 'required|numeric|min:0',
-            'database_limit' => 'required|numeric|min:0',
-            'backup_limit' => 'required|numeric|min:0'
+            'database_limit'   => 'required|numeric|min:0',
+            'backup_limit'     => 'required|numeric|min:0',
+            'databases'        => 'required|numeric|min:0',
+            'backups'          => 'required|numeric|min:0',
         ]);
-
+        
         try {
             $this->validatorService->validate($validated, $server, auth()->user());
-        
+            
             $oldValues = [
-                'memory' => $server->memory,
-                'disk' => $server->disk,
-                'cpu' => $server->cpu,
+                'memory'      => $server->memory,
+                'disk'        => $server->disk,
+                'cpu'         => $server->cpu,
                 'allocations' => $server->allocation_limit,
-                'databases' => $server->database_limit,
-                'backups' => $server->backup_limit
+                'databases'   => $server->databases,  // updated property for current databases count
+                'backups'     => $server->backups,    // updated property for current backups count
             ];
-        
+            
             $user = auth()->user();
             
             // Check if user has enough resources for each change
             $requiredResources = [
-                'memory' => $validated['memory'] - $oldValues['memory'],
-                'disk' => $validated['disk'] - $oldValues['disk'],
-                'cpu' => $validated['cpu'] - $oldValues['cpu'],
+                'memory'      => $validated['memory'] - $oldValues['memory'],
+                'disk'        => $validated['disk'] - $oldValues['disk'],
+                'cpu'         => $validated['cpu'] - $oldValues['cpu'],
                 'allocations' => $validated['allocation_limit'] - $oldValues['allocations'],
-                'databases' => $validated['database_limit'] - $oldValues['databases'],
-                'backups' => $validated['backup_limit'] - $oldValues['backups']
+                'databases'   => $validated['databases'] - $oldValues['databases'],
+                'backups'     => $validated['backups'] - $oldValues['backups'],
             ];
-        
+            
             // Verify each resource availability
             foreach ($requiredResources as $resource => $amount) {
                 if ($amount > 0 && $user->resources[$resource] < $amount) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing, LucideBackpack } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'settings' | 'resources';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'resources';
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -195,8 +195,15 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         collapsed={isSidebarCollapsed}
                     />
                     <MenuItem
+                        icon={LucideBackpack}
+                        label="Backups and Databases"
+                        href={`/server/${serverId}/etc`}
+                        isActive={sidebarTab === 'etc'}
+                        collapsed={isSidebarCollapsed}
+                    />
+                    <MenuItem
                         icon={LucideChartBarIncreasing}
-                        label="Resource Usage"
+                        label="Resources (Edit)"
                         href={`/server/${serverId}/resources`}
                         isActive={sidebarTab === 'resources'}
                         collapsed={isSidebarCollapsed}

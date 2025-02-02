@@ -6,12 +6,14 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import getServerResourceUsage from '@/api/server/getServerResourceUsage';
 import OverviewServerCard from '@/components/server/Overview';
 import ServerSpecifications from '@/components/server/console/SystemSpecs';
-import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsBlock';
-import { Toaster } from "@/components/ui/toaster"
+
+import { useToast } from "@/hooks/use-toast";
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';
 import MinecraftServerStatus from '@/components/server/MinecraftDetails';
 import ServerDatabases from '@/components/server/etc/databases';
+import BackupManager from '@/components/server/etc/backups';
+
 
 
 //etc
@@ -58,8 +60,8 @@ export default function Show() {
     return (
         <ServerLayout 
             serverId={server.identifier}
-            serverName={`Server / ${server.name} / Console`}
-            sidebarTab="terminal"
+            serverName={`Server / ${server.name} / Backups & Databases`}
+            sidebarTab="etc"
         >
             <Head title={`${server.name} - Console`} />
            
@@ -74,9 +76,11 @@ export default function Show() {
                 />
 
                 <ServerDatabases/>
+                <BackupManager/>
                 
                 
-                <ResourceUsage/>
+                
+              
                 
                 
             </div>

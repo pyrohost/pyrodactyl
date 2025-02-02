@@ -1,12 +1,11 @@
 import { createContext, useContext } from 'react';
 import useSWR from 'swr';
+import { usePage } from '@inertiajs/react';
 
 import type { PaginatedResult } from '@/api/http';
 import http, { getPaginationSet } from '@/api/http';
 import type { ServerBackup } from '@/api/server/types';
 import { rawDataToServerBackup } from '@/api/transformers';
-
-import { ServerContext } from '@/state/server';
 
 interface ctx {
     page: number;
@@ -19,10 +18,10 @@ type BackupResponse = PaginatedResult<ServerBackup> & { backupCount: number };
 
 export default () => {
     const { page } = useContext(Context);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const { server } = usePage().props;
 
-    return useSWR<BackupResponse>(['server:backups', uuid, page], async () => {
-        const { data } = await http.get(`/api/client/servers/${uuid}/backups`, { params: { page } });
+    return useSWR<BackupResponse>(['server:backups', server.uuid, page], async () => {
+        const { data } = await http.get(`/api/client/servers/${server.uuid}/backups`, { params: { page } });
 
         return {
             items: (data.data || []).map(rawDataToServerBackup),
