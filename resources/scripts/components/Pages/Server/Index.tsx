@@ -8,6 +8,8 @@ import OverviewServerCard from '@/components/server/Overview';
 import ServerSpecifications from '@/components/server/console/SystemSpecs';
 import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsBlock';
 import { Toaster } from "@/components/ui/toaster"
+import MinecraftDetails from '@/components/server/MinecraftDetails';
+import MinecraftServerStatus from '@/components/server/MinecraftDetails';
 
 interface ServerPageProps {
     server: {
@@ -71,6 +73,7 @@ export default function Show() {
 
 
                 <ServerSpecifications/>
+                <MinecraftServerStatus/>
             </div>
         </ServerLayout>
     );

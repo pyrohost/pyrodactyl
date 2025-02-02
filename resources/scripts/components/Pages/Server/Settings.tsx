@@ -18,6 +18,7 @@ import SFTPDetails from '../Common/SFPT';
 import LogoLoader from '@/components/elements/ServerLoad';
 import DebugInfo from '../Common/Debug';
 import StartupVariables from '../Common/Startup';
+import MinecraftServerStatus from "@/components/server/MinecraftDetails";
 
 export default function Show() {
     const { server } = usePage<ServerPageProps>().props;
@@ -70,6 +71,7 @@ export default function Show() {
             Server Settings
         </h2>
     </div>
+    <MinecraftServerStatus/>
     <StartupVariables/>
     <h2 className="text-4xl font-semibold flex items-center gap-2 py-5">
         <LucideSettings className="h-9 w-9" />
