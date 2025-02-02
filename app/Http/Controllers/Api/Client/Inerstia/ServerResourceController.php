@@ -22,7 +22,7 @@ class ServerResourceController extends Controller
         $this->validatorService = $validatorService;
     }
 
-    public function index($uuidShort)
+    public function index(Request $request, $uuidShort)
     {
         $server = Server::where('uuidShort', $uuidShort)->first();
 
