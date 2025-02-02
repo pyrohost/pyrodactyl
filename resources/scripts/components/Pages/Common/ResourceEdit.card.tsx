@@ -11,6 +11,8 @@ interface ResourceValues {
     allocation_limit: number;
     database_limit: number;
     backup_limit: number;
+    backups: number;
+    databases: number;
 }
 
 interface ResourceCardProps {
@@ -100,7 +102,6 @@ export default function ResourceCard({
                             type="number"
                             value={values.allocation_limit}
                             onChange={e => onChange('allocation_limit', Number(e.target.value))}
-                        
                             className="w-full"
                         />
                         {errors.allocation_limit && <p className="text-red-500 text-sm">{errors.allocation_limit}</p>}
@@ -108,6 +109,35 @@ export default function ResourceCard({
                             Resources left: {availableResources.allocations}
                         </span>
                     </div>
+                   <div className="space-y-2">
+                       <label className="text-sm font-medium">Backups</label>
+                       <Input 
+                           type="number"
+                           value={values.backups}
+                           onChange={(e) => onChange('backups', Number(e.target.value))}
+                           min={0}
+                           className="w-full"
+                       />
+                       {errors.backups && <p className="text-red-500 text-sm">{errors.backups}</p>}
+                       <span className="text-sm text-gray-500">
+                           Resources left: {availableResources.backups}
+                       </span>
+                  </div>
+                  <div className="space-y-2">
+                       <label className="text-sm font-medium">Databases</label>
+                       <Input 
+                           type="number"
+                           value={values.databases}
+                           onChange={(e) => onChange('databases', Number(e.target.value))}
+                           min={0}
+                           className="w-full"
+                       />
+                       {errors.databases && <p className="text-red-500 text-sm">{errors.databases}</p>}
+                       <span className="text-sm text-gray-500">
+                           Resources left: {availableResources.databases}
+                       </span>
+                   </div>
+
 
                     <Button type="submit" disabled={isProcessing} className="w-full">
                         Save Changes

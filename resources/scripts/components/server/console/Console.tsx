@@ -96,6 +96,11 @@ const CustomTerminal: React.FC = () => {
         setLines([{ id: Date.now(), content: 'Restarting terminal...', type: 'output' }]);
       } else if (currentInput === '>>ver') {
         handleConsoleOutput('Terminal Version: Pastelix-1');
+      } else if (currentInput === '>>harun') {
+        handleConsoleOutput('Harun WTF BRO, I am not a bot');
+
+      } else if (currentInput === '>>help') {
+        handleConsoleOutput('>>restart - Restart the terminal \n >>ver - Check the terminal version \n >>harun - Harun WTF BRO, I am not a bot \n >>stop - Stop the terminal and kill the connection');
       } else if (currentInput === '>>stop') {
         wsService.current?.sendRaw(JSON.stringify({event:"set state",args:["kill"]}));
       } else {
