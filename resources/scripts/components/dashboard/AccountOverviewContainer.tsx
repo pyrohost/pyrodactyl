@@ -15,7 +15,7 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import Code from '../elements/Code';
 import FlashbackTester from '../elements/Flashback';
 import AccountSSHContainer from './ssh/AccountSSHContainer';
-import { ManageApiKeys } from './Apikeys';
+import { ApiKeys, ManageApiKeys } from './Apikeys';
 
 export default () => {
     const { props } = usePage();
@@ -53,6 +53,12 @@ export default () => {
                         <UpdatePasswordForm />
                     </CardContent>
                 </Card>
+
+                <h2 className='mt-8 ml-2 font-extrabold text-2xl'>API credentials (Your API keys) </h2>
+
+                <div className='max-w-3xl'>
+                   <ApiKeys/>
+                </div>
                 
 
                 <h2 className='mt-8 ml-2 font-extrabold text-2xl'>App Information </h2>
@@ -73,7 +79,9 @@ export default () => {
                     </CardContent>
                 </Card>
 
-                <ManageApiKeys/>
+                <div className='max-w-3xl'>
+                   <ApiKeys/>
+                </div>
 
                 
 
