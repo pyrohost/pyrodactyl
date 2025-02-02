@@ -1,4 +1,82 @@
-import { fileBitsToString } from '@/helpers';
+import { MoreHorizontal } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+  
+{files.map((file, index) => (
+  <motion.div key={file.key} variants={item}>
+    <Card 
+      className={`
+          group p-4 cursor-pointer transition-all duration-200 
+          hover:shadow-lg hover:translate-x-1
+          ${index === selectedIndex ? 
+              'bg-accent/80 ring-2 ring-primary shadow-lg' : 
+              'hover:bg-accent/40 bg-background/60'
+          }
+      `}
+      onClick={() => handleFileClick(file)}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <motion.div
+            whileHover={{ rotate: 15, scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400 }}
+            className="p-2 rounded-md bg-accent/50"
+          >
+            {file.isFile ? getFileIcon(file) : (
+              <FolderIcon className="h-5 w-5 text-blue-500" />
+            )}
+          </motion.div>
+          <div>
+            <p className="font-medium">{file.name}</p>
+            <p className="text-sm text-muted-foreground">
+              {file.isFile ? formatFileSize(file.size) : 'Click to open this directory'}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            {formatDate(new Date(file.modifiedAt))}
+          </p>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFileToRename(file.name);
+                  setNewFileName(file.name);
+                  setIsRenameDrawerOpen(true);
+                }}
+              >
+                Rename
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(file.name);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </Card>
+  </motion.div>
+))}import { fileBitsToString } from '@/helpers';
 import { Form, Formik, FormikHelpers } from 'formik';
 
 import Field from '@/components/elements/Field';
