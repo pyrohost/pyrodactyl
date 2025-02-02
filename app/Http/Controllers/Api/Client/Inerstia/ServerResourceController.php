@@ -46,7 +46,7 @@ class ServerResourceController extends Controller
     }
 
 
-    public function update($uuidShort)
+    public function update(Request $request, $uuidShort)
     {
         $server = Server::where('uuidShort', $uuidShort)->first();
 
