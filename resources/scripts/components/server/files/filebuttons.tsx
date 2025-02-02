@@ -7,16 +7,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import createDirectory from "@/api/server/files/createDirectory";
 import saveFileContents from "@/api/server/files/saveFileContents"
 import { router, usePage } from '@inertiajs/react';
 import { Textarea } from "@/components/ui/textarea";
+import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose, DrawerFooter, DrawerDescription } from "@/components/ui/drawer"
 import { useToast } from "@/hooks/use-toast";
 import Spinner from "@/components/elements/Spinner";
 import { LucideFolder, LucideLoader2 } from "lucide-react";
+import axios from 'axios';
 
 interface Props {
   currentDirectory: string;
@@ -30,10 +32,12 @@ export function FileButton({ currentDirectory, onDirectoryCreate }: Props) {
   const [fileName, setFileName] = useState("");
   const [fileContent, setFileContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
   const { props } = usePage();
   const [isCreateFileOpen, setIsCreateFileOpen] = useState(false)
   const { toast } = useToast()
   const serverId = props.server.uuid;
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const params = new URLSearchParams(window.location.search);
   const currentDir = params.get('dir') || '/';
@@ -59,6 +63,80 @@ export function FileButton({ currentDirectory, onDirectoryCreate }: Props) {
       setIsLoading(false);
     }
   };
+
+
+  // Uploading FILES 
+
+  // Handlers for drag & drop events
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (event.dataTransfer.files?.length) {
+      onFileSubmission(event.dataTransfer.files);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  //Paste lisenter 
+
+  useEffect(() => {
+    const handlePaste = (event: ClipboardEvent) => {
+      if (event.clipboardData?.files?.length) {
+        event.preventDefault();
+        onFileSubmission(event.clipboardData.files);
+      }
+    };
+
+    if (isUploadOpen) {
+      window.addEventListener("paste", handlePaste);
+    }
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [isUploadOpen]);
+
+  const onFileSubmission = async (files: FileList) => {
+    // Clear previous errors if any...
+    const fileArray = Array.from(files);
+    if (fileArray.some((file) => !file.size || (!file.type && file.size === 4096))) {
+      toast({
+        title: "Error",
+        description: "Folder uploads are not supported at this time.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    fileArray.forEach(async (file) => {
+      const controller = new AbortController();
+      try {
+        const url = await getFileUploadUrl(serverId);
+        await axios.post(
+          url,
+          { files: file },
+          {
+            signal: controller.signal,
+            headers: { 'Content-Type': 'multipart/form-data' },
+            params: { directory: currentDirectory },
+          }
+        );
+        toast({
+          title: "Success",
+          description: `${file.name} uploaded successfully`,
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: `Failed to upload ${file.name}`,
+          variant: "destructive",
+        });
+      }
+    });
+  };
+
+
   
 
   const handleCreate = async () => {
@@ -232,6 +310,41 @@ export function FileButton({ currentDirectory, onDirectoryCreate }: Props) {
   </DrawerContent>
 </Drawer>
 
+
+
+<Button onClick={() => setIsUploadOpen(true)}>Upload File</Button>
+
+<Drawer open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+        <DrawerContent className="flex flex-col items-center">
+          <DrawerHeader>
+            <DrawerTitle className="text-center">Upload File</DrawerTitle>
+          </DrawerHeader>
+          <div className="w-1/3 flex flex-col items-center space-y-4 mt-4">
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              className="w-full h-1/3 border-2 border-dashed border-gray-300 p-6 text-center"
+            >
+              Drag and drop your files here or press Cmd+V to paste
+            </div>
+            <Button onClick={() => fileInputRef.current?.click()} variant="outline">
+              Choose File
+            </Button>
+            <input
+              type="file"
+              multiple
+              ref={fileInputRef}
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files) onFileSubmission(e.target.files);
+              }}
+            />
+          </div>
+          <DrawerFooter className="flex justify-center w-full mt-4">
+            <Button onClick={() => setIsUploadOpen(false)}>Close</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
 
     </div>
     
