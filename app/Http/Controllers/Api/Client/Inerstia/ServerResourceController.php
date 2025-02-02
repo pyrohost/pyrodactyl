@@ -73,8 +73,8 @@ class ServerResourceController extends Controller
                 'disk'        => $server->disk,
                 'cpu'         => $server->cpu,
                 'allocations' => $server->allocation_limit,
-                'databases'   => $server->databases,  // updated property for current databases count
-                'backups'     => $server->backups,    // updated property for current backups count
+                'databases'   => count($server->databases), // use count() on the collection
+                'backups'     => count($server->backups),   // use count() on the collection
             ];
             
             $user = auth()->user();
