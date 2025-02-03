@@ -40,6 +40,7 @@ class UserTransformer extends BaseTransformer
             '2fa' => (bool) $user->use_totp,
             'created_at' => $this->formatTimestamp($user->created_at),
             'updated_at' => $this->formatTimestamp($user->updated_at),
+            'purchased_plans' => $user->purchases_plans,
         ];
     }
 

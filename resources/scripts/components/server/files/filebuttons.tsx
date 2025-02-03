@@ -259,7 +259,7 @@ export function FileButton({ currentDirectory, onDirectoryCreate }: Props) {
     </Button>
   </DrawerTrigger>
   <DrawerContent>
-    <div className="mx-auto px-4 max-w-2xl w-full">
+    <div className="mx-auto px-4  w-full">
       
       
       <div className="flex flex-col items-center space-y-6 py-4">

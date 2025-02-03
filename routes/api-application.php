@@ -24,7 +24,16 @@ Route::group(['prefix' => '/users'], function () {
     Route::post('/', [Application\Users\UserController::class, 'store']);
     Route::patch('/{user:id}', [Application\Users\UserController::class, 'update']);
 
+    
+
     Route::delete('/{user:id}', [Application\Users\UserController::class, 'delete']);
+
+    Route::post('/{user:id}/plans', [Application\Plans\UserPlanController::class, 'store'])
+         ->name('api.application.users.plans.store');
+    
+    Route::delete('/{user:id}/plans', [Application\Plans\UserPlanController::class, 'destroy'])
+         ->name('api.application.users.plans.destroy');
+    
 });
 
 /*
@@ -52,6 +61,30 @@ Route::group(['prefix' => '/nodes'], function () {
         Route::delete('/{allocation:id}', [Application\Nodes\AllocationController::class, 'delete'])->name('api.application.allocations.view');
     });
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Plans Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoints:
+|   GET  /api/application/plans        - Get all plans
+|   POST /api/application/plans        - Create a new plan
+|
+*/
+// Plans collection routes (create and list plans).
+Route::group(['prefix' => '/plans'], function () {
+    Route::get('/', [Application\Plans\PlanController::class, 'index'])
+         ->name('api.application.plans.index');
+    Route::post('/', [Application\Plans\PlanController::class, 'create'])
+         ->name('api.application.plans.create');
+});
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { Progress } from "@/components/ui/progress"
 import UserForm from './components/users.form';
+import ManagePlans from './components/user.plans';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -176,6 +177,8 @@ export default function AdminDashboard(): JSX.Element {
       <Head title="Servers" />
 
       <UserForm/>
+      <ManagePlans/>
+      
     </AdminLayout>
   );
 }

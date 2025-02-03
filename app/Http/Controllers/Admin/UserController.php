@@ -80,7 +80,8 @@ class UserController extends Controller
     public function view(User $user)
 {
     return inertia('Admin/User/user.view', [
-        'user' => $user->load(['servers'])->toArray()
+        'user' => $user->load(['servers'])->toArray(),
+        'plans' => \Pterodactyl\Models\Plan::all()
     ]);
 }
 
@@ -122,45 +123,7 @@ class UserController extends Controller
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
-    public function update(Request $request, User $user)
-{
-    try {
-        $validated = $request->validate([
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'username' => 'required|string|unique:users,username,' . $user->id,
-            'name_first' => 'required|string',
-            'name_last' => 'required|string',
-            'language' => 'required|string',
-            'root_admin' => 'required|boolean',
-            'coins' => 'required|integer',
-            'limits' => 'required|array',
-            'resources' => 'required|array',
-            'password' => 'nullable|string|min:8|confirmed'
-        ]);
     
-        // Update basic info
-        $user->email = $validated['email'];
-        $user->username = $validated['username'];
-        $user->name_first = $validated['name_first'];
-        $user->name_last = $validated['name_last'];
-        $user->language = $validated['language'];
-        $user->root_admin = $validated['root_admin'];
-        $user->coins = $validated['coins'];
-        $user->limits = $validated['limits'];
-        $user->resources = $validated['resources'];
-    
-        // Update password only if provided
-        if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
-        }
-    
-        $user->save();
-
-        return redirect()->back()->with('success', 'User updated successfully');
-    } catch (\Exception $e) {
-        return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-    }
-}
 
     /**
      * Get a JSON response of users on the system.

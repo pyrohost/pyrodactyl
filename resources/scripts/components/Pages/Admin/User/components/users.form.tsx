@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { useState, useEffect } from "react"
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { LucideAlertCircle, LucideCheckCircle2 } from 'lucide-react'
+import ManagePlans from './user.plans'
 
 interface PageProps {
     auth: any;
@@ -77,6 +78,9 @@ export default function UserForm() {
         limits: { ...defaultValues, ...user?.limits },
         resources: { ...defaultValues, ...user?.resources }
     })
+    
+
+
 
     useEffect(() => {
         if (flash.error) {
@@ -205,6 +209,8 @@ export default function UserForm() {
                     </div>
                 </CardContent>
             </Card>
+
+            
 
             {/* Resources Section */}
             <Card>

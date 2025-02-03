@@ -34,6 +34,7 @@ class HandleInertiaRequests extends Middleware
             'user' => $user ? [
                 'uuid'       => $user->uuid,
                 'username'   => $user->username,
+                'id'   => $user->id,
                 'email'      => $user->email,
                 'rootAdmin'  => $user->root_admin,
                 'useTotp'    => $user->use_totp,
@@ -42,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'limits'     => $user->limits,
                 'resources'  => $user->resources,
                 'coins'      => $user->coins,
+                'purchases_plans' => $user->purchases_plans,
             ] : null,
         ],
         'AppConfig' => [

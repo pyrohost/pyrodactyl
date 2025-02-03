@@ -89,6 +89,7 @@ class Egg extends Model
         'config_files',
         'config_startup',
         'config_logs',
+        'image_url',
         'config_stop',
         'config_from',
         'startup',
@@ -182,6 +183,14 @@ class Egg extends Model
 
         return $this->scriptFrom->script_container;
     }
+
+    /**
+ * Get the image URL for the egg.
+ */
+public function getImageUrlAttribute(): ?string
+{
+    return $this->attributes['image_url'];
+}
 
     /**
      * Return the file configuration for an egg.
