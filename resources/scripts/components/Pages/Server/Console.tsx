@@ -10,7 +10,7 @@ import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/S
 import { Toaster } from "@/components/ui/toaster"
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';
-import MinecraftServerStatus from '@/components/server/MinecraftDetails';
+import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 
 
 interface ServerPageProps {

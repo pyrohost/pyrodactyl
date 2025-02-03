@@ -10,7 +10,7 @@ import ServerSpecifications from '@/components/server/console/SystemSpecs';
 import { useToast } from "@/hooks/use-toast";
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';
-import MinecraftServerStatus from '@/components/server/MinecraftDetails';
+import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 import ServerDatabases from '@/components/server/etc/databases';
 import BackupManager from '@/components/server/etc/backups';
 

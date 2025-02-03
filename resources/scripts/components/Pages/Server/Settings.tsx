@@ -18,7 +18,7 @@ import SFTPDetails from '../Common/SFPT';
 import LogoLoader from '@/components/elements/ServerLoad';
 import DebugInfo from '../Common/Debug';
 import StartupVariables from '../Common/Startup';
-import MinecraftServerStatus from "@/components/server/MinecraftDetails";
+import MinecraftServerStatus from "@/components/server/ServerDetails_Intra";
 
 export default function Show() {
     const { server } = usePage<ServerPageProps>().props;

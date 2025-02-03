@@ -1,3 +1,5 @@
+//Depreciated
+
 //million-ignore
 import { useStoreState } from 'easy-peasy';
 import { Loader, Loader2 } from 'lucide-react';

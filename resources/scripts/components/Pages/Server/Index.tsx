@@ -8,8 +8,8 @@ import OverviewServerCard from '@/components/server/Overview';
 import ServerSpecifications from '@/components/server/console/SystemSpecs';
 import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsBlock';
 import { Toaster } from "@/components/ui/toaster"
-import MinecraftDetails from '@/components/server/MinecraftDetails';
-import MinecraftServerStatus from '@/components/server/MinecraftDetails';
+import MinecraftDetails from '@/components/server/ServerDetails_Intra';
+import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 
 interface ServerPageProps {
     server: {
