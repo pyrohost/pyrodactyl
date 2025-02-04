@@ -8,21 +8,21 @@ use Illuminate\Support\Collection;
 class UserFormRequest extends AdminFormRequest 
 {
     public function rules(): array 
-    {
-        $rules = [
-            'email' => 'required|email|unique:users,email,' . $this->route('user')->id,
-            'username' => 'required|string|min:1|max:191|unique:users,username,' . $this->route('user')->id,
-            'name_first' => 'required|string|min:1|max:191',
-            'name_last' => 'required|string|min:1|max:191',
-            'password' => 'sometimes|nullable|string|min:8',
-            'root_admin' => 'sometimes|boolean',
-            'language' => 'required|string|min:2|max:5',
-            'resources' => 'sometimes|nullable|json',
-            'limits' => 'sometimes|nullable|json'
-        ];
+{
+    $rules = [
+        'email' => 'required|email|unique:users,email,' . $this->route('user')->id,
+        'username' => 'required|string|min:1|max:191|unique:users,username,' . $this->route('user')->id,
+        'name_first' => 'required|string|min:1|max:191',
+        'name_last' => 'required|string|min:1|max:191',
+        'password' => 'nullable|string|min:8',
+        'root_admin' => 'sometimes|boolean',
+        'language' => 'required|string|min:2|max:5',
+        'resources' => 'sometimes|nullable|json',
+        'limits' => 'sometimes|nullable|json'
+    ];
 
-        return $rules;
-    }
+    return $rules;
+}
 
     public function normalize(?array $only = null): array
     {
