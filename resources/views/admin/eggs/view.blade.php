@@ -77,6 +77,25 @@
                                 <p class="text-muted small">The author of this version of the Egg. Uploading a new Egg configuration from a different author will change this.</p>
                             </div>
                             <div class="form-group">
+    <label for="pImageUrl" class="control-label">Image URL</label>
+    <input type="text" id="pImageUrl" name="image_url" value="{{ $egg->image_url }}" class="form-control" />
+    <p class="text-muted small">An optional URL to an image that represents this egg. This could be a game logo or icon. Leave blank for no image.</p>
+    @if($egg->image_url)
+        <div class="image-preview mt-2">
+            <img src="{{ $egg->image_url }}" 
+                 alt="Egg Preview Image" 
+                 class="img-responsive" 
+                 style="max-width: 200px; max-height: 200px; object-fit: contain;"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+            />
+            <div class="alert alert-danger" style="display: none;">
+                Unable to load image preview
+            </div>
+        </div>
+    @endif
+</div>
+
+                            <div class="form-group">
                                 <label for="pDockerImage" class="control-label">Docker Images <span class="field-required"></span></label>
                                 <textarea id="pDockerImages" name="docker_images" class="form-control" rows="4">{{ implode(PHP_EOL, $images) }}</textarea>
                                 <p class="text-muted small">

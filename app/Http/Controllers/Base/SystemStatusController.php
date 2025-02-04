@@ -122,7 +122,7 @@ class SystemStatusController extends Controller
         $free = disk_free_space('/');
         
         if ($total === false || $free === false) {
-            throw new \RuntimeException('Failed to get disk space information');
+            throw new \RuntimeException('Failed to get disk  space information');
         }
 
         return [
