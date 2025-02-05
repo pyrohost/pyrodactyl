@@ -87,11 +87,11 @@ export default function Create() {
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              {nests.map(nest => (
-                <div key={nest.id}>
-                  <h3 className="text-lg font-medium mb-4">{nest.name}</h3>
+              {nests.map(eggs => (
+                <div key={egg.id}>
+                  <h3 className="text-lg font-medium mb-4">{egg.name}</h3>
                   <div className="grid gap-4">
-                    {nest.eggs.filter(egg => 
+                    {egg.eggs.filter(egg => 
                       egg.description.toLowerCase().includes('server_ready')
                     ).map(egg => (
                       <Card
@@ -101,7 +101,7 @@ export default function Create() {
                         }`}
                         onClick={() => {
                           setData('egg_id', egg.id)
-                          setData('nest_id', nest.id)
+                          setData('nest_id', egg.id)
                         }}
                       >
                         <div className="p-4">

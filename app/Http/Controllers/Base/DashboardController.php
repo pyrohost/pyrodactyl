@@ -36,11 +36,6 @@ class DashboardController extends BaseController
     $user = auth()->user();
     $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
     
-    Log::info('Looking for plan', [
-        'user_id' => $user->id,
-        'plan_name' => $activePlanName
-    ]);
-
     if (!$activePlanName) {
         throw new DisplayException('No active plan found');
     }
@@ -54,11 +49,12 @@ class DashboardController extends BaseController
     $eggs = Nest::with(['eggs' => function($query) {
         $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
             ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
-    }])->get();
+    }])->get()->pluck('eggs')->flatten();
+
+    $nodes = Node::select(['id', 'name', 'location'])->get();
 
     return Inertia::render('Dash/Deploy/ServerCreate', [
         'plan' => $plan,
-        'eggs' => $eggs,
         'limits' => [
             'cpu' => $plan->cpu,
             'memory' => $plan->memory,
@@ -67,7 +63,9 @@ class DashboardController extends BaseController
             'allocations' => $plan->allocations,
             'databases' => $plan->databases,
             'backups' => $plan->backups
-        ]
+        ],
+        'nodes' => $nodes,
+        'eggs' => $eggs
     ]);
 }
 
