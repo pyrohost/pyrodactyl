@@ -67,7 +67,13 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
             "transition-all duration-300 cursor-pointer group rounded-2xl ",
             "dark:bg-black hover:shadow-xl dark:hover:shadow-xl dark:hover:shadow-700",
             "bg-white",
+            {
+                "border-2 border-zinc-200/50 dark:border-zinc-800/50": !server.plan,
+                "dark:bg-black": server.plan,
+                "bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-black": !server.plan
+            },
             className
+            
         )}>
             <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -83,10 +89,13 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                                 "opacity-100"
                             )} />
                         </div>
+                        {/* tHIS AREA make a cape liek thing iunno bade saying that */}
                         <div className="min-w-0">
+                        
                             <h3 className="text-base font-medium tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
                                 {server.name}
                             </h3>
+                            
                             <p className="text-sm text-zinc-500 truncate">
                                 {server.allocations
                                     .filter((alloc) => alloc.isDefault)
@@ -98,6 +107,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                             </p>
                         </div>
                     </div>
+                    
                     <div className="flex gap-0">
                         <Link 
                             href={`/server/${server.id}`} 
@@ -110,6 +120,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                         >
                             Manage
                         </Link>
+                        
                         <Link 
                             href={`/server/${server.id}/upgrade`} 
                             className={cn(
@@ -123,7 +134,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                                 "[animation:pulse_3s_cubic-bezier(0.4,0,0.6,1)_infinite]"
                             )}
                         >
-                            ✨ Boost
+                            🔥 Boost
                         </Link>
                     </div>
                 </div>

@@ -32,7 +32,7 @@ Route::prefix('/')->middleware([
 ])->group(function () {
     Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
     Route::get('/permissions', [Client\ClientController::class, 'permissions']);
-    Route::post('servers/create', [CreateServerController::class, '__invoke'])
+    Route::post('/servers/create', [Base\Servers\ServerCreationController::class, 'store'])
     ->name('api.client.servers.create');
 
 

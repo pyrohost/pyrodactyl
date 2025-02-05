@@ -193,6 +193,33 @@ class User extends Model implements
         ];
     }
 
+    protected static function booted()
+{
+    static::retrieved(function ($user) {
+        $user->updateResourceUsage();
+    });
+
+    static::created(function ($user) {
+        $freePlan = Plan::where('name', 'Free Tier')->first();
+
+        if ($freePlan) {
+            $user->purchases_plans = [
+                'Free Tier' => [
+                    'plan_id' => $freePlan->id,
+                    'name' => 'Free Tier',
+                    'count' => 1,
+                    'activated_on' => now()->toDateTimeString(),
+                    
+                ]
+            ];
+            
+            $user->save();
+        }
+        
+    });
+
+}
+
     public function updateResourceUsage(): void
 {
     $resources = [
@@ -220,12 +247,7 @@ class User extends Model implements
     }
 }
 
-    protected static function booted()
-{
-    static::retrieved(function ($user) {
-        $user->updateResourceUsage();
-    });
-}
+
 
 public function getAvailableResources(): array
 {

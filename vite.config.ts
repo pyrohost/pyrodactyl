@@ -4,10 +4,10 @@ import react from "@vitejs/plugin-react-swc";
 import path from 'path';
 
 export default defineConfig({
-    server: {
-        host: "::1",
-        port: 5173
-      }, 
+    //server: {
+        //host: "::1",
+        //port: 5173
+      //}, 
       // comment the above server when working on local development 
     plugins: [
         laravel({

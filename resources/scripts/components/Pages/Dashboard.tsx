@@ -150,9 +150,9 @@ export default function AdminDashboard(): JSX.Element {
       </Card>
 
       {/* Resources and Servers */}
-      <div className='h-1/6 py-4 mb-4 px-4'>
+      {/*div className='h-1/6 py-4 mb-4 px-4'>
         <ResourceView/>
-      </div>
+      </div>*/}
 
       <ServerList/>
       

@@ -3,28 +3,62 @@ import { useForm } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Slider } from '@/components/ui/slider'
+import { Select } from '@/components/ui/select'
+
+interface Props {
+  nodes: {
+    id: number
+    name: string
+    location: string
+  }[]
+  nests: {
+    id: number
+    name: string
+    eggs: {
+      id: number
+      name: string
+      description: string
+      image_url: string
+    }[]
+  }[]
+  user: {
+    purchases_plans: {
+      [key: string]: {
+        cpu: number
+        memory: number
+        disk: number
+        databases: number
+        backups: number
+        allocations: number
+      }
+    }
+  }
+}
 
 export default function Create() {
-  const { nests, user } = usePage().props
+  const { nodes, nests, auth} = usePage<Props>().props
+  const props = usePage().props
+  console.log(props)
+  console.log(nodes)
+  console.log(nests)
+  console.log(auth.user)
+  const plan = auth.user.purchases_plans['Free Tier']
 
-  const { data, setData, post, processing } = useForm({
+  const { data, setData, post, processing, errors } = useForm({
     name: '',
     egg_id: '',
     nest_id: '',
-    cpu: user.available.cpu,
-    memory: user.available.memory,
-    disk: user.available.disk,
-    databases: user.available.databases,
-    backups: user.available.backups
+    node_id: '',
   })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    post('/api/inerstia/servers/create')
+  }
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={e => {
-        e.preventDefault()
-        post('/api/client/servers')
-      }}>
+      <form onSubmit={handleSubmit}>
         <Card className="p-6">
           <h2 className="text-2xl font-bold mb-6">Create New Server</h2>
           
@@ -34,7 +68,22 @@ export default function Create() {
               <Input 
                 value={data.name}
                 onChange={e => setData('name', e.target.value)}
+                error={errors.name}
               />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Location</label>
+              <Select 
+                value={data.node_id}
+                onValueChange={(value) => setData('node_id', value)}
+              >
+                {nodes.map(node => (
+                  <Select.Option key={node.id} value={node.id}>
+                    {node.name} - {node.location}
+                  </Select.Option>
+                ))}
+              </Select>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
@@ -42,10 +91,14 @@ export default function Create() {
                 <div key={nest.id}>
                   <h3 className="text-lg font-medium mb-4">{nest.name}</h3>
                   <div className="grid gap-4">
-                    {nest.eggs.map(egg => (
+                    {nest.eggs.filter(egg => 
+                      egg.description.toLowerCase().includes('server_ready')
+                    ).map(egg => (
                       <Card
                         key={egg.id}
-                        className={`cursor-pointer ${data.egg_id === egg.id ? 'ring-2 ring-primary' : ''}`}
+                        className={`cursor-pointer ${
+                          data.egg_id === egg.id ? 'ring-2 ring-primary' : ''
+                        }`}
                         onClick={() => {
                           setData('egg_id', egg.id)
                           setData('nest_id', nest.id)
@@ -68,37 +121,19 @@ export default function Create() {
               ))}
             </div>
 
-            <div className="grid gap-4">
-              <div>
-                <label className="text-sm font-medium">CPU (%)</label>
-                <Slider
-                  value={[data.cpu]}
-                  max={user.available.cpu}
-                  step={1}
-                  onValueChange={([value]) => setData('cpu', value)}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Memory (MB)</label>
-                <Slider
-                  value={[data.memory]}
-                  max={user.available.memory}
-                  step={64}
-                  onValueChange={([value]) => setData('memory', value)}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Disk (MB)</label>
-                <Slider
-                  value={[data.disk]}
-                  max={user.available.disk}
-                  step={100}
-                  onValueChange={([value]) => setData('disk', value)}
-                />
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Plan Limits:</p>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div>CPU: {plan.cpu}%</div>
+                <div>Memory: {plan.memory}MB</div>
+                <div>Disk: {plan.disk}MB</div>
               </div>
             </div>
 
-            <Button disabled={processing}>
+            <Button 
+              type="submit" 
+              disabled={processing || !data.egg_id || !data.node_id}
+            >
               {processing ? 'Creating...' : 'Create Server'}
             </Button>
           </div>

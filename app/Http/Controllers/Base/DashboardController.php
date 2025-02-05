@@ -3,7 +3,10 @@
 namespace Pterodactyl\Http\Controllers\Base;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 use Inertia\Inertia;
+use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Models\Nest;
 use Pterodactyl\Models\Model;
 use Inertia\Response;
@@ -26,33 +29,47 @@ class DashboardController extends BaseController
         return Inertia::render('Dashboard');
     }
 
+   
+
     public function deploy()
-    {
-        $nests = Nest::where('name', 'not like', '%No_show%')
-            ->with(['eggs' => function($query) {
-                $query->select(['id', 'nest_id', 'name', 'description', 'image_url']);
-            }])
-            ->get();
+{
+    $user = auth()->user();
+    $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
+    
+    Log::info('Looking for plan', [
+        'user_id' => $user->id,
+        'plan_name' => $activePlanName
+    ]);
 
-        $user = auth()->user();
-
-        return Inertia::render('Dash/Deploy/ServerCreate', [
-            'nests' => $nests,
-            'user' => [
-                'limits' => $user->limits,
-                'resources' => $user->resources,
-                'available' => [
-                    'cpu' => $user->limits['cpu'] - $user->resources['cpu'],
-                    'memory' => $user->limits['memory'] - $user->resources['memory'],
-                    'disk' => $user->limits['disk'] - $user->resources['disk'],
-                    'databases' => $user->limits['databases'] - $user->resources['databases'],
-                    'backups' => $user->limits['backups'] - $user->resources['backups'],
-                    'allocations' => $user->limits['allocations'] - $user->resources['allocations'],
-                    'servers' => $user->limits['servers'] - $user->resources['servers'],
-                ]
-            ]
-        ]);
+    if (!$activePlanName) {
+        throw new DisplayException('No active plan found');
     }
+
+    $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
+    
+    if (!$plan) {
+        throw new DisplayException('Plan not found in database');
+    }
+
+    $eggs = Nest::with(['eggs' => function($query) {
+        $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
+            ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
+    }])->get();
+
+    return Inertia::render('Dash/Deploy/ServerCreate', [
+        'plan' => $plan,
+        'eggs' => $eggs,
+        'limits' => [
+            'cpu' => $plan->cpu,
+            'memory' => $plan->memory,
+            'disk' => $plan->disk,
+            'servers' => $plan->servers,
+            'allocations' => $plan->allocations,
+            'databases' => $plan->databases,
+            'backups' => $plan->backups
+        ]
+    ]);
+}
 
 
     public function watch(): Response
