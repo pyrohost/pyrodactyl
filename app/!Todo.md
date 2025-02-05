@@ -17,8 +17,24 @@ Ability to show and not show SHOP
 
 Server Creator
 
+default dark mode 
 
-Fix backups and databases
+
+
+
+Fix backups and databases (done)
+
+
+////////////////////////////////
+*
+* Important ones 
+*
+
+
+>> plan by plan upgrade for servers
+>> Upgrade servers 
+>> Add boost button for servers
+
 
 
 

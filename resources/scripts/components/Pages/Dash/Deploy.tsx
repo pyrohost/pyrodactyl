@@ -13,6 +13,7 @@ import Spinner from '@/components/elements/Spinner';
 import LogoLoader from '@/components/elements/ServerLoad';
 import { TbHeartbeat } from 'react-icons/tb';
 import AuthenticatedLayout from '@/components/Layouts/AuthenticatedLayout';
+import Create from './Deploy/ServerCreate';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -169,6 +170,8 @@ export default function AdminDashboard(): JSX.Element {
           <LogoLoader size="lg" />
         </div>
       )}
+
+      <Create/>
 
 
     

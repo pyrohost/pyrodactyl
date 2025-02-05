@@ -215,7 +215,7 @@ export default function UserForm() {
             {/* Resources Section */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Resources & Limits</CardTitle>
+                    <CardTitle>Resources & Limits (Only in resource Spilliting mode)</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-8">

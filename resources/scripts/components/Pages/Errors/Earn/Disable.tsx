@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button'
 import { Moon, SunMoon, LinkIcon, LucideMoon, LucideSun } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function NotFound() {
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const { props } = usePage<PageProps>();
+  const error = props.why;
 
   useEffect(() => {
     const darkModePreference = localStorage.getItem('dark-mode') === 'true'
@@ -39,7 +41,7 @@ export default function NotFound() {
     </div>
     <h1 className="text-6xl font-bold">Disabled Feature</h1>
     <p className="text-lg text-muted-foreground">
-      Earning Coins has been disabled.
+      {error || 'Earning has been disabled for this instance'}
     </p>
     <Button asChild variant="default" size="lg">
       <Link href="/dashboard">Return to Dashboard</Link>

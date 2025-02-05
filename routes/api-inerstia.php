@@ -32,6 +32,8 @@ Route::prefix('/')->middleware([
 ])->group(function () {
     Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
     Route::get('/permissions', [Client\ClientController::class, 'permissions']);
+    Route::post('servers/create', [CreateServerController::class, '__invoke'])
+    ->name('api.client.servers.create');
 
 
     Route::post('/shop/buy/{id}', [Base\ShopController::class, 'buy'])->name('api:client.shop.buy');

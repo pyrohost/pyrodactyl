@@ -162,6 +162,7 @@ class Server extends Model
         'nest_id' => 'required|exists:nests,id',
         'egg_id' => 'required|exists:eggs,id',
         'startup' => 'required|string',
+        
         'skip_scripts' => 'sometimes|boolean',
         'image' => 'required|string|max:191',
         'database_limit' => 'present|nullable|integer|min:0',
@@ -188,6 +189,7 @@ class Server extends Model
         'database_limit' => 'integer',
         'allocation_limit' => 'integer',
         'backup_limit' => 'integer',
+        'plan' => 'array',
         self::CREATED_AT => 'datetime',
         self::UPDATED_AT => 'datetime',
         'deleted_at' => 'datetime',

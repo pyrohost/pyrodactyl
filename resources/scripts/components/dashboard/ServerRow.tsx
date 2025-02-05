@@ -108,6 +108,16 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                     >
                         Manage
                     </Link>
+                    <Link 
+                        href={`/server/${server.id}/upgrade`} 
+                        className={cn(
+                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
+                            "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 hover:text-black dark:hover:text-black",
+                            "dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-200"
+                        )}
+                    >
+                        Boost
+                    </Link>
                 </div>
 
                 <Separator className="my-4 bg-black dark:bg-zinc-200" />
