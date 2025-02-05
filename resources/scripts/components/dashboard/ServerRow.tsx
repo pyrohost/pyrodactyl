@@ -98,26 +98,34 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                             </p>
                         </div>
                     </div>
-                    <Link 
-                        href={`/server/${server.id}`} 
-                        className={cn(
-                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
-                            "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 hover:text-black dark:hover:text-black",
-                            "dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-200"
-                        )}
-                    >
-                        Manage
-                    </Link>
-                    <Link 
-                        href={`/server/${server.id}/upgrade`} 
-                        className={cn(
-                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
-                            "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 hover:text-black dark:hover:text-black",
-                            "dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-200"
-                        )}
-                    >
-                        Boost
-                    </Link>
+                    <div className="flex gap-0">
+                        <Link 
+                            href={`/server/${server.id}`} 
+                            className={cn(
+                                "px-4 py-1.5 rounded-full text-sm font-medium mr-2",
+                                "bg-zinc-200 text-zinc-900 hover:bg-zinc-300",
+                                "dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700",
+                                "transition-transform duration-300 hover:scale-105"
+                            )}
+                        >
+                            Manage
+                        </Link>
+                        <Link 
+                            href={`/server/${server.id}/upgrade`} 
+                            className={cn(
+                                "px-4 py-1.5 rounded-full text-sm font-medium",
+                                "bg-gradient-to-r from-amber-300 to-yellow-500",
+                                "text-black hover:text-black",
+                                "border-2 border-amber-400",
+                                "shadow-lg hover:shadow-amber-200/50",
+                                "transition-all duration-300",
+                                "hover:scale-110 hover:rotate-3",
+                                "[animation:pulse_3s_cubic-bezier(0.4,0,0.6,1)_infinite]"
+                            )}
+                        >
+                            ✨ Boost
+                        </Link>
+                    </div>
                 </div>
 
                 <Separator className="my-4 bg-black dark:bg-zinc-200" />
