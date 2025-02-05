@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Models\Nest;
+use Pterodactyl\Models\Plan;
+use Pterodactyl\Models\Node;
 use Pterodactyl\Models\Model;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
