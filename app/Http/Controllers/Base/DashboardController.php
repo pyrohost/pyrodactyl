@@ -53,7 +53,7 @@ class DashboardController extends BaseController
             ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
     }])->get()->pluck('eggs')->flatten();
 
-    $nodes = Node::select(['id', 'name', 'location'])->get();
+    $nodes = Node::select(['id', 'name'])->get();
 
     return Inertia::render('Dash/Deploy/ServerCreate', [
         'plan' => $plan,
