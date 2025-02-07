@@ -1,9 +1,10 @@
+
+
 import { usePage } from '@inertiajs/react'
 import { useForm } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Select, SelectGroup } from '@/components/ui/select'
 
 interface Props {
   plan: {
@@ -45,7 +46,7 @@ export default function Create() {
     name: '',
     egg_id: '',
     nest_id: '',
-    node_id: '',
+    node_id: nodes[0]?.id || '',
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,7 +54,7 @@ export default function Create() {
     post('/api/inerstia/servers/create')
   }
 
-  const isValid = data.name && data.egg_id 
+  const isValid = data.name && data.egg_id && data.node_id
 
   return (
     <div className="container mx-auto p-6">
@@ -72,17 +73,20 @@ export default function Create() {
             </div>
 
             <div>
-              <label className="text-sm font-medium">Node</label>
-              <Select 
+              <label className="text-sm font-medium">Node Location</label>
+              <select
                 value={data.node_id}
-                onValueChange={(value) => setData('node_id', value)}
+                onChange={e => setData('node_id', e.target.value)}
+                className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700 
+                         bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100
+                         focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {nodes.map(node => (
-                    <option key={node.id} value={node.id}>
+                  <option key={node.id} value={node.id}>
                     {node.name}
-                    </option>
+                  </option>
                 ))}
-              </Select>
+              </select>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
@@ -124,12 +128,16 @@ export default function Create() {
             </div>
 
             <Button 
-          type="submit" 
-          disabled={processing || !isValid}
-          className="w-full mt-4"
-        >
-          {processing ? 'Creating...' : 'Create Server'}
-        </Button>
+              type="submit" 
+              disabled={processing || !isValid}
+              className="w-full"
+            >
+              {processing ? 'Creating...' : 'Create Server'}
+            </Button>
+
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
         </Card>
       </form>
