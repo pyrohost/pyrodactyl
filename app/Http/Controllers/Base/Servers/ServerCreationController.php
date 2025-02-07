@@ -88,11 +88,13 @@ class ServerCreationController extends Controller
 
 
         $variables = $egg->variables->transform(function($item) {
+            // Transform to flat key-value pairs
             return [
-                'key' => $item->env_variable,
-                'value' => $item->default_value ?? '',
+                $item->env_variable => $item->default_value ?? '',
             ];
-        })->keyBy('key')->toArray();
+        })->mapWithKeys(function ($item) {
+            return $item;
+        })->toArray();
 
 
         Log::info('Transformed variables for server creation', [
