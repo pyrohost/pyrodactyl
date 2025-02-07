@@ -58,7 +58,7 @@ export default function Create() {
     name: '',
     egg_id: '',
     nest_id: '',
-    location_id: '',
+    location_id: locations[0]?.id || ''
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -66,7 +66,7 @@ export default function Create() {
     post('/api/inerstia/servers/create')
   }
 
-  const isValid = data.name && data.egg_id && data.node_id
+  const isValid = data.name && data.egg_id && data.location_id
 
   return (
     <div className="container mx-auto p-6">
@@ -85,18 +85,18 @@ export default function Create() {
             </div>
 
             <div>
-                <label className="text-sm font-medium">Location</label>
-                <select
-                    value={data.location_id}
-                    onChange={e => setData('location_id', e.target.value)}
-                    className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700"
-                >
-                    {locations.map(location => (
-                        <option key={location.id} value={location.id}>
-                            {location.short} - {location.long}
-                        </option>
-                    ))}
-                </select>
+              <label className="text-sm font-medium">Location</label>
+              <select
+                value={data.location_id}
+                onChange={e => setData('location_id', e.target.value)}
+                className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700"
+              >
+                {locations.map(location => (
+                  <option key={location.id} value={location.id}>
+                    {location.short} - {location.long}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="grid grid-cols-3 gap-4">

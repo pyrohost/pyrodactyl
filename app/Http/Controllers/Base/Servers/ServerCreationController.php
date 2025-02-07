@@ -77,14 +77,10 @@ class ServerCreationController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|min:3',
             'egg_id' => 'required|exists:eggs,id',
-            'node_id' => 'required|exists:nodes,id'
-        ]);
-
-        $validated = $request->validate([
-            'name' => 'required|string|min:3',
-            'egg_id' => 'required|exists:eggs,id',
             'location_id' => 'required|exists:locations,id'
         ]);
+
+        
 
         $location = Location::findOrFail($validated['location_id']);
         
@@ -93,6 +89,11 @@ class ServerCreationController extends Controller
             ->where('public', true)
             ->inRandomOrder()
             ->firstOrFail();
+
+        Log::info('Selected node for server creation', [
+            'location_id' => $location->id,
+            'node_id' => $node->id
+        ]);
 
         // Get egg and its variables
         $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
