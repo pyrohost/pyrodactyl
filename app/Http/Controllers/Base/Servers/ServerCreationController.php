@@ -85,10 +85,16 @@ class ServerCreationController extends Controller
         $location = Location::findOrFail($validated['location_id']);
         
         // Get random node from location
+         // Get random node from location
         $node = $location->nodes()
             ->where('public', true)
             ->inRandomOrder()
             ->firstOrFail();
+
+        Log::info('Selected node for server creation', [
+            'location_id' => $location->id,
+            'node_id' => $node->id
+        ]);
 
         Log::info('Selected node for server creation', [
             'location_id' => $location->id,
@@ -146,7 +152,7 @@ class ServerCreationController extends Controller
 
         $allocation = Allocation::query()
             ->whereNull('server_id')
-            ->where('node_id', $validated['node_id'])
+            ->where('node_id', $node->id)  // Use node from location
             ->inRandomOrder()
             ->first();
 
