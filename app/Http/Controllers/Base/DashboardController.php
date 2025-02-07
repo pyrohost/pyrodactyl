@@ -35,51 +35,49 @@ class DashboardController extends BaseController
    
 
     public function deploy()
-{
-    $user = auth()->user();
-    $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
-    
-    if (!$activePlanName) {
-        throw new DisplayException('No active plan found');
+    {
+        $user = auth()->user();
+        $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
+        
+        if (!$activePlanName) {
+            throw new DisplayException('No active plan found');
+        }
+
+        $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
+        
+        if (!$plan) {
+            throw new DisplayException('Plan not found in database');
+        }
+
+        $locations = Location::with(['nodes' => function($query) {
+            $query->select(['id', 'name', 'location_id'])
+                ->where('public', true);
+        }])->get()->filter(function($location) use ($activePlanName) {
+            return $location->nodes->count() > 0 
+                && $location->userHasRequiredPlan([$activePlanName])
+                && !$location->hasReachedMaximumServers();
+        });
+
+        $eggs = Nest::with(['eggs' => function($query) {
+            $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
+                ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
+        }])->get()->pluck('eggs')->flatten();
+
+        return Inertia::render('Dash/Deploy/ServerCreate', [
+            'plan' => $plan,
+            'limits' => [
+                'cpu' => $plan->cpu,
+                'memory' => $plan->memory,
+                'disk' => $plan->disk,
+                'servers' => $plan->servers,
+                'allocations' => $plan->allocations,
+                'databases' => $plan->databases,
+                'backups' => $plan->backups
+            ],
+            'locations' => $locations,
+            'eggs' => $eggs
+        ]);
     }
-
-    $locations = Location::with(['nodes' => function($query) {
-        $query->select(['id', 'name', 'location_id'])
-            ->where('public', true);
-    }])->get()->filter(function($location) use ($activePlan) {
-        return $location->nodes->count() > 0 
-            && $location->userHasRequiredPlan([$activePlan['name']])
-            && !$location->hasReachedMaximumServers();
-    });
-
-    $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
-    
-    if (!$plan) {
-        throw new DisplayException('Plan not found in database');
-    }
-
-    $eggs = Nest::with(['eggs' => function($query) {
-        $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
-            ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
-    }])->get()->pluck('eggs')->flatten();
-
-    $nodes = Node::select(['id', 'name'])->get();
-
-    return Inertia::render('Dash/Deploy/ServerCreate', [
-        'plan' => $plan,
-        'limits' => [
-            'cpu' => $plan->cpu,
-            'memory' => $plan->memory,
-            'disk' => $plan->disk,
-            'servers' => $plan->servers,
-            'allocations' => $plan->allocations,
-            'databases' => $plan->databases,
-            'backups' => $plan->backups
-        ],
-        'locations' => $locations,
-        'eggs' => $eggs
-    ]);
-}
 
 
     public function watch(): Response
