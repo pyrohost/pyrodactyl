@@ -5,6 +5,7 @@ namespace Pterodactyl\Http\Controllers\Base\Servers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Pterodactyl\Models\Nest;
+use Pterodactyl\Models\Location;
 use Pterodactyl\Models\Allocation;
 use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Http\Controllers\Controller;
@@ -18,43 +19,44 @@ class ServerCreationController extends Controller
     ) {}
 
     public function index()
-    {
-        $user = auth()->user();
-        $activePlan = $user->purchases_plans['Free Tier'] ?? null;
-
-        if (!$activePlan) {
-            Log::error('No active plan found for user', ['user_id' => $user->id]);
-            throw new DisplayException('No active plan found');
-        }
-
-        Log::info('User Active Plan', [
-            'user_id' => $user->id,
-            'plan' => $activePlan ? json_encode($activePlan) : 'No plan found'
-        ]);
-
-        if (!$activePlan) {
-            throw new DisplayException('No active plan found');
-        }
-
-        $eggs = Nest::with(['eggs' => function($query) {
-            $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
-                ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
-        }])->get();
-
-        return Inertia::render('Dash/Deploy/ServerCreate', [
-            'plan' => $activePlan,
-            'eggs' => $eggs,
-            'limits' => [
-                'cpu' => $activePlan['cpu'],
-                'memory' => $activePlan['memory'],
-                'disk' => $activePlan['disk'],
-                'servers' => $activePlan['servers'],
-                'allocations' => $activePlan['allocations'],
-                'databases' => $activePlan['databases'],
-                'backups' => $activePlan['backups']
-            ]
-        ]);
+{
+    $user = auth()->user();
+    $activePlan = $user->purchases_plans['Free Tier'];
+    
+    if (!$activePlan) {
+        throw new DisplayException('No active plan found');
     }
+
+    // Get locations with available nodes
+    $locations = Location::with(['nodes' => function($query) {
+        $query->select(['id', 'name', 'location_id'])
+            ->where('public', true);
+    }])->get()->filter(function($location) use ($activePlan) {
+        return $location->nodes->count() > 0 
+            && $location->userHasRequiredPlan([$activePlan['name']])
+            && !$location->hasReachedMaximumServers();
+    });
+
+    $eggs = Nest::with(['eggs' => function($query) {
+        $query->whereRaw("LOWER(description) LIKE '%server_ready%'")
+            ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
+    }])->get();
+
+    return Inertia::render('Dash/Deploy/ServerCreate', [
+        'plan' => $activePlan,
+        'eggs' => $eggs,
+        'locations' => $locations,
+        'limits' => [
+            'cpu' => $activePlan['cpu'],
+            'memory' => $activePlan['memory'],
+            'disk' => $activePlan['disk'],
+            'servers' => $activePlan['servers'],
+            'allocations' => $activePlan['allocations'],
+            'databases' => $activePlan['databases'],
+            'backups' => $activePlan['backups']
+        ]
+    ]);
+}
 
     public function store(Request $request)
 {
@@ -77,6 +79,20 @@ class ServerCreationController extends Controller
             'egg_id' => 'required|exists:eggs,id',
             'node_id' => 'required|exists:nodes,id'
         ]);
+
+        $validated = $request->validate([
+            'name' => 'required|string|min:3',
+            'egg_id' => 'required|exists:eggs,id',
+            'location_id' => 'required|exists:locations,id'
+        ]);
+
+        $location = Location::findOrFail($validated['location_id']);
+        
+        // Get random node from location
+        $node = $location->nodes()
+            ->where('public', true)
+            ->inRandomOrder()
+            ->firstOrFail();
 
         // Get egg and its variables
         $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
