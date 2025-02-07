@@ -83,6 +83,8 @@ class ServerCreationController extends Controller
         
 
         $location = Location::findOrFail($validated['location_id']);
+
+        //
         
         // Get random node from location
          // Get random node from location
@@ -90,6 +92,11 @@ class ServerCreationController extends Controller
             ->where('public', true)
             ->inRandomOrder()
             ->firstOrFail();
+
+        
+        //define nodes
+
+        $node_id = $node->id;
 
         Log::info('Selected node for server creation', [
             'location_id' => $location->id,
@@ -171,7 +178,7 @@ class ServerCreationController extends Controller
             'name' => $validated['name'],
             'owner_id' => $user->id,
             'egg_id' => $validated['egg_id'],
-            'node_id' => $validated['node_id'],
+            'node_id' => $node->id,  // Use node from location query instead of validated data
             'allocation_id' => $allocation->id,
             'cpu' => $plan->cpu,
             'memory' => $plan->memory,
