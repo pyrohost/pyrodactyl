@@ -49,13 +49,18 @@ class DashboardController extends BaseController
             throw new DisplayException('Plan not found in database');
         }
 
-        $locations = Location::with(['nodes' => function($query) {
-            $query->select(['id', 'name', 'location_id'])
-                ->where('public', true);
-        }])->get()->filter(function($location) use ($activePlanName) {
-            return $location->nodes->count() > 0 
-                && $location->userHasRequiredPlan([$activePlanName])
-                && !$location->hasReachedMaximumServers();
+        $locations = Location::with('nodes')->get()->map(function($location) {
+            return [
+                'id' => $location->id,
+                'short' => $location->short,
+                'long' => $location->long,
+                'nodes' => $location->nodes->map(fn($node) => [
+                    'id' => $node->id,
+                    'name' => $node->name,
+                    'fqdn' => $node->fqdn,
+                    'servers_count' => $node->servers->count()
+                ])
+            ];
         });
 
         $eggs = Nest::with(['eggs' => function($query) {

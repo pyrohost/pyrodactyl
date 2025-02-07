@@ -85,19 +85,19 @@ export default function Create() {
             </div>
 
             <div>
-    <label className="text-sm font-medium">Location</label>
-    <select
-        value={data.location_id}
-        onChange={e => setData('location_id', e.target.value)}
-        className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700"
-    >
-        {locations.map(location => (
-            <option key={location.id} value={location.id}>
-                {location.short} - {location.long}
-            </option>
-        ))}
-    </select>
-</div>
+                <label className="text-sm font-medium">Location</label>
+                <select
+                    value={data.location_id}
+                    onChange={e => setData('location_id', e.target.value)}
+                    className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700"
+                >
+                    {locations.map(location => (
+                        <option key={location.id} value={location.id}>
+                            {location.short} - {location.long}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <div className="grid grid-cols-3 gap-4">
               {eggs.map(egg => (
