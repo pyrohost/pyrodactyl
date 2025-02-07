@@ -136,7 +136,7 @@ class ServerCreationController extends Controller
             'swap' => 0,
             'io' => 500,
             'startup' => $egg->startup,
-            'image' => $egg->docker_image,
+            'image' => $egg->image,
             'skip_scripts' => false,
             'oom_disabled' => true
         ]);
