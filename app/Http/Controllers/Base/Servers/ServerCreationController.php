@@ -57,12 +57,19 @@ class ServerCreationController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    try {
         $user = auth()->user();
-        $activePlan = $user->purchases_plans['Free Tier'] ?? null;
+        $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
 
-        if (!$activePlan) {
+        if (!$activePlanName) {
             throw new DisplayException('No active plan found');
+        }
+
+        $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
+        
+        if (!$plan) {
+            throw new DisplayException('Plan not found in database');
         }
 
         $validated = $request->validate([
@@ -71,7 +78,6 @@ class ServerCreationController extends Controller
             'node_id' => 'required|exists:nodes,id'
         ]);
 
-        // Find random allocation
         $allocation = Allocation::query()
             ->whereNull('server_id')
             ->where('node_id', $validated['node_id'])
@@ -79,21 +85,40 @@ class ServerCreationController extends Controller
             ->first();
 
         if (!$allocation) {
-            throw new DisplayException('No available allocations');
+            throw new DisplayException('No available allocations found');
         }
 
-        return $this->creationService->handle([
+        $server = $this->creationService->handle([
             'name' => $validated['name'],
             'owner_id' => $user->id,
             'egg_id' => $validated['egg_id'],
             'node_id' => $validated['node_id'],
             'allocation_id' => $allocation->id,
-            'cpu' => $activePlan['cpu'],
-            'memory' => $activePlan['memory'],
-            'disk' => $activePlan['disk'],
-            'database_limit' => $activePlan['databases'],
-            'allocation_limit' => $activePlan['allocations'],
-            'backup_limit' => $activePlan['backups']
+            'cpu' => $plan->cpu,
+            'memory' => $plan->memory,
+            'disk' => $plan->disk,
+            'database_limit' => $plan->databases,
+            'allocation_limit' => $plan->allocations,
+            'backup_limit' => $plan->backups
         ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Server created successfully',
+            'server' => $server
+        ]);
+
+    } catch (DisplayException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 400);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An unexpected error occurred',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 }
