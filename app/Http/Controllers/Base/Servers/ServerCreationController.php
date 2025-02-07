@@ -81,16 +81,19 @@ class ServerCreationController extends Controller
         // Get egg and its variables
         $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
 
-        Log::info('Egg data', [
-            'egg_id' => $egg->id,
-            'docker_image' => $egg->docker_image,
-            'variables' => $egg->variables->toArray()
+        Log::info('Full Egg Model', [
+            'egg' => $egg->toArray(),
+            'egg_attributes' => $egg->getAttributes(),
+            'relationships' => [
+                'variables' => $egg->variables->toArray(),
+                'nest' => $egg->nest ? $egg->nest->toArray() : null
+            ]
         ]);
 
-        Log::info('Egg variables found', [
+       /* Log::info('Egg variables found', [
             'egg_id' => $egg->id,
             'variables' => $egg->variables->toArray()
-        ]);
+        ]);*/
 
 
         $variables = $egg->variables->transform(function($item) {
