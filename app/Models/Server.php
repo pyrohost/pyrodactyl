@@ -190,6 +190,7 @@ class Server extends Model
         'allocation_limit' => 'integer',
         'backup_limit' => 'integer',
         'plan' => 'array',
+        'image' => 'string',
         self::CREATED_AT => 'datetime',
         self::UPDATED_AT => 'datetime',
         'deleted_at' => 'datetime',
