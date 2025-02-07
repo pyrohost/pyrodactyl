@@ -102,23 +102,21 @@ class ServerCreationController extends Controller
             'backup_limit' => $plan->backups
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Server created successfully',
-            'server' => $server
+        return back()->with('success', [
+            'title' => 'Server Created Successfully',
+            'desc' => "Your server {$validated['name']} has been created and is being installed."
         ]);
 
     } catch (DisplayException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 400);
+        return back()->with('error', [
+            'title' => 'Server Creation Failed',
+            'desc' => $e->getMessage()
+        ]);
     } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'An unexpected error occurred',
-            'error' => $e->getMessage()
-        ], 500);
+        return back()->with('error', [
+            'title' => 'Unexpected Error',
+            'desc' => 'An unexpected error occurred while creating your server.'
+        ]);
     }
 }
 }
