@@ -50,7 +50,7 @@ export default function Create() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    post('/api/inertia/servers/create')
+    post('/api/inerstia/servers/create')
   }
 
   const isValid = data.name && data.egg_id 
