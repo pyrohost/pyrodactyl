@@ -81,6 +81,18 @@ class ServerCreationController extends Controller
         // Get egg and its variables
         $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
 
+        if (!$egg) {
+            throw new DisplayException('Invalid egg configuration');
+        }
+        
+        // Default to Java 17 for Bungeecord
+        $dockerImages = array_values($egg->docker_images);
+        $dockerImage = $dockerImages[array_rand($dockerImages)];
+
+        if (!$dockerImage) {
+            throw new DisplayException('No valid docker image found for this egg');
+        }
+
         Log::info('Full Egg Model', [
             'egg' => $egg->toArray(),
             'egg_attributes' => $egg->getAttributes(),
@@ -109,6 +121,12 @@ class ServerCreationController extends Controller
             'variables' => $variables
         ]);
 
+        Log::info('Server creation details', [
+            'egg_id' => $egg->id,
+            'docker_image' => $dockerImage,
+            'startup' => $egg->startup
+        ]);
+
         $allocation = Allocation::query()
             ->whereNull('server_id')
             ->where('node_id', $validated['node_id'])
@@ -118,6 +136,13 @@ class ServerCreationController extends Controller
         if (!$allocation) {
             throw new DisplayException('No available allocations found');
         }
+
+        
+        Log::info('Server creation details', [
+            'egg_id' => $egg->id,
+            'docker_image' => $dockerImage,
+            'startup' => $egg->startup
+        ]);
 
         $server = $this->creationService->handle([
             'name' => $validated['name'],
@@ -132,11 +157,10 @@ class ServerCreationController extends Controller
             'allocation_limit' => $plan->allocations,
             'backup_limit' => $plan->backups,
             'environment' => $variables,
-            // Add required fields
             'swap' => 0,
             'io' => 500,
             'startup' => $egg->startup,
-            'image' => $egg->image,
+            'image' => $dockerImage,
             'skip_scripts' => false,
             'oom_disabled' => true
         ]);
@@ -155,3 +179,7 @@ class ServerCreationController extends Controller
 
 }
 }
+
+
+
+
