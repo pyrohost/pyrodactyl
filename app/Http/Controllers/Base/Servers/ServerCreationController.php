@@ -78,6 +78,15 @@ class ServerCreationController extends Controller
             'node_id' => 'required|exists:nodes,id'
         ]);
 
+        // Get egg and its variables
+        $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
+        $variables = $egg->variables->transform(function($item) {
+            return [
+                'key' => $item->env_variable,
+                'value' => $item->default_value ?? '',
+            ];
+        })->keyBy('key')->toArray();
+
         $allocation = Allocation::query()
             ->whereNull('server_id')
             ->where('node_id', $validated['node_id'])
@@ -99,7 +108,8 @@ class ServerCreationController extends Controller
             'disk' => $plan->disk,
             'database_limit' => $plan->databases,
             'allocation_limit' => $plan->allocations,
-            'backup_limit' => $plan->backups
+            'backup_limit' => $plan->backups,
+            'environment' => $variables
         ]);
 
         return back()->with('success', [
@@ -112,11 +122,7 @@ class ServerCreationController extends Controller
             'title' => 'Server Creation Failed',
             'desc' => $e->getMessage()
         ]);
-    } catch (\Exception $e) {
-        return back()->with('error', [
-            'title' => 'Unexpected Error',
-            'desc' => 'An unexpected error occurred while creating your server.'
-        ]);
     }
+
 }
 }
