@@ -88,7 +88,6 @@ class ServerCreationController extends Controller
 
 
         $variables = $egg->variables->transform(function($item) {
-            // Transform to flat key-value pairs
             return [
                 $item->env_variable => $item->default_value ?? '',
             ];
@@ -123,7 +122,14 @@ class ServerCreationController extends Controller
             'database_limit' => $plan->databases,
             'allocation_limit' => $plan->allocations,
             'backup_limit' => $plan->backups,
-            'environment' => $variables
+            'environment' => $variables,
+            // Add required fields
+            'swap' => 0,
+            'io' => 500,
+            'startup' => $egg->startup,
+            'image' => $egg->docker_image,
+            'skip_scripts' => false,
+            'oom_disabled' => true
         ]);
 
         return back()->with('success', [
