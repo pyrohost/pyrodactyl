@@ -90,7 +90,8 @@ class Handler extends ExceptionHandler
 
     private function generateCleanedExceptionStack(\Throwable $exception): string
     {
-        $cleanedStack = '';
+        $cleanedStack = ''; 
+        
         foreach ($exception->getTrace() as $index => $item) {
             $cleanedStack .= sprintf(
                 "#%d %s(%d): %s%s%s\n",

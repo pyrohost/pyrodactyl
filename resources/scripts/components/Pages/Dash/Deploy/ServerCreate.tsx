@@ -3,46 +3,43 @@ import { useForm } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import { Select, SelectGroup } from '@/components/ui/select'
 
 interface Props {
+  plan: {
+    id: number
+    name: string
+    cpu: number
+    memory: number
+    disk: number
+    databases: number
+    backups: number
+    allocations: number
+  }
+  limits: {
+    cpu: number
+    memory: number
+    disk: number
+    servers: number
+    allocations: number
+    databases: number
+    backups: number
+  }
   nodes: {
     id: number
     name: string
-    location: string
   }[]
-  nests: {
+  eggs: {
     id: number
     name: string
-    eggs: {
-      id: number
-      name: string
-      description: string
-      image_url: string
-    }[]
+    description: string
+    image_url: string
+    nest_id: number
   }[]
-  user: {
-    purchases_plans: {
-      [key: string]: {
-        cpu: number
-        memory: number
-        disk: number
-        databases: number
-        backups: number
-        allocations: number
-      }
-    }
-  }
 }
 
 export default function Create() {
-  const { nodes, nests, auth} = usePage<Props>().props
-  const props = usePage().props
-  console.log(props)
-  console.log(nodes)
-  console.log(nests)
-  console.log(auth.user)
-  const plan = auth.user.purchases_plans['Free Tier']
+  const { plan, limits, nodes, eggs } = usePage<Props>().props
 
   const { data, setData, post, processing, errors } = useForm({
     name: '',
@@ -53,8 +50,10 @@ export default function Create() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    post('/api/inerstia/servers/create')
+    post('/api/inertia/servers/create')
   }
+
+  const isValid = data.name && data.egg_id 
 
   return (
     <div className="container mx-auto p-6">
@@ -73,69 +72,64 @@ export default function Create() {
             </div>
 
             <div>
-              <label className="text-sm font-medium">Location</label>
+              <label className="text-sm font-medium">Node</label>
               <Select 
                 value={data.node_id}
                 onValueChange={(value) => setData('node_id', value)}
               >
                 {nodes.map(node => (
-                  <Select.Option key={node.id} value={node.id}>
-                    {node.name} - {node.location}
-                  </Select.Option>
+                    <option key={node.id} value={node.id}>
+                    {node.name}
+                    </option>
                 ))}
               </Select>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              {nests.map(eggs => (
-                <div key={egg.id}>
-                  <h3 className="text-lg font-medium mb-4">{egg.name}</h3>
-                  <div className="grid gap-4">
-                    {egg.eggs.filter(egg => 
-                      egg.description.toLowerCase().includes('server_ready')
-                    ).map(egg => (
-                      <Card
-                        key={egg.id}
-                        className={`cursor-pointer ${
-                          data.egg_id === egg.id ? 'ring-2 ring-primary' : ''
-                        }`}
-                        onClick={() => {
-                          setData('egg_id', egg.id)
-                          setData('nest_id', egg.id)
-                        }}
-                      >
-                        <div className="p-4">
-                          {egg.image_url && (
-                            <img 
-                              src={egg.image_url}
-                              alt={egg.name}
-                              className="w-full h-32 object-contain mb-2"
-                            />
-                          )}
-                          <p className="text-center font-medium">{egg.name}</p>
-                        </div>
-                      </Card>
-                    ))}
+              {eggs.map(egg => (
+                <Card
+                  key={egg.id}
+                  className={`cursor-pointer ${
+                    data.egg_id === egg.id ? 'ring-2 ring-primary' : ''
+                  }`}
+                  onClick={() => {
+                    setData('egg_id', egg.id)
+                    setData('nest_id', egg.nest_id)
+                  }}
+                >
+                  <div className="p-4">
+                    {egg.image_url && (
+                      <img 
+                        src={egg.image_url}
+                        alt={egg.name}
+                        className="w-full h-32 object-contain mb-2"
+                      />
+                    )}
+                    <p className="text-center font-medium">{egg.name}</p>
+                    <p className="text-sm text-gray-500 text-center mt-1">
+                      {egg.description}
+                    </p>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-medium">Plan Limits:</p>
               <div className="grid grid-cols-3 gap-4 text-sm">
-                <div>CPU: {plan.cpu}%</div>
-                <div>Memory: {plan.memory}MB</div>
-                <div>Disk: {plan.disk}MB</div>
+                <div>CPU: {limits.cpu}%</div>
+                <div>Memory: {limits.memory}MB</div>
+                <div>Disk: {limits.disk}MB</div>
               </div>
             </div>
 
             <Button 
-              type="submit" 
-              disabled={processing || !data.egg_id || !data.node_id}
-            >
-              {processing ? 'Creating...' : 'Create Server'}
-            </Button>
+          type="submit" 
+          disabled={processing || !isValid}
+          className="w-full mt-4"
+        >
+          {processing ? 'Creating...' : 'Create Server'}
+        </Button>
           </div>
         </Card>
       </form>
