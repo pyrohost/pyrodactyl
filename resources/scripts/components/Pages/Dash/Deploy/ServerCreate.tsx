@@ -46,13 +46,19 @@ interface Props {
 }
 
 export default function Create() {
-  const { plan, limits, locations, eggs } = usePage<Props>().props
+  const { plan, limits, locations, eggs} = usePage<Props>().props
+
+  const props = usePage<Props>().props
+
+  console.log(props)
+
+  console.log(locations)
 
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     egg_id: '',
     nest_id: '',
-    location_id: locations[0]?.id || '',
+    location_id: '',
   })
 
   const handleSubmit = (e: React.FormEvent) => {

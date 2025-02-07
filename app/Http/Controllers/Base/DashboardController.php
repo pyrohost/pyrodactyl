@@ -10,6 +10,7 @@ use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Models\Nest;
 use Pterodactyl\Models\Plan;
 use Pterodactyl\Models\Node;
+use Pterodactyl\Models\Location;
 use Pterodactyl\Models\Model;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,15 @@ class DashboardController extends BaseController
         throw new DisplayException('No active plan found');
     }
 
+    $locations = Location::with(['nodes' => function($query) {
+        $query->select(['id', 'name', 'location_id'])
+            ->where('public', true);
+    }])->get()->filter(function($location) use ($activePlan) {
+        return $location->nodes->count() > 0 
+            && $location->userHasRequiredPlan([$activePlan['name']])
+            && !$location->hasReachedMaximumServers();
+    });
+
     $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
     
     if (!$plan) {
@@ -66,7 +76,7 @@ class DashboardController extends BaseController
             'databases' => $plan->databases,
             'backups' => $plan->backups
         ],
-        'nodes' => $nodes,
+        'locations' => $locations,
         'eggs' => $eggs
     ]);
 }
