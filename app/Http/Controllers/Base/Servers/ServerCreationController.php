@@ -80,12 +80,24 @@ class ServerCreationController extends Controller
 
         // Get egg and its variables
         $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
+
+        Log::info('Egg variables found', [
+            'egg_id' => $egg->id,
+            'variables' => $egg->variables->toArray()
+        ]);
+
+
         $variables = $egg->variables->transform(function($item) {
             return [
                 'key' => $item->env_variable,
                 'value' => $item->default_value ?? '',
             ];
         })->keyBy('key')->toArray();
+
+
+        Log::info('Transformed variables for server creation', [
+            'variables' => $variables
+        ]);
 
         $allocation = Allocation::query()
             ->whereNull('server_id')
