@@ -147,14 +147,12 @@ class ServerCreationController extends Controller
             $purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
             $activatedPlans = $user->activated_plans ?? [];
 
-            if ($activatedPlanCount >= $purchasedPlanCount) {
-                throw new DisplayException("No more {$activePlanName} plans available to activate");
-            }
+           
     
             Log::info('Plan validation', [
                 'plan_name' => $activePlanName,
                 'purchased_count' => $purchasedPlanCount,
-                'activated_count' => $activatedPlanCount
+                'activated_plans' => $activatedPlans
             ]);
 
             // Check if plan is already activated
