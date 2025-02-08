@@ -140,9 +140,10 @@ class ServerCreationController extends Controller
             ]);*/
 
             // User model updater
-            $$purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
+            
         
             // Get activated plan count
+            $purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
             $activatedPlans = $user->activated_plans ?? [];
             $activatedPlanCount = isset($activatedPlans[$activePlanName]) ? count($activatedPlans[$activePlanName]) : 0;
 
