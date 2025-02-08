@@ -212,8 +212,10 @@ class ServerCreationController extends Controller
                 'activated_plans' => $activatedPlans
             ]);
             
+            // Reload the user to see the change:
+            $updatedUser = $user->fresh();
             Log::info('Activated plan updated', [
-                'activated_plan' => $activatedPlans[$activePlanName]
+                'activated_plan' => $updatedUser->activated_plans[$activePlanName] ?? 'Not set'
             ]);
 
 

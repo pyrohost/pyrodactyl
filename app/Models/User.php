@@ -120,6 +120,7 @@ class User extends Model implements
         'resources',
         'limits',
         'purchases_plans',
+        'activated_plans',
         'coins'
     ];
 
@@ -150,7 +151,7 @@ class User extends Model implements
         'resources' => '[]',
         'limits' => '[]',
         'purchases_plans' => '[]',
-        'activated_plans' => '[]',
+       
     ];
 
     public static array $validationRules = [
@@ -215,7 +216,7 @@ class User extends Model implements
                 ]
             ];
 
-            $user->activated_plans = null;
+            
             
             $user->save();
         }
