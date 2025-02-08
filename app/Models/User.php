@@ -139,7 +139,7 @@ class User extends Model implements
         'resources' => 'array',
         'limits' => 'array',
         'purchases_plans' => 'array',
-        'activated_plans' => 'array'
+        'activated_plans' => 'array',
     ];
 
     protected $attributes = [

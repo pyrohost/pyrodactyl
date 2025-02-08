@@ -54,6 +54,7 @@ class DashboardController extends BaseController
                 'id' => $location->id,
                 'short' => $location->short,
                 'long' => $location->long,
+                'image' => $location->flag_url,
                 'nodes' => $location->nodes->map(fn($node) => [
                     'id' => $node->id,
                     'name' => $node->name,
@@ -70,7 +71,7 @@ class DashboardController extends BaseController
 
         $otherPlans = \Pterodactyl\Models\Plan::where('name', '!=', $activePlanName)->get()->toArray();
 
-        return Inertia::render('Dash/Deploy/ServerCreate', [
+        return Inertia::render('Dash/Deploy', [
             'plan' => $plan,
             'limits' => [
                 'cpu' => $plan->cpu,
