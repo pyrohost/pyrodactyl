@@ -137,7 +137,8 @@ class User extends Model implements
         'totp_authenticated_at' => 'datetime',
         'resources' => 'array',
         'limits' => 'array',
-        'purchases_plans' => 'array'
+        'purchases_plans' => 'array',
+        'activated_plans' => 'array'
     ];
 
     protected $attributes = [
@@ -148,7 +149,8 @@ class User extends Model implements
         'totp_secret' => null,
         'resources' => '[]',
         'limits' => '[]',
-        'purchases_plans' => '[]'
+        'purchases_plans' => '[]',
+        'activated_plans' => '[]',
     ];
 
     public static array $validationRules = [

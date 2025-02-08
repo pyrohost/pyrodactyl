@@ -68,6 +68,8 @@ class DashboardController extends BaseController
                 ->select(['id', 'nest_id', 'name', 'description', 'image_url']);
         }])->get()->pluck('eggs')->flatten();
 
+        $otherPlans = \Pterodactyl\Models\Plan::where('name', '!=', $activePlanName)->get()->toArray();
+
         return Inertia::render('Dash/Deploy/ServerCreate', [
             'plan' => $plan,
             'limits' => [
@@ -80,7 +82,8 @@ class DashboardController extends BaseController
                 'backups' => $plan->backups
             ],
             'locations' => $locations,
-            'eggs' => $eggs
+            'eggs' => $eggs,
+            'otherPlans' => $otherPlans
         ]);
     }
 
