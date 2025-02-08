@@ -63,15 +63,15 @@ class ServerCreationController extends Controller
         try {
             $user = auth()->user();
             $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
-
+        
             if (!$activePlanName) {
                 throw new DisplayException('No active plan found');
             }
-
+    
             $plan = \Pterodactyl\Models\Plan::where('name', $activePlanName)->first();
             
             if (!$plan) {
-                throw new DisplayException('Plan not found in database');
+                throw new DisplayException('Plan not found in database.');
             }
 
             $validated = $request->validate([
@@ -134,18 +134,18 @@ class ServerCreationController extends Controller
 
             
 
-        /* Log::info('Egg variables found', [
-                'egg_id' => $egg->id,
-                'variables' => $egg->variables->toArray()
-            ]);*/
+            /* Log::info('Egg variables found', [
+                    'egg_id' => $egg->id,
+                    'variables' => $egg->variables->toArray()
+                ]);*/
 
             // User model updater
             
         
             // Get activated plan count
+            // Get purchased and activated plan counts
             $purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
             $activatedPlans = $user->activated_plans ?? [];
-            $activatedPlanCount = isset($activatedPlans[$activePlanName]) ? count($activatedPlans[$activePlanName]) : 0;
 
             if ($activatedPlanCount >= $purchasedPlanCount) {
                 throw new DisplayException("No more {$activePlanName} plans available to activate");
@@ -156,6 +156,15 @@ class ServerCreationController extends Controller
                 'purchased_count' => $purchasedPlanCount,
                 'activated_count' => $activatedPlanCount
             ]);
+
+            // Check if plan is already activated
+            if (isset($activatedPlans[$activePlanName])) {
+                throw new DisplayException("Plan {$activePlanName} is already activated");
+            }
+
+            if (count($activatedPlans) >= $purchasedPlanCount) {
+                throw new DisplayException("No more {$activePlanName} plans available to activate");
+            }
 
 
             $variables = $egg->variables->transform(function($item) {
@@ -196,9 +205,11 @@ class ServerCreationController extends Controller
 
             // Add plan to activated plans
             $activatedPlans[$activePlanName] = [
+                'plan_id' => $plan->id,
+                'name' => $plan->name,
                 'activated_on' => now()->toDateTimeString()
             ];
-
+    
             $user->update([
                 'activated_plans' => $activatedPlans
             ]);
