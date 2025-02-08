@@ -61,9 +61,15 @@ class ServerCreationController extends Controller
     public function store(Request $request)
     {
         try {
+            $validated = $request->validate([
+                'name' => 'required|string|min:3',
+                'egg_id' => 'required|exists:eggs,id',
+                'location_id' => 'required|exists:locations,id'
+            ]);
+
             $user = auth()->user();
             $activePlanName = $user->purchases_plans['Free Tier']['name'] ?? null;
-
+            
             if (!$activePlanName) {
                 throw new DisplayException('No active plan found');
             }
@@ -74,108 +80,49 @@ class ServerCreationController extends Controller
                 throw new DisplayException('Plan not found in database');
             }
 
-            $validated = $request->validate([
-                'name' => 'required|string|min:3',
-                'egg_id' => 'required|exists:eggs,id',
-                'location_id' => 'required|exists:locations,id'
+            // Get purchased and activated plan counts
+            $purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
+            $activatedPlans = $user->activated_plans ?? [];
+
+            Log::info('Plan validation', [
+                'plan_name' => $activePlanName,
+                'purchased_count' => $purchasedPlanCount,
+                'activated_plans' => $activatedPlans
             ]);
 
-            
+            // Check if plan is already activated
+            if (isset($activatedPlans[$activePlanName])) {
+                throw new DisplayException("Plan {$activePlanName} is already activated");
+            }
+
+            if (count($activatedPlans) >= $purchasedPlanCount) {
+                throw new DisplayException("No more {$activePlanName} plans available to activate");
+            }
 
             $location = Location::findOrFail($validated['location_id']);
-
-            //
             
-            // Get random node from location
-            // Get random node from location
             $node = $location->nodes()
                 ->where('public', true)
                 ->inRandomOrder()
                 ->firstOrFail();
 
-            
-            //define nodes
-
-            $node_id = $node->id;
-
             Log::info('Selected node for server creation', [
                 'location_id' => $location->id,
                 'node_id' => $node->id
             ]);
 
-            Log::info('Selected node for server creation', [
-                'location_id' => $location->id,
-                'node_id' => $node->id
-            ]);
-
-            // Get egg and its variables
             $egg = \Pterodactyl\Models\Egg::find($validated['egg_id']);
 
             if (!$egg) {
                 throw new DisplayException('Invalid egg configuration');
             }
             
-            // Default to Java 17 for Bungeecord
             $dockerImages = array_values($egg->docker_images);
             $dockerImage = $dockerImages[array_rand($dockerImages)];
 
             if (!$dockerImage) {
                 throw new DisplayException('No valid docker image found for this egg');
             }
-
-            Log::info('Full Egg Model', [
-                'egg' => $egg->toArray(),
-                'egg_attributes' => $egg->getAttributes(),
-                'relationships' => [
-                    'variables' => $egg->variables->toArray(),
-                    'nest' => $egg->nest ? $egg->nest->toArray() : null
-                ]
-            ]);
-
-            
-
-        /* Log::info('Egg variables found', [
-                'egg_id' => $egg->id,
-                'variables' => $egg->variables->toArray()
-            ]);*/
-
-            // User model updater
-            
-        
-            // Get activated plan count
-            $purchasedPlanCount = $user->purchases_plans[$activePlanName]['count'] ?? 0;
-            $activatedPlans = $user->activated_plans ?? [];
-            $activatedPlanCount = isset($activatedPlans[$activePlanName]) ? count($activatedPlans[$activePlanName]) : 0;
-
-            if ($activatedPlanCount >= $purchasedPlanCount) {
-                throw new DisplayException("No more {$activePlanName} plans available to activate");
-            }
-    
-            Log::info('Plan validation', [
-                'plan_name' => $activePlanName,
-                'purchased_count' => $purchasedPlanCount,
-                'activated_count' => $activatedPlanCount
-            ]);
-
-
-            $variables = $egg->variables->transform(function($item) {
-                return [
-                    $item->env_variable => $item->default_value ?? '',
-                ];
-            })->mapWithKeys(function ($item) {
-                return $item;
-            })->toArray();
-
-
-            Log::info('Transformed variables for server creation', [
-                'variables' => $variables
-            ]);
-
-            Log::info('Server creation details', [
-                'egg_id' => $egg->id,
-                'docker_image' => $dockerImage,
-                'startup' => $egg->startup
-            ]);
 
             $allocation = Allocation::query()
                 ->whereNull('server_id')
@@ -187,11 +134,19 @@ class ServerCreationController extends Controller
                 throw new DisplayException('No available allocations found');
             }
 
-            
             Log::info('Server creation details', [
                 'egg_id' => $egg->id,
                 'docker_image' => $dockerImage,
                 'startup' => $egg->startup
+            ]);
+
+            // Add plan to activated plans
+            $activatedPlans[$activePlanName] = [
+                'activated_on' => now()->toDateTimeString()
+            ];
+
+            $user->update([
+                'activated_plans' => $activatedPlans
             ]);
 
             $server = $this->creationService->handle([
@@ -231,7 +186,6 @@ class ServerCreationController extends Controller
                 'desc' => $e->getMessage()
             ]);
         }
-
     }
 }
 

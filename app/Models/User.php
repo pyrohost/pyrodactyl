@@ -214,6 +214,8 @@ class User extends Model implements
                     
                 ]
             ];
+
+            $user->activated_plans = null;
             
             $user->save();
         }
