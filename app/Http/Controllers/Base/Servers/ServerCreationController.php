@@ -207,9 +207,13 @@ class ServerCreationController extends Controller
                 'name' => $plan->name,
                 'activated_on' => now()->toDateTimeString()
             ];
-    
+            
             $user->update([
                 'activated_plans' => $activatedPlans
+            ]);
+            
+            Log::info('Activated plan updated', [
+                'activated_plan' => $activatedPlans[$activePlanName]
             ]);
 
 
