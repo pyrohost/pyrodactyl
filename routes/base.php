@@ -71,15 +71,13 @@ Route::prefix('/')->group(function () {
         // server frontend
 
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');
-        Route::get('/server/{uuidShort}/resources', [Client\Inerstia\ServerResourceController::class, 'index'])
-        ->name('servers.resources');
-        Route::put('/server/{uuidShort}/resources', [Client\Inerstia\ServerResourceController::class, 'update'])
-        ->name('servers.resources.update');
+        
         Route::get('/server/{uuidShort}/utilization', [ServerController::class, 'util'])->name('server.utilnsole');
         Route::get('/server/{uuidShort}/console', [ServerController::class, 'console'])->name('server.console');
         Route::get('/server/{uuidShort}/files', [ServerController::class, 'files'])->name('server.files');
         Route::get('/server/{uuidShort}/settings', [ServerController::class, 'settings'])->name('server.settings');
         Route::get('/server/{uuidShort}/etc', [ServerController::class, 'etc'])->name('server.etc');
+        Route::get('/server/{uuidShort}/upgrade', [ServerController::class, 'upgrade'])->name('server.etc');
         
     });
 
