@@ -217,7 +217,7 @@ class Server extends Model
         'database_limit' => 'integer',
         'allocation_limit' => 'integer',
         'backup_limit' => 'integer',
-        'plans' => 'array',
+        'plan' => 'array',
         'image' => 'string',
         self::CREATED_AT => 'datetime',
         self::UPDATED_AT => 'datetime',
