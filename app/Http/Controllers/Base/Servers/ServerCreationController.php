@@ -175,7 +175,7 @@ public function store(Request $request)
             'image' => $dockerImage,
             'skip_scripts' => false,
             'oom_disabled' => true,
-            'plans' => [
+            'plan' => [
                 $planName => [
                     'activated_on' => now()->toDateTimeString()
                 ]

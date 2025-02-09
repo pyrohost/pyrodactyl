@@ -132,7 +132,7 @@ class Server extends Model
         'allocation_limit',
         'database_limit',
         'backup_limit',
-        'plans'  // Add plans to fillable
+        'plans'  
     ];
 
     /**
@@ -217,7 +217,7 @@ class Server extends Model
         'database_limit' => 'integer',
         'allocation_limit' => 'integer',
         'backup_limit' => 'integer',
-        'plan' => 'array',
+        'plans' => 'array',
         'image' => 'string',
         self::CREATED_AT => 'datetime',
         self::UPDATED_AT => 'datetime',
