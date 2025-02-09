@@ -100,10 +100,29 @@ public function store(Request $request)
             throw new DisplayException("Plan {$planName} is already activated on another server");
         }
 
+
+
+        // The below code looks for count of plans, This has been removed as we are not using it. user will be given a completely different plan.
         // Check purchase limit
-        $purchasedPlanCount = $user->purchases_plans[$planName]['count'] ?? 0;
-        if (count($activatedPlans) >= $purchasedPlanCount) {
-            throw new DisplayException("No more {$planName} plans available to activate");
+        //$purchasedPlanCount = $user->purchases_plans[$planName]['count'] ?? 1;
+        //if (count($activatedPlans) >= $purchasedPlanCount) {
+            //throw new DisplayException("No more {$planName} plans available to activate");
+        //}
+
+        $purchasedPlan = $user->purchases_plans[$planName] ?? null;
+        if (!$purchasedPlan) {
+            throw new DisplayException("You have not purchased the {$planName} plan");
+        }
+
+        // Count how many times this plan is activated
+        $activatedCount = collect($user->activated_plans ?? [])
+            ->filter(function($plan) use ($planName) {
+                return $plan['name'] === $planName;
+            })->count();
+
+        // Check if user has exceeded their plan limit
+        if ($activatedCount >= $purchasedPlan['count']) {
+            throw new DisplayException("You have reached the limit for {$planName} plan activations ({$purchasedPlan['count']} allowed)");
         }
 
         // Get random node from location
