@@ -107,33 +107,7 @@ class Server extends Model
     use BelongsToThrough;
     use Notifiable;
 
-    protected $fillable = [
-        'external_id',
-        'uuid',
-        'uuidShort',
-        'node_id',
-        'name',
-        'description',
-        'status',
-        'skip_scripts',
-        'owner_id',
-        'memory',
-        'swap',
-        'disk',
-        'io',
-        'cpu',
-        'threads',
-        'oom_disabled',
-        'allocation_id',
-        'nest_id',
-        'egg_id',
-        'startup',
-        'image',
-        'allocation_limit',
-        'database_limit',
-        'backup_limit',
-        'plans'  
-    ];
+    
 
     /**
      * The resource name for this model when it is transformed into an
@@ -223,6 +197,34 @@ class Server extends Model
         self::UPDATED_AT => 'datetime',
         'deleted_at' => 'datetime',
         'installed_at' => 'datetime',
+    ];
+
+    protected $fillable = [
+        'external_id',
+        'uuid',
+        'uuidShort',
+        'node_id',
+        'name',
+        'description',
+        'status',
+        'skip_scripts',
+        'owner_id',
+        'memory',
+        'swap',
+        'disk',
+        'io',
+        'cpu',
+        'threads',
+        'oom_disabled',
+        'allocation_id',
+        'nest_id',
+        'egg_id',
+        'startup',
+        'image',
+        'allocation_limit',
+        'database_limit',
+        'backup_limit',
+        'plan'  
     ];
 
     /**
