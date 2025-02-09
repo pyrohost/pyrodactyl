@@ -74,7 +74,7 @@ public function store(Request $request)
 
         // Check if user has purchased this plan
         if (!isset($user->purchases_plans[$planName])) {
-            throw new DisplayException("You don't own the {$planName} plan! Please purchase it first. \n If you belive this is a mistake please contact a staff member.");
+            throw new DisplayException("You don't own the {$planName} plan! Please purchase it first. If you belive this is a mistake please contact a staff member.");
         }
 
         // Get plan from database
@@ -150,6 +150,10 @@ public function store(Request $request)
             'name' => $plan->name,
             'activated_on' => now()->toDateTimeString()
         ];
+
+        $user->update([
+            'activated_plans' => $activatedPlans
+        ]);
         
         
 
@@ -180,9 +184,7 @@ public function store(Request $request)
             ]
         ]);
 
-        $user->update([
-            'activated_plans' => $activatedPlans
-        ]);
+        
 
         return back()->with('success', [
             'title' => 'Server Created Successfully',
