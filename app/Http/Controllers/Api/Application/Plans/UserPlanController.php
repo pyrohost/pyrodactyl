@@ -18,31 +18,29 @@ class UserPlanController extends Controller
      * @param string $userId
      */
     public function store(Request $request, string $userId)
-    {
-        $data = $request->validate([
-            'plan_id' => 'required|string|exists:plans,id',
-            'count'   => 'required|integer|min:1',
-        ]);
+{
+    $data = $request->validate([
+        'plan_id' => 'required|string|exists:plans,id',
+        'count'   => 'required|integer|min:1',
+    ]);
 
-        $user = User::findOrFail((int) $userId);
-        $plan = Plan::findOrFail((int) $data['plan_id']);
-        
-        $purchasedPlans = $user->purchases_plans ?? [];
-        
-        for ($i = 0; $i < $data['count']; $i++) {
-            $purchasedPlans[] = [
-                'plan_id'    => $plan->id,
-                'identifier' => $plan->identifier ?? $plan->id,
-                'name'       => $plan->name,
-                'added_at'   => now()->toDateTimeString(),
-            ];
-        }
+    $user = User::findOrFail((int) $userId);
+    $plan = Plan::findOrFail((int) $data['plan_id']);
+    
+    $purchasedPlans = $user->purchases_plans ?? [];
+    
+    $purchasedPlans[$plan->name] = [
+        'plan_id' => $plan->id,
+        'name' => $plan->name,
+        'count' => $data['count'], 
+        'activated_on' => now()->toDateTimeString(),
+    ];
 
-        $user->purchases_plans = $purchasedPlans;
-        $user->save();
+    $user->purchases_plans = $purchasedPlans;
+    $user->save();
 
-        return back()->with('success', 'Plan(s) added successfully');
-    }
+    return back()->with('success', 'Plan added successfully');
+}
 
     /**
  * Remove a plan from user.

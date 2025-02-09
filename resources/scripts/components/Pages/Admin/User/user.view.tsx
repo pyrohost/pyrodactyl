@@ -177,7 +177,7 @@ export default function AdminDashboard(): JSX.Element {
       <Head title="Servers" />
 
       <UserForm/>
-      {/*<ManagePlans/>*/}
+      <ManagePlans/>
       
       
     </AdminLayout>

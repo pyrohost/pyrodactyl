@@ -79,6 +79,10 @@ export default function Create() {
   const [isDialogOpen2, setIsDialogOpen2] = useState(false)
   const [selectedEggDetails, setSelectedEggDetails] = useState(null)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const cleanDescription = (description: string | null | undefined) => {
+    if (!description) return '';
+    return description.replace(/server_ready/gi, '').trim();
+  };
  
   const plansArray = Array.isArray(plan) ? plan : [plan];
 
@@ -310,6 +314,13 @@ export default function Create() {
     });
   };
 
+  const handleEggLearnMore = (e: React.MouseEvent, egg: any) => {
+    e.preventDefault(); // Prevent form submission
+    e.stopPropagation(); // Stop event bubbling
+    setSelectedEggDetails(egg);
+    setIsDialogOpen2(true);
+  };
+
   // Auto-scroll carousel
   useEffect(() => {
     const interval = setInterval(() => {
@@ -343,8 +354,8 @@ const { data, setData, post, processing, errors } = useForm({
   plan_name: selectedPlan || "" 
 });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = () => {
+    
     post("/api/inerstia/servers/create")
   }
 
@@ -372,13 +383,13 @@ const { data, setData, post, processing, errors } = useForm({
               <CardContent className="p-8">
                 <div className="grid gap-8">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Server Name</label>
+                    <label className="text-xl font-medium">Server Name</label>
                     <Input
                       value={data.name}
                       onChange={(e) => setData("name", e.target.value)}
                       error={errors.name}
-                      placeholder="Enter server name"
-                      className="h-12 text-lg"
+                      placeholder="Give your server a sassy name, Nak Nak works well "
+                      className="px-4 py-1 text-2xl h-20 "
                     />
                     {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                   </div>
@@ -486,11 +497,8 @@ const { data, setData, post, processing, errors } = useForm({
                                 <Button
                                   variant="ghost"
                                   className="mt-4 text-zinc-100 hover:text-primary transition-colors bg-zinc-900/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:bg-primary/30"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSelectedEggDetails(egg)
-                                    setIsDialogOpen2(true)
-                                  }}
+                                  onClick={(e) => handleEggLearnMore(e, egg)}
+                                  
                                 >
                                   Learn more
                                 </Button>
@@ -534,7 +542,7 @@ const { data, setData, post, processing, errors } = useForm({
         alt={selectedEggDetails?.name}
         className="w-120 h-120 object-contain rounded-lg mx-auto mb-6"
       />
-      <p className="text-lg leading-relaxed">{selectedEggDetails?.description}</p>
+      <p className="text-lg leading-relaxed">{selectedEggDetails?.description ? cleanDescription(selectedEggDetails.description) : "This server is supported!"}</p>
     </div>
   </DialogContent>
 </Dialog>

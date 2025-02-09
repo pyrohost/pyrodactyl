@@ -30,7 +30,7 @@ interface Plan {
 }
 
 export default function ManagePlans() {
-const { user, plans } = usePage<Props>().props
+const { user, plans,  } = usePage<Props>().props
   
   const [selectedPlan, setSelectedPlan] = useState<number>()
   const {toast} = useToast()
@@ -127,32 +127,36 @@ const handleDeleteofplan = (planId: string) => {
           </Button>
         </form>
 
-        {plans.length > 0 && (
-          <div className="mt-8">
-          <h3 className="text-lg font-medium mb-4">Current Plans</h3>
-          <div className="grid gap-4">
-            {user.purchases_plans?.map((purchasedPlan: PurchasedPlan, index: number) => (
-              <Card key={`${purchasedPlan.plan_id}-${index}`}>
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h4 className="font-medium">{purchasedPlan.name}</h4>
-                      <p className="text-sm text-gray-500">Added: {purchasedPlan.added_at}</p>
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDeleteofplan(purchasedPlan.plan_id.toString())}
-                    >
-                      <LucideTrash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          </div>
-        )}
+        {plans.length > 0 && user.purchases_plans && (
+  <div className="mt-8">
+    <h3 className="text-lg font-medium mb-4">Current Plans</h3>
+    <div className="grid gap-4">
+      {Object.values(user.purchases_plans)
+        .filter(plan => plan && typeof plan === 'object' && 'plan_id' in plan)
+        .map((plan, index) => (
+          <Card key={`${plan.plan_id}-${index}`}>
+            <CardContent className="p-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h4 className="font-medium">Name: {plan.name}</h4>
+                  <p className="text-sm text-gray-500">
+                    Added: {new Date(plan.added_at || plan.activated_on).toLocaleDateString()}
+                  </p>
+                </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleDeleteofplan(plan.plan_id.toString())}
+                >
+                  <LucideTrash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+    </div>
+  </div>
+)}
       </CardContent>
     </Card>
   )
