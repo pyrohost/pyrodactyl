@@ -88,7 +88,6 @@ class DashboardController extends BaseController
         ]);
     }
 
-
     public function watch(): Response
 {
     if (!Auth::check()) {
@@ -96,6 +95,19 @@ class DashboardController extends BaseController
     }
     
     return Inertia::render('Dash/Watch', [
+        'user' => Auth::user(),
+        'servers' => Auth::user()->servers,
+    ]);
+}
+
+
+    public function priv(): Response
+{
+    if (!Auth::check()) {
+        return Inertia::location(route('auth.login'));
+    }
+    
+    return Inertia::render('Dash/Privacy', [
         'user' => Auth::user(),
         'servers' => Auth::user()->servers,
     ]);

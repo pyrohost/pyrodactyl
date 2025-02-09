@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import React, { useEffect } from 'react';
 
 export default function Footer() {
@@ -22,6 +23,20 @@ export default function Footer() {
             <p className="text-gray-600 dark:text-gray-300 text-sm">
               Copyright © {new Date().getFullYear()} Nadhi.dev
             </p>
+            <div className="flex items-center space-x-4">
+              <Link
+                href={'/privacy-policy'} 
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                href={'https://astral-core.tebex.io/terms-of-service'} 
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm transition-colors"
+              >
+                Terms of Service
+              </Link>
+            </div>
             <p className="text-gray-500 dark:text-gray-400 text-xs mt-2 md:mt-0">
               Carefully crafted by Nadhi.dev in 2 weeks
             </p>
@@ -32,10 +47,7 @@ export default function Footer() {
               title="DMCA.com Protection Status"
               className="dmca-badge"
             >
-              <img
-                src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=8325d56a-0fde-46d4-b3c7-e00fd57859ff"
-                alt="DMCA.com Protection Status"
-              />
+             
             </a>
           </div>
         </div>
@@ -43,3 +55,4 @@ export default function Footer() {
     </div>
   );
 }
+

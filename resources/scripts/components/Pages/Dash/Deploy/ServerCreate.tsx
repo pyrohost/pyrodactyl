@@ -9,12 +9,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { LucideCreditCard, LucideGift, ChevronLeft, ChevronRight, LucideServer } from "lucide-react"
+import { LucideCreditCard, LucideGift, ChevronLeft, ChevronRight, LucideServer, LucideMemoryStick } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Particles } from "@/components/ui/particles";
 
 import { Cpu, Database, HardDrive, Network, Shield, Share2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 
 interface Props {
   plan: {
@@ -56,13 +58,193 @@ interface Props {
   }[]
 }
 
+interface Plan {
+  name: string;
+  cpu: number;
+  memory: number;
+  disk: number;
+  databases: number;
+  backups: number;
+  allocations: number;
+}
+
+
 export default function Create() {
-  const { plan, limits, locations, eggs } = usePage<Props>().props
+  const { plan, limits, locations, eggs, otherPlans } = usePage<Props>().props
+
+  console.log(plan)
   const [selectedEgg, setSelectedEgg] = useState<Props["eggs"][0] | null>(null)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
   const [isDialogOpen2, setIsDialogOpen2] = useState(false)
   const [selectedEggDetails, setSelectedEggDetails] = useState(null)
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+ 
+  const plansArray = Array.isArray(plan) ? plan : [plan];
+
+  const PlanSection = () => (
+    <div className="space-y-6">
+      <div className="flex flex-col space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight text-zinc-100">Select a Plan</h2>
+        <p className="text-sm text-zinc-400">Choose a plan that fits your needs</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {plansArray.map((plan) => (
+          <Card
+            key={plan.name}
+            className={cn(
+              "relative overflow-hidden cursor-pointer transition-all duration-200 hover:scale-[1.02] border border-zinc-800/50",
+              selectedPlan === plan.name && "ring-2 ring-primary border-primary"
+            )}
+            onClick={() => setSelectedPlan(plan.name)}
+          >
+            <CardContent className="p-6">
+              <div className="flex flex-col space-y-4">
+                {/* Header */}
+                <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                    <h3 className="font-medium text-zinc-100">{plan.name}</h3>
+                    {selectedPlan === plan.name && (
+                      <Badge 
+                        variant="default" 
+                        className="bg-primary/20 text-primary border border-primary/20"
+                      >
+                        Selected
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {/* Resources */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Cpu className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">CPU</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.cpu}%</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <LucideMemoryStick className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">Memory</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.memory} MB</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <HardDrive className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">Storage</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.disk} MB</span>
+                  </div>
+
+                  <Separator className="my-2 bg-zinc-800/50" />
+
+                  {/* Additional Features */}
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.databases}</span>
+                      <p className="text-xs text-zinc-400">Databases</p>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.backups}</span>
+                      <p className="text-xs text-zinc-400">Backups</p>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.allocations}</span>
+                      <p className="text-xs text-zinc-400">Ports</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+            </Card>
+        ))}
+
+{otherPlans?.map((plan) => (
+          <Card
+            key={plan.name}
+            className={cn(
+              "relative overflow-hidden cursor-pointer transition-all duration-200 hover:scale-[1.02] border border-zinc-800/50",
+              selectedPlan === plan.name && "ring-2 ring-primary border-primary"
+            )}
+            onClick={() => setSelectedPlan(plan.name)}
+          >
+            <CardContent className="p-6">
+              <div className="flex flex-col space-y-4">
+                {/* Header */}
+                <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                    <h3 className="font-medium text-zinc-100">{plan.name}</h3>
+                    {selectedPlan === plan.name && (
+                      <Badge
+                        variant="default" 
+                        className="bg-primary/20 text-primary border border-primary/20"
+                      >
+                        Selected
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {/* Resources */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Cpu className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">CPU</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.cpu}%</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <LucideMemoryStick className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">Memory</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.memory} MB</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <HardDrive className="w-4 h-4 text-zinc-400" />
+                      <span className="text-sm text-zinc-400">Storage</span>
+                    </div>
+                    <span className="text-sm font-medium text-zinc-100">{plan.disk} MB</span>
+                  </div>
+
+                  <Separator className="my-2 bg-zinc-800/50" />
+
+                  {/* Additional Features */}
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.databases}</span>
+                      <p className="text-xs text-zinc-400">Databases</p>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.backups}</span>
+                      <p className="text-xs text-zinc-400">Backups</p>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-sm font-medium text-zinc-100">{plan.allocations}</span>
+                      <p className="text-xs text-zinc-400">Ports</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+            
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+
+
 
   const planFeatures = [
     {
@@ -145,12 +327,21 @@ export default function Create() {
     }
   }, [currentPlanIndex])
 
-  const { data, setData, post, processing, errors } = useForm({
-    name: "",
-    egg_id: "",
-    nest_id: "",
-    location_id: locations[0]?.id || "",
-  })
+  useEffect(() => {
+    if (selectedPlan) {
+        setData('plan_name', selectedPlan);
+    }
+}, [selectedPlan]);
+
+
+
+const { data, setData, post, processing, errors } = useForm({
+  name: "",
+  egg_id: "",
+  nest_id: "",
+  location_id: locations[0]?.id || "",
+  plan_name: selectedPlan || "" 
+});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -311,31 +502,9 @@ export default function Create() {
                                           </div>
                                           </div>
 
-                                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-  {planFeatures.map((feature, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-      className="group relative p-4 bg-zinc-900 rounded-xl border border-zinc-800 hover:bg-zinc-800/50 transition-all duration-200"
-    >
-      <div className="flex items-start space-x-4">
-        <div className="p-2 rounded-lg bg-zinc-800 group-hover:bg-zinc-700 transition-colors">
-          <feature.icon className="w-5 h-5 text-white" />
-        </div>
-        <div className="flex-1">
-          <div className="text-2xl font-semibold text-white">
-            {feature.value}
-            <span className="text-zinc-400 text-lg ml-1">{feature.unit}</span>
-          </div>
-          <p className="text-sm text-zinc-400 mt-1">{feature.label}</p>
-          <p className="text-xs text-zinc-500 mt-1">{feature.description}</p>
-        </div>
-      </div>
-    </motion.div>
-  ))}
-</div>
+                                          <PlanSection/>
+
+                                          
                                     
                   <Button type="submit" disabled={processing || !isValid} className="w-full h-12 text-lg font-medium">
                     {processing ? "Creating..." : "Deploy Server"}

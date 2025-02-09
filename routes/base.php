@@ -35,6 +35,8 @@ Route::prefix('/')->group(function () {
     Route::get('/logout', [DashboardController::class, 'logout'])
         ->middleware(['auth'])
         ->name('page.logout');
+        
+    Route::get('/privacy-policy', [DashboardController::class, 'priv'])->name('privacy.policy');
 
     Route::get('/earn', [Base\EarningViewController::class, 'index'])->name('earning.index');
 
