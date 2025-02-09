@@ -46,7 +46,7 @@ interface LocationViewProps {
 
 export default function LocationForm({}: LocationViewProps) {
   const { props } = usePage<PageProps>();
-  const { auth, companyDesc, location} = props;
+  const { auth, companyDesc, location, plans} = props;
   const { data, setData, patch, processing, errors} = useForm({
     short: location.short,
     long: location.long,
@@ -169,23 +169,28 @@ export default function LocationForm({}: LocationViewProps) {
                 )}
               </div>
 
+              
               <div className="space-y-2">
-                <label className="text-sm font-medium">Required Plans</label>
-                <Select
-                  multiple
-                  value={data.required_plans}
-                  onValueChange={value => setData('required_plans', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select plans..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="basic">Basic</SelectItem>
-                    <SelectItem value="premium">Premium</SelectItem>
-                    <SelectItem value="enterprise">Enterprise</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+  <label className="text-sm font-medium">Required Plans</label>
+  <select
+    multiple
+    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
+    value={data.required_plans || []}
+    onChange={(e) => {
+      const selectedPlans = Array.from(e.target.selectedOptions).map(option => option.value);
+      setData('required_plans', selectedPlans);
+    }}
+  >
+    {plans.map((plan) => (
+      <option key={plan.id} value={plan.name}>
+        {plan.name} ({plan.memory}MB RAM, {plan.cpu}% CPU)
+      </option>
+    ))}
+  </select>
+  {errors.required_plans && (
+    <p className="text-sm text-red-500">{errors.required_plans}</p>
+  )}
+</div>
             </CardContent>
 
             <CardFooter className="flex justify-between">

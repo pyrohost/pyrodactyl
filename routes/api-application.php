@@ -26,6 +26,8 @@ Route::group(['prefix' => '/users'], function () {
 
     
 
+    
+
     Route::delete('/{user:id}', [Application\Users\UserController::class, 'delete']);
 
     Route::post('/{user:id}/plans', [Application\Plans\UserPlanController::class, 'store'])
@@ -71,12 +73,15 @@ Route::group(['prefix' => '/nodes'], function () {
 | Endpoints:
 |   GET  /api/application/plans        - Get all plans
 |   POST /api/application/plans        - Create a new plan
+|   PUT  /api/application/plans/{plan} - Update a plan
 |
 */
 // Plans collection routes (create and list plans).
 Route::group(['prefix' => '/plans'], function () {
-    Route::get('/', [Application\Plans\PlanController::class, 'index'])
-         ->name('api.application.plans.index');
+    Route::get('/', [Application\Plans\PlanController::class, 'indexJson'])->name('api.plans.index');
+    Route::put('/plans/{plan}', [Application\Plans\PlanController::class, 'update'])
+    ->where('plan', '[0-9]+')
+    ->name('api.application.plans.update');
     Route::post('/', [Application\Plans\PlanController::class, 'create'])
          ->name('api.application.plans.create');
 });

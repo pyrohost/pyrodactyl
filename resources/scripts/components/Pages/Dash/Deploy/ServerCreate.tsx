@@ -11,6 +11,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { LucideCreditCard, LucideGift, ChevronLeft, ChevronRight, LucideServer } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Particles } from "@/components/ui/particles";
+
+import { Cpu, Database, HardDrive, Network, Shield, Share2 } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface Props {
   plan: {
@@ -57,15 +61,72 @@ export default function Create() {
   const [selectedEgg, setSelectedEgg] = useState<Props["eggs"][0] | null>(null)
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const [isDialogOpen2, setIsDialogOpen2] = useState(false)
+  const [selectedEggDetails, setSelectedEggDetails] = useState(null)
 
   const planFeatures = [
-    { value: plan.cpu, label: "CPU", unit: "%", icon: "⚡" },
-    { value: plan.memory, label: "Memory", unit: "MB", icon: "💾" },
-    { value: plan.disk, label: "Disk", unit: "MB", icon: "💿" },
-    { value: plan.databases, label: "Databases", unit: "", icon: "🗄️" },
-    { value: plan.backups, label: "Backups", unit: "", icon: "📦" },
-    { value: plan.allocations, label: "Allocations", unit: "", icon: "🔌" },
-  ]
+    {
+      value: plan.cpu,
+      label: "CPU Limit",
+      unit: "%",
+      icon: Cpu,
+      description: "Processing power allocated"
+    },
+    {
+      value: plan.memory,
+      label: "Memory",
+      unit: "MB",
+      icon: HardDrive,
+      description: "Available RAM"
+    },
+    {
+      value: plan.disk,
+      label: "Storage",
+      unit: "MB",
+      icon: Database,
+      description: "SSD storage space"
+    },
+    {
+      value: plan.databases,
+      label: "Databases",
+      unit: "",
+      icon: Share2,
+      description: "MySQL databases"
+    },
+    {
+      value: plan.backups,
+      label: "Backups",
+      unit: "",
+      icon: Shield,
+      description: "Automated backups"
+    },
+    {
+      value: plan.allocations,
+      label: "Network",
+      unit: "",
+      icon: Network,
+      description: "Port allocations"
+    }
+  ];
+
+  const handleConfetti = (event?: React.MouseEvent) => {
+    // Default to center of screen if no event
+    const x = event ? event.clientX / window.innerWidth : 0.5;
+    const y = event ? event.clientY / window.innerHeight : 0.5;
+    
+    confetti({
+      particleCount: 35,
+      spread: 45,
+      startVelocity: 15,
+      scalar: 0.7,
+      ticks: 50,
+      gravity: 0.8,
+      decay: 0.94,
+      origin: { x, y },
+      colors: ['#a864fd80', '#29cdff80', '#78ff4480'],
+      shapes: ['circle'],
+    });
+  };
 
   // Auto-scroll carousel
   useEffect(() => {
@@ -99,7 +160,12 @@ export default function Create() {
   const isValid = data.name && data.egg_id && data.location_id
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+
+    <>
+    
+
+
+    <div className="min-h-scree bg-transparent">
       <div className="container mx-auto p-6">
         <form onSubmit={handleSubmit}>
           <motion.div
@@ -108,12 +174,10 @@ export default function Create() {
             transition={{ duration: 0.5 }}
             className="grid gap-8"
           >
-            <div className="text-center space-y-2">
-              <h1 className="text-4xl font-bold tracking-tight">Deploy Your Server</h1>
-              <p className="text-lg text-muted-foreground">Powerful infrastructure at your fingertips</p>
-            </div>
+            
+            
 
-            <Card className="overflow-hidden bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl">
+            <Card className="overflow-hidden  backdrop-blur-xl">
               <CardContent className="p-8">
                 <div className="grid gap-8">
                   <div className="space-y-2">
@@ -128,45 +192,53 @@ export default function Create() {
                     {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                   </div>
 
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-semibold">Select Location</h3>
+                  <div className="space-y-6">
+                    <h3 className="text-2xl font-medium tracking-tight">Select Location</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       <AnimatePresence>
                         {locations.map((location) => (
                           <motion.div
                             key={location.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
                           >
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <Card
                                     className={cn(
-                                      "cursor-pointer transition-all duration-300",
+                                      "group cursor-pointer relative overflow-hidden aspect-[16/9] transition-all duration-300",
                                       data.location_id === location.id
-                                        ? "ring-2 ring-primary shadow-lg"
-                                        : "hover:shadow-md",
+                                        ? "ring-2 ring-primary"
+                                        : "hover:ring-1 hover:ring-primary/50"
                                     )}
-                                    onClick={() => setData("location_id", location.id)}
+                                    style={{
+                                      backgroundImage: `url(${location.image || "/placeholder.svg"})`,
+                                      backgroundSize: 'cover',
+                                      backgroundPosition: 'center'
+                                    }}
+                                    onClick={(e) => {
+                                      setData("location_id", location.id);
+                                      handleConfetti(e);
+                                    }}
                                   >
-                                    <CardContent className="p-6 flex flex-col items-center">
-                                      {location.image && (
-                                        <img
-                                          src={location.image || "/placeholder.svg"}
-                                          alt={location.short}
-                                          className="w-16 h-16 object-cover rounded-lg mb-3 bg-background"
-                                        />
-                                      )}
-                                      <p className="font-medium">{location.short}</p>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent transition-opacity group-hover:opacity-80" />
+                                    <CardContent className="h-full flex flex-col justify-end p-4 relative">
+                                      <div className="transform transition-transform group-hover:-translate-y-1">
+                                        <p className="text-white font-medium text-lg">
+                                          {location.short}
+                                        </p>
+                                        <p className="text-white/80 text-sm">
+                                          {location.long}
+                                        </p>
+                                      </div>
                                     </CardContent>
                                   </Card>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                  <p>{location.long}</p>
+                                  <p>{location.short}</p>
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
@@ -179,134 +251,92 @@ export default function Create() {
                     <div className="space-y-4 z-1">
                     <h3 className="text-2xl font-semibold">Select Template</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                      {eggs.map((egg) => (
-                      <motion.div key={egg.id} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                        <Card
-                        className={cn(
-                          "cursor-pointer transition-all duration-300 relative overflow-hidden min-h-[200px]",
-                          data.egg_id === egg.id ? "ring-2 ring-primary shadow-lg" : "hover:shadow-md",
-                        )}
-                        onClick={() => {
-                          setData("egg_id", egg.id)
-                          setData("nest_id", egg.nest_id)
-                        }}
+                    {eggs.map((egg) => (
+                        <motion.div 
+                          key={egg.id} 
+                          whileHover={{ scale: 1.02, y: -5 }} 
+                          transition={{ type: "spring", stiffness: 300 }}
+                          className="w-full"
                         >
-                        {egg.image_url && (
-                          <div
-                          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                          style={{ backgroundImage: `url(${egg.image_url || "/placeholder.svg"})` }}
-                          >
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
-                          </div>
-                        )}
-                        <CardContent className="p-6 flex flex-col items-center relative z-4">
-                          <LucideServer className="w-8 h-8 text-white mb-3" />
-                          <p className="font-medium text-center text-white text-lg mb-2">{egg.name}</p>
-                          <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                            variant="secondary"
-                            size="sm"
-                            className="mt-auto"
+                          <Card
+                            className={cn(
+                              "cursor-pointer relative overflow-hidden min-h-[240px] border border-zinc-800/50",
+                              "backdrop-blur-md bg-zinc-900/30 hover:bg-zinc-900/50",
+                              "transition-all duration-300 ease-out",
+                              data.egg_id === egg.id ? "ring-2 ring-primary/80 shadow-lg shadow-primary/20" : ""
+                            )}
                             onClick={(e) => {
-                              e.stopPropagation()
-                              setSelectedEgg(egg)
+                              setData("egg_id", egg.id)
+                              setData("nest_id", egg.nest_id)
+                              handleConfetti(e);
                             }}
-                            >
-                            Learn more
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-xl z-10">
-                            <DialogHeader>
-                            <DialogTitle>{selectedEgg?.name}</DialogTitle>
-                            </DialogHeader>
-                            <div className="mt-6">
-                            <img
-                              src={selectedEgg?.image_url || "/placeholder.svg"}
-                              alt={selectedEgg?.name}
-                              className="w-120 h-120 object-contain rounded-lg mx-auto mb-6"
-                            />
-                            <p className="text-lg leading-relaxed">{selectedEgg?.description}</p>
-                            </div>
-                          </DialogContent>
-                          </Dialog>
-                        </CardContent>
-                        </Card>
-                      </motion.div>
-                      ))}
-                    </div>
-                    </div>
-
-                  <Card className="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 max-w-4xl">
-                    <CardContent className="p-8">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-2xl font-semibold">Selected Plan</h3>
-                        {plan.isTrial || plan.price === 0 ? (
-                          <div className="flex items-center text-green-500">
-                            <LucideGift className="w-5 h-5 mr-2" />
-                            <span className="font-medium">Free Plan</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center text-blue-500">
-                            <LucideCreditCard className="w-5 h-5 mr-2" />
-                            <span className="font-medium">${plan.price}/month</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <h4 className="text-xl font-medium mb-6">{plan.name}</h4>
-
-                      <div className="relative">
-                        <div ref={carouselRef} className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                          <div className="flex space-x-6">
-                            {planFeatures.map((item, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{
-                                  opacity: currentPlanIndex === index ? 1 : 0.5,
-                                  scale: currentPlanIndex === index ? 1 : 0.9,
-                                }}
-                                className="snap-center shrink-0 w-[200px] h-48"
+                          >
+                            {egg.image_url && (
+                              <div
+                                className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+                                style={{ backgroundImage: `url(${egg.image_url || "/placeholder.svg"})` }}
                               >
-                                <div className="flex flex-col items-center justify-center h-full bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                                  <span className="text-4xl mb-3">{item.icon}</span>
-                                  <div className="text-2xl font-bold">
-                                    {item.value}
-                                    {item.unit}
-                                  </div>
-                                  <div className="text-sm text-muted-foreground mt-2">{item.label}</div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-900/40 to-zinc-900/60" />
+                              </div>
+                            )}
+                            <CardContent className="relative z-10 p-8 flex flex-col items-center h-full">
+                              <div className="flex flex-col items-center space-y-4">
+                                <div className="p-3 rounded-2xl bg-gradient-to-b from-zinc-800/50 to-zinc-900/50 backdrop-blur-md border border-zinc-800/50">
+                                  <LucideServer className="w-8 h-8 text-primary/80" />
                                 </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
+                                <div className="space-y-1 text-center">
+                                  <h3 className="font-medium text-zinc-100 text-lg tracking-tight">
+                                    {egg.name}
+                                  </h3>
+                                  <p className="text-sm text-zinc-400">
+                                    Click to select this template
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  className="mt-4 text-zinc-100 hover:text-primary transition-colors bg-zinc-900/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:bg-primary/30"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedEggDetails(egg)
+                                    setIsDialogOpen2(true)
+                                  }}
+                                >
+                                  Learn more
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
+                                          </div>
+                                          </div>
 
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="absolute left-0 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm"
-                          onClick={() =>
-                            setCurrentPlanIndex((prev) => (prev === 0 ? planFeatures.length - 1 : prev - 1))
-                          }
-                        >
-                          <ChevronLeft className="h-4 w-4" />
-                        </Button>
-
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-0 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm"
-                          onClick={() =>
-                            setCurrentPlanIndex((prev) => (prev === planFeatures.length - 1 ? 0 : prev + 1))
-                          }
-                        >
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-
+                                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+  {planFeatures.map((feature, index) => (
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="group relative p-4 bg-zinc-900 rounded-xl border border-zinc-800 hover:bg-zinc-800/50 transition-all duration-200"
+    >
+      <div className="flex items-start space-x-4">
+        <div className="p-2 rounded-lg bg-zinc-800 group-hover:bg-zinc-700 transition-colors">
+          <feature.icon className="w-5 h-5 text-white" />
+        </div>
+        <div className="flex-1">
+          <div className="text-2xl font-semibold text-white">
+            {feature.value}
+            <span className="text-zinc-400 text-lg ml-1">{feature.unit}</span>
+          </div>
+          <p className="text-sm text-zinc-400 mt-1">{feature.label}</p>
+          <p className="text-xs text-zinc-500 mt-1">{feature.description}</p>
+        </div>
+      </div>
+    </motion.div>
+  ))}
+</div>
+                                    
                   <Button type="submit" disabled={processing || !isValid} className="w-full h-12 text-lg font-medium">
                     {processing ? "Creating..." : "Deploy Server"}
                   </Button>
@@ -314,9 +344,35 @@ export default function Create() {
               </CardContent>
             </Card>
           </motion.div>
+          <Particles
+              className="absolute inset-0 z-0 opacity-25"
+              quantity={100}
+              ease={80}
+              color={'#ffffff'}
+              refresh
+            />
         </form>
       </div>
     </div>
+    <Dialog open={isDialogOpen2} onOpenChange={setIsDialogOpen2}>
+  <DialogContent className="  ">
+    <DialogHeader>
+      <DialogTitle>{selectedEggDetails?.name}</DialogTitle>
+    </DialogHeader>
+    <div className="mt-6">
+      <img
+        src={selectedEggDetails?.image_url || "/placeholder.svg"}
+        alt={selectedEggDetails?.name}
+        className="w-120 h-120 object-contain rounded-lg mx-auto mb-6"
+      />
+      <p className="text-lg leading-relaxed">{selectedEggDetails?.description}</p>
+    </div>
+  </DialogContent>
+</Dialog>
+
+
+
+    </>
   )
 }
 

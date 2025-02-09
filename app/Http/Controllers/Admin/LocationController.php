@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 use Pterodactyl\Models\Location;
+use Pterodactyl\Models\Plan;
 use Illuminate\Http\RedirectResponse;
 use Prologue\Alerts\AlertsMessageBag;
 use Illuminate\View\Factory as ViewFactory;
@@ -38,8 +39,15 @@ class LocationController extends Controller
      */
     public function index(): View
     {
+
+        $plans = Plan::select(['id', 'name', 'memory', 'cpu'])
+            ->orderBy('memory')
+            ->get();
+
+
         return $this->view->make('admin.locations.index', [
             'locations' => $this->repository->getAllWithDetails(),
+            'plans' => $plans,
         ]);
     }
 
@@ -51,6 +59,9 @@ class LocationController extends Controller
     public function view(int $id): Response
 {
     $location = $this->repository->getWithNodes($id);
+    $plans = Plan::select(['id', 'name', 'memory', 'cpu'])
+            ->orderBy('memory')
+            ->get();
     
     return Inertia::render('Admin/Locations/loc.view', [
         'location' => [
@@ -58,6 +69,7 @@ class LocationController extends Controller
             'short' => $location->short,
             'long' => $location->long,
             'flag_url' => $location->flag_url,
+            
             'maximum_servers' => $location->maximum_servers,
             'required_plans' => $location->required_plans,
             'required_rank' => $location->required_rank,
@@ -67,7 +79,8 @@ class LocationController extends Controller
                 'fqdn' => $node->fqdn,
                 'servers_count' => $node->servers->count()
             ])
-        ]
+            ],
+        'plans' => $plans,
     ]);
 }
 

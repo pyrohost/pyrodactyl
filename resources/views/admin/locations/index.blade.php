@@ -97,13 +97,18 @@
 
 
                         <div class="col-md-12">
-                            <label for="pRequiredPlansModal" class="form-label">Required Plans</label>
-                            <select name="required_plans[]" id="pRequiredPlansModal" class="form-control" multiple>
-                                <option value="basic">Basic</option>
-                                <option value="premium">Premium</option>
-                                <option value="enterprise">Enterprise</option>
-                            </select>
-                            <p class="text-muted small">Select plans that have access to this location (none for all plans).</p>
+                            <div class="col-md-12">
+                                <label for="required_plans">Required Plans</label>
+                                <select name="required_plans[]" id="required_plans" class="form-control" multiple>
+                                    @foreach($plans as $plan)
+                                        <option value="{{ $plan->name }}">
+                                            {{ $plan->name }} ({{ $plan->memory }}MB RAM, {{ $plan->cpu }}% CPU)
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <p class="text-muted small">Select plans that have access to this location (none for all plans).</p>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -117,4 +122,5 @@
     </div>
 </div>
 </div>
+
 @endsection

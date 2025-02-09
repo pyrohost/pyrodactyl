@@ -46,6 +46,8 @@ export default function AdminDashboard(): JSX.Element {
   const userRank = auth.user.rank;
   const pterodactylId = auth.user.pterodactyl_id;
 
+  console.log(props)
+
   const [currentTime, setCurrentTime] = useState<string>(new Date().toLocaleTimeString());
   const [activeProjects, setActiveProjects] = useState<number>(0);
 
@@ -133,12 +135,8 @@ export default function AdminDashboard(): JSX.Element {
                   <div className="absolute inset-0 flex items-center justify-between p-6">
                     <div className="flex items-center space-x-4">
                       <div>
-                        <h1 className="text-2xl font-bold  dark:text-white text-white !opacity-100 mb-2">
-                          Welcome to the Watch, {username}!
-                        </h1>
-                        <span className="dark:text-white text-2xl  mb-4 z-50 text-zinc-50 !opacity-100">
-                          {currentTime}
-                        </span>
+                      <h1 className="text-4xl font-bold tracking-tight">Deploy Your Server</h1>
+                      <p className="text-lg text-muted-foreground">Powerful infrastructure at your fingertips</p>
                         <div className="flex items-center space-x-2 mt-2">
                           {getRankBadge()}
                         </div>
@@ -165,11 +163,7 @@ export default function AdminDashboard(): JSX.Element {
         </div>
       )}
 
-      {!servers && (
-        <div className="flex items-center justify-center p-4">
-          <LogoLoader size="lg" />
-        </div>
-      )}
+      
 
       <Create/>
 
