@@ -29,13 +29,17 @@ class UserPlanController extends Controller
     
     $purchasedPlans = $user->purchases_plans ?? [];
     
-    // Simply add plan under its name
-    $purchasedPlans[$plan->name] = [
-        'plan_id' => $plan->id,
-        'name' => $plan->name,
-        'count' => $data['count'],
-        'activated_on' => now()->toDateTimeString(),
-    ];
+    // If plan exists, update count, otherwise create new entry
+    if (isset($purchasedPlans[$plan->name])) {
+        $purchasedPlans[$plan->name]['count'] += $data['count'];
+    } else {
+        $purchasedPlans[$plan->name] = [
+            'plan_id' => $plan->id,
+            'name' => $plan->name,
+            'count' => $data['count'],
+            'activated_on' => now()->toDateTimeString(),
+        ];
+    }
 
     $user->purchases_plans = $purchasedPlans;
     $user->save();

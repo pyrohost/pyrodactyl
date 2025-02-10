@@ -139,6 +139,7 @@ const handleDeleteofplan = (planId: string) => {
               <div className="flex justify-between items-center">
                 <div>
                   <h4 className="font-medium">Name: {plan.name}</h4>
+                  <p className="font-medium">Active Count {plan.count}</p>
                   <p className="text-sm text-gray-500">
                     Added: {new Date(plan.added_at || plan.activated_on).toLocaleDateString()}
                   </p>
