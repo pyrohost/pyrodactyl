@@ -21,7 +21,7 @@ interface ServerRowProps {
 
 const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
 
-    console.log(server.limits.cpu);
+    console.log(server);
 
     const interval = useRef<ReturnType<typeof setInterval>>(null) as React.MutableRefObject<ReturnType<typeof setInterval>>;
     const [stats, setStats] = useState<ServerStats | null>(null);
@@ -29,6 +29,9 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
     const { props } = usePage<PageProps>();
     
     const { auth, companyDesc, AppConfig } = props;
+
+
+    
 
     const getStats = () =>
         getServerResourceUsage(server.uuid)
@@ -64,18 +67,22 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
 
     return (
         <Card className={cn(
-            "transition-all duration-300 cursor-pointer group rounded-2xl ",
-            "dark:bg-black hover:shadow-xl dark:hover:shadow-xl dark:hover:shadow-700",
-            "bg-white",
+            "transition-all duration-300 cursor-pointer group rounded-2xl",
+            "dark:hover:shadow-xl dark:hover:shadow-700",
+            "relative bg-cover bg-center bg-no-repeat",
+            "overflow-hidden", 
+            server.software_image ? `bg-[url('${server.software_image}')]` : '',
             {
                 "border-2 border-zinc-200/50 dark:border-zinc-800/50": !server.plan,
-                "dark:bg-black": server.plan,
-                "bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-900 dark:to-black": !server.plan
+                
             },
             className
-            
-        )}>
-            <CardContent className="p-6">
+        )}
+        style={{
+            backgroundImage: server.software_image ? `url(${server.software_image})` : 'none'
+        }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/90 to-transparent pointer-events-none" />
+            <CardContent className="p-6 relative z-10">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="relative flex items-center justify-center w-3 h-3">
@@ -92,7 +99,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                         {/* tHIS AREA make a cape liek thing iunno bade saying that */}
                         <div className="min-w-0">
                         
-                            <h3 className="text-base font-medium tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
+                            <h3 className="text-base font-medium tracking-tight dark:text-zinc-900 text-zinc-100 truncate">
                                 {server.name}
                             </h3>
                             

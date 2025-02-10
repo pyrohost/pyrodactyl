@@ -26,6 +26,7 @@ export interface Server {
     invocation: string;
     dockerImage: string;
     description: string;
+    software_image: string;
     limits: {
         memory: number;
         swap: number;
@@ -55,6 +56,7 @@ export const rawDataToServerObject = ({ attributes: data }: FractalResponseData)
     isNodeUnderMaintenance: data.is_node_under_maintenance,
     status: data.status,
     invocation: data.invocation,
+    software_image: data.software_image,
     dockerImage: data.docker_image,
     sftpDetails: {
         ip: data.sftp_details.ip,

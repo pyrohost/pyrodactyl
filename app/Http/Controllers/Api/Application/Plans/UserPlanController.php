@@ -29,10 +29,13 @@ class UserPlanController extends Controller
     
     $purchasedPlans = $user->purchases_plans ?? [];
     
-    $purchasedPlans[$plan->name] = [
+    // Create unique key using plan name + timestamp
+    $planKey = $plan->name . '_' . now()->timestamp;
+    
+    $purchasedPlans[$planKey] = [
         'plan_id' => $plan->id,
         'name' => $plan->name,
-        'count' => $data['count'], 
+        'count' => $data['count'],
         'activated_on' => now()->toDateTimeString(),
     ];
 
