@@ -115,15 +115,23 @@ public function store(Request $request)
         }
 
         // Count how many times this plan is activated
-        $activatedCount = collect($user->activated_plans ?? [])
-            ->filter(function($plan) use ($planName) {
-                return $plan['name'] === $planName;
-            })->count();
+        // Get purchased plan count
+        $purchasedPlanCount = isset($user->purchases_plans[$planName]) 
+            ? $user->purchases_plans[$planName]['count'] 
+            : 0;
 
-        // Check if user has exceeded their plan limit
-        if ($activatedCount >= $purchasedPlan['count']) {
-            throw new DisplayException("You have reached the limit for {$planName} plan activations ({$purchasedPlan['count']} allowed)");
+// Get count of activated instances of this plan
+        $activatedPlans = $user->activated_plans ?? [];
+        $activatedPlanCount = isset($activatedPlans[$planName]) 
+            ? $activatedPlans[$planName]['count'] 
+            : 0;
+
+// Check if user has reached their activation limit
+        if ($activatedPlanCount >= $purchasedPlanCount) {
+            throw new DisplayException("You have reached the maximum activations for {$planName} plan ({$purchasedPlanCount} allowed)");
         }
+
+// Continue with server creation...
 
         // Get random node from location
         $node = $location->nodes()
@@ -163,12 +171,17 @@ public function store(Request $request)
             throw new DisplayException('No available allocations found');
         }
 
-        // Update activated plans
-        $activatedPlans[$planName] = [
-            'plan_id' => $plan->id,
-            'name' => $plan->name,
-            'activated_on' => now()->toDateTimeString()
-        ];
+            // Update activated plans
+        if (isset($activatedPlans[$planName])) {
+            $activatedPlans[$planName]['count'] = ($activatedPlans[$planName]['count'] ?? 0) + 1;
+        } else {
+            $activatedPlans[$planName] = [
+                'plan_id' => $plan->id,
+                'name' => $plan->name,
+                'count' => 1,
+                'activated_on' => now()->toDateTimeString()
+            ];
+        }
 
         $user->update([
             'activated_plans' => $activatedPlans
