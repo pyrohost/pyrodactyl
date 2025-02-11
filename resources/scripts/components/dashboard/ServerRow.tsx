@@ -66,21 +66,20 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
         stats.diskUsageInBytes === undefined;
 
     return (
-        <Card className={cn(
-            "transition-all duration-300 cursor-pointer group rounded-2xl",
-            "dark:hover:shadow-xl dark:hover:shadow-700",
-            "relative bg-cover bg-center bg-no-repeat",
-            "overflow-hidden", 
-            server.software_image ? `bg-[url('${server.software_image}')]` : '',
-            {
-                "border-2 border-zinc-200/50 dark:border-zinc-800/50": !server.plan,
-                
-            },
-            className
+        <Card
+        className={cn(
+        "transition-all duration-300 cursor-pointer group rounded-2xl",
+        "hover:shadow-xl hover:shadow-zinc-200/10 dark:hover:shadow-zinc-800/30",
+        "relative bg-cover bg-center bg-no-repeat",
+        "overflow-hidden",
+        server.software_image ? `bg-[url('${server.software_image}')]` : "",
+        "border border-zinc-200 dark:border-zinc-700",
+        className,
         )}
         style={{
-            backgroundImage: server.software_image ? `url(${server.software_image})` : 'none'
-        }}>
+        backgroundImage: server.software_image ? `url(${server.software_image})` : "none",
+        }}
+        >
             <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/90 to-transparent pointer-events-none" />
             <CardContent className="p-6 relative z-10">
                 <div className="flex items-center justify-between">
@@ -99,9 +98,9 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                         {/* tHIS AREA make a cape liek thing iunno bade saying that */}
                         <div className="min-w-0">
                         
-                            <h3 className="text-base font-medium tracking-tight dark:text-zinc-900 text-zinc-100 truncate">
-                                {server.name}
-                            </h3>
+                        <h3 className="text-base font-medium tracking-tight text-zinc-100 dark:text-zinc-100 truncate">
+                            {server.name}
+                        </h3>
                             
                             <p className="text-sm text-zinc-500 truncate">
                                 {server.allocations
