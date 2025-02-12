@@ -13,6 +13,8 @@ use Pterodactyl\Services\Notifications\NotificationService;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use Illuminate\Support\Facades\Log; // Add this import
+use Illuminate\Support\Facades\Http;
+
 
 class ServerController extends Controller
 {
@@ -319,10 +321,10 @@ public function __construct(
 
             // Send Discord webhook if configured
             if ($webhookUrl = env('DISCORD_WEBHOOK')) {
-                Http::post($webhookUrl, [
+                \Illuminate\Support\Facades\Http::post($webhookUrl, [
                     'embeds' => [[
                         'title' => 'Server Suspended',
-                        'description' => "Server {$server->name} (ID: {$server->id}) was suspended",
+                        'description' => "Server {$server->name} (ID: {$server->id}) was suspended for containg a .sh file",
                         'color' => 16711680, // Red
                         'fields' => [
                             [
