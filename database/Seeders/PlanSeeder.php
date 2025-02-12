@@ -24,7 +24,7 @@ class PlanSeeder extends Seeder
             'renewable' => false,
             'invisible' => false,
             'isTrial' => true,
-            'expiresIn' => Carbon::now()->addDays(5)
+            'expiresIn' => Carbon::now()->addDays(10)
         ]);
     }
 }

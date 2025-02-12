@@ -22,8 +22,11 @@ default dark mode
 
 
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-Server creation, It needs to check for plan count and compare if there are avliable plans or not!, //Without count let's add a completely new array. 
+Server creation, It needs to check for plan count and compare if there are avliable plans or not!, //Without count let's add a completely new array.  [DONE]
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+
+// Add a rolback feature so that f server has a plan, it will rollback the plan.
 
 
 
@@ -192,3 +195,27 @@ VITE_STATUS_PAGE=
 VITE_STATUS_PAGE_TITLE_NATE=
 VITE_APP_NAME=Pastel
 
+
+
+
+
+curl -X POST "http://my.ryx.us/api/application/plans" \
+-H "Authorization: Bearer ptla_GK4UKX8E3eXBJ9G3BOl1yERTkw8G8BElMZiB8bYGhLe" \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-d '{
+  "name": "Astroid Tier",
+  "description": "Basic free hosting plan for all users",
+  "price": 0,
+  "cpu": 140,
+  "memory": 3500,
+  "disk": 5000,
+  "servers": 1,
+  "allocations": 16,
+  "backups": 2,
+  "databases": 10,
+  "renewable": false,
+  "invisible": false,
+  "isTrial": false,
+  "expiresIn": "'$(date -u -d "+31 days" +"%Y-%m-%dT%H:%M:%SZ")'"
+}'

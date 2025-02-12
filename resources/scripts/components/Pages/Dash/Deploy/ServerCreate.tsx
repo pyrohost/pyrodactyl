@@ -90,8 +90,8 @@ export default function Create() {
   const PlanSection = () => (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-100">Select a Plan</h2>
-        <p className="text-sm text-zinc-400">Choose a plan that fits your needs</p>
+        <h2 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 ">Select a Plan</h2>
+        <p className="text-sm text-zinc-800 dark:text-zinc-100">Choose a plan that fits your needs</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -109,7 +109,7 @@ export default function Create() {
                 {/* Header */}
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
-                    <h3 className="font-medium text-zinc-100">{plan.name}</h3>
+                    <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{plan.name}</h3>
                     {selectedPlan === plan.name && (
                       <Badge variant="default" className="bg-primary/20 text-primary border border-primary/20">
                         Selected
@@ -122,26 +122,26 @@ export default function Create() {
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Cpu className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">CPU</span>
+                      <Cpu className="w-4 h-4 text-zinc-700 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-100">CPU</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.cpu}%</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.cpu}%</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <LucideMemoryStick className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">Memory</span>
+                      <LucideMemoryStick className="w-4 h-4 text-zinc-700 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-100">Memory</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.memory} MB</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.memory} MB</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <HardDrive className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">Storage</span>
+                      <HardDrive className="w-4 h-4 text-zinc-700 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-100">Storage</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.disk} MB</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.disk} MB</span>
                   </div>
 
                   <Separator className="my-2 bg-zinc-800/50" />
@@ -149,16 +149,16 @@ export default function Create() {
                   {/* Additional Features */}
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.databases}</span>
-                      <p className="text-xs text-zinc-400">Databases</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.databases}</span>
+                      <p className="text-xs text-zinc-700 dark:text-zinc-100">Databases</p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.backups}</span>
-                      <p className="text-xs text-zinc-400">Backups</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.backups}</span>
+                      <p className="text-xs text-zinc-700 dark:text-zinc-100">Backups</p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.allocations}</span>
-                      <p className="text-xs text-zinc-400">Ports</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.allocations}</span>
+                      <p className="text-xs text-zinc-700 dark:text-zinc-100">Ports</p>
                     </div>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export default function Create() {
                 {/* Header */}
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
-                    <h3 className="font-medium text-zinc-100">{plan.name}</h3>
+                    <h3 className="font-medium text-zinc-800 dark:text-zinc-100">{plan.name}</h3>
                     {selectedPlan === plan.name && (
                       <Badge variant="default" className="bg-primary/20 text-primary border border-primary/20">
                         Selected
@@ -194,26 +194,26 @@ export default function Create() {
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Cpu className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">CPU</span>
+                      <Cpu className="w-4 h-4 text-zinc-700 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-100">CPU</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.cpu}%</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.cpu}%</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <LucideMemoryStick className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">Memory</span>
+                      <LucideMemoryStick className="w-4 h-4 text-zinc-700 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-100">Memory</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.memory} MB</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.memory} MB</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <HardDrive className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">Storage</span>
+                      <HardDrive className="w-4 h-4 text-zinc-800 dark:text-zinc-100" />
+                      <span className="text-sm text-zinc-800 dark:text-zinc-100">Storage</span>
                     </div>
-                    <span className="text-sm font-medium text-zinc-100">{plan.disk} MB</span>
+                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.disk} MB</span>
                   </div>
 
                   <Separator className="my-2 bg-zinc-800/50" />
@@ -221,16 +221,16 @@ export default function Create() {
                   {/* Additional Features */}
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.databases}</span>
-                      <p className="text-xs text-zinc-400">Databases</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.databases}</span>
+                      <p className="text-xs text-zinc-800 dark:text-zinc-100">Databases</p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.backups}</span>
-                      <p className="text-xs text-zinc-400">Backups</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.backups}</span>
+                      <p className="text-xs text-zinc-800 dark:text-zinc-100">Backups</p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-sm font-medium text-zinc-100">{plan.allocations}</span>
-                      <p className="text-xs text-zinc-400">Ports</p>
+                      <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">{plan.allocations}</span>
+                      <p className="text-xs text-zinc-800 dark:text-zinc-100">Ports</p>
                     </div>
                   </div>
                 </div>
@@ -468,21 +468,25 @@ export default function Create() {
                                 </div>
                               )}
                               <CardContent className="relative z-10 p-8 flex flex-col items-center h-full">
-                                <div className="flex flex-col items-center space-y-4">
-                                  <div className="p-3 rounded-2xl bg-gradient-to-b from-zinc-800/50 to-zinc-900/50 backdrop-blur-md border border-zinc-800/50">
-                                    <LucideServer className="w-8 h-8 text-primary/80" />
-                                  </div>
-                                  <div className="space-y-1 text-center">
-                                    <h3 className="font-medium text-zinc-100 text-lg tracking-tight">{egg.name}</h3>
-                                    <p className="text-sm text-zinc-400">Click to select this template</p>
-                                  </div>
-                                  <Button
-                                    variant="ghost"
-                                    className="mt-4 text-zinc-100 hover:text-primary transition-colors bg-zinc-900/50 hover:bg-zinc-900/80 border border-zinc-800/50 hover:bg-primary/30"
-                                    onClick={(e) => handleEggLearnMore(e, egg)}
-                                  >
-                                    Learn more
-                                  </Button>
+                              <div className="flex flex-col items-center space-y-4">
+                                <div className="p-3 rounded-2xl bg-gradient-to-b from-zinc-200 to-zinc-300 dark:from-zinc-800/50 dark:to-zinc-900/50 backdrop-blur-md border border-zinc-300 dark:border-zinc-800/50">
+                                  <LucideServer className="w-8 h-8 text-primary/80" />
+                                </div>
+                                <div className="space-y-1 text-center">
+                                  <h3 className="font-medium text-zinc-800 dark:text-zinc-100 text-lg tracking-tight">
+                                    {egg.name}
+                                  </h3>
+                                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                    Click to select this template
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  className="mt-4 text-zinc-800 dark:text-zinc-100 hover:text-primary transition-colors bg-zinc-200/50 dark:bg-zinc-900/50 hover:bg-zinc-300/80 dark:hover:bg-zinc-900/80 border border-zinc-300/50 dark:border-zinc-800/50 hover:bg-primary/30"
+                                  onClick={(e) => handleEggLearnMore(e, egg)}
+                                >
+                                  Learn more
+                                </Button>
                                 </div>
                               </CardContent>
                             </Card>
@@ -505,7 +509,7 @@ export default function Create() {
                 </CardContent>
               </Card>
             </motion.div>
-            <Particles className="absolute inset-0 z-0 opacity-25" quantity={100} ease={80} color={"#ffffff"} refresh />
+            {/*<Particles className="absolute inset-0 z-0 opacity-25" quantity={100} ease={80} color={"#ffffff"} refresh />*/}
           </form>
         </div>
       </div>

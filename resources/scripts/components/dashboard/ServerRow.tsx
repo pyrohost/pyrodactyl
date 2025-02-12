@@ -157,7 +157,7 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                                     <span className={cn(
                                         "px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ease-in-out hover:scale-[1.2]",
                                         "bg-zinc-100 text-zinc-900",
-                                        "dark:bg-zinc-200 dark:text-zinc-100"
+                                        "dark:bg-zinc-200 dark:text-zinc-800"
                                     )}>
                                         {isSuspended ? 'Suspended' : 
                                         server.isTransferring ? 'Transferring' :

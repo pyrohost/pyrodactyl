@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'resources';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings';
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -201,13 +201,7 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         isActive={sidebarTab === 'etc'}
                         collapsed={isSidebarCollapsed}
                     />
-                    <MenuItem
-                        icon={LucideChartBarIncreasing}
-                        label="Resources (Edit)"
-                        href={`/server/${serverId}/resources`}
-                        isActive={sidebarTab === 'resources'}
-                        collapsed={isSidebarCollapsed}
-                    />
+                    
                 </CardContent>
 
                 <CardFooter className="p-2 border-t">

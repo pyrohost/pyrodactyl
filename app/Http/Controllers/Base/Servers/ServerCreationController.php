@@ -207,9 +207,10 @@ public function store(Request $request)
             'oom_disabled' => true,
             'plan' => [
                 $planName => [
-                    'activated_on' => now()->toDateTimeString()
-                ]
+                'activated_on' => now()->toDateTimeString(),
+                'expires_at' => $plan->expiresIn ? now()->addDays($plan->expiresIn)->toDateTimeString() : null
             ]
+]
         ]);
 
         

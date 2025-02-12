@@ -14,6 +14,7 @@ import LogoLoader from '@/components/elements/ServerLoad';
 import { TbHeartbeat } from 'react-icons/tb';
 import AuthenticatedLayout from '@/components/Layouts/AuthenticatedLayout';
 import Create from './Deploy/ServerCreate';
+import { Particles } from '@/components/ui/particles';
 
 // Type definitions for Page Props
 interface PageProps {
@@ -110,6 +111,10 @@ export default function AdminDashboard(): JSX.Element {
   };
 
   return (
+    <>
+    <>
+      
+    </>
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
@@ -171,5 +176,7 @@ export default function AdminDashboard(): JSX.Element {
       
       
     </AuthenticatedLayout>
+    {/*<Particles className="absolute inset-0 z-0 opacity-25" quantity={200} ease={80} color={"#ffffff"} refresh /> */}
+    </>
   );
 }

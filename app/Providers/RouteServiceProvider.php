@@ -57,7 +57,14 @@ class RouteServiceProvider extends ServiceProvider
                     ->prefix('/api/client')
                     ->scopeBindings()
                     ->group(base_path('routes/api-client.php'));
+                
             });
+
+            Route::middleware('daemon')
+                ->prefix('/api/remote')
+                ->scopeBindings()
+                ->group(base_path('routes/api-remote.php'));
+        
 
             Route::middleware('inerstia')
                 ->prefix('/api/inerstia')
@@ -67,10 +74,7 @@ class RouteServiceProvider extends ServiceProvider
 
             
 
-            Route::middleware('daemon')
-                ->prefix('/api/remote')
-                ->scopeBindings()
-                ->group(base_path('routes/api-remote.php'));
+            
         });
     }
 

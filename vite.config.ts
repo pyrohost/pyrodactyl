@@ -7,8 +7,8 @@ export default defineConfig({
     server: {
         host: "::1",
         port: 5173
-      }, 
-      // comment the above server when working on local development 
+     }, 
+    // comment the above server when working on local development 
     plugins: [
         laravel({
             input: 'resources/scripts/components/App.tsx',
