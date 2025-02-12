@@ -10,20 +10,17 @@ use Pterodactyl\Transformers\Api\Client\ServerTransformer;
 use Pterodactyl\Services\Servers\GetUserPermissionsService;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
-use Illuminate\Support\Facades\Log; // Add this import for logs
-use Pterodactyl\Services\Servers\SuspensionService;
+use Illuminate\Support\Facades\Log; // Add this import
 
 class ServerController extends Controller
 {
     protected $fractal;
     protected $permissionsService;
-    protected $suspensionService;
 
     public function __construct(GetUserPermissionsService $permissionsService)
     {
         $this->fractal = new Manager();
         $this->permissionsService = $permissionsService;
-        $this->suspensionService = $suspensionService;
     }
 
     public function show(Request $request, $uuidShort)
@@ -31,23 +28,7 @@ class ServerController extends Controller
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
 
-            if (isset($server->plan) && !empty($server->plan)) {
-                foreach ($server->plan as $planName => $planDetails) {
-                    if (isset($planDetails['expires_at'])) {
-                        $expirationDate = new \DateTime($planDetails['expires_at']);
-                        $now = new \DateTime();
-                        
-                        if ($now > $expirationDate) {
-                            // Suspend server
-                            $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
-                            
-                            return Inertia::render('Errors/Server/Expired', [
-                                'message' => 'Your plan has expired! Please renew your subscription.'
-                            ]);
-                        }
-                    }
-                }
-            }
+            
 
             \Log::info('Server suspension check', [
                 'server_id' => $server->id,
@@ -85,25 +66,6 @@ class ServerController extends Controller
     {
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
-
-
-            if (isset($server->plan) && !empty($server->plan)) {
-                foreach ($server->plan as $planName => $planDetails) {
-                    if (isset($planDetails['expires_at'])) {
-                        $expirationDate = new \DateTime($planDetails['expires_at']);
-                        $now = new \DateTime();
-                        
-                        if ($now > $expirationDate) {
-                            // Suspend server
-                            $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
-                            
-                            return Inertia::render('Errors/Server/Expired', [
-                                'message' => 'Your plan has expired! Please renew your subscription.'
-                            ]);
-                        }
-                    }
-                }
-            }
 
             \Log::info('Server suspension check', [
                 'server_id' => $server->id,
