@@ -4,9 +4,9 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-01-07T23:17:29+00:00",
+    "exported_at": "2025-01-01T12:00:00+00:00",
     "name": "Fabric",
-    "author": "contact@awakenedredstone.com",
+    "author": "dev@skystral.net",
     "description": "Fabric Server. Fabric is a lightweight mod loader for Minecraft, with support for snapshots and fast updates to new versions.",
     "features": [
         "eula",
@@ -14,14 +14,16 @@
         "pid_limit"
     ],
     "docker_images": {
-        "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",
-        "Java 17": "ghcr.io\/pterodactyl\/yolks:java_17",
-        "Java 16": "ghcr.io\/pterodactyl\/yolks:java_16",
-        "Java 11": "ghcr.io\/pterodactyl\/yolks:java_11",
-        "Java 8": "ghcr.io\/pterodactyl\/yolks:java_8"
+        "Java GraalVM 23 JDK": "ghcr.io\/rikodev\/pterodactyl-graalvm:23-JDK",
+        "Java GraalVM 22 JDK": "ghcr.io\/rikodev\/pterodactyl-graalvm:22-JDK",
+        "Java GraalVM 21 JDK": "ghcr.io\/rikodev\/pterodactyl-graalvm:21-JDK",
+        "Java GraalVM 20 JDK": "ghcr.io\/rikodev\/pterodactyl-graalvm:20-JDK",
+        "Java GraalVM 19 JRE": "ghcr.io\/rikodev\/pterodactyl-graalvm:19",
+        "Java GraalVM 17 JRE EE": "ghcr.io\/rikodev\/pterodactyl-graalvm:17-EE",
+        "Java GraalVM 11 JRE EE": "ghcr.io\/rikodev\/pterodactyl-graalvm:11-EE"
     },
     "file_denylist": [],
-    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive -XX:ConcGCThreads=2 -XX:+UseTransparentHugePages -XX:LargePageSizeInBytes=2m -jar {{SERVER_JARFILE}}",
     "config": {
         "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"query.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \")! For help, type \"\r\n}",
