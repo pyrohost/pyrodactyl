@@ -94,11 +94,7 @@ public function store(Request $request)
             throw new DisplayException('This location has reached its maximum server capacity');
         }
 
-        // Check if plan is already activated
-        $activatedPlans = $user->activated_plans ?? [];
-        if (isset($activatedPlans[$planName])) {
-            throw new DisplayException("Plan {$planName} is already activated on another server");
-        }
+        
 
 
 
