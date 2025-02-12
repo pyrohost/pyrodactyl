@@ -25,4 +25,35 @@ function getObjectKeys<T extends {}>(o: T): (keyof T)[] {
     return Object.keys(o) as (keyof typeof o)[];
 }
 
-export { isObject, isEmptyObject, getObjectKeys };
+/**
+ * Helper function to transform an object into a string that is indented
+ * @param object
+ * @param indentLevel
+ */
+function formatObjectToIdentString(object: any, indentLevel: number = 0): string {
+    const indent = '  '.repeat(indentLevel);
+
+    if (typeof object === 'string') {
+        return `${indent}${object}`;
+    }
+
+    if (isObject(object)) {
+        return getObjectKeys(object)
+                .map((key) => {
+                    const value = object[key];
+                    return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
+                })
+                .join('\n');
+    }
+
+    if (Array.isArray(object)) {
+        return (
+            (indentLevel > 0 ? '\n' : '') +
+            object.map((item) => formatObjectToIdentString(item, indentLevel)).join('\n')
+        );
+    }
+
+    return `${indent}${String(object)}`;
+}
+
+export { isObject, isEmptyObject, getObjectKeys, formatObjectToIdentString };
