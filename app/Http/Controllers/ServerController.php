@@ -8,20 +8,29 @@ use Illuminate\Http\Request;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Transformers\Api\Client\ServerTransformer;
 use Pterodactyl\Services\Servers\GetUserPermissionsService;
+use Pterodactyl\Services\Servers\SuspensionService;
+use Pterodactyl\Services\Notifications\NotificationService;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use Illuminate\Support\Facades\Log; // Add this import
 
 class ServerController extends Controller
 {
-    protected $fractal;
-    protected $permissionsService;
+    private SuspensionService $suspensionService;
+private NotificationService $notificationService;
+private GetUserPermissionsService $permissionsService;
+private Manager $fractal;
 
-    public function __construct(GetUserPermissionsService $permissionsService)
-    {
-        $this->fractal = new Manager();
-        $this->permissionsService = $permissionsService;
-    }
+public function __construct(
+    SuspensionService $suspensionService,
+    NotificationService $notificationService,
+    GetUserPermissionsService $permissionsService
+) {
+    $this->suspensionService = $suspensionService;
+    $this->notificationService = $notificationService;
+    $this->permissionsService = $permissionsService;
+    $this->fractal = new Manager();
+}
 
     public function show(Request $request, $uuidShort)
     {
@@ -48,7 +57,7 @@ class ServerController extends Controller
             $transformer = new ServerTransformer();
             $transformer->setRequest($request);
             
-            $resource = new Item($server, $transformer);
+            $resource = new Item($server, $transformer);                              
             $transformed = $this->fractal->createData($resource)->toArray();
             
             return Inertia::render('Server/Index', [
@@ -282,6 +291,66 @@ class ServerController extends Controller
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Inertia::render('Errors/Server/404');
+        }
+    }
+
+    public function suspend(Request $request, Server $server) 
+    {
+        // Check ownership
+        if ($request->user()->id !== $server->owner_id) {
+            return back()->with('error', [
+                'title' => 'You have no permisson',
+                'desc' => 'This useer lacks the permission to suspend this server'
+            ]);
+        }
+
+        try {
+            // Suspend server
+            $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
+
+            // Notify user
+            $this->notificationService->notify(
+                $request->user()->id,
+                'Server Suspended',
+                "Your server {$server->name} has been suspended.",
+                null,
+                'warning'
+            );
+
+            // Send Discord webhook if configured
+            if ($webhookUrl = env('DISCORD_WEBHOOK')) {
+                Http::post($webhookUrl, [
+                    'embeds' => [[
+                        'title' => 'Server Suspended',
+                        'description' => "Server {$server->name} (ID: {$server->id}) was suspended",
+                        'color' => 16711680, // Red
+                        'fields' => [
+                            [
+                                'name' => 'Owner',
+                                'value' => $request->user()->username,
+                                'inline' => true
+                            ],
+                            [
+                                'name' => 'Server ID',
+                                'value' => $server->id,
+                                'inline' => true
+                            ]
+                        ]
+                    ]]
+                ]);
+            }
+
+            return back()->with('suceess', [ //suceess
+                'title' => 'Suspended Successfully',
+                'desc' => 'Your server was caught having illegal items and has been suspended.'
+            ]);
+            
+        } catch (\Exception $e) {
+            return back()->with('error', [
+                'title' => 'Suspension Failed',
+                'desc' => $e->getMessage()
+            ]);
+            
         }
     }
 }
