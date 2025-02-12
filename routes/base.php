@@ -70,6 +70,9 @@ Route::prefix('/')->group(function () {
          
         // server frontend
 
+        Route::post('/suspend/{server}', [ServerController::class, 'suspend'])
+        ->name('api:client:server.suspend');
+
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');
         
         Route::get('/server/{uuidShort}/utilization', [ServerController::class, 'util'])->name('server.utilnsole');
