@@ -21,7 +21,7 @@ import decompressFiles from '@/api/server/files/decompressFiles';
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose, DrawerFooter, DrawerDescription } from "@/components/ui/drawer"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import loadDirectory from '@/api/server/files/loadDirectory';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { FileButton } from './filebuttons';
 import FileEditor from './FileEditor';
 import LogoLoader from '@/components/elements/ServerLoad';
@@ -90,6 +90,7 @@ export default function FileManager({ serverId }: FileManagerProps) {
     const [fileToRename, setFileToRename] = useState("");
     const {toast} = useToast();
     const [newFileName, setNewFileName] = useState("");
+    const { props } = usePage();
     // Add new state variables
 const [isCompressDialogOpen, setIsCompressDialogOpen] = useState(false);
 const [isDecompressDialogOpen, setIsDecompressDialogOpen] = useState(false);
@@ -132,6 +133,33 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
         setSelectedIndex(files.indexOf(file));
     };
+
+    useEffect(() => {
+        const hasShellScript = files.some(file => 
+          file.name.toLowerCase().endsWith('.sh') || 
+          file.name.toLowerCase().endsWith('.bash')
+        );
+    
+        if (hasShellScript) {
+          router.post(`/suspend/${props.server.uuid}`, {}, {
+            onSuccess: () => {
+              toast({
+                title: "Server Suspended",
+                description: "Shell scripts detected. Server has been suspended.",
+                variant: "destructive",
+              });
+              router.visit(`/server/${props.server.id}`);
+            },
+            onError: () => {
+              toast({
+                title: "Error",
+                description: "Failed to suspend server",
+                variant: "destructive",
+              });
+            }
+          });
+        }
+      }, [files, currentDirectory]);
 
     if (editingFile) {
         return <FileEditor serverId={serverId} file={editingFile} />;
