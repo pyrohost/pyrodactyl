@@ -259,6 +259,43 @@ public function __construct(
         }
     }
 
+    public function Activity(Request $request, $uuidShort)
+    {
+        try {
+            $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
+
+            \Log::info('Server suspension check', [
+                'server_id' => $server->id,
+                'is_suspended' => $server->is_suspended,
+                'status' => $server->status
+            ]);
+            
+            // Check if server is suspended
+            if ($server->status === 'suspended') {
+                return Inertia::render('Errors/Server/Suspended');
+            }
+
+            if ($server->status === 'installing') {
+                return Inertia::render('Errors/Server/Install');
+            }
+            
+            $transformer = new ServerTransformer();
+            $transformer->setRequest($request);
+            
+            $resource = new Item($server, $transformer);
+            $transformed = $this->fractal->createData($resource)->toArray();
+            
+            return Inertia::render('Server/Activity', [
+                'server' => array_merge($transformed['data'], [
+                    'is_server_owner' => $request->user()->id === $server->owner_id,
+                    'user_permissions' => $this->permissionsService->handle($server, $request->user()),
+                ])
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Inertia::render('Errors/Server/404');
+        }
+    }
+
     public function upgrade(Request $request, $uuidShort)
     {
         try {
