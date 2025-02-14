@@ -152,8 +152,8 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
             },
             onError: () => {
               toast({
-                title: "Error",
-                description: "Failed to suspend server",
+                title: "Warning!",
+                description: "Your server contains an illegal file extension .sh",
                 variant: "destructive",
               });
             }
@@ -167,8 +167,21 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
     useEffect(() => {
         loadDirectory(serverId, currentDirectory)
-          .then((data) => setFiles(data))
-          .catch(() => { /* handle error */ });
+          .then((data) => {
+            // Convert modifiedAt to string format since FileObject has Date but state expects string
+            const formattedData = data.map(file => ({
+              ...file,
+              modifiedAt: new Date(file.modifiedAt).toISOString()
+            }));
+            setFiles(formattedData);
+          })
+          .catch(() => {
+            toast({
+              title: "Error",
+              description: "Failed to load directory contents (FileManager)",
+              variant: "destructive",
+            });
+          });
     }, [serverId, currentDirectory]);
     
     const handleRename = async () => {
@@ -240,6 +253,11 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
     };
     const isEditable = (mimetype: string | undefined) => {
         if (!mimetype) {
+            toast({
+                title: "Unknow file type!",
+                description: "mimetype is undefined",
+                variant: "destructive",
+            });
             console.debug('🔍 isEditable check - mimetype is undefined');
             return false;
         }

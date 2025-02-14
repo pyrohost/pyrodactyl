@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/toaster"
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';
 import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
+import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 
 interface ServerPageProps {
@@ -59,6 +60,7 @@ export default function Show() {
             sidebarTab="terminal"
         >
             <Head title={`${server.name} - Console`} />
+            <WebsocketHandler/>
            
             
             

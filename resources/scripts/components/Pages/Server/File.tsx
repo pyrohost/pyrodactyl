@@ -10,6 +10,7 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import FileManager from '@/components/server/files/filelist';
 import { FileButton } from '@/components/server/files/filebuttons';
 import LogoLoader from '@/components/elements/ServerLoad';
+import { Websocket } from '@/plugins/Websocket';
 
 export default function Show() {
     const { server } = usePage<ServerPageProps>().props;
@@ -54,6 +55,8 @@ export default function Show() {
                     sidebarTab="files"
                 >
             <Head title="File Manager" />
+            
+
             <PowerButtons serverId={server.uuid}/>
         
             <FileManager serverId={server.uuid} />

@@ -44,6 +44,7 @@ createInertiaApp({
             <>
                 <Toaster  />
                 <SonnerToaster position="bottom-righ" expand={true} closebutton richColors />
+                
                 <App {...props} />
             </>
         );

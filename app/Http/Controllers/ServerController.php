@@ -320,27 +320,7 @@ public function __construct(
             );
 
             // Send Discord webhook if configured
-            if ($webhookUrl = env('DISCORD_WEBHOOK')) {
-                \Illuminate\Support\Facades\Http::post($webhookUrl, [
-                    'embeds' => [[
-                        'title' => 'Server Suspended',
-                        'description' => "Server {$server->name} (ID: {$server->id}) was suspended for containg a .sh file",
-                        'color' => 16711680, // Red
-                        'fields' => [
-                            [
-                                'name' => 'Owner',
-                                'value' => $request->user()->username,
-                                'inline' => true
-                            ],
-                            [
-                                'name' => 'Server ID',
-                                'value' => $server->id,
-                                'inline' => true
-                            ]
-                        ]
-                    ]]
-                ]);
-            }
+            
 
             return back()->with('suceess', [ //suceess
                 'title' => 'Suspended Successfully',
