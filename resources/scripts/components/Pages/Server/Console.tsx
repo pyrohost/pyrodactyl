@@ -60,7 +60,7 @@ export default function Show() {
             sidebarTab="terminal"
         >
             <Head title={`${server.name} - Console`} />
-            <WebsocketHandler/>
+            {/*<WebsocketHandler/>*/}
            
             
             

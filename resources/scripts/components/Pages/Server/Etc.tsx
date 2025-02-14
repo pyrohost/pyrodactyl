@@ -65,7 +65,7 @@ export default function Show() {
             sidebarTab="etc"
         >
             <Head title={`${server.name} - Console`} />
-            <WebsocketHandler/>
+            {/*<WebsocketHandler/>*/}
            
             
             
