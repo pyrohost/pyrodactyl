@@ -77,8 +77,8 @@ Route::prefix('/')->group(function () {
 
         Route::get('/server/{uuidShort}', [ServerController::class, 'show'])->name('server.show');
         
-        Route::get('/server/{uuidShort}/utilization', [ServerController::class, 'Activity'])->name('server.Activity');
-        Route::get('/server/{uuidShort}/activity', [ServerController::class, 'util'])->name('server.util');
+        Route::get('/server/{uuidShort}/utilization', [ServerController::class, 'util'])->name('server.Activity');
+        Route::get('/server/{uuidShort}/activity', [ServerController::class, 'Activity'])->name('server.util');
         Route::get('/server/{uuidShort}/console', [ServerController::class, 'console'])->name('server.console');
         Route::get('/server/{uuidShort}/files', [ServerController::class, 'files'])->name('server.files');
         Route::get('/server/{uuidShort}/settings', [ServerController::class, 'settings'])->name('server.settings');

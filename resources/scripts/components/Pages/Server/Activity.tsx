@@ -65,12 +65,7 @@ export default function Show() {
             
             
             <div className="p-4 space-y-4">
-                <PowerButtons 
-                    serverId={server.uuid}
-                    status={serverStatus}
-                    disabled={isNodeOffline}
-                    className="mb-4" 
-                />
+                
                 
                 
                 
