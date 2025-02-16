@@ -8,7 +8,7 @@ import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
 import ServerRow from '../dashboard/ServerRow';
-import ServerList from '@/components/Pages/Common/Servers';
+import ServerList from '@/components/Pages/Common/ServersContainer';
 import AdminLayout from '@/components/Layouts/AdminLayout';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

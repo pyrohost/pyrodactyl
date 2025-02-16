@@ -14,7 +14,7 @@ import { FileButton } from '@/components/server/files/filebuttons';
 import ReinstallButton from '../Common/Reinstall-Button';
 import RenameServer from '@/api/server/renameServer';
 import RenameServerDialog from '../Common/Rename';
-import SFTPDetails from '../Common/SFPT';
+import SFTPDetails from '../Common/SFPTContainer';
 import LogoLoader from '@/components/elements/ServerLoad';
 import DebugInfo from '../Common/Debug';
 import StartupVariables from '../Common/Startup';

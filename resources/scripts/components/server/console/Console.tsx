@@ -35,11 +35,24 @@ const CustomTerminal: React.FC = () => {
   const wsService = useRef<ServerWebSocket | null>(null);
   const ansiToHtml = new parse();
 
-  const TERMINAL_PRELUDE = 'Pastel-Package@datacenter~ ';
+  const TERMINAL_PRELUDE = `[${server.node}@${server.name}]: `;
 
   const handleConsoleOutput = (line: string) => {
-    const htmlContent = ansiToHtml.toHtml(line);
-    setLines(prev => [...prev, { id: Date.now(), content: htmlContent, type: 'output' }]);
+    // Replace both container@pterodactyl and [Pterodactyl Daemon] with custom prelude
+    const modifiedLine = line
+      .replace(/^(container@pterodactyl|[\w-]+@[\w-]+)([~:]?\$?\s*)/g, TERMINAL_PRELUDE)
+      .replace(/\[Pterodactyl Daemon\]:/g, TERMINAL_PRELUDE)
+      .replace(/container@pterodactyl~/g, TERMINAL_PRELUDE); // Added this line
+    
+    // Convert ANSI to HTML
+    const htmlContent = ansiToHtml.toHtml(modifiedLine);
+    
+    setLines(prev => [...prev, { 
+      id: Date.now(), 
+      content: htmlContent, 
+      type: 'output' 
+    }]);
+    
     scrollToBottom();
   };
 
@@ -149,18 +162,22 @@ const CustomTerminal: React.FC = () => {
             </AnimatePresence>
             <div className={clsx('h-[453px] rounded-t-xl pt-4 px-4 bg-gray-50 dark:bg-black transition-colors duration-300 border-x border-t border-gray-200 dark:border-zinc-800', { 'rounded-b': serverStatus !== 'running' })}>
               <div ref={terminalRef} className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-                {lines.map((line) => (
-                  <div key={line.id} className={clsx('font-mono text-sm', {
-                    'text-gray-800 dark:text-gray-200': line.type === 'output',
-                    'text-blue-600 dark:text-blue-400': line.type === 'input'
-                  })}>
-                    {line.type === 'input' ? (
-                      `${TERMINAL_PRELUDE}${line.content}`
-                    ) : (
-                      <span dangerouslySetInnerHTML={{ __html: line.content }} />
-                    )}
-                  </div>
-                ))}
+              {lines.map((line) => (
+                <div key={line.id} className={clsx('font-mono text-sm', {
+                  'text-gray-800 dark:text-gray-200': line.type === 'output',
+                  'text-blue-600 dark:text-blue-400': line.type === 'input'
+                })}>
+                  {line.type === 'input' ? (
+                    `${TERMINAL_PRELUDE}${line.content}`
+                  ) : (
+                    <span 
+                      dangerouslySetInnerHTML={{ 
+                        __html: line.content 
+                      }} 
+                    />
+                  )}
+                </div>
+              ))}
               </div>
             </div>
             <AnimatePresence>

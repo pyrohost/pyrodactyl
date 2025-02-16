@@ -10,6 +10,9 @@ import { motion } from "framer-motion"
 import LogoLoader from '@/components/elements/ServerLoad'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
+
+// TO DO ADD PAGINATION
+
 interface ActivityLogData {
   object: string
   attributes: {
@@ -69,10 +72,12 @@ export const ActivityLogs = ({ serverId }: { serverId: string }) => {
       return <div className="text-destructive p-4">{error}</div>
     }
 
+    
+
   
 
   return (
-    <ScrollArea className="h-[600px]">
+    
       <div className="space-y-4 p-4">
         {logs?.map((log: ActivityLogData) => (
           <Card key={log.attributes.id}>
@@ -121,6 +126,6 @@ export const ActivityLogs = ({ serverId }: { serverId: string }) => {
           </Card>
         ))}
       </div>
-    </ScrollArea>
+    
   )
 }

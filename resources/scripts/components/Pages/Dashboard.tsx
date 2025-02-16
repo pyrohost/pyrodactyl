@@ -8,7 +8,7 @@ import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
 import ServerRow from '../dashboard/ServerRow';
-import ServerList from './Common/Servers';
+import ServerList from './Common/ServersContainer';
 import ResourceView from '../dashboard/Resource-Containers';
 
 // Type definitions for Page Props

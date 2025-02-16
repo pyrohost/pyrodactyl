@@ -10,6 +10,7 @@ import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/S
 import { Toaster } from "@/components/ui/toaster"
 import MinecraftDetails from '@/components/server/ServerDetails_Intra';
 import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
+import CustomTerminal from '@/components/server/console/Console';
 
 interface ServerPageProps {
     server: {
@@ -66,6 +67,10 @@ export default function Show() {
                 />
                 <OverviewServerCard serverId={server.uuid}/>
                 
+                
+
+                <CustomTerminal/>
+
                 {/*stop from random debounce errors, methodically load it */}
                 <Suspense>
                    <ResourceUsage/>
@@ -73,6 +78,7 @@ export default function Show() {
 
 
                 <ServerSpecifications/>
+
                 <MinecraftServerStatus/>
             </div>
         </ServerLayout>
