@@ -88,7 +88,7 @@ export default function FileEditor({ serverId, file }: FileEditorProps) {
 
     if (error) {
         return (
-            <Card className="p-4">
+            <Card className="p-4 mt-6">
                 <div className="text-red-500">{error}</div>
             </Card>
         );

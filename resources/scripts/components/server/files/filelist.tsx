@@ -11,6 +11,7 @@ import {
   LucideArchive,
   LucideLock,
   LucideMoreHorizontal,
+  LucideCoffee,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -47,6 +48,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TbZip } from 'react-icons/tb';
 import { EyeOpenIcon } from '@radix-ui/react-icons';
+import { useShellScriptDetection } from '@/hooks/Server/hasShellScript';
+import { useFileCompression } from '@/hooks/Server/useFileCompression';
 
 interface FileManagerProps {
     serverId: string;
@@ -113,7 +116,7 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
     const mimeTypeIcons = {
         'text/plain': LucideFileText,
-        'application/jar': LucideFileJson,
+        'application/jar': LucideCoffee,
         'default': LucideFile,
         'application/zip': LucideArchive,
         'application/x-tar': LucideArchive,
@@ -134,32 +137,8 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
         setSelectedIndex(files.indexOf(file));
     };
 
-    useEffect(() => {
-        const hasShellScript = files.some(file => 
-          file.name.toLowerCase().endsWith('.sh') || 
-          file.name.toLowerCase().endsWith('.bash')
-        );
+    useShellScriptDetection(files, props.server, currentDirectory)
     
-        if (hasShellScript) {
-          router.post(`/suspend/${props.server.uuid}`, {}, {
-            onSuccess: () => {
-              toast({
-                title: "Server Suspended",
-                description: "Shell scripts detected. Server has been suspended.",
-                variant: "destructive",
-              });
-              router.visit(`/server/${props.server.id}`);
-            },
-            onError: () => {
-              toast({
-                title: "Warning!",
-                description: "Your server contains an illegal file extension .sh",
-                variant: "destructive",
-              });
-            }
-          });
-        }
-      }, [files, currentDirectory]);
 
     if (editingFile) {
         return <FileEditor serverId={serverId} file={editingFile} />;
@@ -208,49 +187,9 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
     // Add new functions for compressing and decompressing files
 
-    const handleCompress = async (fileName: string) => {
-        try {
-            const response = await compressFiles(serverId, currentDirectory, [fileName]);
-            if (response.status === 204 || response.ok) {
-                toast({
-                    title: "Success",
-                    description: "File compressed successfully",
-                    variant: "default",
-                });
-                window.location.reload();
-            }
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: "Failed to compress file",
-                variant: "destructive",
-            });
-            w
-            console.error("Compression failed:", error);
-        }
-    };
+    const { handleCompress, handleDecompress } = useFileCompression(serverId, currentDirectory) 
 
-    const handleDecompress = async (fileName: string) => {
-        try {
-            const response = await decompressFiles(serverId, currentDirectory, fileName);
-            if (response.ok) {
-                toast({
-                    title: "Success",
-                    description: "File decompressed successfully",
-                    variant: "default",
-                });
-                window.location.reload();
-            }
-        } catch (error) {
-            toast({
-                title: "Successfully added task!",
-                description: "Your server will be decompressed fully shortly!",
-                variant: "default",
-            });
-            window.location.reload();
-            console.error("Decompression failed:", error);
-        }
-    };
+
     const isEditable = (mimetype: string | undefined) => {
         if (!mimetype) {
             toast({
@@ -372,6 +311,12 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
             </div>
         );
     };
+
+
+    //later move to transformer 
+    // const isEditable = file?.mimetype && typeof file?.isFile !== 'undefined' 
+    //? FileTransformers.isEditable(file.mimetype, file.isFile)
+    //: false;
 
     const pathParts = currentDirectory === '/' ? [] : currentDirectory.split('/').filter(Boolean);
 

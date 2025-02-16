@@ -39,7 +39,7 @@ const CreateNew: React.FC<CreateNewProps> = ({
         <h1 className="font-semibold text-2xl">😿 Nothing Found</h1>
         <Button 
           onClick={handleNavigate}
-          className="text-lg px-6 py-3 font-doto mt-4"
+          className="text-lg px-6 py-3 font-doto mt-4 hover:animate-pulse"
           size="sm"
         >
           {text}

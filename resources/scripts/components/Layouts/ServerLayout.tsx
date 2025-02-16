@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'Activity';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'activity';
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -206,7 +206,7 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         icon={LucideUserCheck}
                         label="Activity"
                         href={`/server/${serverId}/activity`}
-                        isActive={sidebarTab === 'settings'}
+                        isActive={sidebarTab === 'activity'}
                         collapsed={isSidebarCollapsed}
                     />
                     

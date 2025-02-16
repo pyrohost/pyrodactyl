@@ -6,12 +6,13 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import getServerResourceUsage from '@/api/server/getServerResourceUsage';
 import OverviewServerCard from '@/components/server/Overview';
 import ServerSpecifications from '@/components/server/console/SystemSpecs';
-import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsBlock';
+import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsSpedo';
 import { Toaster } from "@/components/ui/toaster"
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';
 import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
+import { ActivityLogs } from '@/components/dashboard/activity/ActivityLogContainer';
 
 
 interface ServerPageProps {
@@ -56,8 +57,8 @@ export default function Show() {
     return (
         <ServerLayout 
             serverId={server.identifier}
-            serverName={`Server / ${server.name} / Console`}
-            sidebarTab="terminal"
+            serverName={`Server / ${server.name} / Activity`}
+            sidebarTab="activity"
         >
             <Head title={`${server.name} - Console`} />
             {/*<WebsocketHandler/>*/}
@@ -65,7 +66,7 @@ export default function Show() {
             
             
             <div className="p-4 space-y-4">
-                
+            <ActivityLogs serverId={server.identifier}/>
                 
                 
                 

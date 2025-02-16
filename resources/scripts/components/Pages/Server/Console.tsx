@@ -6,7 +6,7 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import getServerResourceUsage from '@/api/server/getServerResourceUsage';
 import OverviewServerCard from '@/components/server/Overview';
 import ServerSpecifications from '@/components/server/console/SystemSpecs';
-import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsBlock';
+import ResourceUsage, { ResourceUsageCards } from '@/components/server/console/ServerDetailsSpedo';
 import { Toaster } from "@/components/ui/toaster"
 import Console from '@/components/server/console/Console';
 import CustomTerminal from '@/components/server/console/Console';

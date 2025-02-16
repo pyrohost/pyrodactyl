@@ -9,7 +9,7 @@ import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import Console from '@/components/server/console/Console';
 import PowerButtons from '@/components/server/console/PowerButtons';
-import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
+import ServerDetailsBlock from '@/components/server/console/ServerDetailsSpedo';
 import StatGraphs from '@/components/server/console/StatGraphs';
 
 import { ServerContext } from '@/state/server';

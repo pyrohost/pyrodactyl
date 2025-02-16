@@ -165,7 +165,7 @@ export default function AdminDashboard(): JSX.Element {
       )}
 
       {!servers && (
-        <div className="flex items-center justify-center p-4">
+        <div className="flex items-center justify-center p-4 animate-bounce">
           <LogoLoader size="lg" />
         </div>
       )}

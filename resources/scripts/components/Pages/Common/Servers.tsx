@@ -101,7 +101,7 @@ export default () => {
                             <Input
                                 type='text'
                                 onChange={handleSearchChange}
-                                placeholder='Search servers...'
+                                placeholder='Search servers with name!'
                                 className='pl-9 dark:bg-black bg-zinc-300 '
                             />
                         </div>
@@ -127,44 +127,45 @@ export default () => {
                 </MainPageHeader>
 
                 {!servers ? (
-                    <div className='w-full flex items-center justify-center p-6'>
+                    <div className='w-full flex items-center justify-center p-6 animate-bounce'>
                         <LogoLoader size='80px'/>
                         <span className='text-sm text-zinc-400'>Loading servers...</span>
 
                     </div>
                 ) : (
                     <>
-                        <TabsContent value='list'>
-    <Pagination data={filteredServers} onPageSelect={setPage}>
-        {({ items }) => items.length > 0 ? (
-            <div className='space-y-4'>
-                {items.map(server => (
-                    <ServerRow key={server.uuid} server={server} />
-                ))}
-            </div>
-        ) : (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <CreateNew 
-                    go="/deploy" 
-                    text={searchQuery.trim() 
-                        ? 'No matches found - Deploy a new server?'
-                        : showOnlyAdmin 
-                            ? 'No other servers - Deploy a new one?'
-                            : 'Deploy your first server!'
-                    }
-                />
-            </div>
-        )}
-    </Pagination>
-</TabsContent>
+                                    <TabsContent value='list'>
+                <Pagination data={filteredServers} onPageSelect={setPage}>
+                    {({ items }) => items.length > 0 ? (
+                        <div className='space-y-4'>
+                            {items.map(server => (
+                                <ServerRow key={server.uuid} server={server} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center min-h-[400px]">
+                            <CreateNew 
+                                go="/deploy" 
+                                text={searchQuery.trim() 
+                                    ? 'No matches found - Deploy a new server?'
+                                    : showOnlyAdmin 
+                                        ? 'No other servers - Deploy a new one?'
+                                        : 'Deploy your first server!'
+                                }
+                            />
+                        </div>
+                    )}
+                </Pagination>
+        </TabsContent>
 
-<TabsContent value='grid'>
-    <Pagination data={filteredServers} onPageSelect={setPage}>
-        {({ items }) => items.length > 0 ? (
-            renderServerGrid(items)
-        ) : (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <CreateNew 
+        <TabsContent value='grid'>
+            <Pagination data={filteredServers} onPageSelect={setPage}>
+                {({ items }) => items.length > 0 ? (
+                renderServerGrid(items)
+                ) : (
+                    <div className="flex items-center justify-center min-h-[400px] hover:animate-bounce ">
+                    <CreateNew 
+                    
                     go="/deploy" 
                     text={searchQuery.trim() 
                         ? 'No matches found - Deploy a new server?'
