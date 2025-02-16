@@ -6,16 +6,17 @@ import mkcert from 'vite-plugin-mkcert'
 
 export default defineConfig({
     server: {
-        host: "::1", // Bind to IPv6
+        host: "127.0.0.1", // Bind to IPv6
         port: 5173,
         strictPort: true,
+        https: true,
     }, 
     // comment the above server when working on local development 
     plugins: [
         laravel({
             input: 'resources/scripts/components/App.tsx',
             refresh: true,
-            https: true
+            
         }),
         react(),
         mkcert() 
