@@ -104,6 +104,5 @@ Pterodactyl uses some easy-peasy bullshit, I don't really give a fuck just overw
 
 /* If using Tailwind's dark mode class strategy */
 .dark #nprogress .bar {
-  background: rgb(147, 197, 253) !important;
+  background: rgb(255, 0, 0) !important;
 }
-

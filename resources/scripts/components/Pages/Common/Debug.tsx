@@ -1,10 +1,15 @@
 import { usePage } from '@inertiajs/react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Bug } from 'lucide-react';
-import { toast } from 'sonner';
+import { Copy, Bug, LucideLeafyGreen, LucideCheckCircle } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+
+
 
 export default function DebugInfo() {
+
+    
+
     const { server } = usePage().props as { 
         server: { 
             uuid: string;
@@ -14,10 +19,19 @@ export default function DebugInfo() {
         } 
     };
 
+    const { toast } = useToast(); // Add useToast hook
+
     const copyToClipboard = (text: string, label: string) => {
         navigator.clipboard.writeText(text);
-        toast.success(`${label} copied to clipboard`);
+       
+        toast({
+            title: "Copied to clipboard",
+            description: "Value added to clipboard",
+            
+          })
     };
+
+    
 
     return (
         <Card className="w-full">

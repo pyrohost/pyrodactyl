@@ -46,12 +46,12 @@ export default function NotFound() {
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full ">
               <LucideServerCrash className="h-12 w-12 text-black dark:text-white" />
             </div>
-            <h1 className="text-6xl font-bold dark:text-white text-black">Installing</h1>
+            <h1 className="text-6xl font-bold dark:text-white text-black">Installing / (Pending Install status) </h1>
             <p className="text-lg text-black dark:text-zinc-300">
-              This server is reinstalling or installing itself to fix the issue. Refresh this page to try again.
+              This server is reinstalling or installing itself to fix the issue. Refresh this page to try again. If your server is special it might be waiting for special treatment.
             </p>
             <Button asChild variant="default" size="lg" className="dark:bg-zinc-900 bg-zinc-100  dark:hover:bg-zinc-800 hover:bg-zinc-400   text-black  dark:text-white">
-              <Link href="/dashboard">Come back later👋🏼 </Link>
+              <Link href="/dashboard">Come back later 👋🏼 </Link>
             </Button>
           </CardContent>
         </Card>
