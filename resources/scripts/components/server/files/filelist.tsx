@@ -120,6 +120,18 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
         'default': LucideFile,
         'application/zip': LucideArchive,
         'application/x-tar': LucideArchive,
+        'application/vnd.rar': LucideArchive,
+        'application/x-rar-compressed': LucideArchive, 
+        
+        'application/x-br': LucideArchive,
+        'application/x-bzip2': LucideArchive,
+        'application/gzip': LucideArchive,
+        'application/x-gzip': LucideArchive,
+        'application/x-lzip': LucideArchive,
+        'application/x-sz': LucideArchive,
+        'application/x-xz': LucideArchive,
+        'application/zstd': LucideArchive,
+        
     };
 
     const handleFileClick = (file: any) => {
@@ -427,7 +439,8 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
             Compress
         </DropdownMenuItem> 
 
-                                            {file.isFile && file.mimetype?.includes('gzip') && (
+                                            {file.isFile && (
+            file.mimetype?.match(/^application\/(x-rar-compressed|vnd\.rar|x-tar|x-br|x-bzip2|gzip|x-gzip|x-lzip|x-sz|x-xz|zstd|zip)$/) && 
             <DropdownMenuItem
                 onClick={(e) => {
                     e.stopPropagation();
