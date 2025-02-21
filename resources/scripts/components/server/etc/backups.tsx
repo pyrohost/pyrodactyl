@@ -127,53 +127,67 @@ const BackupManager = () => {
                                 </div>
                             </div>
 
-                            <Table>
+                            <Table className="w-full">
                                 <TableHead>
-                                    <TableRow>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Size</TableCell>
-                                        <TableCell>Created</TableCell>
-                                        <TableCell>Actions</TableCell>
-                                    </TableRow>
+                                    <div className="flex justify-between items-center w-full pb-2 mb-2 border-b">
+                                        <span className="w-1/3">Name</span>
+                                        <span className="w-1/6 text-center">Size</span>
+                                        <span className="w-1/3 text-center">Created</span>
+                                        <span className="w-1/6 text-end">Actions</span>
+                                    </div>
                                 </TableHead>
-                                <TableBody>
-                                    {data.items.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={4} className="text-center text-muted-foreground">
-                                                <div className="flex flex-col items-center justify-center py-6">
-                                                    <Archive className="w-12 h-12 text-muted-foreground mb-4" />
-                                                    <p>No backups have been created yet.</p>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        data.items.map(backup => (
-                                            <TableRow key={backup.uuid}>
-                                                <TableCell>{backup.name || backup.uuid}</TableCell>
-                                                <TableCell>{Math.round(backup.bytes / 1024 / 1024)}MB</TableCell>
-                                                <TableCell>{format(backup.createdAt, 'PPp')}</TableCell>
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => handleDownload(backup.uuid)}
-                                                        >
-                                                            <Download className="h-4 w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => handleDelete(backup.uuid)}
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
+                                
+
+<TableBody>
+    {data.items.length === 0 ? (
+        <TableRow>
+            <TableCell colSpan={4} className="text-center text-muted-foreground">
+                <div className="flex flex-col items-center justify-center py-6">
+                    <Archive className="w-12 h-12 text-muted-foreground mb-4" />
+                    <p>No backups have been created yet.</p>
+                </div>
+            </TableCell>
+        </TableRow>
+    ) : (
+        data.items.map(backup => (
+            <div key={backup.uuid} className="flex items-center justify-between py-4 border-b last:border-b-0 px-7 rounded-lg bg-zinc-900">
+                <div className="w-1/3">
+                    <span className="text-sm font-medium">
+                        {backup.name || backup.uuid}
+                    </span>
+                </div>
+                <div className="w-1/6 text-center">
+                    <span className="text-sm text-muted-foreground">
+                        {Math.round(backup.bytes / 1024 / 1024)}MB
+                    </span>
+                </div>
+                <div className="w-1/3 text-center">
+                    <span className="text-sm text-muted-foreground">
+                        {format(backup.createdAt, 'PPp')}
+                    </span>
+                </div>
+                <div className="w-1/6 flex items-center justify-end gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDownload(backup.uuid)}
+                    >
+                        <Download className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(backup.uuid)}
+                    >
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                </div>
+            </div>
+        ))
+    )}
+</TableBody>
+
+
                             </Table>
 
                             {data.pagination.count > 1 && (

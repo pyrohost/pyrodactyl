@@ -9,7 +9,9 @@ import saveFileContents from '@/api/server/files/saveFileContents';
 
 import { ServerContext } from '@/state/server';
 
-import useFlash from '@/plugins/useFlash';
+
+//fix later 
+
 
 const EulaModalFeature = () => {
     const [visible, setVisible] = useState(false);
@@ -17,8 +19,8 @@ const EulaModalFeature = () => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
+    
+    
 
     useEffect(() => {
         if (!connected || !instance || status === 'running') return;

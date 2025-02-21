@@ -17,7 +17,7 @@ class EarningViewController extends Controller
 
     public function index()
     {
-        return Inertia::render('Errors/Earn/Disable', [
+        return Inertia::render('Errors/Features/Disable', [
             'isEnabled' => $this->earningService->isEnabled()
         ]);
     }

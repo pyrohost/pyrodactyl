@@ -5,9 +5,19 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Loader2, User2, KeyRound, Eye, EyeOff, AlertCircle, Moon, Sun, LucideSunMoon } from 'lucide-react';
+import { Loader2, User2, KeyRound, Eye, EyeOff, AlertCircle, Moon, Sun, LucideSunMoon, LucideCheckCircle2 } from 'lucide-react';
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/separator';
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+  } from "@/components/ui/alert-dialog"
+import { redirect } from 'react-router-dom';
 
 interface PageProps {
     AppConfig: {
@@ -20,6 +30,8 @@ const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [processing, setProcessing] = useState(false);
+    const [Modal, setModal] = useState(false); // this for the warning if the user has been given new credentials
+    const [Redirect, setRedirect] = useState(false);
     const { props } = usePage();
     const { flash, errors } = usePage().props as any;
     const { data, setData, post} = useForm({
@@ -35,6 +47,25 @@ const Login: React.FC = () => {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
+        }
+    }, []);
+
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const email = url.searchParams.get('email');
+        const password = url.searchParams.get('password');
+
+        if (email) {
+            setData('user', email);
+        }
+        if (password) {
+            setData('password', password);
+        }
+
+        if (email && password) {
+            
+            setModal(true);
+            
         }
     }, []);
 
@@ -59,6 +90,7 @@ const Login: React.FC = () => {
     useEffect(() => {
         if (props.success === 'Successfully Authenticated') {
             setProcessing(true);
+            setRedirect(true);
             router.get('/dashboard');
         }
     }, [props.success]);
@@ -69,6 +101,51 @@ const Login: React.FC = () => {
     return (
         <>
             <Head title="Login" />
+
+            <>
+            <AlertDialog open={Modal} onOpenChange={setModal}>
+                <AlertDialogContent className="max-w-[425px]">
+                    <AlertDialogHeader>
+                    <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
+                        <LucideCheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                        </div>
+                        <AlertDialogTitle className="text-xl font-semibold">
+                        New credentials
+                        </AlertDialogTitle>
+                    </div>
+                    <AlertDialogDescription className="pt-4 text-base">
+                        You have been given a new set of credentials to login with, Do you trust to login with these credentials. Please check before logging in.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-lg">Yes, understood</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            </>
+            <>
+            <AlertDialog open={Redirect} onOpenChange={setRedirect}>
+                <AlertDialogContent className="max-w-[425px]">
+                    <AlertDialogHeader>
+                    <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/20">
+                        <LucideCheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                        </div>
+                        <AlertDialogTitle className="text-xl font-semibold">
+                        Woohoo! You're in! 
+                        </AlertDialogTitle>
+                    </div>
+                    <AlertDialogDescription className="pt-4 text-base">
+                        Redirecting you to the dashboard... 
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-lg">Understood!</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            </>
             <div 
                 className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-4 transition-all duration-300"
                 style={{
@@ -175,6 +252,9 @@ const Login: React.FC = () => {
                                 {AppConfig.appLogin === 'DISCORD' && (
                                     <>
                                         <Separator/>
+                                        <CardTitle className={`text-xl font-bold text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                Login with other providers
+                            </CardTitle>
                                         <Button
                                             type="button"
                                             onClick={() => window.location.href = '/auth/discord'}

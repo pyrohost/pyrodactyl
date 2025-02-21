@@ -25,6 +25,8 @@ import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 // FIXME: use regex
+//fixme: Make it use inersia props without using this state server bS
+
 const MATCH_ERRORS = [
     'minecraft 1.17 requires running the server with java 16 or above',
     'minecraft 1.18 requires running the server with java 17 or above',

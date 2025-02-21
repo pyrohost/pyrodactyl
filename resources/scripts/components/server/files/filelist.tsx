@@ -431,25 +431,25 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
                                                 Rename
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-            onClick={(e) => {
-                e.stopPropagation();
-                handleCompress(file.name);
-            }}
-        >
-            Compress
-        </DropdownMenuItem> 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleCompress(file.name);
+                                                }}
+                                            >
+                                                Compress
+                                            </DropdownMenuItem> 
 
-                                            {file.isFile && (
-            file.mimetype?.match(/^application\/(x-rar-compressed|vnd\.rar|x-tar|x-br|x-bzip2|gzip|x-gzip|x-lzip|x-sz|x-xz|zstd|zip)$/) && 
-            <DropdownMenuItem
-                onClick={(e) => {
-                    e.stopPropagation();
-                    handleDecompress(file.name);
-                }}
-            >
-                Decompress
-            </DropdownMenuItem>
-        )}
+                                                                                {file.isFile && (
+                                                file.mimetype?.match(/^application\/(x-rar-compressed|vnd\.rar|x-tar|x-br|x-bzip2|gzip|x-gzip|x-lzip|x-sz|x-xz|zstd|zip)$/) && 
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDecompress(file.name);
+                                                    }}
+                                                >
+                                                    Decompress
+                                                </DropdownMenuItem>
+                                            )}
                                             <DropdownMenuItem 
                                                 onClick={(e) => {
                                                     e.stopPropagation();

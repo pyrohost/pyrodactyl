@@ -46,6 +46,8 @@ export const ActivityLogs = ({ serverId }: { serverId: string }) => {
     const [logs, setLogs] = useState<ActivityLogData[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+
+
   
     useEffect(() => {
       const fetchLogs = async () => {
@@ -61,6 +63,8 @@ export const ActivityLogs = ({ serverId }: { serverId: string }) => {
   
       fetchLogs()
     }, [serverId])
+
+    console.log(logs)
   
     if (loading) {
     return <div className="flex justify-center items-center h-full p-4 animate-bounce">
@@ -85,7 +89,8 @@ export const ActivityLogs = ({ serverId }: { serverId: string }) => {
               <Avatar className="h-8 w-8">
                 <AvatarImage src={log.attributes.relationships.actor.attributes.image} />
                 <AvatarFallback>
-                  {log.attributes.relationships.actor.attributes.username[0].toUpperCase()}
+                  {log.attributes.relationships.actor.attributes.username} 
+                  
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-1">

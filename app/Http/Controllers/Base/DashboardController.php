@@ -135,7 +135,7 @@ public function shop(): Response
     $error = 'Shop has been disabled for this instance.';
 
     if (!str_contains(strtolower(env('MODE')), 'resource')) {
-        return Inertia::render('Errors/Earn/Disable', ['why' => $error]);
+        return Inertia::render('Errors/Features/Disable', ['why' => $error]);
     }
 
     $resource = \Pterodactyl\Models\ShopResources::all();
