@@ -196,6 +196,38 @@ class User extends Model implements
         ];
     }
 
+    /**
+     * Update the user's activated plans based on their servers' plans.
+     *
+     * @return void
+     */
+    public function updateActivatedPlans()
+    {
+        $servers = $this->servers; // Assuming the User model has a 'servers' relationship
+        $activatedPlans = [];
+
+        foreach ($servers as $server) {
+            if (isset($server->plan)) {
+                foreach ($server->plan as $planName => $planDetails) {
+                    if (isset($activatedPlans[$planName])) {
+                        $activatedPlans[$planName]['count'] = ($activatedPlans[$planName]['count'] ?? 0) + 1;
+                    } else {
+                        $activatedPlans[$planName] = [
+                            'plan_id' => $planDetails['id'] ?? null,
+                            'name' => $planName,
+                            'count' => 1,
+                            'activated_on' => now()->toDateTimeString()
+                        ];
+                    }
+                }
+            }
+        }
+
+        $this->update([
+            'activated_plans' => $activatedPlans
+        ]);
+    }
+
     protected static function booted()
 {
     static::retrieved(function ($user) {
