@@ -208,7 +208,7 @@ public function store(Request $request)
             'plan' => [
                 $planName => [
                 'activated_on' => now()->toDateTimeString(),
-                'expires_at' => $plan->expiresIn ? now()->addDays($plan->expiresIn)->toDateTimeString() : null
+                'expires_at' => $planName === 'Free Tier' ? now()->addDays(7)->toDateTimeString() : now()->addDays(30)->toDateTimeString()
             ]
 ]
         ]);

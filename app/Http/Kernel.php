@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             LanguageMiddleware::class,
             \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
+            \Pterodactyl\Http\Middleware\PlanMiddleware::class,
         ],
         'api' => [
             EnsureStatefulRequests::class,

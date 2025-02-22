@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing, LucideBackpack, LucideUserCheck } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing, LucideBackpack, LucideUserCheck, LucideArrowLeft } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'activity';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'activity'| 'back';
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -159,6 +159,13 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                 </CardHeader>
 
                 <CardContent className="flex-grow overflow-y-auto p-2 space-y-2">
+                    <MenuItem
+                        icon={LucideArrowLeft}
+                        label="Back Home"
+                        href={`/dashboard`}
+                        isActive={sidebarTab === 'back'}
+                        collapsed={isSidebarCollapsed}
+                    />
                     <MenuItem
                         icon={Home}
                         label="Overview"

@@ -47,12 +47,7 @@ Route::prefix('/')->middleware([
     // DO NOT PUSH WITHOUT TESTING
 
 
-    Route::prefix('/pastel-keys')->group(function () {
-        Route::get('/', [Base\PastelKeyController::class, 'index']);
-        Route::post('/', [Base\PastelKeyController::class, 'store']);
-        Route::delete('/{key}', [Base\PastelKeyController::class, 'destroy']);
-        //Route::get('/demo-key', [Base\PastelKeyController::class, 'generateDemoKey']);
-    });
+    
 
 
     // Account routes with updated middleware

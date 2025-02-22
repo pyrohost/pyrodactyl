@@ -106,3 +106,12 @@ Pterodactyl uses some easy-peasy bullshit, I don't really give a fuck just overw
 .dark #nprogress .bar {
   background: rgb(255, 0, 0) !important;
 }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

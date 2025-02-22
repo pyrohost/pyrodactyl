@@ -17,7 +17,8 @@ use Pterodactyl\Http\Controllers\Api\Client;
 use Inertia\Inertia;
 use Pterodactyl\Http\Controllers\ServerController;
 
-Route::get('/', [IndexController::class, 'index'])->name('index');
+// Just remove this Bullshit, it controls nothing,
+//Route::get('/', [IndexController::class, 'index'])->name('index');
 
 
 

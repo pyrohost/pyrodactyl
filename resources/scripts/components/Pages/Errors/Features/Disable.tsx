@@ -7,8 +7,8 @@ import useSWR from 'swr';
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
-import AccountOverviewContainer from '@/components/dashboard/AccountOverviewContainer';
-import { Button } from '@/components/ui/button';
+
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 
 // Type definitions for Page Props
 interface PageProps {
@@ -98,7 +98,7 @@ export default function AdminDashboard(): JSX.Element {
          Server Suspended
         </h2>
       }
-      sidebartab="servers"
+      sidebartab=""
     >
       <Head title="Account" />
 
@@ -140,28 +140,46 @@ export default function AdminDashboard(): JSX.Element {
 
       {/* Resources and Servers */}
 
-      <div className='flex items-center justify-center '>
-
-      <Card className="w-full max-w-md p-8 text-center">
-  <CardContent className="space-y-6">
-    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-      <LucideLink className="h-6 w-6" />
-    </div>
-    <h1 className="text-6xl font-bold">Disabled Feature</h1>
-    <p className="text-lg text-muted-foreground">
-      {error || 'This feature has been disabled by the Instance administrator.'}
-    </p>
-    <Button asChild variant="default" size="lg">
-      <Link href="/dashboard">Return to Dashboard</Link>
-    </Button>
-  </CardContent>
-</Card>
-
-
-      </div>
+      <div className='flex items-center justify-center min-h-screen '>
+    <CardContainer className="inter-var">
+        <CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full max-w-md h-auto rounded-2xl p-8 border shadow-lg text-center">
+            <CardItem translateZ="100" className="w-full mt-6">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 shadow-md">
+                    <LucideServerOff className="h-12 w-12 text-red-500" />
+                </div>
+            </CardItem>
+            <CardItem
+                translateZ="50"
+                className="text-6xl font-bold text-neutral-700 dark:text-white mt-6"
+            >
+                Feature Disabled
+            </CardItem>
+            <CardItem
+                as="p"
+                translateZ="60"
+                className="text-neutral-600 text-lg mt-4 dark:text-neutral-300"
+            >
+                {error || 'This feature has been disabled by the Instance administrator. Please contact the administrator for more information.'}
+            </CardItem>
+            <div className="flex justify-center items-center mt-10">
+                <CardItem
+                    translateZ={20}
+                    as={Link}
+                    href="/dashboard"
+                    className="px-6 py-3 rounded-xl bg-black dark:bg-white dark:text-black text-white text-lg font-bold shadow-md hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+                >
+                    Return to Dashboard
+                </CardItem>
+            </div>
+        </CardBody>
+    </CardContainer>
+</div>
      
       
       
     </AuthenticatedLayout>
   );
 }
+
+
+

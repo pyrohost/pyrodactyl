@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight, ChevronLeft, LucideCircle, LucideClock, LucideGitPullRequestCreate } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, LucideMonitorUp, Coins, Crown, X, HammerIcon, LucideShoppingBag, LucideHandCoins, CogIcon, LucideKeySquare, ChevronRight, ChevronLeft, LucideCircle, LucideClock, LucideGitPullRequestCreate, LucideArrowRight, LucideArrowLeft } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -198,6 +198,8 @@ export default function AuthenticatedLayout({ header, children, sidebartab }: Au
                 </CardHeader>
 
                 <CardContent className="flex-grow overflow-y-auto p-2 space-y-2">
+
+                    
                     
                     <MenuItem
                         icon={Home}
