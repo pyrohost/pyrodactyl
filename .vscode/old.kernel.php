@@ -47,7 +47,6 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        \Pterodactyl\Http\Middleware\PlanCheckMiddleware::class, // Add PlanCheckMiddleware here
     ];
 
     /**
@@ -62,6 +61,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             LanguageMiddleware::class,
             \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
+            \Pterodactyl\Http\Middleware\PlanCheckMiddleware::class,
         ],
         'api' => [
             EnsureStatefulRequests::class,
