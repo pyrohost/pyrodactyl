@@ -40,45 +40,54 @@ public function __construct(
      * @param  \Pterodactyl\Models\Server  $server
      * @return void
      */
-    protected function checkServerPlan(Request $request, $server)
-    {
-        if ($server && isset($server->plan)) {
-            $plan = $server->plan;
-
-            // Log the server and plan arrays
-            Log::info('Server details:', ['server' => $server->toArray()]);
-            Log::info('Plan details:', ['plan' => $plan]);
-
-            // Log expiration decision details with should_suspend flag
-            $shouldSuspend = isset($plan['expires_at']) && Carbon::parse($plan['expires_at'])->isPast();
-            
-            Log::info('Server plan expiration check', [
-                'server_id' => $server->id,
-                'expires_at' => $plan['expires_at'] ?? null,
-                'should_suspend' => $shouldSuspend
-            ]);
-
-            if ($shouldSuspend) {
-                // Suspend the server
-                $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
-
-                // Notify the user
-                $this->notificationService->notify(
-                    $request->user()->id,
-                    'Server Suspended Due to Expired Plan',
-                    'This plan is expired for this server',
-                    null,
-                    'warning'
-                );
-
-                // Log the suspension action
-                Log::info('Server suspension check', [
-                    'server_id' => $server->id,
-                    'is_suspended' => $server->is_suspended,
-                    'status' => $server->status
-                ]);
-            }
-        }
+    
+     protected function checkServerPlan(Request $request, $server)
+     {
+         if ($server && isset($server->plan)) {
+             $plan = $server->plan;
+ 
+             // Log the server and plan arrays
+             Log::info('Server details:', ['server' => $server->toArray()]);
+             Log::info('Plan details:', ['plan' => $plan]);
+ 
+             // Check for expiration date in the nested plan structure
+             $expiresAt = null;
+             foreach ($plan as $planDetails) {
+                 if (isset($planDetails['expires_at'])) {
+                     $expiresAt = $planDetails['expires_at'];
+                     break;
+                 }
+             }
+ 
+             // Log expiration decision details with should_suspend flag
+             $shouldSuspend = $expiresAt && Carbon::parse($expiresAt)->isPast();
+             
+             Log::info('Server plan expiration check', [
+                 'server_id' => $server->id,
+                 'expires_at' => $expiresAt,
+                 'should_suspend' => $shouldSuspend
+             ]);
+ 
+             if ($shouldSuspend) {
+                 // Suspend the server
+                 $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
+ 
+                 // Notify the user
+                 $this->notificationService->notify(
+                     $request->user()->id,
+                     'Server Suspended Due to Expired Plan',
+                     'This plan is expired for this server',
+                     null,
+                     'warning'
+                 );
+ 
+                 // Log the suspension action
+                 Log::info('Server suspended due to expired plan', [
+                     'server_id' => $server->id,
+                     'expires_at' => $expiresAt
+                 ]);
+             }
+         }
     }
 
     public function show(Request $request, $uuidShort)
