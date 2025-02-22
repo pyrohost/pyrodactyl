@@ -76,7 +76,7 @@ public function __construct(
                  // Notify the user
                  $this->notificationService->notify(
                      $request->user()->id,
-                     'Server Suspended Due to Expired Plan',
+                     "Server Suspended Due to Expired Plan {$server->id}",
                      'This plan is expired for this server',
                      null,
                      'warning'
