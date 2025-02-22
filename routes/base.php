@@ -16,6 +16,7 @@ use Pterodactyl\Http\Middleware\HandleInertiaRequests;
 use Pterodactyl\Http\Controllers\Api\Client;
 use Inertia\Inertia;
 use Pterodactyl\Http\Controllers\ServerController;
+use \Pterodactyl\Http\Middleware\PlanCheckMiddleware;
 
 // Just remove this Bullshit, it controls nothing,
 //Route::get('/', [IndexController::class, 'index'])->name('index');
@@ -58,7 +59,7 @@ Route::prefix('/')->group(function () {
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
     });
 
-    Route::middleware(['auth', HandleInertiaRequests::class])->group(function () {
+    Route::middleware(['auth', HandleInertiaRequests::class, PlanCheckMiddleware::class ],  )->group(function () { // added plan check middleware to the group
         Route::get('/account', [AccountControllerView::class, 'index'])->name('account');
         Route::post('/account/update', [AccountController::class, 'update'])->name('account.update');
 
