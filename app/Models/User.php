@@ -228,15 +228,15 @@ class User extends Model implements
         ]);
     }
 
+    /**
+     * The "booted" method of the model.
+     */
     protected static function booted()
-{
-    static::retrieved(function ($user) {
-        $user->updateResourceUsage();
-    });
-    
-    parent::booted();
+    {
+        parent::booted();
 
         static::retrieved(function ($user) {
+            $user->updateResourceUsage();
             $user->updateActivatedPlans();
         });
 
@@ -244,28 +244,23 @@ class User extends Model implements
             $user->updateActivatedPlans();
         });
 
-    static::created(function ($user) {
-        $freePlan = Plan::where('name', 'Free Tier')->first();
+        static::created(function ($user) {
+            $freePlan = Plan::where('name', 'Free Tier')->first();
 
-        if ($freePlan) {
-            $user->purchases_plans = [
-                'Free Tier' => [
-                    'plan_id' => $freePlan->id,
-                    'name' => 'Free Tier',
-                    'count' => 1,
-                    'activated_on' => now()->toDateTimeString(),
-                    
-                ]
-            ];
+            if ($freePlan) {
+                $user->purchases_plans = [
+                    'Free Tier' => [
+                        'plan_id' => $freePlan->id,
+                        'name' => 'Free Tier',
+                        'count' => 1,
+                        'activated_on' => now()->toDateTimeString(),
+                    ]
+                ];
 
-            
-            
-            $user->save();
-        }
-        
-    });
-
-}
+                $user->save();
+            }
+        });
+    }
 
     public function updateResourceUsage(): void
 {
