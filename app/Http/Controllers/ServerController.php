@@ -4,6 +4,7 @@ namespace Pterodactyl\Http\Controllers;
 
 use Inertia\Inertia;
 use Pterodactyl\Models\Server;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Transformers\Api\Client\ServerTransformer;
