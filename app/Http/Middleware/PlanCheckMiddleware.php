@@ -1,24 +1,17 @@
 <?php
 
-namespace Petrodactyl\Http\Middleware;
+namespace Pterodactyl\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Services\SuspensionService;
-use App\Services\NotificationService;
+use Pterodactyl\Services\Servers\SuspensionService;
+use Pterodactyl\Services\Notifications\NotificationService;
 use Carbon\Carbon;
 
-class PlanMiddleware
+class PlanCheckMiddleware
 {
     protected $suspensionService;
     protected $notificationService;
-
-    // Make sure that after server is suspended to delete.
-    // Make a cron job aswell so it checks for servers like this.
-    // Also make sure to notify the user that the server has been suspended.
-    // Add a rollback system to if the user has an extra plan or smthing it will rollback to that plan.
-    
-
 
     public function __construct(SuspensionService $suspensionService, NotificationService $notificationService)
     {

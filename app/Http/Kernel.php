@@ -33,6 +33,7 @@ use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Pterodactyl\Http\Middleware\Api\Client\SubstituteClientBindings;
 use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
 use Pterodactyl\Http\Middleware\Api\Application\AuthenticateApplicationUser;
+use Pterodactyl\Http\Middleware\PlanCheckMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -60,7 +61,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             LanguageMiddleware::class,
             \Pterodactyl\Http\Middleware\HandleInertiaRequests::class,
-            \Pterodactyl\Http\Middleware\PlanMiddleware::class,
+            \Pterodactyl\Http\Middleware\PlanCheckMiddleware::class,
         ],
         'api' => [
             EnsureStatefulRequests::class,
@@ -83,7 +84,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             DaemonAuthenticate::class,
         ],
-        'pastel-key' => [ \Petrodactyl\Http\Middleware\PastelKeyMiddleware::class ],
+        'pastel-key' => [ \Pterodactyl\Http\Middleware\PastelKeyMiddleware::class ],
     ];
 
     /**
