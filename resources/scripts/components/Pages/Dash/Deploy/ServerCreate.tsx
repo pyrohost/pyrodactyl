@@ -394,7 +394,7 @@ export default function Create() {
                                   <TooltipTrigger asChild>
                                     <Card
                                       className={cn(
-                                        "group cursor-pointer relative overflow-hidden aspect-[16/9] transition-all duration-300",
+                                        "group cursor-pointer relative overflow-hidden aspect-[16/9] transition-all duration-300 bg-opacity-50",
                                         data.location_id === location.id
                                           ? "ring-2 ring-primary"
                                           : "hover:ring-1 hover:ring-primary/50",
@@ -408,10 +408,10 @@ export default function Create() {
                                         setLoadingLocations(true)
                                         setData("location_id", location.id)
                                         handleConfetti(e)
-                                        setTimeout(() => setLoadingLocations(false), 500) // Simulating a short loading time
+                                        setTimeout(() => setLoadingLocations(false), 5) // Simulating a short loading time
                                       }}
                                     >
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent transition-opacity group-hover:opacity-80" />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black to-transparent transition-opacity group-hover:opacity-80 " />
                                       <CardContent className="h-full flex flex-col justify-end p-4 relative">
                                         <div className="transform transition-transform group-hover:-translate-y-1">
                                           <p className="text-white font-medium text-lg">{location.short}</p>

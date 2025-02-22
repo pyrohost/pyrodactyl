@@ -143,19 +143,19 @@ export default function AdminDashboard(): JSX.Element {
       <div className='flex items-center justify-center '>
 
       <Card className="w-full max-w-md p-8 text-center">
-  <CardContent className="space-y-6">
-    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 ">
-      <LucideServerOff className="h-12 w-12" />
-    </div>
-    <h1 className="text-6xl font-bold">Server Suspended</h1>
-    <p className="text-lg text-muted-foreground">
-      This server has been suspended by the administrator. Please contact administrator for more information.
-    </p>
-    <Button asChild variant="default" size="lg">
-      <Link href="/dashboard">Return to Dashboard</Link>
-    </Button>
-  </CardContent>
-</Card>
+        <CardContent className="space-y-6">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 ">
+            <LucideServerOff className="h-12 w-12" />
+          </div>
+          <h1 className="text-6xl font-bold">Server Suspended</h1>
+          <p className="text-lg text-muted-foreground">
+            This server has been suspended by the administrator. Please contact administrator for more information.
+          </p>
+          <Button asChild variant="default" size="lg">
+            <Link href="/dashboard">Return to Dashboard</Link>
+          </Button>
+        </CardContent>
+      </Card>
 
 
       </div>
