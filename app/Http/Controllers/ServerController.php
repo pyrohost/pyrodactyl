@@ -49,7 +49,16 @@ public function __construct(
             Log::info('Server details:', ['server' => $server->toArray()]);
             Log::info('Plan details:', ['plan' => $plan]);
 
-            if (isset($plan['expires_at']) && Carbon::parse($plan['expires_at'])->isPast()) {
+            // Log expiration decision details with should_suspend flag
+            $shouldSuspend = isset($plan['expires_at']) && Carbon::parse($plan['expires_at'])->isPast();
+            
+            Log::info('Server plan expiration check', [
+                'server_id' => $server->id,
+                'expires_at' => $plan['expires_at'] ?? null,
+                'should_suspend' => $shouldSuspend
+            ]);
+
+            if ($shouldSuspend) {
                 // Suspend the server
                 $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
 
