@@ -33,11 +33,51 @@ public function __construct(
     $this->permissionsService = $permissionsService;
     $this->fractal = new Manager();
 }
+    /**
+     * Check the server's plan and suspend if expired.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Pterodactyl\Models\Server  $server
+     * @return void
+     */
+    protected function checkServerPlan(Request $request, $server)
+    {
+        if ($server && isset($server->plan)) {
+            $plan = $server->plan;
+
+            // Log the server and plan arrays
+            Log::info('Server details:', ['server' => $server->toArray()]);
+            Log::info('Plan details:', ['plan' => $plan]);
+
+            if (isset($plan['expires_at']) && Carbon::parse($plan['expires_at'])->isPast()) {
+                // Suspend the server
+                $this->suspensionService->toggle($server, SuspensionService::ACTION_SUSPEND);
+
+                // Notify the user
+                $this->notificationService->notify(
+                    $request->user()->id,
+                    'Server Suspended Due to Expired Plan',
+                    'This plan is expired for this server',
+                    null,
+                    'warning'
+                );
+
+                // Log the suspension action
+                Log::info('Server suspension check', [
+                    'server_id' => $server->id,
+                    'is_suspended' => $server->is_suspended,
+                    'status' => $server->status
+                ]);
+            }
+        }
+    }
 
     public function show(Request $request, $uuidShort)
     {
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
+            // Check the server's plan
+            $this->checkServerPlan($request, $server);
 
             
 
