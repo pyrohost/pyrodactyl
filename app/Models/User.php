@@ -234,6 +234,15 @@ class User extends Model implements
         $user->updateResourceUsage();
     });
 
+    static::retrieved(function ($user) {
+        $user->updateResourceUsage();
+        $user->updateActivatedPlans();
+    });
+
+    static::saved(function ($user) {
+        $user->updateActivatedPlans();
+    });
+
     static::created(function ($user) {
         $freePlan = Plan::where('name', 'Free Tier')->first();
 
