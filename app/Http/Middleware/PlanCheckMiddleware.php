@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Pterodactyl\Services\Servers\SuspensionService;
 use Pterodactyl\Services\Notifications\NotificationService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PlanCheckMiddleware
 {
@@ -32,6 +33,10 @@ class PlanCheckMiddleware
 
         if ($server && isset($server->plan)) {
             $plan = $server->plan;
+
+            // Log the server and plan arrays
+            Log::info('Server details:', ['server' => $server]);
+            Log::info('Plan details:', ['plan' => $plan]);
 
             if (isset($plan['expires_at']) && Carbon::parse($plan['expires_at'])->isPast()) {
                 // Suspend the server
