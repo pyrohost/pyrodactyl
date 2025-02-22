@@ -98,6 +98,19 @@ public function __construct(
             // Check the server's plan
             $this->checkServerPlan($request, $server);
 
+            $isSuspendedDueToPlan = $this->checkServerPlan($request, $server);
+
+            \Log::info('Server suspension check', [
+                'server_id' => $server->id,
+                'is_suspended' => $server->is_suspended,
+                'status' => $server->status
+            ]);
+
+            // Check if server is suspended due to expired plan
+            if ($isSuspendedDueToPlan) {
+                return Inertia::render('Errors/Server/Expired');
+            }
+
             
 
             \Log::info('Server suspension check', [
@@ -137,6 +150,21 @@ public function __construct(
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
 
+            $this->checkServerPlan($request, $server);
+
+            $isSuspendedDueToPlan = $this->checkServerPlan($request, $server);
+
+            \Log::info('Server suspension check', [
+                'server_id' => $server->id,
+                'is_suspended' => $server->is_suspended,
+                'status' => $server->status
+            ]);
+
+            // Check if server is suspended due to expired plan
+            if ($isSuspendedDueToPlan) {
+                return Inertia::render('Errors/Server/Expired');
+            }
+
             \Log::info('Server suspension check', [
                 'server_id' => $server->id,
                 'is_suspended' => $server->is_suspended,
@@ -174,6 +202,21 @@ public function __construct(
     {
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
+
+            $this->checkServerPlan($request, $server);
+
+            $isSuspendedDueToPlan = $this->checkServerPlan($request, $server);
+
+            \Log::info('Server suspension check', [
+                'server_id' => $server->id,
+                'is_suspended' => $server->is_suspended,
+                'status' => $server->status
+            ]);
+
+            // Check if server is suspended due to expired plan
+            if ($isSuspendedDueToPlan) {
+                return Inertia::render('Errors/Server/Expired');
+            }
 
             \Log::info('Server suspension check', [
                 'server_id' => $server->id,
