@@ -19,7 +19,7 @@ use Pterodactyl\Http\Controllers\ServerController;
 use \Pterodactyl\Http\Middleware\PlanCheckMiddleware;
 
 // Just remove this Bullshit, it controls nothing,
-//Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/', [IndexController::class, 'index'])->name('index');
 
 
 
