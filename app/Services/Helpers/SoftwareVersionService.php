@@ -45,7 +45,7 @@ class SoftwareVersionService
      */
     public function getDiscord(): string
     {
-        return Arr::get(self::$result, 'discord') ?? 'https://pyro.host/discord';
+        return Arr::get(self::$result, 'discord') ?? 'https://discord.gg/UhuYKKK2uM';
     }
 
     /**
@@ -53,7 +53,7 @@ class SoftwareVersionService
      */
     public function getDonations(): string
     {
-        return Arr::get(self::$result, 'donations') ?? 'https://opencollective.com/pyro-inc';
+        return Arr::get(self::$result, 'donations') ?? 'https://liberapay.com/pyro';
     }
 
     /**
