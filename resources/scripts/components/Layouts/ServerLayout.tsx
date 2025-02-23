@@ -22,6 +22,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/toaster"
+import { StatusPill } from '../server/console/StatusPill'
 
 interface MenuItemProps {
     icon: React.ElementType;
@@ -280,6 +281,7 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                                 <h1 className="text-xl font-semibold">{serverName}</h1>
                             </div>
                             <div className="flex items-center space-x-4">
+                                <StatusPill/>
                                 <Switch
                                     checked={isDarkMode}
                                     onCheckedChange={toggleTheme}

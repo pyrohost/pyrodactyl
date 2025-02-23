@@ -7,7 +7,7 @@ import getPlugins from '@/api/server/plugins/getPlugins';
 import { debounce } from 'lodash';
 import LogoLoader from '@/components/elements/ServerLoad';
 import { Badge } from "@/components/ui/badge";
-import { Star, Download, ThumbsUp, Loader2 } from "lucide-react";
+import { Star, Download, ThumbsUp, Loader2, LucideMessageCircleWarning, LucideCircleCheck } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import installPlugin from '@/api/server/plugins/installPlugin';
@@ -63,10 +63,26 @@ const ViewPlugins: React.FC<{ serverUuid: string }> = ({ serverUuid }) => {
                 id: plugin.id,
                 name: plugin.name
             });
-            toast.success(`Successfully installed ${plugin.name}`);
+            toast({
+                title: (
+                    <div className="flex items-center">
+                        <LucideCircleCheck className="w-4 h-4 mr-2 text-green-500" />
+                        Plugin has been installed successfully | {plugin.name}
+                    </div>
+                ),
+                description: `Click on the restart button to restart your server so the plugin activates. You can find the plugin at the plugins directory! `,
+            });
         } catch (error) {
             console.error('Failed to install plugin:', error);
-            toast.error(`Failed to install ${plugin.name}`);
+            toast({
+                title: (
+                    <div className="flex items-center">
+                        <LucideMessageCircleWarning className="w-4 h-4 mr-2 text-red-500" />
+                        Failed to install plugin ${plugin.name} 
+                    </div>
+                ),
+                description: `Uh oh! ${error} Please check your internet connection and try again.`,
+            });
         } finally {
             setInstalling(null);
         }
@@ -141,15 +157,15 @@ const ViewPlugins: React.FC<{ serverUuid: string }> = ({ serverUuid }) => {
         <div className="space-y-4 p-4">
             <div className="flex items-center space-x-4">
             <Command className="rounded-lg border shadow-md">
-        <CommandInput
-            placeholder="Search plugins..."
-            value={search}
-            onValueChange={(value) => {
-                setSearch(value);
-                debouncedSearch(value);
-            }}
-        />
-    </Command>
+                <CommandInput
+                    placeholder="Search plugins..."
+                    value={search}
+                    onValueChange={(value) => {
+                        setSearch(value);
+                        debouncedSearch(value);
+                    }}
+                />
+            </Command>
             </div>
 
             {loading ? (

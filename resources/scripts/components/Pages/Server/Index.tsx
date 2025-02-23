@@ -11,6 +11,8 @@ import { Toaster } from "@/components/ui/toaster"
 import MinecraftDetails from '@/components/server/ServerDetails_Intra';
 import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 import CustomTerminal from '@/components/server/console/Console';
+import { StatusPill } from '@/components/server/console/StatusPill';
+import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 interface ServerPageProps {
     server: {
@@ -59,6 +61,8 @@ export default function Show() {
             
             
             <div className="p-4 space-y-4">
+                
+
                 <PowerButtons 
                     serverId={server.uuid}
                     status={serverStatus}
@@ -66,6 +70,8 @@ export default function Show() {
                     className="mb-4" 
                 />
                 <OverviewServerCard serverId={server.uuid}/>
+                <WebsocketHandler/>
+                
                 
                 
 

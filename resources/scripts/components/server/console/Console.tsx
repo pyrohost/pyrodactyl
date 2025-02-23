@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ServerWebSocket } from '@/api/console/websocket';
 
 import useEventListener from '@/plugins/useEventListener';
+import { WebSocketStatus, UpdateStatusWebsocket, SubscribeToWebsocket } from '@/state/server/webSocketState';
 
 interface ServerPageProps {
   server: {
@@ -60,12 +61,15 @@ const CustomTerminal: React.FC = () => {
     console.log(`Server status changed to: ${state}`);
     setServerStatus(state);
     if (state === 'offline') {
+      UpdateStatusWebsocket(WebSocketStatus.DISCONNECTED);
       setLines([{ id: Date.now(), content: 'Server offline', type: 'output' }]);
     }
   };
 
   useEffect(() => {
     console.log(`Initializing WebSocket connection for server: ${server.uuid}`);
+    UpdateStatusWebsocket(WebSocketStatus.CONNECTING);
+
     
     wsService.current = new ServerWebSocket({
         onStatusChange: handlePowerChangeEvent,
@@ -73,6 +77,7 @@ const CustomTerminal: React.FC = () => {
         onConnectionChange: (state) => {
             setConnected(state);
             console.log(`WebSocket connection state: ${state ? 'connected' : 'disconnected'}`);
+            UpdateStatusWebsocket(state ? WebSocketStatus.CONNECTED : WebSocketStatus.DISCONNECTED);
         }
     });
     console.log("SERVER UUID, ", server.uuid)
@@ -82,6 +87,12 @@ const CustomTerminal: React.FC = () => {
 
     return () => {
         console.log('Cleaning up WebSocket connection');
+        const unsubscribe = SubscribeToWebsocket((status) => {
+          console.log('WebSocket status changed:', status);
+      });
+      
+      // Cleanup
+      unsubscribe();
         wsService.current?.disconnect();
     };
 }, [server.uuid]);

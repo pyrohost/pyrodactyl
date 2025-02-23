@@ -3,6 +3,62 @@
 @tailwind utilities;
 
 
+@layer utilities {
+  .ease-spring {
+    @apply transition-all duration-300;
+    animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      
+  }
+}
+
+.morph-active {
+  transform: scale(1.02);
+  filter: blur(0);
+  opacity: 1;
+}
+
+.morph-inactive {
+  transform: scale(0.98);
+  filter: blur(2px);
+  opacity: 0.8;
+}
+
+.morph-enter {
+  animation: morphIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.morph-exit {
+  animation: morphOut 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes morphIn {
+  0% {
+    transform: scale(0.95);
+    filter: blur(4px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+
+@keyframes morphOut {
+  0% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+  }
+  100% {
+      opacity: 0;
+      transform: scale(0.95);
+      filter: blur(4px);
+  }
+}
+
 @layer base {
   :root {
     --background: #000000;

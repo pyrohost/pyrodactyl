@@ -104,12 +104,12 @@ export default function FileEditor({ serverId, file }: FileEditorProps) {
                             <SelectValue placeholder="Language" />
                         </SelectTrigger>
                         <SelectContent>
-    {uniqueLanguages.map((lang) => (
-        <SelectItem key={lang} value={lang}>
-            {lang.charAt(0).toUpperCase() + lang.slice(1)}
-        </SelectItem>
-    ))}
-</SelectContent>
+                            {uniqueLanguages.map((lang) => (
+                                <SelectItem key={lang} value={lang}>
+                                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
                     </Select>
                 <div className="flex gap-2">
                     <Button

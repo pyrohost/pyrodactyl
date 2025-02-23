@@ -74,6 +74,7 @@ export default function Show() {
                 <MinecraftServerStatus/>
                 <CustomTerminal/>
                 <ResourceUsage/>
+                <WebsocketHandler/>
                 
                 
             </div>

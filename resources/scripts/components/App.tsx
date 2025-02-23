@@ -7,6 +7,8 @@ import React, { useEffect } from 'react';
 import '../../css/app.css';
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as SonnerToaster } from 'sonner'
+import { StatusPillProvider } from './server/StatusPillContext';
+
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -23,6 +25,7 @@ const App = ({ Component, pageProps }) => {
     return (
         <>
             <Toaster />
+            
             <Component {...pageProps} />
         </>
     );
@@ -42,10 +45,14 @@ createInertiaApp({
 
         root.render(
             <>
-                <Toaster  />
-                <SonnerToaster position="bottom-righ" expand={true} closebutton richColors />
-                
-                <App {...props} />
+                <StatusPillProvider id="status-pill-provider">
+
+                    <Toaster  />
+                    <SonnerToaster position="bottom-righ" expand={true} closebutton richColors />
+                    
+                    <App {...props} />
+  
+                </StatusPillProvider>
             </>
         );
     },

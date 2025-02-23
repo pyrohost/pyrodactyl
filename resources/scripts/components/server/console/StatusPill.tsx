@@ -1,121 +1,71 @@
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
-import anime from 'animejs';
-import clsx from 'clsx';
-import { CheckCircle, LucideCircleAlert, X } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ServerStateManager, ServerState } from '@/state/server/states';
 import { Card, CardContent } from "@/components/ui/card";
-
-import { ServerContext } from '@/state/server';
+import { CheckCircle, LucideCircleAlert, ServerOffIcon } from 'lucide-react';
+import { useStatusPillOverride } from '@/components/server/StatusPillContext';
+import clsx from 'clsx';
+import { useServerState } from '@/state/server/useServerState';
 
 export const StatusPill = () => {
-    const status = ServerContext.useStoreState((state) => state.status.value);
-    const activeStates = ['starting', 'running', 'stopping'];
-    const isInactive = !activeStates.includes(status);
-    const [showModal, setShowModal] = useState(false);
-    const modalRef = useRef(null);
-
+    const status = useServerState();
+    const { override, setStatusOverride } = useStatusPillOverride();
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    
     useEffect(() => {
-        if (status !== 'starting' && isInactive) {
-            setShowModal(true);
-        }
-    }, [status, isInactive]);
+        setIsTransitioning(true);
+        const timer = setTimeout(() => setIsTransitioning(false), 50);
+        return () => clearTimeout(timer);
+    }, [status, override]);
 
-    useEffect(() => {
-        if (showModal && modalRef.current) {
-            anime({
-                targets: modalRef.current,
-                opacity: [0, 1],
-                scale: [0.9, 1],
-                duration: 300,
-                easing: 'easeOutCubic',
-            });
+    const getStatusColor = () => {
+        if (override) return override.color;
+        switch (status) {
+            case 'running':
+                return 'bg-green-500/10 text-green-500';
+            case 'starting':
+                return 'bg-yellow-500/10 text-yellow-500';
+            case 'stopped':
+                return 'bg-orange-500/10 text-orange-500';
+            case 'offline':
+                return 'bg-red-500/10 text-red-500 items-center';
+            default:
+                return 'dark:bg-white text-black dark:text-zinc-400';
         }
-    }, [showModal]);
+    };
 
-    const closeModal = () => {
-        anime({
-            targets: modalRef.current,
-            opacity: 0,
-            scale: 0.9,
-            duration: 300,
-            easing: 'easeInCubic',
-            complete: () => setShowModal(false),
-        });
+    const getStatusIcon = () => {
+        switch (status) {
+            case 'running':
+                return <CheckCircle className="h-4 w-4" />;
+            case 'offline':
+                return <ServerOffIcon className="h-4 w-4" />;
+            default:
+                return <LucideCircleAlert className="h-4 w-4" />;
+        }
     };
 
     return (
-        <>
-            <div
+        <Card 
+            className={clsx(
+                'inline-flex items-center gap-2 px-3 py-1 rounded-full',
+                'transform transition-all duration-300 ease-spring',
+                isTransitioning && 'scale-95 opacity-90',
+                getStatusColor()
+            )}
+        >
+            <CardContent 
                 className={clsx(
-                    'relative transition rounded-full pl-3 pr-3 py-2 flex items-center gap-1',
-                    status === 'offline'
-                        ? 'bg-red-400/25'
-                        : status === 'running'
-                          ? 'bg-green-400/25'
-                          : 'bg-yellow-400/25',
+                    "flex items-center gap-2 p-0",
+                    "transition-all duration-300 ease-spring"
                 )}
             >
-                <div
-                    className={clsx(
-                        'transition rounded-full h-4 w-4',
-                        status === 'offline' ? 'bg-red-500' : status === 'running' ? 'bg-green-500' : 'bg-yellow-500',
-                    )}
-                ></div>
-                <div
-                    className={clsx(
-                        'transition rounded-full h-4 w-4 animate-ping absolute top-2.5 opacity-45',
-                        status === 'offline' ? 'bg-red-500' : status === 'running' ? 'bg-green-500' : 'bg-yellow-500',
-                    )}
-                ></div>
-                <div className='text-sm font-bold'>
-                    {status === 'offline'
-                        ? 'Offline'
-                        : status === 'running'
-                          ? 'Online'
-                          : status === 'stopping'
-                            ? 'Stopping'
-                            : status === 'starting'
-                              ? 'Starting'
-                              : 'Fetching'}
-                </div>
-            </div>
-
-            {showModal && (
-                <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-                    <div
-                        ref={modalRef}
-                        className='bg-zinc-900 p-6 rounded-lg shadow-xl flex flex-col items-center relative'
-                    >
-                        <button
-                            onClick={closeModal}
-                            className='absolute top-2 right-2 text-zinc-400 hover:text-white transition-colors duration-200'
-                        >
-                            <X className='w-6 h-6' />
-                        </button>
-                        <LucideCircleAlert className='w-12 h-12 text-zinc-400 mb-4' />
-                        <p className='text-lg font-semibold text-white'>Sanity Check</p>
-                        <p className='text-sm font-bold text-zinc-500'>
-                            We have detected Some issues. Are these affecting your server?
-                        </p>
-                        <div className='flex flex-col gap-4 mt-4'>
-                            <button
-                                className='flex items-center justify-center bg-zinc-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-stone-700 transition duration-200 transform hover:scale-105 ease-in-out '
-                                onClick={() => window.open('https://discord.gg/GYe6wzKrxc', '_blank')}
-                            >
-                                <DiscordLogoIcon className='w-5 h-5 mr-2' />
-                                Report Problem
-                            </button>
-                            <button
-                                className='flex items-center justify-center bg-red-900 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-red-700 transition duration-200 transform hover:scale-105 ease-in-out'
-                                onClick={() => window.open('https://hetrix.astralaxis.tech/', '_blank')}
-                            >
-                                <CheckCircle className='w-5 h-5 mr-2' />
-                                Check Status
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
+                <span className="transition-transform duration-300 ease-spring">
+                    {getStatusIcon()}
+                </span>
+                <span className="capitalize transition-all duration-300 ease-spring">
+                    {override?.text || status}
+                </span>
+            </CardContent>
+        </Card>
     );
 };

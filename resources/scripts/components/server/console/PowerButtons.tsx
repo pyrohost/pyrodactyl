@@ -14,6 +14,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, usePage } from "@inertiajs/react";
 import { LucideMessageCircleWarning, LucideMessageSquareWarning, LucideTerminal } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { SetStatus, statusManager, useStatusPillOverride } from '../StatusPillContext';
+
 
 interface PowerButtonProps {
     serverId: string;
@@ -31,6 +33,8 @@ const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
     const eventSourceRef = useRef<EventSource | null>(null);
     const { server } = usePage().props as { server: { uuid: string } };
     const { toast } = useToast(); // Add useToast hook
+    
+    console.log('server start', status)
 
     useEffect(() => {
         const setupEventSource = () => {
@@ -81,6 +85,15 @@ const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
     const handlePowerAction = async (action: 'start' | 'stop' | 'restart' | 'kill') => {
         setLoading(true);
         try {
+            try {
+                statusManager.setStatus(`New action!`, 'bg-yellow-500/10 text-yellow-500');
+                setTimeout(() => {
+                    statusManager.setStatus(`Server has been ${action}ed`, 'bg-green-500/10 text-green-500');
+                }, 1000);
+                console.log('Status set successfully');
+            } catch (error) {
+                console.error('Failed to set status:', error);
+            }
             toast({
                 title: (
                     <div className="flex items-center">
@@ -90,7 +103,9 @@ const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
                 ),
                 description: `Server power signal sent successfully. Action: ${action}`,
             });
+            
             await sendPowerSignal(serverId, action);
+            
             
         } catch (error) {
             toast({
@@ -217,7 +232,7 @@ const PowerButtons = ({ serverId, className }: PowerButtonProps) => {
                         disabled={loading || (status !== 'running' && status !== 'starting') || isNodeOffline}
                         className="w-24"
                     >
-                        {status === 'stopping' ? 'Killing' : 'Stop'}
+                        {status === 'stopping' ? 'Killing' : status === 'starting' ? 'Starting' : 'Stop'}
                     </Button>
                 </motion.div>
 

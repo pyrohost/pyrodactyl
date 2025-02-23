@@ -116,7 +116,9 @@ const OverviewServerCard = ({ serverId }: OverviewProps) => {
     }, [setupEventSource, debouncedSetStats]);
 
     const memoizedStats = useMemo(() => ({
-        state: stats?.attributes.current_state === 'running' ? 'Running' : 'Stopped',
+        state: stats?.attributes.current_state === 'running' ? 'Running' 
+            : stats?.attributes.current_state === 'starting' ? 'Starting'
+            : 'Stopped',
         cpu: (stats?.attributes.resources.cpu_absolute || 0).toFixed(2),
         memory: ((stats?.attributes.resources.memory_bytes || 0) / (1024 * 1024)).toFixed(2),
         uptime: stats?.attributes.resources.uptime / 1000
@@ -131,7 +133,9 @@ const OverviewServerCard = ({ serverId }: OverviewProps) => {
                             <CardContent className="pt-6">
                                 <div className="flex items-center gap-2">
                                     <div className={`size-2 rounded-full animate-pulse ${
-                                        memoizedStats.state === 'Running' ? 'bg-green-500' : 'bg-red-500'
+                                        memoizedStats.state === 'Running' ? 'bg-green-500' 
+                                        : memoizedStats.state === 'Starting' ? 'bg-yellow-500'
+                                        : 'bg-red-500'
                                     }`} />
                                     <span className="text-sm font-medium">Server State</span>
                                 </div>

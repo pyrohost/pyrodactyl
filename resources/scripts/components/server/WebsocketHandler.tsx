@@ -1,127 +1,72 @@
-import { useEffect } from 'react';
-import { usePage, router } from '@inertiajs/react';
-import Spinner from '@/components/elements/Spinner';
+import { useEffect, useState } from 'react';
+import { WebSocketStatus, SubscribeToWebsocket } from '@/state/server/webSocketState';
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
-import getWebsocketToken from '@/api/server/getWebsocketToken';
-import { Websocket } from '@/plugins/Websocket';
-
-const reconnectErrors = ['jwt: exp claim is invalid', 'jwt: created too far in past (denylist)'];
+import { useStatusPillOverride } from './StatusPillContext';
 
 function WebsocketHandler() {
-    let updatingToken = false;
-    const { props } = usePage();
-    const { server, socket } = props;
+    const [status, setStatus] = useState<WebSocketStatus>(WebSocketStatus.DISCONNECTED);
+    const [isVisible, setIsVisible] = useState(true);
+    
 
-    const updateToken = (uuid: string, socket: Websocket) => {
-        if (updatingToken) {
-            return;
+
+    useEffect(() => {
+        const unsubscribe = SubscribeToWebsocket(setStatus);
+       
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        setIsVisible(true);
+        let timeout: NodeJS.Timeout;
+
+        if (status === WebSocketStatus.CONNECTED) {
+            timeout = setTimeout(() => {
+                setIsVisible(false);
+            }, 3000);
         }
 
-        updatingToken = true;
-        getWebsocketToken(uuid)
-            .then((data) => socket.setToken(data.token, true))
-            .catch((error) => console.error(error))
-            .then(() => {
-                updatingToken = false;
-            });
+        return () => clearTimeout(timeout);
+    }, [status]);
+
+    const statusConfig = {
+        [WebSocketStatus.CONNECTED]: {
+            icon: <CheckCircle className="h-4 w-4" />,
+            text: "Connected",
+            bg: "bg-green-500/80"
+        },
+        [WebSocketStatus.DISCONNECTED]: {
+            icon: <XCircle className="h-4 w-4" />,
+            text: "Disconnected",
+            bg: "bg-red-500/80"
+        },
+        [WebSocketStatus.CONNECTING]: {
+            icon: <Loader2 className="h-4 w-4 animate-spin" />,
+            text: "Connecting",
+            bg: "bg-yellow-500/80"
+        }
     };
 
-    const connect = (uuid: string) => {
-        const socket = new Websocket();
+    const currentStatus = statusConfig[status];
 
-        socket.on('auth success', () => router.reload({ only: ['socket'] }));
-        socket.on('SOCKET_CLOSE', () => router.reload({ only: ['socket'] }));
-        socket.on('SOCKET_ERROR', () => {
-            router.reload({ only: ['socket'], data: { error: 'connecting' } });
-        });
-        socket.on('status', (status) => router.reload({ only: ['server'], data: { status } }));
-
-        socket.on('daemon error', (message) => {
-            console.warn('Got error message from daemon socket:', message);
-        });
-
-        socket.on('token expiring', () => updateToken(uuid, socket));
-        socket.on('token expired', () => updateToken(uuid, socket));
-        socket.on('jwt error', (error: string) => {
-            router.reload({ only: ['socket'], data: { connected: false } });
-            console.warn('JWT validation error from wings:', error);
-
-            if (reconnectErrors.find((v) => error.toLowerCase().indexOf(v) >= 0)) {
-                updateToken(uuid, socket);
-            } else {
-                router.reload({
-                    only: ['socket'],
-                    data: {
-                        error: 'There was an error validating the credentials provided for the websocket. Please refresh the page.',
-                    },
-                });
-            }
-        });
-
-        socket.on('transfer status', (status: string) => {
-            if (status === 'starting' || status === 'success') {
-                return;
-            }
-
-            // This code forces a reconnection to the websocket which will connect us to the target node instead of the source node
-            // in order to be able to receive transfer logs from the target node.
-            socket.close();
-            router.reload({ only: ['socket'], data: { error: 'connecting', connected: false, instance: null } });
-            connect(uuid);
-        });
-
-        getWebsocketToken(uuid)
-            .then((data) => {
-                // Connect and then set the authentication token.
-                socket.setToken(data.token).connect(data.socket);
-
-                // Once that is done, set the instance.
-                router.reload({ only: ['socket'], data: { instance: socket } });
-            })
-            .catch((error) => console.error(error));
-    };
-
-    useEffect(() => {
-        if (socket.connected) {
-            router.reload({ only: ['socket'], data: { error: '' } });
-        }
-    }, [socket.connected]);
-
-    useEffect(() => {
-        return () => {
-            socket.instance && socket.instance.close();
-        };
-    }, [socket.instance]);
-
-    useEffect(() => {
-        // If there is already an instance or there is no server, just exit out of this process
-        // since we don't need to make a new connection.
-        if (socket.instance || !server.uuid) {
-            return;
-        }
-
-        connect(server.uuid);
-    }, [server.uuid]);
-
-    return socket.error ? (
-        <FadeTransition duration='duration-150' show>
-            <div
-                className={`flex items-center px-4 rounded-full fixed w-fit mx-auto left-0 right-0 top-4 bg-red-500 py-2 z-[9999]`}
+    return (
+        <FadeTransition duration='duration-150' show={isVisible}>
+            <div 
+                className={`
+                    flex items-center px-4 rounded-full fixed w-fit mx-auto 
+                    left-0 right-0 top-4 ${currentStatus.bg} py-2 z-[9999]
+                    transition-all duration-300 ease-in-out
+                    ${!isVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}
+                    ${status === WebSocketStatus.CONNECTED ? '' : ''}
+                `}
             >
-                {socket.error === 'connecting' ? (
-                    <>
-                        <Spinner size={'small'} />
-                        <p className={`ml-2 text-sm text-red-100`}>
-                            We're having some trouble connecting to your server, please wait...
-                        </p>
-                    </>
-                ) : (
-                    <p className={`ml-2 text-sm text-white`}>{socket.error}</p>
-                )}
+                {currentStatus.icon}
+                <p className="ml-2 text-sm text-white">
+                    Terminal {currentStatus.text}
+                </p>
             </div>
         </FadeTransition>
-    ) : null;
+    );
 }
 
 export default WebsocketHandler;
-
