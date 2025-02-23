@@ -85,6 +85,7 @@ Route::prefix('/')->group(function () {
         Route::get('/server/{uuidShort}/files', [ServerController::class, 'files'])->name('server.files');
         Route::get('/server/{uuidShort}/settings', [ServerController::class, 'settings'])->name('server.settings');
         Route::get('/server/{uuidShort}/etc', [ServerController::class, 'etc'])->name('server.etc');
+        Route::get('/server/{uuidShort}/plugins', [ServerController::class, 'plugins'])->name('server.plugins');
         Route::get('/server/{uuidShort}/upgrade', [ServerController::class, 'upgrade'])->name('server.upgrade');
         
     });
