@@ -32,8 +32,7 @@ Route::prefix('/')->middleware([
     Route::get('/resources', [Base\ShopController::class, 'show'])->name('api:client.resources.json');
     Route::post('/resources', [Base\ShopController::class, 'update'])->name('api:client.resources.update');
 
-    Route::post('/plugins', [Client\Servers\PluginController::class, 'index'])->name('api:client:server.plugins');
-    Route::post('/plugins/install/{id}', [Client\Servers\PluginController::class, 'install'])->name('api:client:server.plugins');
+    
     
 
     
@@ -94,6 +93,10 @@ Route::group([
     Route::get('/activity', Client\Servers\ActivityLogController::class)->name('api:client:server.activity');
     Route::post('/console/logging', [Client\Servers\WebsocketController::class,  'startLogging']);
     Route::get('console/logs', [Client\Servers\WebsocketController::class, 'getLogs']);
+
+
+    Route::post('/plugins', [Client\Servers\PluginController::class, 'index'])->name('api:client:server.plugins');
+    Route::post('/plugins/install/{id}', [Client\Servers\PluginController::class, 'install'])->name('api:client:server.plugins');
     
 
     Route::post('/command', [Client\Servers\CommandController::class, 'index']);
