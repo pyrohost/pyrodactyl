@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing, LucideBackpack, LucideUserCheck, LucideArrowLeft } from 'lucide-react'
+import { Home, UserIcon, Sun, Moon, Menu, Settings, LogOut, ChevronDown, BarChart3, Folder, Terminal, X, ChevronLeft, LucideChartBarIncreasing, LucideBackpack, LucideUserCheck, LucideArrowLeft, LucideFileArchive } from 'lucide-react'
 import ApplicationLogo from '@/components/ApplicationLogo'
 import { Button } from '@/components/ui/button'
 import {
@@ -74,7 +74,7 @@ interface ServerManagementLayoutProps {
     children: React.ReactNode;
     serverId: string;
     serverName: string;
-    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'activity'| 'back';
+    sidebarTab: 'home' | 'files' | 'terminal' | 'stats' | 'etc' | 'settings' | 'activity'| 'back' | `plugins`;
 }
 
 export default function ServerManagementLayout({ children, serverId, serverName, sidebarTab }: ServerManagementLayoutProps) {
@@ -214,6 +214,13 @@ export default function ServerManagementLayout({ children, serverId, serverName,
                         label="Activity"
                         href={`/server/${serverId}/activity`}
                         isActive={sidebarTab === 'activity'}
+                        collapsed={isSidebarCollapsed}
+                    />
+                    <MenuItem
+                        icon={LucideFileArchive}
+                        label="Plugins"
+                        href={`/server/${serverId}/plugins`}
+                        isActive={sidebarTab === 'plugins'}
                         collapsed={isSidebarCollapsed}
                     />
                     

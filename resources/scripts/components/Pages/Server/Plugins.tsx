@@ -11,6 +11,10 @@ import { Toaster } from "@/components/ui/toaster"
 import MinecraftDetails from '@/components/server/ServerDetails_Intra';
 import MinecraftServerStatus from '@/components/server/ServerDetails_Intra';
 import CustomTerminal from '@/components/server/console/Console';
+import installPlugin from '@/api/server/plugins/installPlugin';
+import getPlugins from '@/api/server/plugins/getPlugins';
+import ViewPlugins from '@/components/server/Plugins/viewPlugins';
+
 
 interface ServerPageProps {
     server: {
@@ -20,10 +24,18 @@ interface ServerPageProps {
     }
 }
 
+
+
+
+
+  // Get initial plugins data
+  
+
 export default function Show() {
     const { server, auth } = usePage<ServerPageProps>().props;
     const [serverStatus, setServerStatus] = useState<string | null>(null);
     const [isNodeOffline, setIsNodeOffline] = useState(false);
+    const initialPlugins = getPlugins(server.uuid, "minecraft")
 
     useEffect(() => {
         const fetchStats = () => {
@@ -44,6 +56,10 @@ export default function Show() {
         return () => clearInterval(interval);
     }, [server.uuid]);
 
+    const [loading, setLoading] = useState(false);
+
+    
+
     console.log(usePage<ServerPageProps>().props);
 
     //fixxses
@@ -51,8 +67,8 @@ export default function Show() {
     return (
         <ServerLayout 
             serverId={server.identifier}
-            serverName={`Server / ${server.name}`}
-            sidebarTab="home"
+            serverName={`Server / ${server.name}/ Plugins`}
+            sidebarTab="plugins"
         >
             <Head title={`${server.name} - Plugins`} />
            
@@ -66,10 +82,11 @@ export default function Show() {
                     className="mb-4" 
                 />
                 <OverviewServerCard serverId={server.uuid}/>
+                <ViewPlugins serverUuid={server.uuid} />
                 
                 
 
-                <CustomTerminal/>
+                
 
                 {/*stop from random debounce errors, methodically load it */}
                 <Suspense>
@@ -77,7 +94,7 @@ export default function Show() {
                 </Suspense>
 
 
-                <ServerSpecifications/>
+               
 
                 <MinecraftServerStatus/>
             </div>
