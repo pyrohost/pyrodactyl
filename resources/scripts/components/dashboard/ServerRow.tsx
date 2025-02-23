@@ -13,6 +13,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ServerStat from '../server/etc/ServerStat';
 
 interface ServerRowProps {
     server: Server;
@@ -177,25 +178,25 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
                         </TooltipProvider>
                     ) : (
                         <div className="grid grid-cols-3 gap-6 w-full">
-    <ServerStat 
-        label="CPU" 
-        value={`${stats.cpuUsagePercent.toFixed(2)}%`}
-        limit={server.limits.cpu}
-        type="cpu" 
-    />
-    <ServerStat 
-        label="RAM" 
-        value={bytesToString(stats.memoryUsageInBytes, 0)}
-        limit={server.limits.memory}
-        type="memory"
-    />
-    <ServerStat 
-        label="Storage" 
-        value={bytesToString(stats.diskUsageInBytes, 0)}
-        limit={server.limits.disk}
-        type="disk"
-    />
-</div>
+                            <ServerStat 
+                                label="CPU" 
+                                value={`${stats.cpuUsagePercent.toFixed(2)}%`}
+                                limit={server.limits.cpu}
+                                type="cpu" 
+                            />
+                            <ServerStat 
+                                label="RAM" 
+                                value={bytesToString(stats.memoryUsageInBytes, 0)}
+                                limit={server.limits.memory}
+                                type="memory"
+                            />
+                            <ServerStat
+                                label="Storage" 
+                                value={bytesToString(stats.diskUsageInBytes, 0)}
+                                limit={server.limits.disk}
+                                type="disk"
+                            />
+                        </div>
                     )}
                 </div>
             </CardContent>
@@ -203,26 +204,6 @@ const ServerRow: React.FC<ServerRowProps> = ({ server, className }) => {
     );
 };
 
-const ServerStat: React.FC<{ 
-    label: string; 
-    value: string;
-    limit?: number;
-    type: 'cpu' | 'memory' | 'disk';
-}> = ({ label, value, limit, type }) => {
-    const getLimitDisplay = () => {
-        if (!limit || limit === 0) return 'Unlimited';
-        if (type === 'cpu') return `${limit}%`;
-        return bytesToString(limit * 1024 * 1024, 0);
-    };
 
-    return (
-        <div className="flex flex-col items-center ">
-    
-    <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 px-3 py-1 dark:bg-zinc-700 rounded-lg bg-zinc-200">
-        {label} : {value} {/* {getLimitDisplay()}*/ }
-    </span>
-</div>
-    );
-};
 
 export default ServerRow;

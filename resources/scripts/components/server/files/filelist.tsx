@@ -296,33 +296,7 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
         );
     }
 
-    const FileActions = ({ file }: { file: FileObject }) => {
-        return (
-            <div className="flex space-x-2">
-                {/* Existing actions */}
-                {file.isFile && file.mimetype?.includes('compressed') && (
-                    <button
-                        onClick={() => {
-                            setIsDecompressDialogOpen(true);
-                            setSelectedFiles([file.name]);
-                        }}
-                        className="text-gray-600 hover:text-gray-900"
-                    >
-                        <EyeOpenIcon className="h-5 w-5" />
-                    </button>
-                )}
-                <button
-                    onClick={() => {
-                        setIsCompressDialogOpen(true);
-                        setSelectedFiles([file.name]);
-                    }}
-                    className="text-gray-600 hover:text-gray-900"
-                >
-                    <TbZip className="h-5 w-5" />
-                </button>
-            </div>
-        );
-    };
+    
 
 
     //later move to transformer 
@@ -469,40 +443,40 @@ const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
             </motion.div>
 
             <Drawer open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
-  <DrawerContent>
-    <div className="mx-auto px-4 max-w-2xl w-full">
-      <div className="flex flex-col items-center space-y-6 py-4">
-        <DrawerHeader className="items-center space-y-2">
-          <DrawerTitle className="text-xl font-semibold">Rename File</DrawerTitle>
-        </DrawerHeader>
-        <div className="w-[450px]">
-          <Input 
-            className="w-full"
-            value={newFileName}
-            onChange={(e) => setNewFileName(e.target.value)}
-            placeholder="Enter new file name"
-          />
-        </div>
-      </div>
-      <DrawerFooter className="sm:justify-center gap-2">
-        <div className="flex gap-2 justify-center">
-          <Button 
-            className="w-32"
-            onClick={handleRename}
-            disabled={!newFileName.trim()}
-          >
-            Rename
-          </Button>
-          <DrawerClose asChild>
-            <Button variant="outline" className="w-32" onClick={() => window.location.reload()}>
-              Cancel
-            </Button>
-          </DrawerClose>
-        </div>
-      </DrawerFooter>
-    </div>
-  </DrawerContent>
-</Drawer>
+            <DrawerContent>
+                <div className="mx-auto px-4 max-w-2xl w-full">
+                <div className="flex flex-col items-center space-y-6 py-4">
+                    <DrawerHeader className="items-center space-y-2">
+                    <DrawerTitle className="text-xl font-semibold">Rename File</DrawerTitle>
+                    </DrawerHeader>
+                    <div className="w-[450px]">
+                    <Input 
+                        className="w-full"
+                        value={newFileName}
+                        onChange={(e) => setNewFileName(e.target.value)}
+                        placeholder="Enter new file name"
+                    />
+                    </div>
+                </div>
+                <DrawerFooter className="sm:justify-center gap-2">
+                    <div className="flex gap-2 justify-center">
+                    <Button 
+                        className="w-32"
+                        onClick={handleRename}
+                        disabled={!newFileName.trim()}
+                    >
+                        Rename
+                    </Button>
+                    <DrawerClose asChild>
+                        <Button variant="outline" className="w-32" onClick={() => window.location.reload()}>
+                        Cancel
+                        </Button>
+                    </DrawerClose>
+                    </div>
+                </DrawerFooter>
+                </div>
+            </DrawerContent>
+            </Drawer>
         </div>
     );
 }
