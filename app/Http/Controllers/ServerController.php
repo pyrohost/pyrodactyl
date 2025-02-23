@@ -518,7 +518,7 @@ public function __construct(
             $resource = new Item($server, $transformer);                              
             $transformed = $this->fractal->createData($resource)->toArray();
             
-            return Inertia::render('Server/', [
+            return Inertia::render('Server/Plugins', [
                 'server' => array_merge($transformed['data'], [
                     'is_server_owner' => $request->user()->id === $server->owner_id,
                     'user_permissions' => $this->permissionsService->handle($server, $request->user()),
