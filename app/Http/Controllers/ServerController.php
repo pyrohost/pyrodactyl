@@ -475,7 +475,7 @@ public function __construct(
         }
     }
 
-    public function show(Request $request, $uuidShort)
+    public function plugins(Request $request, $uuidShort)
     {
         try {
             $server = Server::where('uuidShort', $uuidShort)->firstOrFail();
