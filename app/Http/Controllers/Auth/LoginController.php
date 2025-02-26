@@ -50,6 +50,7 @@ class LoginController extends AbstractLoginController
 
       /** @var User $user */
       $user = User::query()->where($this->getField($username), $username)->firstOrFail();
+      $user->language = trim($user->language);
 
     } catch (ModelNotFoundException) {
       $this->sendFailedLoginResponse($request);
