@@ -271,9 +271,19 @@ abstract class EloquentRepository extends Repository implements RepositoryInterf
       return sprintf('(%s)', $grammar->parameterize($record));
     })->implode(', ');
 
-    $statement = "insert ignore into $table ($columns) values $parameters";
+    // Detect the database driver
+    $connection = $this->getBuilder()->getConnection();
+    $driver = $connection->getDriverName();
 
-    return $this->getBuilder()->getConnection()->statement($statement, $bindings);
+    if ($driver === 'mysql') {
+      $statement = "INSERT IGNORE INTO $table ($columns) VALUES $parameters";
+    } elseif ($driver === 'pgsql') {
+      $statement = "INSERT INTO $table ($columns) VALUES $parameters ON CONFLICT DO NOTHING";
+    } else {
+      throw new \RuntimeException("Unsupported database driver: $driver");
+    }
+
+    return $connection->statement($statement, $bindings);
   }
 
   /**
