@@ -1,6 +1,6 @@
 # Stage 0:
 # Build the frontend
-FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine
+FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine as frontend
 WORKDIR /app
 COPY . ./
 RUN apk add --no-cache --update git \
@@ -13,15 +13,31 @@ RUN apk add --no-cache --update git \
 FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine
 WORKDIR /app
 COPY . ./
-COPY --from=0 /app/public/assets ./public/assets
-COPY --from=0 /app/public/build ./public/build
-RUN apk add --no-cache --update ca-certificates dcron curl git supervisor tar unzip nginx libpng-dev libxml2-dev libzip-dev certbot certbot-nginx mysql-client \
+COPY --from=frontend /app/public/assets ./public/assets
+COPY --from=frontend /app/public/build ./public/build
+
+RUN apk add --no-cache --update \
+        ca-certificates \
+        dcron \
+        curl \
+        git \
+        supervisor \
+        tar \
+        unzip \
+        nginx \
+        libpng-dev \
+        libxml2-dev \
+        libzip-dev \
+        postgresql-dev \
+        certbot \
+        certbot-nginx \
+        mysql-client \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install bcmath gd pdo_mysql zip \
+    && docker-php-ext-install bcmath gd pdo pdo_mysql pdo_pgsql zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && cp .env.example .env \
     && mkdir -p bootstrap/cache/ storage/logs storage/framework/sessions storage/framework/views storage/framework/cache \
-    && chmod 777 -R bootstrap storage \
+    && chmod -R 777 bootstrap storage \
     && composer install --no-dev --optimize-autoloader \
     && rm -rf .env bootstrap/cache/*.php \
     && mkdir -p /app/storage/logs/ \
@@ -40,3 +56,4 @@ COPY .github/docker/supervisord.conf /etc/supervisord.conf
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]
+
