@@ -303,10 +303,22 @@ a:focus {
     color: #fff;
 }
 .content-header {
-    position: relative;
-    padding: 15px 15px 0 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    h1 {
+        font-weight: 800;
+        margin: 0;
+        font-weight: 800;
+        font-size: 52px;
+        letter-spacing: -2.24px;
+        line-height: 50.96px;
+        color: rgb(255, 255, 255);
+    }
 }
-.content-header > h1 {
+/* .content-header > h1 {
     margin: 0;
     font-weight: 800;
     font-size: 52px;
@@ -359,7 +371,7 @@ a:focus {
     .content-header > .breadcrumb li:before {
         color: #97a0b3;
     }
-}
+} */
 .navbar-toggle {
     color: #fff;
     border: 0;

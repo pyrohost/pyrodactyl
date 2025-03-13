@@ -10,11 +10,16 @@
 @endsection
 
 @section('content-header')
-    <h1>Nodes<small>All nodes available on the system.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Nodes
+        <!-- <small>All nodes available on the system.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Nodes</li>
-    </ol>
+    </ol> -->
+    <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">Create New</button></a>
+
+
 @endsection
 
 @section('content')
@@ -29,7 +34,6 @@
                             <input type="text" name="filter[name]" class="form-control pull-right" value="{{ request()->input('filter.name') }}" placeholder="Search Nodes">
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">Create New</button></a>
                             </div>
                         </div>
                     </form>

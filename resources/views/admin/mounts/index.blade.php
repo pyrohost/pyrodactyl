@@ -6,11 +6,14 @@
 @endsection
 
 @section('content-header')
-    <h1>Mounts<small>Configure and manage additional mount points for servers.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Mounts
+        <!-- <small>Configure and manage additional mount points for servers.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Mounts</li>
-    </ol>
+    </ol> -->
+    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newMountModal">Create New</button>
 @endsection
 
 @section('content')
@@ -21,7 +24,6 @@
                     <h3 class="box-title">Mount List</h3>
 
                     <div class="box-tools">
-                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newMountModal">Create New</button>
                     </div>
                 </div>
 

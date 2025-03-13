@@ -5,11 +5,14 @@
 @endsection
 
 @section('content-header')
-    <h1>Locations<small>All locations that nodes can be assigned to for easier categorization.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Locations
+        <!-- <small>All locations that nodes can be assigned to for easier categorization.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Locations</li>
-    </ol>
+    </ol> -->
+    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newLocationModal">Create New</button>
 @endsection
 
 @section('content')
@@ -19,7 +22,6 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Location List</h3>
                 <div class="box-tools">
-                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newLocationModal">Create New</button>
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">
