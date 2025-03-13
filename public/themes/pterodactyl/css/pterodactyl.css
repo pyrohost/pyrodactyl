@@ -22,6 +22,12 @@
  */
 @import 'checkbox.css';
 
+/* meow :3 */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+* {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 .login-page {
     background: #10529f;
 }
@@ -253,7 +259,10 @@ span[aria-labelledby='select2-pUserId-container'] {
 }
 
 .box {
-    box-shadow: 0 0 0 1px rgba(89, 105, 128, 0.1), 0 1px 3px 0 rgba(89, 105, 128, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    box-shadow:
+        0 0 0 1px rgba(89, 105, 128, 0.1),
+        0 1px 3px 0 rgba(89, 105, 128, 0.1),
+        0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
 }
 
 .alert-danger {
@@ -405,7 +414,7 @@ span[aria-labelledby='select2-pUserId-container'] {
 
 .btn {
     border-radius: 6px;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .btn.active,
@@ -513,14 +522,18 @@ body {
 }
 
 .fixed .main-header {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 4px 8px 0 rgba(0, 0, 0, 0.12),
+        0 2px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .skin-blue .wrapper,
 .skin-blue .main-sidebar,
 .skin-blue .left-side {
     background-color: #0f0f0f;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 4px 8px 0 rgba(0, 0, 0, 0.12),
+        0 2px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .skin-blue .main-sidebar,
@@ -539,12 +552,12 @@ body {
 .skin-blue .main-header .logo {
     background-color: #0f0f0f;
     color: #9aa5b1;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .skin-blue .main-header .navbar .sidebar-toggle {
     color: #fa4e49;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .skin-blue .main-header .navbar .nav > li > a {
@@ -577,7 +590,7 @@ body {
 }
 
 .skin-blue .sidebar-menu > li > a {
-    transition: background .2s;
+    transition: background 0.2s;
     color: #ffffff;
 }
 
@@ -588,7 +601,7 @@ body {
 .skin-blue .sidebar-menu > li.active > a {
     border-left-color: #f55d4f;
     color: #f55d4f !important;
-    background: linear-gradient(90deg, rgba(248,81,74,0.20) 0%, rgba(248,81,74,0) 50%) !important;
+    background: linear-gradient(90deg, rgba(248, 81, 74, 0.2) 0%, rgba(248, 81, 74, 0) 50%) !important;
 }
 
 .skin-blue .sidebar-menu > li:hover > a {
@@ -636,7 +649,9 @@ body {
 }
 
 .box {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
+    box-shadow:
+        0 4px 8px 0 rgba(0, 0, 0, 0.12),
+        0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
     background: #0f0f0f;
     border-top: 5px solid #1d1d1d;
     border-radius: 5px;
@@ -708,7 +723,7 @@ h6 small {
 }
 
 .table-hover > tbody > tr {
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 .table-hover > tbody > tr:hover {
     background-color: #181818;
@@ -758,8 +773,12 @@ input.form-control {
     border-radius: 0.25rem;
     color: #cad1d8;
     box-shadow: none;
-    -webkit-transition: border 0.15s linear, box-shaodw 0.15s ease-in;
-    transition: border 0.15s linear, box-shaodw 0.15s ease-in;
+    -webkit-transition:
+        border 0.15s linear,
+        box-shaodw 0.15s ease-in;
+    transition:
+        border 0.15s linear,
+        box-shaodw 0.15s ease-in;
 }
 
 textarea.form-control {
@@ -770,8 +789,12 @@ textarea.form-control {
     border-radius: 0.25rem;
     color: #cad1d8;
     box-shadow: none;
-    -webkit-transition: border 0.15s linear, box-shaodw 0.15s ease-in;
-    transition: border 0.15s linear, box-shaodw 0.15s ease-in;
+    -webkit-transition:
+        border 0.15s linear,
+        box-shaodw 0.15s ease-in;
+    transition:
+        border 0.15s linear,
+        box-shaodw 0.15s ease-in;
 }
 
 .input-group .input-group-addon {
