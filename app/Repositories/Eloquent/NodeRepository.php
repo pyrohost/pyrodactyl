@@ -102,7 +102,7 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
       'allocations',
       $node->allocations()
         ->orderByRaw('server_id IS NOT NULL DESC, server_id IS NULL')
-        ->orderByRaw('ip::inet ASC')
+        ->orderByRaw('INET_ATON(ip) ASC')
         ->orderBy('port')
         ->with('server:id,name')
         ->paginate(50)
