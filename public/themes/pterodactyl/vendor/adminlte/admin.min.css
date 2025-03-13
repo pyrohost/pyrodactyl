@@ -14,7 +14,7 @@ body {
     height: 100%;
 }
 body {
-    font-family: 'Plus Jakarta Sans', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto;
@@ -308,9 +308,14 @@ a:focus {
 }
 .content-header > h1 {
     margin: 0;
-    font-size: 24px;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -2.24px;
+    line-height: 50.96px;
+    color: rgb(255, 255, 255);
 }
 .content-header > h1 > small {
+    content-visibility: hidden;
     font-size: 15px;
     display: inline-block;
     padding-left: 4px;
@@ -511,14 +516,19 @@ a:focus {
     margin-right: 3px;
 }
 .sidebar-menu {
+    display: flex;
+    flex-direction: column;
     list-style: none;
     margin: 0;
     padding: 0;
+
+    font-size: 14px;
 }
 .sidebar-menu > li {
     position: relative;
     margin: 0;
     padding: 0;
+    gap: 8px;
 }
 .sidebar-menu > li > a {
     padding: 12px 5px 12px 15px;
