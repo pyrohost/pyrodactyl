@@ -14,7 +14,7 @@ body {
     height: 100%;
 }
 body {
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto;
@@ -53,10 +53,18 @@ body {
 }
 .content-wrapper,
 .main-footer {
-    -webkit-transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    -webkit-transition:
+        -webkit-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    -moz-transition:
+        -moz-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    -o-transition:
+        -o-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    transition:
+        transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
     margin-left: 230px;
     z-index: 820;
 }
@@ -154,7 +162,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Source Sans Pro', sans-serif;
 }
 a {
     color: #337ab7;
@@ -280,7 +288,7 @@ a:focus {
     line-height: 50px;
     text-align: center;
     width: 230px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 0 15px;
     font-weight: 300;
     overflow: hidden;
@@ -402,10 +410,18 @@ a:focus {
     min-height: 100%;
     width: 230px;
     z-index: 810;
-    -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    -webkit-transition:
+        -webkit-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    -moz-transition:
+        -moz-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    -o-transition:
+        -o-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    transition:
+        transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
 }
 /* FIXME: Temporary workaround for the admin sidebar buttons not being full width */
 .slimScrollDiv {

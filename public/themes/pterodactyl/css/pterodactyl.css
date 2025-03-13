@@ -24,9 +24,9 @@
 
 /* meow :3 */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-* {
+/* * {
     font-family: 'Plus Jakarta Sans', sans-serif;
-}
+} */
 
 .login-page {
     background: #10529f;
@@ -639,13 +639,13 @@ body {
 }
 
 .btn-primary {
-    background-color: #0967d3;
-    border-color: #0550b3;
+    background-color: #fa4e49;
+    border-color: #fa4e49;
 }
 
 .btn.btn-primary:hover {
-    background-color: #0550b3;
-    border-color: #0345a0;
+    background-color: #fa4e49b3;
+    border-color: #fa4e49b3;
 }
 
 .box {
