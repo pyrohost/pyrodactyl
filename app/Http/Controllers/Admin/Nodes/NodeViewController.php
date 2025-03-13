@@ -79,7 +79,7 @@ class NodeViewController extends Controller
       'node' => $node,
       'allocations' => Allocation::query()->where('node_id', $node->id)
         ->groupBy('ip')
-        ->orderByRaw('ip::inet ASC')
+        ->orderByRaw('INET_ATON(ip) ASC')
         ->get(['ip']),
     ]);
   }
