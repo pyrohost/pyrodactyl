@@ -246,7 +246,18 @@ abstract class EloquentRepository extends Repository implements RepositoryInterf
   }
 
   /**
-   * Insert multiple records into the database and ignore duplicates.
+   * Bulk inserts multiple records into the database, ignoring duplicate entries.
+   *
+   * Constructs and executes a bulk insert query that automatically skips duplicates.
+   * For MySQL and MariaDB, the query uses "INSERT IGNORE", while for PostgreSQL it uses "ON CONFLICT DO NOTHING".
+   * If the $values array is empty, the method returns true immediately.
+   *
+   * @param array $values Array of records to insert, where each record is an associative array
+   *                      mapping column names to their corresponding values.
+   *
+   * @return bool True if the insertion query executed successfully, false otherwise.
+   *
+   * @throws \RuntimeException If the underlying database driver is unsupported.
    */
   public function insertIgnore(array $values): bool
   {
@@ -275,7 +286,7 @@ abstract class EloquentRepository extends Repository implements RepositoryInterf
     $connection = $this->getBuilder()->getConnection();
     $driver = $connection->getDriverName();
 
-    if ($driver === 'mysql' || $driver == 'mariadb') {
+    if ($driver === 'mysql' || $driver === 'mariadb') {
       $statement = "INSERT IGNORE INTO $table ($columns) VALUES $parameters";
     } elseif ($driver === 'pgsql') {
       $statement = "INSERT INTO $table ($columns) VALUES $parameters ON CONFLICT DO NOTHING";
