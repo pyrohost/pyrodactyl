@@ -14,7 +14,7 @@ body {
     height: 100%;
 }
 body {
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto;
@@ -53,10 +53,18 @@ body {
 }
 .content-wrapper,
 .main-footer {
-    -webkit-transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    -webkit-transition:
+        -webkit-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    -moz-transition:
+        -moz-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    -o-transition:
+        -o-transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
+    transition:
+        transform 0.3s ease-in-out,
+        margin 0.3s ease-in-out;
     margin-left: 230px;
     z-index: 820;
 }
@@ -154,7 +162,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Source Sans Pro', sans-serif;
 }
 a {
     color: #337ab7;
@@ -280,7 +288,7 @@ a:focus {
     line-height: 50px;
     text-align: center;
     width: 230px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 0 15px;
     font-weight: 300;
     overflow: hidden;
@@ -295,14 +303,31 @@ a:focus {
     color: #fff;
 }
 .content-header {
-    position: relative;
-    padding: 15px 15px 0 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    h1 {
+        font-weight: 800;
+        margin: 0;
+        font-weight: 800;
+        font-size: 52px;
+        letter-spacing: -2.24px;
+        line-height: 50.96px;
+        color: rgb(255, 255, 255);
+    }
 }
-.content-header > h1 {
+/* .content-header > h1 {
     margin: 0;
-    font-size: 24px;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -2.24px;
+    line-height: 50.96px;
+    color: rgb(255, 255, 255);
 }
 .content-header > h1 > small {
+    content-visibility: hidden;
     font-size: 15px;
     display: inline-block;
     padding-left: 4px;
@@ -346,7 +371,7 @@ a:focus {
     .content-header > .breadcrumb li:before {
         color: #97a0b3;
     }
-}
+} */
 .navbar-toggle {
     color: #fff;
     border: 0;
@@ -402,10 +427,18 @@ a:focus {
     min-height: 100%;
     width: 230px;
     z-index: 810;
-    -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    -webkit-transition:
+        -webkit-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    -moz-transition:
+        -moz-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    -o-transition:
+        -o-transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    transition:
+        transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
 }
 /* FIXME: Temporary workaround for the admin sidebar buttons not being full width */
 .slimScrollDiv {
@@ -495,14 +528,19 @@ a:focus {
     margin-right: 3px;
 }
 .sidebar-menu {
+    display: flex;
+    flex-direction: column;
     list-style: none;
     margin: 0;
     padding: 0;
+
+    font-size: 14px;
 }
 .sidebar-menu > li {
     position: relative;
     margin: 0;
     padding: 0;
+    gap: 8px;
 }
 .sidebar-menu > li > a {
     padding: 12px 5px 12px 15px;

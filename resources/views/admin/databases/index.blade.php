@@ -5,11 +5,15 @@
 @endsection
 
 @section('content-header')
-    <h1>Database Hosts<small>Database hosts that servers can have databases created on.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Database Hosts
+        <!-- <small>Database hosts that servers can have databases created on.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Database Hosts</li>
-    </ol>
+    </ol> -->
+    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newHostModal">Create New</button>
+
 @endsection
 
 @section('content')
@@ -19,7 +23,6 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Host List</h3>
                 <div class="box-tools">
-                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newHostModal">Create New</button>
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">

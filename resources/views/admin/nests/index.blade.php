@@ -5,11 +5,15 @@
 @endsection
 
 @section('content-header')
-    <h1>Nests<small>All nests currently available on this system.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Nests
+        <!-- <small>All nests currently available on this system.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Nests</li>
-    </ol>
+    </ol> -->
+    <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#importServiceOptionModal" role="button"><i class="fa fa-upload"></i> Import Egg</a>
+    <a href="{{ route('admin.nests.new') }}" class="btn btn-primary btn-sm">Create New</a>
 @endsection
 
 @section('content')
@@ -26,8 +30,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Configured Nests</h3>
                 <div class="box-tools">
-                    <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#importServiceOptionModal" role="button"><i class="fa fa-upload"></i> Import Egg</a>
-                    <a href="{{ route('admin.nests.new') }}" class="btn btn-primary btn-sm">Create New</a>
+
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">

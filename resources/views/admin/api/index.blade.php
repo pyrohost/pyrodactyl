@@ -5,11 +5,15 @@
 @endsection
 
 @section('content-header')
-    <h1>Application API<small>Control access credentials for managing this Panel via the API.</small></h1>
-    <ol class="breadcrumb">
+    <h1>Application API
+        <!-- <small>Control access credentials for managing this Panel via the API.</small> -->
+    </h1>
+    <!-- <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li class="active">Application API</li>
-    </ol>
+    </ol> -->
+    <a href="{{ route('admin.api.new') }}" class="btn btn-sm btn-primary">Create New</a>
+
 @endsection
 
 @section('content')
@@ -19,7 +23,6 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Credentials List</h3>
                     <div class="box-tools">
-                        <a href="{{ route('admin.api.new') }}" class="btn btn-sm btn-primary">Create New</a>
                     </div>
                 </div>
                 <div class="box-body table-responsive no-padding">
