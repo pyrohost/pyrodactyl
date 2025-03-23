@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/elements/CheckboxLabel';
 
 import { cn } from '@/lib/utils';
 
-import { fetchNewProjects } from '../server/modrinth/config';
+import { fetchNewProjects } from './config';
 
 interface Props {
     appVersion;

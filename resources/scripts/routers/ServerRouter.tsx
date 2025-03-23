@@ -246,7 +246,9 @@ export default () => {
                         </svg>
                     </button>
 
-                    <MainSidebar className={`${isSidebarVisible ? '' : 'hidden'} lg:flex`}>
+                    <MainSidebar
+                        className={`${isSidebarVisible ? '' : 'hidden'} lg:flex fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a]`}
+                    >
                         <div
                             className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
@@ -286,7 +288,7 @@ export default () => {
                                         </svg>
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className='z-[99999] select-none' sideOffset={8}>
+                                <DropdownMenuContent className='z-[99999] select-none relative' sideOffset={8}>
                                     {rootAdmin && (
                                         <DropdownMenuItem onSelect={onSelectManageServer}>
                                             Manage Server
@@ -307,6 +309,7 @@ export default () => {
                                 className='flex flex-row items-center'
                                 ref={NavigationHome}
                                 to={`/server/${id}`}
+                                onClick={toggleSidebar}
                                 end
                             >
                                 <HugeIconsHome fill='currentColor' />
@@ -319,6 +322,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationFiles}
                                             to={`/server/${id}/files`}
+                                            onClick={toggleSidebar}
                                         >
                                             <HugeIconsFolder fill='currentColor' />
                                             <p>Files</p>
@@ -329,6 +333,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationDatabases}
                                             to={`/server/${id}/databases`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsDatabase fill='currentColor' />
@@ -340,6 +345,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationBackups}
                                             to={`/server/${id}/backups`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsCloudUp fill='currentColor' />
@@ -351,6 +357,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationNetworking}
                                             to={`/server/${id}/network`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsConnections fill='currentColor' />
@@ -362,6 +369,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationUsers}
                                             to={`/server/${id}/users`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsPeople fill='currentColor' />
@@ -373,6 +381,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationStartup}
                                             to={`/server/${id}/startup`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsConsole fill='currentColor' />
@@ -384,6 +393,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationSchedules}
                                             to={`/server/${id}/schedules`}
+                                            onClick={toggleSidebar}
                                         >
                                             <HugeIconsClock fill='currentColor' />
                                             <p>Schedules</p>
@@ -394,6 +404,7 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationSettings}
                                             to={`/server/${id}/settings`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsDashboardSettings fill='currentColor' />
@@ -405,23 +416,26 @@ export default () => {
                                             className='flex flex-row items-center'
                                             ref={NavigationActivity}
                                             to={`/server/${id}/activity`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <HugeIconsPencil fill='currentColor' />
                                             <p>Activity</p>
                                         </NavLink>
                                     </Can>
-                                    <Can action={['modrinth.*', 'modrinth.download']} matchAny>
+                                    {/* TODO: finish modrinth support *\}
+                                    {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny>
                                         <NavLink
-                                            className='flex flex-row items-center'
+                                            className='flex flex-row items-center sm:hidden md:show'
                                             ref={NavigationMod}
                                             to={`/server/${id}/mods`}
+                                            onClick={toggleSidebar}
                                             end
                                         >
                                             <ModrinthLogo />
-                                            <p>Mods</p>
+                                            <p>Mods/Plugins</p>
                                         </NavLink>
-                                    </Can>
+                                    </Can> */}
                                 </>
                             )}
                             <Can action={'startup.software'}>
@@ -429,6 +443,7 @@ export default () => {
                                     className='flex flex-row items-center'
                                     ref={NavigationShell}
                                     to={`/server/${id}/shell`}
+                                    onClick={toggleSidebar}
                                     end
                                 >
                                     <HugeIconsController fill='currentColor' />

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { ScrollMenu } from '@/components/elements/ScrollMenu';
+import { ScrollMenu } from '@/components/server/modrinth/ScrollMenu';
 import Checkbox from '@/components/elements/inputs/Checkbox';
 
-import { apiEndpoints, fetchHeaders, settings } from './config';
+import { apiEndpoints, fetchHeaders, persistent, settings } from './config';
 
 interface GameVersion {
     version: string;
@@ -38,6 +38,7 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                 const data = await response.json();
                 if (Array.isArray(data)) {
                     setMinecraftVersions(data);
+                    persistent.gameVersions = data;
                 } else {
                     throw new Error('Invalid data format received from API.');
                 }
@@ -62,7 +63,6 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
 
     const handleSelectionChange = (selectedItems: string[]) => {
         settings.versions = selectedItems;
-        console.log('Updated settings.versions:', settings.versions);
     };
 
     const handleSnapshotToggle = () => {
