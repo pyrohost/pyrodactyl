@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 const Checkbox = React.forwardRef<
     React.ElementRef<'div'>,
     React.ComponentPropsWithoutRef<'div'> & { label?: string; onChange?: () => void }
->(({ className, label, onChange, ...props }, ref) => {
+>(({ label, onChange, ...props }, ref) => {
     const [checked, setChecked] = React.useState(false);
 
     const toggleChecked = () => {

@@ -96,7 +96,7 @@ export function ExpandableScrollBox({
                                 onClick={() => handleSelect(item)}
                             >
                                 <span>{item.label}</span>
-                                {selectedItem?.id === item.id && <Check className='h-4 w-4 text-custom-red' />}
+                                {selectedItem?.id === item.id && <CheckIcon className='h-4 w-4 text-custom-red' />}
                             </div>
                         ))}
                     </div>
