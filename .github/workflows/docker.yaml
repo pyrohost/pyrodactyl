@@ -18,7 +18,7 @@ permissions:
 jobs:
   push:
     name: Push
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
     steps:
       - name: Code checkout
