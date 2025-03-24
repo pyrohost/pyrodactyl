@@ -34,7 +34,7 @@ const EnvironmentSelector: React.FC<Props> = ({ items, onSelectionChange }) => {
             {items.length > 5 && (
                 <div onClick={fetchNewProjects()}>
                     <div className='flex items-center gap-2 cursor-pointer mt-2' onClick={() => setShowAll(!showAll)}>
-                        <CheckboxArrow label={showAll ? 'Show Less' : 'Show More'} />
+                        <CheckboxArrow label={showAll ? 'Show Less' : 'Show More'} toggleable={false} />
                         <ArrowDownIcon
                             className={`transform transition-transform ${showAll ? 'rotate-180' : ''}`}
                             fill='currentColor'

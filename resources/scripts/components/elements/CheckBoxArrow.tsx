@@ -4,11 +4,12 @@ import { cn } from '@/lib/utils';
 
 const CheckboxArrow = React.forwardRef<
     React.ElementRef<'div'>,
-    React.ComponentPropsWithoutRef<'div'> & { label?: string; onChange?: () => void }
->(({ className, label, onChange, ...props }, ref) => {
+    React.ComponentPropsWithoutRef<'div'> & { label?: string; onChange?: () => void; toggleable?: boolean }
+>(({ className, label, onChange, toggleable = true, ...props }, ref) => {
     const [checked, setChecked] = React.useState(false);
 
     const toggleChecked = () => {
+        if (!toggleable) return;
         setChecked((prev) => {
             const newCheckedState = !prev;
             if (onChange) onChange();

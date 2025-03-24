@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@include('partials/admin.settings.nav', ['activeTab' => 'advanced'])
+@include('partials/admin.settings.nav', ['activeTab' => 'captcha'])
 
 @section('title')
-  Advanced Settings
+  Captcha Settings
 @endsection
 
 @section('content-header')
-  <h1>Advanced Settings<small>Configure advanced settings for Pterodactyl.</small></h1>
+  <h1>Captcha Settings<small>Configure captcha settings for Pyrodactyl.</small></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('admin.index') }}">Admin</a></li>
     <li class="active">Settings</li>
@@ -58,7 +58,8 @@
       <div class="col-xs-12">
         <div class="alert alert-warning no-margin">
         You are currently using reCAPTCHA keys that were shipped with this Panel. For improved security it is
-        recommended to <a href="https://www.google.com/recaptcha/admin">generate new invisible reCAPTCHA
+        recommended to <a target="_blank" href="https://www.google.com/recaptcha/admin">generate new invisible
+        reCAPTCHA
         keys</a> that tied specifically to your website.
         </div>
       </div>

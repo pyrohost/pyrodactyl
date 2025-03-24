@@ -5,10 +5,13 @@ interface Settings {
     searchTerms: string;
 }
 
-export const gameLoaders = [];
-export const gamerVersions = [];
+export const persistent = {
+    gameLoaders: [],
+    gameVersions: [],
+};
 
 export const offset = 0;
+export const perpage = 25;
 
 export const apiEndpoints = {
     projects: `/search`,

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import debounce from 'debounce';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -18,6 +19,7 @@ import { settings as localSettings } from './config';
 
 export default () => {
     const [appVersion, setAppVersion] = useState<string | null>(null);
+
     const [settings, setSettings] = useState({
         loaders: [],
         versions: [],
@@ -28,8 +30,6 @@ export default () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const updateSearchTerms = () => {
-        // settings.searchTerms = setSearchTerm;
-        // settings.searchTerms = setSearchTerm;
         localSettings.searchTerms = searchTerm;
         fetchNewProjects();
         return debounce(setSearchTerm, 50);
@@ -44,9 +44,8 @@ export default () => {
     useEffect(() => {
         async function getAppVersion() {
             try {
-                const response = await fetch('/api/client/version');
-                const data = await response.json();
-                setAppVersion(data.version); // Set the app version state
+                const response = await axios.get('/api/client/version');
+                setAppVersion(response.data.version);
             } catch (error) {
                 toast.error('Failed to fetch app version.');
             }
@@ -62,18 +61,11 @@ export default () => {
         return <div>Loading...</div>;
     }
 
-    // Function to update settings
-    const updateSettings = (key: keyof typeof settings, value: any) => {
-        setSettings((prevSettings) => ({ ...prevSettings, [key]: value }));
-    };
-
-    const handleSearch = () => {
-        toast.success(`Searching for: ${searchQuery}`);
-        console.log(searchQuery);
-    };
-
     return (
         <PageContentBlock title={'Mods/Plugins'}>
+            <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl mb-5'>
+                {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver*/}
+            </ContentBox>
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl md:w-1/6'
