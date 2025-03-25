@@ -14,12 +14,21 @@ Vagrant.configure("2") do |config|
     end
     # Libvirt provider
     config.vm.provider "libvirt" do |libvirt|
-        libvirt.memory = 4096
+        libvirt.memory = 8192
         libvirt.cpus = 4
+        config.vm.network "public_network", dev: "bridge0"
+
     end
     # setup the synced folder and provision the VM
-    config.vm.synced_folder ".", "/var/www/pterodactyl"
+    config.vm.synced_folder ".", "/var/www/pterodactyl",
+      type: "nfs",
+      nfs_version: 4
+
     config.vm.provision "shell", path: "vagrant/provision.sh"
+
+    config.vm.hostname = "pyrodactyl-dev"
+
+
     config.vm.post_up_message = "Pterodactyl is up and running at http://localhost:3000. Login with username: dev@pyro.host, password: 'password'."
 
     # allocated testing ports
