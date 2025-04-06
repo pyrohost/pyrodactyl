@@ -54,6 +54,8 @@ COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.c
 COPY --chown=nginx:nginx .github/docker/www.conf /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf   /etc/supervisord.conf
 
+RUN ln -s /bin/ash /bin/bash
+
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]
