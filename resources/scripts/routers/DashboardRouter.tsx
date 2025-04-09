@@ -98,7 +98,10 @@ export default () => {
             </button>
 
             <MainSidebar
-                className={`lg:flex ${isSidebarVisible ? '' : 'hidden'} absolute md:relative z-[9999] backdrop-blur-sm h-full`}
+                // ref={sidebarRef}
+                className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] transition-transform duration-300 ease-in-out absolute md:relative backdrop-blur-sm ${
+                    isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
+                } lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
             >
                 <div
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
