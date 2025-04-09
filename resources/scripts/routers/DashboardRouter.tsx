@@ -84,7 +84,7 @@ export default () => {
         <Fragment key={'dashboard-router'}>
             {isSidebarVisible && (
                 <div
-                    className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9998] transition-opacity duration-300'
+                    className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9998] transition-opacity duration-300 '
                     onClick={() => setSidebarVisible(false)}
                 />
             )}
@@ -97,7 +97,9 @@ export default () => {
                 <HugeIconsHamburger fill='currentColor' />
             </button>
 
-            <MainSidebar className={`lg:flex ${isSidebarVisible ? '' : 'hidden'} absolute md:relative z-[9999]`}>
+            <MainSidebar
+                className={`lg:flex ${isSidebarVisible ? '' : 'hidden'} absolute md:relative z-[9999] backdrop-blur-sm h-full`}
+            >
                 <div
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
                     style={{
