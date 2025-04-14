@@ -118,12 +118,12 @@ export default () => {
   return (
     <ServerContentBlock
       className="!p-0"
-      title={"Gestor de archivos"}
+      title={"File Manager"}
       showFlashKey={"files"}
     >
       <div className="px-2 sm:px-14 pt-2 sm:pt-14">
         <ErrorBoundary>
-          <MainPageHeader title={"Archivos"}>
+          <MainPageHeader title={"Files"}>
             <Can action={"file.create"}>
               <div className="flex flex-row gap-1">
                 <FileManagerStatus />
