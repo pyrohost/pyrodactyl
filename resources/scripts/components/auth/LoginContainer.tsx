@@ -148,9 +148,7 @@ function LoginContainer() {
                             onVerify={(response) => {
                                 setToken(response);
                                 // Ensure submitForm is called after token is updated
-                                setTimeout(() => {
-                                    submitForm();
-                                }, 0);
+                                setTimeout(submitForm, 100);
                             }}
                             onExpire={() => {
                                 setSubmitting(false);

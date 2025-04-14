@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class MoveFunctionsFromFileToDatabase extends Migration
 {
-    private $default = <<<'EOF'
+  private $default = <<<'EOF'
 'use strict';
 
 /**
@@ -41,7 +41,7 @@ class Service extends Core {}
 module.exports = Service;
 EOF;
 
-    private $default_mc = <<<'EOF'
+  private $default_mc = <<<'EOF'
 'use strict';
 
 /**
@@ -82,33 +82,33 @@ class Service extends Core {
 module.exports = Service;
 EOF;
 
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::table('services', function (Blueprint $table) {
-            $table->text('index_file')->after('startup');
-        });
+  /**
+   * Run the migrations.
+   */
+  public function up(): void
+  {
+    Schema::table('services', function (Blueprint $table) {
+      $table->text('index_file')->after('startup');
+    });
 
-        DB::transaction(function () {
-            DB::table('services')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('folder', '!=', 'minecraft')->update([
-                'index_file' => $this->default,
-            ]);
+    DB::transaction(function () {
+      DB::table('services')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('folder', '!=', 'minecraft')->update([
+        'index_file' => $this->default,
+      ]);
 
-            DB::table('services')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('folder', 'minecraft')->update([
-                'index_file' => $this->default_mc,
-            ]);
-        });
-    }
+      DB::table('services')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('folder', 'minecraft')->update([
+        'index_file' => $this->default_mc,
+      ]);
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('services', function (Blueprint $table) {
-            $table->dropColumn('index_file');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   */
+  public function down(): void
+  {
+    Schema::table('services', function (Blueprint $table) {
+      $table->dropColumn('index_file');
+    });
+  }
 }
