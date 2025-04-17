@@ -38,4 +38,3 @@ class AddNullableFieldLastrun extends Migration
     }
   }
 }
-

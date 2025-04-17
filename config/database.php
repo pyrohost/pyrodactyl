@@ -84,7 +84,23 @@ return [
         PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', true),
       ]) : [],
     ],
+
     'pgsql' => [
+      'driver' => 'pgsql',
+      'url' => env('DB_URL', env('DATABASE_URL')),
+      'host' => env('DB_HOST', '127.0.0.1'),
+      'port' => env('DB_PORT', '5432'),
+      'database' => env('DB_DATABASE', 'panel'),
+      'username' => env('DB_USERNAME', 'pterodactyl'),
+      'password' => env('DB_PASSWORD', ''),
+      'charset' => env('DB_CHARSET', 'utf8'),
+      'prefix' => env('DB_PREFIX', ''),
+      'prefix_indexes' => true,
+      'schema' => env('DB_SCHEMA', 'public'),
+      'sslmode' => env('DB_SSLMODE', 'prefer'),
+    ],
+
+    'postgresql' => [
       'driver' => 'pgsql',
       'url' => env('DB_URL', env('DATABASE_URL')),
       'host' => env('DB_HOST', '127.0.0.1'),

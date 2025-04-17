@@ -9,10 +9,13 @@ x-common:
         # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
+        DB_USERNAME: "pterodactyl"
+        # DB_PASSWORD: "Uncomment this to user your own password"
+        
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
         # to generate an SSL certificate for the Panel.
         # LE_EMAIL: ""
-        HASHIDS_SALT: 'CHANGE_ME_TO_A_RANDOM_20_CHAR_STRING'
+        
     mail: &mail-environment
         MAIL_FROM: 'noreply@example.com'
         MAIL_DRIVER: 'smtp'

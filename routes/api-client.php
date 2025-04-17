@@ -18,7 +18,9 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 */
 Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
-
+Route::get('/version', function () {
+  return response()->json(['version' => config('app.version')]);
+});
 
 Route::prefix('/nests')->group(function () {
   Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');

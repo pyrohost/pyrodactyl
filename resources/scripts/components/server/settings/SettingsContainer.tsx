@@ -33,6 +33,7 @@ export default () => {
                     <RenameServerBox />
                 </div>
             </Can>
+
             <div className='w-full h-full flex flex-col gap-8'>
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />

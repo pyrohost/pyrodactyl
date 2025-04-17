@@ -275,7 +275,7 @@ abstract class EloquentRepository extends Repository implements RepositoryInterf
     $connection = $this->getBuilder()->getConnection();
     $driver = $connection->getDriverName();
 
-    if ($driver === 'mysql') {
+    if ($driver === 'mysql' || $driver === 'mariadb') {
       $statement = "INSERT IGNORE INTO $table ($columns) VALUES $parameters";
     } elseif ($driver === 'pgsql') {
       $statement = "INSERT INTO $table ($columns) VALUES $parameters ON CONFLICT DO NOTHING";

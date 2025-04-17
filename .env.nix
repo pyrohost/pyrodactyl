@@ -1,5 +1,5 @@
 APP_ENV=production
-APP_DEBUG=false
+APP_DEBUG=true
 APP_KEY=base64:70nPUP+VYp/0HXxmnXbM2BJO6E1+JizA1XhAf72bAG8=
 APP_THEME=pterodactyl
 APP_TIMEZONE=UTC
