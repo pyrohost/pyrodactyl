@@ -5,9 +5,9 @@ on:
     branches:
       - main
       - dev
-  #  pull_request:
-  #    branches:
-  #      - main
+  pull_request:
+    branches:
+      - main
   release:
     types:
       - published
@@ -18,7 +18,7 @@ permissions:
 jobs:
   push:
     name: Push
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
     if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
     steps:
       - name: Code checkout
