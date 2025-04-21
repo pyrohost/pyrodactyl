@@ -113,10 +113,10 @@
       success: function (data) {
         $('#cpu-load').text(`${data.metrics.cpu.toFixed(1)}%`);
         $('#ram-usage').html(
-        `${formatBytes(data.metrics.memory.used)}<br><small>${formatBytes(data.metrics.memory.total)}</small>`
+        `${formatBytes(data.metrics.memory.used)} Used <br><small>of ${formatBytes(data.metrics.memory.total)}</small>`
         );
         $('#disk-usage').html(
-        `${formatBytes(data.metrics.disk.used)}<br><small>${formatBytes(data.metrics.disk.total)}</small>`
+        `${formatBytes(data.metrics.disk.used)} Used <br><small>of ${formatBytes(data.metrics.disk.total)}</small>`
         );
         $('#uptime').text(formatUptime(data.metrics.uptime));
       },
