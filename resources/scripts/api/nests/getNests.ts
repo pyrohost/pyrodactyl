@@ -1,4 +1,4 @@
-import http from '@/api/http';
+import axios from 'axios';
 
 interface Egg {
     object: string;
@@ -30,9 +30,10 @@ interface Nest {
 }
 
 export default (): Promise<Nest[]> => {
-    return new Promise((resolve, reject) => {
-        http.get('/api/client/nests')
-            .then(({ data }) => resolve(data.data))
-            .catch(reject);
-    });
+    return axios
+        .get('/api/client/nests')
+        .then(({ data }) => data.data)
+        .catch((error) => {
+            throw error;
+        });
 };

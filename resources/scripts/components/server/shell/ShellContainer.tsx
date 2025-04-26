@@ -226,7 +226,7 @@ const SoftwareContainer = () => {
     const handleEggSelect = async () => {
         if (!eggs || !nests || !selectedEgg) return;
 
-        const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
+        const nestId = nests?.findIndex((nest) => nest.attributes.id === selectedNest?.attributes.id) || 0;
         const eggId = eggs?.find((eo) => eo.attributes.uuid === selectedEgg?.attributes.uuid)?.attributes.id || 0;
 
         setSelectedEggImage(uuid, eggId, nestId)
