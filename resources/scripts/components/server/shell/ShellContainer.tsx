@@ -409,35 +409,31 @@ const SoftwareContainer = () => {
                             {(step == 1 && selectedNest && (
                                 <div>
                                     <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
-                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) =>
-                                            (
-                                                <div
-                                                    key={egg.attributes.uuid}
-                                                    className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
-                                                        selectedEgg?.attributes.uuid === egg.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
-                                                >
-                                                    <div className='flex items-center justify-between'>
-                                                        <p className='text-neutral-300 text-md'>
-                                                            {egg.attributes.name}
-                                                        </p>
-                                                        <Button
-                                                            onClick={() => {
-                                                                setSelectedEgg(egg);
-                                                                setModalVisible(true);
-                                                            }}
-                                                        >
-                                                            Select
-                                                        </Button>
-                                                    </div>
-                                                    <p className='text-neutral-400 text-xs mt-2'>
-                                                        {renderEggDescription(egg.attributes.description, eggIndex)}
-                                                    </p>
+                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => (
+                                            <div
+                                                key={egg.attributes.uuid}
+                                                className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
+                                                    selectedEgg?.attributes.uuid === egg.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                }`}
+                                            >
+                                                <div className='flex items-center justify-between'>
+                                                    <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
+                                                    <Button
+                                                        onClick={() => {
+                                                            setSelectedEgg(egg);
+                                                            setModalVisible(true);
+                                                        }}
+                                                    >
+                                                        Select
+                                                    </Button>
                                                 </div>
-                                            ),
-                                        )}
+                                                <p className='text-neutral-400 text-xs mt-2'>
+                                                    {renderEggDescription(egg.attributes.description, eggIndex)}
+                                                </p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )) ||
