@@ -189,7 +189,7 @@ export default () => {
                       ref={searchInputRef}
                       className="pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold"
                       type="text"
-                      placeholder="Buscar..."
+                      placeholder="Search..."
                       onChange={(event) =>
                         debouncedSearchTerm(event.target.value)
                       }
