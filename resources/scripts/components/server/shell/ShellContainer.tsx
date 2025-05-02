@@ -222,26 +222,23 @@ const SoftwareContainer = () => {
         reinstall();
     };
 
-    // FIXME: Make it so that getting the variables doesn't actually change the egg
-    const handleEggSelect = async () => {
-        if (!eggs || !nests || !selectedEgg) return;
+    const handleEggSelect = async (egg: Egg) => {
+        if (!eggs || !nests || !selectedNest) return;
+        setStep(2);
 
-        // const nestId = nests?.findIndex((nest) => nest.attributes.id === selectedNest?.attributes.id) || 0;
-        const nestId = nests?.find((nest) => nest.attributes.id === selectedNest?.attributes.id)?.attributes.id ?? 0;
-        const eggId = eggs?.find((eo) => eo.attributes.uuid === selectedEgg?.attributes.uuid)?.attributes.id || 0;
+        // Use the passed egg directly instead of selectedEgg state
+        const nestId = selectedNest.attributes.id;
+        const eggId = egg.attributes.id;
 
-        setSelectedEggImage(uuid, eggId, nestId)
-            .catch((error) => {
-                console.error(error);
-                toast.error(httpErrorToHuman(error));
-            })
-            .then(async () => {
-                await mutate();
-                updateVarsData();
-
-                setModalVisible(false);
-                setTimeout(() => setStep(2), 500);
-            });
+        try {
+            await setSelectedEggImage(uuid, eggId, nestId);
+            await mutate();
+            updateVarsData();
+            setTimeout(() => setStep(2), 500);
+        } catch (error) {
+            console.error(error);
+            toast.error(httpErrorToHuman(error));
+        }
     };
 
     useEffect(() => {
@@ -301,17 +298,6 @@ const SoftwareContainer = () => {
                     your server.
                 </h2>
             </MainPageHeader>
-
-            <Dialog.Confirm
-                open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
-                onClose={() => setModalVisible(false)}
-                onConfirmed={() => handleEggSelect()}
-            >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
-            </Dialog.Confirm>
 
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
@@ -421,9 +407,9 @@ const SoftwareContainer = () => {
                                                 <div className='flex items-center justify-between'>
                                                     <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
                                                     <Button
-                                                        onClick={() => {
-                                                            setSelectedEgg(egg);
-                                                            setModalVisible(true);
+                                                        onClick={async () => {
+                                                            setSelectedEgg(egg); // Still update the state for UI purposes
+                                                            await handleEggSelect(egg); // Pass the egg directly
                                                         }}
                                                     >
                                                         Select
