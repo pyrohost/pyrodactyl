@@ -8,6 +8,7 @@ on:
     push:
         branches:
             - release/**
+            - main
     release:
         types:
             - published
@@ -19,7 +20,6 @@ jobs:
     push:
         name: Push
         runs-on: ubuntu-latest
-        if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
         steps:
             - name: Code checkout
               uses: actions/checkout@v4
@@ -32,11 +32,12 @@ jobs:
               with:
                   images: ghcr.io/pyrohost/pyrodactyl
                   flavor: |
-                      latest=false
+                      latest=auto
                   tags: |
-                      type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && github.event.release.prerelease == false && github.ref != 'refs/heads/dev' }}
-                      type=ref,event=tag,enable=${{ github.ref != 'refs/heads/dev' }}
-                      type=ref,event=branch
+                      type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
+                      type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease }}
+                      type=ref,event=tag
+                      type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
 
             - name: Setup QEMU
               uses: docker/setup-qemu-action@v3
@@ -46,7 +47,6 @@ jobs:
 
             - name: Login to GitHub Container Registry
               uses: docker/login-action@v3
-              if: "github.event_name != 'pull_request'"
               with:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
@@ -64,7 +64,7 @@ jobs:
               with:
                   context: .
                   file: ./Dockerfile
-                  push: ${{ github.event_name != 'pull_request' }}
+                  push: true
                   platforms: linux/amd64,linux/arm64
                   labels: ${{ steps.docker_meta.outputs.labels }}
                   tags: ${{ steps.docker_meta.outputs.tags }}
