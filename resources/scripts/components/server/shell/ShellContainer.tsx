@@ -327,7 +327,7 @@ const SoftwareContainer = () => {
             )}
 
             {visible && (
-                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
+                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] min-h-[500px] max-h-[90vh] overflow-y-auto'>
                     <div className='max-[480px]:flex max-[480px]:flex-col max-[480px]:items-center w-full h-full'>
                         <div className='flex max-[480px]:flex-col max-[480px]:gap-4 min-[480px]:items-center justify-between p-4 pr-5 mb-2'>
                             {steps.map((cstep, index) => (
@@ -408,8 +408,8 @@ const SoftwareContainer = () => {
                                                     <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
                                                     <Button
                                                         onClick={async () => {
-                                                            setSelectedEgg(egg); // Still update the state for UI purposes
-                                                            await handleEggSelect(egg); // Pass the egg directly
+                                                            setSelectedEgg(egg);
+                                                            await handleEggSelect(egg);
                                                         }}
                                                     >
                                                         Select
