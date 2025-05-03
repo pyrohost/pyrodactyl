@@ -1,3 +1,4 @@
+
 {
     "name": "pyrodactyl",
     "version": "4.0.0-dev",
@@ -120,5 +121,5 @@
         "firefox esr",
         "not dead"
     ],
-    "packageManager": "npm@10.8.1"
+    "packageManager": "pnpm@10.10.0"
 }
