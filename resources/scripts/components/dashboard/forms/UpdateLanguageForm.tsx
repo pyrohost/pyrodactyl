@@ -22,8 +22,6 @@ const SUPPORTED_LANGUAGES = [
  */
 const UpdateLanguageForm = () => {
     const { t, i18n } = useTranslation();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
     // Find the current language to display in the dropdown
     const currentLanguage = SUPPORTED_LANGUAGES.find((lang) => lang.value === i18n.language) || SUPPORTED_LANGUAGES[0];
 
@@ -33,18 +31,6 @@ const UpdateLanguageForm = () => {
      */
     const handleLanguageChange = (value: string) => {
         i18n.changeLanguage(value);
-    };
-
-    /**
-     * Handle when user saves language change
-     */
-    const handleSubmit = () => {
-        //TODO: Save language change
-        setIsSubmitting(true);
-        // Simulate saving change (will be replaced with actual API after)
-        setTimeout(() => {
-            setIsSubmitting(false);
-        }, 500);
     };
 
     return (
@@ -71,11 +57,6 @@ const UpdateLanguageForm = () => {
                     ))}
                 </DropdownMenuContent>
             </DropdownMenu>
-            <div className='flex justify-end mt-4'>
-                <Button className='w-full sm:w-auto' disabled={isSubmitting} onClick={handleSubmit}>
-                    {t('common.save_changes')}
-                </Button>
-            </div>
         </div>
     );
 };
