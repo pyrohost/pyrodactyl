@@ -1,5 +1,6 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Button } from '@/components/elements/button/index';
@@ -15,6 +16,7 @@ export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [modalVisible, setModalVisible] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+    const { t } = useTranslation();
 
     const reinstall = () => {
         clearFlashes('settings');
@@ -23,7 +25,7 @@ export default () => {
                 addFlash({
                     key: 'settings',
                     type: 'success',
-                    message: 'Your server has begun the reinstallation process.',
+                    message: t('server.settings.reinstall.toast.reinstall_started'),
                 });
             })
             .catch((error) => {
@@ -39,28 +41,29 @@ export default () => {
     }, []);
 
     return (
-        <TitledGreyBox title={'Reinstall Server'}>
+        <TitledGreyBox title={t('server.settings.reinstall.title')}>
             <Dialog.Confirm
                 open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
+                title={t('server.settings.reinstall.confirm.title')}
+                confirm={t('server.settings.reinstall.confirm.confirm')}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
             >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
+                {t('server.settings.reinstall.confirm.description')}
             </Dialog.Confirm>
             <p className={`text-sm`}>
-                Reinstalling your server will stop it, and then re-run the installation script that initially set it
-                up.&nbsp;
-                <strong className={`font-medium`}>
-                    Some files may be deleted or modified during this process, please back up your data before
-                    continuing.
-                </strong>
+                <Trans i18nKey={'server.settings.reinstall.description'}>
+                    Reinstalling your server will stop it, and then re-run the installation script that initially set it
+                    up.&nbsp;
+                    <strong className={`font-medium`}>
+                        Some files may be deleted or modified during this process, please back up your data before
+                        continuing.
+                    </strong>
+                </Trans>
             </p>
             <div className={`mt-6 text-right`}>
                 <Button.Danger variant={Button.Variants.Secondary} onClick={() => setModalVisible(true)}>
-                    Reinstall Server
+                    {t('server.settings.reinstall.button')}
                 </Button.Danger>
             </div>
         </TitledGreyBox>

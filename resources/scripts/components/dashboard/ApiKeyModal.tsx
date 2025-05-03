@@ -1,5 +1,6 @@
 import ModalContext from '@/context/ModalContext';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Button from '@/components/elements/Button';
@@ -13,6 +14,7 @@ interface Props {
 
 const ApiKeyModal = ({ apiKey }: Props) => {
     const { dismiss } = useContext(ModalContext);
+    const { t } = useTranslation();
 
     return (
         <div className='p-6 space-y-6 max-w-lg mx-auto  rounded-lg shadow-lg '>
@@ -20,10 +22,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
             <FlashMessageRender byKey='account' />
 
             {/* Modal Header */}
-            <p className='text-sm text-white-600 mt-2 '>
-                The API key you have requested is shown below. Please store it in a safe place, as it will not be shown
-                again.
-            </p>
+            <p className='text-sm text-white-600 mt-2 '>{t('api_key_modal.modal_desc')}</p>
 
             {/* API Key Display Section */}
             <div className='relative mt-6'>
@@ -44,7 +43,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
                     onClick={() => dismiss()}
                     className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500'
                 >
-                    Close
+                    {t('api_key_modal.close')}
                 </Button>
             </div>
         </div>

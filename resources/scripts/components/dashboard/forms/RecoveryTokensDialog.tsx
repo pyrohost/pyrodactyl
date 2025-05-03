@@ -1,3 +1,5 @@
+import { Trans, useTranslation } from 'react-i18next';
+
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Alert } from '@/components/elements/alert';
 import { Button } from '@/components/elements/button/index';
@@ -8,6 +10,7 @@ interface RecoveryTokenDialogProps extends DialogProps {
 }
 
 export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
+    const { t } = useTranslation();
     const grouped = [] as [string, string][];
     tokens.forEach((token, index) => {
         if (index % 2 === 0) {
@@ -19,10 +22,8 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
         <Dialog
             open={open}
             onClose={onClose}
-            title={'Authenticator App Enabled'}
-            description={
-                'Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.'
-            }
+            title={t('settings.2fa.recovery.title')}
+            description={t('settings.2fa.recovery.description')}
             hideCloseIcon
             preventExternalClose
         >
@@ -40,10 +41,10 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
                 </pre>
             </CopyOnClick>
             <Alert type={'danger'} className={'mt-3'}>
-                These codes will not be shown again.
+                {t('settings.2fa.recovery.alert')}
             </Alert>
             <Dialog.Footer>
-                <Button.Text onClick={onClose}>Done</Button.Text>
+                <Button.Text onClick={onClose}>{t('done')}</Button.Text>
             </Dialog.Footer>
         </Dialog>
     );

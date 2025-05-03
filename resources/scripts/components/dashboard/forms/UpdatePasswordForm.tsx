@@ -1,6 +1,7 @@
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import Field from '@/components/elements/Field';
@@ -18,19 +19,23 @@ interface Values {
     confirmPassword: string;
 }
 
-const schema = Yup.object().shape({
-    current: Yup.string().min(1).required('You must provide your current account password.'),
-    password: Yup.string().min(8).required(),
-    confirmPassword: Yup.string().test(
-        'password',
-        'Password confirmation does not match the password you entered.',
-        function (value) {
-            return value === this.parent.password;
-        },
-    ),
-});
-
 export default () => {
+    const { t } = useTranslation();
+
+    const schema = Yup.object().shape({
+        current: Yup.string().min(1).required(t('settings.password.validation.current_required')),
+        password: Yup.string()
+            .min(8, t('settings.password.validation.at_least_8_characters'))
+            .required(t('settings.password.validation.password_required')),
+        confirmPassword: Yup.string().test(
+            'password',
+            t('settings.password.validation.password_mismatch'),
+            function (value) {
+                return value === this.parent.password;
+            },
+        ),
+    });
+
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
@@ -49,7 +54,7 @@ export default () => {
                 addFlash({
                     key: 'account:password',
                     type: 'error',
-                    title: 'Error',
+                    title: t('error'),
                     message: httpErrorToHuman(error),
                 }),
             )
@@ -71,17 +76,15 @@ export default () => {
                                 id={'current_password'}
                                 type={'password'}
                                 name={'current'}
-                                label={'Current Password'}
+                                label={t('settings.password.current_password')}
                             />
                             <div className={`mt-6`}>
                                 <Field
                                     id={'new_password'}
                                     type={'password'}
                                     name={'password'}
-                                    label={'New Password'}
-                                    description={
-                                        'Your new password should be at least 8 characters in length and unique to this website.'
-                                    }
+                                    label={t('settings.password.new_password')}
+                                    description={t('settings.password.requirements')}
                                 />
                             </div>
                             <div className={`mt-6`}>
@@ -89,11 +92,13 @@ export default () => {
                                     id={'confirm_new_password'}
                                     type={'password'}
                                     name={'confirmPassword'}
-                                    label={'Confirm New Password'}
+                                    label={t('settings.password.confirm_password')}
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <Button disabled={isSubmitting || !isValid}>Update Password</Button>
+                                <Button disabled={isSubmitting || !isValid}>
+                                    {t('settings.password.update_password')}
+                                </Button>
                             </div>
                         </Form>
                     </Fragment>

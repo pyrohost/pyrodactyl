@@ -3,6 +3,7 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import QRCode from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CopyOnClick from '@/components/elements/CopyOnClick';
@@ -31,6 +32,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     const [token, setToken] = useState<TwoFactorTokenData | null>(null);
     const { clearAndAddHttpError } = useFlashKey('account:two-step');
     const updateUserData = useStoreActions((actions: Actions<ApplicationStore>) => actions.user.updateUserData);
+    const { t } = useTranslation();
 
     const { close, setProps } = useContext(DialogWrapperContext);
 
@@ -75,12 +77,14 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             </div>
             <CopyOnClick text={token?.secret}>
                 <p className={'font-mono text-sm text-zinc-100 text-center mt-2'}>
-                    {token?.secret.match(/.{1,4}/g)!.join(' ') || 'Loading...'}
+                    {token?.secret.match(/.{1,4}/g)!.join(' ') || t('loading')}
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
-                6-digit code it generates below.
+                <Trans i18nKey={'settings.2fa.setup.description'}>
+                    Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
+                    6-digit code it generates below.
+                </Trans>
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -95,7 +99,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 pattern={'\\d{6}'}
             />
             <label htmlFor={'totp-password'} className={'block mt-3'}>
-                Account Password
+                {t('account_password')}
             </label>
             <Input.Text
                 variant={Input.Text.Variants.Loose}
@@ -120,7 +124,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
-                    Enable
+                    {t('enable')}
                 </Button>
                 {/* </Tooltip> */}
             </Dialog.Footer>

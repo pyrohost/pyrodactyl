@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import MainPage from '@/components/elements/MainPage';
@@ -11,11 +12,13 @@ export interface PageContentBlockProps {
 }
 
 const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey, className, children }) => {
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (title) {
-            document.title = title + ' | Pyrodactyl';
+            document.title = title + t('server_titles.site_name_suffix');
         }
-    }, [title]);
+    }, [title, t]);
 
     return (
         <>

@@ -1,6 +1,7 @@
 import { Dialog as HDialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Spinner from '@/components/elements/Spinner';
@@ -80,6 +81,7 @@ const Modal: React.FC<ModalProps> = ({
     const [_, setFooter] = useState<React.ReactNode>();
     const [iconPosition, setIconPosition] = useState<IconPosition>('title');
     const [down, setDown] = useState(false);
+    const { t } = useTranslation();
 
     const onContainerClick = (down: boolean, e: React.MouseEvent<HTMLDivElement>): void => {
         if (e.target instanceof HTMLElement && container.current?.isSameNode(e.target)) {
@@ -165,7 +167,7 @@ const Modal: React.FC<ModalProps> = ({
                                                 {closeButton && (
                                                     <div className={`my-6 sm:flex items-center justify-end`}>
                                                         <Button onClick={onDismissed} className={`min-w-full`}>
-                                                            <div>Close</div>
+                                                            <div>{t('close')}</div>
                                                         </Button>
                                                     </div>
                                                 )}

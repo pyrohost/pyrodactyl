@@ -2,6 +2,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
@@ -18,6 +19,7 @@ import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 import { useFlashKey } from '@/plugins/useFlash';
 
 export default () => {
+    const { t } = useTranslation();
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const [keys, setKeys] = useState<ApiKey[]>([]);
     const [loading, setLoading] = useState(true);
@@ -44,29 +46,29 @@ export default () => {
     };
 
     return (
-        <PageContentBlock title={'Account API'}>
+        <PageContentBlock title={t('api.account_api')}>
             {/* Flash messages will now appear at the top of the page */}
             <FlashMessageRender byKey='account' />
             <div className='md:flex flex-nowrap my-10 space-x-8'>
-                <ContentBox title={'Create API Key'} className='flex-none w-full md:w-1/1'>
+                <ContentBox title={t('api.create_api_key')} className='flex-none w-full md:w-1/1'>
                     <CreateApiKeyForm onKeyCreated={(key) => setKeys((s) => [...s!, key])} />
                 </ContentBox>
             </div>
-            <ContentBox title={'API Keys'}>
+            <ContentBox title={t('api.api_keys')}>
                 <SpinnerOverlay visible={loading} />
                 <Dialog.Confirm
-                    title={'Delete API Key'}
-                    confirm={'Delete Key'}
+                    title={t('api.delete_api_key_title')}
+                    confirm={t('api.delete_key')}
                     open={!!deleteIdentifier}
                     onClose={() => setDeleteIdentifier('')}
                     onConfirmed={() => doDeletion(deleteIdentifier)}
                 >
-                    All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
+                    {t('api.delete_api_key_desc', { key: deleteIdentifier })}
                 </Dialog.Confirm>
 
                 {keys.length === 0 ? (
                     <p className='text-center text-sm text-gray-500'>
-                        {loading ? 'Loading...' : 'No API keys exist for this account.'}
+                        {loading ? t('common.loading') : t('api.no_api_keys')}
                     </p>
                 ) : (
                     keys.map((key) => (
@@ -75,8 +77,8 @@ export default () => {
                                 <div className='flex-1'>
                                     <p className='text-sm font-medium'>{key.description}</p>
                                     <p className='text-xs text-gray-500 uppercase'>
-                                        Last used:{' '}
-                                        {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : 'Never'}
+                                        {t('api.last_used')}{' '}
+                                        {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : t('api.never')}
                                     </p>
                                 </div>
                                 <p className='text-sm text-gray-600 hidden md:block'>

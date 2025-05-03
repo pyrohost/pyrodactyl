@@ -1,6 +1,7 @@
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import Field from '@/components/elements/Field';
@@ -22,6 +23,7 @@ const schema = Yup.object().shape({
 });
 
 export default () => {
+    const { t } = useTranslation();
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
@@ -64,7 +66,7 @@ export default () => {
                                 id={'confirm_password'}
                                 type={'password'}
                                 name={'password'}
-                                label={'Confirm Password'}
+                                label={t('settings.password.confirm_password')}
                             />
                         </div>
                         <div className={`mt-6`}>
