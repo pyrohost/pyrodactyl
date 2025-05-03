@@ -95,8 +95,6 @@ export default () => {
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
     const [nests, setNests] = useState<Nest[]>();
 
-    // comment from why_context: Please use JSDOC. I beg you.
-
     // ************************** BEGIN SIDEBAR GESTURE ************************** //
 
     const [isSidebarVisible, setSidebarVisible] = useState(false);
