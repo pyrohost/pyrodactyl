@@ -1,0 +1,153 @@
+{
+    "common": {
+        "language": "Ngôn ngữ",
+        "save_changes": "Lưu thay đổi",
+        "loading": "Đang tải..."
+    },
+    "settings": {
+        "your_settings": "Cài đặt của bạn",
+        "account_info": "Thông tin tài khoản",
+        "password_auth": "Mật khẩu và xác thực",
+        "app": "Ứng dụng",
+        "account_password": "Mật khẩu tài khoản",
+        "email_address": "Địa chỉ email",
+        "language": "Ngôn ngữ",
+        "multi_factor_auth": "Xác thực hai yếu tố",
+        "panel_version": "Phiên bản Panel",
+        "panel_version_desc": "Thông tin này hữu ích khi bạn cần hỗ trợ từ đội ngũ Pyro nếu gặp sự cố.",
+        "two_factor_required": "Yêu cầu xác thực hai yếu tố",
+        "two_factor_error": "Tài khoản của bạn phải bật xác thực hai yếu tố để tiếp tục.",
+        "password": {
+            "current_password": "Mật khẩu hiện tại",
+            "new_password": "Mật khẩu mới",
+            "confirm_password": "Xác nhận mật khẩu mới",
+            "update_password": "Cập nhật mật khẩu",
+            "requirements": "Mật khẩu mới của bạn phải có ít nhất 8 ký tự và là duy nhất đối với trang web này.",
+            "validation": {
+                "at_least_8_characters": "Mật khẩu phải có ít nhất 8 ký tự.",
+                "password_required": "Bạn phải cung cấp mật khẩu mới.",
+                "current_required": "Bạn phải cung cấp mật khẩu tài khoản hiện tại.",
+                "password_mismatch": "Xác nhận mật khẩu không khớp với mật khẩu bạn đã nhập."
+            }
+        },
+        "2fa": {
+            "status": {
+                "enabled": "Tài khoản của bạn được bảo vệ bởi ứng dụng xác thực.",
+                "disabled": "Bạn chưa cấu hình ứng dụng xác thực."
+            },
+            "buttons": {
+                "enable": "Bật ứng dụng xác thực",
+                "disable": "Tắt ứng dụng xác thực"
+            },
+            "setup": {
+                "title": "Bật ứng dụng xác thực",
+                "description": "Quét mã QR ở trên bằng ứng dụng xác thực, hoặc nhập mã bí mật ở trên. Sau đó, nhập mã 6 chữ số mà ứng dụng tạo ra bên dưới.",
+                "description_dialog": "Bạn sẽ được yêu cầu nhập mã xác minh mỗi lần đăng nhập."
+            },
+            "recovery": {
+                "title": "Đã bật ứng dụng xác thực",
+                "description": "Lưu trữ các mã dưới đây ở nơi an toàn. Nếu bạn mất quyền truy cập vào ứng dụng xác thực, bạn có thể sử dụng các mã dự phòng này để đăng nhập.",
+                "alert": "Các mã này sẽ không được hiển thị lại."
+            }
+        }
+    },
+    "api_key_modal": {
+        "title": "Khóa API của bạn",
+        "modal_desc": "Khóa API bạn đã yêu cầu được hiển thị bên dưới. Vui lòng lưu trữ ở nơi an toàn, vì nó sẽ không được hiển thị lại.",
+        "close": "Đóng"
+    },
+    "language": {
+        "choose_language": "Chọn ngôn ngữ hiển thị cho giao diện người dùng của hệ thống.",
+        "english": "Tiếng Anh",
+        "vietnamese": "Tiếng Việt"
+    },
+    "activity_log": {
+        "title": "Nhật ký hoạt động tài khoản",
+        "clear_filters": "Xóa bộ lọc"
+    },
+    "ssh_key": {
+        "name": "Tên SSH Key",
+        "name_required": "Tên SSH Key là bắt buộc",
+        "name_description": "Một tên để xác định SSH key này.",
+        "public_key": "Khóa công khai",
+        "public_key_required": "Khóa công khai là bắt buộc",
+        "public_key_description": "Nhập khóa công khai SSH của bạn.",
+        "creating": "Đang tạo...",
+        "create": "Tạo SSH Key",
+        "delete_title": "Xóa SSH Key",
+        "delete_confirm": "Xóa Key",
+        "delete_message": "Xóa SSH key {name} sẽ làm mất hiệu lực sử dụng của nó trên toàn bộ Panel."
+    },
+    "server_titles": {
+        "schedules": "Lịch trình",
+        "users": "Người dùng",
+        "startup_settings": "Cài đặt khởi động",
+        "software": "Phần mềm",
+        "settings": "Cài đặt",
+        "network": "Mạng",
+        "backups": "Sao lưu",
+        "files": "Tệp tin",
+        "databases": "Cơ sở dữ liệu",
+        "other_servers": "Máy chủ khác",
+        "your_servers": "Máy chủ của bạn",
+        "site_name_suffix": " | Pyrodactyl"
+    },
+    "server_schedules": {
+        "new_schedule_button": "Tạo lịch trình mới"
+    },
+    "server_users": {
+        "no_additional_users": "Máy chủ của bạn chưa có người dùng bổ sung nào. Thêm người dùng khác để giúp bạn quản lý máy chủ."
+    },
+    "errors": {
+        "access_denied_title": "Truy cập bị từ chối",
+        "access_denied_message": "Bạn không có quyền truy cập trang này.",
+        "page_not_found_title": "Không tìm thấy trang",
+        "page_not_found_message": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Bạn có thể đã mất quyền truy cập hoặc trang có thể đã bị xóa. Dưới đây là một số liên kết hữu ích thay thế:"
+    },
+    "server": {
+        "settings": {
+            "header": "Cài đặt",
+            "debug_information": "Thông tin gỡ lỗi",
+            "node": "Node",
+            "server_id": "ID Máy chủ",
+            "sftp_details": "Chi tiết SFTP",
+            "server_address": "Địa chỉ máy chủ",
+            "username": "Tên người dùng",
+            "sftp_password_note": "Mật khẩu SFTP của bạn giống với mật khẩu bạn sử dụng để truy cập bảng điều khiển này.",
+            "launch_sftp": "Khởi chạy SFTP",
+            "rename": {
+                "title": "Chi tiết máy chủ",
+                "server_name": "Tên máy chủ",
+                "server_description": "Mô tả máy chủ",
+                "toast": {
+                    "updating": "Đang cập nhật chi tiết máy chủ...",
+                    "updated": "Đã cập nhật chi tiết máy chủ!"
+                }
+            },
+            "reinstall": {
+                "title": "Cài đặt lại máy chủ",
+                "button": "Cài đặt lại máy chủ",
+                "description": "Cài đặt lại máy chủ sẽ dừng nó và sau đó chạy lại tập lệnh cài đặt ban đầu. Một số tệp có thể bị xóa hoặc sửa đổi trong quá trình này, vui lòng sao lưu dữ liệu trước khi tiếp tục.",
+                "confirm": {
+                    "title": "Xác nhận cài đặt lại máy chủ",
+                    "confirm": "Có, cài đặt lại máy chủ",
+                    "description": "Máy chủ của bạn sẽ bị dừng và một số tệp có thể bị xóa hoặc sửa đổi trong quá trình này, bạn có chắc chắn muốn tiếp tục không?"
+                },
+                "toast": {
+                    "reinstall_started": "Máy chủ của bạn đã bắt đầu quá trình cài đặt lại."
+                }
+            }
+        }
+    },
+    "loading": "Đang tải...",
+    "account_password": "Mật khẩu tài khoản",
+    "enable": "Bật",
+    "done": "Hoàn tất",
+    "ok": "OK",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "build": "Bản dựng",
+    "commit": "Commit",
+    "close": "Đóng",
+    "error": "Lỗi"
+}

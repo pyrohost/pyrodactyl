@@ -1,0 +1,138 @@
+{
+    "common": {
+        "language": "Language",
+        "save_changes": "Save Changes",
+        "loading": "Loading..."
+    },
+    "settings": {
+        "your_settings": "Your Settings",
+        "account_info": "Account Information",
+        "password_auth": "Password and Authentication",
+        "app": "App",
+        "account_password": "Account Password",
+        "email_address": "Email Address",
+        "language": "Language",
+        "multi_factor_auth": "Multi-Factor Authentication",
+        "panel_version": "Panel Version",
+        "panel_version_desc": "This is useful to provide Pyro staff if you run into an unexpected issue.",
+        "two_factor_required": "2-Factor Required",
+        "two_factor_error": "Your account must have two-factor authentication enabled in order to continue.",
+        "password": {
+            "current_password": "Current Password",
+            "new_password": "New Password",
+            "confirm_password": "Confirm New Password",
+            "update_password": "Update Password",
+            "requirements": "Your new password should be at least 8 characters in length and unique to this website.",
+            "validation": {
+                "at_least_8_characters": "Your new password should be at least 8 characters in length.",
+                "current_required": "You must provide your current account password.",
+                "password_required": "You must provide a new password.",
+                "password_mismatch": "Password confirmation does not match the password you entered."
+            }
+        },
+        "2fa": {
+            "status": {
+                "enabled": "Your account is protected by an authenticator app.",
+                "disabled": "You have not configured an authenticator app."
+            },
+            "buttons": {
+                "enable": "Enable Authenticator App",
+                "disable": "Remove Authenticator App"
+            },
+            "setup": {
+                "title": "Enable Authenticator App",
+                "description": "Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the 6-digit code it generates below.",
+                "description_dialog": "You'll be required to enter a verification code each time you sign in."
+            },
+            "recovery": {
+                "title": "Authenticator App Enabled",
+                "description": "Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.",
+                "alert": "These codes will not be shown again."
+            }
+        }
+    },
+    "api_key_modal": {
+        "title": "Your API Key",
+        "modal_desc": "The API key you have requested is shown below. Please store it in a safe place, as it will not be shown again.",
+        "close": "Close"
+    },
+    "language": {
+        "choose_language": "Choose display language for the user interface.",
+        "english": "English",
+        "vietnamese": "Vietnamese"
+    },
+    "api": {
+        "account_api": "Account API",
+        "create_api_key": "Create API Key",
+        "api_keys": "API Keys",
+        "delete_api_key_title": "Delete API Key",
+        "delete_key": "Delete Key",
+        "delete_api_key_desc": "All requests using the {{key}} key will be invalidated.",
+        "no_api_keys": "No API keys exist for this account.",
+        "last_used": "Last used:",
+        "never": "Never"
+    },
+    "activity_log": {
+        "title": "Account Activity Log",
+        "clear_filters": "Clear Filters"
+    },
+    "ssh_key": {
+        "name": "SSH Key Name",
+        "name_required": "SSH Key Name is required",
+        "name_description": "A name to identify this SSH key.",
+        "public_key": "Public Key",
+        "public_key_required": "Public Key is required",
+        "public_key_description": "Enter your public SSH key.",
+        "creating": "Creating...",
+        "create": "Create SSH Key",
+        "delete_title": "Delete SSH Key",
+        "delete_confirm": "Delete Key",
+        "delete_message": "Removing the {name} SSH key will invalidate its usage across the Panel."
+    },
+    "server": {
+        "settings": {
+            "header": "Settings",
+            "debug_information": "Debug Information",
+            "node": "Node",
+            "server_id": "Server ID",
+            "sftp_details": "SFTP Details",
+            "server_address": "Server Address",
+            "username": "Username",
+            "sftp_password_note": "Your SFTP password is the same as the password you use to access this panel.",
+            "launch_sftp": "Launch SFTP",
+            "rename": {
+                "title": "Server Details",
+                "server_name": "Server Name",
+                "server_description": "Server Description",
+                "toast": {
+                    "updating": "Updating server details...",
+                    "updated": "Server details updated!"
+                }
+            },
+            "reinstall": {
+                "title": "Reinstall Server",
+                "button": "Reinstall Server",
+                "description": "Reinstalling your server will stop it, and then re-run the installation script that initially set it up. Some files may be deleted or modified during this process, please back up your data before continuing.",
+                "confirm": {
+                    "title": "Confirm server reinstallation",
+                    "confirm": "Yes, reinstall server",
+                    "description": "Your server will be stopped and some files may be deleted or modified during this process, are you sure you wish to continue?"
+                },
+                "toast": {
+                    "reinstall_started": "Your server has begun the reinstallation process."
+                }
+            }
+        }
+    },
+    "loading": "Loading...",
+    "account_password": "Account Password",
+    "enable": "Enable",
+    "done": "Done",
+    "ok": "Okay",
+    "cancel": "Cancel",
+    "save": "Save",
+    "build": "Build",
+    "commit": "Commit",
+    "close": "Close",
+    "error": "Error"
+}
