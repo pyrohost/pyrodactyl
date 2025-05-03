@@ -115,10 +115,6 @@ export default () => {
         else setSidebarPosition(0);
     };
 
-    const toggleSidebar = () => {
-        showSideBar(!isSidebarVisible);
-    };
-
     const checkIfMinimal = () => {
         // @ts-ignore
         if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
@@ -127,12 +123,18 @@ export default () => {
         }
 
         // showSideBar(false);
-        // return false;
+        return false;
+    };
+
+    const toggleSidebar = () => {
+        if (checkIfMinimal()) return;
+        showSideBar(!isSidebarVisible);
     };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (isSidebarVisible && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                if (checkIfMinimal()) return;
                 showSideBar(false);
             }
         };
@@ -166,6 +168,7 @@ export default () => {
 
     // Handle touch events for swipe to close
     const handleTouchStart = (e: React.TouchEvent) => {
+        if (checkIfMinimal()) return;
         // @ts-ignore it is not "possibly undefined." Pretty much guarunteed to work.
 
         if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
