@@ -28,11 +28,119 @@ export default () => {
     const location = useLocation();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
+    // ************************** BEGIN SIDEBAR GESTURE ************************** //
+
     const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const [isSidebarBetween, setSidebarBetween] = useState(false);
+    const [doneOnLoad, setDoneOnLoad] = useState(false);
+
+    const [sidebarPosition, setSidebarPosition] = useState(-1000);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+    const showSideBar = (shown: boolean) => {
+        setSidebarVisible(shown);
+
+        // @ts-ignore
+        if (!shown) setSidebarPosition(-500);
+        else setSidebarPosition(0);
+    };
 
     const toggleSidebar = () => {
-        setSidebarVisible(!isSidebarVisible); // Toggle sidebar visibility
+        showSideBar(!isSidebarVisible);
     };
+
+    const checkIfMinimal = () => {
+        // @ts-ignore
+        if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
+            showSideBar(true);
+            return true;
+        }
+
+        // showSideBar(false);
+        // return false;
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (isSidebarVisible && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                showSideBar(false);
+            }
+        };
+
+        // to do, develop a bit more. This is currently a hack and probably not robust.
+        const windowResize = () => {
+            if (window.innerWidth > 1023) {
+                showSideBar(true);
+                return true;
+            }
+
+            showSideBar(false);
+            return false;
+        };
+
+        if (!doneOnLoad) {
+            windowResize();
+            setDoneOnLoad(true);
+        }
+
+        window.addEventListener('resize', windowResize);
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('resize', windowResize);
+        };
+    }, [isSidebarVisible]);
+
+    // Handle touch events for swipe to close
+    const handleTouchStart = (e: React.TouchEvent) => {
+        // @ts-ignore it is not "possibly undefined." Pretty much guarunteed to work.
+
+        if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
+        // @ts-ignore
+        else setTouchStartX(e.touches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (checkIfMinimal()) return;
+
+        // @ts-ignore go to sleep TSC
+        const sidebarWidth = sidebarRef.current.clientWidth;
+        // @ts-ignore
+        if (e.touches[0].clientX - touchStartX < 30) {
+            setSidebarPosition(-sidebarWidth);
+            return;
+        }
+
+        // @ts-ignore
+        const clampedValue = Math.max(Math.min(e.touches[0].clientX - touchStartX, sidebarWidth), 0) - sidebarWidth;
+
+        setSidebarBetween(false);
+
+        console.group('updateDragLocation');
+        //@ts-ignore Ok, TSC please go back to bed.
+        console.info(`start ${clampedValue}`);
+        console.groupEnd();
+
+        setSidebarPosition(clampedValue);
+    };
+
+    const handleTouchEnd = () => {
+        if (checkIfMinimal()) return;
+
+        setTouchStartX(null);
+        setSidebarBetween(true);
+
+        // @ts-ignore
+        if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
+            showSideBar(true);
+        } else {
+            showSideBar(false);
+        }
+    };
+
+    // *************************** END SIDEBAR GESTURE *************************** //
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -85,7 +193,10 @@ export default () => {
             {isSidebarVisible && (
                 <div
                     className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9998] transition-opacity duration-300 '
-                    onClick={() => setSidebarVisible(false)}
+                    onClick={() => showSideBar(false)}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                 />
             )}
             <button
@@ -98,9 +209,12 @@ export default () => {
             </button>
 
             <MainSidebar
-                className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] transition-transform duration-300 ease-in-out absolute backdrop-blur-sm ${
-                    isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
-                } lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
+                ref={sidebarRef}
+                className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} absolute backdrop-blur-sm lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
+                style={{
+                    // this is needed so we can set the positioning. If you can do it in tailwind, please do. I'm no expert - why_context
+                    transform: `translate(${sidebarPosition}px)`,
+                }}
             >
                 <div
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
@@ -177,7 +291,7 @@ export default () => {
             </MainSidebar>
 
             <Suspense fallback={null}>
-                <MainWrapper>
+                <MainWrapper onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                     <main
                         data-pyro-main=''
                         data-pyro-transitionrouter=''

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { ScrollMenu } from '@/components/server/modrinth/ScrollMenu';
 import Checkbox from '@/components/elements/inputs/Checkbox';
+import { ScrollMenu } from '@/components/server/modrinth/ScrollMenu';
 
 import { apiEndpoints, fetchHeaders, persistent, settings } from './config';
 

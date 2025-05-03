@@ -39,11 +39,11 @@ function formatObjectToIdentString(object: any, indentLevel: number = 0): string
 
     if (isObject(object)) {
         return getObjectKeys(object)
-                .map((key) => {
-                    const value = object[key];
-                    return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
-                })
-                .join('\n');
+            .map((key) => {
+                const value = object[key];
+                return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
+            })
+            .join('\n');
     }
 
     if (Array.isArray(object)) {
