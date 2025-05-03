@@ -1,8 +1,6 @@
 'use client';
 
-import { onLoad } from '@sentry/react';
 import { useStoreState } from 'easy-peasy';
-import { on } from 'events';
 import type React from 'react';
 import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
@@ -72,16 +70,12 @@ interface Nest {
     };
 }
 
-/**
- * Creates a swipe event from an X and Y location at start and current co-ords.
- * Important to create a shared, but not public, space for methods.
- *
- * @class
- */
-
 export default () => {
     const params = useParams<'id'>();
     const location = useLocation();
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [error, setError] = useState('');
@@ -95,125 +89,45 @@ export default () => {
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
     const [nests, setNests] = useState<Nest[]>();
 
-    // comment from why_context: Please use JSDOC. I beg you.
-
-    // ************************** BEGIN SIDEBAR GESTURE ************************** //
-
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
-    const [isSidebarBetween, setSidebarBetween] = useState(false);
-    const [doneOnLoad, setDoneOnLoad] = useState(false);
-
-    const [sidebarPosition, setSidebarPosition] = useState(-1000);
-    const sidebarRef = useRef<HTMLDivElement>(null);
-    const [touchStartX, setTouchStartX] = useState<number | null>(null);
-
-    const showSideBar = (shown: boolean) => {
-        setSidebarVisible(shown);
-
-        // @ts-ignore
-        if (!shown) setSidebarPosition(-500);
-        else setSidebarPosition(0);
-    };
-
     const toggleSidebar = () => {
-        showSideBar(!isSidebarVisible);
+        setSidebarVisible(!isSidebarVisible);
     };
 
-    const checkIfMinimal = () => {
-        // @ts-ignore
-        if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
-            showSideBar(true);
-            return true;
-        }
-
-        // showSideBar(false);
-        // return false;
-    };
-
+    // Handle click outside to close sidebar
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (isSidebarVisible && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-                showSideBar(false);
+                setSidebarVisible(false);
             }
         };
-
-        // to do, develop a bit more. This is currently a hack and probably not robust.
-        const windowResize = () => {
-            if (window.innerWidth > 1023) {
-                showSideBar(true);
-                return true;
-            }
-
-            showSideBar(false);
-            return false;
-        };
-
-        if (!doneOnLoad) {
-            windowResize();
-            setDoneOnLoad(true);
-        }
-
-        window.addEventListener('load', windowResize);
-        window.addEventListener('resize', windowResize);
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
-            window.removeEventListener('resize', windowResize);
-            window.removeEventListener('load', windowResize);
         };
     }, [isSidebarVisible]);
 
     // Handle touch events for swipe to close
     const handleTouchStart = (e: React.TouchEvent) => {
-        // @ts-ignore it is not "possibly undefined." Pretty much guarunteed to work.
-
-        if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
-        // @ts-ignore
-        else setTouchStartX(e.touches[0].clientX);
+        setTouchStartX(e.touches[0].clientX);
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        if (checkIfMinimal()) return;
+        if (touchStartX === null) return;
 
-        // @ts-ignore go to sleep TSC
-        const sidebarWidth = sidebarRef.current.clientWidth;
-        // @ts-ignore
-        if (e.touches[0].clientX - touchStartX < 30) {
-            setSidebarPosition(-sidebarWidth);
-            return;
+        const currentX = e.touches[0].clientX;
+        const diff = touchStartX - currentX;
+
+        // If swiping left (diff > 0) and sidebar is open, close it
+        if (diff > 50 && isSidebarVisible) {
+            setSidebarVisible(false);
+            setTouchStartX(null);
         }
-
-        // @ts-ignore
-        const clampedValue = Math.max(Math.min(e.touches[0].clientX - touchStartX, sidebarWidth), 0) - sidebarWidth;
-
-        setSidebarBetween(false);
-
-        console.group('updateDragLocation');
-        //@ts-ignore Ok, TSC please go back to bed.
-        console.info(`start ${clampedValue}`);
-        console.groupEnd();
-
-        setSidebarPosition(clampedValue);
     };
 
     const handleTouchEnd = () => {
-        if (checkIfMinimal()) return;
-
         setTouchStartX(null);
-        setSidebarBetween(true);
-
-        // @ts-ignore
-        console.log((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth);
-        // @ts-ignore
-        if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
-            showSideBar(true);
-        } else {
-            showSideBar(false);
-        }
     };
-
-    // *************************** END SIDEBAR GESTURE *************************** //
 
     const egg_name =
         nests &&
@@ -353,10 +267,7 @@ export default () => {
                     {isSidebarVisible && (
                         <div
                             className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9998] transition-opacity duration-300'
-                            onClick={() => showSideBar(false)}
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
+                            onClick={() => setSidebarVisible(false)}
                         />
                     )}
 
@@ -372,11 +283,12 @@ export default () => {
                     <div className='flex flex-row w-full'>
                         <MainSidebar
                             ref={sidebarRef}
-                            className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} absolute backdrop-blur-sm lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
-                            style={{
-                                // this is needed so we can set the positioning. If you can do it in tailwind, please do. I'm no expert - why_context
-                                transform: `translate(${sidebarPosition}px)`,
-                            }}
+                            className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] transition-transform duration-300 ease-in-out absolute backdrop-blur-sm ${
+                                isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
+                            } lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
+                            onTouchEnd={handleTouchEnd}
                         >
                             <div
                                 className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
@@ -584,12 +496,7 @@ export default () => {
                             </ul>
                         </MainSidebar>
 
-                        <MainWrapper
-                            className='w-full'
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                        >
+                        <MainWrapper className='w-full'>
                             <CommandMenu />
                             <InstallListener />
                             <TransferListener />
