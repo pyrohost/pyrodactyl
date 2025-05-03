@@ -224,26 +224,23 @@ const SoftwareContainer = () => {
         reinstall();
     };
 
-    // FIXME: Make it so that getting the variables doesn't actually change the egg
-    const handleEggSelect = async () => {
-        if (!eggs || !nests || !selectedEgg) return;
+    const handleEggSelect = async (egg: Egg) => {
+        if (!eggs || !nests || !selectedNest) return;
+        setStep(2);
 
-        // const nestId = nests?.findIndex((nest) => nest.attributes.id === selectedNest?.attributes.id) || 0;
-        const nestId = nests?.find((nest) => nest.attributes.id === selectedNest?.attributes.id)?.attributes.id ?? 0;
-        const eggId = eggs?.find((eo) => eo.attributes.uuid === selectedEgg?.attributes.uuid)?.attributes.id || 0;
+        // Use the passed egg directly instead of selectedEgg state
+        const nestId = selectedNest.attributes.id;
+        const eggId = egg.attributes.id;
 
-        setSelectedEggImage(uuid, eggId, nestId)
-            .catch((error) => {
-                console.error(error);
-                toast.error(httpErrorToHuman(error));
-            })
-            .then(async () => {
-                await mutate();
-                updateVarsData();
-
-                setModalVisible(false);
-                setTimeout(() => setStep(2), 500);
-            });
+        try {
+            await setSelectedEggImage(uuid, eggId, nestId);
+            await mutate();
+            updateVarsData();
+            setTimeout(() => setStep(2), 500);
+        } catch (error) {
+            console.error(error);
+            toast.error(httpErrorToHuman(error));
+        }
     };
 
     useEffect(() => {
@@ -300,17 +297,6 @@ const SoftwareContainer = () => {
             <MainPageHeader direction='column' title='Software'>
                 <h2 className='text-sm'>Welcome</h2>
             </MainPageHeader>
-
-            <Dialog.Confirm
-                open={modalVisible}
-                title='Confirm Reinstall'
-                confirm='Yes Reinstall'
-                onClose={() => setModalVisible(false)}
-                onConfirmed={() => handleEggSelect()}
-            >
-                {t('server.reinstallWarning')}
-            </Dialog.Confirm>
-
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
                     <div className='w-full h-full'>
@@ -339,7 +325,7 @@ const SoftwareContainer = () => {
             )}
 
             {visible && (
-                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
+                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] min-h-[500px] max-h-[90vh] overflow-y-auto'>
                     <div className='max-[480px]:flex max-[480px]:flex-col max-[480px]:items-center w-full h-full'>
                         <div className='flex max-[480px]:flex-col max-[480px]:gap-4 min-[480px]:items-center justify-between p-4 pr-5 mb-2'>
                             {steps.map((cstep, index) => (
@@ -407,35 +393,31 @@ const SoftwareContainer = () => {
                             {(step == 1 && selectedNest && (
                                 <div>
                                     <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
-                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) =>
-                                            currentEgg === egg.attributes.uuid ? null : (
-                                                <div
-                                                    key={egg.attributes.uuid}
-                                                    className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
-                                                        selectedEgg?.attributes.uuid === egg.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
-                                                >
-                                                    <div className='flex items-center justify-between'>
-                                                        <p className='text-neutral-300 text-md'>
-                                                            {egg.attributes.name}
-                                                        </p>
-                                                        <Button
-                                                            onClick={() => {
-                                                                setSelectedEgg(egg);
-                                                                setModalVisible(true);
-                                                            }}
-                                                        >
-                                                            Select
-                                                        </Button>
-                                                    </div>
-                                                    <p className='text-neutral-400 text-xs mt-2'>
-                                                        {renderEggDescription(egg.attributes.description, eggIndex)}
-                                                    </p>
+                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => (
+                                            <div
+                                                key={egg.attributes.uuid}
+                                                className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
+                                                    selectedEgg?.attributes.uuid === egg.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                }`}
+                                            >
+                                                <div className='flex items-center justify-between'>
+                                                    <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
+                                                    <Button
+                                                        onClick={async () => {
+                                                            setSelectedEgg(egg);
+                                                            await handleEggSelect(egg);
+                                                        }}
+                                                    >
+                                                        Select
+                                                    </Button>
                                                 </div>
-                                            ),
-                                        )}
+                                                <p className='text-neutral-400 text-xs mt-2'>
+                                                    {renderEggDescription(egg.attributes.description, eggIndex)}
+                                                </p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )) ||
