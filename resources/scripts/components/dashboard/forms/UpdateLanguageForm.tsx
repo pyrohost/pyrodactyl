@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/elements/button/index';
 
 /**
- * Các ngôn ngữ được hỗ trợ trong hệ thống
+ * Languages supported in the system
  */
 const SUPPORTED_LANGUAGES = [
     { value: 'en', label: 'English' },
@@ -18,30 +18,30 @@ const SUPPORTED_LANGUAGES = [
 ];
 
 /**
- * Component form cho phép người dùng thay đổi ngôn ngữ hiển thị của hệ thống
+ * Component form to allow users to change the display language of the system
  */
 const UpdateLanguageForm = () => {
     const { t, i18n } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Tìm ngôn ngữ hiện tại để hiển thị trong dropdown
+    // Find the current language to display in the dropdown
     const currentLanguage = SUPPORTED_LANGUAGES.find((lang) => lang.value === i18n.language) || SUPPORTED_LANGUAGES[0];
 
     /**
-     * Xử lý khi người dùng thay đổi ngôn ngữ
-     * @param value - Giá trị ngôn ngữ được chọn
+     * Handle when user changes language
+     * @param value - The selected language value
      */
     const handleLanguageChange = (value: string) => {
         i18n.changeLanguage(value);
     };
 
     /**
-     * Xử lý khi người dùng lưu thay đổi ngôn ngữ
+     * Handle when user saves language change
      */
     const handleSubmit = () => {
-        //TODO: Lưu thay đổi ngôn ngữ
+        //TODO: Save language change
         setIsSubmitting(true);
-        // Giả lập việc lưu thay đổi (sẽ được thay thế bằng API thực tế sau)
+        // Simulate saving change (will be replaced with actual API after)
         setTimeout(() => {
             setIsSubmitting(false);
         }, 500);

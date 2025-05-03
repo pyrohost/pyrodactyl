@@ -4,49 +4,49 @@ import Backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 /**
- * Khởi tạo cấu hình i18n cho ứng dụng
- * - Sử dụng Backend để tải file ngôn ngữ từ thư mục public/locales
- * - Sử dụng LanguageDetector để tự động phát hiện ngôn ngữ từ trình duyệt
- * - Khởi tạo với ngôn ngữ mặc định là tiếng Anh
+ * Initialize i18n configuration for the application
+ * - Use Backend to load language files from the public/locales directory
+ * - Use LanguageDetector to automatically detect language from the browser
+ * - Initialize with default language as English
  */
 i18n
-    // Tải ngôn ngữ từ thư mục public/locales/{lng}/translation.json
+    // Load language files from the public/locales/{lng}/translation.json directory
     .use(Backend)
-    // Phát hiện ngôn ngữ tự động từ trình duyệt
+    // Automatically detect language from the browser
     .use(LanguageDetector)
-    // Tích hợp với react-i18next
+    // Integrate with react-i18next
     .use(initReactI18next)
-    // Khởi tạo i18next
+    // Initialize i18next
     .init({
-        // Ngôn ngữ mặc định
+        // Default language
         fallbackLng: 'en',
-        // Ngôn ngữ được hỗ trợ
+        // Supported languages
         supportedLngs: ['en', 'vi'],
-        // Không sử dụng dấu chấm để phân tách khóa
+        // Do not use dots to separate keys
         debug: false,
-        // Cấu hình tải các namespace
+        // Configure loading of namespaces
         ns: ['translation'],
         defaultNS: 'translation',
-        // Cấu hình backend
+        // Configure backend
         backend: {
-            // Đường dẫn tới file ngôn ngữ
+            // Path to language files
             loadPath: '/locales/{{lng}}/{{ns}}.json',
         },
-        // Cấu hình phát hiện ngôn ngữ
+        // Configure language detection
         detection: {
-            // Thứ tự phát hiện ngôn ngữ: localStorage, cookie, navigator
+            // Order of language detection: localStorage, cookie, navigator
             order: ['localStorage', 'cookie', 'navigator'],
-            // Lưu ngôn ngữ vào localStorage và cookie
+            // Save language to localStorage and cookie
             caches: ['localStorage', 'cookie'],
         },
-        // Cấu hình nội suy
+        // Configure interpolation
         interpolation: {
-            // React đã xử lý XSS nên không cần escape giá trị
+            // React has already handled XSS so we don't need to escape values
             escapeValue: false,
         },
-        // Cấu hình cho react-i18next
+        // Configure react-i18next
         react: {
-            // Đợi tải ngôn ngữ xong mới hiển thị nội dung
+            // Wait for language to load before displaying content
             useSuspense: true,
         },
     });
