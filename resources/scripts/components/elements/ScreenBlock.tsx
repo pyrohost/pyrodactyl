@@ -1,26 +1,44 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+/**
+ * Component hiển thị màn hình đầy đủ với thông báo
+ * @param title Tiêu đề màn hình (có thể là key i18n)
+ * @param message Thông điệp hiển thị (có thể là key i18n)
+ */
 const ScreenBlock = ({ title, message }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <div className='w-full h-full flex gap-12 items-center p-8 max-w-3xl mx-auto'>
                 <div className='flex flex-col gap-8 max-w-sm text-left'>
-                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>{title}</h1>
-                    <p className=''>{message}</p>
+                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>
+                        {title.startsWith('errors.') ? t(title) : title}
+                    </h1>
+                    <p className=''>{message.startsWith('errors.') ? t(message) : message}</p>
                 </div>
             </div>
         </>
     );
 };
 
+/**
+ * Component hiển thị lỗi máy chủ
+ * @param title Tiêu đề lỗi (có thể là key i18n)
+ * @param message Thông điệp lỗi (có thể là key i18n)
+ */
 const ServerError = ({ title, message }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <div className='w-full h-full flex gap-12 items-center p-8 max-w-3xl mx-auto'>
                 <div className='flex flex-col gap-8 max-w-sm text-left'>
-                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>{title}</h1>
-                    <p className=''>{message}</p>
+                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>
+                        {title.startsWith('errors.') ? t(title) : title}
+                    </h1>
+                    <p className=''>{message.startsWith('errors.') ? t(message) : message}</p>
                 </div>
             </div>
         </>

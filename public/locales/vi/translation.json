@@ -102,7 +102,9 @@
         "access_denied_title": "Truy cập bị từ chối",
         "access_denied_message": "Bạn không có quyền truy cập trang này.",
         "page_not_found_title": "Không tìm thấy trang",
-        "page_not_found_message": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Bạn có thể đã mất quyền truy cập hoặc trang có thể đã bị xóa. Dưới đây là một số liên kết hữu ích thay thế:"
+        "page_not_found_message": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Bạn có thể đã mất quyền truy cập hoặc trang có thể đã bị xóa. Dưới đây là một số liên kết hữu ích thay thế:",
+        "server_error_title": "Lỗi máy chủ",
+        "server_error_message": "Đã xảy ra lỗi không mong muốn khi xử lý yêu cầu của bạn. Vui lòng thử lại sau."
     },
     "server": {
         "settings": {

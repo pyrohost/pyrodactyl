@@ -124,6 +124,28 @@
             }
         }
     },
+    "errors": {
+        "access_denied_title": "Access Denied",
+        "access_denied_message": "You do not have permission to access this page.",
+        "page_not_found_title": "Page Not Found",
+        "page_not_found_message": "We couldn't find the page you were looking for. You may have lost access, or the page may have been deleted. Here are some helpful alternative links:",
+        "server_error_title": "Server Error",
+        "server_error_message": "An unexpected error occurred while processing your request. Please try again later."
+    },
+    "server_titles": {
+        "schedules": "Schedules",
+        "users": "Users",
+        "startup_settings": "Startup Settings",
+        "software": "Software",
+        "settings": "Settings",
+        "network": "Network",
+        "backups": "Backups",
+        "files": "Files",
+        "databases": "Databases",
+        "other_servers": "Other Servers",
+        "your_servers": "Your Servers",
+        "site_name_suffix": " | Pyrodactyl"
+    },
     "loading": "Loading...",
     "account_password": "Account Password",
     "enable": "Enable",

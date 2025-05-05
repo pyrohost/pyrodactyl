@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Code from './elements/Code';
@@ -13,16 +14,30 @@ interface Props {
 const Container = styled.div<{ $type?: FlashMessageType }>``;
 Container.displayName = 'MessageBox.Container';
 
-const MessageBox = ({ title, children, type }: Props) => (
-    <Container
-        className='flex flex-col gap-2 bg-black border-[2px] border-brand/70 p-4 rounded-2xl mb-4'
-        $type={type}
-        role={'alert'}
-    >
-        {title && <h2 className='font-bold text-xl'>{title}</h2>}
-        <Code>{children}</Code>
-    </Container>
-);
+/**
+ * Component hiển thị thông báo với tiêu đề và nội dung
+ * @param title Tiêu đề thông báo (có thể là key i18n)
+ * @param children Nội dung thông báo (có thể là key i18n)
+ * @param type Loại thông báo: success, info, warning, error
+ */
+const MessageBox = ({ title, children, type }: Props) => {
+    const { t } = useTranslation();
+
+    return (
+        <Container
+            className='flex flex-col gap-2 bg-black border-[2px] border-brand/70 p-4 rounded-2xl mb-4'
+            $type={type}
+            role={'alert'}
+        >
+            {title && (
+                <h2 className='font-bold text-xl'>
+                    {title.startsWith('common.') || title.startsWith('error.') ? t(title) : title}
+                </h2>
+            )}
+            <Code>{children.startsWith('common.') || children.startsWith('error.') ? t(children) : children}</Code>
+        </Container>
+    );
+};
 MessageBox.displayName = 'MessageBox';
 
 export default MessageBox;
