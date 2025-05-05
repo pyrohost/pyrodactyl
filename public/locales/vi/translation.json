@@ -2,7 +2,9 @@
     "common": {
         "language": "Ngôn ngữ",
         "save_changes": "Lưu thay đổi",
-        "loading": "Đang tải..."
+        "loading": "Đang tải...",
+        "error": "Lỗi",
+        "success": "Thành công"
     },
     "settings": {
         "your_settings": "Cài đặt của bạn",
@@ -98,13 +100,45 @@
     "server_users": {
         "no_additional_users": "Máy chủ của bạn chưa có người dùng bổ sung nào. Thêm người dùng khác để giúp bạn quản lý máy chủ."
     },
+    "auth": {
+        "login": "Đăng nhập",
+        "username_or_email": "Tên người dùng hoặc Email",
+        "password": "Mật khẩu",
+        "forgot_password": "Quên mật khẩu?",
+        "reset_password": "Đặt lại mật khẩu",
+        "new_password": "Mật khẩu mới",
+        "confirm_new_password": "Xác nhận mật khẩu mới",
+        "password_requirements": "Mật khẩu phải có ít nhất 8 ký tự.",
+        "return_to_login": "Quay lại đăng nhập",
+        "email": "Email",
+        "send_email": "Gửi email",
+        "reset_email_info": "Chúng tôi sẽ gửi cho bạn một email kèm đường dẫn để đặt lại mật khẩu.",
+        "two_factor_authentication": "Xác thực hai yếu tố",
+        "check_device_for_code": "Kiểm tra thiết bị được liên kết với tài khoản của bạn để lấy mã.",
+        "recovery_code": "Mã khôi phục",
+        "authentication_code": "Mã xác thực",
+        "recovery_code_description": "Nhập một trong các mã khôi phục được tạo khi bạn thiết lập xác thực 2 yếu tố trên tài khoản này để tiếp tục.",
+        "two_factor_code_description": "Nhập mã xác thực hai yếu tố hiển thị trên thiết bị của bạn.",
+        "lost_device": "Tôi đã mất thiết bị",
+        "have_device": "Tôi có thiết bị",
+        "validation": {
+            "username_required": "Phải cung cấp tên người dùng hoặc email.",
+            "password_required": "Vui lòng nhập mật khẩu tài khoản của bạn.",
+            "password_required_reset": "Cần phải có mật khẩu mới.",
+            "password_min_length": "Mật khẩu mới của bạn phải có ít nhất 8 ký tự.",
+            "password_confirmation_required": "Mật khẩu mới của bạn không khớp.",
+            "password_confirmation_mismatch": "Mật khẩu mới của bạn không khớp.",
+            "email_required_reset": "Vui lòng nhập địa chỉ email của bạn để đặt lại mật khẩu."
+        }
+    },
     "errors": {
         "access_denied_title": "Truy cập bị từ chối",
         "access_denied_message": "Bạn không có quyền truy cập trang này.",
         "page_not_found_title": "Không tìm thấy trang",
         "page_not_found_message": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Bạn có thể đã mất quyền truy cập hoặc trang có thể đã bị xóa. Dưới đây là một số liên kết hữu ích thay thế:",
         "server_error_title": "Lỗi máy chủ",
-        "server_error_message": "Đã xảy ra lỗi không mong muốn khi xử lý yêu cầu của bạn. Vui lòng thử lại sau."
+        "server_error_message": "Đã xảy ra lỗi không mong muốn khi xử lý yêu cầu của bạn. Vui lòng thử lại sau.",
+        "rendering_error": "Ứng dụng gặp lỗi khi hiển thị giao diện này. Hãy thử làm mới trang."
     },
     "server": {
         "settings": {

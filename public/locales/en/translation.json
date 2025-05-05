@@ -2,7 +2,9 @@
     "common": {
         "language": "Language",
         "save_changes": "Save Changes",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success"
     },
     "settings": {
         "your_settings": "Your Settings",
@@ -124,13 +126,45 @@
             }
         }
     },
+    "auth": {
+        "login": "Login",
+        "username_or_email": "Username or Email",
+        "password": "Password",
+        "forgot_password": "Forgot Password?",
+        "reset_password": "Reset Password",
+        "new_password": "New Password",
+        "confirm_new_password": "Confirm New Password",
+        "password_requirements": "Passwords must be at least 8 characters in length.",
+        "return_to_login": "Return to Login",
+        "email": "Email",
+        "send_email": "Send Email",
+        "reset_email_info": "We'll send you an email with a link to reset your password.",
+        "two_factor_authentication": "Two Factor Authentication",
+        "check_device_for_code": "Check device linked with your account for code.",
+        "recovery_code": "Recovery Code",
+        "authentication_code": "Authentication Code",
+        "recovery_code_description": "Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.",
+        "two_factor_code_description": "Enter the two-factor token displayed by your device.",
+        "lost_device": "I've Lost My Device",
+        "have_device": "I Have My Device",
+        "validation": {
+            "username_required": "A username or email must be provided.",
+            "password_required": "Please enter your account password.",
+            "password_required_reset": "A new password is required.",
+            "password_min_length": "Your new password should be at least 8 characters in length.",
+            "password_confirmation_required": "Your new password does not match.",
+            "password_confirmation_mismatch": "Your new password does not match.",
+            "email_required_reset": "Please enter your email address to reset your password."
+        }
+    },
     "errors": {
         "access_denied_title": "Access Denied",
         "access_denied_message": "You do not have permission to access this page.",
         "page_not_found_title": "Page Not Found",
         "page_not_found_message": "We couldn't find the page you were looking for. You may have lost access, or the page may have been deleted. Here are some helpful alternative links:",
         "server_error_title": "Server Error",
-        "server_error_message": "An unexpected error occurred while processing your request. Please try again later."
+        "server_error_message": "An unexpected error occurred while processing your request. Please try again later.",
+        "rendering_error": "An error was encountered by the application while rendering this view. Try refreshing the page."
     },
     "server_titles": {
         "schedules": "Schedules",

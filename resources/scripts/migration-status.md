@@ -34,15 +34,14 @@ Tài liệu này theo dõi trạng thái di chuyển các component từ chuỗi
 | MessageBox.tsx                | ✅ Hoàn thành | Mới di chuyển |
 | FlashMessageRender.tsx        | ✅ Hoàn thành | Mới di chuyển |
 | App.tsx (Loading)             | ✅ Hoàn thành | Mới di chuyển |
-
-## Components cần di chuyển
-
-| Component              | Trạng thái       | Ghi chú                        |
-| ---------------------- | ---------------- | ------------------------------ |
-| AuthenticatedRoute.tsx | ⏳ Chờ di chuyển |                                |
-| ErrorBoundary.tsx      | ⏳ Chờ di chuyển |                                |
-| Spinner.tsx            | ⏳ Chờ di chuyển | Đã cập nhật để hỗ trợ fallback |
-| PyrodactylProvider.tsx | ⏳ Chờ di chuyển |                                |
+| LoginContainer.tsx            | ✅ Hoàn thành | Mới di chuyển |
+| ResetPasswordContainer.tsx    | ✅ Hoàn thành | Mới di chuyển |
+| ForgotPasswordContainer.tsx   | ✅ Hoàn thành | Mới di chuyển |
+| LoginCheckpointContainer.tsx  | ✅ Hoàn thành | Mới di chuyển |
+| LoginFormContainer.tsx        | ✅ Hoàn thành | Mới di chuyển |
+| AuthenticatedRoute.tsx        | ✅ Hoàn thành | Mới di chuyển |
+| ErrorBoundary.tsx             | ✅ Hoàn thành | Mới di chuyển |
+| PyrodactylProvider.tsx        | ✅ Hoàn thành | Mới di chuyển |
 
 ## Files JSON đa ngôn ngữ
 
@@ -53,9 +52,9 @@ Cập nhật các khóa dịch trong files:
 
 ## Tiến độ chung
 
--   Tổng số components: 32
--   Số components đã di chuyển: 28 (87.5%)
--   Số components chờ di chuyển: 4 (12.5%)
+-   Tổng số components: 36
+-   Số components đã di chuyển: 36 (100%)
+-   Số components chờ di chuyển: 0 (0%)
 
 ## Hướng dẫn di chuyển
 

@@ -2,6 +2,7 @@ import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import Reaptcha from 'reaptcha';
 import { object, string } from 'yup';
@@ -22,6 +23,7 @@ interface Values {
 }
 
 function LoginContainer() {
+    const { t } = useTranslation();
     const ref = useRef<Reaptcha>(null);
     const [token, setToken] = useState('');
 
@@ -83,8 +85,8 @@ function LoginContainer() {
             onSubmit={onSubmit}
             initialValues={{ username: '', password: '' }}
             validationSchema={object().shape({
-                username: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
+                username: string().required(t('auth.validation.username_required')),
+                password: string().required(t('auth.validation.password_required')),
             })}
         >
             {({ isSubmitting, setSubmitting, submitForm }) => (
@@ -106,11 +108,11 @@ function LoginContainer() {
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
+                    <h2 className='text-xl font-extrabold mb-2'>{t('auth.login')}</h2>
                     <Field
                         id='usernameOrEmail'
                         type={'text'}
-                        label={'Username or Email'}
+                        label={t('auth.username_or_email')}
                         name={'username'}
                         disabled={isSubmitting}
                     />
@@ -118,7 +120,7 @@ function LoginContainer() {
                         <Field
                             id='password'
                             type={'password'}
-                            label={'Password'}
+                            label={t('auth.password')}
                             name={'password'}
                             disabled={isSubmitting}
                         />
@@ -126,7 +128,7 @@ function LoginContainer() {
                             to={'/auth/password'}
                             className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
                         >
-                            Forgot Password?
+                            {t('auth.forgot_password')}
                         </Link>
                     </div>
                     <div className={`mt-6`}>
@@ -137,7 +139,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Login
+                            {t('auth.login')}
                         </Button>
                     </div>
                     {recaptchaEnabled && (

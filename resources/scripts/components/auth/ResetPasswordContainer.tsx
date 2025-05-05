@@ -1,6 +1,7 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 
@@ -23,6 +24,7 @@ interface Values {
 }
 
 function ResetPasswordContainer() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
 
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -45,7 +47,7 @@ function ResetPasswordContainer() {
                 console.error(error);
 
                 setSubmitting(false);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({ type: 'error', title: t('common.error'), message: httpErrorToHuman(error) });
             });
     };
 
@@ -59,11 +61,11 @@ function ResetPasswordContainer() {
                 }}
                 validationSchema={object().shape({
                     password: string()
-                        .required('A new password is required.')
-                        .min(8, 'Your new password should be at least 8 characters in length.'),
+                        .required(t('auth.validation.password_required_reset'))
+                        .min(8, t('auth.validation.password_min_length')),
                     passwordConfirmation: string()
-                        .required('Your new password does not match.')
-                        .oneOf([ref('password')], 'Your new password does not match.'),
+                        .required(t('auth.validation.password_confirmation_required'))
+                        .oneOf([ref('password')], t('auth.validation.password_confirmation_mismatch')),
                 })}
             >
                 {({ isSubmitting }) => (
@@ -81,17 +83,15 @@ function ResetPasswordContainer() {
                         </div>
                         <div className={`mt-6`}>
                             <Field
-                                light
-                                label={'New Password'}
+                                label={t('auth.new_password')}
                                 name={'password'}
                                 type={'password'}
-                                description={'Passwords must be at least 8 characters in length.'}
+                                description={t('auth.password_requirements')}
                             />
                         </div>
                         <div className={`mt-6`}>
                             <Field
-                                light
-                                label={'Confirm New Password'}
+                                label={t('auth.confirm_new_password')}
                                 name={'passwordConfirmation'}
                                 type={'password'}
                             />
@@ -104,7 +104,7 @@ function ResetPasswordContainer() {
                                 disabled={isSubmitting}
                                 isLoading={isSubmitting}
                             >
-                                Reset Password
+                                {t('auth.reset_password')}
                             </Button>
                         </div>
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
@@ -116,7 +116,7 @@ function ResetPasswordContainer() {
                                 to={'/auth/login'}
                                 className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
                             >
-                                Return to Login
+                                {t('auth.return_to_login')}
                             </Link>
                         </div>
                     </LoginFormContainer>
