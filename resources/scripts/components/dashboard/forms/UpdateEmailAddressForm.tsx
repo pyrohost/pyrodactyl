@@ -17,17 +17,17 @@ interface Values {
     password: string;
 }
 
-const schema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().required('You must provide your current account password.'),
-});
-
 export default () => {
     const { t } = useTranslation();
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+
+    const schema = Yup.object().shape({
+        email: Yup.string().email().required(t('auth.validation.email_required_reset')),
+        password: Yup.string().required(t('auth.validation.password_required')),
+    });
 
     const submit = (values: Values, { resetForm, setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('account:email');
@@ -37,14 +37,14 @@ export default () => {
                 addFlash({
                     type: 'success',
                     key: 'account:email',
-                    message: 'Your primary email has been updated.',
+                    message: t('settings.email.updated_successfully'),
                 }),
             )
             .catch((error) =>
                 addFlash({
                     type: 'error',
                     key: 'account:email',
-                    title: 'Error',
+                    title: t('error'),
                     message: httpErrorToHuman(error),
                 }),
             )
@@ -60,7 +60,7 @@ export default () => {
                 <Fragment>
                     <SpinnerOverlay size={'large'} visible={isSubmitting} />
                     <Form className={`m-0`}>
-                        <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
+                        <Field id={'current_email'} type={'email'} name={'email'} label={t('auth.email')} />
                         <div className={`mt-6`}>
                             <Field
                                 id={'confirm_password'}
@@ -70,7 +70,7 @@ export default () => {
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>Update Email</Button>
+                            <Button disabled={isSubmitting || !isValid}>{t('settings.email.update_email')}</Button>
                         </div>
                     </Form>
                 </Fragment>

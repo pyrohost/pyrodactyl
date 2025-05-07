@@ -1,16 +1,8 @@
-import { useTranslation } from 'react-i18next';
-
 interface Props {
     children: React.ReactNode;
 }
 
-/**
- * Component cung cấp thông tin về phiên bản và môi trường Pyrodactyl
- * @param children Nội dung bên trong provider
- */
 const PyrodactylProvider = ({ children }: Props) => {
-    const { t } = useTranslation();
-
     return (
         <div
             data-pyro-pyrodactylprovider=''

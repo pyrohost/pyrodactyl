@@ -4,6 +4,7 @@
         "save_changes": "Save Changes",
         "loading": "Loading...",
         "error": "Error",
+        "creating": "Creating...",
         "success": "Success"
     },
     "settings": {
@@ -50,7 +51,15 @@
                 "title": "Authenticator App Enabled",
                 "description": "Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.",
                 "alert": "These codes will not be shown again."
+            },
+            "disable": {
+                "title": "Remove Authenticator App",
+                "description": "Removing your authenticator app will make your account less secure."
             }
+        },
+        "email": {
+            "update_email": "Update Email",
+            "updated_successfully": "Your primary email has been updated."
         }
     },
     "api_key_modal": {
@@ -72,7 +81,11 @@
         "delete_api_key_desc": "All requests using the {{key}} key will be invalidated.",
         "no_api_keys": "No API keys exist for this account.",
         "last_used": "Last used:",
-        "never": "Never"
+        "never": "Never",
+        "key_description": "Description",
+        "key_description_description": "A description of this API key.",
+        "allowed_ips": "Allowed IPs",
+        "allowed_ips_description": "Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line."
     },
     "activity_log": {
         "title": "Account Activity Log",

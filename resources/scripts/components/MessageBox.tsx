@@ -14,12 +14,6 @@ interface Props {
 const Container = styled.div<{ $type?: FlashMessageType }>``;
 Container.displayName = 'MessageBox.Container';
 
-/**
- * Component hiển thị thông báo với tiêu đề và nội dung
- * @param title Tiêu đề thông báo (có thể là key i18n)
- * @param children Nội dung thông báo (có thể là key i18n)
- * @param type Loại thông báo: success, info, warning, error
- */
 const MessageBox = ({ title, children, type }: Props) => {
     const { t } = useTranslation();
 

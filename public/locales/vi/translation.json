@@ -3,6 +3,7 @@
         "language": "Ngôn ngữ",
         "save_changes": "Lưu thay đổi",
         "loading": "Đang tải...",
+        "creating": "Đang tạo...",
         "error": "Lỗi",
         "success": "Thành công"
     },
@@ -50,7 +51,15 @@
                 "title": "Đã bật ứng dụng xác thực",
                 "description": "Lưu trữ các mã dưới đây ở nơi an toàn. Nếu bạn mất quyền truy cập vào ứng dụng xác thực, bạn có thể sử dụng các mã dự phòng này để đăng nhập.",
                 "alert": "Các mã này sẽ không được hiển thị lại."
+            },
+            "disable": {
+                "title": "Xóa ứng dụng xác thực",
+                "description": "Việc xóa ứng dụng xác thực sẽ làm cho tài khoản của bạn kém an toàn hơn."
             }
+        },
+        "email": {
+            "update_email": "Cập nhật email",
+            "updated_successfully": "Email chính của bạn đã được cập nhật."
         }
     },
     "api_key_modal": {
@@ -79,6 +88,21 @@
         "delete_title": "Xóa SSH Key",
         "delete_confirm": "Xóa Key",
         "delete_message": "Xóa SSH key {name} sẽ làm mất hiệu lực sử dụng của nó trên toàn bộ Panel."
+    },
+    "api": {
+        "account_api": "API tài khoản",
+        "create_api_key": "Tạo khóa API",
+        "api_keys": "Các khóa API",
+        "delete_api_key_title": "Xóa khóa API",
+        "delete_key": "Xóa khóa",
+        "delete_api_key_desc": "Tất cả các yêu cầu sử dụng khóa {{key}} sẽ bị vô hiệu hóa.",
+        "no_api_keys": "Không có khóa API nào tồn tại cho tài khoản này.",
+        "last_used": "Sử dụng lần cuối:",
+        "never": "Chưa bao giờ",
+        "key_description": "Mô tả",
+        "key_description_description": "Mô tả về khóa API này.",
+        "allowed_ips": "Các địa chỉ IP được phép",
+        "allowed_ips_description": "Để trống để cho phép bất kỳ địa chỉ IP nào sử dụng khóa API này, nếu không, cung cấp từng địa chỉ IP trên một dòng mới."
     },
     "server_titles": {
         "schedules": "Lịch trình",

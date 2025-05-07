@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CreateApiKeyForm from '@/components/dashboard/forms/CreateApiKeyForm';
 import Button from '@/components/elements/Button';
-import Code from '@/components/elements/Code';
 import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
