@@ -56,7 +56,6 @@
         "laravel-vite-plugin": "^1.0.2",
         "million": "^3.0.6",
         "pathe": "^1.1.2",
-        "postcss-nesting": "^13.0.1",
         "qrcode.react": "^3.1.0",
         "react": "^18.3.1",
         "react-chartjs-2": "^5.2.0",
