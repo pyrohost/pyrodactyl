@@ -91,8 +91,15 @@ do
 done
 
 ## make sure the db is set up
-echo -e "Migrating and Seeding D.B"
-php artisan migrate --seed --force
+echo -e "Migrating Database"
+php artisan migrate --force
+
+if [ "$SKIP_SEED" != "True" ]; then
+    echo -e "Seeding database"
+    php artisan migrate --seed --force
+else
+    echo -e "Skipping database seeding (SKIP_SEED=True)"
+fi
 
 ## start cronjobs for the queue
 echo -e "Starting cron jobs."

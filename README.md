@@ -41,7 +41,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ## Installing Pyrodactyl
 
-See our [Installation](https://pyrodactyl.dev/docs/installation) wiki page on how to get started.
+See our [Installation](https://pyrodactyl.dev/docs/installation) docs page on how to get started.
 
 > [!NOTE]
 > Windows is currently only supported for development purposes.
@@ -50,9 +50,9 @@ See our [Installation](https://pyrodactyl.dev/docs/installation) wiki page on ho
 
 See our development pages on how to get started:
 
--   [Local Dev on Windows (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Windows-(Vagrant)>)
--   [Local Dev on Linux (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Vagrant)>)
--   [Local Dev on Linux (Nix)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Nix)>)
+-   [Local Dev on Windows (Vagrant)](https://pyrodactyl.dev/docs/local-development#local-dev-with-vagrant-on-windows)
+-   [Local Dev on Linux (Vagrant)](https://pyrodactyl.dev/docs/local-development#local-dev-with-vagrant-on-linux)
+-   [Local Dev on Linux (Nix)](https://pyrodactyl.dev/docs/local-development#local-dev-with-nix)
     -   Nix is recommended if you can't get Vagrant working
 
 ## Star History

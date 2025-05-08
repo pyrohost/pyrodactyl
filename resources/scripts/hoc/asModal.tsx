@@ -43,42 +43,38 @@ function asModal<P extends {}>(
                 };
             }
 
-            /**
-             * @this {React.PureComponent<P & AsModalProps, State>}
-             */
-            override componentDidUpdate(prevProps: Readonly<P & AsModalProps>, prevState: Readonly<State>) {
-                if (prevProps.visible && !this.props.visible) {
-                    this.setState({ visible: false, propOverrides: {} });
-                } else if (!prevProps.visible && this.props.visible) {
-                    this.setState({ render: true, visible: true });
-                }
-                if (!this.state.render && !isEqual(prevState.propOverrides, this.state.propOverrides)) {
-                    this.setState({ propOverrides: {} });
+            override componentDidUpdate(prevProps: Readonly<P & AsModalProps>) {
+                if (this.props.visible !== prevProps.visible) {
+                    this.setState({
+                        render: this.props.visible,
+                        visible: this.props.visible,
+                        propOverrides: this.props.visible ? this.state.propOverrides : {},
+                    });
                 }
             }
 
-            dismiss = () => this.setState({ visible: false });
+            dismiss = () => {
+                if (this.props.onModalDismissed) {
+                    this.props.onModalDismissed();
+                }
+            };
 
             setPropOverrides: ModalContextValues['setPropOverrides'] = (value) =>
                 this.setState((state) => ({
                     propOverrides: !value ? {} : typeof value === 'function' ? value(state.propOverrides) : value,
                 }));
 
-            /**
-             * @this {React.PureComponent<P & AsModalProps, State>}
-             */
             override render() {
                 if (!this.state.render) return null;
 
                 return (
                     <PortaledModal
-                        onDismissed={() =>
-                            this.setState({ render: false }, () => {
-                                if (typeof this.props.onModalDismissed === 'function') {
-                                    this.props.onModalDismissed();
-                                }
-                            })
-                        }
+                        onDismissed={() => {
+                            this.setState({ render: false });
+                            if (typeof this.props.onModalDismissed === 'function') {
+                                this.props.onModalDismissed();
+                            }
+                        }}
                         {...this.computedModalProps}
                     >
                         <ModalContext.Provider
