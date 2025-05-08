@@ -66,7 +66,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     return (
         <form id={'enable-totp-form'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
-            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow mx-auto mt-6'}>
+            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow-sm mx-auto mt-6'}>
                 {!token ? (
                     <Spinner />
                 ) : (

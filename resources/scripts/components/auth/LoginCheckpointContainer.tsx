@@ -33,7 +33,7 @@ function LoginCheckpointContainer() {
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl'>
+        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl'>
             <LoginFormContainer className={`w-full flex`}>
                 <Link to='/'>
                     <div className='flex h-12 mb-4 items-center w-full'>
@@ -61,7 +61,7 @@ function LoginCheckpointContainer() {
                 </div>
                 <div className={`mt-6`}>
                     <Button
-                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2'
+                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
                         size={'xlarge'}
                         type={'submit'}
                         disabled={isSubmitting}
@@ -73,7 +73,7 @@ function LoginCheckpointContainer() {
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
                 <div
-                    className={`mt-6 text-center w-full rounded-t-lg bg-[#ffffff33] border-0 ring-0 outline-none capitalize font-bold text-sm py-2 mb-2 `}
+                    className={`mt-6 text-center w-full rounded-t-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 `}
                 >
                     <span
                         onClick={() => {
@@ -87,7 +87,7 @@ function LoginCheckpointContainer() {
                     </span>
                 </div>
                 <div
-                    className={`text-center w-full rounded-b-lg bg-[#ffffff33] border-0 ring-0 outline-none capitalize font-bold text-sm py-2 `}
+                    className={`text-center w-full rounded-b-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
                 >
                     <Link
                         to={'/auth/login'}

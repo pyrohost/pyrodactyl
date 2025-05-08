@@ -51,7 +51,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     >
                         <FormikField
                             as={Textarea}
-                            className='px-4 py-2 rounded-lg outline-none bg-[#ffffff17] text-sm'
+                            className='px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm'
                             name={'ignored'}
                             rows={6}
                         />
@@ -122,7 +122,7 @@ export default () => {
                     background:
                         'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                 }}
-                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
+                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                 onClick={() => setVisible(true)}
             >
                 New Backup

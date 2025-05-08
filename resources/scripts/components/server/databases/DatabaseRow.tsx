@@ -202,7 +202,7 @@ export default ({ database }: Props) => {
                     <button
                         type={'button'}
                         aria-label={'View database connection details'}
-                        className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 flex align-middle items-center justify-center flex-col`}
+                        className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 flex align-middle items-center justify-center flex-col cursor-pointer`}
                         onClick={() => setConnectionVisible(true)}
                     >
                         <FontAwesomeIcon icon={faEye} className={`px-5`} size='lg' />
@@ -212,7 +212,7 @@ export default ({ database }: Props) => {
                         <button
                             type={'button'}
                             aria-label={'Delete database'}
-                            className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
+                            className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
                             onClick={() => setVisible(true)}
                         >
                             <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />

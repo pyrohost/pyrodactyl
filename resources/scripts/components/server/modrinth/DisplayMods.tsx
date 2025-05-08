@@ -98,7 +98,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
             <button
                 onClick={fetchProjects}
                 id='fetchNewProjects'
-                className='btn btn-primary mb-4 flex hidden'
+                className='btn btn-primary mb-4 flex hidden cursor-pointer'
                 disabled={isLoading}
             >
                 {isLoading ? 'Loading...' : 'Fetch Projects'}
@@ -110,13 +110,13 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 projects.map((project) => (
                     <ContentBox
                         key={project.project_id}
-                        className='p-4 bg-[#ffffff09] border border-gray-600 shadow-sm rounded-xl w-full mb-4'
+                        className='p-4 bg-[#ffffff09] border border-gray-600 shadow-xs rounded-xl w-full mb-4'
                     >
                         <div className='flex items-center'>
                             <ContentBox className='pt-1 rounded-xl mr-4'>
                                 <a href={`${nonApiUrl}/mod/${project.project_id}`} target='_blank' rel='noreferrer'>
                                     {project.icon_url !== 'N/A' ? (
-                                        <img src={project.icon_url} className='w-24 h-20 object-contain rounded' />
+                                        <img src={project.icon_url} className='w-24 h-20 object-contain rounded-sm' />
                                     ) : (
                                         <svg
                                             fillRule='evenodd'
@@ -159,7 +159,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                             </div>
                             <div className='flex flex-col py-2 px-6 mx-6'>
                                 <button
-                                    className='flex items-center border-2 border-solid rounded py-1 px-6 border-brand hover:border-white hover:bg-red-600 hover:scale-110 justify-center'
+                                    className='flex items-center border-2 border-solid rounded-sm py-1 px-6 border-brand hover:border-white hover:bg-red-600 hover:scale-110 justify-center cursor-pointer'
                                     onClick={() => setModalProject(project.project_id)}
                                 >
                                     <HugeIconsDownload className='px-2 mx-2' fill='currentColor' /> Install

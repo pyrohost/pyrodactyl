@@ -99,7 +99,7 @@ export default () => {
     });
 
     return (
-        <ServerContentBlock className='!p-0' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
                 <ErrorBoundary>
                     <MainPageHeader title={'Files'}>

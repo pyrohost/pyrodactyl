@@ -266,14 +266,14 @@ export default () => {
                 <>
                     {isSidebarVisible && (
                         <div
-                            className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9998] transition-opacity duration-300'
+                            className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-9998 transition-opacity duration-300'
                             onClick={() => setSidebarVisible(false)}
                         />
                     )}
 
                     <button
                         id='sidebarToggle'
-                        className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md'
+                        className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md cursor-pointer'
                         onClick={toggleSidebar}
                         aria-label='Toggle sidebar'
                     >
@@ -283,7 +283,7 @@ export default () => {
                     <div className='flex flex-row w-full'>
                         <MainSidebar
                             ref={sidebarRef}
-                            className={`fixed inset-y-0 left-0 z-[9999] w-[300px] bg-[#1a1a1a] transition-transform duration-300 ease-in-out absolute backdrop-blur-sm ${
+                            className={`fixed inset-y-0 left-0 z-9999 w-[300px] bg-[#1a1a1a] transition-transform duration-300 ease-in-out absolute backdrop-blur-xs ${
                                 isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
                             } lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
                             onTouchStart={handleTouchStart}
@@ -314,7 +314,7 @@ export default () => {
                                 </NavLink>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 select-none'>
+                                        <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 select-none cursor-pointer'>
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
                                                 width='16'
@@ -328,7 +328,7 @@ export default () => {
                                             </svg>
                                         </button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className='z-[99999] select-none relative' sideOffset={8}>
+                                    <DropdownMenuContent className='z-99999 select-none relative' sideOffset={8}>
                                         {rootAdmin && (
                                             <DropdownMenuItem onSelect={onSelectManageServer}>
                                                 Manage Server
