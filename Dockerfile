@@ -4,9 +4,10 @@ FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine AS frontend
 WORKDIR /app
 COPY . ./
 RUN apk add --no-cache --update git \
-  && npm install -g turbo  \
-  && npm ci  \
-  && npm run ship \
+  && npm install -g corepack@latest turbo \
+  && corepack enable \
+  && pnpm i --frozen-lockfile \
+  && pnpm run ship \
   && apk del git
 
 # Stage 1:
