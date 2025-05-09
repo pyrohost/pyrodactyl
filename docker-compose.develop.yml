@@ -1,0 +1,85 @@
+x-common:
+    database: &db-environment
+        # Do not remove the "&db-password" from the end of the line below, it is important
+        # for Panel functionality.
+        MYSQL_PASSWORD: &db-password 'password'
+        MYSQL_ROOT_PASSWORD: &db-root-password 'rootpassword'
+    panel: &panel-environment
+        APP_URL: 'http://localhost:3000'
+        # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+        APP_TIMEZONE: 'UTC'
+        APP_SERVICE_AUTHOR: 'noreply@example.com'
+        DB_USERNAME: 'pterodactyl'
+        # Specifies to setup default user, location, etc on first run
+        PYRODACTYL_DEV: 'true'
+        # DB_PASSWORD: "Uncomment this to user your own password"
+
+        # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
+        # to generate an SSL certificate for the Panel.
+        # LE_EMAIL: ""
+
+    mail: &mail-environment
+        MAIL_FROM: 'noreply@example.com'
+        MAIL_DRIVER: 'smtp'
+        MAIL_HOST: 'mail'
+        MAIL_PORT: '1025'
+        MAIL_USERNAME: ''
+        MAIL_PASSWORD: ''
+        MAIL_ENCRYPTION: 'true'
+
+#
+# ------------------------------------------------------------------------------------------
+# DANGER ZONE BELOW
+#
+# The remainder of this file likely does not need to be changed. Please only make modifications
+# below if you understand what you are doing.
+#
+services:
+    database:
+        image: mariadb:10.5
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - './srv/database:/var/lib/mysql'
+        environment:
+            <<: *db-environment
+            MYSQL_DATABASE: 'panel'
+            MYSQL_USER: 'pterodactyl'
+    cache:
+        image: redis:alpine
+        restart: always
+    panel:
+        image: pyrodactyl:develop
+        restart: always
+        ports:
+            - '3000:80'
+            # - '443:443'
+        links:
+            - database
+            - cache
+        volumes:
+            - '.:/app'
+            - '/app/vendor' # creates an anonymous volume for /app/vendor, meaning it'll use the image's vendor directory
+            - './srv/var:/app/var'
+            - './srv/nginx/:/etc/nginx/http.d/'
+            - './srv/certs:/etc/letsencrypt'
+            - './srv/logs/:/app/storage/logs'
+        environment:
+            <<: [*panel-environment, *mail-environment]
+            DB_PASSWORD: *db-password
+            DB_ROOT_PASSWORD: *db-root-password
+            APP_ENV: 'production'
+            APP_ENVIRONMENT_ONLY: 'false'
+            CACHE_DRIVER: 'redis'
+            SESSION_DRIVER: 'redis'
+            QUEUE_DRIVER: 'redis'
+            REDIS_HOST: 'cache'
+            DB_CONNECTION: 'mariadb'
+            DB_HOST: 'database'
+            DB_PORT: '3306'
+            HASHIDS_LENGTH: 8
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16

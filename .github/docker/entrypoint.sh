@@ -101,6 +101,31 @@ else
     echo -e "Skipping database seeding (SKIP_SEED=True)"
 fi
 
+# Setup development environment if specified
+(
+  source /app/.env
+  if [ "$PYRODACTYL_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
+    echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
+
+    # Create a developer user
+    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password
+    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
+    
+    # Make a location and node for the panel
+    php artisan p:location:make -n --short local --long Local
+    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
+    
+    # Add some dummy allocations to the node
+    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
+    
+    # Mark setup as complete
+    echo "DEV_SETUP=true" >> /app/.env
+    echo "Development setup complete."
+  elif [ "$DEV_SETUP" = "true" ]; then
+    echo "Skipping development setup, already completed."
+  fi
+)
+
 ## start cronjobs for the queue
 echo -e "Starting cron jobs."
 crond -L /var/log/crond -l 5

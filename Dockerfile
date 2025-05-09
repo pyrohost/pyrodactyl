@@ -1,19 +1,29 @@
 # Stage 0:
-# Build the frontend
+# Build the frontend (only if not in dev mode)
 FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine AS frontend
+ARG DEV=false
 WORKDIR /app
-RUN apk add --no-cache git \
+RUN if [ "$DEV" = "false" ]; then \
+  apk add --no-cache git \
   && npm install -g corepack@latest turbo \
-  && corepack enable
+  && corepack enable \
+  && echo "Building frontend"; \
+  fi
 COPY pnpm-lock.yaml package.json ./
-RUN pnpm fetch
+RUN if [ "$DEV" = "false" ]; then \
+  pnpm fetch \
+  && echo "Fetched dependencies"; \
+  fi
 COPY . .
-RUN pnpm install --frozen-lockfile \
-  && pnpm run ship
+RUN if [ "$DEV" = "false" ]; then \
+  pnpm install --frozen-lockfile \
+  && pnpm run ship; \
+  fi
 
 # Stage 1:
 # Build the actual container with all of the needed PHP dependencies that will run the application
 FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine AS php
+ARG DEV=false
 WORKDIR /app
 
 # Build-time deps & PHP extensions
@@ -33,8 +43,13 @@ RUN apk add --no-cache \
 
 # Copy frontend build
 COPY . ./
-COPY --from=frontend /app/public/assets  public/assets
-COPY --from=frontend /app/public/build   public/build
+RUN if [ "$DEV" = "false" ]; then \
+  echo "Copying frontend build"; \
+  else \
+  mkdir -p public/assets public/build; \
+  fi
+COPY --from=frontend /app/public/assets public/assets
+COPY --from=frontend /app/public/build public/build
 
 # Fetch & install Composer packages
 COPY composer.json composer.lock ./
