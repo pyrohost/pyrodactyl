@@ -50,7 +50,7 @@ export function httpErrorToHuman(error: any): string {
         if (typeof data === 'string') {
             try {
                 data = JSON.parse(data);
-            } catch (e) {
+            } catch {
                 // do nothing, bad json
             }
         }

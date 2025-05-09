@@ -29,14 +29,18 @@ export class Websocket extends EventEmitter {
             onmessage: (e) => {
                 try {
                     const { event, args } = JSON.parse(e.data);
-                    args ? this.emit(event, ...args) : this.emit(event);
+                    if (args) {
+                        this.emit(event, ...args);
+                    } else {
+                        this.emit(event);
+                    }
                 } catch (ex) {
                     console.warn('Failed to parse incoming websocket message.', ex);
                 }
             },
             onopen: () => {
                 // Clear the timers, we managed to connect just fine.
-                this.timer && clearTimeout(this.timer);
+                if (this.timer) clearTimeout(this.timer);
                 this.backoff = 5000;
 
                 this.emit('SOCKET_OPEN');
@@ -52,7 +56,7 @@ export class Websocket extends EventEmitter {
 
         this.timer = setTimeout(() => {
             this.backoff = this.backoff + 2500 >= 20000 ? 20000 : this.backoff + 2500;
-            this.socket && this.socket.close();
+            if (this.socket) this.socket.close();
             clearTimeout(this.timer);
 
             // Re-attempt connecting to the socket.
@@ -83,24 +87,25 @@ export class Websocket extends EventEmitter {
     close(code?: number, reason?: string) {
         this.url = null;
         this.token = '';
-        this.socket && this.socket.close(code, reason);
+        if (this.socket) this.socket.close(code, reason);
     }
 
     open() {
-        this.socket && this.socket.open();
+        if (this.socket) this.socket.open();
     }
 
     reconnect() {
-        this.socket && this.socket.reconnect();
+        if (this.socket) this.socket.reconnect();
     }
 
     send(event: string, payload?: string | string[]) {
-        this.socket &&
+        if (this.socket) {
             this.socket.send(
                 JSON.stringify({
                     event,
                     args: Array.isArray(payload) ? payload : [payload],
                 }),
             );
+        }
     }
 }

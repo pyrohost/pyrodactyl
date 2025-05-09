@@ -4,8 +4,7 @@ interface State {
     hasError: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-class ErrorBoundary extends Component<{}, State> {
+class ErrorBoundary extends Component<Record<string, never>, State> {
     override state: State = {
         hasError: false,
     };
