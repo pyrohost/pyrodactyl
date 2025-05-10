@@ -124,35 +124,35 @@ fi
     # Configure node
     export WINGS_CONFIG=/etc/pterodactyl/config.yml
     mkdir -p $(dirname $WINGS_CONFIG)
-    echo "Creating Wings configuration file at '$WINGS_CONFIG'"
-    php artisan p:node:configuration 1 > $WINGS_CONFIG
-
+    echo "Fetching and modifying Wings configuration file..."
+    CONFIG=$(php artisan p:node:configuration 1)
+    
     # Allow all origins for CORS
-    echo "allowed_origins: ['*']" >> $WINGS_CONFIG
-
+    CONFIG=$(printf "%s\nallowed_origins: ['*']" "$CONFIG")
+    
     # Update Wings configuration paths if WINGS_DIR is set
     if [ -z "$WINGS_DIR" ]; then
       echo "WINGS_DIR is not set, using default paths."
     else
-      echo "Updating Wings configuration paths to '$WINGS_DIR'"
-
+      echo "Updating Wings configuration paths to '$WINGS_DIR'..."
+      
+      # add system section if it doesn't exist
+      if ! echo "$CONFIG" | grep -q "^system:"; then
+        CONFIG+=$'\nsystem:'
+      fi
+      
       update_config() {
-        key="$1"
-        value="$2"
+        local key="$1"
+        local value="$2"
         
         # update existing key or add new one
-        if grep -q "$key:" $WINGS_CONFIG; then
-          sed -i "s|$key:.*|$key: $value|" $WINGS_CONFIG
+        if echo "$CONFIG" | grep -q "^  $key:"; then
+          CONFIG=$(echo "$CONFIG" | sed "s|^  $key:.*|  $key: $value|")
         else
-          sed -i "/^system:/a\\  $key: $value" $WINGS_CONFIG
+          CONFIG=$(echo "$CONFIG" | sed "/^system:/a\\  $key: $value")
         fi
       }
-
-      # if system section doesn't exists, add it
-      if ! grep -q "^system:" $WINGS_CONFIG; then
-        echo "system:" >> $WINGS_CONFIG
-      fi
-
+      
       update_config "root_directory" "$WINGS_DIR/srv/wings/"
       update_config "log_directory" "$WINGS_DIR/srv/wings/logs/"
       update_config "data" "$WINGS_DIR/srv/wings/volumes"
@@ -160,6 +160,9 @@ fi
       update_config "backup_directory" "$WINGS_DIR/srv/wings/backups"
       update_config "tmp_directory" "$WINGS_DIR/srv/wings/tmp/"
     fi
+    
+    echo "Saving Wings configuration file to '$WINGS_CONFIG'..."
+    echo "$CONFIG" > $WINGS_CONFIG
 
     # Mark setup as complete
     echo "DEV_SETUP=true" >> /app/.env
