@@ -57,9 +57,22 @@ RUN curl -sS https://getcomposer.org/installer \
   | php -- --install-dir=/usr/local/bin --filename=composer \
   && composer install --no-dev --optimize-autoloader
 
+# Clean up image for dev environment
+# This is because we share local files with the container
+RUN if [ "$DEV" = "true" ]; then \
+  echo "Cleaning up"; \
+  find . \
+  -mindepth 1 \
+  \( -path './vendor*' \) -prune \
+  -o \
+  -exec rm -rf -- {} \; \
+  >/dev/null 2>&1; \
+  fi; \
+  exit 0
+
 # Env, directories, permissions
-RUN cp .env.example .env \
-  && mkdir -p bootstrap/cache storage/{logs,framework/{sessions,views,cache}} \
+RUN cp .env.example .env || true \
+  && mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache \
   && chmod -R 777 bootstrap storage \
   && rm -rf bootstrap/cache/*.php \
   && chown -R nginx:nginx storage bootstrap
@@ -77,19 +90,6 @@ RUN rm /usr/local/etc/php-fpm.conf \
 COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.conf
 COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
-
-# Clean up image for dev environment
-# This is because we share local files with the container
-RUN if [ "$DEV" = "true" ]; then \
-  echo "Cleaning up"; \
-  find . \
-  -mindepth 1 \
-  \( -path './vendor' -o -path './vendor/*' \) -prune \
-  -o \
-  -exec rm -rf -- {} \; \
-  >/dev/null 2>&1; \
-  fi; \
-  exit 0
 
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]

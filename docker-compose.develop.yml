@@ -1,8 +1,11 @@
 x-common:
     wings: &wings-environment
-        # The panel needs the to use the same FQDN/IP in both the container and the host, so a static IP is required.
+        # The panel needs the to use the same FQDN/IP accessible in both the container & host, so a static IP is required.
         # If you change it, you will need to update it in "http://localhost:3000/admin/nodes/view/1/settings" too, or down
         # the compose, delete the "srv" folder, then up it again.
+        #
+        # Rootless Docker can't expose the IPs, so accessing Wings from the host won't work.
+        # https://docs.docker.com/engine/security/rootless/#known-limitations
         #
         # macOS Docker Desktop users will need to install https://github.com/chipmk/docker-mac-net-connect for Wings to work.
         # macOS OrbStack & Linux users shouldn't need to install the above.
@@ -65,12 +68,17 @@ services:
             - cache
         volumes:
             - '.:/app'
-            - '/app/vendor' # creates an anonymous volume for /app/vendor, meaning it'll use the image's vendor directory
             - './srv/var:/app/var'
             - './srv/nginx/:/etc/nginx/http.d/'
             - './srv/certs:/etc/letsencrypt'
             - './srv/logs/:/app/storage/logs'
             - './srv/pterodactyl/config/:/etc/pterodactyl'
+            # anonymous volumes below, meaning it'll use the image's directory instead of the host
+            - '/app/vendor'
+            # needed for linux permissions
+            - '/app/storage'
+            - '/app/storage/framework/views'
+            - '/app/bootstrap/cache'
         environment:
             <<: [*panel-environment, *mail-environment]
             DB_PASSWORD: *db-password
