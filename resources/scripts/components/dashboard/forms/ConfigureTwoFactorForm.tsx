@@ -1,5 +1,6 @@
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import DisableTOTPDialog from '@/components/dashboard/forms/DisableTOTPDialog';
 import RecoveryTokensDialog from '@/components/dashboard/forms/RecoveryTokensDialog';
@@ -15,6 +16,7 @@ export default () => {
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
     const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
     const { clearAndAddHttpError } = useFlashKey('account:two-step');
+    const { t } = useTranslation();
 
     useEffect(() => {
         return () => {
@@ -33,15 +35,15 @@ export default () => {
             <RecoveryTokensDialog tokens={tokens} open={tokens.length > 0} onClose={() => setTokens([])} />
             <DisableTOTPDialog open={visible === 'disable'} onClose={() => setVisible(null)} />
             <p className={`text-sm`}>
-                {isEnabled
-                    ? 'Your account is protected by an authenticator app.'
-                    : 'You have not configured an authenticator app.'}
+                {isEnabled ? t('settings.2fa.status.enabled') : t('settings.2fa.status.disabled')}
             </p>
             <div className={`mt-6`}>
                 {isEnabled ? (
-                    <Button.Danger onClick={() => setVisible('disable')}>Remove Authenticator App</Button.Danger>
+                    <Button.Danger onClick={() => setVisible('disable')}>
+                        {t('settings.2fa.buttons.disable')}
+                    </Button.Danger>
                 ) : (
-                    <Button onClick={() => setVisible('enable')}>Enable Authenticator App</Button>
+                    <Button onClick={() => setVisible('enable')}>{t('settings.2fa.buttons.enable')}</Button>
                 )}
             </div>
         </div>

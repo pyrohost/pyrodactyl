@@ -1,5 +1,6 @@
 import { useStoreState } from 'easy-peasy';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
@@ -23,11 +24,12 @@ export default () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const node = ServerContext.useStoreState((state) => state.server.data!.node);
     const sftp = ServerContext.useStoreState((state) => state.server.data!.sftpDetails, isEqual);
+    const { t } = useTranslation();
 
     return (
-        <ServerContentBlock title={'Settings'}>
+        <ServerContentBlock title={t('server.settings.header')}>
             <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader title={'Settings'} />
+            <MainPageHeader title={t('server.settings.header')} />
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
                     <RenameServerBox />
@@ -38,22 +40,22 @@ export default () => {
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />
                 </Can>
-                <TitledGreyBox title={'Debug Information'}>
+                <TitledGreyBox title={t('server.settings.debug_information')}>
                     <div className={`flex items-center justify-between text-sm`}>
-                        <p>Node</p>
+                        <p>{t('server.settings.node')}</p>
                         <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{node}</code>
                     </div>
                     <CopyOnClick text={uuid}>
                         <div className={`flex items-center justify-between mt-2 text-sm`}>
-                            <p>Server ID</p>
+                            <p>{t('server.settings.server_id')}</p>
                             <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{uuid}</code>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
                 <Can action={'file.sftp'}>
-                    <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
+                    <TitledGreyBox title={t('server.settings.sftp_details')} className={`mb-6 md:mb-10`}>
                         <div className={`flex items-center justify-between text-sm`}>
-                            <Label>Server Address</Label>
+                            <Label>{t('server.settings.server_address')}</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
                                 <code
                                     className={`font-mono bg-zinc-900 rounded py-1 px-2`}
@@ -61,7 +63,7 @@ export default () => {
                             </CopyOnClick>
                         </div>
                         <div className={`mt-2 flex items-center justify-between text-sm`}>
-                            <Label>Username</Label>
+                            <Label>{t('server.settings.username')}</Label>
                             <CopyOnClick text={`${username}.${id}`}>
                                 <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`${username}.${id}`}</code>
                             </CopyOnClick>
@@ -69,14 +71,14 @@ export default () => {
                         <div className={`mt-6 flex items-center`}>
                             <div className={`flex-1`}>
                                 <div className={`border-l-4 border-brand p-3`}>
-                                    <p className={`text-xs text-zinc-200`}>
-                                        Your SFTP password is the same as the password you use to access this panel.
-                                    </p>
+                                    <p className={`text-xs text-zinc-200`}>{t('server.settings.sftp_password_note')}</p>
                                 </div>
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <Button.Text variant={Button.Variants.Secondary}>Launch SFTP</Button.Text>
+                                    <Button.Text variant={Button.Variants.Secondary}>
+                                        {t('server.settings.launch_sftp')}
+                                    </Button.Text>
                                 </a>
                             </div>
                         </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -25,6 +26,8 @@ function ScheduleContainer() {
     const schedules = ServerContext.useStoreState((state) => state.schedules.data);
     const setSchedules = ServerContext.useStoreActions((actions) => actions.schedules.setSchedules);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         clearFlashes('schedules');
 
@@ -40,7 +43,7 @@ function ScheduleContainer() {
     return (
         <ServerContentBlock title={'Schedules'}>
             <FlashMessageRender byKey={'schedules'} />
-            <MainPageHeader title={'Schedules'}>
+            <MainPageHeader title={t('server_titles.schedules')}>
                 <Can action={'schedule.create'}>
                     <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
                     <button
@@ -51,7 +54,7 @@ function ScheduleContainer() {
                         className='rounded-full border-[1px] border-[#ffffff12] px-8 py-3 text-sm font-bold shadow-md'
                         onClick={() => setVisible(true)}
                     >
-                        New Schedule
+                        {t('server_schedules.new_schedule_button')}
                     </button>
                 </Can>
             </MainPageHeader>

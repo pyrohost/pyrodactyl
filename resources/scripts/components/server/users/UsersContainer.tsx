@@ -1,6 +1,7 @@
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
@@ -27,6 +28,8 @@ export default () => {
     const getPermissions = useStoreActions((actions: Actions<ApplicationStore>) => actions.permissions.getPermissions);
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         clearFlashes('users');
         getServerSubusers(uuid)
@@ -50,7 +53,9 @@ export default () => {
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
         return (
             <ServerContentBlock title={'Users'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>
+                    {t('server_titles.users')}
+                </h1>
             </ServerContentBlock>
         );
     }
@@ -58,15 +63,13 @@ export default () => {
     return (
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} />
-            <MainPageHeader title={'Users'}>
+            <MainPageHeader title={t('server_titles.users')}>
                 <Can action={'user.create'}>
                     <AddSubuserButton />
                 </Can>
             </MainPageHeader>
             {!subusers.length ? (
-                <p className={`text-center text-sm text-zinc-300`}>
-                    Your server does not have any additional users. Add others to help you manage your server.
-                </p>
+                <p className={`text-center text-sm text-zinc-300`}>{t('server_users.no_additional_users')}</p>
             ) : (
                 <PageListContainer data-pyro-users-container-users>
                     <For each={subusers} memo>

@@ -1,6 +1,8 @@
-// Provides necessary information for components to function properly
-// million-ignore
-const PyrodactylProvider = ({ children }) => {
+interface Props {
+    children: React.ReactNode;
+}
+
+const PyrodactylProvider = ({ children }: Props) => {
     return (
         <div
             data-pyro-pyrodactylprovider=''

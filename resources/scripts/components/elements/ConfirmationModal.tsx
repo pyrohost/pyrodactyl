@@ -1,5 +1,6 @@
 import ModalContext from '@/context/ModalContext';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/elements/button/index';
 
@@ -15,13 +16,14 @@ type Props = {
 
 const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed }) => {
     const { dismiss } = useContext(ModalContext);
+    const { t } = useTranslation();
 
     return (
         <>
             <div className='flex flex-col w-full'>
                 <div className={`text-zinc-300`}>{children}</div>
                 <div className={`flex gap-4 items-center justify-end my-6`}>
-                    <Button.Text onClick={() => dismiss()}>Cancel</Button.Text>
+                    <Button.Text onClick={() => dismiss()}>{t('cancel')}</Button.Text>
                     <Button onClick={() => onConfirmed()}>{buttonText}</Button>
                 </div>
             </div>

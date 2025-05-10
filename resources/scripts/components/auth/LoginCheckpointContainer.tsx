@@ -1,6 +1,7 @@
 import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -28,7 +29,11 @@ type Props = OwnProps & {
     clearAndAddHttpError: ActionCreator<FlashStore['clearAndAddHttpError']['payload']>;
 };
 
+/**
+ * Component hiển thị form xác thực hai yếu tố khi đăng nhập
+ */
 function LoginCheckpointContainer() {
+    const { t } = useTranslation();
     const { isSubmitting, setFieldValue } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
@@ -41,18 +46,18 @@ function LoginCheckpointContainer() {
                     </div>
                 </Link>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
+                <h2 className='text-xl font-extrabold mb-2'>{t('auth.two_factor_authentication')}</h2>
+                <div className='text-sm mb-6'>{t('auth.check_device_for_code')}</div>
 
                 <div className={`mt-6`}>
                     <Field
                         name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
+                        title={isMissingDevice ? t('auth.recovery_code') : t('auth.authentication_code')}
                         placeholder='000000'
                         description={
                             isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
+                                ? t('auth.recovery_code_description')
+                                : t('auth.two_factor_code_description')
                         }
                         type={'text'}
                         autoComplete={'one-time-code'}
@@ -67,7 +72,7 @@ function LoginCheckpointContainer() {
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >
-                        Login
+                        {t('auth.login')}
                     </Button>
                 </div>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
@@ -83,7 +88,7 @@ function LoginCheckpointContainer() {
                         }}
                         className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
                     >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                        {!isMissingDevice ? t('auth.lost_device') : t('auth.have_device')}
                     </span>
                 </div>
                 <div
@@ -93,7 +98,7 @@ function LoginCheckpointContainer() {
                         to={'/auth/login'}
                         className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33]`}
                     >
-                        Return to Login
+                        {t('auth.return_to_login')}
                     </Link>
                 </div>
             </LoginFormContainer>

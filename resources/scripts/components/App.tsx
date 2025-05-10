@@ -7,6 +7,7 @@ import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
@@ -39,6 +40,17 @@ interface ExtendedWindow extends Window {
     };
 }
 
+/**
+ * Fallback component cho Suspense với i18n
+ */
+const LoadingFallback = () => {
+    const { t } = useTranslation();
+    return <>{t('common.loading')}</>;
+};
+
+/**
+ * Component gốc của ứng dụng
+ */
 const App = () => {
     const { PterodactylUser, SiteConfiguration } = window as ExtendedWindow;
     if (PterodactylUser && !store.getState().user.data) {
@@ -81,7 +93,7 @@ const App = () => {
                                 <Route
                                     path='/auth/*'
                                     element={
-                                        <Spinner.Suspense>
+                                        <Spinner.Suspense fallback={<LoadingFallback />}>
                                             <AuthenticationRouter />
                                         </Spinner.Suspense>
                                     }
@@ -91,7 +103,7 @@ const App = () => {
                                     path='/server/:id/*'
                                     element={
                                         <AuthenticatedRoute>
-                                            <Spinner.Suspense>
+                                            <Spinner.Suspense fallback={<LoadingFallback />}>
                                                 <ServerContext.Provider>
                                                     <ServerRouter />
                                                 </ServerContext.Provider>
@@ -104,7 +116,7 @@ const App = () => {
                                     path='/*'
                                     element={
                                         <AuthenticatedRoute>
-                                            <Spinner.Suspense>
+                                            <Spinner.Suspense fallback={<LoadingFallback />}>
                                                 <DashboardRouter />
                                             </Spinner.Suspense>
                                         </AuthenticatedRoute>

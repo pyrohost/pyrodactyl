@@ -45,3 +45,7 @@ nix/docker/maria/mariadb_data/
 nix/mariadb/
 wings/
 mariadb_data/
+
+docker-compose.yml
+srv
+.cursor

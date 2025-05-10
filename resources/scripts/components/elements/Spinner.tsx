@@ -11,6 +11,7 @@ interface Props {
     centered?: boolean;
     isBlue?: boolean;
     children?: React.ReactNode;
+    fallback?: React.ReactNode;
 }
 
 interface Spinner extends React.FC<Props> {
@@ -45,6 +46,12 @@ const SpinnerComponent = styled.div<Props>`
     border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
 `;
 
+/**
+ * Component hiển thị hiệu ứng spinner loading
+ * @param centered Hiển thị chính giữa container
+ * @param visible Điều khiển hiển thị
+ * @param props Props khác
+ */
 const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
     visible &&
     (centered ? (
@@ -62,10 +69,16 @@ Spinner.Size = {
     LARGE: 'large',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-Spinner.Suspense = ({ children, centered = true, size = Spinner.Size.LARGE, ...props }) => (
-    // <Spinner centered={centered} size={size} {...props} />
-    <Suspense fallback={null} {...props}>
+/**
+ * Component Suspense kết hợp với Spinner
+ * @param children Nội dung bên trong
+ * @param centered Hiển thị spinner chính giữa
+ * @param size Kích thước spinner
+ * @param fallback Component hiển thị khi đang loading (mặc định là Spinner)
+ * @param props Props khác
+ */
+Spinner.Suspense = ({ children, centered = true, size = Spinner.Size.LARGE, fallback = null, ...props }) => (
+    <Suspense fallback={fallback ?? <Spinner centered={centered} size={size} {...props} />}>
         <ErrorBoundary>{children}</ErrorBoundary>
     </Suspense>
 );

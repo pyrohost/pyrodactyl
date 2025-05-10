@@ -2,6 +2,7 @@ import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Reaptcha from 'reaptcha';
 import { object, string } from 'yup';
@@ -23,6 +24,7 @@ interface Values {
 }
 
 export default () => {
+    const { t } = useTranslation();
     const ref = useRef<Reaptcha>(null);
     const [token, setToken] = useState('');
 
@@ -43,7 +45,11 @@ export default () => {
                 console.error(error);
 
                 setSubmitting(false);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({
+                    type: 'error',
+                    title: t('common.error'),
+                    message: httpErrorToHuman(error),
+                });
             });
 
             return;
@@ -52,11 +58,19 @@ export default () => {
         requestPasswordResetEmail(email, token)
             .then((response) => {
                 resetForm();
-                addFlash({ type: 'success', title: 'Success', message: response });
+                addFlash({
+                    type: 'success',
+                    title: t('common.success'),
+                    message: response,
+                });
             })
             .catch((error) => {
                 console.error(error);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({
+                    type: 'error',
+                    title: t('common.error'),
+                    message: httpErrorToHuman(error),
+                });
             })
             .then(() => {
                 setToken('');
@@ -75,8 +89,8 @@ export default () => {
                 initialValues={{ email: '' }}
                 validationSchema={object().shape({
                     email: string()
-                        .email('Please enter your email address to reset your password.')
-                        .required('Please enter your email address to reset your password.'),
+                        .email(t('auth.validation.email_required_reset'))
+                        .required(t('auth.validation.email_required_reset')),
                 })}
             >
                 {({ isSubmitting, setSubmitting, submitForm }) => (
@@ -87,11 +101,9 @@ export default () => {
                             </div>
                         </Link>
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                        <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
-                        <div className='text-sm mb-6'>
-                            We&apos;ll send you an email with a link to reset your password.
-                        </div>
-                        <Field id='email' label={'Email'} name={'email'} type={'email'} />
+                        <h2 className='text-xl font-extrabold mb-2'>{t('auth.reset_password')}</h2>
+                        <div className='text-sm mb-6'>{t('auth.reset_email_info')}</div>
+                        <Field id='email' label={t('auth.email')} name={'email'} type={'email'} />
                         <div className={`mt-6`}>
                             <Button
                                 className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
@@ -100,7 +112,7 @@ export default () => {
                                 isLoading={isSubmitting}
                                 disabled={isSubmitting}
                             >
-                                Send Email
+                                {t('auth.send_email')}
                             </Button>
                         </div>
                         {recaptchaEnabled && (
@@ -129,7 +141,7 @@ export default () => {
                                 to={'/auth/login'}
                                 className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
                             >
-                                Return to Login
+                                {t('auth.return_to_login')}
                             </Link>
                         </div>
                     </LoginFormContainer>

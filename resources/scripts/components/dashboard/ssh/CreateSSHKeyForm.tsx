@@ -1,6 +1,7 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -22,6 +23,7 @@ interface Values {
 }
 
 export default () => {
+    const { t } = useTranslation();
     const [sshKey, setSshKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { mutate } = useSSHKeys();
@@ -56,8 +58,8 @@ export default () => {
                     onSubmit={submit}
                     initialValues={{ name: '', publicKey: '' }}
                     validationSchema={object().shape({
-                        name: string().required('SSH Key Name is required'),
-                        publicKey: string().required('Public Key is required'),
+                        name: string().required(t('ssh_key.name_required')),
+                        publicKey: string().required(t('ssh_key.public_key_required')),
                     })}
                 >
                     {({ isSubmitting }) => (
@@ -67,18 +69,18 @@ export default () => {
 
                             {/* SSH Key Name Field */}
                             <FormikFieldWrapper
-                                label='SSH Key Name'
+                                label={t('ssh_key.name')}
                                 name='name'
-                                description='A name to identify this SSH key.'
+                                description={t('ssh_key.name_description')}
                             >
                                 <Field name='name' as={Input} className='w-full' />
                             </FormikFieldWrapper>
 
                             {/* Public Key Field */}
                             <FormikFieldWrapper
-                                label='Public Key'
+                                label={t('ssh_key.public_key')}
                                 name='publicKey'
-                                description='Enter your public SSH key.'
+                                description={t('ssh_key.public_key_description')}
                             >
                                 <Field name='publicKey' as={Input} className='w-full' />
                             </FormikFieldWrapper>
@@ -86,7 +88,7 @@ export default () => {
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
                                 <Button type='submit' disabled={isSubmitting}>
-                                    {isSubmitting ? 'Creating...' : 'Create SSH Key'}
+                                    {isSubmitting ? t('ssh_key.creating') : t('ssh_key.create')}
                                 </Button>
                             </div>
                         </Form>

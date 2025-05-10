@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import Button from '@/components/elements/ButtonV2';
@@ -74,6 +75,7 @@ const hidden_nest_prefix = '!';
 const blank_egg_prefix = '@';
 
 const SoftwareContainer = () => {
+    const [t] = useTranslation();
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest[]>();
     const eggs = nests?.reduce(
@@ -293,12 +295,8 @@ const SoftwareContainer = () => {
     return (
         <ServerContentBlock title='Software'>
             <MainPageHeader direction='column' title='Software'>
-                <h2 className='text-sm'>
-                    Welcome to the software management page. Here you can change the game or software that is running on
-                    your server.
-                </h2>
+                <h2 className='text-sm'>Welcome</h2>
             </MainPageHeader>
-
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
                     <div className='w-full h-full'>
