@@ -138,7 +138,7 @@ fi
       
       # add system section if it doesn't exist
       if ! echo "$CONFIG" | grep -q "^system:"; then
-        CONFIG+=$'\nsystem:'
+        CONFIG=$(printf "%s\nsystem:" "$CONFIG")
       fi
       
       update_config() {
