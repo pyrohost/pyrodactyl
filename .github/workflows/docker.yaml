@@ -1,4 +1,4 @@
-name: Docker
+name: Docker Build and Push
 
 on:
     workflow_run:
@@ -9,6 +9,8 @@ on:
         branches:
             - release/**
             - main
+            - feature/**
+            - dev
     release:
         types:
             - published
@@ -34,10 +36,25 @@ jobs:
                   flavor: |
                       latest=auto
                   tags: |
+                      # For main branch, tag as both 'main' and 'latest'
                       type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
+                      type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+                      # For release branches, tag with branch name (e.g., release/v1.0)
+                      type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
+
+                      # For feature branches, tag with branch name (e.g., feature/new-auth)
+                      type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/feature/') }}
+
+                      # For develop branch
+                      type=raw,value=develop,enable=${{ github.ref == 'refs/heads/dev' }}
+
+                      # For GitHub releases
                       type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease }}
                       type=ref,event=tag
-                      type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
+
+                      # For workflow_run triggered builds
+                      type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }}
 
             - name: Setup QEMU
               uses: docker/setup-qemu-action@v3
