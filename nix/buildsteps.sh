@@ -123,7 +123,7 @@ main() {
 
     # Optional: Start development services
     tmux new-session -s pterodactyl-dev -d
-    tmux send-keys -t pterodactyl-dev 'npm run dev' C-m
+    tmux send-keys -t pterodactyl-dev 'pnpm run dev' C-m
     tmux new-window -t pterodactyl-dev
     tmux send-keys -t pterodactyl-dev 'php artisan serve' C-m
     tmux new-window -t pterodactyl-dev

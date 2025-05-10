@@ -118,7 +118,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         The schedule system supports the use of Cronjob syntax when defining when tasks should begin
                         running. Use the fields above to specify when these tasks should begin running.
                     </p>
-                    <div className={`space-y-3 my-6`}>
+                    <div className='gap-3 my-6 flex flex-col'>
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                             <ItemContainer
                                 description={'Online editor for cron schedule experessions.'}

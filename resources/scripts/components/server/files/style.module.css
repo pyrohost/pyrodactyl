@@ -1,12 +1,14 @@
+@import '../../../assets/tailwind.css';
+
 .manager_actions {
-    @apply grid grid-cols-2 sm:grid-cols-3 w-full gap-4 mb-4;
+    @apply mb-4 grid w-full grid-cols-2 gap-4 sm:grid-cols-3;
 
     & button {
         @apply w-full first:col-span-2 sm:first:col-span-1;
     }
 
     @screen md {
-        @apply flex flex-1 justify-end mb-0;
+        @apply mb-0 flex flex-1 justify-end;
 
         & button {
             @apply w-auto;
@@ -15,11 +17,11 @@
 }
 
 .file_row {
-    @apply rounded-sm p-1 transition bg-[#ffffff08] border-[1px] border-[#ffffff07] flex items-center text-sm no-underline;
+    @apply flex items-center rounded-sm border-[1px] border-[#ffffff07] bg-[#ffffff08] p-1 text-sm no-underline transition;
     @apply hover:bg-[#ffffff12] hover:duration-0;
 
     & > .details {
-        @apply flex flex-1 items-center text-zinc-300 no-underline px-4 py-2 overflow-hidden truncate;
+        @apply flex flex-1 items-center truncate overflow-hidden px-4 py-2 text-zinc-300 no-underline;
 
         &:not(a) {
             @apply cursor-default;

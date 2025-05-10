@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-    * {
-        min-width: 0
-    }
+    // * {
+    //     min-width: 0
+    // }
 
     html, body, #app {
         position: relative;

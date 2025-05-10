@@ -1,6 +1,5 @@
 import ModalContext, { ModalContextValues } from '@/context/ModalContext';
 import { PureComponent } from 'react';
-import isEqual from 'react-fast-compare';
 
 import PortaledModal, { ModalProps } from '@/components/elements/Modal';
 
@@ -17,8 +16,7 @@ interface State {
     propOverrides: Partial<SettableModalProps>;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-function asModal<P extends {}>(
+function asModal<P extends object>(
     modalProps?: SettableModalProps | ((props: P) => SettableModalProps),
 ): (Component: any) => any {
     return function (Component) {

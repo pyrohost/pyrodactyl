@@ -108,7 +108,7 @@ const StartupContainer = () => {
                 <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
                     <CopyOnClick text={data.invocation}>
                         <div className={`px-1 py-2`}>
-                            <p className={`font-mono bg-zinc-900 rounded py-2 px-4`}>{data.invocation}</p>
+                            <p className={`font-mono bg-zinc-900 rounded-sm py-2 px-4`}>{data.invocation}</p>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
@@ -118,7 +118,7 @@ const StartupContainer = () => {
                             <InputSpinner visible={loading}>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11]'>
+                                        <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] cursor-pointer'>
                                             <div>{variables.dockerImage}</div>
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
@@ -137,7 +137,7 @@ const StartupContainer = () => {
                                             </svg>
                                         </button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className='flex flex-col gap-1 z-[99999]' sideOffset={8}>
+                                    <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
                                         <DropdownMenuRadioGroup
                                             value={variables.dockerImage}
                                             onValueChange={(value) => updateSelectedDockerImage(value)}

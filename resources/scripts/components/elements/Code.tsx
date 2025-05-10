@@ -8,7 +8,7 @@ interface CodeProps {
 
 export default ({ dark, className, children }: CodeProps) => (
     <code
-        className={clsx('font-mono text-sm px-2 py-1 inline-block rounded w-fit', className, {
+        className={clsx('font-mono text-sm px-2 py-1 inline-block rounded-sm w-fit', className, {
             'bg-zinc-900': !dark,
             'bg-zinc-900 text-zinc-100': dark,
         })}

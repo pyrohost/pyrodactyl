@@ -1,3 +1,5 @@
+@import '../../../assets/tailwind.css';
+
 .checkbox_input {
     @apply h-4 w-4 rounded-sm border-zinc-500 bg-zinc-600 text-zinc-500;
 

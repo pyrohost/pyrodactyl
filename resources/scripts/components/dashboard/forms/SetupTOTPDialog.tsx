@@ -1,7 +1,7 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { Actions, useStoreActions } from 'easy-peasy';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -66,11 +66,11 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     return (
         <form id={'enable-totp-form'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
-            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow mx-auto mt-6'}>
+            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow-sm mx-auto mt-6'}>
                 {!token ? (
                     <Spinner />
                 ) : (
-                    <QRCode renderAs={'svg'} value={token.image_url_data} className={`w-full h-full shadow-none`} />
+                    <QRCodeSVG value={token.image_url_data} className={`w-full h-full shadow-none`} />
                 )}
             </div>
             <CopyOnClick text={token?.secret}>

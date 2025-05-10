@@ -47,7 +47,9 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <button onClick={() => setConfirm(true)}>Delete</button>
+            <button className='cursor-pointer' onClick={() => setConfirm(true)}>
+                Delete
+            </button>
         </>
     );
 };

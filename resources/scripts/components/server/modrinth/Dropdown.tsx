@@ -52,7 +52,7 @@ const DropdownButton = ({ list }: Props) => {
                     <ChevronDownIcon className='w-4 h-4 ml-2' />
                 </Button>
                 {open && (
-                    <div className='absolute mt-1 w-full bg-[#ffffff09] border rounded-sm shadow-lg text-white'>
+                    <div className='absolute mt-1 w-full bg-[#ffffff09] border rounded-xs shadow-lg text-white'>
                         {list.map((option) => (
                             <div
                                 key={option.id}

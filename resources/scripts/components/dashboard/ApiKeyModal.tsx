@@ -15,12 +15,12 @@ const ApiKeyModal = ({ apiKey }: Props) => {
     const { dismiss } = useContext(ModalContext);
 
     return (
-        <div className='p-6 space-y-6 max-w-lg mx-auto  rounded-lg shadow-lg '>
+        <div className='p-6 space-y-6 max-w-lg mx-auto rounded-lg shadow-lg'>
             {/* Flash message section */}
             <FlashMessageRender byKey='account' />
 
             {/* Modal Header */}
-            <p className='text-sm text-white-600 mt-2 '>
+            <p className='text-sm text-white-600 mt-2'>
                 The API key you have requested is shown below. Please store it in a safe place, as it will not be shown
                 again.
             </p>
@@ -42,7 +42,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
                 <Button
                     type='button'
                     onClick={() => dismiss()}
-                    className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500'
+                    className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-hidden focus:ring-2 focus:ring-gray-500 cursor-pointer'
                 >
                     Close
                 </Button>

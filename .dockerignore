@@ -5,4 +5,5 @@ vagrant/
 nix/
 flake.nix
 flake.lock
-
+var/
+srv/

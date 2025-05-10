@@ -5,8 +5,7 @@
  */
 import { isEmptyObject, isObject } from '@/lib/objects';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export default <T extends {}>(data: T): T => {
+export default <T extends object>(data: T): T => {
     const empty = [undefined, null, ''] as unknown[];
 
     const removeEmptyValues = (input: T): T =>

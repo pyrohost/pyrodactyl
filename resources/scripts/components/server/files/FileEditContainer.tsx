@@ -121,7 +121,7 @@ export default () => {
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='!p-0'>
+        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0!'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -134,14 +134,14 @@ export default () => {
             </ErrorBoundary>
 
             {filename === '.pteroignore' ? (
-                <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded border-cyan-400`}>
+                <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded-sm border-cyan-400`}>
                     <p className={`text-neutral-300 text-sm`}>
                         You&apos;re editing a{' '}
-                        <code className={`font-mono bg-black rounded py-px px-1`}>.pteroignore</code> file. Any files or
-                        directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-black rounded py-px px-1`}>*</code>). You can negate a
-                        prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-black rounded py-px px-1`}>!</code>).
+                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pteroignore</code> file. Any files
+                        or directories listed in here will be excluded from backups. Wildcards are supported by using an
+                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>). You can negate
+                        a prior rule by prepending an exclamation point (
+                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>).
                     </p>
                 </div>
             ) : null}
@@ -156,7 +156,7 @@ export default () => {
             />
 
             <div
-                className={`relative h-full bg-[#ffffff11] border-[1px] border-[#ffffff07] border-t-0 [&>div>div]:h-full [&>div>div]:!outline-none w-full`}
+                className={`relative h-full bg-[#ffffff11] border-[1px] border-[#ffffff07] border-t-0 [&>div>div]:h-full [&>div>div]:outline-hidden! w-full`}
             >
                 <Editor
                     style={{ height: 'calc(100vh - 86px)', width: '100%' }}
@@ -216,7 +216,7 @@ export default () => {
                             />
                         </svg>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='max-h-[calc(100vh-4rem)] overflow-auto z-[99999]' sideOffset={8}>
+                    <DropdownMenuContent className='max-h-[calc(100vh-4rem)] overflow-auto z-99999' sideOffset={8}>
                         <For each={languages.sort((a, b) => a.name.localeCompare(b.name))} memo>
                             {(language) => (
                                 <DropdownMenuItem
@@ -240,7 +240,7 @@ export default () => {
                                     background:
                                         'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
                                 }}
-                                className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md'
+                                className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md cursor-pointer'
                                 onClick={() => save()}
                             >
                                 Save <span className='ml-2 font-mono text-xs font-bold uppercase'>CTRL + S</span>
@@ -269,7 +269,7 @@ export default () => {
                                     </svg>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className='max-h-[calc(100vh-4rem)] overflow-auto z-[99999]'
+                                    className='max-h-[calc(100vh-4rem)] overflow-auto z-99999'
                                     sideOffset={8}
                                 >
                                     <DropdownMenuItem onSelect={() => saveAndRestart()}>
@@ -286,7 +286,7 @@ export default () => {
                                 background:
                                     'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                             }}
-                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
+                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                             onClick={() => setModalVisible(true)}
                         >
                             Create File

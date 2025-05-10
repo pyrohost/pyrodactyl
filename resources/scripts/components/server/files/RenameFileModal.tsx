@@ -71,7 +71,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                         <div className='w-full'>
                             <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
                             {useMoveTerminology && (
-                                <p className={`mt-2 !text-xs break-all`}>
+                                <p className={`mt-2 text-xs! break-all`}>
                                     <strong className={`text-sm text-zinc-200`}>New location: </strong>
                                     <Code>
                                         /root/

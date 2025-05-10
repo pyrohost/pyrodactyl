@@ -136,7 +136,7 @@ export default ({ backup }: Props) => {
                     Your server will be stopped. You will not be able to control the power state, access the file
                     manager, or create additional backups until completed.
                 </p>
-                <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded`}>
+                <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded-sm`}>
                     <label htmlFor={'restore_truncate'} className={`text-base flex items-center cursor-pointer`}>
                         <Input
                             type={'checkbox'}
@@ -163,25 +163,25 @@ export default ({ backup }: Props) => {
                 <ContextMenuContent className='flex flex-col gap-1'>
                     <Can action={'backup.download'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
-                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
+                            <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
                             Download Backup
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.restore'}>
                         <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
-                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
+                            <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
                             Restore Backup
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.delete'}>
                         <>
                             <ContextMenuItem className='flex gap-2' onClick={onLockToggle}>
-                                <HugeIconsFileSecurity className='!h-4 !w-4' fill='currentColor' />
+                                <HugeIconsFileSecurity className='h-4! w-4!' fill='currentColor' />
                                 {backup.isLocked ? 'Unlock' : 'Lock'}
                             </ContextMenuItem>
                             {!backup.isLocked && (
                                 <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
-                                    <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
+                                    <HugeIconsDelete className='h-4! w-4!' fill='currentColor' />
                                     Delete Backup
                                 </ContextMenuItem>
                             )}
@@ -191,7 +191,7 @@ export default ({ backup }: Props) => {
             ) : (
                 <button
                     onClick={() => setModal('delete')}
-                    className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
+                    className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2 cursor-pointer`}
                 >
                     Delete Backup
                 </button>

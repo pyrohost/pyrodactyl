@@ -14,7 +14,7 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
             <Dialog open={open} onClose={() => setOpen(false)} hideCloseIcon title={'Metadata'}>
                 <pre
                     className={
-                        'bg-zinc-900 rounded p-2 font-mono text-sm leading-relaxed overflow-x-scroll whitespace-pre-wrap'
+                        'bg-zinc-900 rounded-sm p-2 font-mono text-sm leading-relaxed overflow-x-scroll whitespace-pre-wrap'
                     }
                 >
                     {formatObjectToIdentString(meta)}
@@ -26,7 +26,7 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
             <button
                 aria-describedby={'View additional event metadata'}
                 className={
-                    'p-2 transition-colors duration-100 text-zinc-400 group-hover:text-zinc-300 group-hover:hover:text-zinc-50'
+                    'p-2 transition-colors duration-100 text-zinc-400 group-hover:text-zinc-300 hover:group-hover:text-zinc-50 cursor-pointer'
                 }
                 onClick={() => setOpen(true)}
             >

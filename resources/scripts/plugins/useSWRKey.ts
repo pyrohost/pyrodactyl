@@ -3,8 +3,7 @@ import { ServerContext } from '@/state/server';
 
 import { useDeepCompareMemo } from '@/plugins/useDeepCompareMemo';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Context = string | string[] | (string | number | null | {})[];
+type Context = string | string[] | (string | number | null | object)[];
 
 function useSWRKey(context: Context, prefix: string | null = null): string {
     const key = useDeepCompareMemo((): string => {

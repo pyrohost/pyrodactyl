@@ -1,7 +1,10 @@
+/* @import "../../../../scripts/assets/tailwind.css'; */
+@import '../../../assets/tailwind.css';
+
 .button {
-    @apply inline-flex items-center justify-center px-4 py-2;
+    @apply inline-flex cursor-pointer items-center justify-center px-4 py-2;
     @apply rounded-xl text-sm font-bold transition-all duration-100;
-    @apply focus:ring-[3px] focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-zinc-700;
+    /* @apply focus:ring-3 focus:ring-zinc-700/50 focus:ring-offset-2 focus:ring-offset-zinc-700; */
 
     /* Sizing Controls */
     &.small {
@@ -13,7 +16,7 @@
     }
 
     &.secondary {
-        @apply bg-white bg-opacity-10;
+        @apply bg-white/10;
 
         &:disabled {
             background: transparent !important;
@@ -35,10 +38,11 @@
 
 .primary {
     @apply bg-brand text-blue-50;
-    @apply hover:bg-brand/70 focus:ring-brand/50 focus:ring-opacity-75 active:bg-brand;
+    @apply hover:bg-brand/70 active:bg-brand;
+    /* @apply hover:bg-brand/70 focus:ring-brand/50 focus:ring-opacity-75 active:bg-brand; */
 
     &.secondary {
-        @apply hover:bg-opacity-10 active:bg-brand;
+        @apply hover:bg-brand/10 active:bg-brand;
     }
 
     &:disabled {
@@ -48,7 +52,8 @@
 
 .text {
     @apply bg-zinc-700 text-zinc-50;
-    @apply hover:bg-zinc-600 focus:ring-zinc-300 focus:ring-opacity-50 active:bg-zinc-600;
+    @apply hover:bg-zinc-600 active:bg-zinc-600;
+    /* @apply focus:ring-opacity-50 hover:bg-zinc-600 focus:ring-zinc-300 active:bg-zinc-600; */
 
     &.secondary {
         @apply hover:bg-zinc-500 active:bg-zinc-500;
@@ -61,7 +66,8 @@
 
 .danger {
     @apply bg-red-600 text-zinc-50;
-    @apply hover:bg-red-500 focus:ring-red-400 focus:ring-opacity-75 active:bg-red-500;
+    @apply hover:bg-red-500 active:bg-red-500;
+    /* @apply focus:ring-opacity-75 hover:bg-red-500 focus:ring-red-400 active:bg-red-500; */
 
     &.secondary {
         @apply hover:bg-red-600 active:bg-red-600;

@@ -75,7 +75,7 @@ export default () => {
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] hover:bg-[#ffffff22] transition hover:duration-0'>
+                                <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] hover:bg-[#ffffff22] transition hover:duration-0 cursor-pointer'>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='20'
@@ -106,7 +106,7 @@ export default () => {
                                     </svg>
                                 </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className='flex flex-col gap-1 z-[99999]' sideOffset={8}>
+                            <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
                                 <div className='text-xs opacity-50 text-center'>More filters coming soon!</div>
                                 {rootAdmin && (
                                     <DropdownMenuItem
@@ -198,7 +198,7 @@ export default () => {
                                                     }}
                                                 >
                                                     <ServerRow
-                                                        className='!items-start flex-col w-full gap-4 [&>div~div]:w-full'
+                                                        className='items-start! flex-col w-full gap-4 [&>div~div]:w-full'
                                                         key={server.uuid}
                                                         server={server}
                                                     />

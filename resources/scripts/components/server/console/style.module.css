@@ -1,28 +1,30 @@
+@import '../../../assets/tailwind.css';
+
 .stat_block {
-    @apply flex items-center rounded-xl shadow-lg relative w-full;
+    @apply relative flex w-full items-center rounded-xl shadow-lg;
     /* @apply col-span-3 md:col-span-2 lg:col-span-6; */
     @apply p-8;
 
     & > .status_bar {
-        @apply w-1 h-full absolute left-0 top-0 rounded-l sm:hidden;
+        @apply absolute top-0 left-0 h-full w-1 rounded-l sm:hidden;
     }
 
     & > .icon {
-        @apply hidden flex-shrink-0 items-center justify-center rounded-lg shadow-md w-12 h-12;
+        @apply hidden h-12 w-12 shrink-0 items-center justify-center rounded-lg shadow-md;
         @apply transition-colors duration-500;
-        @apply sm:flex sm:mr-4;
+        @apply sm:mr-4 sm:flex;
 
         & > svg {
-            @apply w-6 h-6 m-auto;
+            @apply m-auto h-6 w-6;
         }
     }
 }
 
 .terminal {
-    @apply flex flex-col w-full h-full relative;
+    @apply relative flex h-full w-full flex-col;
 
-    & > .container {
-        @apply min-h-[453px] rounded-t-xl pt-8 pl-8 bg-[#131313] border-x-[1px] border-[#ffffff11] border-t-[1px] font-mono text-sm h-full;
+    & > .terminalContainer {
+        @apply h-full min-h-[453px] rounded-t-xl border-x-[1px] border-t-[1px] border-[#ffffff11] bg-[#131313] pt-8 pl-8 font-mono text-sm;
 
         & #terminal {
             @apply h-full w-full;
@@ -38,16 +40,16 @@
     }
 
     & .command_icon {
-        @apply flex items-center top-0 left-0 absolute z-10 select-none h-full px-3 transition-colors duration-100;
+        @apply absolute top-0 left-0 z-10 flex h-full items-center px-3 transition-colors duration-100 select-none;
     }
 
     & .command_input {
-        @apply relative bg-[#131313] border-[#ffffff11] border-x-[1px] border-b-[1px] px-4 pb-6 pt-2 text-zinc-100 pl-8 pr-4 w-full font-mono text-sm rounded-b-xl;
-        @apply focus:ring-0 outline-none focus-visible:outline-none;
-        @apply active:border-b-blue-500 focus:border-b-blue-500;
+        @apply relative w-full rounded-b-xl border-x-[1px] border-b-[1px] border-[#ffffff11] bg-[#131313] px-4 pt-2 pr-4 pb-6 pl-8 font-mono text-sm text-zinc-100;
+        @apply outline-hidden focus:ring-0 focus-visible:outline-none;
+        @apply focus:border-b-blue-500 active:border-b-blue-500;
     }
 }
 
 .chart_container {
-    @apply bg-[#131313] rounded-xl border-[#ffffff11] border-[1px] relative;
+    @apply relative rounded-xl border-[1px] border-[#ffffff11] bg-[#131313];
 }

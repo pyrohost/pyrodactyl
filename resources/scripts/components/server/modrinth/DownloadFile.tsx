@@ -68,7 +68,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
             <button
                 onClick={downloadAndUploadFile}
                 disabled={loading}
-                className='px-4 py-2 bg-blue-500 text-white rounded-lg'
+                className='px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'
             >
                 {loading ? 'Processing...' : 'Download & Upload'}
             </button>

@@ -45,16 +45,16 @@ const FileUploadList = () => {
     return (
         <div className={'space-y-2 mt-6'}>
             {uploads.map(([name, file]) => (
-                <div key={name} className={'flex items-center space-x-3 bg-zinc-700 p-3 rounded'}>
+                <div key={name} className={'flex items-center space-x-3 bg-zinc-700 p-3 rounded-sm'}>
                     {/* <Tooltip content={`${Math.floor((file.loaded / file.total) * 100)}%`} placement={'left'}> */}
-                    <div className={'flex-shrink-0'}>
+                    <div className={'shrink-0'}>
                         <Spinner progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
                     </div>
                     {/* </Tooltip> */}
                     <Code className={'flex-1 truncate'}>{name}</Code>
                     <button
                         onClick={cancelFileUpload.bind(this, name)}
-                        className={'text-zinc-500 hover:text-zinc-200 transition-colors duration-75'}
+                        className={'text-zinc-500 hover:text-zinc-200 transition-colors duration-75 cursor-pointer'}
                     >
                         FIXME: add X icon Cancel Upload
                     </button>
@@ -90,7 +90,10 @@ export default () => {
         <>
             {count > 0 && (
                 // <Tooltip content={`${count} files are uploading, click to view`}>
-                <button className={'flex items-center justify-center w-10 h-10'} onClick={() => (open.value = true)}>
+                <button
+                    className={'flex items-center justify-center w-10 h-10 cursor-pointer'}
+                    onClick={() => (open.value = true)}
+                >
                     <svg
                         className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
                         xmlns='http://www.w3.org/2000/svg'
