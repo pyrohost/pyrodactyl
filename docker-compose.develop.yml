@@ -1,17 +1,23 @@
 x-common:
+    wings: &wings-environment
+        # The panel needs the to use the same FQDN/IP in both the container and the host, so a static IP is required.
+        # If you change it, you will need to update it in "http://localhost:3000/admin/nodes/view/1/settings" too, or down
+        # the compose, delete the "srv" folder, then up it again.
+        #
+        # macOS Docker Desktop users will need to install https://github.com/chipmk/docker-mac-net-connect for Wings to work.
+        # macOS OrbStack & Linux users shouldn't need to install the above.
+        ipv4: &wings-ipv4 172.20.0.99
     database: &db-environment
         # Do not remove the "&db-password" from the end of the line below, it is important
         # for Panel functionality.
         MYSQL_PASSWORD: &db-password 'password'
         MYSQL_ROOT_PASSWORD: &db-root-password 'rootpassword'
     panel: &panel-environment
-        APP_URL: 'http://localhost:3000'
+        APP_URL: 'http://panel'
         # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
         DB_USERNAME: 'pterodactyl'
-        # Specifies to setup default user, location, etc on first run
-        PYRODACTYL_DEV: 'true'
         # DB_PASSWORD: "Uncomment this to user your own password"
 
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
@@ -64,6 +70,7 @@ services:
             - './srv/nginx/:/etc/nginx/http.d/'
             - './srv/certs:/etc/letsencrypt'
             - './srv/logs/:/app/storage/logs'
+            - './srv/pterodactyl/config/:/etc/pterodactyl'
         environment:
             <<: [*panel-environment, *mail-environment]
             DB_PASSWORD: *db-password
@@ -78,6 +85,46 @@ services:
             DB_HOST: 'database'
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
+            WINGS_IP: *wings-ipv4
+            WINGS_DIR: '${PWD}'
+            PYRODACTYL_DOCKER_DEV: 'true'
+    wings:
+        # The default Wings image doesn't work on macOS Docker
+        # This fork simply removes the incompatible `io.priority` cgroup v2 flag
+        # For Linux users, you can use the default image by uncommenting the line below
+        # image: ghcr.io/pterodactyl/wings:latest
+        image: ghcr.io/he3als/wings-mac:latest
+        restart: always
+        networks:
+            default:
+                ipv4_address: *wings-ipv4
+        ports:
+            - '8080:8080'
+            - '2022:2022'
+        tty: true
+        environment:
+            TZ: 'UTC'
+            WINGS_UID: 988
+            WINGS_GID: 988
+            WINGS_USERNAME: pterodactyl
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            - '/etc/ssl/certs:/etc/ssl/certs:ro'
+            - './srv/pterodactyl/config/:/etc/pterodactyl/'
+
+            # The volumes below need to be the exact same path in the container as on the host.
+            #
+            # The paths are currently hardcoded in the container on first run, meaning if you move
+            # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
+            #
+            # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
+            # Do not change anything but the $PWD part as this is also hardcoded in the container.
+
+            - '${PWD}/srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - '${PWD}/srv/wings/:${PWD}/srv/wings/'
+            - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
+
 networks:
     default:
         ipam:

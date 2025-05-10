@@ -95,16 +95,16 @@ echo -e "Migrating Database"
 php artisan migrate --force
 
 if [ "$SKIP_SEED" != "True" ]; then
-    echo -e "Seeding database"
-    php artisan migrate --seed --force
+  echo -e "Seeding database"
+  php artisan migrate --seed --force
 else
-    echo -e "Skipping database seeding (SKIP_SEED=True)"
+  echo -e "Skipping database seeding (SKIP_SEED=True)"
 fi
 
 # Setup development environment if specified
 (
   source /app/.env
-  if [ "$PYRODACTYL_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
+  if [ "$PYRODACTYL_DOCKER_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
     echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
 
     # Create a developer user
@@ -113,11 +113,54 @@ fi
     
     # Make a location and node for the panel
     php artisan p:location:make -n --short local --long Local
-    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
+    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn $WINGS_IP --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
     
-    # Add some dummy allocations to the node
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
+    echo "Adding dummy allocations..."
+    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
     
+    echo "Creating database user..."
+    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'somepassword'; GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;"
+
+    # Configure node
+    export WINGS_CONFIG=/etc/pterodactyl/config.yml
+    mkdir -p $(dirname $WINGS_CONFIG)
+    echo "Creating Wings configuration file at '$WINGS_CONFIG'"
+    php artisan p:node:configuration 1 > $WINGS_CONFIG
+
+    # Allow all origins for CORS
+    echo "allowed_origins: ['*']" >> $WINGS_CONFIG
+
+    # Update Wings configuration paths if WINGS_DIR is set
+    if [ -z "$WINGS_DIR" ]; then
+      echo "WINGS_DIR is not set, using default paths."
+    else
+      echo "Updating Wings configuration paths to '$WINGS_DIR'"
+
+      update_config() {
+        key="$1"
+        value="$2"
+        
+        # update existing key or add new one
+        if grep -q "$key:" $WINGS_CONFIG; then
+          sed -i "s|$key:.*|$key: $value|" $WINGS_CONFIG
+        else
+          sed -i "/^system:/a\\  $key: $value" $WINGS_CONFIG
+        fi
+      }
+
+      # if system section doesn't exists, add it
+      if ! grep -q "^system:" $WINGS_CONFIG; then
+        echo "system:" >> $WINGS_CONFIG
+      fi
+
+      update_config "root_directory" "$WINGS_DIR/srv/wings/"
+      update_config "log_directory" "$WINGS_DIR/srv/wings/logs/"
+      update_config "data" "$WINGS_DIR/srv/wings/volumes"
+      update_config "archive_directory" "$WINGS_DIR/srv/wings/archives"
+      update_config "backup_directory" "$WINGS_DIR/srv/wings/backups"
+      update_config "tmp_directory" "$WINGS_DIR/srv/wings/tmp/"
+    fi
+
     # Mark setup as complete
     echo "DEV_SETUP=true" >> /app/.env
     echo "Development setup complete."
