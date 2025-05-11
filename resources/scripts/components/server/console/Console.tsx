@@ -109,7 +109,7 @@ export default () => {
             setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
             setHistoryIndex(-1);
 
-            instance && instance.send('send command', command);
+            if (instance) instance.send('send command', command);
             e.currentTarget.value = '';
         }
     };

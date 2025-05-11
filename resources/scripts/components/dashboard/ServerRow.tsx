@@ -81,7 +81,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
         });
 
         return () => {
-            interval.current && clearInterval(interval.current);
+            if (interval.current) clearInterval(interval.current);
         };
     }, [isSuspended]);
 

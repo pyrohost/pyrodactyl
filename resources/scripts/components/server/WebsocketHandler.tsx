@@ -89,12 +89,12 @@ function WebsocketHandler() {
     };
 
     useEffect(() => {
-        connected && setError('');
+        if (connected) setError('');
     }, [connected]);
 
     useEffect(() => {
         return () => {
-            instance && instance.close();
+            if (instance) instance.close();
         };
     }, [instance]);
 

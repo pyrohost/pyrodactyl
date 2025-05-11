@@ -49,7 +49,7 @@ export default () => {
     useEventListener('dragexit', () => setVisible(false), { capture: true });
 
     useEventListener('keydown', () => {
-        visible && setVisible(false);
+        if (visible) setVisible(false);
     });
 
     useEffect(() => {

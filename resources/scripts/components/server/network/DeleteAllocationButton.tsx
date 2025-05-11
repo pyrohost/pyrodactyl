@@ -24,7 +24,7 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
 
     const deleteAllocation = () => {
         clearFlashes();
-        
+
         setConfirm(false);
 
         mutate((data) => data?.filter((a) => a.id !== allocation), false);

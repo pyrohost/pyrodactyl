@@ -109,7 +109,7 @@
         "vite-plugin-manifest-sri": "^0.2.0"
     },
     "scripts": {
-        "lint": "eslint ./resources/scripts/**/*.{ts,tsx} --fix",
+        "lint": "eslint ./resources/scripts --ext .ts,.tsx --fix",
         "lint:turbo": "turbo lint",
         "dev": "vite",
         "dev:docker": "cross-env APP_URL=\"http://localhost:3000\" vite",

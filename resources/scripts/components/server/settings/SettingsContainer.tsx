@@ -63,7 +63,9 @@ export default () => {
                         <div className={`mt-2 flex items-center justify-between text-sm`}>
                             <Label>Username</Label>
                             <CopyOnClick text={`${username}.${id}`}>
-                                <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>{`${username}.${id}`}</code>
+                                <code
+                                    className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}
+                                >{`${username}.${id}`}</code>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-6 flex items-center`}>
