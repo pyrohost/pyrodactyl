@@ -63,12 +63,12 @@ export default () => {
 
     return (
         <PageContentBlock title={'Mods/Plugins'}>
-            <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl mb-5'>
+            <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl mb-5'>
                 {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver*/}
             </ContentBox>
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl md:w-1/6'
+                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl md:w-1/6'
                     title='Settings'
                 >
                     <Can action={'modrinth.loader'}>
@@ -107,7 +107,7 @@ export default () => {
                 </ContentBox>
 
                 <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl w-full md:w-4/5'
+                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-4/5'
                     title='Modrinth'
                 >
                     <div className='relative w-full h-full mb-4'>

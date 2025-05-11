@@ -76,7 +76,7 @@ export default ({ schedule, task }: Props) => {
             icon={icon}
             divClasses={`mb-2 gap-6`}
             copyDescription={copyOnClick}
-            descriptionClasses={`whitespace-nowrap overflow-hidden overflow-ellipsis`}
+            descriptionClasses={`whitespace-nowrap overflow-hidden text-ellipsis`}
         >
             <SpinnerOverlay visible={isLoading} fixed size={'large'} />
             <TaskDetailsModal
@@ -103,7 +103,7 @@ export default ({ schedule, task }: Props) => {
                             <p className={`text-xs uppercase text-zinc-400 mb-1`}>Ignoring files & folders:</p>
                         )}
                         <div
-                            className={`font-mono bg-zinc-800 rounded py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
+                            className={`font-mono bg-zinc-800 rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
                         >
                             {task.payload}
                         </div>
@@ -125,7 +125,7 @@ export default ({ schedule, task }: Props) => {
                     <button
                         type={'button'}
                         aria-label={'Edit scheduled task'}
-                        className={`block text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 ml-auto sm:ml-0`}
+                        className={`block text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 ml-auto sm:ml-0 cursor-pointer`}
                         onClick={() => setIsEditing(true)}
                     >
                         <FontAwesomeIcon icon={faPen} className={`px-5`} size='lg' />
@@ -136,7 +136,7 @@ export default ({ schedule, task }: Props) => {
                     <button
                         type={'button'}
                         aria-label={'Delete scheduled task'}
-                        className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150`}
+                        className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 cursor-pointer`}
                         onClick={() => setVisible(true)}
                     >
                         <FontAwesomeIcon icon={faTrash} className={`px-5`} size='lg' />

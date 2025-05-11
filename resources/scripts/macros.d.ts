@@ -11,8 +11,7 @@ declare module 'styled-components' {
     interface StyledComponentBase<
         C extends string | ComponentType<any>,
         T extends object,
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        O extends object = {},
+        O extends object = object,
         A extends keyof any = never,
     > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
         (

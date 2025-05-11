@@ -45,7 +45,7 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
             {pages.length > 1 && (
                 <div className={`flex justify-center mt-4`}>
                     <div
-                        className={`flex justify-center gap-3 p-[4px] w-fit bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#00000017] rounded-md`}
+                        className={`flex justify-center gap-3 p-[4px] w-fit bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#00000017] rounded-md`}
                     >
                         <Block
                             isSecondary

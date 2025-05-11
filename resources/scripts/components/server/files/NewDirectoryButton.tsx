@@ -75,7 +75,7 @@ const NewDirectoryDialog = asDialog({
                     <FlashMessageRender key={'files:directory-modal'} />
                     <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
-                        <p className={`mt-2 !text-xs break-all`}>
+                        <p className={`mt-2 text-xs! break-all`}>
                             <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
                             <Code>
                                 /root/
@@ -110,7 +110,7 @@ export default () => {
                     background:
                         'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                 }}
-                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md'
+                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
                 onClick={setOpen.bind(this, true)}
             >
                 New Folder

@@ -80,7 +80,7 @@ export default () => {
                                     </p>
                                 </div>
                                 <p className='text-sm text-gray-600 hidden md:block'>
-                                    <code className='font-mono py-1 px-2 bg-gray-800 rounded text-white'>
+                                    <code className='font-mono py-1 px-2 bg-gray-800 rounded-sm text-white'>
                                         {key.identifier}
                                     </code>
                                 </p>

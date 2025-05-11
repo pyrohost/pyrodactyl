@@ -10,8 +10,7 @@ function isObject(val: unknown): val is Record<string, unknown> {
  * Determines if an object is truly empty by looking at the keys present
  * and the prototype value.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
-function isEmptyObject(val: {}): boolean {
+function isEmptyObject(val: object): boolean {
     return Object.keys(val).length === 0 && Object.getPrototypeOf(val) === Object.prototype;
 }
 
@@ -20,8 +19,7 @@ function isEmptyObject(val: {}): boolean {
  * for an object, but in a typed manner to make working with them a little
  * easier.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
-function getObjectKeys<T extends {}>(o: T): (keyof T)[] {
+function getObjectKeys<T extends object>(o: T): (keyof T)[] {
     return Object.keys(o) as (keyof typeof o)[];
 }
 

@@ -18,7 +18,9 @@ _ide_helper_models.php
 public/assets/manifest.json
 
 # For local development with docker
-#docker-compose.yml
+docker-compose.yml
+/srv
+/var
 
 # for image related files
 misc
