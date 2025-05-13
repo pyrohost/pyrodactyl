@@ -205,7 +205,6 @@ export default () => {
         setSidebarBetween(true);
 
         // @ts-ignore
-        console.log((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth);
         // @ts-ignore
         if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
             showSideBar(true);
