@@ -40,7 +40,7 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 - **More accessible:** Pyro believes that gaming should be easily available for everyone. Pyrodactyl builds with the latest Web accessibility guidelines in mind. Pyrodactyl is **entirely keyboard-navigable, even context menus.**, and screen-readers are easily compatible.
 - **More approachable:** Pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server.
 
-[![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)]
+![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)
 
 ## Installing Pyrodactyl
 
