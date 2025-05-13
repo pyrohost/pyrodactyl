@@ -27,6 +27,7 @@ export default ({ subuser }: { subuser: Subuser }) => {
             .then(() => {
                 setLoading(false);
                 removeSubuser(subuser.uuid);
+                setShowConfirmation(false);
             })
             .catch((error) => {
                 console.error(error);
