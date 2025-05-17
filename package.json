@@ -112,7 +112,7 @@
         "lint": "eslint ./resources/scripts --ext .ts,.tsx --fix",
         "lint:turbo": "turbo lint",
         "dev": "vite",
-        "dev:docker": "cross-env APP_URL=\"http://localhost:3000\" vite",
+        "dev:docker": "cross-env APP_URL=\"http://localhost\" vite",
         "compose": "docker compose down && docker compose up -d",
         "compose:down": "docker compose down",
         "build": "vite build",

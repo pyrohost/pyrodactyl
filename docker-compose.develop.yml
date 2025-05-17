@@ -1,22 +1,11 @@
 x-common:
-    wings: &wings-environment
-        # The panel needs the to use the same FQDN/IP accessible in both the container & host, so a static IP is required.
-        # If you change it, you will need to update it in "http://localhost:3000/admin/nodes/view/1/settings" too, or down
-        # the compose, delete the "srv" folder, then up it again.
-        #
-        # Rootless Docker can't expose the IPs, so accessing Wings from the host won't work.
-        # https://docs.docker.com/engine/security/rootless/#known-limitations
-        #
-        # macOS Docker Desktop users will need to install https://github.com/chipmk/docker-mac-net-connect for Wings to work.
-        # macOS OrbStack & Linux users shouldn't need to install the above.
-        ipv4: &wings-ipv4 172.20.0.99
     database: &db-environment
         # Do not remove the "&db-password" from the end of the line below, it is important
         # for Panel functionality.
         MYSQL_PASSWORD: &db-password 'password'
         MYSQL_ROOT_PASSWORD: &db-root-password 'rootpassword'
     panel: &panel-environment
-        APP_URL: 'http://panel'
+        APP_URL: 'http://localhost'
         # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
@@ -48,6 +37,7 @@ services:
         image: mariadb:10.5
         restart: always
         command: --default-authentication-plugin=mysql_native_password
+        network_mode: host
         volumes:
             - './srv/database:/var/lib/mysql'
         environment:
@@ -57,15 +47,17 @@ services:
     cache:
         image: redis:alpine
         restart: always
+        network_mode: host
     panel:
         image: pyrodactyl:develop
         restart: always
-        ports:
-            - '3000:80'
-            # - '443:443'
-        links:
-            - database
-            - cache
+        network_mode: host
+        # ports:
+        #     - '3000:80'
+        #     - '443:443'
+        # links:
+        #     - database
+        #     - cache
         volumes:
             - '.:/app'
             - './srv/var:/app/var'
@@ -73,9 +65,8 @@ services:
             - './srv/certs:/etc/letsencrypt'
             - './srv/logs/:/app/storage/logs'
             - './srv/pterodactyl/config/:/etc/pterodactyl'
-            # anonymous volumes below, meaning it'll use the image's directory instead of the host
+            # anonymous volumes below, meaning it'll use the image's vendor directory
             - '/app/vendor'
-            # needed for linux permissions
             - '/app/storage'
             - '/app/storage/framework/views'
             - '/app/bootstrap/cache'
@@ -88,27 +79,26 @@ services:
             CACHE_DRIVER: 'redis'
             SESSION_DRIVER: 'redis'
             QUEUE_DRIVER: 'redis'
-            REDIS_HOST: 'cache'
+            REDIS_HOST: '127.0.0.1'
             DB_CONNECTION: 'mariadb'
-            DB_HOST: 'database'
+            DB_HOST: '127.0.0.1'
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
-            WINGS_IP: *wings-ipv4
-            WINGS_DIR: '${PWD}'
+            WINGS_IP: 'localhost'
+            WINGS_DIR: *files-root
             PYRODACTYL_DOCKER_DEV: 'true'
     wings:
-        # The default Wings image doesn't work on macOS Docker
-        # This fork simply removes the incompatible `io.priority` cgroup v2 flag
-        # For Linux users, you can use the default image by uncommenting the line below
+        # The default Wings image doesn't work on macOS Docker. This fork simply removes the incompatible
+        # io.priority cgroup v2 flag. Linux users can use the default image, you can use it by uncommenting
+        # the line below
+
         # image: ghcr.io/pterodactyl/wings:latest
         image: ghcr.io/he3als/wings-mac:latest
         restart: always
-        networks:
-            default:
-                ipv4_address: *wings-ipv4
-        ports:
-            - '8080:8080'
-            - '2022:2022'
+        network_mode: host
+        # ports:
+        #     - '8080:8080'
+        #     - '2022:2022'
         tty: true
         environment:
             TZ: 'UTC'
@@ -132,9 +122,3 @@ services:
             - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
             - '${PWD}/srv/wings/:${PWD}/srv/wings/'
             - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
-
-networks:
-    default:
-        ipam:
-            config:
-                - subnet: 172.20.0.0/16
