@@ -92,8 +92,6 @@ COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.c
 COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
 
-RUN chown -R www-data:www-data /app/storage \
-  && chmod -R 775 /app/storage
 
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
