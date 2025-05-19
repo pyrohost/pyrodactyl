@@ -177,7 +177,8 @@ echo -e "Starting cron jobs."
 crond -L /var/log/crond -l 5
 
 # Fix permissions on logs
-chown -R nginx: /app/storage/logs/
+chown -R www-data:www-data /app/storage
+chmod -R 775 /app/storage
 
 echo -e "Starting supervisord."
 exec "$@"
