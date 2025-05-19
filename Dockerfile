@@ -76,7 +76,7 @@ RUN cp .env.example .env || true \
   && chmod -R 777 bootstrap storage \
   && rm -rf bootstrap/cache/*.php \
   && chown -R nginx:nginx storage bootstrap \
-  && chwon -R www-data:www-data /app/storage \
+  && chown -R www-data:www-data /app/storage \
   && chmod -R 775 /app/storage
 
 # Cron jobs & NGINX tweaks
