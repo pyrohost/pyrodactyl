@@ -123,11 +123,11 @@ export default () => {
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
                         <div
-                            className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
+                            className={`text-center w-full rounded-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
                         >
                             <Link
-                                to={'/auth/login'}
-                                className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
+                                to='/auth/login'
+                                className='block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                             >
                                 Return to Login
                             </Link>
