@@ -76,11 +76,10 @@ RUN cp .env.example .env || true \
   && chmod -R 777 bootstrap storage \
   && rm -rf bootstrap/cache/*.php \
   && chown -R nginx:nginx storage bootstrap \
-  && chown -R www-data:www-data /app/storage \
-  && chmod -R 775 /app/storage
 
-# Cron jobs & NGINX tweaks
-RUN rm /usr/local/etc/php-fpm.conf \
+
+  # Cron jobs & NGINX tweaks
+  RUN rm /usr/local/etc/php-fpm.conf \
   && { \
   echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; \
   echo "0 23 * * * certbot renew --nginx --quiet"; \
@@ -92,6 +91,9 @@ RUN rm /usr/local/etc/php-fpm.conf \
 COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.conf
 COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
+
+RUN chown -R www-data:www-data /app/storage \
+  && chmod -R 775 /app/storage
 
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
