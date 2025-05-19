@@ -75,7 +75,9 @@ RUN cp .env.example .env || true \
   && mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache \
   && chmod -R 777 bootstrap storage \
   && rm -rf bootstrap/cache/*.php \
-  && chown -R nginx:nginx storage bootstrap
+  && chown -R nginx:nginx storage bootstrap \
+  && chwon -R www-data:www-data /app/storage \
+  && chmod -R 775 /app/storage
 
 # Cron jobs & NGINX tweaks
 RUN rm /usr/local/etc/php-fpm.conf \
