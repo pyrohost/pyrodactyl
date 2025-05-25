@@ -14,11 +14,14 @@ class NodeFormRequest extends AdminFormRequest
     public function rules(): array
     {
         if ($this->method() === 'PATCH') {
-            return Node::getRulesForUpdate($this->route()->parameter('node'));
+            $rules = Node::getRulesForUpdate($this->route()->parameter('node'));
+            $rules['internal_fqdn'] = ['nullable', 'string', Fqdn::make('scheme')];
+            return $rules;
         }
 
         $data = Node::getRules();
         $data['fqdn'][] = Fqdn::make('scheme');
+        $data['internal_fqdn'] = ['nullable', 'string', Fqdn::make('scheme')];
 
         return $data;
     }
