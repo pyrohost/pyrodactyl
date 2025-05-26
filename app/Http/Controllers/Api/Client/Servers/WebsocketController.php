@@ -61,7 +61,7 @@ class WebsocketController extends ClientApiController
             ])
             ->handle($node, $user->id . $server->uuid);
 
-        $socket = str_replace(['https://', 'http://'], ['wss://', 'ws://'], $node->getConnectionAddress());
+        $socket = str_replace(['https://', 'http://'], ['wss://', 'ws://'], $node->getBrowserConnectionAddress());
 
         return new JsonResponse([
             'data' => [

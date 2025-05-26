@@ -1,15 +1,4 @@
 x-common:
-    wings: &wings-environment
-        # The panel needs the to use the same FQDN/IP accessible in both the container & host, so a static IP is required.
-        # If you change it, you will need to update it in "http://localhost:3000/admin/nodes/view/1/settings" too, or down
-        # the compose, delete the "srv" folder, then up it again.
-        #
-        # Rootless Docker can't expose the IPs, so accessing Wings from the host won't work.
-        # https://docs.docker.com/engine/security/rootless/#known-limitations
-        #
-        # macOS Docker Desktop users will need to install https://github.com/chipmk/docker-mac-net-connect for Wings to work.
-        # macOS OrbStack & Linux users shouldn't need to install the above.
-        ipv4: &wings-ipv4 172.20.0.99
     database: &db-environment
         # Do not remove the "&db-password" from the end of the line below, it is important
         # for Panel functionality.
@@ -93,7 +82,7 @@ services:
             DB_HOST: 'database'
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
-            WINGS_IP: *wings-ipv4
+            WINGS_INTERNAL_IP: 'wings'
             WINGS_DIR: '${PWD}'
             PYRODACTYL_DOCKER_DEV: 'true'
     wings:
@@ -103,9 +92,6 @@ services:
         # image: ghcr.io/pterodactyl/wings:latest
         image: ghcr.io/he3als/wings-mac:latest
         restart: always
-        networks:
-            default:
-                ipv4_address: *wings-ipv4
         ports:
             - '8080:8080'
             - '2022:2022'

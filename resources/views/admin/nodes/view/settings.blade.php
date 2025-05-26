@@ -67,13 +67,39 @@
                         </div>
                     </div>
                     <div class="form-group col-xs-12">
-                        <label for="fqdn" class="control-label">Fully Qualified Domain Name</label>
+                        <label for="fqdn" class="control-label">Public Fully Qualified Domain Name</label>
                         <div>
-                            <input type="text" autocomplete="off" name="fqdn" class="form-control" value="{{ old('fqdn', $node->fqdn) }}" />
+                            <input type="text" autocomplete="off" name="fqdn" class="form-control"
+                                value="{{ old('fqdn', $node->fqdn) }}" />
                         </div>
-                        <p class="text-muted"><small>Please enter domain name (e.g <code>node.example.com</code>) to be used for connecting to the daemon. An IP address may only be used if you are not using SSL for this node.
-                                <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Why do I need a FQDN?" data-content="In order to secure communications between your server and this node we use SSL. We cannot generate a SSL certificate for IP Addresses, and as such you will need to provide a FQDN.">Why?</a>
-                            </small></p>
+                        <p class="text-muted">
+                            <small>
+                                Domain name that browsers will use to connect to Wings (e.g <code>wings.example.com</code>).
+                                An IP address may be used <em>only</em> if you are not using SSL for this node.
+                                <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Why do I need a FQDN?"
+                                    data-content="In order to secure communications between your server and this node we use SSL. We cannot generate a SSL certificate for IP Addresses, and as such you will need to provide a FQDN.">Why?</a>
+                            </small>
+                        </p>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="internal_fqdn" class="control-label">
+                            Internal FQDN
+                            <strong>(Optional)</strong>
+                        </label>
+                        <div>
+                            <input type="text" autocomplete="off" name="internal_fqdn" class="form-control"
+                                value="{{ old('internal_fqdn', $node->internal_fqdn) }}" />
+                        </div>
+                        <p class="text-muted">
+                            <small>
+                                <strong>Optional:</strong>
+                                Leave blank to use the Public FQDN for panel-to-Wings communication.
+                                If specified, this internal domain name will be used for panel-to-Wings communication instead
+                                (e.g <code>wings-internal.example.com</code> or <code>10.0.0.5</code>).
+                                Useful for internal networks where the panel needs to communicate with Wings using a
+                                different address than what browsers use.
+                            </small>
+                        </p>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="form-label"><span class="label label-warning"><i class="fa fa-power-off"></i></span> Communicate Over SSL</label>
