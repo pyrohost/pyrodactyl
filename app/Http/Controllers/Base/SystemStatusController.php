@@ -3,45 +3,84 @@
 namespace Pterodactyl\Http\Controllers\Base;
 
 use Pterodactyl\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SystemStatusController extends Controller
 {
   /**
-   * Get system metrics and status
+   * Get system metrics and status as a stream
    */
-  public function index(): JsonResponse
+  public function index(Request $request): StreamedResponse
   {
-    try {
-      $metrics = Cache::remember('system_metrics', 60, function () {
-        return [
-          'status' => 'running',
-          'timestamp' => now()->toIso8601String(),
-          'metrics' => [
-            'uptime' => $this->getUptime(),
-            'memory' => $this->getMemoryUsage(),
-            'cpu' => $this->getCpuUsage(),
-            'disk' => $this->getDiskUsage(),
-          ],
-          'system' => [
-            'php_version' => PHP_VERSION,
-            'os' => php_uname(),
-            'hostname' => gethostname(),
-            'load_average' => sys_getloadavg(),
-          ]
-        ];
-      });
+    $response = new StreamedResponse(function() {
+      // Set the content type headers for SSE
+      header('Content-Type: text/event-stream');
+      header('Cache-Control: no-cache');
+      header('Connection: keep-alive');
+      header('X-Accel-Buffering: no'); // Disable Nginx buffering (Pain in the arse)
 
-      return response()->json($metrics);
+      // Keep streaming until the connection is closed
+      while (true) {
+        try {
+          $metrics = [
+            'status' => 'running',
+            'timestamp' => now()->toIso8601String(),
+            'metrics' => [
+              'uptime' => $this->getUptime(),
+              'memory' => $this->getMemoryUsage(),
+              'cpu' => $this->getCpuUsage(),
+              'disk' => $this->getDiskUsage(),
+            ],
+            'system' => [
+              'php_version' => PHP_VERSION,
+              'os' => php_uname(),
+              'hostname' => gethostname(),
+              'load_average' => sys_getloadavg(),
+            ]
+          ];
 
-    } catch (\Exception $e) {
-      return response()->json([
-        'status' => 'error',
-        'message' => 'Failed to retrieve system metrics',
-        'error' => $e->getMessage()
-      ], 500);
-    }
+          // Format data as an SSE event
+          echo "event: metrics\n";
+          echo "data: " . json_encode($metrics) . "\n\n";
+          
+          // Flush output buffer to send data immediately
+          ob_flush();
+          flush();
+          
+          // Wait before sending the next update (1 second)
+          sleep(1);
+          
+          // Check if the client has disconnected
+          if (connection_aborted()) {
+            break;
+          }
+        } catch (\Exception $e) {
+          // Send error as an event
+          echo "event: error\n";
+          echo "data: " . json_encode([
+            'status' => 'error',
+            'message' => 'Failed to retrieve system metrics',
+            'error' => $e->getMessage()
+          ]) . "\n\n";
+          
+          ob_flush();
+          flush();
+          
+          // Continue trying after a delay
+          sleep(5);
+        }
+      }
+    });
+
+    // Set additional headers for the response
+    $response->headers->set('Content-Type', 'text/event-stream');
+    $response->headers->set('Cache-Control', 'no-cache');
+    $response->headers->set('Connection', 'keep-alive');
+    $response->headers->set('X-Accel-Buffering', 'no');
+
+    return $response;
   }
 
   private function getMemoryUsage(): array
@@ -122,7 +161,7 @@ class SystemStatusController extends Controller
     $free = disk_free_space('/');
 
     if ($total === false || $free === false) {
-      throw new \RuntimeException('Failed to get disk  space information');
+      throw new \RuntimeException('Failed to get disk space information');
     }
 
     return [

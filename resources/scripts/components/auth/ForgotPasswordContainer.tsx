@@ -16,7 +16,7 @@ import { httpErrorToHuman } from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/ApplicationLogo';
 
 interface Values {
     email: string;

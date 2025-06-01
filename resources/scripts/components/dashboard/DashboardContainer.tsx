@@ -70,8 +70,12 @@ export default () => {
                     setDashboardDisplayOption(value);
                 }}
                 className='w-full'
+
+
             >
-                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
+                {/* Types of animations for the page headers.
+                    animation?: 'flyside' | 'flyright' | 'pop' | 'none';*/ }
+                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'} animation='flyside'>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

@@ -16,7 +16,7 @@ use Pterodactyl\Http\Controllers\Base;
 */
 
 Route::group(['prefix' => '/panel'], function () {
-  Route::get('/status', [Base\SystemStatusController::class, 'index']);
+  Route::get('/status/stream', [Base\SystemStatusController::class, 'index']);
 });
 
 
