@@ -14,7 +14,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import Logo from '@/components/elements/PyroLogo';
+import Logo from '@/components/elements/ApplicationLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
@@ -23,6 +23,10 @@ import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http from '@/api/http';
+import { HomeIcon } from '@/components/ui/home';
+import { WebhookIcon } from '@/components/ui/webhook';
+import { KeyCircleIcon } from '@/components/ui/key-circle';
+import { SettingsGearIcon } from '@/components/ui/settings-gear';
 
 export default () => {
     const location = useLocation();
@@ -275,19 +279,19 @@ export default () => {
                 <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
                 <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper ' onClick={toggleSidebar}>
                     <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
-                        <HugeIconsHome fill='currentColor' />
+                        <HomeIcon  />
                         <p>Servers</p>
                     </NavLink>
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
-                        <HugeIconsApi fill='currentColor' />
+                        <WebhookIcon  />
                         <p>API Keys</p>
                     </NavLink>
                     <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
-                        <HugeIconsSsh fill='currentColor' />
+                        <KeyCircleIcon />
                         <p>SSH Keys</p>
                     </NavLink>
                     <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                        <HugeIconsDashboardSettings fill='currentColor' />
+                        <SettingsGearIcon/>
                         <p>Settings</p>
                     </NavLink>
                 </ul>

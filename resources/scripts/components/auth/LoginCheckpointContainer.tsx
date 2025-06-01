@@ -15,7 +15,7 @@ import type { FlashStore } from '@/state/flashes';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/ApplicationLogo';
 
 interface Values {
     code: string;

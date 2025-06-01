@@ -14,7 +14,7 @@ import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/ApplicationLogo';
 
 interface Values {
     username: string;

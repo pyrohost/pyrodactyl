@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -45,19 +46,22 @@ class MigratePubPrivFormatToSingleKey extends Migration
    */
   public function down(): void
   {
-    Schema::table('api_keys', function (Blueprint $table) {
-      $table->dropUnique(['token']);
-      $table->renameColumn('token', 'secret');
-    });
+    // Use try-catch to handle cases where the index doesn't exist
+    try {
+      Schema::table('api_keys', function (Blueprint $table) {
+        $table->dropUnique(['token']);
+      });
+    } catch (\Exception $e) {
+      // Index doesn't exist, continue anyway
+      // You can add logging here if needed
+    }
 
     Schema::table('api_keys', function (Blueprint $table) {
-      $table->dropUnique('token');
       $table->text('token')->change();
     });
 
     Schema::table('api_keys', function (Blueprint $table) {
       $table->renameColumn('token', 'secret');
-
       $table->text('secret')->nullable()->change();
       $table->char('public', 16)->after('user_id');
     });

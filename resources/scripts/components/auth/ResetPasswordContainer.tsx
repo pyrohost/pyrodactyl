@@ -15,7 +15,7 @@ import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
 
-import Logo from '../elements/PyroLogo';
+import Logo from '../elements/ApplicationLogo';
 
 interface Values {
     password: string;
