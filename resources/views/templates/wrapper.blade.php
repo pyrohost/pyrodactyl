@@ -11,6 +11,7 @@
 <!-- Beta Rydactyl. Powered by Bun.sh  -->
 <!-- Icon library https://icons.pqoqubbw.dev/  -->
 <!-- This file is part of the Rydactyl project, which is released under the GNU General Public License v3.0. -->
+<!-- ryx.us , Who told hosting should be expensive. -->
 
 <html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
