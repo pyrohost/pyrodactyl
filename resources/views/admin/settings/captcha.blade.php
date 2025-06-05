@@ -6,7 +6,7 @@
 @endsection
 
 @section('content-header')
-  <h1>Captcha Settings<small>Configure captcha settings for Pyrodactyl.</small></h1>
+  <h1>Captcha Settings<small>Configure captcha settings for your panel.</small></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('admin.index') }}">Admin</a></li>
     <li class="active">Settings</li>
@@ -18,125 +18,245 @@
   <div class="row">
     <div class="col-xs-12">
     <form action="" method="POST">
+      @csrf
+      @method('PATCH')
       <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">reCAPTCHA</h3>
+        <h3 class="box-title">CAPTCHA Provider</h3>
       </div>
       <div class="box-body">
         <div class="row">
         <div class="form-group col-md-4">
-          <label class="control-label">Status</label>
+          <label class="control-label">Provider</label>
           <div>
-          <select class="form-control" name="recaptcha:enabled">
-            <option value="true">Enabled</option>
-            <option value="false" @if(old('recaptcha:enabled', config('recaptcha.enabled')) == '0') selected @endif>
-            Disabled</option>
+          <select class="form-control" name="driver" id="captcha_provider">
+            <option value="none" @if(isset($current) && $current['driver'] === 'none') selected @endif>Disabled
+            </option>
+            <option value="hcaptcha" @if(isset($current) && $current['driver'] === 'hcaptcha') selected @endif>
+            hCaptcha</option>
+            <option value="mcaptcha" @if(isset($current) && $current['driver'] === 'mcaptcha') selected @endif>
+            mCaptcha</option>
+            <option value="turnstile" @if(isset($current) && $current['driver'] === 'turnstile') selected @endif>
+            Cloudflare
+            Turnstile</option>
+            <!-- <option value="proton" @if(isset($current) && $current['driver'] === 'proton') selected @endif>Proton Captcha -->
+            <!-- </option> -->
+            <option value="friendly" @if(isset($current) && $current['driver'] === 'friendly') selected @endif>
+            Friendly Captcha
+            </option>
+            <!-- <option value="recaptcha" @if(isset($current) && $current['driver'] === 'recaptcha') selected @endif>
+      ReCaptcha
+      </option> -->
           </select>
-          <p class="text-muted small">If enabled, login forms and password reset forms will do a silent captcha
-            check and display a visible captcha if needed.</p>
+          <p class="text-muted small">Select which CAPTCHA provider you want to use.</p>
           </div>
         </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- hCaptcha Settings -->
+      <div class="box provider-settings" id="hcaptcha_settings"
+      style="@if(isset($current) && $current['driver'] !== 'hcaptcha') display: none; @endif">
+      <div class="box-header with-border">
+        <h3 class="box-title">hCaptcha Settings</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+        <div class="form-group col-md-6">
+          <label class="control-label">Site Key</label>
+          <div>
+          <input type="text" class="form-control" name="hcaptcha[site_key]"
+            value="{{ old('hcaptcha.site_key', isset($current) ? $current['hcaptcha']['site_key'] : '') }}">
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="control-label">Secret Key</label>
+          <div>
+          <input type="text" class="form-control" name="hcaptcha[secret_key]"
+            value="{{ old('hcaptcha.secret_key', isset($current) ? $current['hcaptcha']['secret_key'] : '') }}">
+          <p class="text-muted small">Get your keys from <a href="https://dashboard.hcaptcha.com/"
+            target="_blank">hCaptcha dashboard</a>.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- mCaptcha Settings -->
+      <div class="box provider-settings" id="mcaptcha_settings"
+      style="@if(isset($current) && $current['driver'] !== 'mcaptcha') display: none; @endif">
+      <div class="box-header with-border">
+        <h3 class="box-title">mCaptcha Settings</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
         <div class="form-group col-md-4">
           <label class="control-label">Site Key</label>
           <div>
-          <input type="text" required class="form-control" name="recaptcha:website_key"
-            value="{{ old('recaptcha:website_key', config('recaptcha.website_key')) }}">
+          <input type="text" class="form-control" name="mcaptcha[site_key]"
+            value="{{ old('mcaptcha.site_key', isset($current) ? $current['mcaptcha']['site_key'] : '') }}">
           </div>
         </div>
         <div class="form-group col-md-4">
           <label class="control-label">Secret Key</label>
           <div>
-          <input type="text" required class="form-control" name="recaptcha:secret_key"
-            value="{{ old('recaptcha:secret_key', config('recaptcha.secret_key')) }}">
-          <p class="text-muted small">Used for communication between your site and Google. Be sure to keep it a
-            secret.</p>
+          <input type="text" class="form-control" name="mcaptcha[secret_key]"
+            value="{{ old('mcaptcha.secret_key', isset($current) ? $current['mcaptcha']['secret_key'] : '') }}">
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="control-label">Endpoint</label>
+          <div>
+          <input type="text" class="form-control" name="mcaptcha[endpoint]"
+            value="{{ old('mcaptcha.endpoint', isset($current) ? $current['mcaptcha']['endpoint'] : '') }}">
+          <p class="text-muted small">URL to your mCaptcha instance API endpoint.</p>
           </div>
         </div>
         </div>
-        @if($showRecaptchaWarning)
-      <div class="row">
-      <div class="col-xs-12">
-        <div class="alert alert-warning no-margin">
-        You are currently using reCAPTCHA keys that were shipped with this Panel. For improved security it is
-        recommended to <a target="_blank" href="https://www.google.com/recaptcha/admin">generate new invisible
-        reCAPTCHA
-        keys</a> that tied specifically to your website.
-        </div>
       </div>
       </div>
-    @endif
-      </div>
-      </div>
-      <div class="box">
+
+      <!-- Cloudflare Turnstile Settings -->
+      <div class="box provider-settings" id="turnstile_settings"
+      style="@if(isset($current) && $current['driver'] !== 'turnstile') display: none; @endif">
       <div class="box-header with-border">
-        <h3 class="box-title">HTTP Connections</h3>
+        <h3 class="box-title">Cloudflare Turnstile Settings</h3>
       </div>
       <div class="box-body">
         <div class="row">
         <div class="form-group col-md-6">
-          <label class="control-label">Connection Timeout</label>
+          <label class="control-label">Site Key</label>
           <div>
-          <input type="number" required class="form-control" name="pterodactyl:guzzle:connect_timeout"
-            value="{{ old('pterodactyl:guzzle:connect_timeout', config('pterodactyl.guzzle.connect_timeout')) }}">
-          <p class="text-muted small">The amount of time in seconds to wait for a connection to be opened before
-            throwing an error.</p>
+          <input type="text" class="form-control" name="turnstile[site_key]"
+            value="{{ old('turnstile.site_key', isset($current) ? $current['turnstile']['site_key'] : '') }}">
           </div>
         </div>
         <div class="form-group col-md-6">
-          <label class="control-label">Request Timeout</label>
+          <label class="control-label">Secret Key</label>
           <div>
-          <input type="number" required class="form-control" name="pterodactyl:guzzle:timeout"
-            value="{{ old('pterodactyl:guzzle:timeout', config('pterodactyl.guzzle.timeout')) }}">
-          <p class="text-muted small">The amount of time in seconds to wait for a request to be completed before
-            throwing an error.</p>
+          <input type="text" class="form-control" name="turnstile[secret_key]"
+            value="{{ old('turnstile.secret_key', isset($current) ? $current['turnstile']['secret_key'] : '') }}">
+          <p class="text-muted small">Get your keys from <a
+            href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank">Cloudflare dashboard</a>.
+          </p>
           </div>
         </div>
         </div>
       </div>
       </div>
-      <div class="box">
+
+      <!-- Proton Captcha Settings -->
+      <div class="box provider-settings" id="proton_settings"
+      style="@if(isset($current) && $current['driver'] !== 'proton') display: none; @endif">
       <div class="box-header with-border">
-        <h3 class="box-title">Automatic Allocation Creation</h3>
+        <h3 class="box-title">Proton Captcha Settings</h3>
       </div>
       <div class="box-body">
         <div class="row">
-        <div class="form-group col-md-4">
-          <label class="control-label">Status</label>
+        <div class="form-group col-md-6">
+          <label class="control-label">Site Key</label>
           <div>
-          <select class="form-control" name="pterodactyl:client_features:allocations:enabled">
-            <option value="false">Disabled</option>
-            <option value="true" @if(old('pterodactyl:client_features:allocations:enabled', config('pterodactyl.client_features.allocations.enabled'))) selected @endif>Enabled</option>
-          </select>
-          <p class="text-muted small">If enabled users will have the option to automatically create new
-            allocations for their server via the frontend.</p>
+          <input type="text" class="form-control" name="proton[site_key]"
+            value="{{ old('proton.site_key', isset($current) && isset($current['proton']) ? $current['proton']['site_key'] : '') }}">
           </div>
         </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Starting Port</label>
+        <div class="form-group col-md-6">
+          <label class="control-label">Secret Key</label>
           <div>
-          <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_start"
-            value="{{ old('pterodactyl:client_features:allocations:range_start', config('pterodactyl.client_features.allocations.range_start')) }}">
-          <p class="text-muted small">The starting port in the range that can be automatically allocated.</p>
-          </div>
-        </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Ending Port</label>
-          <div>
-          <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_end"
-            value="{{ old('pterodactyl:client_features:allocations:range_end', config('pterodactyl.client_features.allocations.range_end')) }}">
-          <p class="text-muted small">The ending port in the range that can be automatically allocated.</p>
+          <input type="text" class="form-control" name="proton[secret_key]"
+            value="{{ old('proton.secret_key', isset($current) && isset($current['proton']) ? $current['proton']['secret_key'] : '') }}">
+          <p class="text-muted small">Get your keys from <a href="https://account.proton.me/signup"
+            target="_blank">Proton account</a>.</p>
           </div>
         </div>
         </div>
       </div>
       </div>
+
+      <!-- Friendly Captcha Settings -->
+      <div class="box provider-settings" id="friendly_settings"
+      style="@if(isset($current) && $current['driver'] !== 'friendly') display: none; @endif">
+      <div class="box-header with-border">
+        <h3 class="box-title">Friendly Captcha Settings</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+        <div class="form-group col-md-6">
+          <label class="control-label">Site Key</label>
+          <div>
+          <input type="text" class="form-control" name="friendly[site_key]"
+            value="{{ old('friendly.site_key', isset($current) ? $current['friendly']['site_key'] : '') }}">
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="control-label">Secret Key</label>
+          <div>
+          <input type="text" class="form-control" name="friendly[secret_key]"
+            value="{{ old('friendly.secret_key', isset($current) ? $current['friendly']['secret_key'] : '') }}">
+          <p class="text-muted small">Get your keys from <a href="https://friendlycaptcha.com/"
+            target="_blank">Friendly Captcha</a>.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+
+
+      <!-- Recaptcha Settings -->
+      <div class="box provider-settings" id="recaptcha_settings"
+      style="@if(isset($current) && $current['driver'] !== 'recaptcha') display: none; @endif">
+      <div class="box-header with-border">
+        <h3 class="box-title">Recaptcha Settings</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+        <div class="form-group col-md-6">
+          <label class="control-label">Site Key</label>
+          <div>
+          <input type="text" class="form-control" name="recaptcha[site_key]"
+            value="{{ old('recaptcha.site_key', isset($current) ? $current['recaptcha']['site_key'] : '') }}">
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="control-label">Secret Key</label>
+          <div>
+          <input type="text" class="form-control" name="recaptcha[secret_key]"
+            value="{{ old('recaptcha.secret_key', isset($current) ? $current['recaptcha']['secret_key'] : '') }}">
+          <p class="text-muted small">Get your keys from <a href="https://www.google.com/recaptcha/admin/create"
+            target="_blank">Google api Dashboard</a>.
+          </p>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+
       <div class="box box-primary">
       <div class="box-footer">
         {{ csrf_field() }}
-        <button type="submit" name="_method" value="PATCH" class="btn btn-sm btn-primary pull-right">Save</button>
+        <button type="submit" class="btn btn-sm btn-primary pull-right">Save</button>
       </div>
       </div>
     </form>
     </div>
   </div>
+@endsection
+
+@section('footer-scripts')
+  @parent
+  <script>
+    document.getElementById('captcha_provider').addEventListener('change', function () {
+
+    document.querySelectorAll('.provider-settings').forEach(el => {
+      el.style.display = 'none';
+    });
+
+
+    const selectedProvider = this.value;
+    if (selectedProvider !== 'none') {
+      document.getElementById(selectedProvider + '_settings').style.display = 'block';
+    }
+    });
+  </script>
 @endsection
