@@ -43,6 +43,7 @@ jobs:
                       type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease }}
                       type=ref,event=tag
                       type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }}
+                      type=raw,value=action-${{ github.run_number }}
 
             # Only set up QEMU for release branches and tagged releases
             - name: Setup QEMU

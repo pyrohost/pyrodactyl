@@ -23,45 +23,45 @@
       <div class="box-body">
       You are running Pyrodactyl panel version <code>{{ config('app.version') }}</code>.
       </div>
-      <div aria-hidden="true"
+      <!-- <div aria-hidden="true"
       style="background-color: #ffffff33; position: absolute; height: 1px; width: 100%; margin-top: 20px;"></div>
       <div class="row" style="margin-top: 20px;">
       <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="small-box bg-[#000000]">
-        <div class="inner">
-          <h3 id="cpu-load">--</h3>
-          <p>CPU Usage</p>
-        </div>
-        </div>
+      <div class="small-box bg-[#000000]">
+      <div class="inner">
+      <h3 id="cpu-load">--</h3>
+      <p>CPU Usage</p>
+      </div>
+      </div>
       </div>
       <div class="col-sm-6 col-lg-3">
-        <div class="small-box bg-[#000000]">
-        <div class="inner">
-          <h3 id="ram-usage">--</h3>
-          <p>Memory Usage</p>
-        </div>
-        </div>
+      <div class="small-box bg-[#000000]">
+      <div class="inner">
+      <h3 id="ram-usage">--</h3>
+      <p>Memory Usage</p>
+      </div>
+      </div>
       </div>
 
       <div class="col-sm-6 col-lg-3">
 
-        <div class="small-box bg-[#000000]">
-        <div class="inner items-center">
-          <h3 id="disk-usage">--</h3>
-          <p>Storage</p>
-        </div>
-        </div>
+      <div class="small-box bg-[#000000]">
+      <div class="inner items-center">
+      <h3 id="disk-usage">--</h3>
+      <p>Storage</p>
+      </div>
+      </div>
       </div>
 
       <div class="col-sm-6 col-lg-3">
-        <div class="small-box bg-[#000000]">
-        <div class="inner">
-          <h3 id="uptime">--</h3>
-          <p>System Uptime</p>
-        </div>
-        </div>
+      <div class="small-box bg-[#000000]">
+      <div class="inner">
+      <h3 id="uptime">--</h3>
+      <p>System Uptime</p>
       </div>
       </div>
+      </div> -->
+      <!-- </div> -->
     </div>
 
     </div>
