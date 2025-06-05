@@ -1,11 +1,4 @@
 // components/Captcha.tsx
-import {
-    CreateWidgetOptions,
-    FRCWidgetCompleteEvent,
-    FRCWidgetErrorEventData,
-    FriendlyCaptchaSDK,
-    WidgetErrorData,
-} from '@friendlycaptcha/sdk';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useEffect, useState } from 'react';
@@ -37,20 +30,13 @@ export default ({ driver, sitekey, endpoint, onVerify, onError, onExpire }: Capt
         return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
     }
 
-    if (driver === 'recaptcha') {
+    if (driver === 'mcaptcha') {
         // TODO: Maybe make this work one day
         return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
     }
-
-    if (driver === 'friendly') {
-        return (
-            <FriendlyCaptcha
-                sitekey={sitekey || ''}
-                endpoint={endpoint}
-                onSuccess={(e: any) => onVerify(e.detail.token)}
-                onError={onError}
-            />
-        );
+    if (driver === 'recaptcha') {
+        // TODO: Maybe make this work one day
+        return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
     }
 
     return null;
