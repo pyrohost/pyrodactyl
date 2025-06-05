@@ -37,7 +37,7 @@
         "@radix-ui/react-tabs": "^1.1.11",
         "@sentry/react": "^9.17.0",
         "@sentry/vite-plugin": "^3.4.0",
-        "@tailwindcss/postcss": "^4.1.6",
+        "@tailwindcss/postcss": "^4.1.8",
         "@tanstack/react-virtual": "^3.13.8",
         "@xterm/addon-fit": "^0.10.0",
         "@xterm/addon-search": "^0.15.0",
