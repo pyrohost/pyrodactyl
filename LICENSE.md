@@ -1,3 +1,11 @@
+
+
+Note to End User: Pyro Inc and its contributors provide all services and software "as is" without any guarantees. We make no promises regarding warranty, security, reliability, or fitness for a particular purpose. Use at your own risk. PyroHost / Pyro and its contributors are not responsible for any loss, damage, or issues resulting from the use of this product or service.
+
+
+
+
+
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
