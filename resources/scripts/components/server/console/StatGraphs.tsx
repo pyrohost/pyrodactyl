@@ -1,4 +1,6 @@
-// FIXME: add icons back
+import { faCloudDownloadAlt, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Tooltip from '@radix-ui/react-tooltip';
 import { useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -38,7 +40,6 @@ export default () => {
                 ...opts,
                 label: !index ? 'Network In' : 'Network Out',
                 borderColor: !index ? '#facc15' : '#60a5fa',
-                // backgroundColor: hexToRgba(!index ? theme('colors.cyan.700') : theme('colors.yellow.700'), 0.5),
                 backgroundColor: hexToRgba(!index ? '#facc15' : '#60a5fa', 0.09),
             };
         },
@@ -70,7 +71,7 @@ export default () => {
     });
 
     return (
-        <>
+        <Tooltip.Provider>
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{
@@ -106,21 +107,51 @@ export default () => {
                 <ChartBlock
                     title={'Network Activity'}
                     legend={
-                        <>
-                            {/* FIXME: add icons legend back */}
-                            {/* FIXME: replace with radix tooltip */}
-                            {/* <Tooltip arrow content={'Inbound'}> */}
-                            {/* <CloudDownloadIcon className={'mr-2 w-4 h-4 text-yellow-400'} /> */}
-                            {/* </Tooltip> */}
-                            {/* <Tooltip arrow content={'Outbound'}> */}
-                            {/* <CloudUploadIcon className={'w-4 h-4 text-blue-400'} /> */}
-                            {/* </Tooltip> */}
-                        </>
+                        <div className='flex gap-2'>
+                            <Tooltip.Root delayDuration={200}>
+                                <Tooltip.Trigger asChild>
+                                    <div className='flex items-center cursor-default'>
+                                        <FontAwesomeIcon
+                                            icon={faCloudDownloadAlt}
+                                            className='mr-2 w-4 h-4 text-yellow-400'
+                                        />
+                                    </div>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                    <Tooltip.Content
+                                        side='top'
+                                        className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
+                                        sideOffset={5}
+                                    >
+                                        Inbound
+                                        <Tooltip.Arrow className='fill-gray-800' />
+                                    </Tooltip.Content>
+                                </Tooltip.Portal>
+                            </Tooltip.Root>
+
+                            <Tooltip.Root delayDuration={200}>
+                                <Tooltip.Trigger asChild>
+                                    <div className='flex items-center cursor-default'>
+                                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4 text-blue-400' />
+                                    </div>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                    <Tooltip.Content
+                                        side='top'
+                                        className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
+                                        sideOffset={5}
+                                    >
+                                        Outbound
+                                        <Tooltip.Arrow className='fill-gray-800' />
+                                    </Tooltip.Content>
+                                </Tooltip.Portal>
+                            </Tooltip.Root>
+                        </div>
                     }
                 >
                     <Line aria-label='Network Activity. Download and upload activity' role='img' {...network.props} />
                 </ChartBlock>
             </div>
-        </>
+        </Tooltip.Provider>
     );
 };
