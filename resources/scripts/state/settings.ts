@@ -24,6 +24,7 @@ interface CaptchaConfig {
 export interface SiteSettings {
     name: string;
     locale: string;
+    timezone: string;
     captcha: CaptchaConfig;
 }
 
