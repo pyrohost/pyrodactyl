@@ -111,7 +111,7 @@
         "postcss": "^8.5.3",
         "postcss-import": "^16.1.0",
         "prettier": "^3.5.3",
-        "prettier-plugin-tailwindcss": "^0.6.11",
+        "prettier-plugin-tailwindcss": "^0.6.12",
         "tailwind-scrollbar": "^4.0.2",
         "ts-essentials": "^10.0.4",
         "tw-animate-css": "^1.2.9",
