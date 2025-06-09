@@ -66,7 +66,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
     let differenceDescription = '';
     if (!isServerTimezoneValid) {
-        differenceDescription = 'unknown';
+        differenceDescription = 'at an unknown difference to';
     } else if (offsetDifferenceMinutes === 0) {
         differenceDescription = 'same time';
     } else {
@@ -76,16 +76,16 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
         if (absDifferenceHours === Math.floor(absDifferenceHours)) {
             // whole hours
-            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead' : 'behind'}`;
+            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
         } else {
             // hours & minutes
             const hours = Math.floor(absDifferenceHours);
             const minutes = Math.abs(offsetDifferenceMinutes % 60);
 
             if (hours > 0) {
-                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead' : 'behind'}`;
+                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead of' : 'behind'}`;
             } else {
-                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead' : 'behind'}`;
+                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
             }
         }
     }
@@ -195,7 +195,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                         {timezoneInfo.difference !== 'same time' && (
                                             <span className={'text-blue-100 font-medium'}>
                                                 {' '}
-                                                The server is {timezoneInfo.difference} of your timezone.
+                                                The server is {timezoneInfo.difference} your timezone.
                                             </span>
                                         )}
                                     </p>
