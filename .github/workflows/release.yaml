@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Auto-increment and push new tag
+        id: create_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch --tags
+
+          LATEST_TAG=$(git tag --list "v*" | sort -V | tail -n 1)
+          if [ -z "$LATEST_TAG" ]; then
+            NEW_TAG="v0.0.1"
+          else
+            MAJOR=$(echo $LATEST_TAG | cut -d. -f1 | tr -d 'v')
+            MINOR=$(echo $LATEST_TAG | cut -d. -f2)
+            PATCH=$(echo $LATEST_TAG | cut -d. -f3)
+            PATCH=$((PATCH + 1))
+            NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+          fi
+
+          git config --local user.email "naterfute@pyro.host"
+          git config --local user.name "Pyrodactyl CI"
+
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
+          echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: Update version in config/app.php
+        run: |
+          sed -i "s/'version' => '[^']\+'/'version' => '${{ steps.create_tag.outputs.tag }}'/" config/app.php
+          git add config/app.php
+          git commit -m "ci(release): bump version to ${{ steps.create_tag.outputs.tag }}" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: Create release archive
+        run: |
+          rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
+          chmod -R 755 storage/* bootstrap/cache/
+          tar -czf panel.tar.gz * .editorconfig .env.example .gitignore .prettierrc.json
+
+      - name: Extract changelog
+        run: |
+          sed -n "/^## ${{ steps.create_tag.outputs.tag }}/,/^## /{/^## /b;p}" CHANGELOG.md > ./RELEASE_CHANGELOG || echo "No changelog found."
+
+      - name: Create checksum and add to changelog
+        run: |
+          SUM=$(sha256sum panel.tar.gz)
+          echo -e "\n#### SHA256 Checksum\n\n\`\`\`\n$SUM\n\`\`\`\n" >> ./RELEASE_CHANGELOG
+          echo $SUM > checksum.txt
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Alpha ${{ steps.create_tag.outputs.tag }}
+          tag_name: ${{ steps.create_tag.outputs.tag }}
+          draft: false
+          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+          body_path: ./RELEASE_CHANGELOG
+
+      - name: Upload release archive
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./panel.tar.gz
+          asset_name: panel.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./checksum.txt
+          asset_name: checksum.txt
+          asset_content_type: text/plain
+
+      - name: Upload changelog
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./RELEASE_CHANGELOG
+          asset_name: RELEASE_CHANGELOG
+          asset_content_type: text/markdown
