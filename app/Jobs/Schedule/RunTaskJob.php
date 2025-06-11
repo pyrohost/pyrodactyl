@@ -68,12 +68,20 @@ class RunTaskJob extends Job implements ShouldQueue
                     $commandRepository->setServer($server)->send($this->task->payload);
                     break;
                 case Task::ACTION_BACKUP:
+                    // Mark the task as running before initiating the backup to prevent duplicate runs
+                    $this->task->update(['is_processing' => true]);
                     $backupService->setIgnoredFiles(explode(PHP_EOL, $this->task->payload))->handle($server, null, true);
+                    $this->task->update(['is_processing' => false]);
                     break;
                 default:
                     throw new \InvalidArgumentException('Invalid task action provided: ' . $this->task->action);
             }
         } catch (\Exception $exception) {
+            // Reset the processing flag if there was an error
+            if ($this->task->action === Task::ACTION_BACKUP) {
+                $this->task->update(['is_processing' => false]);
+            }
+            
             // If this isn't a DaemonConnectionException on a task that allows for failures
             // throw the exception back up the chain so that the task is stopped.
             if (!($this->task->continue_on_failure && $exception instanceof DaemonConnectionException)) {
