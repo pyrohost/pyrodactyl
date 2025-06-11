@@ -13,86 +13,76 @@ use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
 
 class ProcessScheduleService
 {
-    /**
-     * ProcessScheduleService constructor.
-     */
-    public function __construct(private ConnectionInterface $connection, private Dispatcher $dispatcher, private DaemonServerRepository $serverRepository)
-    {
+  /**
+   * ProcessScheduleService constructor.
+   */
+  public function __construct(private ConnectionInterface $connection, private Dispatcher $dispatcher, private DaemonServerRepository $serverRepository)
+  {
+  }
+
+  /**
+   * Process a schedule and push the first task onto the queue worker.
+   *
+   * @throws \Throwable
+   */
+  public function handle(Schedule $schedule, bool $now = false): void
+  {
+    /** @var \Pterodactyl\Models\Task $task */
+    $task = $schedule->tasks()->orderBy('sequence_id')->first();
+
+    if (is_null($task)) {
+      throw new DisplayException('Cannot process schedule for task execution: no tasks are registered.');
     }
 
-    /**
-     * Process a schedule and push the first task onto the queue worker.
-     *
-     * @throws \Throwable
-     */
-    public function handle(Schedule $schedule, bool $now = false): void
-    {
-        // Add a transaction with a row-level lock to prevent double-processing
-        $this->connection->transaction(function () use (&$schedule, $now) {
-            // Reload the schedule with a FOR UPDATE lock
-            $lockedSchedule = Schedule::where('id', $schedule->id)
-                ->lockForUpdate()
-                ->first();
+    $this->connection->transaction(function () use ($schedule, $task) {
+      $schedule->forceFill([
+        'is_processing' => true,
+        'next_run_at' => $schedule->getNextRunDate(),
+      ])->saveOrFail();
 
-            if (!$lockedSchedule) {
-                throw new ModelNotFoundException('Schedule not found for locking.');
-            }
+      $task->update(['is_queued' => true]);
+    });
 
-            // Prevent double-processing if another process already set is_processing
-            if ($lockedSchedule->is_processing) {
-                throw new DisplayException('Schedule is already being processed.');
-            }
+    $job = new RunTaskJob($task, $now);
+    if ($schedule->only_when_online) {
+      // Check that the server is currently in a starting or running state before executing
+      // this schedule if this option has been set.
+      try {
+        $details = $this->serverRepository->setServer($schedule->server)->getDetails();
+        $state = $details['state'] ?? 'offline';
+        // If the server is stopping or offline just do nothing with this task.
+        if (in_array($state, ['offline', 'stopping'])) {
+          $job->failed();
 
-            /** @var \Pterodactyl\Models\Task $task */
-            $task = $lockedSchedule->tasks()->orderBy('sequence_id')->first();
-
-            if (is_null($task)) {
-                throw new DisplayException('Cannot process schedule for task execution: no tasks are registered.');
-            }
-
-            $lockedSchedule->forceFill([
-                'is_processing' => true,
-                'next_run_at' => $lockedSchedule->getNextRunDate(),
-            ])->saveOrFail();
-
-            $task->update(['is_queued' => true]);
-
-            $schedule = $lockedSchedule;
-
-            $GLOBALS['__process_schedule_task'] = $task;
-        });
-
-        // Retrieve the task from the global (not ideal, but avoids refactoring signature)
-        $task = $GLOBALS['__process_schedule_task'];
-        unset($GLOBALS['__process_schedule_task']);
-
-        $job = new RunTaskJob($task, $now);
-        if ($schedule->only_when_online) {
-            try {
-                $details = $this->serverRepository->setServer($schedule->server)->getDetails();
-                $state = $details['state'] ?? 'offline';
-                if (in_array($state, ['offline', 'stopping'])) {
-                    $job->failed();
-                    return;
-                }
-            } catch (\Exception $exception) {
-                if (!$exception instanceof DaemonConnectionException) {
-                    $job->failed($exception);
-                }
-                $job->failed();
-                return;
-            }
+          return;
         }
-
-        if (!$now) {
-            $this->dispatcher->dispatch($job->delay($task->time_offset));
-        } else {
-            try {
-                $this->dispatcher->dispatchNow($job);
-            } catch (\Exception $exception) {
-                $job->failed($exception);
-                throw $exception;
-            }
+      } catch (\Exception $exception) {
+        if (!$exception instanceof DaemonConnectionException) {
+          // If we encountered some exception during this process that wasn't just an
+          // issue connecting to Wings run the failed sequence for a job. Otherwise we
+          // can just quietly mark the task as completed without actually running anything.
+          $job->failed($exception);
         }
+        $job->failed();
+
+        return;
+      }
     }
+
+    if (!$now) {
+      $this->dispatcher->dispatch($job->delay($task->time_offset));
+    } else {
+      // When using dispatchNow the RunTaskJob::failed() function is not called automatically
+      // so we need to manually trigger it and then continue with the exception throw.
+      //
+      // @see https://github.com/pterodactyl/panel/issues/2550
+      try {
+        $this->dispatcher->dispatchNow($job);
+      } catch (\Exception $exception) {
+        $job->failed($exception);
+
+        throw $exception;
+      }
+    }
+  }
 }
