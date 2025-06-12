@@ -47,27 +47,25 @@ jobs:
                     NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
                   fi
                   echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+                  echo "version=${NEW_TAG#v}" >> $GITHUB_OUTPUT  # Extract version without 'v' prefix for package.json
 
-            - name: Update version in config/app.php and create tag
+            - name: Update version in config/app.php and package.json, create tag
               id: create_tag
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  # Update version in config file
                   sed -i "s/'version' => '[^']\+'/'version' => '${{ steps.determine_tag.outputs.tag }}'/" config/app.php
 
-                  # Configure git
+                  npm version --no-git-tag-version ${{ steps.determine_tag.outputs.version }}
+
                   git config --local user.email "naterfute@pyro.host"
                   git config --local user.name "Pyrodactyl CI"
 
-                  # Commit the version change
-                  git add config/app.php
+                  git add config/app.php package.json
                   git commit -m "ci(release): bump version to ${{ steps.determine_tag.outputs.tag }}"
 
-                  # Create annotated tag pointing to this commit
                   git tag -a ${{ steps.determine_tag.outputs.tag }} -m "Release ${{ steps.determine_tag.outputs.tag }}"
 
-                  # Push only the tag (not the branch)
                   git push origin ${{ steps.determine_tag.outputs.tag }}
 
             - name: Create release archive
