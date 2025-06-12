@@ -53,17 +53,24 @@ export default async (data: LoginData): Promise<LoginResponse> => {
             error: response.data.error ?? response.data.message,
         };
     } catch (error: any) {
-        console.error('Login API Error:', {
-            status: error.response?.status,
-            data: error.response?.data,
-            message: error.message,
-        });
-
-        throw new Error(
+        const loginError = new Error(
             error.response?.data?.error ??
                 error.response?.data?.message ??
                 error.message ??
                 'Login failed. Please try again.',
-        );
+        ) as any;
+
+        loginError.response = error.response;
+        loginError.detail = error.response?.data?.errors?.[0]?.detail;
+        loginError.code = error.response?.data?.errors?.[0]?.code;
+
+        console.error('Login API Error:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            detail: loginError.detail,
+            message: loginError.message,
+        });
+
+        throw loginError;
     }
 };

@@ -115,25 +115,23 @@ function LoginContainer() {
                 }
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 console.error('Login error details:', {
                     message: error.message,
-                    response: error.response?.data,
-                    config: error.config,
+                    detail: error.detail,
+                    code: error.code,
+                    response: error.response,
                 });
+
                 resetCaptcha();
                 setSubmitting(false);
 
-                // Check if the error is specifically about invalid credentials
-                if (error.response?.data?.errors?.some((e: any) => e.code === 'InvalidCredentials')) {
+                if (error.code === 'InvalidCredentials') {
                     clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
-                }
-                if (error.response?.data?.errors?.some((e: any) => e.code === 'DisplayException')) {
-                    clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
+                } else if (error.code === 'DisplayException') {
+                    clearAndAddHttpError({ error: new Error(error.detail || error.message) });
                 } else {
-                    // Fall back to the server's error message or a generic CAPTCHA message
-                    const errorMsg = error.response?.data?.message || 'An Unknown Error Occured.';
-                    clearAndAddHttpError({ error: new Error(errorMsg) });
+                    clearAndAddHttpError({ error });
                 }
             });
     };
@@ -209,6 +207,7 @@ function LoginContainer() {
                                 onError={() => handleCaptchaError('hCaptcha')}
                                 onExpire={handleCaptchaExpire}
                                 theme='dark'
+                                size='normal'
                             />
                         </div>
                     )}
