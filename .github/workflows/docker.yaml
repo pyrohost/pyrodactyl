@@ -60,7 +60,7 @@ jobs:
                       type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
                       type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/feature/') }}
                       type=raw,value=develop,enable=${{ github.ref == 'refs/heads/dev' }}
-                      type=raw,value=latest,enable=${{ (github.event_name == 'release' && !github.event.release.prerelease) || (startsWith(github.ref, 'refs/tags/') && steps.tag_check.outputs.is_latest == 'true' }}
+                      type=raw,value=latest,enable="${{ (github.event_name == 'release' && !github.event.release.prerelease) || (startsWith(github.ref, 'refs/tags/') && steps.tag_check.outputs.is_latest == 'true') }}"
                       type=ref,event=tag
                       type=raw,value=${{ steps.tag_check.outputs.current_tag || github.event.workflow_run.head_branch || github.ref_name }}
                       type=raw,value=action-${{ github.run_number }}
