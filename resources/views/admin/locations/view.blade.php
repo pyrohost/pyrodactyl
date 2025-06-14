@@ -15,16 +15,6 @@
 
 @section('content')
 @php
-    function humanizeSize($bytes) {
-        $units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
-        $i = 0;
-        while ($bytes >= 1024 && $i < count($units) - 1) {
-            $bytes /= 1024;
-            $i++;
-        }
-        return round($bytes, 2) . ' ' . $units[$i];
-    }
-
     $totalMemory = 0;
     $allocatedMemory = 0;
     $totalDisk = 0;

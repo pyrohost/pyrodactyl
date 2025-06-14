@@ -106,7 +106,6 @@
       </div>
       @endif
         @php
-
       $stats = app('Pterodactyl\Repositories\Eloquent\NodeRepository')->getUsageStatsRaw($node);
       $memoryPercent = ($stats['memory']['value'] / $stats['memory']['max']) * 100;
       $diskPercent = ($stats['disk']['value'] / $stats['disk']['max']) * 100;

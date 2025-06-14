@@ -33,3 +33,19 @@ if (!function_exists('object_get_strict')) {
         return $object;
     }
 }
+
+if (!function_exists('humanizeSize')) {
+    /**
+     * Convert bytes to a human readable format with binary units.
+     */
+    function humanizeSize(int|float $bytes): string
+    {
+        $units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
+        $i = 0;
+        while ($bytes >= 1024 && $i < count($units) - 1) {
+            $bytes /= 1024;
+            $i++;
+        }
+        return round($bytes, 2) . ' ' . $units[$i];
+    }
+}

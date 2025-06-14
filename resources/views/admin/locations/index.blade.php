@@ -40,16 +40,6 @@
                             @php
                                 $memoryColor = $location->memory_percent < 50 ? '#50af51' : ($location->memory_percent < 70 ? '#e0a800' : '#d9534f');
                                 $diskColor = $location->disk_percent < 50 ? '#50af51' : ($location->disk_percent < 70 ? '#e0a800' : '#d9534f');
-
-                                function humanizeSize($bytes) {
-                                    $units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
-                                    $i = 0;
-                                    while ($bytes >= 1024 && $i < count($units) - 1) {
-                                        $bytes /= 1024;
-                                        $i++;
-                                    }
-                                    return round($bytes, 2) . ' ' . $units[$i];
-                                }
                             @endphp
                             <tr>
                                 <td><code>{{ $location->id }}</code></td>
