@@ -19,7 +19,7 @@
             <link rel="manifest" href="/favicons/site.webmanifest" />
 
             <meta name="theme-color" content="#000000">
-			<meta name="darkreader-lock">
+            <meta name="darkreader-lock">
         @show
 
         @section('user-data')
