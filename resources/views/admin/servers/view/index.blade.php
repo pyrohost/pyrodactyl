@@ -150,6 +150,7 @@
                         <div class="small-box bg-zinc">
                             <div class="inner">
                                 <h3>{{ str_limit($server->user->username, 16) }}</h3>
+                                <p>{{ $server->user->email }}</p>
                                 <p>Server Owner</p>
                             </div>
                             <div class="icon"><i class="fa fa-user"></i></div>
