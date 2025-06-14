@@ -5,7 +5,7 @@
 @endsection
 
 @section('content-header')
-    <h1>{{ $user->name_first }} {{ $user->name_last}}<small>{{ $user->username }} ({{ $user->email }})</small></h1>
+    <h1>{{ $user->name_first }} {{ $user->name_last}}<small>{{ $user->username }}</small></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
         <li><a href="{{ route('admin.users') }}">Users</a></li>
