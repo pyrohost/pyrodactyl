@@ -27,6 +27,7 @@ export default ({ subuser }: { subuser: Subuser }) => {
             .then(() => {
                 setLoading(false);
                 removeSubuser(subuser.uuid);
+                setShowConfirmation(false);
             })
             .catch((error) => {
                 console.error(error);
@@ -50,7 +51,7 @@ export default ({ subuser }: { subuser: Subuser }) => {
             <button
                 type={'button'}
                 aria-label={'Delete subuser'}
-                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
+                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
                 onClick={() => setShowConfirmation(true)}
             >
                 <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />

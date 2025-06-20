@@ -1,9 +1,11 @@
 import ModalContext from '@/context/ModalContext';
-import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { TZDate } from '@date-fns/tz';
+import { faInfoCircle, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { format } from 'date-fns';
+import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
-// import { useContext, useEffect, useState } from 'react';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import Field from '@/components/elements/Field';
@@ -11,7 +13,6 @@ import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import ItemContainer from '@/components/elements/ItemContainer';
 import { Button } from '@/components/elements/button/index';
 
-// import ScheduleCheatsheetCards from '@/components/server/schedules/ScheduleCheatsheetCards';
 import asModal from '@/hoc/asModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -37,13 +38,81 @@ interface Values {
     onlyWhenOnline: boolean;
 }
 
+const getTimezoneInfo = (serverTimezone: string) => {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const now = new Date();
+
+    const userOffsetString = format(now, 'xxx');
+    let serverOffsetString: string;
+    let offsetDifferenceMinutes = 0;
+
+    let isServerTimezoneValid = true;
+    try {
+        const serverDate = new TZDate(now, serverTimezone);
+        const userDate = new TZDate(now, userTimezone);
+        serverOffsetString = format(serverDate, 'xxx');
+
+        // offset difference in minutes
+        const serverOffsetValue = serverDate.getTimezoneOffset();
+        const userOffsetValue = userDate.getTimezoneOffset();
+
+        // + values mean behind UTC
+        // - values mean ahead of UTC
+        offsetDifferenceMinutes = userOffsetValue - serverOffsetValue;
+    } catch {
+        serverOffsetString = 'Unknown';
+        isServerTimezoneValid = false;
+    }
+
+    let differenceDescription = '';
+    if (!isServerTimezoneValid) {
+        differenceDescription = 'at an unknown difference to';
+    } else if (offsetDifferenceMinutes === 0) {
+        differenceDescription = 'same time';
+    } else {
+        const offsetDifferenceHours = offsetDifferenceMinutes / 60;
+        const absDifferenceHours = Math.abs(offsetDifferenceHours);
+        const isAhead = offsetDifferenceMinutes > 0;
+
+        if (absDifferenceHours === Math.floor(absDifferenceHours)) {
+            // whole hours
+            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+        } else {
+            // hours & minutes
+            const hours = Math.floor(absDifferenceHours);
+            const minutes = Math.abs(offsetDifferenceMinutes % 60);
+
+            if (hours > 0) {
+                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead of' : 'behind'}`;
+            } else {
+                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+            }
+        }
+    }
+
+    return {
+        user: { timezone: userTimezone, offset: userOffsetString },
+        server: { timezone: serverTimezone, offset: serverOffsetString },
+        difference: differenceDescription,
+        isDifferent: userTimezone !== serverTimezone,
+    };
+};
+
+const formatTimezoneDisplay = (timezone: string, offset: string) => {
+    return `${timezone} (${offset})`;
+};
+
 const EditScheduleModal = ({ schedule }: Props) => {
     const { addError, clearFlashes } = useFlash();
     const { dismiss, setPropOverrides } = useContext(ModalContext);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    // const [showCheatsheet, setShowCheetsheet] = useState(false);
+    const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Unknown');
+
+    const timezoneInfo = useMemo(() => {
+        return getTimezoneInfo(serverTimezone);
+    }, [serverTimezone]);
 
     useEffect(() => {
         setPropOverrides({ title: schedule ? 'Edit schedule' : 'Create new schedule' });
@@ -114,11 +183,55 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         <Field name={'month'} label={'Month'} />
                         <Field name={'dayOfWeek'} label={'Day of week'} />
                     </div>
+
+                    {timezoneInfo.isDifferent && (
+                        <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
+                            <div className={'flex items-start gap-3'}>
+                                <FontAwesomeIcon icon={faInfoCircle} className={'text-blue-400 mt-0.5 flex-shrink-0'} />
+                                <div className={'text-sm'}>
+                                    <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
+                                    <p className={'text-blue-200/80 text-xs mb-2'}>
+                                        Times shown here are configured for the server timezone.
+                                        {timezoneInfo.difference !== 'same time' && (
+                                            <span className={'text-blue-100 font-medium'}>
+                                                {' '}
+                                                The server is {timezoneInfo.difference} your timezone.
+                                            </span>
+                                        )}
+                                    </p>
+                                    <div className={'mt-2 text-xs space-y-1'}>
+                                        <div className={'text-blue-200/60'}>
+                                            Your timezone:
+                                            <span className={'font-mono'}>
+                                                {' '}
+                                                {formatTimezoneDisplay(
+                                                    timezoneInfo.user.timezone,
+                                                    timezoneInfo.user.offset,
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div className={'text-blue-200/60'}>
+                                            Server timezone:
+                                            <span className={'font-mono'}>
+                                                {' '}
+                                                {formatTimezoneDisplay(
+                                                    timezoneInfo.server.timezone,
+                                                    timezoneInfo.server.offset,
+                                                )}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <p className={`text-zinc-400 text-xs mt-2`}>
                         The schedule system supports the use of Cronjob syntax when defining when tasks should begin
                         running. Use the fields above to specify when these tasks should begin running.
                     </p>
-                    <div className={`space-y-3 my-6`}>
+
+                    <div className='gap-3 my-6 flex flex-col'>
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                             <ItemContainer
                                 description={'Online editor for cron schedule experessions.'}

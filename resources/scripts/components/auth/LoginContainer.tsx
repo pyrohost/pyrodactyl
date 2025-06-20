@@ -1,119 +1,158 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Reaptcha from 'reaptcha';
 import { object, string } from 'yup';
 
+import FriendlyCaptcha from '@/components/FriendlyCaptcha';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import Field from '@/components/elements/Field';
+import Logo from '@/components/elements/PyroLogo';
 
 import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
-
 interface Values {
-    username: string;
+    user: string;
     password: string;
 }
 
 function LoginContainer() {
-    const ref = useRef<Reaptcha>(null);
     const [token, setToken] = useState('');
+    const [friendlyLoaded, setFriendlyLoaded] = useState(false);
+    const turnstileRef = useRef(null);
+    const friendlyCaptchaRef = useRef<{ reset: () => void }>(null);
+    const hCaptchaRef = useRef<HCaptcha>(null);
+    const mCaptchaRef = useRef<{ reset: () => void }>(null);
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { enabled: recaptchaEnabled, siteKey } = useStoreState((state) => state.settings.data!.recaptcha);
+    const { captcha } = useStoreState((state) => state.settings.data!);
+    const isTurnstileEnabled = captcha.driver === 'turnstile' && captcha.turnstile?.siteKey;
+    const isFriendlyEnabled = captcha.driver === 'friendly' && captcha.friendly?.siteKey;
+    const isHCaptchaEnabled = captcha.driver === 'hcaptcha' && captcha.hcaptcha?.siteKey;
+    const isMCaptchaEnabled = captcha.driver === 'mcaptcha' && captcha.mcaptcha?.siteKey;
 
     const navigate = useNavigate();
 
     useEffect(() => {
         clearFlashes();
+
+        // Load FriendlyCaptcha script if needed
+        if (isFriendlyEnabled && !window.friendlyChallenge) {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/friendly-challenge@0.9.12/widget.module.min.js';
+            script.async = true;
+            script.defer = true;
+            script.onload = () => setFriendlyLoaded(true);
+            document.body.appendChild(script);
+        } else if (isFriendlyEnabled) {
+            setFriendlyLoaded(true);
+        }
     }, []);
+
+    const resetCaptcha = () => {
+        setToken('');
+        if (isTurnstileEnabled && turnstileRef.current) {
+            // @ts-ignore - The type doesn't expose the reset method directly
+            turnstileRef.current.reset();
+        }
+        if (isFriendlyEnabled && friendlyCaptchaRef.current) {
+            friendlyCaptchaRef.current.reset();
+        }
+        if (isHCaptchaEnabled && hCaptchaRef.current) {
+            hCaptchaRef.current.resetCaptcha();
+        }
+    };
+
+    const handleCaptchaComplete = (response: string) => {
+        setToken(response);
+    };
+
+    const handleCaptchaError = (provider: string) => {
+        setToken('');
+        clearAndAddHttpError({ error: new Error(`${provider} challenge failed.`) });
+    };
+
+    const handleCaptchaExpire = () => {
+        setToken('');
+    };
 
     const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
 
-        // If there is no token in the state yet, request the token and then abort this submit request
-        // since it will be re-submitted when the recaptcha data is returned by the component.
-        if (recaptchaEnabled && !token) {
-            ref.current!.execute().catch((error) => {
-                console.error(error);
-
-                setSubmitting(false);
-                clearAndAddHttpError({ error });
-            });
-
+        if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
+            setSubmitting(false);
+            clearAndAddHttpError({ error: new Error('Please complete the CAPTCHA challenge.') });
             return;
         }
 
-        login({ ...values, recaptchaData: token })
+        const requestData: Record<string, string> = {
+            user: values.user,
+            password: values.password,
+        };
+
+        if (isTurnstileEnabled) {
+            requestData['cf-turnstile-response'] = token;
+            if (process.env.NODE_ENV === 'development') {
+                requestData['cf-turnstile-remoteip'] = 'localhost';
+            }
+        } else if (isHCaptchaEnabled) {
+            requestData['h-captcha-response'] = token;
+        } else if (isFriendlyEnabled) {
+            requestData['frc-captcha-response'] = token;
+        }
+
+        login(requestData)
             .then((response) => {
                 if (response.complete) {
-                    // @ts-expect-error this is valid
-                    window.location = response.intended || '/';
+                    window.location.href = response.intended || '/';
                     return;
                 }
-
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
-            .catch((error) => {
-                console.error(error);
+            .catch((error: any) => {
+                console.error('Login error details:', {
+                    message: error.message,
+                    detail: error.detail,
+                    code: error.code,
+                    response: error.response,
+                });
 
-                setToken('');
-                // https://github.com/jsardev/reaptcha/issues/218
-                if (ref.current) {
-                    setTimeout(() => {
-                        if (ref.current) {
-                            ref.current.reset();
-                        }
-                    }, 500);
-                }
-
+                resetCaptcha();
                 setSubmitting(false);
-                clearAndAddHttpError({ error });
+
+                if (error.code === 'InvalidCredentials') {
+                    clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
+                } else if (error.code === 'DisplayException') {
+                    clearAndAddHttpError({ error: new Error(error.detail || error.message) });
+                } else {
+                    clearAndAddHttpError({ error });
+                }
             });
     };
 
     return (
         <Formik
             onSubmit={onSubmit}
-            initialValues={{ username: '', password: '' }}
+            initialValues={{ user: '', password: '' }}
             validationSchema={object().shape({
-                username: string().required('A username or email must be provided.'),
+                user: string().required('A username or email must be provided.'),
                 password: string().required('Please enter your account password.'),
             })}
         >
-            {({ isSubmitting, setSubmitting, submitForm }) => (
+            {({ isSubmitting }) => (
                 <LoginFormContainer className={`w-full flex`}>
                     <div className='flex h-12 mb-4 items-center w-full'>
-                        {/* temp src */}
-                        {/* <img
-                            className='w-full max-w-full h-full'
-                            loading='lazy'
-                            decoding='async'
-                            alt=''
-                            aria-hidden
-                            style={{
-                                color: 'transparent',
-                            }}
-                            src='https://i.imgur.com/Hbum4fc.png'
-                        /> */}
-                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    <Field
-                        id='usernameOrEmail'
-                        type={'text'}
-                        label={'Username or Email'}
-                        name={'username'}
-                        disabled={isSubmitting}
-                    />
+                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
                     <div className={`relative mt-6`}>
                         <Field
                             id='password'
@@ -129,9 +168,59 @@ function LoginContainer() {
                             Forgot Password?
                         </Link>
                     </div>
+
+                    {/* CAPTCHA Providers */}
+                    {isTurnstileEnabled && (
+                        <div className='mt-6'>
+                            <Turnstile
+                                ref={turnstileRef}
+                                siteKey={captcha.turnstile.siteKey}
+                                onSuccess={handleCaptchaComplete}
+                                onError={() => handleCaptchaError('Turnstile')}
+                                onExpire={handleCaptchaExpire}
+                                options={{
+                                    theme: 'dark',
+                                    size: 'flexible',
+                                }}
+                            />
+                        </div>
+                    )}
+
+                    {isFriendlyEnabled && friendlyLoaded && (
+                        <div className='mt-6 w-full'>
+                            <FriendlyCaptcha
+                                ref={friendlyCaptchaRef}
+                                sitekey={captcha.friendly.siteKey}
+                                onComplete={handleCaptchaComplete}
+                                onError={() => handleCaptchaError('FriendlyCaptcha')}
+                                onExpire={handleCaptchaExpire}
+                            />
+                        </div>
+                    )}
+
+                    {isHCaptchaEnabled && (
+                        <div className='mt-6'>
+                            <HCaptcha
+                                ref={hCaptchaRef}
+                                sitekey={captcha.hcaptcha.siteKey}
+                                onVerify={handleCaptchaComplete}
+                                onError={() => handleCaptchaError('hCaptcha')}
+                                onExpire={handleCaptchaExpire}
+                                theme='dark'
+                                size='normal'
+                            />
+                        </div>
+                    )}
+
+                    {isMCaptchaEnabled && (
+                        <div className='mt-6'>
+                            <p className='text-red-500'>mCaptcha implementation needed</p>
+                        </div>
+                    )}
+
                     <div className={`mt-6`}>
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}
@@ -140,22 +229,6 @@ function LoginContainer() {
                             Login
                         </Button>
                     </div>
-                    {recaptchaEnabled && (
-                        <Reaptcha
-                            ref={ref}
-                            size={'invisible'}
-                            sitekey={siteKey || '_invalid_key'}
-                            onVerify={(response) => {
-                                setToken(response);
-                                // Ensure submitForm is called after token is updated
-                                setTimeout(submitForm, 100);
-                            }}
-                            onExpire={() => {
-                                setSubmitting(false);
-                                setToken('');
-                            }}
-                        />
-                    )}
                 </LoginFormContainer>
             )}
         </Formik>

@@ -52,7 +52,7 @@ const terminalProps: ITerminalOptions = {
 };
 
 export default () => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pterodactyl~ \u001b[0m';
+    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
     const fitAddon = new FitAddon();
@@ -109,7 +109,7 @@ export default () => {
             setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
             setHistoryIndex(-1);
 
-            instance && instance.send('send command', command);
+            if (instance) instance.send('send command', command);
             e.currentTarget.value = '';
         }
     };
@@ -206,7 +206,11 @@ export default () => {
         >
             <div className={clsx(styles.terminal, 'relative')}>
                 <SpinnerOverlay visible={!connected} size={'large'} />
-                <div className={clsx(styles.container, styles.overflows_container, { 'rounded-b': !canSendCommands })}>
+                <div
+                    className={clsx(styles.terminalContainer, styles.overflows_container, {
+                        'rounded-b': !canSendCommands,
+                    })}
+                >
                     <div className={'h-full'}>
                         <div id={styles.terminal} ref={ref} />
                     </div>

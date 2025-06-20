@@ -12,8 +12,8 @@ import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import asDialog from '@/hoc/asDialog';
 
 import createDirectory from '@/api/server/files/createDirectory';
-import { FileObject } from '@/api/server/files/loadDirectory';
 
+// import { FileObject } from '@/api/server/files/loadDirectory';
 import { ServerContext } from '@/state/server';
 
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
@@ -27,20 +27,22 @@ const schema = object().shape({
     directoryName: string().required('A valid directory name must be provided.'),
 });
 
-const generateDirectoryData = (name: string): FileObject => ({
-    key: `dir_${name.split('/', 1)[0] ?? name}`,
-    name: name.replace(/^(\/*)/, '').split('/', 1)[0] ?? name,
-    mode: 'drwxr-xr-x',
-    modeBits: '0755',
-    size: 0,
-    isFile: false,
-    isSymlink: false,
-    mimetype: '',
-    createdAt: new Date(),
-    modifiedAt: new Date(),
-    isArchiveType: () => false,
-    isEditable: () => false,
-});
+// removed to prevent linting issues, you're welcome.
+//
+// const generateDirectoryData = (name: string): FileObject => ({
+//     key: `dir_${name.split('/', 1)[0] ?? name}`,
+//     name: name.replace(/^(\/*)/, '').split('/', 1)[0] ?? name,
+//     mode: 'drwxr-xr-x',
+//     modeBits: '0755',
+//     size: 0,
+//     isFile: false,
+//     isSymlink: false,
+//     mimetype: '',
+//     createdAt: new Date(),
+//     modifiedAt: new Date(),
+//     isArchiveType: () => false,
+//     isEditable: () => false,
+// });
 
 const NewDirectoryDialog = asDialog({
     title: 'New Folder',
@@ -60,7 +62,8 @@ const NewDirectoryDialog = asDialog({
 
     const submit = ({ directoryName }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         createDirectory(uuid, directory, directoryName)
-            .then(() => mutate((data) => [...data!, generateDirectoryData(directoryName)], false))
+            // .then(() => mutate((data) => [...data!, generateDirectoryData(directoryName)], false))
+            .then(() => mutate())
             .then(() => close())
             .catch((error) => {
                 setSubmitting(false);
@@ -75,7 +78,7 @@ const NewDirectoryDialog = asDialog({
                     <FlashMessageRender key={'files:directory-modal'} />
                     <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
-                        <p className={`mt-2 !text-xs break-all`}>
+                        <p className={`mt-2 text-xs! break-all`}>
                             <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
                             <Code>
                                 /root/
@@ -110,7 +113,7 @@ export default () => {
                     background:
                         'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                 }}
-                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md'
+                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
                 onClick={setOpen.bind(this, true)}
             >
                 New Folder

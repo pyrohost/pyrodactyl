@@ -39,7 +39,7 @@ export default () => {
     const parentRef = useRef<HTMLDivElement | null>(null);
 
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
-    const { hash } = useLocation();
+    const { hash, pathname } = useLocation();
     const { data: files, error, mutate } = useFileManagerSwr();
 
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -48,6 +48,8 @@ export default () => {
 
     const setSelectedFiles = ServerContext.useStoreActions((actions) => actions.files.setSelectedFiles);
     const selectedFilesLength = ServerContext.useStoreState((state) => state.files.selectedFiles.length);
+
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         clearFlashes('files');
@@ -77,7 +79,12 @@ export default () => {
 
     useEffect(() => {
         setSearchTerm('');
-    }, [location]);
+
+        // Clean imput using a reference
+        if (searchInputRef.current) {
+            searchInputRef.current.value = '';
+        }
+    }, [hash, pathname, directory]);
 
     if (error) {
         return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
@@ -92,7 +99,7 @@ export default () => {
     });
 
     return (
-        <ServerContentBlock className='!p-0' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
                 <ErrorBoundary>
                     <MainPageHeader title={'Files'}>
@@ -150,9 +157,10 @@ export default () => {
                                         </svg>
 
                                         <input
+                                            ref={searchInputRef}
                                             className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                                             type='text'
-                                            placeholder='Search'
+                                            placeholder='Search...'
                                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                                         />
                                     </div>

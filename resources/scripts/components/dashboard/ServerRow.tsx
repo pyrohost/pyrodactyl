@@ -81,7 +81,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
         });
 
         return () => {
-            interval.current && clearInterval(interval.current);
+            if (interval.current) clearInterval(interval.current);
         };
     }, [isSuspended]);
 
@@ -121,7 +121,7 @@ export default ({ server, className }: { server: Server; className?: string }) =
                 </div>
             </div>
             <div
-                className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
+                className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
                 {!stats || isSuspended ? (
                     isSuspended ? (

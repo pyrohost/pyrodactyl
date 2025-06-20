@@ -28,6 +28,11 @@ class NodeCreationService
         $data['daemon_token'] = app(Encrypter::class)->encrypt(Str::random(Node::DAEMON_TOKEN_LENGTH));
         $data['daemon_token_id'] = Str::random(Node::DAEMON_TOKEN_ID_LENGTH);
 
+        // Automatically set use_separate_fqdns based on whether internal_fqdn is provided
+        if (isset($data['internal_fqdn'])) {
+            $data['use_separate_fqdns'] = !empty($data['internal_fqdn']);
+        }
+
         return $this->repository->create($data, true, true);
     }
 }

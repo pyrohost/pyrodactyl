@@ -1,0 +1,126 @@
+x-common:
+    database: &db-environment
+        # Do not remove the "&db-password" from the end of the line below, it is important
+        # for Panel functionality.
+        MYSQL_PASSWORD: &db-password 'password'
+        MYSQL_ROOT_PASSWORD: &db-root-password 'rootpassword'
+    panel: &panel-environment
+        APP_URL: 'http://panel'
+        # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+        APP_TIMEZONE: 'UTC'
+        APP_SERVICE_AUTHOR: 'noreply@example.com'
+        DB_USERNAME: 'pterodactyl'
+        # DB_PASSWORD: "Uncomment this to user your own password"
+
+        # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
+        # to generate an SSL certificate for the Panel.
+        # LE_EMAIL: ""
+
+    mail: &mail-environment
+        MAIL_FROM: 'noreply@example.com'
+        MAIL_DRIVER: 'smtp'
+        MAIL_HOST: 'mail'
+        MAIL_PORT: '1025'
+        MAIL_USERNAME: ''
+        MAIL_PASSWORD: ''
+        MAIL_ENCRYPTION: 'true'
+
+#
+# ------------------------------------------------------------------------------------------
+# DANGER ZONE BELOW
+#
+# The remainder of this file likely does not need to be changed. Please only make modifications
+# below if you understand what you are doing.
+#
+services:
+    database:
+        image: mariadb:10.5
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - './srv/database:/var/lib/mysql'
+        environment:
+            <<: *db-environment
+            MYSQL_DATABASE: 'panel'
+            MYSQL_USER: 'pterodactyl'
+    cache:
+        image: redis:alpine
+        restart: always
+    panel:
+        image: pyrodactyl:develop
+        restart: always
+        ports:
+            - '3000:80'
+            # - '443:443'
+        links:
+            - database
+            - cache
+        volumes:
+            - '.:/app'
+            - './srv/var:/app/var'
+            - './srv/nginx/:/etc/nginx/http.d/'
+            - './srv/certs:/etc/letsencrypt'
+            - './srv/logs/:/app/storage/logs'
+            - './srv/pterodactyl/config/:/etc/pterodactyl'
+            # anonymous volumes below, meaning it'll use the image's directory instead of the host
+            - '/app/vendor'
+            # needed for linux permissions
+            - '/app/storage'
+            - '/app/storage/framework/views'
+            - '/app/bootstrap/cache'
+        environment:
+            <<: [*panel-environment, *mail-environment]
+            DB_PASSWORD: *db-password
+            DB_ROOT_PASSWORD: *db-root-password
+            APP_ENV: 'production'
+            APP_ENVIRONMENT_ONLY: 'false'
+            CACHE_DRIVER: 'redis'
+            SESSION_DRIVER: 'redis'
+            QUEUE_DRIVER: 'redis'
+            REDIS_HOST: 'cache'
+            DB_CONNECTION: 'mariadb'
+            DB_HOST: 'database'
+            DB_PORT: '3306'
+            HASHIDS_LENGTH: 8
+            WINGS_INTERNAL_IP: 'wings'
+            WINGS_DIR: '${PWD}'
+            PYRODACTYL_DOCKER_DEV: 'true'
+    wings:
+        # The default Wings image doesn't work on macOS Docker
+        # This fork simply removes the incompatible `io.priority` cgroup v2 flag
+        # For Linux users, you can use the default image by uncommenting the line below
+        # image: ghcr.io/pterodactyl/wings:latest
+        image: ghcr.io/he3als/wings-mac:latest
+        restart: always
+        ports:
+            - '8080:8080'
+            - '2022:2022'
+        tty: true
+        environment:
+            TZ: 'UTC'
+            WINGS_UID: 988
+            WINGS_GID: 988
+            WINGS_USERNAME: pterodactyl
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            - '/etc/ssl/certs:/etc/ssl/certs:ro'
+            - './srv/pterodactyl/config/:/etc/pterodactyl/'
+
+            # The volumes below need to be the exact same path in the container as on the host.
+            #
+            # The paths are currently hardcoded in the container on first run, meaning if you move
+            # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
+            #
+            # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
+            # Do not change anything but the $PWD part as this is also hardcoded in the container.
+
+            - '${PWD}/srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - '${PWD}/srv/wings/:${PWD}/srv/wings/'
+            - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
+
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16

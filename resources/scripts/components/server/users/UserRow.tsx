@@ -48,7 +48,7 @@ export default ({ subuser }: Props) => {
                                 <button
                                     type={'button'}
                                     aria-label={'Edit subuser'}
-                                    className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
+                                    className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
                                     onClick={() => setVisible(true)}
                                 >
                                     <FontAwesomeIcon icon={faEdit} className={`px-5`} size='lg' />

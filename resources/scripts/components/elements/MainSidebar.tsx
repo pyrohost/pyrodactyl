@@ -3,14 +3,14 @@ import styled from 'styled-components';
 const MainSidebar = styled.nav`
     width: 300px;
     flex-direction: column;
-    flex-shrink: 0;
+    shrink: 0;
     border-radius: 8px;
     overflow-x: hidden;
     padding: 32px;
-    position: relative;
+    // position: absolute;
     margin-right: 8px;
     user-select: none;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
 
     & > .pyro-subnav-routes-wrapper {

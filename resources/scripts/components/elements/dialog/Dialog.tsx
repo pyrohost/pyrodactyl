@@ -77,12 +77,12 @@ export default ({
                                 background:
                                     'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
                             }}
-                            className={'fixed inset-0 backdrop-blur-sm z-[9997]'}
+                            className={'fixed inset-0 backdrop-blur-xs z-9997'}
                         />
-                        <div className={'fixed inset-0 overflow-y-auto z-[9998]'}>
+                        <div className={'fixed inset-0 overflow-y-auto z-9998'}>
                             <div
                                 ref={container}
-                                className={styles.container}
+                                className={styles.dialogContainer}
                                 onMouseDown={onContainerClick.bind(this, true)}
                                 onMouseUp={onContainerClick.bind(this, false)}
                             >
@@ -116,7 +116,7 @@ export default ({
                                     {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
                                     {!hideCloseIcon && (
                                         <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onClose}>
+                                            <button onClick={onClose} className='cursor-pointer'>
                                                 <HugeIconsX fill='currentColor' />
                                             </button>
                                         </div>

@@ -98,7 +98,7 @@ function ResetPasswordContainer() {
                         </div>
                         <div className={`mt-6`}>
                             <Button
-                                className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2'
+                                className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
                                 size={'xlarge'}
                                 type={'submit'}
                                 disabled={isSubmitting}
@@ -110,7 +110,7 @@ function ResetPasswordContainer() {
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
                         <div
-                            className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-none capitalize font-bold text-sm py-2 `}
+                            className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
                         >
                             <Link
                                 to={'/auth/login'}

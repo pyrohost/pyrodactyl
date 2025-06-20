@@ -1,70 +1,104 @@
-name: Docker
-
+name: Docker Build and Push
 on:
-  push:
-    branches:
-      - main
-      - dev
-  pull_request:
-    branches:
-      - main
-  release:
-    types:
-      - published
-
+    workflow_run:
+        workflows: ['Release']
+        types:
+            - completed
+    push:
+        branches:
+            - release/**
+            # - main
+            - feature/**
+            - dev
+        tags:
+            - v/*
+    release:
+        types:
+            - published
 permissions:
-  packages: write
+    packages: write
 
 jobs:
-  push:
-    name: Push
-    runs-on: ubuntu-latest
-    if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@v4
+    push:
+        name: Push
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.workflow_run.head_branch || github.ref }}
+                  fetch-depth: 1 # Only fetch the latest commit to speed up checkout
 
-      - name: Docker metadata
-        id: docker_meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/pyrohost/pyrodactyl
-          flavor: |
-            latest=false
-          tags: |
-            type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && github.event.release.prerelease == false && github.ref != 'refs/heads/dev' }}
-            type=ref,event=tag,enable=${{ github.ref != 'refs/heads/dev' }}
-            type=ref,event=branch
+            - name: Docker metadata
+              id: docker_meta
+              uses: docker/metadata-action@v5
+              with:
+                  images: ghcr.io/pyrohost/pyrodactyl
+                  flavor: |
+                      latest=auto
+                  tags: |
+                      type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
+                      type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+                      type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
+                      type=raw,value=${{ github.ref_name }},enable=${{ startsWith(github.ref, 'refs/heads/feature/') }}
+                      type=raw,value=develop,enable=${{ github.ref == 'refs/heads/dev' }}
+                      type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease }}
+                      type=ref,event=tag
+                      type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }}
+                      type=raw,value=action-${{ github.run_number }}
 
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
+            # Only set up QEMU for release branches and tagged releases
+            - name: Setup QEMU
+              if: ${{ startsWith(github.ref, 'refs/heads/release/') || github.event_name == 'release' || github.ref == 'refs/heads/main' }}
+              uses: docker/setup-qemu-action@v3
 
-      - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@v3
+            - name: Setup Docker buildx
+              uses: docker/setup-buildx-action@v3
+              with:
+                  buildkitd-flags: --debug
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        if: "github.event_name != 'pull_request'"
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update version
-        if: "github.event_name == 'release' && github.event.action == 'published'"
-        env:
-          REF: ${{ github.event.release.tag_name }}
-        run: |
-          sed -i "s/    'version' => 'canary',/    'version' => '${REF:1}',/" config/app.php
+            - name: Update version
+              if: "github.event_name == 'release' && github.event.action == 'published'"
+              env:
+                  REF: ${{ github.event.release.tag_name }}
+              run: |
+                  sed -i "s/ 'version' => 'canary',/ 'version' => '${REF:1}',/" config/app.php
 
-      - name: Build and Push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.docker_meta.outputs.labels }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            # For feature branches, only build for amd64 to save time
+            - name: Build and Push (feature branches)
+              if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/dev' }}
+              uses: docker/build-push-action@v6
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  platforms: linux/amd64
+                  labels: ${{ steps.docker_meta.outputs.labels }}
+                  tags: ${{ steps.docker_meta.outputs.tags }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+                  build-args: |
+                      BUILDKIT_INLINE_CACHE=1
+
+            # For main/release branches and releases, build for all platforms
+            - name: Build and Push (production)
+              if: ${{ startsWith(github.ref, 'refs/heads/release/') || github.ref == 'refs/heads/main' || github.event_name == 'release' }}
+              uses: docker/build-push-action@v6
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  platforms: linux/amd64,linux/arm64
+                  labels: ${{ steps.docker_meta.outputs.labels }}
+                  tags: ${{ steps.docker_meta.outputs.tags }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+                  build-args: |
+                      BUILDKIT_INLINE_CACHE=1

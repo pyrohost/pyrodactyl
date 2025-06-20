@@ -102,7 +102,7 @@ const JavaVersionModalFeature = () => {
                         <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]'
+                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer'
                                     disabled={!data}
                                 >
                                     {selectedVersion
@@ -121,7 +121,7 @@ const JavaVersionModalFeature = () => {
                                     )}
                                 </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                            <DropdownMenuContent className='z-99999' sideOffset={8}>
                                 <DropdownMenuRadioGroup value={selectedVersion} onValueChange={setSelectedVersion}>
                                     {data &&
                                         Object.keys(data.dockerImages).map((key) => (

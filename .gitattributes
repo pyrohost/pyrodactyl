@@ -1,1 +1,35 @@
 * text eol=lf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.ico binary
+*.webp binary
+*.tiff binary
+*.tif binary
+*.svg binary
+*.avif binary
+*.heic binary
+*.heif binary
+
+# Audio
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.flac binary
+*.aac binary
+*.m4a binary
+*.wma binary
+
+# Video
+*.mp4 binary
+*.mov binary
+*.avi binary
+*.mkv binary
+*.webm binary
+*.flv binary
+*.wmv binary
+*.m4v binary

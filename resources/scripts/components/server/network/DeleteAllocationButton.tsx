@@ -25,6 +25,8 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
     const deleteAllocation = () => {
         clearFlashes();
 
+        setConfirm(false);
+
         mutate((data) => data?.filter((a) => a.id !== allocation), false);
         setServerFromState((s) => ({ ...s, allocations: s.allocations.filter((a) => a.id !== allocation) }));
 
@@ -45,7 +47,9 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <button onClick={() => setConfirm(true)}>Delete</button>
+            <button className='cursor-pointer' onClick={() => setConfirm(true)}>
+                Delete
+            </button>
         </>
     );
 };

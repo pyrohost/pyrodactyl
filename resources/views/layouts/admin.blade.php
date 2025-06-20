@@ -8,14 +8,15 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <meta name="_token" content="{{ csrf_token() }}">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
-  <link rel="manifest" href="/favicons/manifest.json">
-  <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#bc6e3c">
-  <link rel="shortcut icon" href="/favicons/favicon.ico">
-  <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+  <link rel="icon" type="image/png" href="/favicons/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" />
+  <link rel="shortcut icon" href="/favicons/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Pyrodactyl" />
+  <link rel="manifest" href="/favicons/site.webmanifest" />
+
   <meta name="theme-color" content="#000000">
+  <meta name="darkreader-lock">
 
   @include('layouts.scripts')
 
@@ -158,21 +159,21 @@
         <div class="row">
           <div class="col-xs-12">
             @if (count($errors) > 0)
-        <div class="alert alert-danger">
-          There was an error validating the data provided.<br><br>
-          <ul>
-          @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-      @endforeach
-          </ul>
-        </div>
+          <div class="alert alert-danger">
+            There was an error validating the data provided.<br><br>
+            <ul>
+            @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+            </ul>
+          </div>
       @endif
             @foreach (Alert::getMessages() as $type => $messages)
-        @foreach ($messages as $message)
-      <div class="alert alert-{{ $type }} alert-dismissable" role="alert">
-        {!! $message !!}
-      </div>
-    @endforeach
+            @foreach ($messages as $message)
+          <div class="alert alert-{{ $type }} alert-dismissable" role="alert">
+            {!! $message !!}
+          </div>
+          @endforeach
       @endforeach
           </div>
         </div>

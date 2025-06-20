@@ -222,25 +222,23 @@ const SoftwareContainer = () => {
         reinstall();
     };
 
-    // FIXME: Make it so that getting the variables doesn't actually change the egg
-    const handleEggSelect = async () => {
-        if (!eggs || !nests || !selectedEgg) return;
+    const handleEggSelect = async (egg: Egg) => {
+        if (!eggs || !nests || !selectedNest) return;
+        setStep(2);
 
-        const nestId = nests?.findIndex((nest) => nest.attributes.uuid === selectedNest?.attributes.uuid) + 1 || 0;
-        const eggId = eggs?.find((eo) => eo.attributes.uuid === selectedEgg?.attributes.uuid)?.attributes.id || 0;
+        // Use the passed egg directly instead of selectedEgg state
+        const nestId = selectedNest.attributes.id;
+        const eggId = egg.attributes.id;
 
-        setSelectedEggImage(uuid, eggId, nestId)
-            .catch((error) => {
-                console.error(error);
-                toast.error(httpErrorToHuman(error));
-            })
-            .then(async () => {
-                await mutate();
-                updateVarsData();
-
-                setModalVisible(false);
-                setTimeout(() => setStep(2), 500);
-            });
+        try {
+            await setSelectedEggImage(uuid, eggId, nestId);
+            await mutate();
+            updateVarsData();
+            setTimeout(() => setStep(2), 500);
+        } catch (error) {
+            console.error(error);
+            toast.error(httpErrorToHuman(error));
+        }
     };
 
     useEffect(() => {
@@ -274,7 +272,10 @@ const SoftwareContainer = () => {
                 {isLongDescription && !shouldShowFull ? (
                     <>
                         {`${description.slice(0, MAX_DESCRIPTION_LENGTH)}... `}
-                        <button className='text-brand' onClick={() => toggleDescriptionVisibility(index)}>
+                        <button
+                            className='text-brand cursor-pointer'
+                            onClick={() => toggleDescriptionVisibility(index)}
+                        >
                             Show More
                         </button>
                     </>
@@ -282,7 +283,10 @@ const SoftwareContainer = () => {
                     <>
                         {description}
                         {isLongDescription && (
-                            <button className='text-brand' onClick={() => toggleDescriptionVisibility(index)}>
+                            <button
+                                className='text-brand cursor-pointer'
+                                onClick={() => toggleDescriptionVisibility(index)}
+                            >
                                 <span className='text-neutral-400'>..</span>Show Less
                             </button>
                         )}
@@ -301,17 +305,6 @@ const SoftwareContainer = () => {
                 </h2>
             </MainPageHeader>
 
-            <Dialog.Confirm
-                open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
-                onClose={() => setModalVisible(false)}
-                onConfirmed={() => handleEggSelect()}
-            >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
-            </Dialog.Confirm>
-
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
                     <div className='w-full h-full'>
@@ -329,7 +322,7 @@ const SoftwareContainer = () => {
                                 </div>
                             </div>
                             <button
-                                className='rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] text-white'
+                                className='rounded-full border-[1px] cursor-pointer border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-linear-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
                             >
                                 Change Egg
@@ -340,7 +333,7 @@ const SoftwareContainer = () => {
             )}
 
             {visible && (
-                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] lg:h-[73svh]'>
+                <div className='relative rounded-xl shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] min-h-[500px] max-h-[90vh] overflow-y-auto'>
                     <div className='max-[480px]:flex max-[480px]:flex-col max-[480px]:items-center w-full h-full'>
                         <div className='flex max-[480px]:flex-col max-[480px]:gap-4 min-[480px]:items-center justify-between p-4 pr-5 mb-2'>
                             {steps.map((cstep, index) => (
@@ -354,7 +347,7 @@ const SoftwareContainer = () => {
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <div
-                                            className={`${index < step + 1 ? 'border-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#FF343C] to-[#F06F53] text-brand' : 'border-[#ffffff20] text-[#ffffff20]'} border-[2px] rounded-full p-1 w-8 h-8 text-sm font-bold shadow-md hover:shadow-lg items-center text-center`}
+                                            className={`${index < step + 1 ? 'border-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-[#FF343C] to-[#F06F53] text-brand' : 'border-[#ffffff20] text-[#ffffff20]'} border-[2px] rounded-full p-1 w-8 h-8 text-sm font-bold shadow-md hover:shadow-lg items-center text-center`}
                                         >
                                             {index + 1}
                                         </div>
@@ -408,35 +401,31 @@ const SoftwareContainer = () => {
                             {(step == 1 && selectedNest && (
                                 <div>
                                     <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4'>
-                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) =>
-                                            currentEgg === egg.attributes.uuid ? null : (
-                                                <div
-                                                    key={egg.attributes.uuid}
-                                                    className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
-                                                        selectedEgg?.attributes.uuid === egg.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
-                                                >
-                                                    <div className='flex items-center justify-between'>
-                                                        <p className='text-neutral-300 text-md'>
-                                                            {egg.attributes.name}
-                                                        </p>
-                                                        <Button
-                                                            onClick={() => {
-                                                                setSelectedEgg(egg);
-                                                                setModalVisible(true);
-                                                            }}
-                                                        >
-                                                            Select
-                                                        </Button>
-                                                    </div>
-                                                    <p className='text-neutral-400 text-xs mt-2'>
-                                                        {renderEggDescription(egg.attributes.description, eggIndex)}
-                                                    </p>
+                                        {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => (
+                                            <div
+                                                key={egg.attributes.uuid}
+                                                className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
+                                                    selectedEgg?.attributes.uuid === egg.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                }`}
+                                            >
+                                                <div className='flex items-center justify-between'>
+                                                    <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
+                                                    <Button
+                                                        onClick={async () => {
+                                                            setSelectedEgg(egg);
+                                                            await handleEggSelect(egg);
+                                                        }}
+                                                    >
+                                                        Select
+                                                    </Button>
                                                 </div>
-                                            ),
-                                        )}
+                                                <p className='text-neutral-400 text-xs mt-2'>
+                                                    {renderEggDescription(egg.attributes.description, eggIndex)}
+                                                </p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )) ||
