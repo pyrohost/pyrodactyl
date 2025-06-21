@@ -7,11 +7,11 @@ on:
     push:
         branches:
             - release/**
-            # - main
             - feature/**
             - dev
         tags:
             - v/*
+            - v*
     release:
         types:
             - published
@@ -26,7 +26,7 @@ jobs:
             - name: Code checkout
               uses: actions/checkout@v4
               with:
-                  ref: ${{ github.event.workflow_run.head_branch || github.ref }}
+                  ref: ${{ github.event.release.tag_name || github.event.workflow_run.head_branch || github.ref }}
                   fetch-depth: 1 # Only fetch the latest commit to speed up checkout
 
             - name: Docker metadata
@@ -34,8 +34,7 @@ jobs:
               uses: docker/metadata-action@v5
               with:
                   images: ghcr.io/pyrohost/pyrodactyl
-                  flavor: |
-                      latest=auto
+                  flavor: latest=auto
                   tags: |
                       type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
                       type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
@@ -44,7 +43,7 @@ jobs:
                       type=raw,value=develop,enable=${{ github.ref == 'refs/heads/dev' }}
                       type=raw,value=latest,enable=${{ github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease }}
                       type=ref,event=tag
-                      type=raw,value=${{ github.event.workflow_run.head_branch || github.ref_name }}
+                      type=raw,value=${{ github.event.release.tag_name || github.event.workflow_run.head_branch || github.ref_name }}
                       type=raw,value=action-${{ github.run_number }}
 
             # Only set up QEMU for release branches and tagged releases

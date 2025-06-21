@@ -16,7 +16,7 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
+                  fetch-depth: 1
 
             - name: Install pnpm
               run: npm install -g pnpm
@@ -58,7 +58,7 @@ jobs:
 
                   npm version --no-git-tag-version ${{ steps.determine_tag.outputs.version }}
 
-                  git config --local user.email "naterfute@pyro.host"
+                  git config --local user.email "ci@pyro.host"
                   git config --local user.name "Pyrodactyl CI"
 
                   git add config/app.php package.json
