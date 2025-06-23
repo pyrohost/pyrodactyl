@@ -23,7 +23,7 @@
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
-        "@friendlycaptcha/sdk": "^0.1.22",
+        "@friendlycaptcha/sdk": "^0.1.23",
         "@hcaptcha/react-hcaptcha": "^1.12.0",
         "@headlessui/react": "^2.2.4",
         "@lezer/highlight": "^1.2.1",
