@@ -110,7 +110,7 @@
         "eslint-plugin-react-hooks": "^5.2.0",
         "postcss": "^8.5.6",
         "postcss-import": "^16.1.1",
-        "prettier": "^3.5.3",
+        "prettier": "^3.6.2",
         "prettier-plugin-tailwindcss": "^0.6.12",
         "tailwind-scrollbar": "^4.0.2",
         "ts-essentials": "^10.1.1",
