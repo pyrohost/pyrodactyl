@@ -1,6 +1,6 @@
 <?php
 
-namespace Pterodactyl\Http\Controllers\Api\CLient\Nests;
+namespace Pterodactyl\Http\Controllers\Api\Client\Nests;
 
 use Pterodactyl\Models\Egg;
 use Pterodactyl\Models\Nest;
