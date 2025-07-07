@@ -1,5 +1,5 @@
 import { Dialog as HDialog } from '@headlessui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
