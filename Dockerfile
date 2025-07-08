@@ -78,10 +78,10 @@ RUN cp .env.example .env || true \
   && chown -R nginx:nginx storage bootstrap
 
 
-  # Cron jobs & NGINX tweaks
-  RUN rm /usr/local/etc/php-fpm.conf \
+# Cron jobs & NGINX tweaks
+RUN rm /usr/local/etc/php-fpm.conf \
   && { \
-  echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; \
+  echo "* * * * * su -s /bin/sh nginx -c '/usr/local/bin/php /app/artisan schedule:run' >> /dev/null 2>&1"; \
   echo "0 23 * * * certbot renew --nginx --quiet"; \
   } > /var/spool/cron/crontabs/root \
   && sed -i 's/ssl_session_cache/#ssl_session_cache/' /etc/nginx/nginx.conf \
