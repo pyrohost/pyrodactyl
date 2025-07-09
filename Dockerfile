@@ -77,6 +77,10 @@ RUN cp .env.example .env || true \
   && chown -R nginx:nginx storage bootstrap \
   && chmod -R 775 bootstrap storage
 
+# Set permissions for Laravel storage and cache directories
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 
 # Cron jobs & NGINX tweaks
 RUN rm /usr/local/etc/php-fpm.conf \
@@ -91,7 +95,6 @@ RUN rm /usr/local/etc/php-fpm.conf \
 COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.conf
 COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
-RUN chmod -R 775 /app/storage/framework/cache/data
 
 
 EXPOSE 80 443
