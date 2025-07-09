@@ -56,7 +56,7 @@ export default defineConfig({
         outDir: 'public/build',
 
         rollupOptions: {
-            input: 'resources/scripts/index.tsx',
+            input: path.resolve('resources/scripts/index.tsx'),
             output: {
                 // @ts-ignore
                 manualChunks(id) {
