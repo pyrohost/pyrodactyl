@@ -62,12 +62,10 @@ services:
             - './srv/certs:/etc/letsencrypt'
             - './srv/logs/:/app/storage/logs'
             - './srv/pterodactyl/config/:/etc/pterodactyl'
-            # anonymous volumes below, meaning it'll use the image's directory instead of the host
-            - '/app/vendor'
-            # needed for linux permissions
-            - '/app/storage'
-            - '/app/storage/framework/views'
-            - '/app/bootstrap/cache'
+            # volumes set for the dirs below so the image's files are used instead of the host's files
+            - panel_vendor:/app/vendor
+            - panel_storage:/app/storage
+            - panel_bootstrap_cache:/app/bootstrap/cache
         environment:
             <<: [*panel-environment, *mail-environment]
             DB_PASSWORD: *db-password
@@ -124,3 +122,8 @@ networks:
         ipam:
             config:
                 - subnet: 172.20.0.0/16
+
+volumes:
+    panel_vendor:
+    panel_storage:
+    panel_bootstrap_cache:

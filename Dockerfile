@@ -72,10 +72,10 @@ RUN if [ "$DEV" = "true" ]; then \
 
 # Env, directories, permissions
 RUN cp .env.example .env || true \
-  && mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache \
-  && chmod -R 777 bootstrap storage \
+  && mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data \
   && rm -rf bootstrap/cache/*.php \
-  && chown -R nginx:nginx storage bootstrap
+  && chown -R nginx:nginx storage bootstrap \
+  && chmod -R 775 bootstrap storage
 
 
 # Cron jobs & NGINX tweaks
