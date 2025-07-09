@@ -71,24 +71,31 @@ class FindViableNodesService
         Assert::integer($this->disk, 'Disk space must be an int, got %s');
         Assert::integer($this->memory, 'Memory usage must be an int, got %s');
 
-        $query = Node::query()->select('nodes.*')
-            ->selectRaw('IFNULL(SUM(servers.memory), 0) as sum_memory')
-            ->selectRaw('IFNULL(SUM(servers.disk), 0) as sum_disk')
-            ->leftJoin('servers', 'servers.node_id', '=', 'nodes.id')
-            ->where('nodes.public', 1);
-
+        $query = Node::query()->with('servers')->where('nodes.public', 1);
         if (!empty($this->locations)) {
             $query = $query->whereIn('nodes.location_id', $this->locations);
         }
+        $nodes = $query->get();
 
-        $results = $query->groupBy('nodes.id')
-            ->havingRaw('(IFNULL(SUM(servers.memory), 0) + ?) <= (nodes.memory * (1 + (nodes.memory_overallocate / 100)))', [$this->memory])
-            ->havingRaw('(IFNULL(SUM(servers.disk), 0) + ?) <= (nodes.disk * (1 + (nodes.disk_overallocate / 100)))', [$this->disk]);
+        $filtered = $nodes->filter(function ($node) {
+            $sumMemory = $node->servers->sum('memory');
+            $sumDisk = $node->servers->sum('disk');
+            $memoryLimit = $node->memory * (1 + ($node->memory_overallocate / 100));
+            $diskLimit = $node->disk * (1 + ($node->disk_overallocate / 100));
+            return ($sumMemory + $this->memory) <= $memoryLimit
+                && ($sumDisk + $this->disk) <= $diskLimit;
+        })->values();
 
         if (!is_null($page)) {
-            $results = $results->paginate($perPage ?? 50, ['*'], 'page', $page);
+            $perPage = $perPage ?? 50;
+            $results = new \Illuminate\Pagination\LengthAwarePaginator(
+                $filtered->forPage($page, $perPage)->values(),
+                $filtered->count(),
+                $perPage,
+                $page
+            );
         } else {
-            $results = $results->get()->toBase();
+            $results = $filtered;
         }
 
         if ($results->isEmpty()) {
