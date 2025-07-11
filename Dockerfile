@@ -71,21 +71,17 @@ RUN if [ "$DEV" = "true" ]; then \
   exit 0
 
 # Env, directories, permissions
-RUN cp .env.example .env || true \
-  && mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data \
-  && rm -rf bootstrap/cache/*.php \
-  && chown -R nginx:nginx storage bootstrap \
-  && chmod -R 775 bootstrap storage
-
-# Set permissions for Laravel storage and cache directories
-RUN chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data; \
+  rm -rf bootstrap/cache/*.php; \
+  chown -R nginx:nginx .; \
+  chmod -R 755 bootstrap/cache storage; \
+  cp .env.example .env || true
 
 
 # Cron jobs & NGINX tweaks
 RUN rm /usr/local/etc/php-fpm.conf \
   && { \
-  echo "* * * * * su -s /bin/sh nginx -c '/usr/local/bin/php /app/artisan schedule:run' >> /dev/null 2>&1"; \
+  echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; \
   echo "0 23 * * * certbot renew --nginx --quiet"; \
   } > /var/spool/cron/crontabs/root \
   && sed -i 's/ssl_session_cache/#ssl_session_cache/' /etc/nginx/nginx.conf \
