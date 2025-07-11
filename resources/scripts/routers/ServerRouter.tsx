@@ -108,13 +108,13 @@ export default () => {
     const showSideBar = (shown: boolean) => {
         setSidebarVisible(shown);
 
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (!shown) setSidebarPosition(-500);
         else setSidebarPosition(0);
     };
 
     const checkIfMinimal = () => {
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
             showSideBar(true);
             return true;
@@ -167,31 +167,30 @@ export default () => {
     // Handle touch events for swipe to close
     const handleTouchStart = (e: React.TouchEvent) => {
         if (checkIfMinimal()) return;
-        // @ts-ignore it is not "possibly undefined." Pretty much guarunteed to work.
+        // @ts-expect-error - Legacy type suppression it is not "possibly undefined." Pretty much guarunteed to work.
 
         if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         else setTouchStartX(e.touches[0].clientX);
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
         if (checkIfMinimal()) return;
 
-        // @ts-ignore go to sleep TSC
+        // @ts-expect-error - Legacy type suppression go to sleep TSC
         const sidebarWidth = sidebarRef.current.clientWidth;
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (e.touches[0].clientX - touchStartX < 30) {
             setSidebarPosition(-sidebarWidth);
             return;
         }
 
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         const clampedValue = Math.max(Math.min(e.touches[0].clientX - touchStartX, sidebarWidth), 0) - sidebarWidth;
 
         setSidebarBetween(false);
 
         console.group('updateDragLocation');
-        //@ts-ignore Ok, TSC please go back to bed.
         console.info(`start ${clampedValue}`);
         console.groupEnd();
 
@@ -204,8 +203,8 @@ export default () => {
         setTouchStartX(null);
         setSidebarBetween(true);
 
-        // @ts-ignore
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
+        // @ts-expect-error - Legacy type suppression
         if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
             showSideBar(true);
         } else {
@@ -411,7 +410,6 @@ export default () => {
                                                 viewBox='0 0 16 15'
                                                 className='flex shrink-0 h-full w-full'
                                             >
-                                                {/* @ts-ignore */}
                                                 <path d='M8.9375 7.3775C8.9375 7.56341 8.88252 7.74515 8.7795 7.89974C8.67649 8.05432 8.53007 8.1748 8.35877 8.24595C8.18746 8.31709 7.99896 8.33571 7.8171 8.29944C7.63525 8.26317 7.4682 8.17364 7.33709 8.04218C7.20598 7.91072 7.11669 7.74323 7.08051 7.56088C7.04434 7.37854 7.06291 7.18954 7.13386 7.01778C7.20482 6.84601 7.32498 6.69921 7.47915 6.59592C7.63332 6.49263 7.81458 6.4375 8 6.4375C8.24864 6.4375 8.4871 6.53654 8.66291 6.71282C8.83873 6.8891 8.9375 7.1282 8.9375 7.3775ZM1.625 6.4375C1.43958 6.4375 1.25832 6.49263 1.10415 6.59592C0.949982 6.69921 0.829821 6.84601 0.758863 7.01778C0.687906 7.18954 0.669341 7.37854 0.705514 7.56088C0.741688 7.74323 0.830976 7.91072 0.962088 8.04218C1.0932 8.17364 1.26025 8.26317 1.4421 8.29944C1.62396 8.33571 1.81246 8.31709 1.98377 8.24595C2.15507 8.1748 2.30149 8.05432 2.4045 7.89974C2.50752 7.74515 2.5625 7.56341 2.5625 7.3775C2.5625 7.1282 2.46373 6.8891 2.28791 6.71282C2.1121 6.53654 1.87364 6.4375 1.625 6.4375ZM14.375 6.4375C14.1896 6.4375 14.0083 6.49263 13.8542 6.59592C13.7 6.69921 13.5798 6.84601 13.5089 7.01778C13.4379 7.18954 13.4193 7.37854 13.4555 7.56088C13.4917 7.74323 13.581 7.91072 13.7121 8.04218C13.8432 8.17364 14.0102 8.26317 14.1921 8.29944C14.374 8.33571 14.5625 8.31709 14.7338 8.24595C14.9051 8.1748 15.0515 8.05432 15.1545 7.89974C15.2575 7.74515 15.3125 7.56341 15.3125 7.3775C15.3125 7.1282 15.2137 6.8891 15.0379 6.71282C14.8621 6.53654 14.6236 6.4375 14.375 6.4375Z' />
                                             </svg>
                                         </button>

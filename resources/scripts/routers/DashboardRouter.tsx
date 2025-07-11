@@ -41,13 +41,13 @@ export default () => {
     const showSideBar = (shown: boolean) => {
         setSidebarVisible(shown);
 
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (!shown) setSidebarPosition(-500);
         else setSidebarPosition(0);
     };
 
     const checkIfMinimal = () => {
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
             showSideBar(true);
             return true;
@@ -98,31 +98,30 @@ export default () => {
     // Handle touch events for swipe to close
     const handleTouchStart = (e: React.TouchEvent) => {
         if (checkIfMinimal()) return;
-        // @ts-ignore it is not "possibly undefined." Pretty much guarunteed to work.
+        // @ts-expect-error - Legacy type suppression it is not "possibly undefined." Pretty much guarunteed to work.
 
         if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         else setTouchStartX(e.touches[0].clientX);
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
         if (checkIfMinimal()) return;
 
-        // @ts-ignore go to sleep TSC
+        // @ts-expect-error - Legacy type suppression go to sleep TSC
         const sidebarWidth = sidebarRef.current.clientWidth;
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if (e.touches[0].clientX - touchStartX < 30) {
             setSidebarPosition(-sidebarWidth);
             return;
         }
 
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         const clampedValue = Math.max(Math.min(e.touches[0].clientX - touchStartX, sidebarWidth), 0) - sidebarWidth;
 
         setSidebarBetween(false);
 
         console.group('updateDragLocation');
-        //@ts-ignore Ok, TSC please go back to bed.
         console.info(`start ${clampedValue}`);
         console.groupEnd();
 
@@ -135,7 +134,7 @@ export default () => {
         setTouchStartX(null);
         setSidebarBetween(true);
 
-        // @ts-ignore
+        // @ts-expect-error - Legacy type suppression
         if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
             showSideBar(true);
         } else {

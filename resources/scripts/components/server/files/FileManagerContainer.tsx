@@ -192,7 +192,7 @@ export default () => {
                                                         }}
                                                     >
                                                         <FileObjectRow
-                                                            // @ts-ignore
+                                                            // @ts-expect-error - Legacy type suppression
                                                             file={filesArray[virtualItem.index]}
                                                             key={filesArray[virtualItem.index]?.name}
                                                         />

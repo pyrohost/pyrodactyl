@@ -25,7 +25,7 @@ type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 //     return undefined;
 // };
 
-// @ts-ignore
+// @ts-expect-error - Unused parameter in component definition
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => <>{children}</>;
 

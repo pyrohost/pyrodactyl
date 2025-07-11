@@ -35,7 +35,7 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
     const end = Math.min(pagination.totalPages, pagination.currentPage + 5);
 
     for (let i = start; i <= end; i++) {
-        // @ts-ignore
+        // @ts-expect-error - Type issue with array push
         pages.push(i);
     }
 

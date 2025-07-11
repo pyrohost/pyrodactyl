@@ -58,7 +58,7 @@ function LoginContainer() {
     const resetCaptcha = () => {
         setToken('');
         if (isTurnstileEnabled && turnstileRef.current) {
-            // @ts-ignore - The type doesn't expose the reset method directly
+            // @ts-expect-error - The type doesn't expose the reset method directly
             turnstileRef.current.reset();
         }
         if (isFriendlyEnabled && friendlyCaptchaRef.current) {
