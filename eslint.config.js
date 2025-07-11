@@ -15,7 +15,7 @@ const gitignorePath = fileURLToPath(new URL('.gitignore', import.meta.url));
 export default defineConfig([
     includeIgnoreFile(gitignorePath),
     {
-        ignores: ['public/**', 'postcss.config.*'],
+        ignores: ['public/**'],
     },
     {
         files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
