@@ -92,9 +92,6 @@ importers:
       '@tanstack/react-virtual':
         specifier: ^3.13.12
         version: 3.13.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@types/events':
-        specifier: ^3.0.3
-        version: 3.0.3
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -231,6 +228,9 @@ importers:
       '@types/debounce':
         specifier: ^1.2.4
         version: 1.2.4
+      '@types/events':
+        specifier: ^3.0.3
+        version: 3.0.3
       '@types/node':
         specifier: ^24.0.13
         version: 24.0.13
