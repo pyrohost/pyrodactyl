@@ -1,6 +1,5 @@
 'use client';
 
-import { onLoad } from '@sentry/react';
 import { useStoreState } from 'easy-peasy';
 import { on } from 'events';
 import type React from 'react';
