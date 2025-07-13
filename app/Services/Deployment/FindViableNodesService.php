@@ -12,16 +12,19 @@ use Webmozart\Assert\Assert;
 
 /**
  * Finds nodes that can host a new server, always preferring *physical* capacity
- * over overallocation. The search runs in two passes:
+ * over overallocation. The search runs in two passes with different ordering strategies:
  *
- *  Pass 1
+ *  Pass 1 (Physical Capacity)
  *      Ignore memory/disk overallocation completely. If any node can fit
- *      the server within its physical limit, choose the best-fit result(s).
+ *      the server within its physical limit, choose the best-fit result(s)
+ *      (least leftover capacity first) for efficient resource usage.
  *
- *  Pass 2 (fallback)
+ *  Pass 2 (Overallocation Fallback)
  *      Only executed when Pass 1 returns zero rows. Re-runs the query but
- *      includes each node’s configured overallocation allowances.
- * 
+ *      includes each node's configured overallocation allowances. Uses
+ *      worst-fit ordering (most leftover capacity first) to spread load
+ *      across nodes when overallocation is involved.
+ *
  */
 class FindViableNodesService
 {
@@ -126,10 +129,11 @@ class FindViableNodesService
             ->havingRaw("$memCap  - COALESCE(SUM(servers.memory), 0) >= ?", [$this->memory])
             ->havingRaw("$diskCap - COALESCE(SUM(servers.disk),   0) >= ?", [$this->disk])
 
-            // Best-fit ordering (least leftover capacity first)
+            // Ordering strategy: best-fit for physical capacity, worst-fit for overallocation
             ->orderByRaw(
                 "($memCap - COALESCE(SUM(servers.memory), 0) + " .
-                "$diskCap - COALESCE(SUM(servers.disk), 0)) ASC"
+                "$diskCap - COALESCE(SUM(servers.disk), 0)) " .
+                ($allowOverallocation ? 'DESC' : 'ASC')
             );
 
         // Execute and strip helper columns
