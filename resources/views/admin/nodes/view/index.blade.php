@@ -107,8 +107,8 @@
       @endif
         @php
       $stats = app('Pterodactyl\Repositories\Eloquent\NodeRepository')->getUsageStatsRaw($node);
-      $memoryPercent = ($stats['memory']['value'] / $stats['memory']['max']) * 100;
-      $diskPercent = ($stats['disk']['value'] / $stats['disk']['max']) * 100;
+      $memoryPercent = ($stats['memory']['value'] / $stats['memory']['base_limit']) * 100;
+      $diskPercent = ($stats['disk']['value'] / $stats['disk']['base_limit']) * 100;
 
       $memoryColor = $memoryPercent < 50 ? '#50af51' : ($memoryPercent < 70 ? '#e0a800' : '#d9534f');
       $diskColor = $diskPercent < 50 ? '#50af51' : ($diskPercent < 70 ? '#e0a800' : '#d9534f');
