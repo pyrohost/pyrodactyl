@@ -29,12 +29,13 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
 
     return Collection::make(['disk' => $stats->sum_disk, 'memory' => $stats->sum_memory])
       ->mapWithKeys(function ($value, $key) use ($node) {
-        $maxUsage = $node->{$key};
+        $baseLimit = $node->{$key};
+        $maxUsage = $baseLimit;
         if ($node->{$key . '_overallocate'} > 0) {
-          $maxUsage = $node->{$key} * (1 + ($node->{$key . '_overallocate'} / 100));
+          $maxUsage = $baseLimit * (1 + ($node->{$key . '_overallocate'} / 100));
         }
 
-        $percent = ($value / $maxUsage) * 100;
+        $percent = ($value / $baseLimit) * 100;
 
         return [
           $key => [
@@ -58,15 +59,17 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
     )->join('servers', 'servers.node_id', '=', 'nodes.id')->where('node_id', $node->id)->first();
 
     return collect(['disk' => $stats->sum_disk, 'memory' => $stats->sum_memory])->mapWithKeys(function ($value, $key) use ($node) {
-      $maxUsage = $node->{$key};
+      $baseLimit = $node->{$key};
+      $maxUsage = $baseLimit;
       if ($node->{$key . '_overallocate'} > 0) {
-        $maxUsage = $node->{$key} * (1 + ($node->{$key . '_overallocate'} / 100));
+        $maxUsage = $baseLimit * (1 + ($node->{$key . '_overallocate'} / 100));
       }
 
       return [
         $key => [
           'value' => $value,
           'max' => $maxUsage,
+          'base_limit' => $baseLimit,
         ],
       ];
     })->toArray();

@@ -34,22 +34,27 @@ class LocationRepository extends EloquentRepository implements LocationRepositor
             $allocatedDisk = 0;
 
             foreach ($nodes as $node) {
-                $memoryLimit = $node->memory * (1 + ($node->memory_overallocate / 100));
-                $diskLimit = $node->disk * (1 + ($node->disk_overallocate / 100));
-
+                $baseMemoryLimit = $node->memory;
+                $baseDiskLimit = $node->disk;
+                $memoryLimit = $baseMemoryLimit * (1 + ($node->memory_overallocate / 100));
+                $diskLimit = $baseDiskLimit * (1 + ($node->disk_overallocate / 100));
+    
                 $totalMemory += $memoryLimit;
                 $totalDisk += $diskLimit;
-
+    
                 $nodeAllocatedMemory = $node->servers->sum('memory');
                 $nodeAllocatedDisk = $node->servers->sum('disk');
-
+    
                 $allocatedMemory += $nodeAllocatedMemory;
                 $allocatedDisk += $nodeAllocatedDisk;
             }
-
-            $location->memory_percent = $totalMemory > 0 ? ($allocatedMemory / $totalMemory) * 100 : 0;
-            $location->disk_percent = $totalDisk > 0 ? ($allocatedDisk / $totalDisk) * 100 : 0;
-
+    
+            $totalBaseMemory = $nodes->sum('memory');
+            $totalBaseDisk = $nodes->sum('disk');
+            
+            $location->memory_percent = $totalBaseMemory > 0 ? ($allocatedMemory / $totalBaseMemory) * 100 : 0;
+            $location->disk_percent = $totalBaseDisk > 0 ? ($allocatedDisk / $totalBaseDisk) * 100 : 0;
+    
             $location->total_memory = $totalMemory;
             $location->allocated_memory = $allocatedMemory;
             $location->total_disk = $totalDisk;
