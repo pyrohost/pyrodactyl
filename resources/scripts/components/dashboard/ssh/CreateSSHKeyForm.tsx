@@ -21,7 +21,7 @@ interface Values {
     publicKey: string;
 }
 
-export default () => {
+const CreateSSHKeyForm = () => {
     const [sshKey, setSshKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { mutate } = useSSHKeys();
@@ -96,3 +96,5 @@ export default () => {
         </>
     );
 };
+
+export default CreateSSHKeyForm;

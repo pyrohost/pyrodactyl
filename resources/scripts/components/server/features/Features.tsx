@@ -7,7 +7,7 @@ import features from './index';
 
 type ListItems = [string, ComponentType][];
 
-export default ({ enabled }: { enabled: string[] }) => {
+const Features = ({ enabled }: { enabled: string[] }) => {
     const mapped: ListItems = useMemo(() => {
         return getObjectKeys(features)
             .filter((key) => enabled.map((v) => v.toLowerCase()).includes(key.toLowerCase()))
@@ -22,3 +22,5 @@ export default ({ enabled }: { enabled: string[] }) => {
         </Suspense>
     );
 };
+
+export default Features;

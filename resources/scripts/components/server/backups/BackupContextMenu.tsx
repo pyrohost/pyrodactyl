@@ -24,7 +24,7 @@ interface Props {
     backup: ServerBackup;
 }
 
-export default ({ backup }: Props) => {
+const BackupContextMenu = ({ backup }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
     const [modal, setModal] = useState('');
@@ -199,3 +199,5 @@ export default ({ backup }: Props) => {
         </>
     );
 };
+
+export default BackupContextMenu;

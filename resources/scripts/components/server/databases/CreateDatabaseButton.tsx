@@ -31,7 +31,7 @@ const schema = object().shape({
     connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'A valid host address must be provided.'),
 });
 
-export default () => {
+const CreateDatabaseButton = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { addError, clearFlashes } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -114,3 +114,5 @@ export default () => {
         </>
     );
 };
+
+export default CreateDatabaseButton;

@@ -10,7 +10,7 @@ import { ApplicationStore } from '@/state';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
-export default () => {
+const ConfigureTwoFactorForm = () => {
     const [tokens, setTokens] = useState<string[]>([]);
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
     const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
@@ -47,3 +47,5 @@ export default () => {
         </div>
     );
 };
+
+export default ConfigureTwoFactorForm;

@@ -21,7 +21,7 @@ const schema = Yup.object().shape({
     password: Yup.string().required('You must provide your current account password.'),
 });
 
-export default () => {
+const UpdateEmailAddressForm = () => {
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
@@ -76,3 +76,5 @@ export default () => {
         </Formik>
     );
 };
+
+export default UpdateEmailAddressForm;

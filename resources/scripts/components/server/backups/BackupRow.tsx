@@ -23,7 +23,7 @@ interface Props {
     backup: ServerBackup;
 }
 
-export default ({ backup }: Props) => {
+const BackupRow = ({ backup }: Props) => {
     const { mutate } = getServerBackups();
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {
@@ -114,3 +114,5 @@ export default ({ backup }: Props) => {
         </ContextMenu>
     );
 };
+
+export default BackupRow;

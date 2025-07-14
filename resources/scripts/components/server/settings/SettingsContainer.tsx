@@ -17,7 +17,7 @@ import { ServerContext } from '@/state/server';
 
 import RenameServerBox from './RenameServerBox';
 
-export default () => {
+const SettingsContainer = () => {
     const username = useStoreState((state) => state.user.data!.username);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -88,3 +88,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default SettingsContainer;

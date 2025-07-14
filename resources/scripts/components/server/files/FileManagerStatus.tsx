@@ -75,7 +75,7 @@ const FileUploadListDialog = asDialog({
     description: 'The following files are being uploaded to your server.',
 })(FileUploadList);
 
-export default () => {
+const FileManagerStatus = () => {
     const open = useSignal(false);
 
     const count = ServerContext.useStoreState((state) => Object.keys(state.files.uploads).length);
@@ -121,3 +121,5 @@ export default () => {
         </>
     );
 };
+
+export default FileManagerStatus;

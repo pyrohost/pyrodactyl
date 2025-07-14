@@ -24,7 +24,7 @@ interface Values {
     allowedIps: string;
 }
 
-export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
+const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
     const [apiKey, setApiKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
@@ -99,3 +99,6 @@ export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
         </>
     );
 };
+
+CreateApiKeyForm.displayName = 'CreateApiKeyForm';
+export default CreateApiKeyForm;

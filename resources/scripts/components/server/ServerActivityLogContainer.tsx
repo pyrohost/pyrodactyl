@@ -17,7 +17,7 @@ import { useFlashKey } from '@/plugins/useFlash';
 // FIXME: add icons back
 import useLocationHash from '@/plugins/useLocationHash';
 
-export default () => {
+const ServerActivityLogContainer = () => {
     const { hash } = useLocationHash();
     const { clearAndAddHttpError } = useFlashKey('server:activity');
     const [filters, setFilters] = useState<ActivityLogFilters>({ page: 1, sorts: { timestamp: -1 } });
@@ -74,3 +74,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default ServerActivityLogContainer;

@@ -83,7 +83,7 @@ const BackupContainer = () => {
     );
 };
 
-export default () => {
+const BackupContainerWrapper = () => {
     const [page, setPage] = useState<number>(1);
     return (
         <ServerBackupContext.Provider value={{ page, setPage }}>
@@ -91,3 +91,5 @@ export default () => {
         </ServerBackupContext.Provider>
     );
 };
+
+export default BackupContainerWrapper;

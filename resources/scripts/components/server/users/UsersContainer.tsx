@@ -16,7 +16,7 @@ import getServerSubusers from '@/api/server/users/getServerSubusers';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default () => {
+const UsersContainer = () => {
     const [loading, setLoading] = useState(true);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -77,3 +77,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default UsersContainer;

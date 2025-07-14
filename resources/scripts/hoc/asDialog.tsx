@@ -6,7 +6,7 @@ function asDialog(
     initialProps?: WrapperProps,
 ): <P extends object>(C: React.ComponentType<P>) => React.FunctionComponent<P & DialogProps> {
     return function (Component) {
-        return function ({ open, onClose, ...rest }) {
+        const WrappedComponent = function ({ open, onClose, ...rest }) {
             const [props, setProps] = useState<WrapperProps>(initialProps || {});
 
             return (
@@ -17,6 +17,10 @@ function asDialog(
                 </DialogWrapperContext.Provider>
             );
         };
+
+        WrappedComponent.displayName = `asDialog(${Component.displayName || Component.name || 'Component'})`;
+
+        return WrappedComponent;
     };
 }
 

@@ -11,7 +11,7 @@ interface Props {
     className?: string;
 }
 
-export default ({ schedule, className }: Props) => {
+const NewTaskButton = ({ schedule, className }: Props) => {
     const [visible, setVisible] = useState(false);
 
     return (
@@ -23,3 +23,5 @@ export default ({ schedule, className }: Props) => {
         </>
     );
 };
+
+export default NewTaskButton;

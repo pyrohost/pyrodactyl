@@ -78,7 +78,7 @@ interface Nest {
  * @class
  */
 
-export default () => {
+const ServerRouter = () => {
     const params = useParams<'id'>();
     const location = useLocation();
 
@@ -628,3 +628,5 @@ export default () => {
         </Fragment>
     );
 };
+
+export default ServerRouter;

@@ -9,7 +9,7 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 
 import Code from '../elements/Code';
 
-export default () => {
+const AccountOverviewContainer = () => {
     const { state } = useLocation();
 
     return (
@@ -49,3 +49,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default AccountOverviewContainer;

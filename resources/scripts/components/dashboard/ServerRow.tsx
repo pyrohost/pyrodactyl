@@ -57,7 +57,7 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
 
 type Timer = ReturnType<typeof setInterval>;
 
-export default ({ server, className }: { server: Server; className?: string }) => {
+const ServerRow = ({ server, className }: { server: Server; className?: string }) => {
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
     const [stats, setStats] = useState<ServerStats | null>(null);
@@ -196,3 +196,5 @@ export default ({ server, className }: { server: Server; className?: string }) =
         </StatusIndicatorBox>
     );
 };
+
+export default ServerRow;

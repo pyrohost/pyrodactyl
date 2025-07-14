@@ -17,7 +17,7 @@ import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
-export default () => {
+const AccountApiContainer = () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const [keys, setKeys] = useState<ApiKey[]>([]);
     const [loading, setLoading] = useState(true);
@@ -98,3 +98,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default AccountApiContainer;

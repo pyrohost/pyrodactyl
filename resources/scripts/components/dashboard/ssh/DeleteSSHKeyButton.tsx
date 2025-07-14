@@ -9,7 +9,7 @@ import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
-export default ({ name, fingerprint }: { name: string; fingerprint: string }) => {
+const DeleteSSHKeyButton = ({ name, fingerprint }: { name: string; fingerprint: string }) => {
     const { clearAndAddHttpError } = useFlashKey('account');
     const [visible, setVisible] = useState(false);
     const { mutate } = useSSHKeys();
@@ -43,3 +43,5 @@ export default ({ name, fingerprint }: { name: string; fingerprint: string }) =>
         </>
     );
 };
+
+export default DeleteSSHKeyButton;

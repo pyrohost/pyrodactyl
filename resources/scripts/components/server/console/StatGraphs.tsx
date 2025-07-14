@@ -15,7 +15,7 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
-export default () => {
+const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
@@ -155,3 +155,5 @@ export default () => {
         </Tooltip.Provider>
     );
 };
+
+export default StatGraphs;

@@ -31,7 +31,7 @@ const ActivePill = ({ active }: { active: boolean }) => (
     </span>
 );
 
-export default () => {
+const ScheduleEditContainer = () => {
     const { id: scheduleId } = useParams<'id'>();
     const navigate = useNavigate();
 
@@ -160,3 +160,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default ScheduleEditContainer;

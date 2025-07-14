@@ -14,7 +14,7 @@ import { useSSHKeys } from '@/api/account/ssh-keys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
-export default () => {
+const AccountSSHContainer = () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const { clearAndAddHttpError } = useFlashKey('account');
     const { data, isValidating, error } = useSSHKeys({
@@ -77,3 +77,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default AccountSSHContainer;

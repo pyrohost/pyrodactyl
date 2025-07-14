@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import EditSubuserModal from '@/components/server/users/EditSubuserModal';
 
-export default () => {
+const AddSubuserButton = () => {
     const [visible, setVisible] = useState(false);
 
     return (
@@ -21,3 +21,5 @@ export default () => {
         </>
     );
 };
+
+export default AddSubuserButton;

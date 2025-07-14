@@ -7,7 +7,7 @@ interface RecoveryTokenDialogProps extends DialogProps {
     tokens: string[];
 }
 
-export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
+const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
     const grouped = [] as [string, string][];
     tokens.forEach((token, index) => {
         if (index % 2 === 0) {
@@ -48,3 +48,5 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
         </Dialog>
     );
 };
+
+export default RecoveryTokensDialog;

@@ -45,4 +45,8 @@ const _Button = Object.assign(Button, {
     Danger: DangerButton,
 });
 
+Button.displayName = 'Button';
+TextButton.displayName = 'TextButton';
+DangerButton.displayName = 'DangerButton';
+
 export default _Button;

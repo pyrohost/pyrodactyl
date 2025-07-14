@@ -28,7 +28,7 @@ type Props = OwnProps & {
     clearAndAddHttpError: ActionCreator<FlashStore['clearAndAddHttpError']['payload']>;
 };
 
-function LoginCheckpointContainer() {
+function LoginCheckpointForm() {
     const { isSubmitting, setFieldValue } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
@@ -111,7 +111,6 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
         loginCheckpoint(location.state?.token || '', code, recoveryCode)
             .then((response) => {
                 if (response.complete) {
-                    // @ts-expect-error this is valid
                     window.location = response.intended || '/';
                     return;
                 }
@@ -129,9 +128,9 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
         code: '',
         recoveryCode: '',
     }),
-})(LoginCheckpointContainer);
+})(LoginCheckpointForm);
 
-export default ({ ...props }: OwnProps) => {
+const LoginCheckpointContainer = ({ ...props }: OwnProps) => {
     const { clearAndAddHttpError } = useFlash();
 
     const location = useLocation();
@@ -145,3 +144,5 @@ export default ({ ...props }: OwnProps) => {
 
     return <EnhancedForm clearAndAddHttpError={clearAndAddHttpError} location={location} {...props} />;
 };
+
+export default LoginCheckpointContainer;

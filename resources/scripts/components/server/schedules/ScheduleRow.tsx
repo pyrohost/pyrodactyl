@@ -6,7 +6,7 @@ import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
-export default ({ schedule }: { schedule: Schedule }) => (
+const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
     <>
         <div className={`flex-auto`}>
             <div className='flex flex-row flex-none align-middle items-center gap-6'>
@@ -29,3 +29,5 @@ export default ({ schedule }: { schedule: Schedule }) => (
         </div>
     </>
 );
+
+export default ScheduleRow;

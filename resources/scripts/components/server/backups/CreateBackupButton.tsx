@@ -76,7 +76,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     );
 };
 
-export default () => {
+const CreateBackupButton = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -130,3 +130,5 @@ export default () => {
         </>
     );
 };
+
+export default CreateBackupButton;

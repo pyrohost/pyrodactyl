@@ -11,7 +11,7 @@ import reinstallServer from '@/api/server/reinstallServer';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default () => {
+const ReinstallServerBox = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [modalVisible, setModalVisible] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -66,3 +66,5 @@ export default () => {
         </TitledGreyBox>
     );
 };
+
+export default ReinstallServerBox;

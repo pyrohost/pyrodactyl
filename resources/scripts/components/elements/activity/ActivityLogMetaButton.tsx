@@ -6,7 +6,7 @@ import MetaDataIcon from '@/components/elements/hugeicons/MetaData';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 
-export default ({ meta }: { meta: Record<string, unknown> }) => {
+const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -35,3 +35,5 @@ export default ({ meta }: { meta: Record<string, unknown> }) => {
         </div>
     );
 };
+
+export default ActivityLogMetaButton;

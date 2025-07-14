@@ -16,7 +16,7 @@ import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
 import { useFlashKey } from '@/plugins/useFlash';
 import useLocationHash from '@/plugins/useLocationHash';
 
-export default () => {
+const ActivityLogContainer = () => {
     const { hash } = useLocationHash();
     const { clearAndAddHttpError } = useFlashKey('account');
     const [filters, setFilters] = useState<ActivityLogFilters>({ page: 1, sorts: { timestamp: -1 } });
@@ -69,3 +69,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default ActivityLogContainer;

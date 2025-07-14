@@ -8,7 +8,7 @@ interface AlertProps {
     children: React.ReactNode;
 }
 
-export default ({ type, className, children }: AlertProps) => {
+const Alert = ({ type, className, children }: AlertProps) => {
     return (
         <div
             className={clsx(
@@ -30,3 +30,5 @@ export default ({ type, className, children }: AlertProps) => {
         </div>
     );
 };
+
+export default Alert;

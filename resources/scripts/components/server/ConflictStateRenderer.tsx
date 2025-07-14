@@ -4,7 +4,7 @@ import { ServerContext } from '@/state/server';
 
 import Spinner from '../elements/Spinner';
 
-export default () => {
+const ConflictStateRenderer = () => {
     const status = ServerContext.useStoreState((state) => state.server.data?.status || null);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data?.isTransferring || false);
     const isNodeUnderMaintenance = ServerContext.useStoreState(
@@ -39,3 +39,5 @@ export default () => {
         />
     );
 };
+
+export default ConflictStateRenderer;

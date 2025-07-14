@@ -16,7 +16,7 @@ interface Props {
     onDeleted: () => void;
 }
 
-export default ({ scheduleId, onDeleted }: Props) => {
+const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -61,3 +61,5 @@ export default ({ scheduleId, onDeleted }: Props) => {
         </>
     );
 };
+
+export default DeleteScheduleButton;

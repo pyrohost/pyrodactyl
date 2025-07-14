@@ -102,7 +102,7 @@ const NewDirectoryDialog = asDialog({
     );
 });
 
-export default () => {
+const NewDirectoryButton = () => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -121,3 +121,5 @@ export default () => {
         </>
     );
 };
+
+export default NewDirectoryButton;

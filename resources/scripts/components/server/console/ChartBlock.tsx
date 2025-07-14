@@ -8,7 +8,7 @@ interface ChartBlockProps {
     children: React.ReactNode;
 }
 
-export default ({ title, legend, children }: ChartBlockProps) => (
+const ChartBlock = ({ title, legend, children }: ChartBlockProps) => (
     <div className={clsx(styles.chart_container, 'group p-8!')}>
         <div className={'flex items-center justify-between mb-4'}>
             <h3 className={'font-extrabold text-sm'}>{title}</h3>
@@ -17,3 +17,5 @@ export default ({ title, legend, children }: ChartBlockProps) => (
         <div className={'z-10 overflow-hidden rounded-lg'}>{children}</div>
     </div>
 );
+
+export default ChartBlock;

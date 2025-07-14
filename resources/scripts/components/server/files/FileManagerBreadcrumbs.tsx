@@ -10,7 +10,7 @@ interface Props {
     isNewFile?: boolean;
 }
 
-export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
+const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
@@ -95,3 +95,5 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
         </div>
     );
 };
+
+export default FileManagerBreadcrumbs;

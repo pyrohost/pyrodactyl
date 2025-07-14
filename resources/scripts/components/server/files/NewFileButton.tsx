@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-export default ({ id }: { id: string }) => {
+const NewFileButton = ({ id }: { id: string }) => {
     return (
         <NavLink to={`/server/${id}/files/new${window.location.hash}`}>
             <div
@@ -15,3 +15,5 @@ export default ({ id }: { id: string }) => {
         </NavLink>
     );
 };
+
+export default NewFileButton;

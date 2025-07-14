@@ -30,7 +30,7 @@ const schema = Yup.object().shape({
     ),
 });
 
-export default () => {
+const UpdatePasswordForm = () => {
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
@@ -102,3 +102,5 @@ export default () => {
         </Fragment>
     );
 };
+
+export default UpdatePasswordForm;

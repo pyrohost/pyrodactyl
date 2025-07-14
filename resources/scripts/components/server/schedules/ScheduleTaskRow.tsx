@@ -42,7 +42,7 @@ const getActionDetails = (action: string): [string, IconDefinition, boolean?] =>
     }
 };
 
-export default ({ schedule, task }: Props) => {
+const ScheduleTaskRow = ({ schedule, task }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { clearFlashes, addError } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -147,3 +147,5 @@ export default ({ schedule, task }: Props) => {
         </ItemContainer>
     );
 };
+
+export default ScheduleTaskRow;

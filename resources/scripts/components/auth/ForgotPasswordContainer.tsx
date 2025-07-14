@@ -25,7 +25,7 @@ interface Values {
     email: string;
 }
 
-export default () => {
+const ForgotPasswordContainer = () => {
     const turnstileRef = useRef(null);
     const friendlyCaptchaRef = useRef<{ reset: () => void }>(null);
     const hCaptchaRef = useRef<HCaptcha>(null);
@@ -202,3 +202,5 @@ export default () => {
         </ContentBox>
     );
 };
+
+export default ForgotPasswordContainer;

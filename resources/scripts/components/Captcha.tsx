@@ -12,7 +12,7 @@ interface CaptchaProps {
     onExpire: () => void;
 }
 
-export default ({ driver, sitekey, endpoint, onVerify, onError, onExpire }: CaptchaProps) => {
+const Captcha = ({ driver, sitekey, endpoint, onVerify, onError, onExpire }: CaptchaProps) => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -50,3 +50,5 @@ export default ({ driver, sitekey, endpoint, onVerify, onError, onExpire }: Capt
 
     return null;
 };
+
+export default Captcha;

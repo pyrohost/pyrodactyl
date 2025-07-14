@@ -23,7 +23,7 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 
 import { MainPageHeader } from '../elements/MainPageHeader';
 
-export default () => {
+const DashboardContainer = () => {
     const { search } = useLocation();
     const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
@@ -221,3 +221,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default DashboardContainer;

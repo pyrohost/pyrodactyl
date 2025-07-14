@@ -31,7 +31,7 @@ const variants = {
     },
 };
 
-export default ({
+const Dialog = ({
     open,
     title,
     description,
@@ -130,3 +130,5 @@ export default ({
         </AnimatePresence>
     );
 };
+
+export default Dialog;

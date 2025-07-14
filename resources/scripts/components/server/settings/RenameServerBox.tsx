@@ -18,7 +18,7 @@ interface Values {
     description: string;
 }
 
-const RenameServerBox = () => {
+const RenameServerForm = () => {
     return (
         <TitledGreyBox title={'Server Details'}>
             <Form className='flex flex-col gap-4'>
@@ -32,7 +32,7 @@ const RenameServerBox = () => {
     );
 };
 
-export default () => {
+const RenameServerBox = () => {
     const server = ServerContext.useStoreState((state) => state.server.data!);
     const setServer = ServerContext.useStoreActions((actions) => actions.server.setServer);
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -61,7 +61,9 @@ export default () => {
                 description: string().nullable(),
             })}
         >
-            <RenameServerBox />
+            <RenameServerForm />
         </Formik>
     );
 };
+
+export default RenameServerBox;

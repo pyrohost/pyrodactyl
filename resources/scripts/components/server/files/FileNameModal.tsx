@@ -16,7 +16,7 @@ interface Values {
     fileName: string;
 }
 
-export default ({ onFileNamed, onDismissed, ...props }: Props) => {
+const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
@@ -58,3 +58,5 @@ export default ({ onFileNamed, onDismissed, ...props }: Props) => {
         </Formik>
     );
 };
+
+export default FileNameModal;

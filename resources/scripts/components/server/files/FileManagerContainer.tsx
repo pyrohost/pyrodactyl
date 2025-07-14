@@ -35,7 +35,7 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
     return sortedFiles.filter((file, index) => index === 0 || file.name !== sortedFiles[index - 1]?.name);
 };
 
-export default () => {
+const FileManagerContainer = () => {
     const parentRef = useRef<HTMLDivElement | null>(null);
 
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
@@ -86,10 +86,6 @@ export default () => {
         }
     }, [hash, pathname, directory]);
 
-    if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
-    }
-
     const rowVirtualizer = useVirtualizer({
         // count: 10000,
         count: filesArray.length,
@@ -97,6 +93,10 @@ export default () => {
         estimateSize: () => 54,
         // scrollMargin: 54,
     });
+
+    if (error) {
+        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+    }
 
     return (
         <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
@@ -212,3 +212,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default FileManagerContainer;

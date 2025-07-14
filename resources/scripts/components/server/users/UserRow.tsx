@@ -14,7 +14,7 @@ interface Props {
     subuser: Subuser;
 }
 
-export default ({ subuser }: Props) => {
+const UserRow = ({ subuser }: Props) => {
     const uuid = useStoreState((state) => state.user!.data!.uuid);
     const [visible, setVisible] = useState(false);
 
@@ -62,3 +62,5 @@ export default ({ subuser }: Props) => {
         </PageListItem>
     );
 };
+
+export default UserRow;

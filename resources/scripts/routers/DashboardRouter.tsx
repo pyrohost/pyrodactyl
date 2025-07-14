@@ -24,7 +24,7 @@ import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http from '@/api/http';
 
-export default () => {
+const DashboardRouter = () => {
     const location = useLocation();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
@@ -318,3 +318,5 @@ export default () => {
         </Fragment>
     );
 };
+
+export default DashboardRouter;

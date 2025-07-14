@@ -34,7 +34,7 @@ interface Props {
     database: ServerDatabase;
 }
 
-export default ({ database }: Props) => {
+const DatabaseRow = ({ database }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { addError, clearFlashes } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -232,3 +232,5 @@ export default ({ database }: Props) => {
         </>
     );
 };
+
+export default DatabaseRow;

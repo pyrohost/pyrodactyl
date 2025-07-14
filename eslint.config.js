@@ -37,7 +37,6 @@ export default defineConfig([
             // React
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
-            'react/display-name': 'warn',
 
             // React Hooks
             ...reactHooks.configs.recommended.rules,

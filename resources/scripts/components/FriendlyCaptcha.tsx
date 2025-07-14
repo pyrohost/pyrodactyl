@@ -45,4 +45,6 @@ const FriendlyCaptcha = forwardRef(({ sitekey, onComplete, onError, onExpire }: 
     return <div ref={containerRef} className='frc-captcha dark' data-sitekey={sitekey} />;
 });
 
+FriendlyCaptcha.displayName = 'FriendlyCaptcha';
+
 export default FriendlyCaptcha;

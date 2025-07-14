@@ -21,7 +21,7 @@ interface Props {
     children?: React.ReactNode;
 }
 
-export default ({ activity, children }: Props) => {
+const ActivityLogEntry = ({ activity, children }: Props) => {
     const { pathTo } = useLocationHash();
     const actor = activity.relationships.actor;
 
@@ -76,3 +76,5 @@ export default ({ activity, children }: Props) => {
         </div>
     );
 };
+
+export default ActivityLogEntry;

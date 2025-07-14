@@ -11,7 +11,7 @@ interface StatBlockProps {
     className?: string;
 }
 
-export default ({ title, copyOnClick, className, children }: StatBlockProps) => {
+const StatBlock = ({ title, copyOnClick, className, children }: StatBlockProps) => {
     return (
         <CopyOnClick text={copyOnClick}>
             <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
@@ -25,3 +25,5 @@ export default ({ title, copyOnClick, className, children }: StatBlockProps) => 
         </CopyOnClick>
     );
 };
+
+export default StatBlock;

@@ -20,7 +20,7 @@ function isFileOrDirectory(event: DragEvent): boolean {
     return event.dataTransfer.types.some((value) => value.toLowerCase() === 'files');
 }
 
-export default () => {
+const UploadButton = () => {
     const fileUploadInput = useRef<HTMLInputElement>(null);
     const [timeouts, _] = useState<NodeJS.Timeout[]>([]);
     const [visible, setVisible] = useState(false);
@@ -179,3 +179,5 @@ export default () => {
         </>
     );
 };
+
+export default UploadButton;

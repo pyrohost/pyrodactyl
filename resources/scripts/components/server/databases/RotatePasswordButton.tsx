@@ -13,7 +13,13 @@ import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePasswor
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (database: ServerDatabase) => void }) => {
+const RotatePasswordButton = ({
+    databaseId,
+    onUpdate,
+}: {
+    databaseId: string;
+    onUpdate: (database: ServerDatabase) => void;
+}) => {
     const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const server = ServerContext.useStoreState((state) => state.server.data!);
@@ -53,3 +59,5 @@ export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (datab
         </Button>
     );
 };
+
+export default RotatePasswordButton;

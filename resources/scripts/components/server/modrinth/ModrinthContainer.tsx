@@ -17,7 +17,7 @@ import LoaderSelector from './LoaderSelector';
 import { fetchNewProjects } from './config';
 import { settings as localSettings } from './config';
 
-export default () => {
+const ModrinthContainer = () => {
     const [appVersion, setAppVersion] = useState<string | null>(null);
 
     const [settings, setSettings] = useState({
@@ -140,3 +140,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default ModrinthContainer;

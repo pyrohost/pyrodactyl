@@ -7,7 +7,7 @@ type Props = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, 
     title?: string;
 };
 
-export default forwardRef<HTMLFormElement, Props>(({ title, ...props }, ref) => (
+const LoginFormContainer = forwardRef<HTMLFormElement, Props>(({ title, ...props }, ref) => (
     <div className='w-full max-w-lg px-8'>
         {title && <h2 className={`text-3xl text-center text-zinc-100 font-medium py-4`}>{title}</h2>}
         <FlashMessageRender />
@@ -18,3 +18,7 @@ export default forwardRef<HTMLFormElement, Props>(({ title, ...props }, ref) => 
         </Form>
     </div>
 ));
+
+LoginFormContainer.displayName = 'LoginFormContainer';
+
+export default LoginFormContainer;

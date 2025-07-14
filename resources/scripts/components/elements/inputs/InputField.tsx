@@ -23,4 +23,6 @@ const Component = forwardRef<HTMLInputElement, InputFieldProps>(({ className, va
 
 const InputField = Object.assign(Component, { Variants: Variant });
 
+Component.displayName = 'InputField';
+
 export default InputField;

@@ -12,7 +12,7 @@ import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
-export default ({ subuser }: { subuser: Subuser }) => {
+const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -60,3 +60,5 @@ export default ({ subuser }: { subuser: Subuser }) => {
         </>
     );
 };
+
+export default RemoveSubuserButton;

@@ -11,7 +11,7 @@ interface PowerButtonProps {
     className?: string;
 }
 
-export default ({ className }: PowerButtonProps) => {
+const PowerButtons = ({ className }: PowerButtonProps) => {
     const [open, setOpen] = useState(false);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
@@ -127,3 +127,5 @@ export default ({ className }: PowerButtonProps) => {
         </div>
     );
 };
+
+export default PowerButtons;

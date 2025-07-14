@@ -31,7 +31,7 @@ import useFlash from '@/plugins/useFlash';
 
 const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 
-export default () => {
+const FileEditContainer = () => {
     const [error, setError] = useState('');
     const { action, '*': rawFilename } = useParams<{ action: 'edit' | 'new'; '*': string }>();
     const [_, setLoading] = useState(action === 'edit');
@@ -297,3 +297,5 @@ export default () => {
         </PageContentBlock>
     );
 };
+
+export default FileEditContainer;
