@@ -41,7 +41,10 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
                     return { name: directory };
                 }
 
-                return { name: directory, path: `/${dirs.slice(0, index + 1).join('/')}` };
+                return {
+                    name: directory,
+                    path: `/${dirs.slice(0, index + 1).join('/')}`,
+                };
             });
     };
 

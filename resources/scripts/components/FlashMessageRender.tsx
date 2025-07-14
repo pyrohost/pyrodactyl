@@ -1,20 +1,17 @@
-import { useStoreState } from 'easy-peasy';
+'use client';
+
 import { Fragment } from 'react';
 
 import MessageBox from '@/components/MessageBox';
 
-type Props = Readonly<{
-    byKey?: string;
-}>;
+import { useStateContext } from '@/state';
 
-const FlashMessageRender = ({ byKey }: Props) => {
-    const flashes = useStoreState((state) =>
-        state.flashes.items.filter((flash) => (byKey ? flash.key === byKey : true)),
-    );
+const FlashMessageRender = ({}: Readonly<{}>) => {
+    const state = useStateContext();
 
-    return flashes.length ? (
+    return state?.flashes.length ? (
         <>
-            {flashes.map((flash, index) => (
+            {state?.flashes.map((flash, index) => (
                 <Fragment key={flash.id || flash.type + flash.message}>
                     {index > 0 && <div></div>}
                     <MessageBox type={flash.type} title={flash.title}>

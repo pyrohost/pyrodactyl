@@ -20,7 +20,10 @@ import useLocationHash from '@/plugins/useLocationHash';
 export default () => {
     const { hash } = useLocationHash();
     const { clearAndAddHttpError } = useFlashKey('server:activity');
-    const [filters, setFilters] = useState<ActivityLogFilters>({ page: 1, sorts: { timestamp: -1 } });
+    const [filters, setFilters] = useState<ActivityLogFilters>({
+        page: 1,
+        sorts: { timestamp: -1 },
+    });
 
     const { data, isValidating, error } = useActivityLogs(filters, {
         revalidateOnMount: true,
@@ -28,7 +31,10 @@ export default () => {
     });
 
     useEffect(() => {
-        setFilters((value) => ({ ...value, filters: { ip: hash.ip, event: hash.event } }));
+        setFilters((value) => ({
+            ...value,
+            filters: { ip: hash.ip, event: hash.event },
+        }));
     }, [hash]);
 
     useEffect(() => {

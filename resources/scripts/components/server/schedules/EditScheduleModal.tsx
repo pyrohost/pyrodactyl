@@ -115,7 +115,9 @@ const EditScheduleModal = ({ schedule }: Props) => {
     }, [serverTimezone]);
 
     useEffect(() => {
-        setPropOverrides({ title: schedule ? 'Edit schedule' : 'Create new schedule' });
+        setPropOverrides({
+            title: schedule ? 'Edit schedule' : 'Create new schedule',
+        });
     }, []);
 
     useEffect(() => {

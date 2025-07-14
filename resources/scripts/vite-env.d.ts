@@ -1,10 +1,9 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    readonly VITE_PYRODACTYL_VERSION: string;
-    readonly VITE_COMMIT_HASH: string;
-    readonly VITE_BRANCH_NAME: string;
-    readonly VITE_PYRODACTYL_BUILD_NUMBER: string;
+    readonly NEXT_PUBLIC_PYRODACTYL_VERSION: string;
+    readonly NEXT_PUBLIC_COMMIT_HASH: string;
+    readonly NEXT_PUBLIC_BRANCH_NAME: string;
 }
 
 interface ImportMeta {

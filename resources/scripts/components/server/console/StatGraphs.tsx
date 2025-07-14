@@ -67,7 +67,10 @@ export default () => {
             previous.current.rx < 0 ? 0 : Math.max(0, values.network.rx_bytes - previous.current.rx),
         ]);
 
-        previous.current = { tx: values.network.tx_bytes, rx: values.network.rx_bytes };
+        previous.current = {
+            tx: values.network.tx_bytes,
+            rx: values.network.rx_bytes,
+        };
     });
 
     return (

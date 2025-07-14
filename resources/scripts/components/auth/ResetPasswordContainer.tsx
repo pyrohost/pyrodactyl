@@ -36,7 +36,11 @@ function ResetPasswordContainer() {
 
     const submit = ({ password, passwordConfirmation }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
-        performPasswordReset(email, { token: params.token ?? '', password, passwordConfirmation })
+        performPasswordReset(email, {
+            token: params.token ?? '',
+            password,
+            passwordConfirmation,
+        })
             .then(() => {
                 // @ts-expect-error this is valid
                 window.location = '/';
@@ -45,7 +49,11 @@ function ResetPasswordContainer() {
                 console.error(error);
 
                 setSubmitting(false);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({
+                    type: 'error',
+                    title: 'Error',
+                    message: httpErrorToHuman(error),
+                });
             });
     };
 

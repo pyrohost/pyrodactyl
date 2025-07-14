@@ -48,7 +48,9 @@ const EditSubuserModal = ({ subuser }: Props) => {
     const [canEditUser] = usePermissions(subuser ? ['user.update'] : ['user.create']);
 
     useEffect(() => {
-        setPropOverrides({ title: subuser ? `Permissions for ${subuser.email}` : 'Create new subuser' });
+        setPropOverrides({
+            title: subuser ? `Permissions for ${subuser.email}` : 'Create new subuser',
+        });
     }, []);
 
     // The permissions that can be modified by this user.

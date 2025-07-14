@@ -4,7 +4,6 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'eslint-plugin-prettier';
 import pluginReact from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import turbo from 'eslint-plugin-turbo';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import { fileURLToPath } from 'node:url';
@@ -29,14 +28,12 @@ export default defineConfig([
     {
         plugins: {
             'react-hooks': reactHooks,
-            turbo,
             prettier,
         },
         settings: { react: { version: 'detect' } },
         rules: {
             // React
             'react/react-in-jsx-scope': 'off',
-            'react/prop-types': 'off',
             'react/display-name': 'warn',
 
             // React Hooks
