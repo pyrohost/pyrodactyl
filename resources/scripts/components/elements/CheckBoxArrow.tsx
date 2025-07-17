@@ -4,7 +4,11 @@ import { cn } from '@/lib/utils';
 
 const CheckboxArrow = React.forwardRef<
     React.ElementRef<'div'>,
-    React.ComponentPropsWithoutRef<'div'> & { label?: string; onChange?: () => void; toggleable?: boolean }
+    React.ComponentPropsWithoutRef<'div'> & {
+        label?: string;
+        onChange?: () => void;
+        toggleable?: boolean;
+    }
 >(({ className, label, onChange, toggleable = true, ...props }, ref) => {
     const [checked, setChecked] = React.useState(false);
 

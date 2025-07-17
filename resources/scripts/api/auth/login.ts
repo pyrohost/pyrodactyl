@@ -1,12 +1,8 @@
 import http from '@/api/http';
 
-interface LoginData {
+export interface LoginData {
     user: string;
     password: string;
-    'cf-turnstile-response'?: string;
-    'h-captcha-response'?: string;
-    'frc-captcha-response'?: string;
-    captchaData?: string;
 }
 
 interface LoginResponse {
@@ -24,18 +20,6 @@ export default async (data: LoginData): Promise<LoginResponse> => {
             user: data.user,
             password: data.password,
         };
-
-        if (data['cf-turnstile-response']) {
-            payload['cf-turnstile-response'] = data['cf-turnstile-response'];
-        } else if (data['h-captcha-response']) {
-            payload['h-captcha-response'] = data['h-captcha-response'];
-        } else if (data['frc-captcha-response']) {
-            payload['frc-captcha-response'] = data['frc-captcha-response'];
-        } else if (data['g-captcha-response']) {
-            payload['g-captcha-response'] = data['g-captcha-response'];
-        } else if (data.captchaData) {
-            payload.captchaData = data.captchaData;
-        }
 
         const response = await http.post('/auth/login', payload);
 

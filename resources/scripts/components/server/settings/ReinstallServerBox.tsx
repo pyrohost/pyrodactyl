@@ -29,7 +29,11 @@ export default () => {
             .catch((error) => {
                 console.error(error);
 
-                addFlash({ key: 'settings', type: 'error', message: httpErrorToHuman(error) });
+                addFlash({
+                    key: 'settings',
+                    type: 'error',
+                    message: httpErrorToHuman(error),
+                });
             })
             .then(() => setModalVisible(false));
     };

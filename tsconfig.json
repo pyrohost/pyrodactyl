@@ -3,9 +3,9 @@
     "display": "Default",
     "compilerOptions": {
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
-        "jsx": "react-jsx",
-        "module": "ESNext",
-        "target": "ES2015",
+        "jsx": "preserve",
+        "module": "preserve",
+        "target": "ESNext",
         "paths": {
             "@/*": ["./resources/scripts/*"],
             "@definitions/*": ["./resources/scripts/api/definitions/*"],
@@ -14,9 +14,11 @@
         "plugins": [
             {
                 "name": "typescript-plugin-tw-template"
+            },
+            {
+                "name": "next"
             }
         ],
-
         "allowJs": false,
         "allowSyntheticDefaultImports": true,
         "composite": false,
@@ -30,7 +32,6 @@
         "newLine": "lf",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": false,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": false,
@@ -43,8 +44,16 @@
         "sourceMap": true,
         "strict": true,
         "stripInternal": true,
-        "useDefineForClassFields": true
+        "useDefineForClassFields": true,
+        "incremental": true
     },
-    "include": ["./resources/scripts/**/*", "vite.config.ts", "./package.json"],
+    "include": [
+        "./package.json",
+        "./resources/scripts/**/*",
+        "./app/**/*",
+        "next.config.ts",
+        "dist/types/**/*.ts",
+        "app/login/page.tsx"
+    ],
     "exclude": ["node_modules"]
 }

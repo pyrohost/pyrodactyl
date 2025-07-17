@@ -13,7 +13,10 @@ interface Props {
 
 const ScrollMenu = React.forwardRef<
     React.ElementRef<'div'>,
-    React.ComponentPropsWithoutRef<'div'> & { items: string[]; onSelectionChange: (selectedItems: string[]) => void }
+    React.ComponentPropsWithoutRef<'div'> & {
+        items: string[];
+        onSelectionChange: (selectedItems: string[]) => void;
+    }
 >(({ className, items, onSelectionChange, ...props }, ref) => {
     const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
 

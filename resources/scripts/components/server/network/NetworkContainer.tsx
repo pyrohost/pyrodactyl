@@ -46,7 +46,10 @@ const NetworkContainer = () => {
         setLoading(true);
         createServerAllocation(uuid)
             .then((allocation) => {
-                setServerFromState((s) => ({ ...s, allocations: s.allocations.concat(allocation) }));
+                setServerFromState((s) => ({
+                    ...s,
+                    allocations: s.allocations.concat(allocation),
+                }));
                 return mutate(data?.concat(allocation), false);
             })
             .catch((error) => clearAndAddHttpError(error))

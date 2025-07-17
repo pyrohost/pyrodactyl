@@ -10,6 +10,8 @@ storage/framework/*
 /.direnv
 
 node_modules
+.turbopack/
+dist/
 *.log
 _ide_helper.php
 _ide_helper_models.php

@@ -1,4 +1,4 @@
-import { Action, action } from 'easy-peasy';
+import { createContext } from 'react';
 
 export type SubuserPermission =
     | 'websocket.connect'
@@ -44,38 +44,6 @@ export interface Subuser {
 
 export interface ServerSubuserStore {
     data: Subuser[];
-    setSubusers: Action<ServerSubuserStore, Subuser[]>;
-    appendSubuser: Action<ServerSubuserStore, Subuser>;
-    removeSubuser: Action<ServerSubuserStore, string>;
 }
 
-const subusers: ServerSubuserStore = {
-    data: [],
-
-    setSubusers: action((state, payload) => {
-        state.data = payload;
-    }),
-
-    appendSubuser: action((state, payload) => {
-        let matched = false;
-        state.data = [
-            ...state.data
-                .map((user) => {
-                    if (user.uuid === payload.uuid) {
-                        matched = true;
-
-                        return payload;
-                    }
-
-                    return user;
-                })
-                .concat(matched ? [] : [payload]),
-        ];
-    }),
-
-    removeSubuser: action((state, payload) => {
-        state.data = [...state.data.filter((user) => user.uuid !== payload)];
-    }),
-};
-
-export default subusers;
+export const ServerSubuserContext = createContext<ServerSubuserStore | null>(null);

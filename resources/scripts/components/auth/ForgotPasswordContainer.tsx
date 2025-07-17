@@ -61,7 +61,11 @@ export default () => {
 
     const handleCaptchaError = (provider: string) => {
         setToken('');
-        addFlash({ type: 'error', title: 'CAPTCHA Error', message: `${provider} challenge failed.` });
+        addFlash({
+            type: 'error',
+            title: 'CAPTCHA Error',
+            message: `${provider} challenge failed.`,
+        });
     };
 
     const handleCaptchaExpire = () => {
@@ -72,7 +76,11 @@ export default () => {
         clearFlashes();
 
         if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
-            addFlash({ type: 'error', title: 'Error', message: 'Please complete the CAPTCHA challenge.' });
+            addFlash({
+                type: 'error',
+                title: 'Error',
+                message: 'Please complete the CAPTCHA challenge.',
+            });
             setSubmitting(false);
             return;
         }
@@ -92,11 +100,19 @@ export default () => {
         http.post('/auth/password', requestData)
             .then((response) => {
                 resetForm();
-                addFlash({ type: 'success', title: 'Success', message: response.data.status || 'Email sent!' });
+                addFlash({
+                    type: 'success',
+                    title: 'Success',
+                    message: response.data.status || 'Email sent!',
+                });
             })
             .catch((error) => {
                 console.error(error);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({
+                    type: 'error',
+                    title: 'Error',
+                    message: httpErrorToHuman(error),
+                });
             })
             .finally(() => {
                 setToken('');

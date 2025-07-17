@@ -3,12 +3,12 @@ name: Build
 on:
   push:
     branches:
-      - "develop"
-      - "1.0-develop"
+      - 'develop'
+      - '1.0-develop'
   pull_request:
     branches:
-      - "develop"
-      - "1.0-develop"
+      - 'develop'
+      - '1.0-develop'
 
 jobs:
   ui:

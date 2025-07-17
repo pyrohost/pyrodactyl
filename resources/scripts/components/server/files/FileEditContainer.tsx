@@ -33,7 +33,10 @@ const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 
 export default () => {
     const [error, setError] = useState('');
-    const { action, '*': rawFilename } = useParams<{ action: 'edit' | 'new'; '*': string }>();
+    const { action, '*': rawFilename } = useParams<{
+        action: 'edit' | 'new';
+        '*': string;
+    }>();
     const [_, setLoading] = useState(action === 'edit');
     const [content, setContent] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -139,9 +142,10 @@ export default () => {
                         You&apos;re editing a{' '}
                         <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pteroignore</code> file. Any files
                         or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>). You can negate
-                        a prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>).
+                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>
+                        ). You can negate a prior rule by prepending an exclamation point (
+                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>
+                        ).
                     </p>
                 </div>
             ) : null}

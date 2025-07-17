@@ -17,7 +17,10 @@ interface FormikValues {
     name: string;
 }
 
-type OwnProps = RequiredModalProps & { files: string[]; useMoveTerminology?: boolean };
+type OwnProps = RequiredModalProps & {
+    files: string[];
+    useMoveTerminology?: boolean;
+};
 
 const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

@@ -4,9 +4,8 @@ const PyrodactylProvider = ({ children }) => {
     return (
         <div
             data-pyro-pyrodactylprovider=''
-            data-pyro-pyrodactyl-version={import.meta.env.VITE_PYRODACTYL_VERSION}
-            data-pyro-pyrodactyl-build={import.meta.env.VITE_PYRODACTYL_BUILD_NUMBER}
-            data-pyro-commit-hash={import.meta.env.VITE_COMMIT_HASH}
+            data-pyro-pyrodactyl-version={process.env.NEXT_PUBLIC_PYRODACTYL_VERSION}
+            data-pyro-commit-hash={process.env.NEXT_PUBLIC_COMMIT_HASH}
             style={{
                 display: 'contents',
             }}

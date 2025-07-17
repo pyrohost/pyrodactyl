@@ -40,9 +40,10 @@ export default () => {
                     </p>
                     <div className='flex flex-col gap-4'>
                         <Code>
-                            Version: {import.meta.env.VITE_PYRODACTYL_VERSION} - {import.meta.env.VITE_BRANCH_NAME}
+                            Version: {process.env.NEXT_PUBLIC_PYRODACTYL_VERSION} -{' '}
+                            {process.env.NEXT_PUBLIC_BRANCH_NAME}
                         </Code>
-                        <Code>Commit : {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
+                        <Code>Commit : {process.env.NEXT_PUBLIC_COMMIT_HASH.slice(0, 7)}</Code>
                     </div>
                 </ContentBox>
             </div>

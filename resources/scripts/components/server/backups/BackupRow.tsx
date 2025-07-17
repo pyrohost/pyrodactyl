@@ -102,7 +102,10 @@ export default ({ backup }: Props) => {
                             title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
                             className={`text-xs sm:flex-initial`}
                         >
-                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
+                            {formatDistanceToNow(backup.createdAt, {
+                                includeSeconds: true,
+                                addSuffix: true,
+                            })}
                         </p>
                     </div>
 
