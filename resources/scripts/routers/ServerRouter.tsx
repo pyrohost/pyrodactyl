@@ -582,7 +582,7 @@ const ServerRouter = () => {
                         </MainSidebar>
 
                         <MainWrapper
-                            className='w-full'
+                            className={`${isSidebarVisible ? 'max-w-[calc(100%-300px-8px)]' : 'w-full'}`}
                             onTouchStart={handleTouchStart}
                             onTouchMove={handleTouchMove}
                             onTouchEnd={handleTouchEnd}
