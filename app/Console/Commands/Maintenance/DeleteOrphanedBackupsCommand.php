@@ -11,7 +11,7 @@ class DeleteOrphanedBackupsCommand extends Command
 {
     protected $signature = 'p:maintenance:delete-orphaned-backups {--dry-run : Show what would be deleted without actually deleting}';
 
-    protected $description = 'Delete backups that reference non-existent servers (orphaned backups).';
+    protected $description = 'Delete backups that reference non-existent servers (orphaned backups), including soft-deleted backups.';
 
     /**
      * DeleteOrphanedBackupsCommand constructor.
@@ -25,8 +25,14 @@ class DeleteOrphanedBackupsCommand extends Command
     {
         $isDryRun = $this->option('dry-run');
 
-        // Find backups that reference non-existent servers
-        $orphanedBackups = Backup::whereDoesntHave('server')->get();
+        // Find backups that reference non-existent servers including 
+        // soft-deleted backups since they might be orphaned too
+        $orphanedBackups = Backup::withTrashed()
+            ->whereDoesntHave('server', function ($query) {
+                // Check against both active and soft-deleted servers
+                $query->withTrashed();
+            })
+            ->get();
 
         if ($orphanedBackups->isEmpty()) {
             $this->info('No orphaned backups found.');
@@ -40,7 +46,7 @@ class DeleteOrphanedBackupsCommand extends Command
             $this->warn("Found {$count} orphaned backup(s) that would be deleted (Total size: {$this->formatBytes($totalSize)}):");
             
             $this->table(
-                ['ID', 'UUID', 'Name', 'Server ID', 'Disk', 'Size', 'Created At'],
+                ['ID', 'UUID', 'Name', 'Server ID', 'Disk', 'Size', 'Status', 'Created At'],
                 $orphanedBackups->map(function (Backup $backup) {
                     return [
                         $backup->id,
@@ -49,6 +55,7 @@ class DeleteOrphanedBackupsCommand extends Command
                         $backup->server_id,
                         $backup->disk,
                         $this->formatBytes($backup->bytes),
+                        $backup->trashed() ? 'Soft Deleted' : 'Active',
                         $backup->created_at->format('Y-m-d H:i:s'),
                     ];
                 })->toArray()
@@ -70,17 +77,30 @@ class DeleteOrphanedBackupsCommand extends Command
 
         foreach ($orphanedBackups as $backup) {
             try {
-                $this->deleteBackupService->handle($backup);
-                $deletedCount++;
-                $this->info("Deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
+                // If backup is already soft-deleted, force delete it completely
+                if ($backup->trashed()) {
+                    $backup->forceDelete();
+                    $deletedCount++;
+                    $this->info("Force deleted soft-deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
+                } else {
+                    // Use the service to properly delete from storage and database
+                    $this->deleteBackupService->handle($backup);
+                    $deletedCount++;
+                    $this->info("Deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
+                }
             } catch (\Exception $exception) {
                 $failedCount++;
                 $this->error("Failed to delete backup {$backup->uuid}: {$exception->getMessage()}");
                 
                 // If we can't delete from storage, at least remove the database record
                 try {
-                    $backup->delete();
-                    $this->warn("Removed database record for backup {$backup->uuid} (storage deletion failed)");
+                    if ($backup->trashed()) {
+                        $backup->forceDelete();
+                        $this->warn("Force deleted soft-deleted backup {$backup->uuid} (storage deletion failed)");
+                    } else {
+                        $backup->delete();
+                        $this->warn("Removed database record for backup {$backup->uuid} (storage deletion failed)");
+                    }
                 } catch (\Exception $dbException) {
                     $this->error("Failed to remove database record for backup {$backup->uuid}: {$dbException->getMessage()}");
                 }
