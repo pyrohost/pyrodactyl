@@ -42,14 +42,14 @@ RUN apk add --no-cache \
   && ln -s /bin/ash /bin/bash
 
 # Copy frontend build
-COPY --chown=root:www-data . ./
+COPY . ./
 RUN if [ "$DEV" = "false" ]; then \
   echo "Copying frontend build"; \
   else \
   mkdir -p public/assets public/build; \
   fi
-COPY --chown=root:www-data --from=frontend /app/public/assets public/assets
-COPY --chown=root:www-data --from=frontend /app/public/build public/build
+COPY --from=frontend /app/public/assets public/assets
+COPY --from=frontend /app/public/build public/build
 
 # Fetch & install Composer packages
 COPY composer.json composer.lock ./
@@ -70,20 +70,13 @@ RUN if [ "$DEV" = "true" ]; then \
   fi; \
   exit 0
 
-# Create necessary directories, clear any existing cache, environment file
-RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data && \
-  mkdir -p /var/run/php /var/run/nginx && \
-  mkdir -p /var/log/supervisord /var/log/nginx && \
-  rm -rf bootstrap/cache/*.php && \
+# Env, directories, permissions
+RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data; \
+  rm -rf bootstrap/cache/*.php; \
+  chown -R nginx:nginx .; \
+  chmod -R 755 bootstrap/cache storage; \
   cp .env.example .env || true
 
-# Set proper ownership and permissions
-# Files readable by www-data, directories executable for traversal
-RUN chown -R root:www-data ./ && \
-  find ./ -type f -exec chmod 644 {} \; && \
-  find ./ -type d -exec chmod 755 {} \; && \
-  chown -R www-data:www-data ./storage ./bootstrap/cache .env && \
-  chmod -R 775 ./storage ./bootstrap/cache
 
 # Cron jobs & NGINX tweaks
 RUN rm /usr/local/etc/php-fpm.conf \
@@ -91,12 +84,14 @@ RUN rm /usr/local/etc/php-fpm.conf \
   echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; \
   echo "0 23 * * * certbot renew --nginx --quiet"; \
   } > /var/spool/cron/crontabs/root \
-  && sed -i 's/ssl_session_cache/#ssl_session_cache/' /etc/nginx/nginx.conf
+  && sed -i 's/ssl_session_cache/#ssl_session_cache/' /etc/nginx/nginx.conf \
+  && mkdir -p /var/run/php /var/run/nginx
 
 # Configs
-COPY --chown=www-data:www-data .github/docker/default.conf /etc/nginx/http.d/default.conf
-COPY --chown=www-data:www-data .github/docker/www.conf     /usr/local/etc/php-fpm.conf
-COPY --chown=www-data:www-data .github/docker/supervisord.conf /etc/supervisord.conf
+COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.conf
+COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
+COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
+
 
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
