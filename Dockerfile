@@ -1,3 +1,5 @@
+# TODO: Refactor Docker with stricter permissions & modernized tooling
+
 # Stage 0:
 # Build the frontend (only if not in dev mode)
 FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine AS frontend
@@ -71,12 +73,11 @@ RUN if [ "$DEV" = "true" ]; then \
   exit 0
 
 # Env, directories, permissions
-RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/cache/data; \
+RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache; \
   rm -rf bootstrap/cache/*.php; \
   chown -R nginx:nginx .; \
-  chmod -R 755 bootstrap/cache storage; \
-  cp .env.example .env || true
-
+  chmod -R 777 bootstrap storage; \
+  cp .env.example .env || true; 
 
 # Cron jobs & NGINX tweaks
 RUN rm /usr/local/etc/php-fpm.conf \
