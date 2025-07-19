@@ -1,10 +1,6 @@
 #!/bin/ash -e
 cd /app
 
-mkdir -p /var/log/panel/logs/ /var/log/supervisord/ /var/log/nginx/ /var/log/php7/ \
-  && chmod 777 /var/log/panel/logs/ \
-  && ln -s /app/storage/logs/ /var/log/panel/
-
 # Check that user has mounted the /app/var directory
 if [ ! -d /app/var ]; then
   echo "You must mount the /app/var directory to the container."
