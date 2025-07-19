@@ -28,10 +28,7 @@ class DeleteOrphanedBackupsCommand extends Command
         // Find backups that reference non-existent servers including 
         // soft-deleted backups since they might be orphaned too
         $orphanedBackups = Backup::withTrashed()
-            ->whereDoesntHave('server', function ($query) {
-                // Check against both active and soft-deleted servers
-                $query->withTrashed();
-            })
+            ->whereDoesntHave('server')
             ->get();
 
         if ($orphanedBackups->isEmpty()) {
