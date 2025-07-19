@@ -34,12 +34,13 @@ class DeleteOrphanedBackupsCommand extends Command
         }
 
         $count = $orphanedBackups->count();
+        $totalSize = $orphanedBackups->sum('bytes');
         
         if ($isDryRun) {
-            $this->warn("Found {$count} orphaned backup(s) that would be deleted:");
+            $this->warn("Found {$count} orphaned backup(s) that would be deleted (Total size: {$this->formatBytes($totalSize)}):");
             
             $this->table(
-                ['ID', 'UUID', 'Name', 'Server ID', 'Disk', 'Created At'],
+                ['ID', 'UUID', 'Name', 'Server ID', 'Disk', 'Size', 'Created At'],
                 $orphanedBackups->map(function (Backup $backup) {
                     return [
                         $backup->id,
@@ -47,6 +48,7 @@ class DeleteOrphanedBackupsCommand extends Command
                         $backup->name,
                         $backup->server_id,
                         $backup->disk,
+                        $this->formatBytes($backup->bytes),
                         $backup->created_at->format('Y-m-d H:i:s'),
                     ];
                 })->toArray()
@@ -56,12 +58,12 @@ class DeleteOrphanedBackupsCommand extends Command
             return;
         }
 
-        if (!$this->confirm("Are you sure you want to delete {$count} orphaned backup(s)? This action cannot be undone.")) {
+        if (!$this->confirm("Are you sure you want to delete {$count} orphaned backup(s) ({$this->formatBytes($totalSize)})? This action cannot be undone.")) {
             $this->info('Operation cancelled.');
             return;
         }
 
-        $this->warn("Deleting {$count} orphaned backup(s)...");
+        $this->warn("Deleting {$count} orphaned backup(s) ({$this->formatBytes($totalSize)})...");
 
         $deletedCount = 0;
         $failedCount = 0;
@@ -70,7 +72,7 @@ class DeleteOrphanedBackupsCommand extends Command
             try {
                 $this->deleteBackupService->handle($backup);
                 $deletedCount++;
-                $this->info("Deleted backup: {$backup->uuid} ({$backup->name})");
+                $this->info("Deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
             } catch (\Exception $exception) {
                 $failedCount++;
                 $this->error("Failed to delete backup {$backup->uuid}: {$exception->getMessage()}");
@@ -86,5 +88,25 @@ class DeleteOrphanedBackupsCommand extends Command
         }
 
         $this->info("Cleanup completed. Deleted: {$deletedCount}, Failed: {$failedCount}");
+    }
+
+    /**
+     * Format bytes into human readable format.
+     */
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes === 0) {
+            return '0 B';
+        }
+
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $base = 1024;
+        $exponent = floor(log($bytes) / log($base));
+        $exponent = min($exponent, count($units) - 1);
+
+        $value = $bytes / pow($base, $exponent);
+        $unit = $units[$exponent];
+
+        return sprintf('%.2f %s', $value, $unit);
     }
 }
