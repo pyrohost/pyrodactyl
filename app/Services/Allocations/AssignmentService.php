@@ -18,7 +18,7 @@ class AssignmentService
     public const CIDR_MIN_BITS = 32;
     public const PORT_FLOOR = 1024;
     public const PORT_CEIL = 65535;
-    public const PORT_RANGE_LIMIT = 1000;
+    public const PORT_RANGE_LIMIT = 100000;
     public const PORT_RANGE_REGEX = '/^(\d{4,5})-(\d{4,5})$/';
 
     /**
