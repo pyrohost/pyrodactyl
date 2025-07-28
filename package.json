@@ -83,7 +83,7 @@
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/debounce": "^1.2.4",
         "@types/events": "^3.0.3",
-        "@types/node": "^24.0.13",
+        "@types/node": "^24.1.0",
         "@types/react": "^19.1.8",
         "@types/react-copy-to-clipboard": "^5.0.7",
         "@types/react-dom": "^19.1.6",
