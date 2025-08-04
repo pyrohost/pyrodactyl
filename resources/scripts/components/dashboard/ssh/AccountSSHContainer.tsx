@@ -1,3 +1,4 @@
+import { useHeader } from '@/contexts/HeaderContext';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +15,8 @@ import { useSSHKeys } from '@/api/account/ssh-keys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
+import HeaderCentered from '../header/HeaderCentered';
+
 const AccountSSHContainer = () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const { clearAndAddHttpError } = useFlashKey('account');
@@ -22,6 +25,13 @@ const AccountSSHContainer = () => {
         revalidateOnFocus: false,
     });
 
+    const { setHeaderActions, clearHeaderActions } = useHeader();
+
+    useEffect(() => {
+        setHeaderActions(<HeaderCentered className='font-medium'>Manage SSH Keys</HeaderCentered>);
+        return () => clearHeaderActions();
+    }, [setHeaderActions, clearHeaderActions]);
+
     useEffect(() => {
         clearAndAddHttpError(error);
     }, [error]);
@@ -29,11 +39,11 @@ const AccountSSHContainer = () => {
     const doDeletion = (fingerprint: string) => {};
 
     return (
-        <PageContentBlock title={'SSH Keys'}>
+        <PageContentBlock title={'SSH Keys'} className='gap-6'>
             <FlashMessageRender byKey={'account'} />
-            <div className='md:flex flex-nowrap my-10 space-x-8'>
+            <div className='md:flex flex-nowrap space-x-8'>
                 {/* Create SSH Key Section */}
-                <ContentBox title={'Add SSH Key'} className='flex-none w-full md:w-1/1'>
+                <ContentBox className='flex-none w-full md:w-1/1'>
                     <CreateSSHKeyForm />
                 </ContentBox>
             </div>

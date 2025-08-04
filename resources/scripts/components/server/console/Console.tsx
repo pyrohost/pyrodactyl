@@ -1,26 +1,26 @@
+import { useSidebar } from '@/contexts/SidebarContext';
 import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import clsx from 'clsx';
-import debounce from 'debounce';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+import KeyboardShortcut from '@/components/ui/keyboard-shortcut';
+
+import { cn } from '@/lib/utils';
 
 import { ServerContext } from '@/state/server';
 
-import useEventListener from '@/plugins/useEventListener';
 import { usePermissions } from '@/plugins/usePermissions';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
-import styles from './style.module.css';
-
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',
-    background: '#131313',
+    background: '#110f0d',
     cursor: 'transparent',
     black: '#000000',
     red: '#E54B4B',
@@ -54,36 +54,83 @@ const terminalProps: ITerminalOptions = {
 const Console = () => {
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
+    const resizeObserverRef = useRef<ResizeObserver | null>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
-    const fitAddon = new FitAddon();
-    const searchAddon = new SearchAddon();
-    const webLinksAddon = new WebLinksAddon();
+    const fitAddon = useMemo(() => new FitAddon(), []);
+    const searchAddon = useMemo(() => new SearchAddon(), []);
+    const webLinksAddon = useMemo(() => new WebLinksAddon(), []);
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
     const [canSendCommands] = usePermissions(['control.console']);
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const { isMinimized } = useSidebar();
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleConsoleOutput = (line: string, prelude = false) =>
-        terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
+    const debouncedFit = useDebouncedCallback(() => {
+        // FIXME: The proposeDimensions & fit functions seemingly only go one column at a time (until it stabilizes)
+        // There's likely an underlying bug somewhere, but for now, here's a loop as a workaround
+        if (terminal.element) {
+            let lastCols = -1;
+            let currentCols = 0;
+            let iterations = 0;
+            const maxIterations = 100;
 
-    const handleTransferStatus = (status: string) => {
-        switch (status) {
-            // Sent by either the source or target node if a failure occurs.
-            case 'failure':
-                terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
-                return;
+            while (lastCols !== currentCols && iterations < maxIterations) {
+                const proposedDimensions = fitAddon.proposeDimensions();
+                if (!proposedDimensions) {
+                    console.warn('Could not propose dimensions for terminal.');
+                    return;
+                }
+
+                lastCols = currentCols;
+                currentCols = proposedDimensions.cols;
+
+                // console.log(`Iteration ${iterations + 1}: Proposed dimensions:`, proposedDimensions);
+
+                terminal.resize(proposedDimensions.cols, proposedDimensions.rows);
+                iterations++;
+            }
+
+            // if (iterations >= maxIterations) {
+            //     console.warn(`Terminal resize reached maximum iterations (${maxIterations})`);
+            // } else {
+            //     console.log(`Terminal resize stabilized after ${iterations} iterations with cols: ${currentCols}`);
+            // }
         }
-    };
+    }, 200);
 
-    const handleDaemonErrorOutput = (line: string) =>
-        terminal.writeln(
-            TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m',
-        );
+    const handleConsoleOutput = useCallback(
+        (line: string, prelude = false) =>
+            terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m'),
+        [terminal, TERMINAL_PRELUDE],
+    );
 
-    const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+    const handleTransferStatus = useCallback(
+        (status: string) => {
+            switch (status) {
+                // Sent by either the source or target node if a failure occurs.
+                case 'failure':
+                    terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
+                    return;
+            }
+        },
+        [terminal, TERMINAL_PRELUDE],
+    );
+
+    const handleDaemonErrorOutput = useCallback(
+        (line: string) =>
+            terminal.writeln(
+                TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m',
+            ),
+        [terminal, TERMINAL_PRELUDE],
+    );
+
+    const handlePowerChangeEvent = useCallback(
+        (state: string) => terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m'),
+        [terminal, TERMINAL_PRELUDE],
+    );
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -114,41 +161,96 @@ const Console = () => {
         }
     };
 
-    useEffect(() => {
-        if (connected && ref.current && !terminal.element) {
-            terminal.loadAddon(fitAddon);
-            terminal.loadAddon(searchAddon);
-            terminal.loadAddon(webLinksAddon);
-
-            terminal.open(ref.current);
-            fitAddon.fit();
-
-            // Add support for capturing keys
-            terminal.attachCustomKeyEventHandler((e: KeyboardEvent) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-                    document.execCommand('copy');
-                    return false;
-                }
-                // } else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-                //     e.preventDefault();
-                //     searchBar.show();
-                //     return false;
-                // } else if (e.key === 'Escape') {
-                //     searchBar.hidden();
-                // }
-                return true;
-            });
+    const handleGlobalKeyDown = useCallback((e: KeyboardEvent) => {
+        // Focus input when slash key is pressed
+        if (e.key === '/' && inputRef.current && document.activeElement !== inputRef.current) {
+            e.preventDefault();
+            inputRef.current.focus();
         }
-    }, [terminal, connected]);
+    }, []);
 
-    useEventListener(
-        'resize',
-        debounce(() => {
-            if (terminal.element) {
-                fitAddon.fit();
+    useEffect(() => {
+        // Add global keydown listener
+        document.addEventListener('keydown', handleGlobalKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleGlobalKeyDown);
+        };
+    }, [handleGlobalKeyDown]);
+
+    // Auto-focus input on component mount
+    useEffect(() => {
+        if (inputRef.current && canSendCommands) {
+            inputRef.current.focus();
+        }
+    }, [canSendCommands]);
+
+    useEffect(() => {
+        if (connected && ref.current) {
+            // If terminal is already attached to a different element, dispose it first
+            if (terminal.element && terminal.element !== ref.current) {
+                terminal.dispose();
             }
-        }, 100),
-    );
+
+            // Only set up the terminal if it's not already attached to the current element
+            if (!terminal.element || terminal.element !== ref.current) {
+                terminal.loadAddon(fitAddon);
+                terminal.loadAddon(searchAddon);
+                terminal.loadAddon(webLinksAddon);
+
+                terminal.open(ref.current);
+                fitAddon.fit();
+
+                // Add support for capturing keys
+                terminal.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                        document.execCommand('copy');
+                        return false;
+                    }
+                    // } else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    //     e.preventDefault();
+                    //     searchBar.show();
+                    //     return false;
+                    // } else if (e.key === 'Escape') {
+                    //     searchBar.hidden();
+                    // }
+                    return true;
+                });
+
+                // Set up ResizeObserver to watch for container size changes
+                resizeObserverRef.current = new ResizeObserver(debouncedFit);
+
+                if (ref.current) {
+                    resizeObserverRef.current.observe(ref.current);
+                }
+            }
+        }
+
+        // Cleanup function to dispose terminal when component unmounts
+        return () => {
+            if (terminal.element) {
+                terminal.dispose();
+            }
+            // Clean up the ResizeObserver
+            if (resizeObserverRef.current) {
+                resizeObserverRef.current.disconnect();
+                resizeObserverRef.current = null;
+            }
+        };
+    }, [terminal, connected, fitAddon, searchAddon, webLinksAddon, debouncedFit]);
+
+    // useEventListener(
+    //     'resize',
+    //     debounce(() => {
+    //         if (terminal.element) {
+    //             fitAddon.fit();
+    //         }
+    //     }, 100),
+    // );
+
+    useEffect(() => {
+        debouncedFit();
+    }, [terminal, isMinimized, fitAddon, debouncedFit]);
 
     useEffect(() => {
         const listeners: Record<string, (s: string) => void> = {
@@ -190,45 +292,48 @@ const Console = () => {
                 });
             }
         };
-    }, [connected, instance]);
+    }, [
+        connected,
+        instance,
+        isTransferring,
+        terminal,
+        handleConsoleOutput,
+        handleDaemonErrorOutput,
+        handlePowerChangeEvent,
+        handleTransferStatus,
+    ]);
 
     return (
-        <div
-            className='transform-gpu skeleton-anim-2'
-            style={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                animationDelay: `250ms`,
-                animationTimingFunction:
-                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-            }}
-        >
-            <div className={clsx(styles.terminal, 'relative')}>
+        <div className='flex w-full h-full'>
+            <div className={cn('relative flex size-full flex-col overflow-x-hidden contain-inline-size flex-1')}>
                 <SpinnerOverlay visible={!connected} size={'large'} />
                 <div
-                    className={clsx(styles.terminalContainer, styles.overflows_container, {
-                        'rounded-b': !canSendCommands,
-                    })}
+                    className={cn(
+                        'bg-bg-raised border-mocha-400 p-4 flex flex-1 flex-col overflow-hidden rounded-2xl border text-sm',
+                        {
+                            'rounded-b': !canSendCommands,
+                        },
+                    )}
                 >
-                    <div className={'h-full'}>
-                        <div id={styles.terminal} ref={ref} />
-                    </div>
+                    <div className='size-full' ref={ref} />
+
+                    {canSendCommands && (
+                        <div className='w-full rounded-2xl border border-mocha-300 bg-mocha-400 p-2 text-zinc-100 flex px-(--padding-x) relative [--padding-x:--spacing(4)] text-sm'>
+                            <input
+                                ref={inputRef}
+                                className='w-full'
+                                type={'text'}
+                                placeholder={'Enter a command'}
+                                aria-label={'Console command input.'}
+                                disabled={!instance || !connected}
+                                onKeyDown={handleCommandKeyDown}
+                                autoCorrect={'off'}
+                                autoCapitalize={'none'}
+                            />
+                            <KeyboardShortcut keys={['/']} variant='faded' className='pl-(--padding-x)' />
+                        </div>
+                    )}
                 </div>
-                {canSendCommands && (
-                    <div className={clsx('relative', styles.overflows_container)}>
-                        <input
-                            className={clsx('peer', styles.command_input)}
-                            type={'text'}
-                            placeholder={'Enter a command'}
-                            aria-label={'Console command input.'}
-                            disabled={!instance || !connected}
-                            onKeyDown={handleCommandKeyDown}
-                            autoCorrect={'off'}
-                            autoCapitalize={'none'}
-                        />
-                    </div>
-                )}
             </div>
         </div>
     );

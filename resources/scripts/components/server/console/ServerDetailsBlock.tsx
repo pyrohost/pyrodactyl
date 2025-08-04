@@ -1,10 +1,10 @@
-import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import { cn } from '@/lib/utils';
 
 import { ServerContext } from '@/state/server';
 
@@ -79,7 +79,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     });
 
     return (
-        <div className={clsx('flex md:flex-row gap-4 flex-col', className)}>
+        <div className={cn('flex md:flex-row gap-4 flex-col', className)}>
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{

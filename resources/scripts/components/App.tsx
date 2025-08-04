@@ -3,6 +3,7 @@
 // in the root first. The github issue for this is still open. Stupid.
 // https://github.com/preactjs/signals/issues/414
 import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
+import '@/assets/globals.css';
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
@@ -20,8 +21,7 @@ import { SiteSettings } from '@/state/settings';
 
 import PyrodactylProvider from './PyrodactylProvider';
 
-const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
-const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
+const UnifiedRouter = lazy(() => import('@/routers/UnifiedRouter'));
 const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 
 interface ExtendedWindow extends Window {
@@ -60,12 +60,21 @@ const App = () => {
 
     return (
         <>
+            <div
+                style={{
+                    backgroundImage: 'url(/assets/noise.png)',
+                    backgroundSize: '180px 180px',
+                    backgroundRepeat: 'repeat',
+                    backgroundPosition: '0 0',
+                }}
+                className='pointer-events-none fixed opacity-[0.1] inset-0 mix-blend-overlay'
+            ></div>
             <GlobalStylesheet />
             <StoreProvider store={store}>
                 <PyrodactylProvider>
                     <div
                         data-pyro-routerwrap=''
-                        className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
+                        className='relative w-full h-full flex flex-row overflow-hidden rounded-lg'
                     >
                         <Toaster
                             theme='dark'
@@ -88,24 +97,13 @@ const App = () => {
                                 />
 
                                 <Route
-                                    path='/server/:id/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <ServerContext.Provider>
-                                                    <ServerRouter />
-                                                </ServerContext.Provider>
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
-
-                                <Route
                                     path='/*'
                                     element={
                                         <AuthenticatedRoute>
                                             <Spinner.Suspense>
-                                                <DashboardRouter />
+                                                <ServerContext.Provider>
+                                                    <UnifiedRouter />
+                                                </ServerContext.Provider>
                                             </Spinner.Suspense>
                                         </AuthenticatedRoute>
                                     }

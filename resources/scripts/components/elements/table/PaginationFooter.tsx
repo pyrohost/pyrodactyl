@@ -1,8 +1,8 @@
-import clsx from 'clsx';
-
 import { Button } from '@/components/elements/button/index';
 import ArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
 import ArrowRight from '@/components/elements/hugeicons/ArrowRight';
+
+import { cn } from '@/lib/utils';
 
 import { PaginationDataSet } from '@/api/http';
 
@@ -42,7 +42,7 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
     });
 
     return (
-        <div className={clsx('flex items-center justify-between my-2', className)}>
+        <div className={cn('flex items-center justify-between my-2', className)}>
             <p className={'text-sm text-zinc-500'}>
                 Showing&nbsp;
                 <span className={'font-semibold text-zinc-400'}>{Math.max(start, Math.min(pagination.total, 1))}</span>

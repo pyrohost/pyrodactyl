@@ -1,9 +1,12 @@
+import { PlayIcon, Rotate01FreeIcons, StopIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
+import { Button } from '@/components/ui/button';
 
 import { ServerContext } from '@/state/server';
 
@@ -68,61 +71,43 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                 Forcibly stopping a server can lead to data corruption.
             </Dialog.Confirm>
             <Can action={'control.start'}>
-                <button
-                    style={
-                        status === 'offline'
-                            ? {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
-                            : {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
-                    }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
+                <Button
+                    variant={'secondary'}
+                    size={'sm'}
+                    className='px-3 gap-1 rounded-full'
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
+                    aria-label='Start server'
                 >
-                    Start
-                </button>
+                    <div className='flex flex-row items-center gap-1.5'>
+                        <HugeiconsIcon size={16} strokeWidth={2} icon={PlayIcon} className='size-4' />
+                        Start
+                    </div>
+                </Button>
             </Can>
             <Can action={'control.restart'}>
-                <button
-                    style={{
-                        background:
-                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                    }}
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-none text-sm font-bold shadow-md cursor-pointer'
+                <Button
+                    variant={'secondary'}
+                    size={'sm'}
+                    className='p-1 gap-1 rounded-full size-8'
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
+                    aria-label='Restart server'
                 >
-                    Restart
-                </button>
+                    <HugeiconsIcon size={16} icon={Rotate01FreeIcons} />
+                </Button>
             </Can>
             <Can action={'control.stop'}>
-                <button
-                    style={
-                        status === 'offline'
-                            ? {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
-                            : {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
-                    }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all cursor-pointer'
+                <Button
+                    variant={'secondary'}
+                    size={'sm'}
+                    className='p-1 gap-1 rounded-full size-8'
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
+                    aria-label={`${killable ? 'Kill' : 'Stop'} server`}
                 >
-                    {killable ? 'Kill' : 'Stop'}
-                </button>
+                    <HugeiconsIcon size={16} icon={StopIcon} />
+                </Button>
             </Can>
         </div>
     );

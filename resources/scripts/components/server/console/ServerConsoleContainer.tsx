@@ -1,36 +1,58 @@
-import { memo } from 'react';
+import { useHeader } from '@/contexts/HeaderContext';
+import { memo, useEffect, useMemo } from 'react';
 import isEqual from 'react-fast-compare';
 
+import HeaderCentered from '@/components/dashboard/header/HeaderCentered';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import PageContentBlock from '@/components/elements/PageContentBlock';
 // import Can from '@/components/elements/Can';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import Console from '@/components/server/console/Console';
 import PowerButtons from '@/components/server/console/PowerButtons';
-import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import StatGraphs from '@/components/server/console/StatGraphs';
 
 import { ServerContext } from '@/state/server';
 
 import Features from '@feature/Features';
 
-import { StatusPill } from './StatusPill';
+import ServerDetailsHeader from './ServerDetailsHeader';
+import { StatusPillHeader } from './StatusPillHeader';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
-    const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
+    const { setHeaderActions, clearHeaderActions } = useHeader();
+
+    const statusSection = useMemo(
+        () => (
+            <HeaderCentered className='flex items-center gap-6'>
+                <div className='flex items-center gap-3'>
+                    <StatusPillHeader />
+                    <span className='xl:max-w-[20vw] min-w-0 truncate'>{name}</span>
+                </div>
+                <div className='border-l border-gray-200 h-6' />
+                <ServerDetailsHeader />
+            </HeaderCentered>
+        ),
+        [name],
+    );
+
+    const buttonsSection = useMemo(() => <PowerButtons className='flex gap-2 items-center justify-center' />, []);
+
+    useEffect(() => {
+        setHeaderActions([statusSection, buttonsSection]);
+        return () => clearHeaderActions();
+    }, [setHeaderActions, clearHeaderActions, statusSection, buttonsSection]);
 
     return (
-        <ServerContentBlock title={'Home'}>
-            <div className='w-full h-full min-h-full flex-1 flex flex-col gap-4'>
+        <PageContentBlock title={'Console'} background={false} className='overflow-y-visible'>
+            <div className='w-full h-full flex gap-4'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance
@@ -40,26 +62,20 @@ const ServerConsoleContainer = () => {
                               : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
-                <MainPageHeader title={name} titleChildren={<StatusPill />}>
-                    <PowerButtons className='skeleton-anim-2 duration-75 flex gap-1 items-center justify-center' />
-                </MainPageHeader>
-                {description && (
-                    <h2 className='text-sm -mt-8'>
-                        <span className='opacity-50'>{description}</span>
-                    </h2>
-                )}
-                <ServerDetailsBlock />
                 <Console />
-                <div className={'grid grid-cols-1 md:grid-cols-3 gap-4'}>
-                    <Spinner.Suspense>
-                        <StatGraphs />
-                    </Spinner.Suspense>
+                <div className='relative w-(--sidebar-full-width) overflow-y-auto overflow-x-visible flex-none -mb-(--main-wrapper-spacing) pb-(--main-wrapper-spacing)'>
+                    <div className='flex flex-col gap-4'>
+                        <Spinner.Suspense>
+                            <StatGraphs />
+                        </Spinner.Suspense>
+                    </div>
                 </div>
+
                 <ErrorBoundary>
                     <Features enabled={eggFeatures} />
                 </ErrorBoundary>
             </div>
-        </ServerContentBlock>
+        </PageContentBlock>
     );
 };
 

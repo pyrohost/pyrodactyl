@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import HugeIconsAlert from '../hugeicons/Alert';
 
@@ -11,7 +11,7 @@ interface AlertProps {
 const Alert = ({ type, className, children }: AlertProps) => {
     return (
         <div
-            className={clsx(
+            className={cn(
                 'flex items-center border-l-8 text-zinc-50 rounded-md shadow-sm px-4 py-3',
                 {
                     ['border-red-500 bg-red-500/25']: type === 'danger',

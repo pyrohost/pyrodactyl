@@ -1,0 +1,59 @@
+@import 'tailwind.css';
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-schibsted;
+}
+
+html,
+body,
+#app {
+    @apply bg-bg text-primary font-manrope relative size-full overflow-hidden;
+}
+
+.pyro-logo1 {
+    mask-image: linear-gradient(60deg, white 25%, rgba(255, 255, 255, 0.2) 50%, white 75%);
+    mask-size: 400%;
+    mask-position: 0%;
+    animation: shine 3s ease forwards infinite;
+    animation-delay: 1s;
+}
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.animate-delay {
+    animation: opacity 1s ease-in-out forwards;
+    animation-delay: 1s;
+}
+
+@keyframes shine {
+    from {
+        mask-position: 100%;
+    }
+    to {
+        mask-position: 0%;
+    }
+}
+
+@keyframes slide-left {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-left {
+    animation: slide-left 1s cubic-bezier(0.19, 1, 0.22, 1);
+}

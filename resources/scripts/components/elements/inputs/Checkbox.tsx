@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import { forwardRef } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import styles from './styles.module.css';
 
@@ -9,11 +10,11 @@ type Props = Omit<React.ComponentProps<'input'>, 'type'> & {
 };
 
 const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputField, ...props }, ref) => (
-    <div className={clsx('flex items-center', className)}>
+    <div className={cn('flex items-center', className)}>
         <input
             ref={ref}
             type='checkbox'
-            className={clsx(
+            className={cn(
                 'form-input',
                 styles.checkbox_input,
                 'accent-branding', // Use the custom branding color for the checkbox accent
@@ -23,9 +24,9 @@ const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputF
             )}
             {...props}
         />
-        {label && <label className={clsx('ml-2', styles.label)}>{label}</label>}
+        {label && <label className={cn('ml-2', styles.label)}>{label}</label>}
         {inputField && (
-            <input type='text' className={clsx('ml-2', 'form-input', styles.input_field, 'border-branding')} />
+            <input type='text' className={cn('ml-2', 'form-input', styles.input_field, 'border-branding')} />
         )}
     </div>
 ));

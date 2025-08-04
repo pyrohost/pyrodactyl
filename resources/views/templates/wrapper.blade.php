@@ -35,12 +35,18 @@
             @endif
         @show
         <style>
-            @import url('https://fonts.bunny.net/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap')
+            /* @import url('https://fonts.bunny.net/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap') */
+            @import url('https://fonts.bunny.net/css2?family=Manrope:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap');
         </style>
 
         @yield('assets')
 
         @include('layouts.scripts')
+
+        <!-- <script
+            crossorigin="anonymous"
+            src="//unpkg.com/react-scan/dist/auto.global.js"
+        ></script> -->
 
         @viteReactRefresh
         @vite('resources/scripts/index.tsx')

@@ -1,111 +1,112 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { Turnstile } from '@marsidev/react-turnstile';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useStoreState } from 'easy-peasy';
-import type { FormikHelpers } from 'formik';
-import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { object, string } from 'yup';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
-import FriendlyCaptcha from '@/components/FriendlyCaptcha';
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
-import Field from '@/components/elements/Field';
-import Logo from '@/components/elements/PyroLogo';
+import Captcha, { CaptchaRef } from '@/components/Captcha';
+import LoginFormContainer, { TitleSection } from '@/components/auth/LoginFormContainer';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
 
-interface Values {
+import { Button } from '../ui/button';
+import SecondaryLink from '../ui/secondary-link';
+import FlashStatusContainer from './StatusContainer';
+
+const loginSchema = z.object({
+    user: z.string().min(1, 'A username or email must be provided.'),
+    password: z.string().min(1, 'Please enter your account password.'),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+interface LoginData extends Record<string, string> {
     user: string;
     password: string;
 }
 
 function LoginContainer() {
-    const [token, setToken] = useState('');
-    const [friendlyLoaded, setFriendlyLoaded] = useState(false);
-    const turnstileRef = useRef(null);
-    const friendlyCaptchaRef = useRef<{ reset: () => void }>(null);
-    const hCaptchaRef = useRef<HCaptcha>(null);
-    const mCaptchaRef = useRef<{ reset: () => void }>(null);
+    const captchaRef = useRef<CaptchaRef>(null);
+    const [isCaptchaValid, setIsCaptchaValid] = useState(false);
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { captcha } = useStoreState((state) => state.settings.data!);
-    const isTurnstileEnabled = captcha.driver === 'turnstile' && captcha.turnstile?.siteKey;
-    const isFriendlyEnabled = captcha.driver === 'friendly' && captcha.friendly?.siteKey;
-    const isHCaptchaEnabled = captcha.driver === 'hcaptcha' && captcha.hcaptcha?.siteKey;
-    const isMCaptchaEnabled = captcha.driver === 'mcaptcha' && captcha.mcaptcha?.siteKey;
+    const settings = useStoreState((state) => state.settings.data);
+    const captcha = settings?.captcha;
+
+    const isCaptchaRequired = captcha?.driver !== 'none';
+    const isCaptchaInvalid = isCaptchaRequired && !isCaptchaValid;
 
     const navigate = useNavigate();
 
+    const form = useForm<LoginFormValues>({
+        resolver: zodResolver(loginSchema),
+        mode: 'onChange',
+        reValidateMode: 'onChange',
+        defaultValues: {
+            user: '',
+            password: '',
+        },
+    });
+
     useEffect(() => {
         clearFlashes();
+    }, [clearFlashes]);
 
-        // Load FriendlyCaptcha script if needed
-        if (isFriendlyEnabled && !window.friendlyChallenge) {
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/friendly-challenge@0.9.12/widget.module.min.js';
-            script.async = true;
-            script.defer = true;
-            script.onload = () => setFriendlyLoaded(true);
-            document.body.appendChild(script);
-        } else if (isFriendlyEnabled) {
-            setFriendlyLoaded(true);
-        }
-    }, []);
+    // Watch for changes in the user field to reset submitting state
+    useEffect(() => {
+        const subscription = form.watch((_value, { name }) => {
+            if (name === 'user' && form.formState.isSubmitting) {
+                form.clearErrors();
+                // Reset form state to stop submitting
+                form.formState.isSubmitting = false;
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [form]);
+
+    // Don't render if settings aren't loaded yet
+    if (!settings?.captcha) {
+        return <div>Loading...</div>;
+    }
 
     const resetCaptcha = () => {
-        setToken('');
-        if (isTurnstileEnabled && turnstileRef.current) {
-            // @ts-expect-error - The type doesn't expose the reset method directly
-            turnstileRef.current.reset();
-        }
-        if (isFriendlyEnabled && friendlyCaptchaRef.current) {
-            friendlyCaptchaRef.current.reset();
-        }
-        if (isHCaptchaEnabled && hCaptchaRef.current) {
-            hCaptchaRef.current.resetCaptcha();
+        setIsCaptchaValid(false);
+        if (captchaRef.current) {
+            captchaRef.current.reset();
         }
     };
 
-    const handleCaptchaComplete = (response: string) => {
-        setToken(response);
+    const handleCaptchaComplete = () => {
+        setIsCaptchaValid(true);
     };
 
     const handleCaptchaError = (provider: string) => {
-        setToken('');
+        setIsCaptchaValid(false);
         clearAndAddHttpError({ error: new Error(`${provider} challenge failed.`) });
     };
 
     const handleCaptchaExpire = () => {
-        setToken('');
+        setIsCaptchaValid(false);
     };
 
-    const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const onSubmit = (values: LoginFormValues) => {
         clearFlashes();
 
-        if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
-            setSubmitting(false);
+        if (isCaptchaInvalid) {
             clearAndAddHttpError({ error: new Error('Please complete the CAPTCHA challenge.') });
             return;
         }
 
-        const requestData: Record<string, string> = {
+        const requestData: LoginData = {
             user: values.user,
             password: values.password,
+            ...captchaRef.current?.getFormData(),
         };
-
-        if (isTurnstileEnabled) {
-            requestData['cf-turnstile-response'] = token;
-            if (process.env.NODE_ENV === 'development') {
-                requestData['cf-turnstile-remoteip'] = 'localhost';
-            }
-        } else if (isHCaptchaEnabled) {
-            requestData['h-captcha-response'] = token;
-        } else if (isFriendlyEnabled) {
-            requestData['frc-captcha-response'] = token;
-        }
 
         login(requestData)
             .then((response) => {
@@ -115,123 +116,84 @@ function LoginContainer() {
                 }
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
-            .catch((error: any) => {
-                console.error('Login error details:', {
-                    message: error.message,
-                    detail: error.detail,
-                    code: error.code,
-                    response: error.response,
-                });
+            .catch(
+                (error: Error & { response?: { status?: number; data?: unknown }; detail?: string; code?: string }) => {
+                    console.error('Login error details:', {
+                        message: error.message,
+                        detail: error.detail,
+                        code: error.code,
+                        response: error.response,
+                    });
 
-                resetCaptcha();
-                setSubmitting(false);
+                    setIsCaptchaValid(false);
+                    resetCaptcha();
 
-                if (error.code === 'InvalidCredentials') {
-                    clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
-                } else if (error.code === 'DisplayException') {
-                    clearAndAddHttpError({ error: new Error(error.detail || error.message) });
-                } else {
-                    clearAndAddHttpError({ error });
-                }
-            });
+                    if (error.code === 'InvalidCredentials') {
+                        clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
+                    } else if (error.code === 'DisplayException') {
+                        clearAndAddHttpError({ error: new Error(error.detail || error.message) });
+                    } else {
+                        clearAndAddHttpError({ error });
+                    }
+                },
+            );
     };
 
     return (
-        <Formik
-            onSubmit={onSubmit}
-            initialValues={{ user: '', password: '' }}
-            validationSchema={object().shape({
-                user: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
-            })}
-        >
-            {({ isSubmitting }) => (
-                <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        <Logo />
-                    </div>
-                    <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
-                    <div className={`relative mt-6`}>
-                        <Field
-                            id='password'
-                            type={'password'}
-                            label={'Password'}
-                            name={'password'}
-                            disabled={isSubmitting}
-                        />
-                        <Link
-                            to={'/auth/password'}
-                            className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
-                        >
-                            Forgot Password?
-                        </Link>
-                    </div>
+        <LoginFormContainer onSubmit={form.handleSubmit(onSubmit)}>
+            <TitleSection title='Login' />
+            <Form {...form}>
+                <div className='flex flex-col gap-6'>
+                    <FormField
+                        control={form.control}
+                        name='user'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username or Email</FormLabel>
+                                <FormControl>
+                                    <Input {...field} type='text' disabled={form.formState.isSubmitting} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                    {/* CAPTCHA Providers */}
-                    {isTurnstileEnabled && (
-                        <div className='mt-6'>
-                            <Turnstile
-                                ref={turnstileRef}
-                                siteKey={captcha.turnstile.siteKey}
-                                onSuccess={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('Turnstile')}
-                                onExpire={handleCaptchaExpire}
-                                options={{
-                                    theme: 'dark',
-                                    size: 'flexible',
-                                }}
-                            />
-                        </div>
-                    )}
+                    <FormField
+                        control={form.control}
+                        name='password'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input {...field} type='password' disabled={form.formState.isSubmitting} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                    {isFriendlyEnabled && friendlyLoaded && (
-                        <div className='mt-6 w-full'>
-                            <FriendlyCaptcha
-                                ref={friendlyCaptchaRef}
-                                sitekey={captcha.friendly.siteKey}
-                                onComplete={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('FriendlyCaptcha')}
-                                onExpire={handleCaptchaExpire}
-                            />
-                        </div>
-                    )}
+                    <Captcha
+                        ref={captchaRef}
+                        onVerify={handleCaptchaComplete}
+                        onError={handleCaptchaError}
+                        onExpire={handleCaptchaExpire}
+                    />
 
-                    {isHCaptchaEnabled && (
-                        <div className='mt-6'>
-                            <HCaptcha
-                                ref={hCaptchaRef}
-                                sitekey={captcha.hcaptcha.siteKey}
-                                onVerify={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('hCaptcha')}
-                                onExpire={handleCaptchaExpire}
-                                theme='dark'
-                                size='normal'
-                            />
-                        </div>
-                    )}
-
-                    {isMCaptchaEnabled && (
-                        <div className='mt-6'>
-                            <p className='text-red-500'>mCaptcha implementation needed</p>
-                        </div>
-                    )}
-
-                    <div className={`mt-6`}>
+                    <FlashStatusContainer />
+                    <div className='flex w-full justify-between items-center'>
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
-                            type={'submit'}
-                            size={'xlarge'}
-                            isLoading={isSubmitting}
-                            disabled={isSubmitting}
+                            type='submit'
+                            shape='round'
+                            disabled={form.formState.isSubmitting || !form.formState.isValid || isCaptchaInvalid}
                         >
-                            Login
+                            Sign in
                         </Button>
+
+                        <SecondaryLink to='/auth/password'>Forgot your password?</SecondaryLink>
                     </div>
-                </LoginFormContainer>
-            )}
-        </Formik>
+                </div>
+            </Form>
+        </LoginFormContainer>
     );
 }
 

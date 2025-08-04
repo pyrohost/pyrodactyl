@@ -104,7 +104,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 </div> */}
                 <div className='flex flex-col'>
                     <div className='flex items-center gap-2'>
-                        <p className={`text-xl tracking-tight font-bold break-words`}>{server.name}</p>{' '}
+                        <p className={`text-xl tracking-tight font-bold truncate max-w-[20vw]`}>{server.name}</p>{' '}
                         <div className={'status-bar'} />
                     </div>
                     <p className={`text-sm text-[#ffffff66]`}>

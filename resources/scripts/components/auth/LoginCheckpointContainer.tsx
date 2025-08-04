@@ -1,148 +1,155 @@
-import type { ActionCreator } from 'easy-peasy';
-import { useFormikContext, withFormik } from 'formik';
+import { REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { useState } from 'react';
-import type { Location, RouteProps } from 'react-router-dom';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
-import ContentBox from '@/components/elements/ContentBox';
-import Field from '@/components/elements/Field';
+import LoginFormContainer, { ReturnToLogin, TitleSection } from '@/components/auth/LoginFormContainer';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 import loginCheckpoint from '@/api/auth/loginCheckpoint';
 
-import type { FlashStore } from '@/state/flashes';
-
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../ui/input-otp';
+import FlashStatusContainer from './StatusContainer';
 
-interface Values {
-    code: string;
-    recoveryCode: '';
+interface CheckpointFormValues {
+    code?: string;
+    recoveryCode?: string;
 }
 
-type OwnProps = RouteProps;
-
-type Props = OwnProps & {
-    clearAndAddHttpError: ActionCreator<FlashStore['clearAndAddHttpError']['payload']>;
-};
-
-function LoginCheckpointForm() {
-    const { isSubmitting, setFieldValue } = useFormikContext<Values>();
+function LoginCheckpointContainer() {
     const [isMissingDevice, setIsMissingDevice] = useState(false);
-
-    return (
-        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl'>
-            <LoginFormContainer className={`w-full flex`}>
-                <Link to='/'>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        <Logo />
-                    </div>
-                </Link>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
-
-                <div className={`mt-6`}>
-                    <Field
-                        name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
-                        placeholder='000000'
-                        description={
-                            isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
-                        }
-                        type={'text'}
-                        autoComplete={'one-time-code'}
-                        autoFocus
-                    />
-                </div>
-                <div className={`mt-6`}>
-                    <Button
-                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                        size={'xlarge'}
-                        type={'submit'}
-                        disabled={isSubmitting}
-                        isLoading={isSubmitting}
-                    >
-                        Login
-                    </Button>
-                </div>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-
-                <div
-                    className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}
-                >
-                    <span
-                        onClick={() => {
-                            setFieldValue('code', '');
-                            setFieldValue('recoveryCode', '');
-                            setIsMissingDevice((s) => !s);
-                        }}
-                        // className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
-                    >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
-                    </span>
-                </div>
-                <div
-                    className={`text-center w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
-                >
-                    <Link
-                        to={'/auth/login'}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
-                    >
-                        Return to Login
-                    </Link>
-                </div>
-            </LoginFormContainer>
-        </ContentBox>
-    );
-}
-
-const EnhancedForm = withFormik<Props & { location: Location }, Values>({
-    handleSubmit: ({ code, recoveryCode }, { setSubmitting, props: { clearAndAddHttpError, location } }) => {
-        loginCheckpoint(location.state?.token || '', code, recoveryCode)
-            .then((response) => {
-                if (response.complete) {
-                    window.location = response.intended || '/';
-                    return;
-                }
-
-                setSubmitting(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setSubmitting(false);
-                clearAndAddHttpError({ error });
-            });
-    },
-
-    mapPropsToValues: () => ({
-        code: '',
-        recoveryCode: '',
-    }),
-})(LoginCheckpointForm);
-
-const LoginCheckpointContainer = ({ ...props }: OwnProps) => {
-    const { clearAndAddHttpError } = useFlash();
-
+    const { clearAndAddHttpError, clearFlashes } = useFlash();
     const location = useLocation();
     const navigate = useNavigate();
 
+    const form = useForm<CheckpointFormValues>({
+        defaultValues: {
+            code: '',
+            recoveryCode: '',
+        },
+    });
+
+    // Redirect if no token is present
     if (!location.state?.token) {
         navigate('/auth/login');
-
         return null;
     }
 
-    return <EnhancedForm clearAndAddHttpError={clearAndAddHttpError} location={location} {...props} />;
-};
+    const onSubmit = (values: CheckpointFormValues) => {
+        const { code, recoveryCode } = values;
+
+        loginCheckpoint(location.state?.token || '', code || '', recoveryCode || '')
+            .then((response) => {
+                if (response.complete) {
+                    window.location.href = response.intended || '/';
+                    return;
+                }
+            })
+            .catch((error) => {
+                clearAndAddHttpError({ error });
+            });
+    };
+
+    const handleDeviceToggle = () => {
+        clearFlashes();
+        form.setValue('code', '');
+        form.setValue('recoveryCode', '');
+        setIsMissingDevice((prev) => !prev);
+    };
+
+    return (
+        <LoginFormContainer onSubmit={form.handleSubmit(onSubmit)}>
+            <TitleSection
+                title='Two Factor Authentication'
+                subtitle={
+                    isMissingDevice
+                        ? 'Enter one of the recovery codes generated when you setup two-factor auth on this account.'
+                        : 'Enter the two-factor token displayed by your device.'
+                }
+            />
+            <Form {...form}>
+                <div className='flex flex-col gap-6'>
+                    <FormField
+                        control={form.control}
+                        name={isMissingDevice ? 'recoveryCode' : 'code'}
+                        render={({ field }) => (
+                            <FormItem className='max-w-fit'>
+                                <FormLabel>{isMissingDevice ? 'Recovery Code' : 'Authentication Code'}</FormLabel>
+                                <FormControl>
+                                    {isMissingDevice ? (
+                                        <InputOTP
+                                            {...field}
+                                            maxLength={10}
+                                            autoFocus
+                                            disabled={form.formState.isSubmitting}
+                                            className='text-secondary focus-visible:ring-0'
+                                            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                                            onComplete={() => {
+                                                form.handleSubmit(onSubmit)();
+                                            }}
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={5} />
+                                                <InputOTPSlot index={6} />
+                                                <InputOTPSlot index={7} />
+                                                <InputOTPSlot index={8} />
+                                                <InputOTPSlot index={9} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
+                                    ) : (
+                                        <InputOTP
+                                            {...field}
+                                            maxLength={6}
+                                            autoFocus
+                                            disabled={form.formState.isSubmitting}
+                                            className='text-secondary focus-visible:ring-0'
+                                            pattern={REGEXP_ONLY_DIGITS}
+                                            onComplete={() => {
+                                                form.handleSubmit(onSubmit)();
+                                            }}
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
+                                    )}
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FlashStatusContainer />
+
+                    <div className='flex w-full gap-8 items-center'>
+                        <Button type='button' shape='round' onClick={handleDeviceToggle}>
+                            {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                        </Button>
+
+                        <ReturnToLogin />
+                    </div>
+                </div>
+            </Form>
+        </LoginFormContainer>
+    );
+}
 
 export default LoginCheckpointContainer;

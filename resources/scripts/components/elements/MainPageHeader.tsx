@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import styled from 'styled-components';
+
+import { cn } from '@/lib/utils';
 
 const HeaderWrapper = styled.div``;
 
@@ -18,7 +19,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
 }) => {
     return (
         <HeaderWrapper
-            className={clsx(
+            className={cn(
                 'flex',
                 direction === 'row' ? 'items-center flex-col md:flex-row' : 'items-start flex-col',
                 'justify-between',

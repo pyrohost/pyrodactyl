@@ -99,46 +99,44 @@ const FileManagerContainer = () => {
     }
 
     return (
-        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
-            <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
-                <ErrorBoundary>
-                    <MainPageHeader title={'Files'}>
-                        <Can action={'file.create'}>
-                            <div className='flex flex-row gap-1'>
-                                <FileManagerStatus />
-                                <NewDirectoryButton />
-                                <NewFileButton id={id} />
-                                <UploadButton />
-                            </div>
-                        </Can>
-                    </MainPageHeader>
-                    <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
-                        <FileManagerBreadcrumbs
-                            renderLeft={
-                                <Checkbox
-                                    className='ml-[1.22rem] mr-4'
-                                    checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
-                                    onCheckedChange={() => onSelectAllClick()}
-                                />
-                            }
-                        />
-                    </div>
-                </ErrorBoundary>
-            </div>
+        <ServerContentBlock title={'File Manager'} showFlashKey={'files'}>
+            <ErrorBoundary>
+                <MainPageHeader title={'Files'}>
+                    <Can action={'file.create'}>
+                        <div className='flex flex-row gap-1'>
+                            <FileManagerStatus />
+                            <NewDirectoryButton />
+                            <NewFileButton id={id} />
+                            <UploadButton />
+                        </div>
+                    </Can>
+                </MainPageHeader>
+                <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
+                    <FileManagerBreadcrumbs
+                        renderLeft={
+                            <Checkbox
+                                className='ml-6 mr-4'
+                                checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
+                                onCheckedChange={() => onSelectAllClick()}
+                            />
+                        }
+                    />
+                </div>
+            </ErrorBoundary>
             {!files ? null : (
                 <>
                     {!files.length ? (
                         <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
                     ) : (
                         <>
-                            <div ref={parentRef} style={{ height: `calc(100vh - 194px)`, overflowY: 'scroll' }}>
+                            <div ref={parentRef} className='overflow-y-auto'>
                                 <div
                                     data-pyro-file-manager-files
                                     style={{
                                         background:
                                             'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
                                     }}
-                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl ml-14 mr-12'
+                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl w-full'
                                 >
                                     <div className='relative w-full h-full mb-1'>
                                         <svg

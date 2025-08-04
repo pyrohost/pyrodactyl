@@ -1,6 +1,4 @@
 import { ActivityLog } from '@definitions/user';
-// FIXME: add icons back
-import clsx from 'clsx';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -11,6 +9,8 @@ import FolderIcon from '@/components/elements/hugeicons/Folder';
 import TerminalIcon from '@/components/elements/hugeicons/Terminal';
 
 import { formatObjectToIdentString } from '@/lib/objects';
+// FIXME: add icons back
+import { cn } from '@/lib/utils';
 
 import useLocationHash from '@/plugins/useLocationHash';
 
@@ -45,7 +45,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                         >
                             {activity.event}
                         </Link>
-                        <div className={clsx(style.icons, 'group-hover:text-zinc-300')}>
+                        <div className={cn(style.icons, 'group-hover:text-zinc-300')}>
                             {activity.isApi && <TerminalIcon fill='contentColor' />}
                             {activity.event.startsWith('server:sftp.') && (
                                 // <Tooltip placement={'top'} content={'Using SFTP'}>

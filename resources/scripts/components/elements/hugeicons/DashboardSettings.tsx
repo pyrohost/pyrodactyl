@@ -3,7 +3,7 @@ import { HugeIconProps } from './props';
 const HugeIconsDashboardSettings = (props: HugeIconProps) => {
     return (
         <svg
-            className={'h-6 w-6' + (props.className ? ` ${props.className}` : '')}
+            className={'h-5 w-5' + (props.className ? ` ${props.className}` : '')}
             width='24'
             height='24'
             viewBox='0 0 24 24'

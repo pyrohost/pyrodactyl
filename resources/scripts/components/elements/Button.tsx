@@ -1,7 +1,8 @@
-import clsx from 'clsx';
 import styled from 'styled-components';
 
 import Spinner from '@/components/elements/Spinner';
+
+import { cn } from '@/lib/utils';
 
 interface Props {
     isLoading?: boolean;
@@ -22,7 +23,7 @@ const Button: React.FC<ComponentProps> = ({ children, isLoading, ...props }) => 
             </div>
         )}
         <span
-            className={clsx({
+            className={cn({
                 'opacity-0': isLoading,
                 'pointer-events-none': isLoading,
             })}

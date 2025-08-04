@@ -1,4 +1,4 @@
-import { hexToRgba } from '@/lib/helpers';
+import { hexToRgba, sha256Hash } from '@/lib/helpers';
 
 describe('@/lib/helpers.ts', function () {
     describe('hexToRgba()', function () {
@@ -24,6 +24,39 @@ describe('@/lib/helpers.ts', function () {
             expect(hexToRgba('#fff')).toBe('#fff');
             expect(hexToRgba('#')).toBe('#');
             expect(hexToRgba('#fffffy')).toBe('#fffffy');
+        });
+    });
+
+    describe('sha256Hash()', function () {
+        it('should return a valid SHA256 hash', async function () {
+            const input = 'test@example.com';
+            const hash = await sha256Hash(input);
+
+            // SHA256 hash should be 64 characters long
+            expect(hash).toHaveLength(64);
+            // Should only contain hex characters
+            expect(hash).toMatch(/^[a-f0-9]{64}$/);
+        });
+
+        it('should return consistent hashes for same input', async function () {
+            const input = 'test@example.com';
+            const hash1 = await sha256Hash(input);
+            const hash2 = await sha256Hash(input);
+
+            expect(hash1).toBe(hash2);
+        });
+
+        it('should return different hashes for different inputs', async function () {
+            const hash1 = await sha256Hash('test1@example.com');
+            const hash2 = await sha256Hash('test2@example.com');
+
+            expect(hash1).not.toBe(hash2);
+        });
+
+        it('should handle empty string', async function () {
+            const hash = await sha256Hash('');
+            expect(hash).toHaveLength(64);
+            expect(hash).toMatch(/^[a-f0-9]{64}$/);
         });
     });
 });

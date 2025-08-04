@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import { forwardRef } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import styles from './styles.module.css';
 
@@ -16,7 +17,7 @@ interface InputFieldProps extends React.ComponentProps<'input'> {
 const Component = forwardRef<HTMLInputElement, InputFieldProps>(({ className, variant, ...props }, ref) => (
     <input
         ref={ref}
-        className={clsx('', styles.text_input, { [styles.loose]: variant === Variant.Loose }, className)}
+        className={cn('', styles.text_input, { [styles.loose]: variant === Variant.Loose }, className)}
         {...props}
     />
 ));

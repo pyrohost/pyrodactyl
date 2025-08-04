@@ -1,3 +1,5 @@
+import { useHeader } from '@/contexts/HeaderContext';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import MessageBox from '@/components/MessageBox';
@@ -8,32 +10,39 @@ import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
 import Code from '../elements/Code';
+import HeaderCentered from './header/HeaderCentered';
 
 const AccountOverviewContainer = () => {
     const { state } = useLocation();
 
+    const { setHeaderActions, clearHeaderActions } = useHeader();
+
+    useEffect(() => {
+        setHeaderActions(<HeaderCentered className='font-semibold'>Your Settings</HeaderCentered>);
+        return () => clearHeaderActions();
+    }, [setHeaderActions, clearHeaderActions]);
+
     return (
         <PageContentBlock title={'Your Settings'}>
-            <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] mb-8'>Your Settings</h1>
             {state?.twoFactorRedirect && (
                 <MessageBox title={'2-Factor Required'} type={'error'}>
                     Your account must have two-factor authentication enabled in order to continue.
                 </MessageBox>
             )}
 
-            <div className='flex flex-col w-full h-full gap-4'>
-                <h2 className='mt-8 font-extrabold text-2xl'>Account Information</h2>
+            <div className='flex flex-col w-full gap-4'>
+                <h2 className='font-extrabold text-2xl'>Account Information</h2>
                 <ContentBox title={'Email Address'} showFlashes={'account:email'}>
                     <UpdateEmailAddressForm />
                 </ContentBox>
-                <h2 className='mt-8 font-extrabold text-2xl'>Password and Authentication</h2>
+                <h2 className='mt-6 font-extrabold text-2xl'>Password and Authentication</h2>
                 <ContentBox title={'Account Password'} showFlashes={'account:password'}>
                     <UpdatePasswordForm />
                 </ContentBox>
                 <ContentBox title={'Multi-Factor Authentication'}>
                     <ConfigureTwoFactorForm />
                 </ContentBox>
-                <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
+                <h2 className='mt-6 font-extrabold text-2xl'>App</h2>
                 <ContentBox title={'Panel Version'}>
                     <p className='text-sm mb-4'>
                         This is useful to provide Pyro staff if you run into an unexpected issue.

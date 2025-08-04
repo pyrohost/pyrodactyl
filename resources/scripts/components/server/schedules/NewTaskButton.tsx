@@ -1,8 +1,9 @@
-import clsx from 'clsx';
 import { useState } from 'react';
 
 import { Button } from '@/components/elements/button/index';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+
+import { cn } from '@/lib/utils';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
@@ -17,7 +18,7 @@ const NewTaskButton = ({ schedule, className }: Props) => {
     return (
         <>
             <TaskDetailsModal schedule={schedule} visible={visible} onModalDismissed={() => setVisible(false)} />
-            <Button onClick={() => setVisible(true)} className={clsx(className)}>
+            <Button onClick={() => setVisible(true)} className={cn(className)}>
                 New Task
             </Button>
         </>

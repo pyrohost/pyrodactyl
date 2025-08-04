@@ -1,0 +1,105 @@
+@import '../../../assets/tailwind.css';
+
+:root {
+    --sidebar-initial-top: 0px; /* 16px */
+    --sidebar-transition-indicator: 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+    --sidebar-transition-sidebar: 0.4s cubic-bezier(0.23, 1.2, 0.32, 1);
+    --sidebar-text-scale-small: 0.86; /* 12px (text-xs) / 14px (text-sm) */
+    --sidebar-margin-base: 0.75rem;
+    --sidebar-padding: 2rem; /* 32px, mx-8 */
+    --sidebar-full-width: 300px;
+    --sidebar-minimized-width: 128px;
+}
+
+body[data-sidebar-minimized='true'] {
+    --sidebar-width: var(--sidebar-minimized-width);
+    --nav-item-height: 60px;
+    --nav-item-spacing: 4px;
+    --indicator-height: 60px;
+}
+
+body[data-sidebar-minimized='false'] {
+    --sidebar-width: var(--sidebar-full-width);
+    --nav-item-height: 32px;
+    --nav-item-spacing: 8px;
+    --indicator-height: 32px;
+}
+
+body[data-sidebar-minimized] {
+    --indicator-width: calc(var(--sidebar-width) - calc(var(--sidebar-padding) * 2));
+}
+
+/* width transitions */
+.sidebar-container {
+    width: var(--sidebar-width);
+}
+.sidebar-logo-container,
+.sidebar-container {
+    transition: width var(--sidebar-transition-sidebar);
+}
+body[data-sidebar-minimized='true'] .sidebar-logo-container {
+    width: calc(var(--sidebar-width));
+}
+body[data-sidebar-minimized='false'] .sidebar-logo-container {
+    /* -64px because the padding is 32px (mx-8)
+       this puts the toggle button in line with the items */
+    width: calc(var(--sidebar-width) - 64px);
+}
+
+.sidebar-indicator {
+    height: var(--indicator-height);
+    width: var(--indicator-width);
+    transition:
+        top var(--sidebar-transition-indicator),
+        height var(--sidebar-transition-indicator),
+        width var(--sidebar-transition-indicator);
+}
+
+.nav-item {
+    /* padding-top: calc(var(--nav-item-spacing) / 1); */
+    padding-bottom: calc(var(--nav-item-spacing) / 1);
+    /* transition:  */
+}
+
+body[data-sidebar-minimized='true'] .nav-item {
+    /* 64px height, 4px used for padding */
+    @apply size-16 flex-col justify-center text-center;
+}
+body[data-sidebar-minimized='false'] .nav-item {
+    /* 32px height, 8px used for padding */
+    @apply h-10 flex-row items-center gap-2 pl-3;
+}
+
+body[data-sidebar-minimized='true'] .nav-item .nav-icon {
+    @apply transition-all duration-200;
+}
+
+body[data-sidebar-minimized='false'] .nav-item .nav-icon {
+    @apply transition-all duration-200;
+    transform: none;
+}
+
+/* Text adjustments */
+body[data-sidebar-minimized='true'] .nav-item .nav-text {
+    @apply origin-bottom transition-all duration-200;
+    transform: scale(var(--sidebar-text-scale-small));
+}
+
+body[data-sidebar-minimized='false'] .nav-item .nav-text {
+    @apply origin-bottom-left transition-all duration-200;
+    transform: scale(1);
+}
+
+/* hide indicator when no nav items are present */
+.sidebar-container:not(:has(.nav-item)) .sidebar-indicator {
+    display: none;
+}
+
+/* active tab highlighting - applies to the active tab when only when nothing's hovered */
+.sidebar-container:not(:has(li:hover)) li[data-active='true'] a {
+    @apply !text-cream-400 !fill-cream-400 opacity-100;
+}
+/* hover highlighting */
+.sidebar-container li:hover a {
+    @apply !text-cream-400 !fill-cream-400 opacity-100;
+}

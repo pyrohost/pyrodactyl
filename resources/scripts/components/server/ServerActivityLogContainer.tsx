@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +8,8 @@ import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
 import { styles as btnStyles } from '@/components/elements/button/index';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
+
+import { cn } from '@/lib/utils';
 
 import { ActivityLogFilters } from '@/api/account/activity';
 import { useActivityLogs } from '@/api/server/activity';
@@ -43,7 +44,7 @@ const ServerActivityLogContainer = () => {
                     <div className={'flex justify-end mb-2'}>
                         <Link
                             to={'#'}
-                            className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
+                            className={cn(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
                             onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
                         >
                             Clear Filters

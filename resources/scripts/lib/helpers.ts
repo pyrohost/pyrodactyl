@@ -14,4 +14,16 @@ function hexToRgba(hex: string, alpha = 1): string {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-export { hexToRgba };
+/**
+ * Generates a SHA256 hash of the input string.
+ * Useful for generating Gravatar hashes from email addresses.
+ */
+async function sha256Hash(input: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+export { hexToRgba, sha256Hash };

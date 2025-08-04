@@ -9,7 +9,10 @@ interface FriendlyCaptchaProps {
 
 const FriendlyCaptcha = forwardRef(({ sitekey, onComplete, onError, onExpire }: FriendlyCaptchaProps, ref) => {
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const widgetRef = React.useRef<any>(null);
+    const widgetRef = React.useRef<{
+        reset: () => void;
+        destroy: () => void;
+    } | null>(null);
 
     useImperativeHandle(ref, () => ({
         reset: () => {
@@ -40,7 +43,7 @@ const FriendlyCaptcha = forwardRef(({ sitekey, onComplete, onError, onExpire }: 
                 widgetRef.current.destroy();
             }
         };
-    }, [sitekey]);
+    }, [sitekey, onComplete, onError, onExpire]);
 
     return <div ref={containerRef} className='frc-captcha dark' data-sitekey={sitekey} />;
 });

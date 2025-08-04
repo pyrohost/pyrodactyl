@@ -1,3 +1,4 @@
+import { useHeader } from '@/contexts/HeaderContext';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
@@ -17,11 +18,19 @@ import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
+import HeaderCentered from './header/HeaderCentered';
+
 const AccountApiContainer = () => {
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const [keys, setKeys] = useState<ApiKey[]>([]);
     const [loading, setLoading] = useState(true);
     const { clearAndAddHttpError } = useFlashKey('account');
+    const { setHeaderActions, clearHeaderActions } = useHeader();
+
+    useEffect(() => {
+        setHeaderActions(<HeaderCentered className='font-medium'>Manage API Keys</HeaderCentered>);
+        return () => clearHeaderActions();
+    }, [setHeaderActions, clearHeaderActions]);
 
     useEffect(() => {
         getApiKeys()
@@ -44,11 +53,10 @@ const AccountApiContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'Account API'}>
-            {/* Flash messages will now appear at the top of the page */}
+        <PageContentBlock title={'Account API'} className='gap-6'>
             <FlashMessageRender byKey='account' />
-            <div className='md:flex flex-nowrap my-10 space-x-8'>
-                <ContentBox title={'Create API Key'} className='flex-none w-full md:w-1/1'>
+            <div className='md:flex flex-nowrap space-x-8'>
+                <ContentBox className='flex-none w-full md:w-1/1'>
                     <CreateApiKeyForm onKeyCreated={(key) => setKeys((s) => [...s!, key])} />
                 </ContentBox>
             </div>

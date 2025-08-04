@@ -1,8 +1,9 @@
-import clsx from 'clsx';
 import copy from 'copy-to-clipboard';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { toast } from 'sonner';
+
+import { cn } from '@/lib/utils';
 
 interface CopyOnClickProps {
     text: string | number | null | undefined;
@@ -42,7 +43,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
         ? React.Children.only(children)
         : React.cloneElement(React.Children.only(children), {
               // @ts-expect-error - Props type inference issue with React.cloneElement
-              className: clsx(children.props.className || '', 'cursor-pointer'),
+              className: cn(children.props.className || '', 'cursor-pointer'),
               onClick: (e: React.MouseEvent<HTMLElement>) => {
                   copy(String(text));
                   setCopied(true);

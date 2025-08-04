@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ScheduleCronRow = ({ cron, className }: Props) => (
-    <div className={clsx('flex flex-wrap gap-4 justify-center m-auto', className)}>
+    <div className={cn('flex flex-wrap gap-4 justify-center m-auto', className)}>
         <div className={'text-center'}>
             <p className={'font-medium'}>{cron.minute}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Minute</p>
