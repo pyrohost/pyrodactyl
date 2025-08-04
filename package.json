@@ -78,7 +78,7 @@
         "yup": "^1.6.1"
     },
     "devDependencies": {
-        "@swc/core": "^1.12.11",
+        "@swc/core": "^1.13.3",
         "@swc/plugin-styled-components": "^8.0.3",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/debounce": "^1.2.4",
