@@ -10,8 +10,10 @@ class ServerConfigurationStructureService
     /**
      * ServerConfigurationStructureService constructor.
      */
-    public function __construct(private EnvironmentService $environment)
-    {
+    public function __construct(
+        private EnvironmentService $environment,
+        private StartupCommandService $startupCommandService
+    ) {
     }
 
     /**
@@ -50,7 +52,7 @@ class ServerConfigurationStructureService
             ],
             'suspended' => $server->isSuspended(),
             'environment' => $this->environment->handle($server),
-            'invocation' => $server->startup,
+            'invocation' => $this->startupCommandService->handle($server),
             'skip_egg_scripts' => $server->skip_scripts,
             'build' => [
                 'memory_limit' => $server->memory + $server->overhead_memory,
