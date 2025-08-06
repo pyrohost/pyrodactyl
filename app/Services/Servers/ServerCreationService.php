@@ -148,6 +148,7 @@ class ServerCreationService
             'skip_scripts' => Arr::get($data, 'skip_scripts') ?? isset($data['skip_scripts']),
             'owner_id' => Arr::get($data, 'owner_id'),
             'memory' => Arr::get($data, 'memory'),
+            'overhead_memory' => Arr::get($data, 'overhead_memory', 0),
             'swap' => Arr::get($data, 'swap'),
             'disk' => Arr::get($data, 'disk'),
             'io' => Arr::get($data, 'io'),

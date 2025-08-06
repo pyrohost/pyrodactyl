@@ -37,6 +37,7 @@ class StoreServerRequest extends ApplicationApiRequest
             // Resource limitations
             'limits' => 'required|array',
             'limits.memory' => $rules['memory'],
+            'limits.overhead_memory' => $rules['overhead_memory'],
             'limits.swap' => $rules['swap'],
             'limits.disk' => $rules['disk'],
             'limits.io' => $rules['io'],
@@ -82,6 +83,7 @@ class StoreServerRequest extends ApplicationApiRequest
             'startup' => array_get($data, 'startup'),
             'environment' => array_get($data, 'environment'),
             'memory' => array_get($data, 'limits.memory'),
+            'overhead_memory' => array_get($data, 'limits.overhead_memory', 0),
             'swap' => array_get($data, 'limits.swap'),
             'disk' => array_get($data, 'limits.disk'),
             'io' => array_get($data, 'limits.io'),

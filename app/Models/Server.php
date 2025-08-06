@@ -27,6 +27,7 @@ use Pterodactyl\Exceptions\Http\Server\ServerStateConflictException;
  * @property bool $skip_scripts
  * @property int $owner_id
  * @property int $memory
+ * @property int $overhead_memory
  * @property int $swap
  * @property int $disk
  * @property int $io
@@ -87,6 +88,7 @@ use Pterodactyl\Exceptions\Http\Server\ServerStateConflictException;
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereIo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereMemory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereOverheadMemory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereNestId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereNodeId($value)
@@ -155,6 +157,7 @@ class Server extends Model
         'description' => 'string',
         'status' => 'nullable|string',
         'memory' => 'required|numeric|min:0',
+        'overhead_memory' => 'sometimes|numeric|min:0',
         'swap' => 'required|numeric|min:-1',
         'io' => 'required|numeric|between:10,1000',
         'cpu' => 'required|numeric|min:0',
@@ -180,6 +183,7 @@ class Server extends Model
         'skip_scripts' => 'boolean',
         'owner_id' => 'integer',
         'memory' => 'integer',
+        'overhead_memory' => 'integer',
         'swap' => 'integer',
         'disk' => 'integer',
         'io' => 'integer',
