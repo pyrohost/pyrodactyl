@@ -177,6 +177,19 @@
                     </div>
 
                     <div class="form-group col-xs-6">
+                        <label for="pOverheadMemory">Overhead Memory</label>
+
+                        <div class="input-group">
+                            <input type="text" id="pOverheadMemory" name="overhead_memory" class="form-control" value="{{ old('overhead_memory', 0) }}" />
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+
+                        <p class="text-muted small">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                    </div>
+                </div>
+
+                <div class="box-body row">
+                    <div class="form-group col-xs-6">
                         <label for="pSwap">Swap</label>
 
                         <div class="input-group">

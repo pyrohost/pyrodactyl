@@ -54,6 +54,7 @@ class ServerConfigurationStructureService
             'skip_egg_scripts' => $server->skip_scripts,
             'build' => [
                 'memory_limit' => $server->memory,
+                'overhead_memory' => $server->overhead_memory,
                 'swap' => $server->swap,
                 'io_weight' => $server->io,
                 'cpu_limit' => $server->cpu,
@@ -112,6 +113,7 @@ class ServerConfigurationStructureService
                 'env' => $this->environment->handle($server),
                 'oom_disabled' => $server->oom_disabled,
                 'memory' => (int) $server->memory,
+                'overhead_memory' => (int) $server->overhead_memory,
                 'swap' => (int) $server->swap,
                 'io' => (int) $server->io,
                 'cpu' => (int) $server->cpu,
