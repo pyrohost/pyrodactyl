@@ -53,8 +53,7 @@ class ServerConfigurationStructureService
             'invocation' => $server->startup,
             'skip_egg_scripts' => $server->skip_scripts,
             'build' => [
-                'memory_limit' => $server->memory,
-                'overhead_memory' => $server->overhead_memory,
+                'memory_limit' => $server->memory + $server->overhead_memory,
                 'swap' => $server->swap,
                 'io_weight' => $server->io,
                 'cpu_limit' => $server->cpu,
