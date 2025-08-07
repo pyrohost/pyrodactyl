@@ -15,7 +15,7 @@ class UpdateStartupCommandRequest extends ClientApiRequest
     public function rules(): array
     {
         return [
-            'startup' => 'required|string|min:1|max:1000',
+            'startup' => 'required|string|min:1|max:10000',
         ];
     }
 
