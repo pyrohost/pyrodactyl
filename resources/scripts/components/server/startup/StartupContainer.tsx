@@ -150,7 +150,7 @@ const StartupContainer = () => {
                             <div className={`space-y-2`}>
                                 <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
                                 <textarea
-                                    className={`w-full h-24 px-3 py-2 text-sm font-mono bg-zinc-900 border border-zinc-700 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                                    className={`w-full h-24 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
                                     value={commandValue}
                                     onChange={(e) => setCommandValue(e.target.value)}
                                     placeholder="Enter startup command..."
@@ -161,7 +161,7 @@ const StartupContainer = () => {
                                     <button
                                         onClick={updateCommand}
                                         disabled={commandLoading || !commandValue.trim()}
-                                        className={`px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        className={`px-4 py-2 text-sm font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
                                     >
                                         Save Command
                                     </button>
@@ -169,7 +169,7 @@ const StartupContainer = () => {
                                 <button
                                     onClick={cancelEditingCommand}
                                     disabled={commandLoading}
-                                    className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-zinc-700 rounded-md hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl hover:from-[#ffffff10] hover:to-[#ffffff08] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
                                 >
                                     Cancel
                                 </button>
@@ -183,7 +183,7 @@ const StartupContainer = () => {
                                     {canEditCommand && (
                                         <button
                                             onClick={startEditingCommand}
-                                            className={`px-3 py-1 text-xs font-medium text-blue-400 hover:text-blue-300 border border-blue-400 hover:border-blue-300 rounded-md transition-colors`}
+                                            className={`px-3 py-1 text-xs font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors`}
                                         >
                                             Edit Raw Command
                                         </button>
@@ -191,7 +191,7 @@ const StartupContainer = () => {
                                 </div>
                                 <CopyOnClick text={data.invocation}>
                                     <div className={`px-1 py-2`}>
-                                        <p className={`font-mono bg-zinc-900 rounded-sm py-2 px-4 text-sm`}>{data.invocation}</p>
+                                        <p className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-2 px-4 text-sm`}>{data.invocation}</p>
                                     </div>
                                 </CopyOnClick>
                             </div>
@@ -200,7 +200,7 @@ const StartupContainer = () => {
                                     <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
                                     <CopyOnClick text={data.rawStartupCommand}>
                                         <div className={`px-1 py-2`}>
-                                            <p className={`font-mono bg-zinc-800 rounded-sm py-2 px-4 text-sm text-neutral-400`}>{data.rawStartupCommand}</p>
+                                            <p className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-2 px-4 text-sm text-neutral-400`}>{data.rawStartupCommand}</p>
                                         </div>
                                     </CopyOnClick>
                                 </div>
@@ -214,7 +214,7 @@ const StartupContainer = () => {
                             <InputSpinner visible={loading}>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] cursor-pointer'>
+                                        <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors cursor-pointer'>
                                             <div>{variables.dockerImage}</div>
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
@@ -270,9 +270,9 @@ const StartupContainer = () => {
             </div>
             {data && (
                 <>
-                    <h3 className={`mt-8 mb-4 text-2xl font-extrabold`}>Variables</h3>
+                    <h3 className={`mt-8 mb-6 text-2xl font-extrabold`}>Variables</h3>
                     <div className='h-[47svh] flex flex-col justify-between'>
-                        <div className={`grid gap-2 md:grid-cols-2`}>
+                        <div className={`grid gap-4 md:grid-cols-2`}>
                             {paginatedVariables.map((variable) => (
                                 <VariableBox key={variable.envVariable} variable={variable} />
                             ))}

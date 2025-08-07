@@ -72,7 +72,7 @@ const VariableBox = ({ variable }: Props) => {
 
     return (
         <div
-            className={`flex flex-col justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}
+            className={`flex flex-col justify-between gap-2 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 rounded-xl`}
         >
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>
@@ -111,7 +111,7 @@ const VariableBox = ({ variable }: Props) => {
                                 <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                     <DropdownMenuTrigger asChild>
                                         <button
-                                            className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer'
+                                            className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff15] hover:to-[#ffffff10] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                                             disabled={!canEdit || !variable.isEditable}
                                         >
                                             {variable.serverValue}
@@ -130,7 +130,7 @@ const VariableBox = ({ variable }: Props) => {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className='z-99999' sideOffset={8}>
                                         <DropdownMenuRadioGroup
-                                            value={variable.serverValue}
+                                            value={variable.serverValue ?? ''}
                                             onValueChange={setVariableValue}
                                         >
                                             {selectValues.map((selectValue) => (
@@ -148,7 +148,7 @@ const VariableBox = ({ variable }: Props) => {
                         ) : (
                             <>
                                 <Input
-                                    className='w-1/2'
+                                    className='w-full'
                                     onKeyUp={(e) => {
                                         if (canEdit && variable.isEditable) {
                                             setVariableValue(e.currentTarget.value);
