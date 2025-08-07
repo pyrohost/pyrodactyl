@@ -123,4 +123,35 @@ class StartupController extends ClientApiController
             ])
             ->toArray();
     }
+
+    /**
+     * Returns the default startup command for the server's egg.
+     */
+    public function getDefaultCommand(GetStartupRequest $request, Server $server): array
+    {
+        return [
+            'default_startup_command' => $server->egg->startup,
+        ];
+    }
+
+    /**
+     * Process a startup command with variables for live preview.
+     */
+    public function processCommand(GetStartupRequest $request, Server $server): array
+    {
+        $command = $request->input('command', $server->startup);
+        
+        // Temporarily update the server's startup command for processing
+        $originalStartup = $server->startup;
+        $server->startup = $command;
+        
+        $processedCommand = $this->startupCommandService->handle($server, false);
+        
+        // Restore original startup command
+        $server->startup = $originalStartup;
+        
+        return [
+            'processed_command' => $processedCommand,
+        ];
+    }
 }

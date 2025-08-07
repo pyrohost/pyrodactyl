@@ -141,6 +141,8 @@ Route::group([
     Route::get('/', [Client\Servers\StartupController::class, 'index']);
     Route::put('/variable', [Client\Servers\StartupController::class, 'update']);
     Route::put('/command', [Client\Servers\StartupController::class, 'updateCommand']);
+    Route::get('/command/default', [Client\Servers\StartupController::class, 'getDefaultCommand']);
+    Route::post('/command/process', [Client\Servers\StartupController::class, 'processCommand']);
   });
 
   Route::group(['prefix' => '/settings'], function () {
