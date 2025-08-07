@@ -5,14 +5,13 @@ namespace Pterodactyl\Services\Servers;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Facades\Activity;
 use Illuminate\Database\ConnectionInterface;
-use Pterodactyl\Repositories\Wings\DaemonConfigurationRepository;
+use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 
 class StartupCommandUpdateService
 {
     public function __construct(
         private ConnectionInterface $connection,
-        private DaemonConfigurationRepository $daemonConfigurationRepository,
-        private ServerConfigurationStructureService $configurationStructureService,
+        private DaemonServerRepository $daemonServerRepository,
     ) {
     }
 
@@ -38,10 +37,8 @@ class StartupCommandUpdateService
                 ])
                 ->log();
 
-            // Update the daemon configuration
-            $this->daemonConfigurationRepository->setServer($server)->update(
-                $this->configurationStructureService->handle($server)
-            );
+            // Sync the server configuration with Wings daemon
+            $this->daemonServerRepository->setServer($server)->sync();
 
             return $server->refresh();
         });
