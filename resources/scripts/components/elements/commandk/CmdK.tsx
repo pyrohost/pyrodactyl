@@ -7,19 +7,19 @@ import Can from '@/components/elements/Can';
 
 import { ServerContext } from '@/state/server';
 
+import ModrinthLogo from '../ModrinthLogo';
+import HugeIconsClock from '../hugeicons/Clock';
 import HugeIconsCloudUp from '../hugeicons/CloudUp';
 import HugeIconsConnections from '../hugeicons/Connections';
+import HugeIconsConsole from '../hugeicons/Console';
+import HugeIconsController from '../hugeicons/Controller';
 import HugeIconsDashboardSettings from '../hugeicons/DashboardSettings';
 import HugeIconsDatabase from '../hugeicons/Database';
 import HugeIconsFolder from '../hugeicons/Folder';
 import HugeIconsHome from '../hugeicons/Home';
-import HugeIconsZap from '../hugeicons/Zap';
-import HugeIconsPeople from '../hugeicons/People';
-import HugeIconsConsole from '../hugeicons/Console';
-import HugeIconsClock from '../hugeicons/Clock';
 import HugeIconsPencil from '../hugeicons/Pencil';
-import ModrinthLogo from '../ModrinthLogo';
-import HugeIconsController from '../hugeicons/Controller';
+import HugeIconsPeople from '../hugeicons/People';
+import HugeIconsZap from '../hugeicons/Zap';
 
 const CommandMenu = () => {
     const [open, setOpen] = useState(false);

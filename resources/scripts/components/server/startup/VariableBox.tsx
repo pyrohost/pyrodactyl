@@ -71,27 +71,38 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <div className="flex flex-col justify-between gap-4 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all">
+        <div className='flex flex-col justify-between gap-4 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
             <FlashMessageRender byKey={FLASH_KEY} />
-            <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
-                    <div className="flex items-center gap-2 min-w-0">
+            <div className='space-y-3'>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3'>
+                    <div className='flex items-center gap-2 min-w-0'>
                         {!variable.isEditable && (
-                            <HugeIconsSquareLock fill={'currentColor'} className="text-neutral-500 w-4 h-4 flex-shrink-0" />
+                            <HugeIconsSquareLock
+                                fill={'currentColor'}
+                                className='text-neutral-500 w-4 h-4 flex-shrink-0'
+                            />
                         )}
-                        <span className="text-sm font-medium text-neutral-200 break-words">{variable.name}</span>
+                        <span className='text-sm font-medium text-neutral-200 break-words'>{variable.name}</span>
                     </div>
-                    <div className="text-xs text-neutral-500 font-mono bg-neutral-800/30 px-2 py-1 rounded border border-neutral-700/30 w-fit">
+                    <div className='text-xs text-neutral-500 font-mono bg-neutral-800/30 px-2 py-1 rounded border border-neutral-700/30 w-fit'>
                         {variable.envVariable}
                     </div>
                 </div>
-                <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed break-words">{variable.description}</p>
+                <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed break-words'>
+                    {variable.description}
+                </p>
             </div>
             <InputSpinner visible={loading}>
                 {useSwitch ? (
-                    <div className="flex items-center justify-between p-3 sm:p-4 bg-linear-to-b from-[#ffffff06] to-[#ffffff03] border border-[#ffffff10] rounded-xl">
-                        <span className="text-sm font-medium text-neutral-300">
-                            {isStringSwitch ? (variable.serverValue === 'true' ? 'Enabled' : 'Disabled') : (variable.serverValue === '1' ? 'On' : 'Off')}
+                    <div className='flex items-center justify-between p-3 sm:p-4 bg-linear-to-b from-[#ffffff06] to-[#ffffff03] border border-[#ffffff10] rounded-xl'>
+                        <span className='text-sm font-medium text-neutral-300'>
+                            {isStringSwitch
+                                ? variable.serverValue === 'true'
+                                    ? 'Enabled'
+                                    : 'Disabled'
+                                : variable.serverValue === '1'
+                                  ? 'On'
+                                  : 'Off'}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
@@ -119,16 +130,18 @@ const VariableBox = ({ variable }: Props) => {
                                         className='w-full flex items-center justify-between gap-3 h-11 sm:h-12 px-3 sm:px-4 text-sm font-medium text-white transition-all duration-200 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] hover:border-[#ffffff25] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation'
                                         disabled={!canEdit || !variable.isEditable}
                                     >
-                                        <span className="font-mono text-neutral-200 truncate text-left">{variable.serverValue}</span>
+                                        <span className='font-mono text-neutral-200 truncate text-left'>
+                                            {variable.serverValue}
+                                        </span>
                                         {dropDownOpen ? (
                                             <HugeIconsArrowUp
                                                 fill={'currentColor'}
-                                                className="w-[14px] h-[14px] opacity-60 flex-shrink-0"
+                                                className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
                                             />
                                         ) : (
                                             <HugeIconsArrowDown
                                                 fill={'currentColor'}
-                                                className="w-[14px] h-[14px] opacity-60 flex-shrink-0"
+                                                className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
                                             />
                                         )}
                                     </button>
