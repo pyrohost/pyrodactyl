@@ -144,134 +144,169 @@ const StartupContainer = () => {
                     settings as they can cause your server to become inoperable.
                 </h2>
             </MainPageHeader>
-            <div className={`flex gap-8 lg:flex-row flex-col`}>
-                <TitledGreyBox title={'Startup Command'} className={`flex-1 min-h-[280px]`}>
-                    <div className={`h-full flex flex-col`}>
-                        {editingCommand ? (
-                            <div className={`space-y-4 flex-1`}>
-                                <div className={`space-y-2`}>
-                                    <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
-                                    <textarea
-                                        className={`w-full h-32 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
-                                        value={commandValue}
-                                        onChange={(e) => setCommandValue(e.target.value)}
-                                        placeholder="Enter startup command..."
-                                    />
-                                </div>
-                                <div className={`flex gap-2 mt-auto`}>
-                                    <InputSpinner visible={commandLoading}>
-                                        <button
-                                            onClick={updateCommand}
-                                            disabled={commandLoading || !commandValue.trim()}
-                                            className={`px-4 py-2 text-sm font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
-                                        >
-                                            Save Command
-                                        </button>
-                                    </InputSpinner>
-                                    <button
-                                        onClick={cancelEditingCommand}
-                                        disabled={commandLoading}
-                                        className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl hover:from-[#ffffff10] hover:to-[#ffffff08] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
+            <div className={`space-y-6`}>
+                <TitledGreyBox title={'Startup Command'}>
+                    {editingCommand ? (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-2`}>
+                                <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
+                                <textarea
+                                    className={`w-full h-32 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
+                                    value={commandValue}
+                                    onChange={(e) => setCommandValue(e.target.value)}
+                                    placeholder="Enter startup command..."
+                                    style={{
+                                        wordBreak: 'break-all',
+                                        overflowWrap: 'break-word',
+                                        whiteSpace: 'pre-wrap'
+                                    }}
+                                />
                             </div>
-                        ) : (
-                            <div className={`space-y-4 flex-1`}>
-                                <div className={`space-y-2`}>
-                                    <div className={`flex items-center justify-between`}>
-                                        <label className={`text-sm font-medium text-neutral-300`}>Processed Command</label>
-                                        {canEditCommand && (
-                                            <button
-                                                onClick={startEditingCommand}
-                                                className={`px-3 py-1 text-xs font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors`}
-                                            >
-                                                Edit Raw Command
-                                            </button>
-                                        )}
+                            <div className={`flex flex-col xs:flex-row gap-3`}>
+                                <InputSpinner visible={commandLoading}>
+                                    <button
+                                        onClick={updateCommand}
+                                        disabled={commandLoading || !commandValue.trim()}
+                                        className={`w-full xs:w-auto px-6 py-2.5 text-sm font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+                                    >
+                                        Save Command
+                                    </button>
+                                </InputSpinner>
+                                <button
+                                    onClick={cancelEditingCommand}
+                                    disabled={commandLoading}
+                                    className={`w-full xs:w-auto px-6 py-2.5 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl hover:from-[#ffffff10] hover:to-[#ffffff08] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-3`}>
+                                <div className={`flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3`}>
+                                    <label className={`text-sm font-medium text-neutral-300`}>Processed Command</label>
+                                    {canEditCommand && (
+                                        <button
+                                            onClick={startEditingCommand}
+                                            className={`self-start xs:self-auto px-4 py-2 text-xs font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors`}
+                                        >
+                                            Edit Raw Command
+                                        </button>
+                                    )}
+                                </div>
+                                <CopyOnClick text={data.invocation}>
+                                    <div className={`cursor-pointer`}>
+                                        <div className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 text-sm min-h-[3.5rem] overflow-hidden`}>
+                                            <span className={`break-all`} style={{
+                                                wordBreak: 'break-all',
+                                                overflowWrap: 'break-word',
+                                                whiteSpace: 'pre-wrap'
+                                            }}>
+                                                {data.invocation}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <CopyOnClick text={data.invocation}>
-                                        <div className={`px-1 py-2`}>
-                                            <p className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-2 px-4 text-sm min-h-[2.5rem] flex items-center`}>{data.invocation}</p>
+                                </CopyOnClick>
+                            </div>
+                            {data.rawStartupCommand && (
+                                <div className={`space-y-3`}>
+                                    <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
+                                    <CopyOnClick text={data.rawStartupCommand}>
+                                        <div className={`cursor-pointer`}>
+                                            <div className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-4 px-4 text-sm text-neutral-400 min-h-[3.5rem] overflow-hidden`}>
+                                                <span className={`break-all`} style={{
+                                                    wordBreak: 'break-all',
+                                                    overflowWrap: 'break-word',
+                                                    whiteSpace: 'pre-wrap'
+                                                }}>
+                                                    {data.rawStartupCommand}
+                                                </span>
+                                            </div>
                                         </div>
                                     </CopyOnClick>
                                 </div>
-                                {data.rawStartupCommand && (
-                                    <div className={`space-y-2`}>
-                                        <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
-                                        <CopyOnClick text={data.rawStartupCommand}>
-                                            <div className={`px-1 py-2`}>
-                                                <p className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-2 px-4 text-sm text-neutral-400 min-h-[2.5rem] flex items-center`}>{data.rawStartupCommand}</p>
-                                            </div>
-                                        </CopyOnClick>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className='min-w-80 lg:max-w-80'>
-                    {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
-                        <>
-                            <InputSpinner visible={loading}>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors cursor-pointer'>
-                                            <div>
-                                                {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
-                                            </div>
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                width='13'
-                                                height='13'
-                                                viewBox='0 0 13 13'
-                                                fill='none'
-                                            >
-                                                <path
-                                                    fillRule='evenodd'
-                                                    clipRule='evenodd'
-                                                    d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
-                                                    fill='white'
-                                                    fillOpacity='0.37'
-                                                />
-                                            </svg>
-                                        </button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
-                                        <DropdownMenuRadioGroup
-                                            value={variables.dockerImage}
-                                            onValueChange={(value) => updateSelectedDockerImage(value)}
-                                        >
-                                            {Object.keys(data.dockerImages).map((key) => (
-                                                <DropdownMenuRadioItem
-                                                    value={data.dockerImages[key] as string}
-                                                    key={data.dockerImages[key]}
-                                                >
-                                                    {key}
-                                                </DropdownMenuRadioItem>
-                                            ))}
-                                        </DropdownMenuRadioGroup>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </InputSpinner>
-                            <p className={`text-xs mt-2`}>
-                                This is an advanced feature allowing you to select a Docker image to use when running
-                                this server instance.
-                            </p>
-                        </>
-                    ) : (
-                        <>
-                            <span className={`text-neutral-400`}>
-                                {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
-                            </span>
-                            {isCustomImage && (
-                                <p className={`text-xs text-zinc-300 mt-2`}>
-                                    This {"server's"} Docker image has been manually set by an administrator and cannot
-                                    be changed through this UI.
-                                </p>
                             )}
-                        </>
+                        </div>
+                    )}
+                </TitledGreyBox>
+
+                <TitledGreyBox title={'Docker Image'}>
+                    {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-3`}>
+                                <label className={`text-sm font-medium text-neutral-300`}>Selected Image</label>
+                                <InputSpinner visible={loading}>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button className='w-full flex items-center justify-between gap-3 font-medium text-sm px-4 py-3 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors cursor-pointer'>
+                                                <span className={`truncate text-left`}>
+                                                    {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                                                </span>
+                                                <svg
+                                                    xmlns='http://www.w3.org/2000/svg'
+                                                    width='16'
+                                                    height='16'
+                                                    viewBox='0 0 13 13'
+                                                    fill='none'
+                                                    className={`flex-shrink-0`}
+                                                >
+                                                    <path
+                                                        fillRule='evenodd'
+                                                        clipRule='evenodd'
+                                                        d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
+                                                        fill='white'
+                                                        fillOpacity='0.37'
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
+                                            <DropdownMenuRadioGroup
+                                                value={variables.dockerImage}
+                                                onValueChange={(value) => updateSelectedDockerImage(value)}
+                                            >
+                                                {Object.keys(data.dockerImages).map((key) => (
+                                                    <DropdownMenuRadioItem
+                                                        value={data.dockerImages[key] as string}
+                                                        key={data.dockerImages[key]}
+                                                    >
+                                                        {key}
+                                                    </DropdownMenuRadioItem>
+                                                ))}
+                                            </DropdownMenuRadioGroup>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </InputSpinner>
+                            </div>
+                            <div className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}>
+                                <p className={`text-sm text-neutral-300 leading-relaxed`}>
+                                    Select a Docker image to use when running this server instance. Different images provide different software versions and configurations.
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-3`}>
+                                <label className={`text-sm font-medium text-neutral-300`}>Docker Image</label>
+                                <div className={`bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 overflow-hidden`}>
+                                    <span className={`text-sm font-mono break-all`} style={{
+                                        wordBreak: 'break-all',
+                                        overflowWrap: 'break-word',
+                                        whiteSpace: 'pre-wrap'
+                                    }}>
+                                        {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                                    </span>
+                                </div>
+                            </div>
+                            {isCustomImage && (
+                                <div className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}>
+                                    <p className={`text-sm text-neutral-300 leading-relaxed`}>
+                                        This server's Docker image has been manually set by an administrator and cannot be changed through this interface.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </TitledGreyBox>
             </div>
