@@ -218,7 +218,9 @@ const StartupContainer = () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors cursor-pointer'>
-                                            <div>{variables.dockerImage}</div>
+                                            <div>
+                                                {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                                            </div>
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
                                                 width='13'
@@ -260,7 +262,9 @@ const StartupContainer = () => {
                         </>
                     ) : (
                         <>
-                            <span className={`text-neutral-400`}>{variables.dockerImage}</span>
+                            <span className={`text-neutral-400`}>
+                                {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                            </span>
                             {isCustomImage && (
                                 <p className={`text-xs text-zinc-300 mt-2`}>
                                     This {"server's"} Docker image has been manually set by an administrator and cannot
