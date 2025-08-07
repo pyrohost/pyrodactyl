@@ -140,6 +140,7 @@ Route::group([
   Route::group(['prefix' => '/startup'], function () {
     Route::get('/', [Client\Servers\StartupController::class, 'index']);
     Route::put('/variable', [Client\Servers\StartupController::class, 'update']);
+    Route::put('/command', [Client\Servers\StartupController::class, 'updateCommand']);
   });
 
   Route::group(['prefix' => '/settings'], function () {

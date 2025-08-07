@@ -20,16 +20,22 @@ import VariableBox from '@/components/server/startup/VariableBox';
 
 import { httpErrorToHuman } from '@/api/http';
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import updateStartupCommand from '@/api/server/updateStartupCommand';
 import getServerStartup from '@/api/swr/getServerStartup';
 
 import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import useFlash from '@/plugins/useFlash';
+import { usePermissions } from '@/plugins/usePermissions';
 
 const StartupContainer = () => {
     const [loading, setLoading] = useState(false);
+    const [commandLoading, setCommandLoading] = useState(false);
+    const [editingCommand, setEditingCommand] = useState(false);
+    const [commandValue, setCommandValue] = useState('');
     const { clearFlashes, clearAndAddHttpError } = useFlash();
+    const [canEditCommand] = usePermissions(['startup.command']);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const variables = ServerContext.useStoreState(
@@ -90,6 +96,39 @@ const StartupContainer = () => {
             .then(() => setLoading(false));
     };
 
+    const updateCommand = () => {
+        setCommandLoading(true);
+        clearFlashes('startup:command');
+
+        updateStartupCommand(uuid, commandValue)
+            .then((invocation) => {
+                mutate(
+                    (data) => ({
+                        ...data!,
+                        invocation,
+                        rawStartupCommand: commandValue,
+                    }),
+                    false,
+                );
+                setEditingCommand(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:command', error });
+            })
+            .then(() => setCommandLoading(false));
+    };
+
+    const startEditingCommand = () => {
+        setCommandValue(data?.rawStartupCommand || '');
+        setEditingCommand(true);
+    };
+
+    const cancelEditingCommand = () => {
+        setEditingCommand(false);
+        setCommandValue('');
+    };
+
     return !data ? (
         !error || (error && isValidating) ? (
             <Spinner centered size={Spinner.Size.LARGE} />
@@ -97,7 +136,7 @@ const StartupContainer = () => {
             <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
+        <ServerContentBlock title={'Startup Settings'} showFlashKey={['startup:image', 'startup:command']}>
             <MainPageHeader direction='column' title='Startup Settings'>
                 <h2 className='text-sm'>
                     These settings are used to control how your server starts up. Please be careful when modifying these
@@ -106,11 +145,68 @@ const StartupContainer = () => {
             </MainPageHeader>
             <div className={`flex gap-8 lg:flex-row flex-col`}>
                 <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
-                    <CopyOnClick text={data.invocation}>
-                        <div className={`px-1 py-2`}>
-                            <p className={`font-mono bg-zinc-900 rounded-sm py-2 px-4`}>{data.invocation}</p>
+                    {editingCommand ? (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-2`}>
+                                <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
+                                <textarea
+                                    className={`w-full h-24 px-3 py-2 text-sm font-mono bg-zinc-900 border border-zinc-700 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                                    value={commandValue}
+                                    onChange={(e) => setCommandValue(e.target.value)}
+                                    placeholder="Enter startup command..."
+                                />
+                            </div>
+                            <div className={`flex gap-2`}>
+                                <InputSpinner visible={commandLoading}>
+                                    <button
+                                        onClick={updateCommand}
+                                        disabled={commandLoading || !commandValue.trim()}
+                                        className={`px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        Save Command
+                                    </button>
+                                </InputSpinner>
+                                <button
+                                    onClick={cancelEditingCommand}
+                                    disabled={commandLoading}
+                                    className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-zinc-700 rounded-md hover:bg-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed`}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
-                    </CopyOnClick>
+                    ) : (
+                        <div className={`space-y-4`}>
+                            <div className={`space-y-2`}>
+                                <div className={`flex items-center justify-between`}>
+                                    <label className={`text-sm font-medium text-neutral-300`}>Processed Command</label>
+                                    {canEditCommand && (
+                                        <button
+                                            onClick={startEditingCommand}
+                                            className={`px-3 py-1 text-xs font-medium text-blue-400 hover:text-blue-300 border border-blue-400 hover:border-blue-300 rounded-md transition-colors`}
+                                        >
+                                            Edit Raw Command
+                                        </button>
+                                    )}
+                                </div>
+                                <CopyOnClick text={data.invocation}>
+                                    <div className={`px-1 py-2`}>
+                                        <p className={`font-mono bg-zinc-900 rounded-sm py-2 px-4 text-sm`}>{data.invocation}</p>
+                                    </div>
+                                </CopyOnClick>
+                            </div>
+                            {data.rawStartupCommand && (
+                                <div className={`space-y-2`}>
+                                    <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
+                                    <CopyOnClick text={data.rawStartupCommand}>
+                                        <div className={`px-1 py-2`}>
+                                            <p className={`font-mono bg-zinc-800 rounded-sm py-2 px-4 text-sm text-neutral-400`}>{data.rawStartupCommand}</p>
+                                        </div>
+                                    </CopyOnClick>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </TitledGreyBox>
                 <TitledGreyBox title={'Docker Image'} className='min-w-80'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
