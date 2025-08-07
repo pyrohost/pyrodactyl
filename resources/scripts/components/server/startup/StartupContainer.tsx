@@ -50,6 +50,7 @@ const StartupContainer = () => {
     const { data, error, isValidating, mutate } = getServerStartup(uuid, {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
+        rawStartupCommand: '',
     });
 
     const ITEMS_PER_PAGE = 6;
@@ -136,7 +137,7 @@ const StartupContainer = () => {
             <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={['startup:image', 'startup:command']}>
+        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
             <MainPageHeader direction='column' title='Startup Settings'>
                 <h2 className='text-sm'>
                     These settings are used to control how your server starts up. Please be careful when modifying these
@@ -144,71 +145,73 @@ const StartupContainer = () => {
                 </h2>
             </MainPageHeader>
             <div className={`flex gap-8 lg:flex-row flex-col`}>
-                <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
-                    {editingCommand ? (
-                        <div className={`space-y-4`}>
-                            <div className={`space-y-2`}>
-                                <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
-                                <textarea
-                                    className={`w-full h-24 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
-                                    value={commandValue}
-                                    onChange={(e) => setCommandValue(e.target.value)}
-                                    placeholder="Enter startup command..."
-                                />
-                            </div>
-                            <div className={`flex gap-2`}>
-                                <InputSpinner visible={commandLoading}>
-                                    <button
-                                        onClick={updateCommand}
-                                        disabled={commandLoading || !commandValue.trim()}
-                                        className={`px-4 py-2 text-sm font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
-                                    >
-                                        Save Command
-                                    </button>
-                                </InputSpinner>
-                                <button
-                                    onClick={cancelEditingCommand}
-                                    disabled={commandLoading}
-                                    className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl hover:from-[#ffffff10] hover:to-[#ffffff08] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={`space-y-4`}>
-                            <div className={`space-y-2`}>
-                                <div className={`flex items-center justify-between`}>
-                                    <label className={`text-sm font-medium text-neutral-300`}>Processed Command</label>
-                                    {canEditCommand && (
-                                        <button
-                                            onClick={startEditingCommand}
-                                            className={`px-3 py-1 text-xs font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors`}
-                                        >
-                                            Edit Raw Command
-                                        </button>
-                                    )}
-                                </div>
-                                <CopyOnClick text={data.invocation}>
-                                    <div className={`px-1 py-2`}>
-                                        <p className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-2 px-4 text-sm`}>{data.invocation}</p>
-                                    </div>
-                                </CopyOnClick>
-                            </div>
-                            {data.rawStartupCommand && (
+                <TitledGreyBox title={'Startup Command'} className={`flex-1 min-h-[280px]`}>
+                    <div className={`h-full flex flex-col`}>
+                        {editingCommand ? (
+                            <div className={`space-y-4 flex-1`}>
                                 <div className={`space-y-2`}>
-                                    <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
-                                    <CopyOnClick text={data.rawStartupCommand}>
+                                    <label className={`text-sm font-medium text-neutral-300`}>Raw Startup Command</label>
+                                    <textarea
+                                        className={`w-full h-32 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
+                                        value={commandValue}
+                                        onChange={(e) => setCommandValue(e.target.value)}
+                                        placeholder="Enter startup command..."
+                                    />
+                                </div>
+                                <div className={`flex gap-2 mt-auto`}>
+                                    <InputSpinner visible={commandLoading}>
+                                        <button
+                                            onClick={updateCommand}
+                                            disabled={commandLoading || !commandValue.trim()}
+                                            className={`px-4 py-2 text-sm font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+                                        >
+                                            Save Command
+                                        </button>
+                                    </InputSpinner>
+                                    <button
+                                        onClick={cancelEditingCommand}
+                                        disabled={commandLoading}
+                                        className={`px-4 py-2 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl hover:from-[#ffffff10] hover:to-[#ffffff08] disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={`space-y-4 flex-1`}>
+                                <div className={`space-y-2`}>
+                                    <div className={`flex items-center justify-between`}>
+                                        <label className={`text-sm font-medium text-neutral-300`}>Processed Command</label>
+                                        {canEditCommand && (
+                                            <button
+                                                onClick={startEditingCommand}
+                                                className={`px-3 py-1 text-xs font-medium text-white bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors`}
+                                            >
+                                                Edit Raw Command
+                                            </button>
+                                        )}
+                                    </div>
+                                    <CopyOnClick text={data.invocation}>
                                         <div className={`px-1 py-2`}>
-                                            <p className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-2 px-4 text-sm text-neutral-400`}>{data.rawStartupCommand}</p>
+                                            <p className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-2 px-4 text-sm min-h-[2.5rem] flex items-center`}>{data.invocation}</p>
                                         </div>
                                     </CopyOnClick>
                                 </div>
-                            )}
-                        </div>
-                    )}
+                                {data.rawStartupCommand && (
+                                    <div className={`space-y-2`}>
+                                        <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
+                                        <CopyOnClick text={data.rawStartupCommand}>
+                                            <div className={`px-1 py-2`}>
+                                                <p className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-2 px-4 text-sm text-neutral-400 min-h-[2.5rem] flex items-center`}>{data.rawStartupCommand}</p>
+                                            </div>
+                                        </CopyOnClick>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className='min-w-80'>
+                <TitledGreyBox title={'Docker Image'} className='min-w-80 lg:max-w-80'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>
