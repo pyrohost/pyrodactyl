@@ -502,7 +502,12 @@ const ServerRouter = () => {
                                             </NavLink>
                                         </Can>
                                         <Can
-                                            action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']}
+                                            action={[
+                                                'startup.read',
+                                                'startup.update',
+                                                'startup.command',
+                                                'startup.docker-image',
+                                            ]}
                                             matchAny
                                         >
                                             <NavLink
@@ -597,7 +602,7 @@ const ServerRouter = () => {
                                 className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
-                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>

@@ -72,7 +72,7 @@ const StartupContainer = () => {
         // want to always fetch fresh information from the API however when we're loading the startup
         // information.
         mutate();
-    }, []);
+    }, [mutate]);
 
     useDeepCompareEffect(() => {
         if (!data) return;
@@ -154,11 +154,11 @@ const StartupContainer = () => {
                                     className={`w-full h-32 px-3 py-2 text-sm font-mono bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#ffffff15] focus:border-transparent placeholder:text-muted-foreground`}
                                     value={commandValue}
                                     onChange={(e) => setCommandValue(e.target.value)}
-                                    placeholder="Enter startup command..."
+                                    placeholder='Enter startup command...'
                                     style={{
                                         wordBreak: 'break-all',
                                         overflowWrap: 'break-word',
-                                        whiteSpace: 'pre-wrap'
+                                        whiteSpace: 'pre-wrap',
                                     }}
                                 />
                             </div>
@@ -197,12 +197,17 @@ const StartupContainer = () => {
                                 </div>
                                 <CopyOnClick text={data.invocation}>
                                     <div className={`cursor-pointer`}>
-                                        <div className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 text-sm min-h-[3.5rem] overflow-hidden`}>
-                                            <span className={`break-all`} style={{
-                                                wordBreak: 'break-all',
-                                                overflowWrap: 'break-word',
-                                                whiteSpace: 'pre-wrap'
-                                            }}>
+                                        <div
+                                            className={`font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 text-sm min-h-[3.5rem] overflow-hidden`}
+                                        >
+                                            <span
+                                                className={`break-all`}
+                                                style={{
+                                                    wordBreak: 'break-all',
+                                                    overflowWrap: 'break-word',
+                                                    whiteSpace: 'pre-wrap',
+                                                }}
+                                            >
                                                 {data.invocation}
                                             </span>
                                         </div>
@@ -214,12 +219,17 @@ const StartupContainer = () => {
                                     <label className={`text-sm font-medium text-neutral-300`}>Raw Command</label>
                                     <CopyOnClick text={data.rawStartupCommand}>
                                         <div className={`cursor-pointer`}>
-                                            <div className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-4 px-4 text-sm text-neutral-400 min-h-[3.5rem] overflow-hidden`}>
-                                                <span className={`break-all`} style={{
-                                                    wordBreak: 'break-all',
-                                                    overflowWrap: 'break-word',
-                                                    whiteSpace: 'pre-wrap'
-                                                }}>
+                                            <div
+                                                className={`font-mono bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl py-4 px-4 text-sm text-neutral-400 min-h-[3.5rem] overflow-hidden`}
+                                            >
+                                                <span
+                                                    className={`break-all`}
+                                                    style={{
+                                                        wordBreak: 'break-all',
+                                                        overflowWrap: 'break-word',
+                                                        whiteSpace: 'pre-wrap',
+                                                    }}
+                                                >
                                                     {data.rawStartupCommand}
                                                 </span>
                                             </div>
@@ -241,7 +251,9 @@ const StartupContainer = () => {
                                         <DropdownMenuTrigger asChild>
                                             <button className='w-full flex items-center justify-between gap-3 font-medium text-sm px-4 py-3 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] transition-colors cursor-pointer'>
                                                 <span className={`truncate text-left`}>
-                                                    {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                                                    {Object.keys(data.dockerImages).find(
+                                                        (key) => data.dockerImages[key] === variables.dockerImage,
+                                                    ) || variables.dockerImage}
                                                 </span>
                                                 <svg
                                                     xmlns='http://www.w3.org/2000/svg'
@@ -279,9 +291,12 @@ const StartupContainer = () => {
                                     </DropdownMenu>
                                 </InputSpinner>
                             </div>
-                            <div className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}>
+                            <div
+                                className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}
+                            >
                                 <p className={`text-sm text-neutral-300 leading-relaxed`}>
-                                    Select a Docker image to use when running this server instance. Different images provide different software versions and configurations.
+                                    Select a Docker image to use when running this server instance. Different images
+                                    provide different software versions and configurations.
                                 </p>
                             </div>
                         </div>
@@ -289,20 +304,30 @@ const StartupContainer = () => {
                         <div className={`space-y-4`}>
                             <div className={`space-y-3`}>
                                 <label className={`text-sm font-medium text-neutral-300`}>Docker Image</label>
-                                <div className={`bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 overflow-hidden`}>
-                                    <span className={`text-sm font-mono break-all`} style={{
-                                        wordBreak: 'break-all',
-                                        overflowWrap: 'break-word',
-                                        whiteSpace: 'pre-wrap'
-                                    }}>
-                                        {Object.keys(data.dockerImages).find(key => data.dockerImages[key] === variables.dockerImage) || variables.dockerImage}
+                                <div
+                                    className={`bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-4 px-4 overflow-hidden`}
+                                >
+                                    <span
+                                        className={`text-sm font-mono break-all`}
+                                        style={{
+                                            wordBreak: 'break-all',
+                                            overflowWrap: 'break-word',
+                                            whiteSpace: 'pre-wrap',
+                                        }}
+                                    >
+                                        {Object.keys(data.dockerImages).find(
+                                            (key) => data.dockerImages[key] === variables.dockerImage,
+                                        ) || variables.dockerImage}
                                     </span>
                                 </div>
                             </div>
                             {isCustomImage && (
-                                <div className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}>
+                                <div
+                                    className={`bg-linear-to-b from-[#ffffff05] to-[#ffffff03] border border-[#ffffff08] rounded-xl p-4`}
+                                >
                                     <p className={`text-sm text-neutral-300 leading-relaxed`}>
-                                        This server's Docker image has been manually set by an administrator and cannot be changed through this interface.
+                                        This server&apos;s Docker image has been manually set by an administrator and
+                                        cannot be changed through this interface.
                                     </p>
                                 </div>
                             )}
