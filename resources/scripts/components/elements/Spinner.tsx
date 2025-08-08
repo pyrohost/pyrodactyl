@@ -50,7 +50,7 @@ const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
     (centered ? (
         <div
             className={`
-              flex justify-center items-center relative
+              flex justify-center items-center w-full
               sm:absolute sm:inset-0 sm:z-50
           `}
         >
