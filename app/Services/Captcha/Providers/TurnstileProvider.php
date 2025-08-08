@@ -38,7 +38,19 @@ class TurnstileProvider implements CaptchaProviderInterface
      */
     public function verify(string $response, ?string $remoteIp = null): bool
     {
+        Log::info('Turnstile verification attempt', [
+            'response_length' => strlen($response),
+            'response_preview' => substr($response, 0, 50) . '...',
+            'remote_ip' => $remoteIp,
+            'secret_key_set' => !empty($this->secretKey),
+            'site_key' => $this->siteKey,
+        ]);
+
         if (empty($this->secretKey) || empty($response)) {
+            Log::warning('Turnstile verification failed: Missing secret key or response', [
+                'secret_key_empty' => empty($this->secretKey),
+                'response_empty' => empty($response),
+            ]);
             return false;
         }
 
@@ -52,27 +64,49 @@ class TurnstileProvider implements CaptchaProviderInterface
                 $data['remoteip'] = $remoteIp;
             }
 
+            Log::info('Sending Turnstile verification request', [
+                'url' => $this->verifyUrl,
+                'data_keys' => array_keys($data),
+                'remote_ip' => $remoteIp,
+            ]);
+
             $httpResponse = Http::timeout(10)
                 ->asForm()
                 ->post($this->verifyUrl, $data);
 
+            Log::info('Turnstile verification response', [
+                'status' => $httpResponse->status(),
+                'successful' => $httpResponse->successful(),
+                'body' => $httpResponse->body(),
+            ]);
+
             if (!$httpResponse->successful()) {
-                Log::warning('Turnstile verification failed: HTTP ' . $httpResponse->status());
+                Log::warning('Turnstile verification failed: HTTP ' . $httpResponse->status(), [
+                    'response_body' => $httpResponse->body(),
+                ]);
                 return false;
             }
 
             $result = $httpResponse->json();
 
             if (!isset($result['success'])) {
-                Log::warning('Turnstile verification failed: Invalid response format');
+                Log::warning('Turnstile verification failed: Invalid response format', [
+                    'result' => $result,
+                ]);
                 return false;
             }
 
             if (!$result['success'] && isset($result['error-codes'])) {
                 Log::warning('Turnstile verification failed', [
                     'error_codes' => $result['error-codes'],
+                    'full_result' => $result,
                 ]);
             }
+
+            Log::info('Turnstile verification result', [
+                'success' => $result['success'],
+                'full_result' => $result,
+            ]);
 
             return (bool) $result['success'];
         } catch (\Exception $e) {
