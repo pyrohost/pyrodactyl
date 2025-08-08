@@ -2,206 +2,165 @@
 
 namespace Pterodactyl\Http\Middleware;
 
-use GuzzleHttp\Client;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Pterodactyl\Events\Auth\FailedCaptcha;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
-use Psr\Http\Client\ClientExceptionInterface;
+use Illuminate\Support\Facades\Log;
+use Pterodactyl\Events\Auth\FailedCaptcha;
+use Pterodactyl\Services\Captcha\TurnstileService;
+use Pterodactyl\Services\Captcha\TurnstileException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class VerifyCaptcha
 {
-  private const PROVIDER_ENDPOINTS = [
-    'turnstile' => 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-    'hcaptcha' => 'https://hcaptcha.com/siteverify',
-    'friendly' => 'https://api.friendlycaptcha.com/api/v1/siteverify',
-    'mcaptcha' => 'https://mcaptcha.org/api/siteverify',
-  ];
-
-  private const PROVIDER_FIELDS = [
-    'turnstile' => 'cf-turnstile-response',
-    'hcaptcha' => 'h-captcha-response',
-    'friendly' => 'frc-captcha-response',
-    'mcaptcha' => 'mcaptcha-response',
-  ];
-
-
-  public function __construct(
-    private Dispatcher $dispatcher,
-    private Repository $config,
-    private Client $client
-  ) {
-  }
-
-  public function handle(Request $request, \Closure $next): mixed
-  {
-    $driver = $this->config->get('captcha.driver');
-
-    if (!$this->shouldVerifyCaptcha($driver)) {
-      return $next($request);
+    public function __construct(
+        private Dispatcher $dispatcher,
+        private Repository $config,
+        private TurnstileService $turnstileService
+    ) {
     }
 
-    $fieldName = self::PROVIDER_FIELDS[$driver];
-    $captchaResponse = $this->getCaptchaResponseFromRequest($request, $fieldName);
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): mixed
+    {
+        $driver = $this->config->get('captcha.driver');
 
-
-
-    if (empty($captchaResponse)) {
-      \Log::warning('CAPTCHA Middleware - Missing response token', [
-        'expected_field' => $fieldName,
-        'available_fields' => array_keys($request->all()),
-      ]);
-      $this->logAndTriggerFailure($request, $driver, 'missing_response');
-      throw new HttpException(400, 'Please complete the CAPTCHA challenge.');
-    }
-
-    try {
-      $result = $this->verifyWithProvider($driver, $captchaResponse, $request->ip());
-
-      if ($this->isResponseValid($result, $request, $driver)) {
-        return $next($request);
-      }
-
-      $this->logAndTriggerFailure($request, $driver, 'verification_failed', $result);
-      throw new HttpException(400, 'CAPTCHA verification failed. Please try again.');
-
-    } catch (ClientExceptionInterface $e) {
-      $this->logAndTriggerFailure($request, $driver, 'service_error');
-      \Log::error('CAPTCHA service error', ['error' => $e->getMessage()]);
-      throw new HttpException(503, 'CAPTCHA service unavailable. Please try again later.');
-    } catch (\Exception $e) {
-      $this->logAndTriggerFailure($request, $driver, 'unexpected_error');
-      \Log::error('CAPTCHA unexpected error', ['error' => $e->getMessage()]);
-      throw new HttpException(500, 'An unexpected error occurred during CAPTCHA verification.');
-    }
-  }
-
-  private function shouldVerifyCaptcha(?string $driver): bool
-  {
-    return $driver && array_key_exists($driver, self::PROVIDER_FIELDS);
-  }
-
-  private function getCaptchaResponseFromRequest(Request $request, string $fieldName): ?string
-  {
-
-    if ($request->isJson()) {
-      $data = $request->json()->all();
-      return $data['captchaData'] ?? $data[$fieldName] ?? null;
-    }
-
-    $response = $request->input($fieldName) ?? $request->input('captchaData');
-
-    if (empty($response) && in_array($request->method(), ['POST', 'PUT', 'PATCH'])) {
-      $rawInput = file_get_contents('php://input');
-      if (!empty($rawInput)) {
-        parse_str($rawInput, $parsed);
-        $response = $parsed[$fieldName] ?? $parsed['captchaData'] ?? null;
-      }
-    }
-
-    return $response;
-  }
-
-  private function verifyWithProvider(string $driver, string $response, string $remoteIp): \stdClass
-  {
-    $secretKey = $this->config->get("captcha.{$driver}.secret_key");
-
-    if (empty($secretKey)) {
-      throw new \RuntimeException("No secret key configured for CAPTCHA driver: {$driver}");
-    }
-
-    $params = ['secret' => $secretKey];
-
-    if ($driver === 'turnstile') {
-      $params['response'] = $response;
-      $params['remoteip'] = $remoteIp;
-    } elseif ($driver === 'hcaptcha') {
-      $params['response'] = $response;
-      $params['remoteip'] = $remoteIp;
-    } elseif ($driver === 'friendly') {
-      $params['solution'] = $response;
-      $params['sitekey'] = $this->config->get("captcha.{$driver}.site_key");
-    }
-
-
-    try {
-      $res = $this->client->post(self::PROVIDER_ENDPOINTS[$driver], [
-        'timeout' => $this->config->get('captcha.timeout', 5),
-        'json' => $params,
-      ]);
-
-      $body = $res->getBody()->getContents();
-      $result = json_decode($body);
-
-      if (json_last_error() !== JSON_ERROR_NONE) {
-        \Log::error('Invalid JSON response from CAPTCHA provider', [
-          'provider' => $driver,
-          'response_body' => $body,
-          'json_error' => json_last_error_msg()
-        ]);
-        throw new \RuntimeException("Invalid JSON response from {$driver} CAPTCHA provider");
-      }
-
-      return $result;
-    } catch (\Exception $e) {
-      \Log::error('CAPTCHA verification error', [
-        'provider' => $driver,
-        'error' => $e->getMessage(),
-        'response' => $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-      ]);
-      throw $e;
-    }
-  }
-
-  private function isResponseValid(\stdClass $result, Request $request, string $driver): bool
-  {
-    if (!($result->success ?? false)) {
-
-      return false;
-    }
-
-    switch ($driver) {
-      case 'turnstile':
-        if ($this->config->get('captcha.verify_domain', false)) {
-          $expectedHost = parse_url($request->url(), PHP_URL_HOST);
-          if (($result->hostname ?? null) !== $expectedHost) {
-            \Log::warning('Domain verification failed', [
-              'expected' => $expectedHost,
-              'actual' => $result->hostname ?? 'null'
-            ]);
-            return false;
-          }
+        // Skip verification if captcha is disabled or not Turnstile
+        if ($driver !== 'turnstile' || !$this->turnstileService->isEnabled()) {
+            return $next($request);
         }
-        break;
+
+        try {
+            $this->verifyTurnstileToken($request);
+            return $next($request);
+        } catch (TurnstileException $e) {
+            $this->logAndTriggerFailure($request, 'turnstile', $e->getMessage());
+            throw new HttpException(400, 'CAPTCHA verification failed: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            $this->logAndTriggerFailure($request, 'turnstile', 'unexpected_error');
+            Log::error('CAPTCHA unexpected error', ['error' => $e->getMessage()]);
+            throw new HttpException(500, 'An unexpected error occurred during CAPTCHA verification.');
+        }
     }
 
-    return true;
-  }
+    /**
+     * Verify Turnstile token according to official documentation
+     */
+    private function verifyTurnstileToken(Request $request): void
+    {
+        // Extract token from request
+        $token = $this->turnstileService->getTokenFromRequest($request);
 
-  private function logAndTriggerFailure(
-    Request $request,
-    string $driver,
-    string $reason,
-    ?\stdClass $result = null
-  ): void {
-    $errorCodes = $result->{'error-codes'} ?? [];
+        if (empty($token)) {
+            throw new TurnstileException('Please complete the CAPTCHA challenge.');
+        }
 
-    \Log::warning("CAPTCHA verification failed", [
-      'driver' => $driver,
-      'reason' => $reason,
-      'ip' => $request->ip(),
-      'path' => $request->path(),
-      'method' => $request->method(),
-      'error_codes' => $errorCodes,
-    ]);
+        // Get visitor's IP address
+        $remoteIp = $this->getVisitorIpAddress($request);
 
-    $this->dispatcher->dispatch(new FailedCaptcha(
-      $request->ip(),
-      $driver,
-      $reason,
-      $errorCodes
-    ));
-  }
+        // Generate idempotency key for potential retries
+        $idempotencyKey = $this->turnstileService->generateIdempotencyKey();
+
+        // Verify token with Turnstile Siteverify API
+        $result = $this->turnstileService->verify($token, $remoteIp, $idempotencyKey);
+
+        if ($result->isFailed()) {
+            // Handle specific error cases
+            if ($result->isTokenInvalid()) {
+                throw new TurnstileException('Invalid or expired CAPTCHA token. Please try again.');
+            }
+
+            if ($result->isTokenConsumed()) {
+                throw new TurnstileException('CAPTCHA token has already been used or has timed out. Please refresh and try again.');
+            }
+
+            if ($result->hasInternalError()) {
+                throw new TurnstileException('CAPTCHA service temporarily unavailable. Please try again.');
+            }
+
+            if ($result->hasSecretKeyError()) {
+                Log::error('Turnstile secret key configuration error', [
+                    'error_codes' => $result->getErrorCodes()
+                ]);
+                throw new TurnstileException('CAPTCHA configuration error. Please contact support.');
+            }
+
+            // Generic error message for other failures
+            throw new TurnstileException($result->getErrorMessage() ?: 'CAPTCHA verification failed. Please try again.');
+        }
+
+        // Additional validation: verify hostname if domain verification is enabled
+        if ($this->config->get('captcha.verify_domain', false)) {
+            $expectedHostname = parse_url($request->url(), PHP_URL_HOST);
+            if (!$result->validateHostname($expectedHostname)) {
+                Log::warning('Turnstile hostname verification failed', [
+                    'expected' => $expectedHostname,
+                    'actual' => $result->getHostname()
+                ]);
+                throw new TurnstileException('CAPTCHA domain verification failed.');
+            }
+        }
+
+        // Log successful verification for monitoring
+        Log::info('Turnstile verification successful', [
+            'hostname' => $result->getHostname(),
+            'challenge_ts' => $result->getChallengeTimestamp()?->toISOString(),
+            'action' => $result->getAction(),
+            'ip' => $remoteIp,
+        ]);
+    }
+
+    /**
+     * Get the visitor's IP address with proper header handling
+     */
+    private function getVisitorIpAddress(Request $request): string
+    {
+        // Check for Cloudflare's CF-Connecting-IP header first
+        if ($request->hasHeader('CF-Connecting-IP')) {
+            return $request->header('CF-Connecting-IP');
+        }
+
+        // Check for other common proxy headers
+        $headers = [
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_REAL_IP',
+            'HTTP_CLIENT_IP',
+        ];
+
+        foreach ($headers as $header) {
+            if ($request->server($header)) {
+                $ips = explode(',', $request->server($header));
+                return trim($ips[0]);
+            }
+        }
+
+        // Fallback to standard IP
+        return $request->ip();
+    }
+
+    /**
+     * Log failure and trigger event
+     */
+    private function logAndTriggerFailure(Request $request, string $driver, string $reason): void
+    {
+        Log::warning('CAPTCHA verification failed', [
+            'driver' => $driver,
+            'reason' => $reason,
+            'ip' => $request->ip(),
+            'path' => $request->path(),
+            'method' => $request->method(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        $this->dispatcher->dispatch(new FailedCaptcha(
+            $request->ip(),
+            $driver,
+            $reason,
+            []
+        ));
+    }
 }

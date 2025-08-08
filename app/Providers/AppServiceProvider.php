@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Pterodactyl\Extensions\Themes\Theme;
+use Pterodactyl\Services\Captcha\TurnstileService;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
@@ -65,6 +66,9 @@ class AppServiceProvider extends ServiceProvider
     $this->app->singleton('extensions.themes', function () {
       return new Theme();
     });
+
+    // Register Turnstile service
+    $this->app->singleton(TurnstileService::class);
   }
 
   /**

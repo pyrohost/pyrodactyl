@@ -59,6 +59,11 @@ class CaptchaController extends Controller
         'turnstile' => [
           'site_key' => $this->settings->get('settings::captcha:turnstile:site_key', ''),
           'secret_key' => $this->settings->get('settings::captcha:turnstile:secret_key', ''),
+          'theme' => $this->settings->get('settings::captcha:turnstile:theme', 'auto'),
+          'size' => $this->settings->get('settings::captcha:turnstile:size', 'normal'),
+          'appearance' => $this->settings->get('settings::captcha:turnstile:appearance', 'always'),
+          'action' => $this->settings->get('settings::captcha:turnstile:action', ''),
+          'cdata' => $this->settings->get('settings::captcha:turnstile:cdata', ''),
         ],
         'friendly' => [
           'site_key' => $this->settings->get('settings::captcha:friendly:site_key', ''),
@@ -93,6 +98,13 @@ class CaptchaController extends Controller
       $this->settings->set("settings::captcha:{$provider}:secret_key", '');
       if ($provider === 'mcaptcha') {
         $this->settings->set("settings::captcha:{$provider}:endpoint", '');
+      }
+      if ($provider === 'turnstile') {
+        $this->settings->set("settings::captcha:{$provider}:theme", '');
+        $this->settings->set("settings::captcha:{$provider}:size", '');
+        $this->settings->set("settings::captcha:{$provider}:appearance", '');
+        $this->settings->set("settings::captcha:{$provider}:action", '');
+        $this->settings->set("settings::captcha:{$provider}:cdata", '');
       }
     }
 

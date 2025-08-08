@@ -1,19 +1,16 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 
-import FriendlyCaptcha from '@/components/FriendlyCaptcha';
+import Captcha from '@/components/Captcha';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 
-import requestPasswordResetEmail from '@/api/auth/requestPasswordResetEmail';
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
 
@@ -26,42 +23,39 @@ interface Values {
 }
 
 const ForgotPasswordContainer = () => {
-    const turnstileRef = useRef(null);
-    const friendlyCaptchaRef = useRef<{ reset: () => void }>(null);
-    const hCaptchaRef = useRef<HCaptcha>(null);
-
+    const captchaRef = useRef<any>(null);
     const [token, setToken] = useState('');
-    const [friendlyLoaded, setFriendlyLoaded] = useState(false);
 
     const { clearFlashes, addFlash } = useFlash();
     const { captcha } = useStoreState((state) => state.settings.data!);
-    const isTurnstileEnabled = captcha.driver === 'turnstile' && captcha.turnstile?.siteKey;
-    const isFriendlyEnabled = captcha.driver === 'friendly' && captcha.friendly?.siteKey;
-    const isHCaptchaEnabled = captcha.driver === 'hcaptcha' && captcha.hcaptcha?.siteKey;
-    const isMCaptchaEnabled = captcha.driver === 'mcaptcha' && captcha.mcaptcha?.siteKey;
 
-    useEffect(() => {
-        clearFlashes();
+    const isCaptchaEnabled = captcha.driver !== 'none' && captcha.driver !== undefined;
+    
+    let siteKey = '';
+    if (captcha.driver === 'turnstile') {
+        siteKey = captcha.turnstile?.siteKey || '';
+    } else if (captcha.driver === 'hcaptcha') {
+        siteKey = captcha.hcaptcha?.siteKey || '';
+    } else if (captcha.driver === 'friendly') {
+        siteKey = captcha.friendly?.siteKey || '';
+    } else if (captcha.driver === 'mcaptcha') {
+        siteKey = captcha.mcaptcha?.siteKey || '';
+    }
 
-        if (isFriendlyEnabled && !window.friendlyChallenge) {
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/friendly-challenge@0.9.12/widget.module.min.js';
-            script.async = true;
-            script.defer = true;
-            script.onload = () => setFriendlyLoaded(true);
-            document.body.appendChild(script);
-        } else if (isFriendlyEnabled) {
-            setFriendlyLoaded(true);
+    const resetCaptcha = () => {
+        setToken('');
+        if (captchaRef.current && typeof captchaRef.current.reset === 'function') {
+            captchaRef.current.reset();
         }
-    }, []);
+    };
 
-    const handleCaptchaComplete = (response: string) => {
+    const handleCaptchaSuccess = (response: string) => {
         setToken(response);
     };
 
-    const handleCaptchaError = (provider: string) => {
+    const handleCaptchaError = () => {
         setToken('');
-        addFlash({ type: 'error', title: 'CAPTCHA Error', message: `${provider} challenge failed.` });
+        addFlash({ type: 'error', title: 'CAPTCHA Error', message: 'CAPTCHA challenge failed. Please try again.' });
     };
 
     const handleCaptchaExpire = () => {
@@ -71,22 +65,31 @@ const ForgotPasswordContainer = () => {
     const handleSubmission = ({ email }: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
         clearFlashes();
 
-        if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
+        // Validate CAPTCHA if enabled
+        if (isCaptchaEnabled && !token) {
             addFlash({ type: 'error', title: 'Error', message: 'Please complete the CAPTCHA challenge.' });
             setSubmitting(false);
             return;
         }
 
-        const requestData: Record<string, string> = { email };
+        const requestData: any = { email };
 
-        if (isTurnstileEnabled) {
-            requestData['cf-turnstile-response'] = token;
-        } else if (isHCaptchaEnabled) {
-            requestData['h-captcha-response'] = token;
-        } else if (isFriendlyEnabled) {
-            requestData['frc-captcha-response'] = token;
-        } else if (isMCaptchaEnabled) {
-            requestData['g-recaptcha-response'] = token; // Fallback or mCaptcha field
+        // Add CAPTCHA token based on provider
+        if (isCaptchaEnabled && token) {
+            switch (captcha.driver) {
+                case 'turnstile':
+                    requestData['cf-turnstile-response'] = token;
+                    break;
+                case 'hcaptcha':
+                    requestData['h-captcha-response'] = token;
+                    break;
+                case 'friendly':
+                    requestData['frc-captcha-response'] = token;
+                    break;
+                case 'mcaptcha':
+                    requestData['mcaptcha-response'] = token;
+                    break;
+            }
         }
 
         http.post('/auth/password', requestData)
@@ -99,8 +102,7 @@ const ForgotPasswordContainer = () => {
                 addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
             })
             .finally(() => {
-                setToken('');
-                // Reset CAPTCHAs...
+                resetCaptcha();
                 setSubmitting(false);
             });
     };
@@ -128,48 +130,22 @@ const ForgotPasswordContainer = () => {
                         </div>
                         <Field id='email' label={'Email'} name={'email'} type={'email'} />
 
-                        {/* CAPTCHA Components */}
-                        {isTurnstileEnabled && (
-                            <div className='mt-6'>
-                                <Turnstile
-                                    ref={turnstileRef}
-                                    siteKey={captcha.turnstile.siteKey}
-                                    onSuccess={handleCaptchaComplete}
-                                    onError={() => handleCaptchaError('Turnstile')}
+                        {/* CAPTCHA Component */}
+                        {isCaptchaEnabled && siteKey && (
+                            <div className='mt-6 flex justify-center'>
+                                <Captcha
+                                    ref={captchaRef}
+                                    driver={captcha.driver}
+                                    sitekey={siteKey}
+                                    theme={(captcha.turnstile as any)?.theme || 'dark'}
+                                    size={(captcha.turnstile as any)?.size || 'flexible'}
+                                    action={(captcha.turnstile as any)?.action}
+                                    cData={(captcha.turnstile as any)?.cdata}
+                                    onVerify={handleCaptchaSuccess}
+                                    onError={handleCaptchaError}
                                     onExpire={handleCaptchaExpire}
-                                    options={{
-                                        theme: 'dark',
-                                        size: 'flexible',
-                                    }}
+                                    className=""
                                 />
-                            </div>
-                        )}
-                        {isFriendlyEnabled && friendlyLoaded && (
-                            <div className='mt-6 w-full'>
-                                <FriendlyCaptcha
-                                    ref={friendlyCaptchaRef}
-                                    sitekey={captcha.friendly.siteKey}
-                                    onComplete={handleCaptchaComplete}
-                                    onError={() => handleCaptchaError('FriendlyCaptcha')}
-                                    onExpire={handleCaptchaExpire}
-                                />
-                            </div>
-                        )}
-                        {isHCaptchaEnabled && (
-                            <div className='mt-6'>
-                                <HCaptcha
-                                    ref={hCaptchaRef}
-                                    sitekey={captcha.hcaptcha.siteKey}
-                                    onVerify={handleCaptchaComplete}
-                                    onError={() => handleCaptchaError('hCaptcha')}
-                                    onExpire={handleCaptchaExpire}
-                                    theme='dark'
-                                />
-                            </div>
-                        )}
-                        {isMCaptchaEnabled && (
-                            <div className='mt-6'>
-                                <p className='text-red-500'>mCaptcha implementation needed</p>
                             </div>
                         )}
 

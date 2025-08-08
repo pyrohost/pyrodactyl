@@ -23,6 +23,16 @@ return [
       'site_key' => env('TURNSTILE_SITE_KEY'),
       'secret_key' => env('TURNSTILE_SECRET_KEY'),
       'endpoint' => 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      'theme' => env('TURNSTILE_THEME', 'auto'), // auto, light, dark
+      'size' => env('TURNSTILE_SIZE', 'normal'), // normal, compact, flexible
+      'action' => env('TURNSTILE_ACTION', null), // Optional action identifier
+      'cdata' => env('TURNSTILE_CDATA', null), // Optional customer data
+      'retry' => env('TURNSTILE_RETRY', 'auto'), // auto, never
+      'retry_interval' => env('TURNSTILE_RETRY_INTERVAL', 8000), // milliseconds
+      'refresh_expired' => env('TURNSTILE_REFRESH_EXPIRED', 'auto'), // auto, manual, never
+      'refresh_timeout' => env('TURNSTILE_REFRESH_TIMEOUT', 'auto'), // auto, manual, never
+      'appearance' => env('TURNSTILE_APPEARANCE', 'always'), // always, execute, interaction-only
+      'execution' => env('TURNSTILE_EXECUTION', 'render'), // render, execute
     ],
 
     'proton' => [

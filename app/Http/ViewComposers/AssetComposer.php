@@ -19,7 +19,12 @@ class AssetComposer
       'captcha' => [
         'driver' => config('captcha.driver', 'none'),
         'turnstile' => [
-          'siteKey' => config('captcha.turnstile.site_key', '')
+          'siteKey' => config('captcha.turnstile.site_key', ''),
+          'theme' => config('captcha.turnstile.theme', 'auto'),
+          'size' => config('captcha.turnstile.size', 'normal'),
+          'appearance' => config('captcha.turnstile.appearance', 'always'),
+          'action' => config('captcha.turnstile.action', ''),
+          'cdata' => config('captcha.turnstile.cdata', ''),
         ],
         'hcaptcha' => [
           'siteKey' => config('captcha.hcaptcha.site_key', '')

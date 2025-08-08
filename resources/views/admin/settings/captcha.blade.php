@@ -143,6 +143,59 @@
           </div>
         </div>
         </div>
+        <div class="row">
+        <div class="form-group col-md-4">
+          <label class="control-label">Theme</label>
+          <div>
+          <select class="form-control" name="turnstile[theme]">
+            <option value="auto" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'auto') selected @endif>Auto</option>
+            <option value="light" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'light') selected @endif>Light</option>
+            <option value="dark" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'dark') selected @endif>Dark</option>
+          </select>
+          <p class="text-muted small">Widget color theme.</p>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="control-label">Size</label>
+          <div>
+          <select class="form-control" name="turnstile[size]">
+            <option value="normal" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'normal') selected @endif>Normal</option>
+            <option value="compact" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'compact') selected @endif>Compact</option>
+            <option value="flexible" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'flexible') selected @endif>Flexible</option>
+          </select>
+          <p class="text-muted small">Widget size.</p>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="control-label">Appearance</label>
+          <div>
+          <select class="form-control" name="turnstile[appearance]">
+            <option value="always" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'always') selected @endif>Always</option>
+            <option value="execute" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'execute') selected @endif>Execute</option>
+            <option value="interaction-only" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'interaction-only') selected @endif>Interaction Only</option>
+          </select>
+          <p class="text-muted small">When the widget becomes visible.</p>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-md-6">
+          <label class="control-label">Action (Optional)</label>
+          <div>
+          <input type="text" class="form-control" name="turnstile[action]"
+            value="{{ old('turnstile.action', isset($current) ? $current['turnstile']['action'] ?? '' : '') }}">
+          <p class="text-muted small">Custom action identifier for analytics (max 32 chars, alphanumeric + _ -).</p>
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="control-label">Custom Data (Optional)</label>
+          <div>
+          <input type="text" class="form-control" name="turnstile[cdata]"
+            value="{{ old('turnstile.cdata', isset($current) ? $current['turnstile']['cdata'] ?? '' : '') }}">
+          <p class="text-muted small">Custom data passed to widget (max 255 chars, alphanumeric + _ -).</p>
+          </div>
+        </div>
+        </div>
       </div>
       </div>
 

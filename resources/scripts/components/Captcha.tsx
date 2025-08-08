@@ -1,7 +1,7 @@
-// components/Captcha.tsx
+import React from 'react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { Turnstile } from '@marsidev/react-turnstile';
-import { useEffect, useState } from 'react';
+import TurnstileWidget from './TurnstileWidget';
+import FriendlyCaptcha from './FriendlyCaptcha';
 
 interface CaptchaProps {
     sitekey?: string;
@@ -10,45 +10,83 @@ interface CaptchaProps {
     onVerify: (token: string) => void;
     onError: () => void;
     onExpire: () => void;
+    theme?: 'light' | 'dark' | 'auto';
+    size?: 'normal' | 'compact' | 'flexible';
+    action?: string;
+    cData?: string;
+    className?: string;
 }
 
-const Captcha = ({ driver, sitekey, endpoint, onVerify, onError, onExpire }: CaptchaProps) => {
-    const [loaded, setLoaded] = useState(false);
-
-    useEffect(() => {
-        if (driver !== 'none' && !loaded) {
-            // Load any required external scripts here if needed
-            setLoaded(true);
+const Captcha = React.forwardRef<any, CaptchaProps>(
+    ({ driver, sitekey, theme = 'auto', size = 'normal', action, cData, onVerify, onError, onExpire, className }, ref) => {
+        if (driver === 'hcaptcha' && sitekey) {
+            return (
+                <HCaptcha
+                    ref={ref}
+                    sitekey={sitekey}
+                    onVerify={onVerify}
+                    onError={onError}
+                    onExpire={onExpire}
+                    theme={theme === 'auto' ? 'dark' : theme}
+                    size={size === 'flexible' ? 'normal' : size}
+                />
+            );
         }
-    }, [driver]);
 
-    if (driver === 'hcaptcha') {
-        return <HCaptcha sitekey={sitekey || ''} onVerify={onVerify} onError={onError} onExpire={onExpire} />;
+        if (driver === 'turnstile' && sitekey) {
+            return (
+                <TurnstileWidget
+                    ref={ref}
+                    siteKey={sitekey}
+                    theme={theme}
+                    size={size}
+                    action={action}
+                    cData={cData}
+                    onSuccess={onVerify}
+                    onError={onError}
+                    onExpire={onExpire}
+                    className={className}
+                    appearance="always"
+                    execution="render"
+                    retry="auto"
+                    refreshExpired="auto"
+                    refreshTimeout="auto"
+                />
+            );
+        }
+
+        if (driver === 'friendly' && sitekey) {
+            return (
+                <FriendlyCaptcha
+                    ref={ref}
+                    sitekey={sitekey}
+                    onComplete={onVerify}
+                    onError={onError}
+                    onExpire={onExpire}
+                />
+            );
+        }
+
+        if (driver === 'mcaptcha') {
+            return (
+                <div className="text-red-500 text-sm">
+                    mCaptcha implementation needed
+                </div>
+            );
+        }
+
+        if (driver === 'recaptcha') {
+            return (
+                <div className="text-red-500 text-sm">
+                    reCAPTCHA implementation needed
+                </div>
+            );
+        }
+
+        return null;
     }
+);
 
-    if (driver === 'turnstile') {
-        return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
-    }
-
-    if (driver === 'mcaptcha') {
-        // TODO: Maybe make this work one day
-        // @mcaptcha/vanilla-glue
-        return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
-    }
-
-    if (driver === 'recaptcha') {
-        // TODO: Maybe make this work one day
-        // react-google-recaptcha-v3
-        return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
-    }
-
-    if (driver === 'friendly') {
-        // TODO: Maybe make this work one day
-        // @friendlycaptcha/sdk
-        return <Turnstile siteKey={sitekey || ''} onSuccess={onVerify} onError={onError} onExpire={onExpire} />;
-    }
-
-    return null;
-};
+Captcha.displayName = 'Captcha';
 
 export default Captcha;

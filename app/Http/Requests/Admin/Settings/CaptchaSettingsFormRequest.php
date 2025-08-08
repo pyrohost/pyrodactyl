@@ -26,6 +26,11 @@ class CaptchaSettingsFormRequest extends AdminFormRequest
       } elseif ($driver === 'turnstile') {
         $rules['turnstile.site_key'] = 'required|string';
         $rules['turnstile.secret_key'] = 'required|string';
+        $rules['turnstile.theme'] = 'nullable|in:auto,light,dark';
+        $rules['turnstile.size'] = 'nullable|in:normal,compact,flexible';
+        $rules['turnstile.appearance'] = 'nullable|in:always,execute,interaction-only';
+        $rules['turnstile.action'] = 'nullable|string|max:32|regex:/^[a-zA-Z0-9_-]*$/';
+        $rules['turnstile.cdata'] = 'nullable|string|max:255|regex:/^[a-zA-Z0-9_-]*$/';
       } elseif ($driver === 'friendly') {
         $rules['friendly.site_key'] = 'required|string';
         $rules['friendly.secret_key'] = 'required|string';
@@ -48,6 +53,11 @@ class CaptchaSettingsFormRequest extends AdminFormRequest
       'mcaptcha.endpoint' => 'mCaptcha Endpoint',
       'turnstile.site_key' => 'Turnstile Site Key',
       'turnstile.secret_key' => 'Turnstile Secret Key',
+      'turnstile.theme' => 'Turnstile Theme',
+      'turnstile.size' => 'Turnstile Size',
+      'turnstile.appearance' => 'Turnstile Appearance',
+      'turnstile.action' => 'Turnstile Action',
+      'turnstile.cdata' => 'Turnstile Custom Data',
       'proton.site_key' => 'Proton Site Key',
       'proton.secret_key' => 'Proton Secret Key',
       'friendly.site_key' => 'Friendly Site Key',
