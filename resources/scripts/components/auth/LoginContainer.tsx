@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useStoreState } from 'easy-peasy';
@@ -16,6 +17,10 @@ import Logo from '@/components/elements/PyroLogo';
 import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
+
+const MemoizedTurnstile = React.memo(Turnstile);
+const MemoizedFriendlyCaptcha = React.memo(FriendlyCaptcha);
+const MemoizedHCaptcha = React.memo(HCaptcha);
 
 interface Values {
     user: string;
@@ -42,7 +47,6 @@ function LoginContainer() {
     useEffect(() => {
         clearFlashes();
 
-        // Load FriendlyCaptcha script if needed
         if (isFriendlyEnabled && !window.friendlyChallenge) {
             const script = document.createElement('script');
             script.src = 'https://unpkg.com/friendly-challenge@0.9.12/widget.module.min.js';
@@ -53,9 +57,9 @@ function LoginContainer() {
         } else if (isFriendlyEnabled) {
             setFriendlyLoaded(true);
         }
-    }, []);
+    }, [isFriendlyEnabled, clearFlashes]);
 
-    const resetCaptcha = () => {
+    const resetCaptcha = useCallback(() => {
         setToken('');
         if (isTurnstileEnabled && turnstileRef.current) {
             // @ts-expect-error - The type doesn't expose the reset method directly
@@ -67,22 +71,22 @@ function LoginContainer() {
         if (isHCaptchaEnabled && hCaptchaRef.current) {
             hCaptchaRef.current.resetCaptcha();
         }
-    };
+    }, [isTurnstileEnabled, isFriendlyEnabled, isHCaptchaEnabled]);
 
-    const handleCaptchaComplete = (response: string) => {
+    const handleCaptchaComplete = useCallback((response: string) => {
         setToken(response);
-    };
+    }, []);
 
-    const handleCaptchaError = (provider: string) => {
+    const handleCaptchaError = useCallback((provider: string) => {
         setToken('');
         clearAndAddHttpError({ error: new Error(`${provider} challenge failed.`) });
-    };
+    }, [clearAndAddHttpError]);
 
-    const handleCaptchaExpire = () => {
+    const handleCaptchaExpire = useCallback(() => {
         setToken('');
-    };
+    }, []);
 
-    const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const onSubmit = useCallback((values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
 
         if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
@@ -116,13 +120,7 @@ function LoginContainer() {
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
             .catch((error: any) => {
-                console.error('Login error details:', {
-                    message: error.message,
-                    detail: error.detail,
-                    code: error.code,
-                    response: error.response,
-                });
-
+                console.error('Login error details:', error);
                 resetCaptcha();
                 setSubmitting(false);
 
@@ -134,7 +132,7 @@ function LoginContainer() {
                     clearAndAddHttpError({ error });
                 }
             });
-    };
+    }, [clearAndAddHttpError, clearFlashes, isFriendlyEnabled, isHCaptchaEnabled, isTurnstileEnabled, navigate, resetCaptcha, token]);
 
     return (
         <Formik
@@ -144,26 +142,28 @@ function LoginContainer() {
                 user: string().required('A username or email must be provided.'),
                 password: string().required('Please enter your account password.'),
             })}
+            validateOnChange={false}
+            validateOnBlur={false}
         >
             {({ isSubmitting }) => (
-                <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
+                <LoginFormContainer className="w-full flex">
+                    <div className="flex h-12 mb-4 items-center w-full">
                         <Logo />
                     </div>
-                    <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
-                    <div className={`relative mt-6`}>
+                    <div aria-hidden className="my-8 bg-[#ffffff33] min-h-[1px]"></div>
+                    <h2 className="text-xl font-extrabold mb-2">Login</h2>
+                    <Field id="user" type="text" label="Username or Email" name="user" disabled={isSubmitting} />
+                    <div className="relative mt-6">
                         <Field
-                            id='password'
-                            type={'password'}
-                            label={'Password'}
-                            name={'password'}
+                            id="password"
+                            type="password"
+                            label="Password"
+                            name="password"
                             disabled={isSubmitting}
                         />
                         <Link
-                            to={'/auth/password'}
-                            className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
+                            to="/auth/password"
+                            className="text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0"
                         >
                             Forgot Password?
                         </Link>
@@ -171,8 +171,8 @@ function LoginContainer() {
 
                     {/* CAPTCHA Providers */}
                     {isTurnstileEnabled && (
-                        <div className='mt-6'>
-                            <Turnstile
+                        <div className="mt-6">
+                            <MemoizedTurnstile
                                 ref={turnstileRef}
                                 siteKey={captcha.turnstile.siteKey}
                                 onSuccess={handleCaptchaComplete}
@@ -187,8 +187,8 @@ function LoginContainer() {
                     )}
 
                     {isFriendlyEnabled && friendlyLoaded && (
-                        <div className='mt-6 w-full'>
-                            <FriendlyCaptcha
+                        <div className="mt-6 w-full">
+                            <MemoizedFriendlyCaptcha
                                 ref={friendlyCaptchaRef}
                                 sitekey={captcha.friendly.siteKey}
                                 onComplete={handleCaptchaComplete}
@@ -199,30 +199,30 @@ function LoginContainer() {
                     )}
 
                     {isHCaptchaEnabled && (
-                        <div className='mt-6'>
-                            <HCaptcha
+                        <div className="mt-6">
+                            <MemoizedHCaptcha
                                 ref={hCaptchaRef}
                                 sitekey={captcha.hcaptcha.siteKey}
                                 onVerify={handleCaptchaComplete}
                                 onError={() => handleCaptchaError('hCaptcha')}
                                 onExpire={handleCaptchaExpire}
-                                theme='dark'
-                                size='normal'
+                                theme="dark"
+                                size="normal"
                             />
                         </div>
                     )}
 
                     {isMCaptchaEnabled && (
-                        <div className='mt-6'>
-                            <p className='text-red-500'>mCaptcha implementation needed</p>
+                        <div className="mt-6">
+                            <p className="text-red-500">mCaptcha implementation needed</p>
                         </div>
                     )}
 
-                    <div className={`mt-6`}>
+                    <div className="mt-6">
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
-                            type={'submit'}
-                            size={'xlarge'}
+                            className="relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer"
+                            type="submit"
+                            size="xlarge"
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
