@@ -19,16 +19,6 @@ class SettingsServiceProvider extends ServiceProvider
   protected array $keys = [
     'app:name',
     'app:locale',
-    'captcha:driver',
-    'captcha:hcaptcha:site_key',
-    'captcha:hcaptcha:secret_key',
-    'captcha:mcaptcha:site_key',
-    'captcha:mcaptcha:secret_key',
-    'captcha:mcaptcha:endpoint',
-    'captcha:turnstile:site_key',
-    'captcha:turnstile:secret_key',
-    'captcha:friendly:site_key',
-    'captcha:friendly:secret_key',
     // existing mail keys, etc...
     'pterodactyl:guzzle:timeout',
     'pterodactyl:guzzle:connect_timeout',
@@ -38,6 +28,13 @@ class SettingsServiceProvider extends ServiceProvider
     'pterodactyl:client_features:allocations:enabled',
     'pterodactyl:client_features:allocations:range_start',
     'pterodactyl:client_features:allocations:range_end',
+    'pterodactyl:captcha:provider',
+    'pterodactyl:captcha:turnstile:site_key',
+    'pterodactyl:captcha:turnstile:secret_key',
+    'pterodactyl:captcha:hcaptcha:site_key',
+    'pterodactyl:captcha:hcaptcha:secret_key',
+    'pterodactyl:captcha:recaptcha:site_key',
+    'pterodactyl:captcha:recaptcha:secret_key',
   ];
 
 
@@ -61,6 +58,9 @@ class SettingsServiceProvider extends ServiceProvider
    */
   protected static array $encrypted = [
     'mail:mailers:smtp:password',
+    'pterodactyl:captcha:turnstile:secret_key',
+    'pterodactyl:captcha:hcaptcha:secret_key',
+    'pterodactyl:captcha:recaptcha:secret_key',
   ];
 
   /**

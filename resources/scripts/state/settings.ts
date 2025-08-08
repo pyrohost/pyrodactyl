@@ -1,31 +1,9 @@
 import { Action, action } from 'easy-peasy';
 
-// Define captcha configuration type
-interface CaptchaConfig {
-    driver: 'none' | 'hcaptcha' | 'mcaptcha' | 'turnstile' | 'friendly';
-    hcaptcha: {
-        siteKey: string;
-    };
-    mcaptcha: {
-        siteKey: string;
-        endpoint: string;
-    };
-    turnstile: {
-        siteKey: string;
-    };
-    friendly: {
-        siteKey: string;
-    };
-    recaptcha: {
-        siteKey: string;
-    };
-}
-
 export interface SiteSettings {
     name: string;
     locale: string;
     timezone: string;
-    captcha: CaptchaConfig;
 }
 
 export interface SettingsStore {

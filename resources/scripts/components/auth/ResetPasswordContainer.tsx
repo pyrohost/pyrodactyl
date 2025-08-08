@@ -9,11 +9,13 @@ import Button from '@/components/elements/Button';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 
 import performPasswordReset from '@/api/auth/performPasswordReset';
 import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
+import CaptchaManager from '@/lib/captcha';
 
 import Logo from '../elements/PyroLogo';
 
@@ -36,7 +38,19 @@ function ResetPasswordContainer() {
 
     const submit = ({ password, passwordConfirmation }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
-        performPasswordReset(email, { token: params.token ?? '', password, passwordConfirmation })
+
+        // Get captcha response if enabled
+        const captchaResponse = getCaptchaResponse();
+        
+        let resetData: any = { token: params.token ?? '', password, passwordConfirmation };
+        if (CaptchaManager.isEnabled() && captchaResponse) {
+            const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
+            if (fieldName) {
+                resetData = { ...resetData, [fieldName]: captchaResponse };
+            }
+        }
+
+        performPasswordReset(email, resetData)
             .then(() => {
                 // @ts-expect-error this is valid
                 window.location = '/';

@@ -1,121 +1,69 @@
 <?php
+
 namespace Pterodactyl\Http\Controllers\Admin\Settings;
 
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Prologue\Alerts\AlertsMessageBag;
+use Illuminate\Contracts\Console\Kernel;
+use Illuminate\View\Factory as ViewFactory;
 use Pterodactyl\Http\Controllers\Controller;
+use Pterodactyl\Services\Captcha\CaptchaManager;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Pterodactyl\Contracts\Repository\SettingsRepositoryInterface;
 use Pterodactyl\Http\Requests\Admin\Settings\CaptchaSettingsFormRequest;
 
 class CaptchaController extends Controller
 {
-  /**
-   * @var \Prologue\Alerts\AlertsMessageBag
-   */
-  protected $alert;
+    /**
+     * CaptchaController constructor.
+     */
+    public function __construct(
+        private AlertsMessageBag $alert,
+        private CaptchaManager $captcha,
+        private Encrypter $encrypter,
+        private Kernel $kernel,
+        private SettingsRepositoryInterface $settings,
+        private ViewFactory $view,
+    ) {}
 
-  /**
-   * @var \Pterodactyl\Contracts\Repository\SettingsRepositoryInterface
-   */
-  protected $settings;
-
-  /**
-   * CaptchaController constructor.
-   */
-  public function __construct(
-    AlertsMessageBag $alert,
-    SettingsRepositoryInterface $settings
-  ) {
-    $this->alert = $alert;
-    $this->settings = $settings;
-  }
-
-  /**
-   * Render CAPTCHA settings page.
-   */
-  public function index(): View
-  {
-    return view('admin.settings.captcha', [
-      'providers' => [
-        'none' => 'Disabled',
-        'hcaptcha' => 'hCaptcha',
-        'mcaptcha' => 'mCaptcha',
-        'turnstile' => 'Cloudflare Turnstile',
-        'friendly' => 'Friendly Captcha',
-        'recaptcha' => 'Recaptcha V3'
-      ],
-      'current' => [
-        'driver' => $this->settings->get('settings::captcha:driver', 'none'),
-        'hcaptcha' => [
-          'site_key' => $this->settings->get('settings::captcha:hcaptcha:site_key', ''),
-          'secret_key' => $this->settings->get('settings::captcha:hcaptcha:secret_key', ''),
-        ],
-        'mcaptcha' => [
-          'site_key' => $this->settings->get('settings::captcha:mcaptcha:site_key', ''),
-          'secret_key' => $this->settings->get('settings::captcha:mcaptcha:secret_key', ''),
-          'endpoint' => $this->settings->get('settings::captcha:mcaptcha:endpoint', ''),
-        ],
-        'turnstile' => [
-          'site_key' => $this->settings->get('settings::captcha:turnstile:site_key', ''),
-          'secret_key' => $this->settings->get('settings::captcha:turnstile:secret_key', ''),
-          'theme' => $this->settings->get('settings::captcha:turnstile:theme', 'auto'),
-          'size' => $this->settings->get('settings::captcha:turnstile:size', 'normal'),
-          'appearance' => $this->settings->get('settings::captcha:turnstile:appearance', 'always'),
-          'action' => $this->settings->get('settings::captcha:turnstile:action', ''),
-          'cdata' => $this->settings->get('settings::captcha:turnstile:cdata', ''),
-        ],
-        'friendly' => [
-          'site_key' => $this->settings->get('settings::captcha:friendly:site_key', ''),
-          'secret_key' => $this->settings->get('settings::captcha:friendly:secret_key', ''),
-        ],
-        'recaptcha' => [
-          'site_key' => $this->settings->get('settings::captcha:recaptcha:site_key', ''),
-          'secret_key' => $this->settings->get('settings::captcha:friendly:secret_key', ''),
-        ],
-      ],
-    ]);
-  }
-
-  /**
-   * Handle CAPTCHA settings update.
-   *
-   * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-   * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
-   */
-  public function update(CaptchaSettingsFormRequest $request): RedirectResponse
-  {
-    $data = $request->validated();
-    $driver = $data['driver'];
-
-    // Save the driver
-    $this->settings->set('settings::captcha:driver', $driver);
-
-    // Clear all provider settings first
-    $providers = ['hcaptcha', 'mcaptcha', 'turnstile', 'friendly', 'recaptcha'];
-    foreach ($providers as $provider) {
-      $this->settings->set("settings::captcha:{$provider}:site_key", '');
-      $this->settings->set("settings::captcha:{$provider}:secret_key", '');
-      if ($provider === 'mcaptcha') {
-        $this->settings->set("settings::captcha:{$provider}:endpoint", '');
-      }
-      if ($provider === 'turnstile') {
-        $this->settings->set("settings::captcha:{$provider}:theme", '');
-        $this->settings->set("settings::captcha:{$provider}:size", '');
-        $this->settings->set("settings::captcha:{$provider}:appearance", '');
-        $this->settings->set("settings::captcha:{$provider}:action", '');
-        $this->settings->set("settings::captcha:{$provider}:cdata", '');
-      }
+    /**
+     * Render captcha settings UI.
+     */
+    public function index(): View
+    {
+        return $this->view->make('admin.settings.captcha', [
+            'providers' => [
+                'none' => 'Disabled',
+                'turnstile' => 'Cloudflare Turnstile',
+                'hcaptcha' => 'hCaptcha',
+                'recaptcha' => 'Google reCAPTCHA',
+            ],
+        ]);
     }
 
-    // Save the selected provider's config if enabled
-    if ($driver !== 'none' && isset($data[$driver])) {
-      foreach ($data[$driver] as $key => $value) {
-        $this->settings->set("settings::captcha:{$driver}:{$key}", $value);
-      }
-    }
+    /**
+     * Update captcha settings.
+     *
+     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+     * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
+     */
+    public function update(CaptchaSettingsFormRequest $request): RedirectResponse
+    {
+        $values = $request->normalize();
+        
+        foreach ($values as $key => $value) {
+            // Encrypt secret keys before storing
+            if (in_array($key, \Pterodactyl\Providers\SettingsServiceProvider::getEncryptedKeys()) && !empty($value)) {
+                $value = $this->encrypter->encrypt($value);
+            }
+            
+            $this->settings->set('settings::' . $key, $value);
+        }
 
-    $this->alert->success('CAPTCHA settings have been updated successfully.')->flash();
-    return redirect()->route('admin.settings.captcha');
-  }
+        $this->kernel->call('queue:restart');
+        $this->alert->success('Captcha settings have been updated successfully and the queue worker was restarted to apply these changes.')->flash();
+
+        return redirect()->route('admin.settings.captcha');
+    }
 }

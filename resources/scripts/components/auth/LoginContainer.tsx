@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
-import Captcha from '@/components/Captcha';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import Field from '@/components/elements/Field';
 import Logo from '@/components/elements/PyroLogo';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
+import CaptchaManager from '@/lib/captcha';
 
 import login from '@/api/auth/login';
 
@@ -21,85 +22,41 @@ interface Values {
 }
 
 function LoginContainer() {
-    const [token, setToken] = useState('');
-    const captchaRef = useRef<any>(null);
-
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { captcha } = useStoreState((state) => state.settings.data!);
-    
     const navigate = useNavigate();
 
     useEffect(() => {
         clearFlashes();
     }, []);
 
-    const resetCaptcha = () => {
-        setToken('');
-        if (captchaRef.current && typeof captchaRef.current.reset === 'function') {
-            captchaRef.current.reset();
-        }
-    };
-
-    const handleCaptchaSuccess = (response: string) => {
-        setToken(response);
-    };
-
-    const handleCaptchaError = () => {
-        setToken('');
-        clearAndAddHttpError({ error: new Error('CAPTCHA challenge failed. Please try again.') });
-    };
-
-    const handleCaptchaExpire = () => {
-        setToken('');
-    };
-
-    const isCaptchaEnabled = captcha.driver !== 'none' && captcha.driver !== undefined;
-    
-    let siteKey = '';
-    if (captcha.driver === 'turnstile') {
-        siteKey = captcha.turnstile?.siteKey || '';
-    } else if (captcha.driver === 'hcaptcha') {
-        siteKey = captcha.hcaptcha?.siteKey || '';
-    } else if (captcha.driver === 'friendly') {
-        siteKey = captcha.friendly?.siteKey || '';
-    } else if (captcha.driver === 'mcaptcha') {
-        siteKey = captcha.mcaptcha?.siteKey || '';
-    }
-
     const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
 
-        // Validate CAPTCHA if enabled
-        if (isCaptchaEnabled && !token) {
-            setSubmitting(false);
-            clearAndAddHttpError({ error: new Error('Please complete the CAPTCHA challenge.') });
-            return;
-        }
-
-        const requestData: any = {
-            user: values.user,
-            password: values.password,
-        };
-
-        // Add CAPTCHA token based on provider
-        if (isCaptchaEnabled && token) {
-            switch (captcha.driver) {
-                case 'turnstile':
-                    requestData['cf-turnstile-response'] = token;
-                    break;
-                case 'hcaptcha':
-                    requestData['h-captcha-response'] = token;
-                    break;
-                case 'friendly':
-                    requestData['frc-captcha-response'] = token;
-                    break;
-                case 'mcaptcha':
-                    requestData['mcaptcha-response'] = token;
-                    break;
+        // Get captcha response if enabled
+        let loginData: any = values;
+        if (CaptchaManager.isEnabled()) {
+            const captchaResponse = getCaptchaResponse();
+            const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
+            
+            console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
+            
+            if (fieldName) {
+                if (captchaResponse) {
+                    loginData = { ...values, [fieldName]: captchaResponse };
+                    console.log('Adding captcha to login data:', loginData);
+                } else {
+                    // Captcha is enabled but no response - show error
+                    console.error('Captcha enabled but no response available');
+                    clearAndAddHttpError({ error: new Error('Please complete the captcha verification.') });
+                    setSubmitting(false);
+                    return;
+                }
             }
+        } else {
+            console.log('Captcha not enabled');
         }
 
-        login(requestData)
+        login(loginData)
             .then((response) => {
                 if (response.complete) {
                     window.location.href = response.intended || '/';
@@ -108,14 +65,6 @@ function LoginContainer() {
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
             .catch((error: any) => {
-                console.error('Login error details:', {
-                    message: error.message,
-                    detail: error.detail,
-                    code: error.code,
-                    response: error.response,
-                });
-
-                resetCaptcha();
                 setSubmitting(false);
 
                 if (error.code === 'InvalidCredentials') {
@@ -169,24 +118,13 @@ function LoginContainer() {
                         </Link>
                     </div>
 
-                    {/* CAPTCHA Component */}
-                    {isCaptchaEnabled && siteKey && (
-                        <div className='mt-6 flex justify-center'>
-                            <Captcha
-                                ref={captchaRef}
-                                driver={captcha.driver}
-                                sitekey={siteKey}
-                                theme={(captcha.turnstile as any)?.theme || 'dark'}
-                                size={(captcha.turnstile as any)?.size || 'flexible'}
-                                action={(captcha.turnstile as any)?.action}
-                                cData={(captcha.turnstile as any)?.cdata}
-                                onVerify={handleCaptchaSuccess}
-                                onError={handleCaptchaError}
-                                onExpire={handleCaptchaExpire}
-                                className=""
-                            />
-                        </div>
-                    )}
+                    <Captcha
+                        className="mt-6"
+                        onError={(error) => {
+                            console.error('Captcha error:', error);
+                            clearAndAddHttpError({ error: new Error('Captcha verification failed. Please try again.') });
+                        }}
+                    />
 
                     <div className={`mt-6`}>
                         <Button

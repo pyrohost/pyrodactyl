@@ -5,16 +5,17 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 
-import Captcha from '@/components/Captcha';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
+import CaptchaManager from '@/lib/captcha';
 
 import Logo from '../elements/PyroLogo';
 
@@ -23,72 +24,19 @@ interface Values {
 }
 
 const ForgotPasswordContainer = () => {
-    const captchaRef = useRef<any>(null);
-    const [token, setToken] = useState('');
-
     const { clearFlashes, addFlash } = useFlash();
-    const { captcha } = useStoreState((state) => state.settings.data!);
-
-    const isCaptchaEnabled = captcha.driver !== 'none' && captcha.driver !== undefined;
-    
-    let siteKey = '';
-    if (captcha.driver === 'turnstile') {
-        siteKey = captcha.turnstile?.siteKey || '';
-    } else if (captcha.driver === 'hcaptcha') {
-        siteKey = captcha.hcaptcha?.siteKey || '';
-    } else if (captcha.driver === 'friendly') {
-        siteKey = captcha.friendly?.siteKey || '';
-    } else if (captcha.driver === 'mcaptcha') {
-        siteKey = captcha.mcaptcha?.siteKey || '';
-    }
-
-    const resetCaptcha = () => {
-        setToken('');
-        if (captchaRef.current && typeof captchaRef.current.reset === 'function') {
-            captchaRef.current.reset();
-        }
-    };
-
-    const handleCaptchaSuccess = (response: string) => {
-        setToken(response);
-    };
-
-    const handleCaptchaError = () => {
-        setToken('');
-        addFlash({ type: 'error', title: 'CAPTCHA Error', message: 'CAPTCHA challenge failed. Please try again.' });
-    };
-
-    const handleCaptchaExpire = () => {
-        setToken('');
-    };
 
     const handleSubmission = ({ email }: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
         clearFlashes();
 
-        // Validate CAPTCHA if enabled
-        if (isCaptchaEnabled && !token) {
-            addFlash({ type: 'error', title: 'Error', message: 'Please complete the CAPTCHA challenge.' });
-            setSubmitting(false);
-            return;
-        }
-
-        const requestData: any = { email };
-
-        // Add CAPTCHA token based on provider
-        if (isCaptchaEnabled && token) {
-            switch (captcha.driver) {
-                case 'turnstile':
-                    requestData['cf-turnstile-response'] = token;
-                    break;
-                case 'hcaptcha':
-                    requestData['h-captcha-response'] = token;
-                    break;
-                case 'friendly':
-                    requestData['frc-captcha-response'] = token;
-                    break;
-                case 'mcaptcha':
-                    requestData['mcaptcha-response'] = token;
-                    break;
+        // Get captcha response if enabled
+        const captchaResponse = getCaptchaResponse();
+        
+        let requestData: any = { email };
+        if (CaptchaManager.isEnabled() && captchaResponse) {
+            const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
+            if (fieldName) {
+                requestData = { ...requestData, [fieldName]: captchaResponse };
             }
         }
 
@@ -102,7 +50,6 @@ const ForgotPasswordContainer = () => {
                 addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
             })
             .finally(() => {
-                resetCaptcha();
                 setSubmitting(false);
             });
     };
@@ -130,24 +77,13 @@ const ForgotPasswordContainer = () => {
                         </div>
                         <Field id='email' label={'Email'} name={'email'} type={'email'} />
 
-                        {/* CAPTCHA Component */}
-                        {isCaptchaEnabled && siteKey && (
-                            <div className='mt-6 flex justify-center'>
-                                <Captcha
-                                    ref={captchaRef}
-                                    driver={captcha.driver}
-                                    sitekey={siteKey}
-                                    theme={(captcha.turnstile as any)?.theme || 'dark'}
-                                    size={(captcha.turnstile as any)?.size || 'flexible'}
-                                    action={(captcha.turnstile as any)?.action}
-                                    cData={(captcha.turnstile as any)?.cdata}
-                                    onVerify={handleCaptchaSuccess}
-                                    onError={handleCaptchaError}
-                                    onExpire={handleCaptchaExpire}
-                                    className=""
-                                />
-                            </div>
-                        )}
+                        <Captcha
+                            className="mt-6"
+                            onError={(error) => {
+                                console.error('Captcha error:', error);
+                                addFlash({ type: 'error', title: 'Error', message: 'Captcha verification failed. Please try again.' });
+                            }}
+                        />
 
                         <div className='mt-6'>
                             <Button

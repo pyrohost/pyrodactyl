@@ -6,7 +6,7 @@
 @endsection
 
 @section('content-header')
-  <h1>Captcha Settings<small>Configure captcha settings for your panel.</small></h1>
+  <h1>Captcha Settings<small>Configure captcha protection for authentication forms.</small></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('admin.index') }}">Admin</a></li>
     <li class="active">Settings</li>
@@ -17,299 +17,188 @@
   @yield('settings::nav')
   <div class="row">
     <div class="col-xs-12">
-    <form action="" method="POST">
-      @csrf
-      @method('PATCH')
-      <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">CAPTCHA Provider</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-4">
-          <label class="control-label">Provider</label>
-          <div>
-          <select class="form-control" name="driver" id="captcha_provider">
-            <option value="none" @if(isset($current) && $current['driver'] === 'none') selected @endif>Disabled
-            </option>
-            <option value="hcaptcha" @if(isset($current) && $current['driver'] === 'hcaptcha') selected @endif>
-            hCaptcha</option>
-            <option value="mcaptcha" @if(isset($current) && $current['driver'] === 'mcaptcha') selected @endif>
-            mCaptcha</option>
-            <option value="turnstile" @if(isset($current) && $current['driver'] === 'turnstile') selected @endif>
-            Cloudflare
-            Turnstile</option>
-            <!-- <option value="proton" @if(isset($current) && $current['driver'] === 'proton') selected @endif>Proton Captcha -->
-            <!-- </option> -->
-            <option value="friendly" @if(isset($current) && $current['driver'] === 'friendly') selected @endif>
-            Friendly Captcha
-            </option>
-            <!-- <option value="recaptcha" @if(isset($current) && $current['driver'] === 'recaptcha') selected @endif>
-      ReCaptcha
-      </option> -->
-          </select>
-          <p class="text-muted small">Select which CAPTCHA provider you want to use.</p>
+      <form action="{{ route('admin.settings.captcha') }}" method="POST">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Captcha Provider</h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="form-group col-md-4">
+                <label class="control-label">Provider</label>
+                <div>
+                  <select name="pterodactyl:captcha:provider" class="form-control" id="captcha-provider">
+                    @foreach($providers as $key => $name)
+                      <option value="{{ $key }}" @if(old('pterodactyl:captcha:provider', config('pterodactyl.captcha.provider', 'none')) === $key) selected @endif>{{ $name }}</option>
+                    @endforeach
+                  </select>
+                  <p class="text-muted"><small>Select the captcha provider to use for authentication forms.</small></p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        </div>
-      </div>
-      </div>
 
-      <!-- hCaptcha Settings -->
-      <div class="box provider-settings" id="hcaptcha_settings"
-      style="@if(isset($current) && $current['driver'] !== 'hcaptcha') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">hCaptcha Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="hcaptcha[site_key]"
-            value="{{ old('hcaptcha.site_key', isset($current) ? $current['hcaptcha']['site_key'] : '') }}">
+        <div class="box" id="turnstile-settings" style="display: none;">
+          <div class="box-header with-border">
+            <h3 class="box-title">Cloudflare Turnstile Configuration</h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Site Key</label>
+                <div>
+                  <input type="text" class="form-control" name="pterodactyl:captcha:turnstile:site_key"
+                    value="{{ old('pterodactyl:captcha:turnstile:site_key', config('pterodactyl.captcha.turnstile.site_key', '')) }}" />
+                  <p class="text-muted"><small>The site key provided by Cloudflare Turnstile. This is used in the frontend widget.</small></p>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">Secret Key</label>
+                <div>
+                  <input type="password" class="form-control" name="pterodactyl:captcha:turnstile:secret_key"
+                    value="{{ old('pterodactyl:captcha:turnstile:secret_key', config('pterodactyl.captcha.turnstile.secret_key', '')) }}" />
+                  <p class="text-muted"><small>The secret key provided by Cloudflare Turnstile. This is used for server-side verification.</small></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="alert alert-info">
+                  <strong>Setup Instructions:</strong>
+                  <ol>
+                    <li>Visit the <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank">Cloudflare Turnstile dashboard</a></li>
+                    <li>Create a new site or select an existing one</li>
+                    <li>Add your domain to the site configuration</li>
+                    <li>Copy the Site Key and Secret Key from the dashboard</li>
+                    <li>Paste them into the fields above</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="hcaptcha[secret_key]"
-            value="{{ old('hcaptcha.secret_key', isset($current) ? $current['hcaptcha']['secret_key'] : '') }}">
-          <p class="text-muted small">Get your keys from <a href="https://dashboard.hcaptcha.com/"
-            target="_blank">hCaptcha dashboard</a>.</p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
 
-      <!-- mCaptcha Settings -->
-      <div class="box provider-settings" id="mcaptcha_settings"
-      style="@if(isset($current) && $current['driver'] !== 'mcaptcha') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">mCaptcha Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-4">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="mcaptcha[site_key]"
-            value="{{ old('mcaptcha.site_key', isset($current) ? $current['mcaptcha']['site_key'] : '') }}">
+        <div class="box" id="hcaptcha-settings" style="display: none;">
+          <div class="box-header with-border">
+            <h3 class="box-title">hCaptcha Configuration</h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Site Key</label>
+                <div>
+                  <input type="text" class="form-control" name="pterodactyl:captcha:hcaptcha:site_key"
+                    value="{{ old('pterodactyl:captcha:hcaptcha:site_key', config('pterodactyl.captcha.hcaptcha.site_key', '')) }}" />
+                  <p class="text-muted"><small>The site key provided by hCaptcha. This is used in the frontend widget.</small></p>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">Secret Key</label>
+                <div>
+                  <input type="password" class="form-control" name="pterodactyl:captcha:hcaptcha:secret_key"
+                    value="{{ old('pterodactyl:captcha:hcaptcha:secret_key', config('pterodactyl.captcha.hcaptcha.secret_key', '')) }}" />
+                  <p class="text-muted"><small>The secret key provided by hCaptcha. This is used for server-side verification.</small></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="alert alert-info">
+                  <strong>Setup Instructions:</strong>
+                  <ol>
+                    <li>Visit the <a href="https://dashboard.hcaptcha.com/sites" target="_blank">hCaptcha dashboard</a></li>
+                    <li>Create a new site or select an existing one</li>
+                    <li>Add your domain to the site configuration</li>
+                    <li>Copy the Site Key and Secret Key from the dashboard</li>
+                    <li>Paste them into the fields above</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="mcaptcha[secret_key]"
-            value="{{ old('mcaptcha.secret_key', isset($current) ? $current['mcaptcha']['secret_key'] : '') }}">
-          </div>
-        </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Endpoint</label>
-          <div>
-          <input type="text" class="form-control" name="mcaptcha[endpoint]"
-            value="{{ old('mcaptcha.endpoint', isset($current) ? $current['mcaptcha']['endpoint'] : '') }}">
-          <p class="text-muted small">URL to your mCaptcha instance API endpoint.</p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
 
-      <!-- Cloudflare Turnstile Settings -->
-      <div class="box provider-settings" id="turnstile_settings"
-      style="@if(isset($current) && $current['driver'] !== 'turnstile') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">Cloudflare Turnstile Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="turnstile[site_key]"
-            value="{{ old('turnstile.site_key', isset($current) ? $current['turnstile']['site_key'] : '') }}">
+        <div class="box" id="recaptcha-settings" style="display: none;">
+          <div class="box-header with-border">
+            <h3 class="box-title">Google reCAPTCHA v3 Configuration</h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="control-label">Site Key</label>
+                <div>
+                  <input type="text" class="form-control" name="pterodactyl:captcha:recaptcha:site_key"
+                    value="{{ old('pterodactyl:captcha:recaptcha:site_key', config('pterodactyl.captcha.recaptcha.site_key', '')) }}" />
+                  <p class="text-muted"><small>The site key provided by Google reCAPTCHA v3. This is used in the frontend integration.</small></p>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="control-label">Secret Key</label>
+                <div>
+                  <input type="password" class="form-control" name="pterodactyl:captcha:recaptcha:secret_key"
+                    value="{{ old('pterodactyl:captcha:recaptcha:secret_key', config('pterodactyl.captcha.recaptcha.secret_key', '')) }}" />
+                  <p class="text-muted"><small>The secret key provided by Google reCAPTCHA v3. This is used for server-side verification.</small></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="alert alert-info">
+                  <strong>reCAPTCHA v3 Setup Instructions:</strong>
+                  <ol>
+                    <li>Visit the <a href="https://www.google.com/recaptcha/admin" target="_blank">Google reCAPTCHA admin console</a></li>
+                    <li>Create a new site and select <strong>reCAPTCHA v3</strong></li>
+                    <li>Add your domain(s) to the site configuration</li>
+                    <li>Copy the Site Key and Secret Key from the dashboard</li>
+                    <li>Paste them into the fields above</li>
+                  </ol>
+                  <p><strong>Note:</strong> reCAPTCHA v3 runs invisibly in the background and returns a score (0.0-1.0) based on user interactions. A threshold of 0.5 is used by default.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="turnstile[secret_key]"
-            value="{{ old('turnstile.secret_key', isset($current) ? $current['turnstile']['secret_key'] : '') }}">
-          <p class="text-muted small">Get your keys from <a
-            href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank">Cloudflare dashboard</a>.
-          </p>
-          </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="form-group col-md-4">
-          <label class="control-label">Theme</label>
-          <div>
-          <select class="form-control" name="turnstile[theme]">
-            <option value="auto" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'auto') selected @endif>Auto</option>
-            <option value="light" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'light') selected @endif>Light</option>
-            <option value="dark" @if(old('turnstile.theme', isset($current) ? $current['turnstile']['theme'] ?? 'auto' : 'auto') === 'dark') selected @endif>Dark</option>
-          </select>
-          <p class="text-muted small">Widget color theme.</p>
-          </div>
-        </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Size</label>
-          <div>
-          <select class="form-control" name="turnstile[size]">
-            <option value="normal" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'normal') selected @endif>Normal</option>
-            <option value="compact" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'compact') selected @endif>Compact</option>
-            <option value="flexible" @if(old('turnstile.size', isset($current) ? $current['turnstile']['size'] ?? 'normal' : 'normal') === 'flexible') selected @endif>Flexible</option>
-          </select>
-          <p class="text-muted small">Widget size.</p>
-          </div>
-        </div>
-        <div class="form-group col-md-4">
-          <label class="control-label">Appearance</label>
-          <div>
-          <select class="form-control" name="turnstile[appearance]">
-            <option value="always" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'always') selected @endif>Always</option>
-            <option value="execute" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'execute') selected @endif>Execute</option>
-            <option value="interaction-only" @if(old('turnstile.appearance', isset($current) ? $current['turnstile']['appearance'] ?? 'always' : 'always') === 'interaction-only') selected @endif>Interaction Only</option>
-          </select>
-          <p class="text-muted small">When the widget becomes visible.</p>
-          </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Action (Optional)</label>
-          <div>
-          <input type="text" class="form-control" name="turnstile[action]"
-            value="{{ old('turnstile.action', isset($current) ? $current['turnstile']['action'] ?? '' : '') }}">
-          <p class="text-muted small">Custom action identifier for analytics (max 32 chars, alphanumeric + _ -).</p>
-          </div>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Custom Data (Optional)</label>
-          <div>
-          <input type="text" class="form-control" name="turnstile[cdata]"
-            value="{{ old('turnstile.cdata', isset($current) ? $current['turnstile']['cdata'] ?? '' : '') }}">
-          <p class="text-muted small">Custom data passed to widget (max 255 chars, alphanumeric + _ -).</p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-
-      <!-- Proton Captcha Settings -->
-      <div class="box provider-settings" id="proton_settings"
-      style="@if(isset($current) && $current['driver'] !== 'proton') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">Proton Captcha Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="proton[site_key]"
-            value="{{ old('proton.site_key', isset($current) && isset($current['proton']) ? $current['proton']['site_key'] : '') }}">
-          </div>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="proton[secret_key]"
-            value="{{ old('proton.secret_key', isset($current) && isset($current['proton']) ? $current['proton']['secret_key'] : '') }}">
-          <p class="text-muted small">Get your keys from <a href="https://account.proton.me/signup"
-            target="_blank">Proton account</a>.</p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-
-      <!-- Friendly Captcha Settings -->
-      <div class="box provider-settings" id="friendly_settings"
-      style="@if(isset($current) && $current['driver'] !== 'friendly') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">Friendly Captcha Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="friendly[site_key]"
-            value="{{ old('friendly.site_key', isset($current) ? $current['friendly']['site_key'] : '') }}">
-          </div>
-        </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="friendly[secret_key]"
-            value="{{ old('friendly.secret_key', isset($current) ? $current['friendly']['secret_key'] : '') }}">
-          <p class="text-muted small">Get your keys from <a href="https://friendlycaptcha.com/"
-            target="_blank">Friendly Captcha</a>.</p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
 
 
-      <!-- Recaptcha Settings -->
-      <div class="box provider-settings" id="recaptcha_settings"
-      style="@if(isset($current) && $current['driver'] !== 'recaptcha') display: none; @endif">
-      <div class="box-header with-border">
-        <h3 class="box-title">Recaptcha Settings</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-        <div class="form-group col-md-6">
-          <label class="control-label">Site Key</label>
-          <div>
-          <input type="text" class="form-control" name="recaptcha[site_key]"
-            value="{{ old('recaptcha.site_key', isset($current) ? $current['recaptcha']['site_key'] : '') }}">
+        <div class="box box-primary">
+          <div class="box-footer">
+            {{ csrf_field() }}
+            <button type="submit" name="_method" value="PATCH" class="btn btn-sm btn-primary pull-right">Save</button>
           </div>
         </div>
-        <div class="form-group col-md-6">
-          <label class="control-label">Secret Key</label>
-          <div>
-          <input type="text" class="form-control" name="recaptcha[secret_key]"
-            value="{{ old('recaptcha.secret_key', isset($current) ? $current['recaptcha']['secret_key'] : '') }}">
-          <p class="text-muted small">Get your keys from <a href="https://www.google.com/recaptcha/admin/create"
-            target="_blank">Google api Dashboard</a>.
-          </p>
-          </div>
-        </div>
-        </div>
-      </div>
-      </div>
-
-      <div class="box box-primary">
-      <div class="box-footer">
-        {{ csrf_field() }}
-        <button type="submit" class="btn btn-sm btn-primary pull-right">Save</button>
-      </div>
-      </div>
-    </form>
+      </form>
     </div>
   </div>
-@endsection
 
-@section('footer-scripts')
-  @parent
   <script>
-    document.getElementById('captcha_provider').addEventListener('change', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+      const providerSelect = document.getElementById('captcha-provider');
+      const turnstileSettings = document.getElementById('turnstile-settings');
+      const hcaptchaSettings = document.getElementById('hcaptcha-settings');
+      const recaptchaSettings = document.getElementById('recaptcha-settings');
 
-    document.querySelectorAll('.provider-settings').forEach(el => {
-      el.style.display = 'none';
-    });
+      function toggleSettings() {
+        const provider = providerSelect.value;
+        
+        // Hide all provider-specific settings first
+        turnstileSettings.style.display = 'none';
+        hcaptchaSettings.style.display = 'none';
+        recaptchaSettings.style.display = 'none';
+        
+        if (provider === 'turnstile') {
+          turnstileSettings.style.display = 'block';
+        } else if (provider === 'hcaptcha') {
+          hcaptchaSettings.style.display = 'block';
+        } else if (provider === 'recaptcha') {
+          recaptchaSettings.style.display = 'block';
+        }
+      }
 
-
-    const selectedProvider = this.value;
-    if (selectedProvider !== 'none') {
-      document.getElementById(selectedProvider + '_settings').style.display = 'block';
-    }
+      providerSelect.addEventListener('change', toggleSettings);
+      
+      // Initialize on page load with a small delay to ensure DOM is ready
+      setTimeout(toggleSettings, 100);
     });
   </script>
 @endsection

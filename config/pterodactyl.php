@@ -46,6 +46,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Captcha Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for captcha providers used in authentication forms.
+    */
+
+    'captcha' => [
+        'provider' => env('CAPTCHA_PROVIDER', 'none'),
+        'turnstile' => [
+            'site_key' => env('TURNSTILE_SITE_KEY', ''),
+            'secret_key' => env('TURNSTILE_SECRET_KEY', ''),
+        ],
+        'hcaptcha' => [
+            'site_key' => env('HCAPTCHA_SITE_KEY', ''),
+            'secret_key' => env('HCAPTCHA_SECRET_KEY', ''),
+        ],
+        'recaptcha' => [
+            'site_key' => env('RECAPTCHA_SITE_KEY', ''),
+            'secret_key' => env('RECAPTCHA_SECRET_KEY', ''),
+        ],
+        'forms' => [
+            'login' => env('CAPTCHA_LOGIN', false),
+            'forgot_password' => env('CAPTCHA_FORGOT_PASSWORD', false),
+            'reset_password' => env('CAPTCHA_RESET_PASSWORD', false),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Pagination
     |--------------------------------------------------------------------------
     |

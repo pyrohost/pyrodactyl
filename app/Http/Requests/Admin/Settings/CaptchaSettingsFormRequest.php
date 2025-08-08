@@ -1,69 +1,105 @@
 <?php
+
 namespace Pterodactyl\Http\Requests\Admin\Settings;
 
+use Illuminate\Validation\Rule;
 use Pterodactyl\Http\Requests\Admin\AdminFormRequest;
 
 class CaptchaSettingsFormRequest extends AdminFormRequest
 {
-  public function rules(): array
-  {
-    $rules = [
-      'driver' => 'required|in:none,hcaptcha,mcaptcha,turnstile,friendly,recaptcha',
-    ];
-
-    // Only apply validation rules for the selected driver
-    $driver = $this->input('driver');
-    if ($driver !== 'none') {
-      $rules[$driver] = 'required|array';
-
-      if ($driver === 'hcaptcha') {
-        $rules['hcaptcha.site_key'] = 'required|string';
-        $rules['hcaptcha.secret_key'] = 'required|string';
-      } elseif ($driver === 'mcaptcha') {
-        $rules['mcaptcha.site_key'] = 'required|string';
-        $rules['mcaptcha.secret_key'] = 'required|string';
-        $rules['mcaptcha.endpoint'] = 'required|url';
-      } elseif ($driver === 'turnstile') {
-        $rules['turnstile.site_key'] = 'required|string';
-        $rules['turnstile.secret_key'] = 'required|string';
-        $rules['turnstile.theme'] = 'nullable|in:auto,light,dark';
-        $rules['turnstile.size'] = 'nullable|in:normal,compact,flexible';
-        $rules['turnstile.appearance'] = 'nullable|in:always,execute,interaction-only';
-        $rules['turnstile.action'] = 'nullable|string|max:32|regex:/^[a-zA-Z0-9_-]*$/';
-        $rules['turnstile.cdata'] = 'nullable|string|max:255|regex:/^[a-zA-Z0-9_-]*$/';
-      } elseif ($driver === 'friendly') {
-        $rules['friendly.site_key'] = 'required|string';
-        $rules['friendly.secret_key'] = 'required|string';
-      } elseif ($driver === 'recaptcha') {
-        $rules['recaptcha.site_key'] = 'required|string';
-        $rules['recaptcha.secret_key'] = 'required|string';
-      }
+    public function rules(): array
+    {
+        return [
+            'pterodactyl:captcha:provider' => ['required', 'string', Rule::in(['none', 'turnstile', 'hcaptcha', 'recaptcha'])],
+            'pterodactyl:captcha:turnstile:site_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,turnstile',
+            ],
+            'pterodactyl:captcha:turnstile:secret_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,turnstile',
+            ],
+            'pterodactyl:captcha:hcaptcha:site_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,hcaptcha',
+            ],
+            'pterodactyl:captcha:hcaptcha:secret_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,hcaptcha',
+            ],
+            'pterodactyl:captcha:recaptcha:site_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,recaptcha',
+            ],
+            'pterodactyl:captcha:recaptcha:secret_key' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:pterodactyl:captcha:provider,recaptcha',
+            ],
+        ];
     }
 
-    return $rules;
-  }
+    public function attributes(): array
+    {
+        return [
+            'pterodactyl:captcha:provider' => 'Captcha Provider',
+            'pterodactyl:captcha:turnstile:site_key' => 'Turnstile Site Key',
+            'pterodactyl:captcha:turnstile:secret_key' => 'Turnstile Secret Key',
+            'pterodactyl:captcha:hcaptcha:site_key' => 'hCaptcha Site Key',
+            'pterodactyl:captcha:hcaptcha:secret_key' => 'hCaptcha Secret Key',
+            'pterodactyl:captcha:recaptcha:site_key' => 'reCAPTCHA Site Key',
+            'pterodactyl:captcha:recaptcha:secret_key' => 'reCAPTCHA Secret Key',
+        ];
+    }
 
-  public function attributes(): array
-  {
-    return [
-      'hcaptcha.site_key' => 'hCaptcha Site Key',
-      'hcaptcha.secret_key' => 'hCaptcha Secret Key',
-      'mcaptcha.site_key' => 'mCaptcha Site Key',
-      'mcaptcha.secret_key' => 'mCaptcha Secret Key',
-      'mcaptcha.endpoint' => 'mCaptcha Endpoint',
-      'turnstile.site_key' => 'Turnstile Site Key',
-      'turnstile.secret_key' => 'Turnstile Secret Key',
-      'turnstile.theme' => 'Turnstile Theme',
-      'turnstile.size' => 'Turnstile Size',
-      'turnstile.appearance' => 'Turnstile Appearance',
-      'turnstile.action' => 'Turnstile Action',
-      'turnstile.cdata' => 'Turnstile Custom Data',
-      'proton.site_key' => 'Proton Site Key',
-      'proton.secret_key' => 'Proton Secret Key',
-      'friendly.site_key' => 'Friendly Site Key',
-      'friendly.secret_key' => 'Friendly Secret Key',
-      'recaptcha.site_key' => 'Recaptcha Site Key',
-      'recaptcha.secret_key' => 'Recaptcha Secret Key',
-    ];
-  }
+    public function normalize(?array $only = null): array
+    {
+        $data = $this->validated();
+
+        // Clear provider-specific settings if provider is 'none'
+        if ($data['pterodactyl:captcha:provider'] === 'none') {
+            $data['pterodactyl:captcha:turnstile:site_key'] = '';
+            $data['pterodactyl:captcha:turnstile:secret_key'] = '';
+            $data['pterodactyl:captcha:hcaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:hcaptcha:secret_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:secret_key'] = '';
+        }
+
+        // Clear other provider settings when switching providers
+        if ($data['pterodactyl:captcha:provider'] === 'turnstile') {
+            $data['pterodactyl:captcha:hcaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:hcaptcha:secret_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:secret_key'] = '';
+        } elseif ($data['pterodactyl:captcha:provider'] === 'hcaptcha') {
+            $data['pterodactyl:captcha:turnstile:site_key'] = '';
+            $data['pterodactyl:captcha:turnstile:secret_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:recaptcha:secret_key'] = '';
+        } elseif ($data['pterodactyl:captcha:provider'] === 'recaptcha') {
+            $data['pterodactyl:captcha:turnstile:site_key'] = '';
+            $data['pterodactyl:captcha:turnstile:secret_key'] = '';
+            $data['pterodactyl:captcha:hcaptcha:site_key'] = '';
+            $data['pterodactyl:captcha:hcaptcha:secret_key'] = '';
+        }
+
+        // Apply the $only filter if provided, similar to parent class
+        if ($only !== null) {
+            return array_intersect_key($data, array_flip($only));
+        }
+
+        return $data;
+    }
 }
