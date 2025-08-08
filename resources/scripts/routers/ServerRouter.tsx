@@ -2,8 +2,7 @@
 
 import { useStoreState } from 'easy-peasy';
 import { on } from 'events';
-import type React from 'react';
-import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
+import React, { Fragment, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import routes from '@/routers/routes';
@@ -47,6 +46,84 @@ import getNests from '@/api/nests/getNests';
 import { ServerContext } from '@/state/server';
 
 const blank_egg_prefix = '@';
+
+// Sidebar item components that check both permissions and feature limits
+const DatabasesSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
+    ({ id, onClick }, ref) => {
+        const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases ?? 0);
+
+        // Hide if no database access (limit is 0)
+        if (databaseLimit === 0) return null;
+
+        return (
+            <Can action={'database.*'} matchAny>
+                <NavLink
+                    className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                    ref={ref}
+                    to={`/server/${id}/databases`}
+                    onClick={onClick}
+                    end
+                >
+                    <HugeIconsDatabase fill='currentColor' />
+                    <p>Databases</p>
+                </NavLink>
+            </Can>
+        );
+    },
+);
+DatabasesSidebarItem.displayName = 'DatabasesSidebarItem';
+
+const BackupsSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
+    ({ id, onClick }, ref) => {
+        const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups ?? 0);
+
+        // Hide if no backup access (limit is 0)
+        if (backupLimit === 0) return null;
+
+        return (
+            <Can action={'backup.*'} matchAny>
+                <NavLink
+                    className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                    ref={ref}
+                    to={`/server/${id}/backups`}
+                    onClick={onClick}
+                    end
+                >
+                    <HugeIconsCloudUp fill='currentColor' />
+                    <p>Backups</p>
+                </NavLink>
+            </Can>
+        );
+    },
+);
+BackupsSidebarItem.displayName = 'BackupsSidebarItem';
+
+const NetworkingSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
+    ({ id, onClick }, ref) => {
+        const allocationLimit = ServerContext.useStoreState(
+            (state) => state.server.data?.featureLimits.allocations ?? 0,
+        );
+
+        // Hide if no allocation access (limit is 0)
+        if (allocationLimit === 0) return null;
+
+        return (
+            <Can action={'allocation.*'} matchAny>
+                <NavLink
+                    className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                    ref={ref}
+                    to={`/server/${id}/network`}
+                    onClick={onClick}
+                    end
+                >
+                    <HugeIconsConnections fill='currentColor' />
+                    <p>Networking</p>
+                </NavLink>
+            </Can>
+        );
+    },
+);
+NetworkingSidebarItem.displayName = 'NetworkingSidebarItem';
 
 interface Egg {
     object: string;
@@ -453,42 +530,17 @@ const ServerRouter = () => {
                                                 <p>Files</p>
                                             </NavLink>
                                         </Can>
-                                        <Can action={'database.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationDatabases}
-                                                to={`/server/${id}/databases`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsDatabase fill='currentColor' />
-                                                <p>Databases</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'backup.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationBackups}
-                                                to={`/server/${id}/backups`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsCloudUp fill='currentColor' />
-                                                <p>Backups</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'allocation.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationNetworking}
-                                                to={`/server/${id}/network`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsConnections fill='currentColor' />
-                                                <p>Networking</p>
-                                            </NavLink>
-                                        </Can>
+                                        <DatabasesSidebarItem
+                                            id={id}
+                                            ref={NavigationDatabases}
+                                            onClick={toggleSidebar}
+                                        />
+                                        <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={toggleSidebar} />
+                                        <NetworkingSidebarItem
+                                            id={id}
+                                            ref={NavigationNetworking}
+                                            onClick={toggleSidebar}
+                                        />
                                         <Can action={'user.*'} matchAny>
                                             <NavLink
                                                 className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'

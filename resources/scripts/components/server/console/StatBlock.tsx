@@ -14,10 +14,21 @@ interface StatBlockProps {
 const StatBlock = ({ title, copyOnClick, className, children }: StatBlockProps) => {
     return (
         <CopyOnClick text={copyOnClick}>
-            <div className={clsx(styles.stat_block, 'bg-[#ffffff09] border-[1px] border-[#ffffff11]', className)}>
+            <div
+                className={clsx(
+                    'bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 cursor-pointer group shadow-sm',
+                    className,
+                )}
+            >
                 <div className={'flex flex-col justify-center overflow-hidden w-full'}>
-                    <p className={'leading-tight text-xs md:text-sm text-zinc-400'}>{title}</p>
-                    <div className={'text-[32px] font-extrabold leading-[98%] tracking-[-0.07rem] w-full truncate'}>
+                    <p className={'leading-tight text-xs text-zinc-400 mb-2 uppercase tracking-wide font-medium'}>
+                        {title}
+                    </p>
+                    <div
+                        className={
+                            'text-lg sm:text-xl font-bold leading-tight tracking-tight w-full truncate text-zinc-100 group-hover:text-white transition-colors duration-150'
+                        }
+                    >
                         {children}
                     </div>
                 </div>

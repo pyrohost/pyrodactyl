@@ -161,73 +161,63 @@ const DatabaseRow = ({ database }: Props) => {
                 </div>
             </Modal>
 
-            {/* Title */}
-            <div className={`flex-auto box-border min-w-fit`}>
-                <div className='flex flex-row flex-none align-middle items-center gap-6'>
-                    <FontAwesomeIcon icon={faDatabase} className='flex-none' />
-                    <div>
-                        <CopyOnClick text={database.name}>
-                            <p className='text-lg'>{database.name}</p>
-                        </CopyOnClick>
-                        <CopyOnClick text={database.connectionString}>
-                            <p className={`text-xs text-zinc-400 font-mono`}>{database.connectionString}</p>
-                        </CopyOnClick>
+            <div className='bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+                    <div className='flex-1 min-w-0'>
+                        <div className='flex items-center gap-3 mb-2'>
+                            <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                                <FontAwesomeIcon icon={faDatabase} className='text-zinc-400 w-4 h-4' />
+                            </div>
+                            <div className='min-w-0 flex-1'>
+                                <CopyOnClick text={database.name}>
+                                    <h3 className='text-base font-medium text-zinc-100 truncate'>{database.name}</h3>
+                                </CopyOnClick>
+                            </div>
+                        </div>
+
+                        <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm'>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Endpoint</p>
+                                <CopyOnClick text={database.connectionString}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.connectionString}</p>
+                                </CopyOnClick>
+                            </div>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>From</p>
+                                <CopyOnClick text={database.allowConnectionsFrom}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.allowConnectionsFrom}</p>
+                                </CopyOnClick>
+                            </div>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Username</p>
+                                <CopyOnClick text={database.username}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.username}</p>
+                                </CopyOnClick>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
+                        <button
+                            type='button'
+                            onClick={() => setConnectionVisible(true)}
+                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150'
+                        >
+                            <FontAwesomeIcon icon={faEye} className='w-4 h-4' />
+                            <span className='hidden sm:inline'>Details</span>
+                        </button>
+                        <Can action={'database.delete'}>
+                            <button
+                                type='button'
+                                onClick={() => setVisible(true)}
+                                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150'
+                            >
+                                <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                                <span className='hidden sm:inline'>Delete</span>
+                            </button>
+                        </Can>
                     </div>
                 </div>
-            </div>
-
-            {/* Properties + buttons */}
-            <div className={`flex flex-col items-center sm:gap-12 gap-4 sm:flex-row`}>
-                <div className='flex flex-wrap gap-4 justify-center m-auto'>
-                    <For
-                        each={[
-                            { label: 'Endpoint', value: database.connectionString },
-                            { label: 'From', value: database.allowConnectionsFrom },
-                            { label: 'Username', value: database.username },
-                        ]}
-                        memo
-                    >
-                        {(db, index) => (
-                            <div key={index} className='text-center'>
-                                <CopyOnClick text={db.value}>
-                                    <p className='text-sm'>{db.value}</p>
-                                </CopyOnClick>
-                                <p className='mt-1 text-xs text-zinc-500 uppercase select-none'>{db.label}</p>
-                            </div>
-                        )}
-                    </For>
-                </div>
-
-                <div className='flex align-middle items-center justify-center'>
-                    <button
-                        type={'button'}
-                        aria-label={'View database connection details'}
-                        className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 flex align-middle items-center justify-center flex-col cursor-pointer`}
-                        onClick={() => setConnectionVisible(true)}
-                    >
-                        <FontAwesomeIcon icon={faEye} className={`px-5`} size='lg' />
-                        Details
-                    </button>
-                    <Can action={'database.delete'}>
-                        <button
-                            type={'button'}
-                            aria-label={'Delete database'}
-                            className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
-                            onClick={() => setVisible(true)}
-                        >
-                            <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
-                            Delete
-                        </button>
-                    </Can>
-                </div>
-                {/* <Button onClick={() => setConnectionVisible(true)}>
-                        <FontAwesomeIcon icon={faEye} fixedWidth />
-                    </Button>
-                    <Can action={'database.delete'}>
-                        <Button color={'red'} onClick={() => setVisible(true)}>
-                            <FontAwesomeIcon icon={faTrashAlt} fixedWidth />
-                        </Button>
-                    </Can> */}
             </div>
         </>
     );

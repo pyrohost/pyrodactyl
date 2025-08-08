@@ -45,16 +45,22 @@ const terminalProps: ITerminalOptions = {
     disableStdin: true,
     cursorStyle: 'underline',
     allowTransparency: true,
-    fontSize: 12,
-    fontFamily: 'monospace, monospace',
-    // rows: 30,
+    fontSize: window.innerWidth < 640 ? 11 : 12,
+    fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
     theme: theme,
 };
 
 const Console = () => {
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
-    const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
+    const terminal = useMemo(
+        () =>
+            new Terminal({
+                ...terminalProps,
+                rows: window.innerWidth < 640 ? 20 : 25,
+            }),
+        [],
+    );
     const fitAddon = new FitAddon();
     const searchAddon = new SearchAddon();
     const webLinksAddon = new WebLinksAddon();
@@ -145,6 +151,9 @@ const Console = () => {
         'resize',
         debounce(() => {
             if (terminal.element) {
+                // Update font size based on window width
+                const newFontSize = window.innerWidth < 640 ? 11 : 12;
+                terminal.options.fontSize = newFontSize;
                 fitAddon.fit();
             }
         }, 100),
@@ -193,39 +202,25 @@ const Console = () => {
     }, [connected, instance]);
 
     return (
-        <div
-            className='transform-gpu skeleton-anim-2'
-            style={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                animationDelay: `250ms`,
-                animationTimingFunction:
-                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-            }}
-        >
-            <div className={clsx(styles.terminal, 'relative')}>
+        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl hover:border-[#ffffff20] transition-all duration-150 overflow-hidden shadow-sm'>
+            <div className='relative'>
                 <SpinnerOverlay visible={!connected} size={'large'} />
-                <div
-                    className={clsx(styles.terminalContainer, styles.overflows_container, {
-                        'rounded-b': !canSendCommands,
-                    })}
-                >
-                    <div className={'h-full'}>
-                        <div id={styles.terminal} ref={ref} />
+                <div className='bg-[#131313] min-h-[280px] sm:min-h-[380px] p-3 sm:p-4 font-mono overflow-hidden'>
+                    <div className='h-full w-full'>
+                        <div ref={ref} className='h-full w-full' />
                     </div>
                 </div>
                 {canSendCommands && (
-                    <div className={clsx('relative', styles.overflows_container)}>
+                    <div className='relative border-t-[1px] border-[#ffffff11] bg-[#0f0f0f]'>
                         <input
-                            className={clsx('peer', styles.command_input)}
-                            type={'text'}
-                            placeholder={'Enter a command'}
-                            aria-label={'Console command input.'}
+                            className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-zinc-100 placeholder-zinc-500 border-0 outline-none focus:ring-0 focus:outline-none focus:bg-[#1a1a1a] transition-colors duration-150'
+                            type='text'
+                            placeholder='Enter a command...'
+                            aria-label='Console command input.'
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}
-                            autoCorrect={'off'}
-                            autoCapitalize={'none'}
+                            autoCorrect='off'
+                            autoCapitalize='none'
                         />
                     </div>
                 )}

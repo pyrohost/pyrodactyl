@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -47,8 +48,13 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <button className='cursor-pointer' onClick={() => setConfirm(true)}>
-                Delete
+            <button
+                type='button'
+                onClick={() => setConfirm(true)}
+                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150'
+            >
+                <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
+                <span className='hidden sm:inline'>Delete</span>
             </button>
         </>
     );

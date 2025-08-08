@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import Can from '@/components/elements/Can';
-import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
 import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
@@ -160,40 +160,61 @@ const BackupContextMenu = ({ backup }: Props) => {
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
-                <ContextMenuContent className='flex flex-col gap-1'>
+                <div className='flex flex-wrap gap-2'>
                     <Can action={'backup.download'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
-                            <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
-                            Download Backup
-                        </ContextMenuItem>
+                        <button
+                            type='button'
+                            onClick={doDownload}
+                            disabled={loading}
+                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                        >
+                            <HugeIconsFileDownload className='h-4 w-4' fill='currentColor' />
+                            <span className='hidden sm:inline'>Download</span>
+                        </button>
                     </Can>
                     <Can action={'backup.restore'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
-                            <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
-                            Restore Backup
-                        </ContextMenuItem>
+                        <button
+                            type='button'
+                            onClick={() => setModal('restore')}
+                            disabled={loading}
+                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                        >
+                            <HugeIconsCloudUp className='h-4 w-4' fill='currentColor' />
+                            <span className='hidden sm:inline'>Restore</span>
+                        </button>
                     </Can>
                     <Can action={'backup.delete'}>
-                        <>
-                            <ContextMenuItem className='flex gap-2' onClick={onLockToggle}>
-                                <HugeIconsFileSecurity className='h-4! w-4!' fill='currentColor' />
-                                {backup.isLocked ? 'Unlock' : 'Lock'}
-                            </ContextMenuItem>
-                            {!backup.isLocked && (
-                                <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
-                                    <HugeIconsDelete className='h-4! w-4!' fill='currentColor' />
-                                    Delete Backup
-                                </ContextMenuItem>
-                            )}
-                        </>
+                        <button
+                            type='button'
+                            onClick={onLockToggle}
+                            disabled={loading}
+                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                        >
+                            <HugeIconsFileSecurity className='h-4 w-4' fill='currentColor' />
+                            <span className='hidden sm:inline'>{backup.isLocked ? 'Unlock' : 'Lock'}</span>
+                        </button>
+                        {!backup.isLocked && (
+                            <button
+                                type='button'
+                                onClick={() => setModal('delete')}
+                                disabled={loading}
+                                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150 disabled:opacity-50'
+                            >
+                                <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
+                                <span className='hidden sm:inline'>Delete</span>
+                            </button>
+                        )}
                     </Can>
-                </ContextMenuContent>
+                </div>
             ) : (
                 <button
+                    type='button'
                     onClick={() => setModal('delete')}
-                    className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2 cursor-pointer`}
+                    disabled={loading}
+                    className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150 disabled:opacity-50'
                 >
-                    Delete Backup
+                    <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
+                    <span className='hidden sm:inline'>Delete</span>
                 </button>
             )}
         </>

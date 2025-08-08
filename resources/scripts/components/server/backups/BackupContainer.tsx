@@ -35,18 +35,23 @@ const BackupContainer = () => {
     if (!backups || (error && isValidating)) {
         return (
             <ServerContentBlock title={'Backups'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+                <FlashMessageRender byKey={'backups'} />
+                <MainPageHeader title={'Backups'} />
+                <div className='flex items-center justify-center py-12'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                </div>
             </ServerContentBlock>
         );
     }
 
     return (
         <ServerContentBlock title={'Backups'}>
+            <FlashMessageRender byKey={'backups'} />
             <MainPageHeader title={'Backups'}>
                 <Can action={'backup.create'}>
-                    <div className={`flex flex-col sm:flex-row items-center justify-end`}>
+                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                         {backupLimit > 0 && backups.backupCount > 0 && (
-                            <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
                                 {backups.backupCount} of {backupLimit} backups
                             </p>
                         )}
@@ -54,19 +59,31 @@ const BackupContainer = () => {
                     </div>
                 </Can>
             </MainPageHeader>
-            <FlashMessageRender byKey={'backups'} />
+
             <Pagination data={backups} onPageSelect={setPage}>
                 {({ items }) =>
                     !items.length ? (
-                        // Don't show any error messages if the server has no backups and the user cannot
-                        // create additional ones for the server.
-                        !backupLimit ? null : (
-                            <p className={`text-center text-sm text-zinc-300`}>
-                                {page > 1
-                                    ? "Looks like we've run out of backups to show you, try going back a page."
-                                    : 'Your server does not have any backups.'}
-                            </p>
-                        )
+                        <div className='flex flex-col items-center justify-center py-12 px-4'>
+                            <div className='text-center'>
+                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                                    <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                                        <path
+                                            fillRule='evenodd'
+                                            d='M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z'
+                                            clipRule='evenodd'
+                                        />
+                                    </svg>
+                                </div>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                                    {backupLimit > 0 ? 'No backups found' : 'Backups unavailable'}
+                                </h3>
+                                <p className='text-sm text-zinc-400 max-w-sm'>
+                                    {backupLimit > 0
+                                        ? 'Your server does not have any backups. Create one to get started.'
+                                        : 'Backups cannot be created for this server.'}
+                                </p>
+                            </div>
+                        </div>
                     ) : (
                         <PageListContainer>
                             {items.map((backup) => (
@@ -76,9 +93,6 @@ const BackupContainer = () => {
                     )
                 }
             </Pagination>
-            {backupLimit === 0 && (
-                <p className={`text-center text-sm text-zinc-300`}>Backups cannot be created for this server.</p>
-            )}
         </ServerContentBlock>
     );
 };

@@ -19,6 +19,7 @@ public/assets/manifest.json
 
 # For local development with docker
 docker-compose.yml
+local_docker
 /srv
 /var
 

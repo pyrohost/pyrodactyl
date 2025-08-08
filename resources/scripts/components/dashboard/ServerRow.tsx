@@ -12,9 +12,8 @@ import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/ser
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
 const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>`
-    // background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.044) 100%);
-    border: 1px solid #ffffff07;
     background: #ffffff11;
+    border: 1px solid #ffffff12;
     transition: all 250ms ease-in-out;
     padding: 1.75rem 2rem;
     cursor: pointer;
@@ -25,8 +24,9 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
     position: relative;
 
     &:hover {
-        border: 1px solid #ffffff11;
-        background: #ffffff18;
+        border: 1px solid #ffffff19;
+        background: #ffffff19;
+        transition-duration: 0ms;
     }
 
     & .status-bar {
@@ -121,7 +121,11 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 </div>
             </div>
             <div
-                className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
+                style={{
+                    background:
+                        'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                }}
+                className={`h-full hidden sm:flex items-center justify-center border-[1px] border-[#ffffff12] shadow-md rounded-lg w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
                 {!stats || isSuspended ? (
                     isSuspended ? (
@@ -151,44 +155,27 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     <Fragment>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>CPU</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>{stats.cpuUsagePercent.toFixed(2)}%</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>CPU</p>
+                                <p className='text-xs font-bold w-fit whitespace-nowrap'>
+                                    {stats.cpuUsagePercent.toFixed(2)}%
+                                </p>
                             </div>
-                            {/* <p className={`text-xs text-zinc-600 text-center mt-1`}>of {cpuLimit}</p> */}
                         </div>
                         <div className={`sm:flex hidden`}>
-                            {/* <p className={`text-xs text-zinc-600 text-center mt-1`}>of {memoryLimit}</p> */}
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>RAM</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>RAM</p>
+                                <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {bytesToString(stats.memoryUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>Storage</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Storage</p>
+                                <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {bytesToString(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
-                            {/* Pyro has unlimited storage */}
-                            {/* ░░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄░░░░░░░
-                            ░░░░░█░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄░░░░
-                            ░░░░█░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█░░░
-                            ░░░█░░░░░░▄██▀▄▄░░░░░▄▄▄░░░░█░░
-                            ░▄▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░░█░
-                            █░▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒░█
-                            █░▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█
-                            ░█░▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█░
-                            ░░█░░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█░░
-                            ░░░█░░░░██░░▀█▄▄▄█▄▄█▄████░█░░░
-                            ░░░░█░░░░▀▀▄░█░░░█░█▀██████░█░░
-                            ░░░░░▀▄░░░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█░░
-                            ░░░░░░░▀▄▄░▒▒▒▒░░░░░░░░░░▒░░░█░
-                            ░░░░░░░░░░▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░░░░█░
-                            ░░░░░░░░░░░░░░▀▄▄▄▄▄░░░░░░░░█░░ */}
-                            {/* <p className={`text-xs text-zinc-600 text-center mt-1`}>of {diskLimit}</p> */}
                         </div>
                     </Fragment>
                 )}

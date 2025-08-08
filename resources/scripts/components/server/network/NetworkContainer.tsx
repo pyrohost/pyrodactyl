@@ -2,6 +2,7 @@ import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
+import FlashMessageRender from '@/components/FlashMessageRender';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -54,14 +55,15 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock showFlashKey={'server:network'} title={'Network'}>
+        <ServerContentBlock title={'Network'}>
+            <FlashMessageRender byKey={'server:network'} />
             <MainPageHeader title={'Network'}>
                 {!data ? null : (
                     <>
                         {allocationLimit > 0 && (
                             <Can action={'allocation.create'}>
-                                <div className={`flex flex-col sm:flex-row items-center justify-end`}>
-                                    <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
+                                <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                                    <p className='text-sm text-zinc-300 text-center sm:text-right'>
                                         {data.length} of {allocationLimit} allowed allocations
                                     </p>
                                     {allocationLimit > data.length && (
@@ -70,7 +72,7 @@ const NetworkContainer = () => {
                                                 background:
                                                     'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                                             }}
-                                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
+                                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer hover:bg-[#ffffff11] transition-colors duration-150'
                                             onClick={onCreateAllocation}
                                         >
                                             New Allocation
@@ -82,16 +84,41 @@ const NetworkContainer = () => {
                     </>
                 )}
             </MainPageHeader>
-            {!data ? null : (
-                <>
-                    <PageListContainer data-pyro-network-container-allocations>
-                        <For each={data} memo>
-                            {(allocation) => (
-                                <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
-                            )}
-                        </For>
-                    </PageListContainer>
-                </>
+
+            {!data ? (
+                <div className='flex items-center justify-center py-12'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                </div>
+            ) : data.length > 0 ? (
+                <PageListContainer data-pyro-network-container-allocations>
+                    <For each={data} memo>
+                        {(allocation) => (
+                            <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
+                        )}
+                    </For>
+                </PageListContainer>
+            ) : (
+                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                    <div className='text-center'>
+                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                            <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                                <path
+                                    fillRule='evenodd'
+                                    d='M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+                                    clipRule='evenodd'
+                                />
+                            </svg>
+                        </div>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                            {allocationLimit > 0 ? 'No allocations found' : 'Allocations unavailable'}
+                        </h3>
+                        <p className='text-sm text-zinc-400 max-w-sm'>
+                            {allocationLimit > 0
+                                ? 'Your server does not have any network allocations. Create one to get started.'
+                                : 'Network allocations cannot be created for this server.'}
+                        </p>
+                    </div>
+                </div>
             )}
         </ServerContentBlock>
     );

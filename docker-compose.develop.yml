@@ -9,7 +9,7 @@ x-common:
         # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
-        DB_USERNAME: 'pterodactyl'
+        DB_USERNAME: 'root'
         # DB_PASSWORD: "Uncomment this to user your own password"
 
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
@@ -38,7 +38,7 @@ services:
         restart: always
         command: --default-authentication-plugin=mysql_native_password
         volumes:
-            - './srv/database:/var/lib/mysql'
+            - './local_docker/database:/var/lib/mysql'
         environment:
             <<: *db-environment
             MYSQL_DATABASE: 'panel'
@@ -47,7 +47,11 @@ services:
         image: redis:alpine
         restart: always
     panel:
-        image: pyrodactyl:develop
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+                DEV: "true"
         restart: always
         ports:
             - '3000:80'
@@ -57,20 +61,21 @@ services:
             - cache
         volumes:
             - '.:/app'
-            - './srv/var:/app/var'
-            - './srv/nginx/:/etc/nginx/http.d/'
-            - './srv/certs:/etc/letsencrypt'
-            - './srv/logs/:/app/storage/logs'
-            - './srv/pterodactyl/config/:/etc/pterodactyl'
+            - './local_docker/var:/app/var'
+            - './local_docker/nginx/:/etc/nginx/http.d/'
+            - './local_docker/certs:/etc/letsencrypt'
+            - './local_docker/logs/:/app/storage/logs'
+            - './local_docker/pterodactyl/config/:/etc/pterodactyl'
             # volumes set for the dirs below so the image's files are used instead of the host's files
             - panel_vendor:/app/vendor
             - panel_storage:/app/storage
             - panel_bootstrap_cache:/app/bootstrap/cache
         environment:
             <<: [*panel-environment, *mail-environment]
-            DB_PASSWORD: *db-password
+            DB_PASSWORD: *db-root-password
             DB_ROOT_PASSWORD: *db-root-password
-            APP_ENV: 'production'
+            APP_ENV: 'local'
+            APP_DEBUG: 'true'
             APP_ENVIRONMENT_ONLY: 'false'
             CACHE_DRIVER: 'redis'
             SESSION_DRIVER: 'redis'
@@ -81,14 +86,14 @@ services:
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
             WINGS_INTERNAL_IP: 'wings'
-            WINGS_DIR: '${PWD}'
+            WINGS_DIR: '${PWD}/local_docker'
             PYRODACTYL_DOCKER_DEV: 'true'
     wings:
         # The default Wings image doesn't work on macOS Docker
         # This fork simply removes the incompatible `io.priority` cgroup v2 flag
         # For Linux users, you can use the default image by uncommenting the line below
-        # image: ghcr.io/pterodactyl/wings:latest
-        image: ghcr.io/he3als/wings-mac:latest
+        image: ghcr.io/pterodactyl/wings:latest
+        # image: ghcr.io/he3als/wings-mac:latest
         restart: always
         ports:
             - '8080:8080'
@@ -102,20 +107,20 @@ services:
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - '/etc/ssl/certs:/etc/ssl/certs:ro'
-            - './srv/pterodactyl/config/:/etc/pterodactyl/'
+            - './local_docker/pterodactyl/config/:/etc/pterodactyl/'
 
             # The volumes below need to be the exact same path in the container as on the host.
             #
             # The paths are currently hardcoded in the container on first run, meaning if you move
-            # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
+            # this repo on your host, you'll need to delete "local_docker" folder so the paths can be recreated.
             #
             # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
             # Do not change anything but the $PWD part as this is also hardcoded in the container.
 
-            - '${PWD}/srv/wings/tmp/:${PWD}/srv/wings/tmp/'
-            - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
-            - '${PWD}/srv/wings/:${PWD}/srv/wings/'
-            - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
+            - '${PWD}/local_docker/wings/tmp/:${PWD}/local_docker/wings/tmp/'
+            - '${PWD}/local_docker/wings/docker/containers/:${PWD}/local_docker/wings/docker/containers/'
+            - '${PWD}/local_docker/wings/:${PWD}/local_docker/wings/'
+            - '${PWD}/local_docker/wings/logs/:${PWD}/local_docker/wings/logs/'
 
 networks:
     default:

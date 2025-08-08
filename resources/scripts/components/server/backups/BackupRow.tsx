@@ -53,65 +53,67 @@ const BackupRow = ({ backup }: Props) => {
     });
 
     return (
-        <ContextMenu>
-            <ContextMenuTrigger>
-                <PageListItem>
-                    <div className={`flex-auto max-w-full box-border`}>
-                        <div className='flex flex-row align-middle items-center gap-6 truncate'>
-                            <div className='flex-none'>
-                                {backup.completedAt === null ? (
-                                    <Spinner size={'small'} />
-                                ) : backup.isLocked ? (
-                                    <FontAwesomeIcon icon={faLock} className='text-red-500' />
-                                ) : (
-                                    <FontAwesomeIcon icon={faFile} />
+        <div className='bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+                <div className='flex-1 min-w-0'>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                            {backup.completedAt === null ? (
+                                <Spinner size={'small'} />
+                            ) : backup.isLocked ? (
+                                <FontAwesomeIcon icon={faLock} className='text-red-400 w-4 h-4' />
+                            ) : backup.isSuccessful ? (
+                                <FontAwesomeIcon icon={faFile} className='text-green-400 w-4 h-4' />
+                            ) : (
+                                <FontAwesomeIcon icon={faFile} className='text-red-400 w-4 h-4' />
+                            )}
+                        </div>
+                        <div className='min-w-0 flex-1'>
+                            <div className='flex items-center gap-2 mb-1'>
+                                {backup.completedAt !== null && !backup.isSuccessful && (
+                                    <span className='bg-red-500 py-1 px-2 rounded-full text-white text-xs uppercase font-medium'>
+                                        Failed
+                                    </span>
+                                )}
+                                <h3 className='text-base font-medium text-zinc-100 truncate'>{backup.name}</h3>
+                                {backup.isLocked && (
+                                    <span className='text-xs text-red-400 font-medium bg-red-500/10 px-2 py-1 rounded'>
+                                        Locked
+                                    </span>
                                 )}
                             </div>
-                            <div className={`flex items-center w-full md:flex-1`}>
-                                <div className={`flex flex-col`}>
-                                    <div className={`flex items-center text-sm mb-1`}>
-                                        {backup.completedAt !== null && !backup.isSuccessful && (
-                                            <span
-                                                className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
-                                            >
-                                                Failed
-                                            </span>
-                                        )}
-                                        <div className={`flex gap-2 items-center justify-center`}>
-                                            <p className='break-words truncate text-lg'>{backup.name}</p>
-                                        </div>
-                                    </div>
-                                    {backup.checksum && (
-                                        <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>
-                                            {backup.checksum}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+                            {backup.checksum && (
+                                <p className='text-sm text-zinc-400 font-mono truncate'>{backup.checksum}</p>
+                            )}
                         </div>
                     </div>
 
-                    <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full lg:w-96 sm:min-w-40'>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm'>
                         {backup.completedAt !== null && backup.isSuccessful && (
-                            <>
-                                <span className={`text-xs sm:flex-initial sm:ml-0`}>{bytesToString(backup.bytes)}</span>
-                                <p className={`text-xs inline sm:hidden`}>,&nbsp;</p>
-                            </>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
+                                <p className='text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                            </div>
                         )}
-                        <p
-                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
-                            className={`text-xs sm:flex-initial`}
-                        >
-                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
-                        </p>
+                        <div>
+                            <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
+                            <p
+                                className='text-zinc-300 font-medium'
+                                title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
+                            >
+                                {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
+                            </p>
+                        </div>
                     </div>
+                </div>
 
+                <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
                     <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
-                        {!backup.completedAt ? <></> : <BackupContextMenu backup={backup} />}
+                        {backup.completedAt ? <BackupContextMenu backup={backup} /> : null}
                     </Can>
-                </PageListItem>
-            </ContextMenuTrigger>
-        </ContextMenu>
+                </div>
+            </div>
+        </div>
     );
 };
 

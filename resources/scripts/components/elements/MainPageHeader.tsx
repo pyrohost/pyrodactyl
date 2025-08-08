@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { JSX } from 'react';
 import styled from 'styled-components';
 
 const HeaderWrapper = styled.div``;
@@ -22,7 +23,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
                 'flex',
                 direction === 'row' ? 'items-center flex-col md:flex-row' : 'items-start flex-col',
                 'justify-between',
-                'mb-8 gap-8 mt-8 md:mt-0 select-none',
+                'mb-4 gap-8 mt-8 md:mt-0 select-none',
             )}
         >
             <div className='flex items-center gap-4 flex-wrap'>

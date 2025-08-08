@@ -45,9 +45,9 @@ const DatabasesContainer = () => {
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader title={'Databases'}>
                 <Can action={'database.create'}>
-                    <div className={`flex flex-col sm:flex-row items-center justify-end`}>
+                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                         {databaseLimit > 0 && databases.length > 0 && (
-                            <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
                                 {databases.length} of {databaseLimit} databases
                             </p>
                         )}
@@ -56,26 +56,38 @@ const DatabasesContainer = () => {
                 </Can>
             </MainPageHeader>
 
-            {!databases.length && loading ? null : (
-                <>
-                    {databases.length > 0 ? (
-                        <PageListContainer data-pyro-backups>
-                            <For each={databases} memo>
-                                {(database, index) => (
-                                    <PageListItem key={index}>
-                                        <DatabaseRow key={database.id} database={database} />
-                                    </PageListItem>
-                                )}
-                            </For>
-                        </PageListContainer>
-                    ) : (
-                        <p className={`text-center text-sm text-zinc-300`}>
+            {!databases.length && loading ? (
+                <div className='flex items-center justify-center py-12'>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                </div>
+            ) : databases.length > 0 ? (
+                <PageListContainer data-pyro-databases>
+                    <For each={databases} memo>
+                        {(database, index) => <DatabaseRow key={database.id} database={database} />}
+                    </For>
+                </PageListContainer>
+            ) : (
+                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                    <div className='text-center'>
+                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                            <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                                <path
+                                    fillRule='evenodd'
+                                    d='M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z'
+                                    clipRule='evenodd'
+                                />
+                            </svg>
+                        </div>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                            {databaseLimit > 0 ? 'No databases found' : 'Databases unavailable'}
+                        </h3>
+                        <p className='text-sm text-zinc-400 max-w-sm'>
                             {databaseLimit > 0
-                                ? 'Your server does not have any databases.'
+                                ? 'Your server does not have any databases. Create one to get started.'
                                 : 'Databases cannot be created for this server.'}
                         </p>
-                    )}
-                </>
+                    </div>
+                </div>
             )}
         </ServerContentBlock>
     );

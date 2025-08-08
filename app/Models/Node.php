@@ -86,6 +86,7 @@ class Node extends Model
      * Fields that are mass assignable.
      */
     protected $fillable = [
+        'uuid',
         'public',
         'name',
         'location_id',
@@ -102,6 +103,8 @@ class Node extends Model
         'daemonBase',
         'daemonSFTP',
         'daemonListen',
+        'daemon_token_id',
+        'daemon_token',
         'description',
         'maintenance_mode',
     ];
