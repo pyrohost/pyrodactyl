@@ -1,52 +1,79 @@
 Vagrant.configure("2") do |config|
-    config.vm.box = "almalinux/9"
-    config.vm.network "forwarded_port", guest: 3000, host: 3000, host_ip: "localhost"
-    config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "localhost"
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.hostname = "pyrodactyl-dev"
 
-    # you need enough RAM for packages to install properly
-    config.vm.provider "virtualbox" do |vb|
-        vb.memory = "4096"
-        vb.cpus = "4"
-        vb.cpuexecutioncap = 95
-        vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
-        vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
-        vb.customize ["storagectl", :id, "--name", "IDE Controller", "--remove"]
-        vb.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata"]
-        vb.customize ["modifyvm", :id, "--boot1", "disk"]
-        vb.customize ["modifyvm", :id, "--nic1", "nat"]
+  ram  = (ENV["VM_RAM"]  || "8192").to_i
+  cpus = (ENV["VM_CPUS"] || "8").to_i
 
-    end
-    config.vm.provider "vmware_desktop" do |v|
-        v.vmx["memsize"] = "4096"
-        v.vmx["numvcpus"] = "4"
-        v.vmx["tools.upgrade.policy"] = "manual"
-        v.vmx["RemoteDisplay.vnc.enabled"] = "FALSE"
-        v.vmx["vhv.enable"] = "FALSE"
-        v.vmx["ethernet0.connectionType"] = "nat"
-        v.vmx["ethernet0.wakeOnPacketTx"] = "TRUE"
-        v.vmx["ethernet0.addressType"] = "generated"
-    end
-    # Libvirt provider
-    config.vm.provider "libvirt" do |libvirt|
-        libvirt.memory = 8192
-        libvirt.cpus = 4
-        config.vm.network "public_network", dev: "bridge0"
+  forwarded_ports = [
+    3000,  # app
+    3306,  # database
+    8080,  # alt-http
+    25565, # test ports...
+    25566,
+    25567
+  ]
 
-    end
-    # setup the synced folder and provision the VM
-    config.vm.synced_folder ".", "/var/www/pterodactyl"
-      # type: "virtualbox"
-    #   nfs_version: 4
+  forwarded_ports.each do |p|
+    config.vm.network "forwarded_port",
+      guest: p,
+      host:  p,
+      host_ip: "127.0.0.1",
+      auto_correct: true
+  end
 
-    config.vm.provision "shell", path: "vagrant/provision.sh"
+  config.vm.provider "virtualbox" do |vb|
+    vb.name   = "pyrodactyl-dev"
+    vb.memory = ram
+    vb.cpus   = cpus
+    vb.gui    = false
 
-    config.vm.hostname = "pyrodactyl-dev"
+    vb.customize ["modifyvm", :id, "--cpuexecutioncap", "95"]
+    vb.customize ["modifyvm", :id, "--nic1", "nat"]
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+  end
 
+  config.vm.provider "vmware_desktop" do |v|
+    v.vmx["memsize"]                = ram.to_s
+    v.vmx["numvcpus"]               = cpus.to_s
+    v.vmx["tools.upgrade.policy"]   = "manual"
+    v.vmx["RemoteDisplay.vnc.enabled"] = "FALSE"
+    v.vmx["vhv.enable"]             = "FALSE"
+    v.vmx["ethernet0.connectionType"] = "nat"
+    v.vmx["ethernet0.wakeOnPacketTx"] = "TRUE"
+    v.vmx["ethernet0.addressType"]  = "generated"
+  end
 
-    config.vm.post_up_message = "Pterodactyl is up and running at http://localhost:3000. Login with username: dev@pyro.host, password: 'password'."
+  config.vm.provider "libvirt" do |lv|
+    lv.memory = ram
+    lv.cpus   = cpus
+  end
 
-    # allocated testing ports
-    config.vm.network "forwarded_port", guest: 25565, host: 25565, host_ip: "localhost"
-    config.vm.network "forwarded_port", guest: 25566, host: 25566, host_ip: "localhost"
-    config.vm.network "forwarded_port", guest: 25567, host: 25567, host_ip: "localhost"
+  if Vagrant::Util::Platform.windows?
+    config.vm.synced_folder ".", "/var/www/pterodactyl",
+      type: "smb",
+      smb_username: ENV["VAGRANT_SMB_USERNAME"],
+      smb_password: ENV["VAGRANT_SMB_PASSWORD"],
+      mount_options: ["mfsymlinks"],
+      owner: "vagrant", group: "vagrant"
+  else
+    config.vm.synced_folder ".", "/var/www/pterodactyl",
+      type: "nfs",
+      nfs_version: 4,
+      nfs_udp: false,
+      mount_options: ["rw","vers=4","tcp","fsc","rsize=1048576","wsize=1048576"],
+      owner: "vagrant", group: "vagrant"
+  end
+
+  config.vm.provision "shell",
+    path: "vagrant/provision.sh",
+    keep_color: true,
+    privileged: true
+
+  config.vm.post_up_message = <<~MSG
+    Pyrodactyl is up and running at http://localhost:3000
+    Login with:
+      username: dev@pyro.host
+      password: password
+  MSG
 end
