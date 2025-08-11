@@ -53,7 +53,7 @@ sed -i 's/user www-data;/user vagrant;/' /etc/nginx/nginx.conf
 cat >/etc/nginx/sites-available/pterodactyl.conf <<EOF
 server {
     listen 3000;
-    server_name localhost;
+    server_name 127.0.0.1;
 
     root /var/www/pterodactyl/public;
     index index.html index.htm index.php;
@@ -131,21 +131,21 @@ chmod -R 755 storage/* bootstrap/cache/
 
 # Create the database for the panel
 mysql -u root -e "CREATE DATABASE panel;" \
-    -e "CREATE USER 'pterodactyl'@'localhost' IDENTIFIED BY 'password';" \
-    -e "GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'localhost' WITH GRANT OPTION;" \
+    -e "CREATE USER 'pterodactyl'@'127.0.0.1' IDENTIFIED BY 'password';" \
+    -e "GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Create the database host user for local and remote connections
-mysql -u root -e "CREATE USER 'pterodactyluser'@'localhost' IDENTIFIED BY 'password';" \
+mysql -u root -e "CREATE USER 'pterodactyluser'@'127.0.0.1' IDENTIFIED BY 'password';" \
     -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'password';" \
-    -e "GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'localhost' WITH GRANT OPTION;" \
+    -e "GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'127.0.0.1' WITH GRANT OPTION;" \
     -e "GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
 # Create a dedicated database host user for Pterodactyl panel
-mysql -u root -e "CREATE USER 'dbhost'@'localhost' IDENTIFIED BY 'dbhostpassword';" \
+mysql -u root -e "CREATE USER 'dbhost'@'127.0.0.1' IDENTIFIED BY 'dbhostpassword';" \
     -e "CREATE USER 'dbhost'@'%' IDENTIFIED BY 'dbhostpassword';" \
-    -e "GRANT ALL PRIVILEGES ON *.* TO 'dbhost'@'localhost' WITH GRANT OPTION;" \
+    -e "GRANT ALL PRIVILEGES ON *.* TO 'dbhost'@'127.0.0.1' WITH GRANT OPTION;" \
     -e "GRANT ALL PRIVILEGES ON *.* TO 'dbhost'@'%' WITH GRANT OPTION;" \
     -e "FLUSH PRIVILEGES;"
 
@@ -155,8 +155,8 @@ php /usr/local/bin/composer install --no-dev --optimize-autoloader
 
 # PHP Artisan commands
 php artisan key:generate --force
-php artisan p:environment:setup -n --author dev@pyro.host --url http://localhost:3000 --cache redis --session redis --queue redis
-php artisan p:environment:database -n --host localhost --port 3306 --database panel --username pterodactyl --password password
+php artisan p:environment:setup -n --author dev@pyro.host --url http://127.0.0.1:3000 --cache redis --session redis --queue redis
+php artisan p:environment:database -n --host 127.0.0.1 --port 3306 --database panel --username pterodactyl --password password
 php artisan migrate --seed --force
 
 # Create a developer user
@@ -165,13 +165,13 @@ mysql -u root -e "USE panel; UPDATE users SET root_admin = 1;" # workaround beca
 
 # Make a location and node for the panel
 php artisan p:location:make -n --short local --long Local
-php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --public 1 --scheme http --proxy 0 --maxMemory 8192 --maxDisk 32768 --overallocateMemory 0 --overallocateDisk 0
+php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn 127.0.0.1 --public 1 --scheme http --proxy 0 --maxMemory 8192 --maxDisk 32768 --overallocateMemory 0 --overallocateDisk 0
 
 # Add some dummy allocations to the node
-mysql -u root -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, 'localhost', 25565), (1, 'localhost', 25566), (1, 'localhost', 25567);"
+mysql -u root -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '127.0.0.1', 25565), (1, '127.0.0.1', 25566), (1, '127.0.0.1', 25567);"
 
 # Create database host entry in Pterodactyl panel
-mysql -u root -e "USE panel; INSERT INTO database_hosts (name, host, port, username, password, max_databases, node_id, created_at, updated_at) VALUES ('Local Database Host', 'localhost', 3306, 'dbhost', 'dbhostpassword', NULL, 1, NOW(), NOW());"
+mysql -u root -e "USE panel; INSERT INTO database_hosts (name, host, port, username, password, max_databases, node_id, created_at, updated_at) VALUES ('Local Database Host', '127.0.0.1', 3306, 'dbhost', 'dbhostpassword', NULL, 1, NOW(), NOW());"
 
 # Set the crontab for the panel
 (
@@ -285,7 +285,7 @@ if [ -n "$API_KEY" ]; then
     echo "Creating Minecraft Vanilla Server via Pterodactyl API..."
     
     # Create the server using the API
-    SERVER_RESPONSE=$(curl -s -X POST "http://localhost:3000/api/application/servers" \
+    SERVER_RESPONSE=$(curl -s -X POST "http://127.0.0.1:3000/api/application/servers" \
         -H "Authorization: Bearer $API_KEY" \
         -H "Content-Type: application/json" \
         -H "Accept: Application/vnd.pterodactyl.v1+json" \
@@ -329,7 +329,7 @@ if [ -n "$API_KEY" ]; then
         
         # Install the server
         echo "Installing Minecraft server..."
-        curl -s -X POST "http://localhost:3000/api/application/servers/$SERVER_ID/reinstall" \
+        curl -s -X POST "http://127.0.0.1:3000/api/application/servers/$SERVER_ID/reinstall" \
             -H "Authorization: Bearer $API_KEY" \
             -H "Content-Type: application/json" \
             -H "Accept: Application/vnd.pterodactyl.v1+json"
@@ -347,7 +347,7 @@ systemctl restart php8.3-fpm
 systemctl reload nginx
 
 echo "=== Provisioning Complete ==="
-echo "Pterodactyl Panel: http://localhost:3000"
+echo "Pterodactyl Panel: http://127.0.0.1:3000"
 echo "Login: dev@pyro.host / password"
 echo "API Key: $API_KEY"
 echo "Minecraft Server will be available once installation completes"
