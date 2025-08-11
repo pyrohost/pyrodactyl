@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       guest: p,
       host:  p,
       host_ip: "127.0.0.1",
-      auto_correct: true
+      auto_correct: false
   end
 
   config.vm.provider "virtualbox" do |vb|
