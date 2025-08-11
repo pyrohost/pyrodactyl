@@ -26,53 +26,70 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
     const actor = activity.relationships.actor;
 
     return (
-        <div className={'grid grid-cols-10 py-4 border-b-2 border-zinc-800 last:rounded-b last:border-0 group'}>
-            <div className={'hidden sm:flex sm:col-span-1 items-center justify-center select-none'}>
-                <div className={'flex items-center w-10 h-10 rounded-full bg-zinc-600 overflow-hidden'}>
-                    <img src={actor?.image} />
-                </div>
-            </div>
-            <div className={'col-span-10 sm:col-span-9 flex'}>
-                <div className={'flex-1 px-4 sm:px-0'}>
-                    <div className={'flex items-center text-zinc-50'}>
-                        {/* <Tooltip placement={'top'} content={actor?.email || 'System User'}> */}
-                        <span>{actor?.username || 'System'}</span>
-                        {/* </Tooltip> */}
-                        <span className={'text-zinc-400'}>&nbsp;&mdash;&nbsp;</span>
-                        <Link
-                            to={`#${pathTo({ event: activity.event })}`}
-                            className={'transition-colors duration-75 active:text-blue-400 hover:text-red-400'}
-                        >
-                            {activity.event}
-                        </Link>
-                        <div className={clsx(style.icons, 'group-hover:text-zinc-300')}>
-                            {activity.isApi && <TerminalIcon fill='contentColor' />}
-                            {activity.event.startsWith('server:sftp.') && (
-                                // <Tooltip placement={'top'} content={'Using SFTP'}>
-                                <FolderIcon fill='contentColor' />
-                            )}
-                            {children}
-                        </div>
+        <div className='flex items-center py-2 px-3 border-b border-zinc-800/30 last:border-0 group hover:bg-zinc-800/20 transition-colors duration-150'>
+            {/* Compact Avatar */}
+            <div className='flex-shrink-0 w-8 h-8 rounded-full bg-zinc-600 overflow-hidden mr-3'>
+                {actor?.image ? (
+                    <img src={actor.image} alt={actor.username || 'System'} className='w-full h-full object-cover' />
+                ) : (
+                    <div className='w-full h-full flex items-center justify-center text-zinc-300 text-xs font-semibold'>
+                        {(actor?.username || 'S').charAt(0).toUpperCase()}
                     </div>
-                    {!activity.hasAdditionalMetadata && (
-                        <p className={style.description}>
-                            <pre>{formatObjectToIdentString(activity.properties)}</pre>
-                        </p>
-                    )}
-                    <div className={'mt-1 flex items-center text-sm'}>
-                        {activity.ip && (
-                            <span>
-                                {activity.ip}
-                                <span className={'text-zinc-400'}>&nbsp;|&nbsp;</span>
+                )}
+            </div>
+
+            {/* Main Content - Compact Layout */}
+            <div className='flex-1 min-w-0'>
+                <div className='flex items-center gap-2 text-sm'>
+                    <span className='font-medium text-zinc-100 truncate'>{actor?.username || 'System'}</span>
+                    <span className='text-zinc-500'>•</span>
+                    <Link
+                        to={`#${pathTo({ event: activity.event })}`}
+                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-blue-400 transition-colors duration-150 truncate'
+                    >
+                        {activity.event}
+                    </Link>
+                    
+                    {/* Compact badges */}
+                    <div className='flex items-center gap-1 ml-auto'>
+                        {activity.isApi && (
+                            <span className='text-xs bg-blue-900/30 text-blue-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
+                                <TerminalIcon fill='currentColor' className='w-3 h-3' />
+                                API
                             </span>
                         )}
-                        {/* <Tooltip placement={'right'} content={format(activity.timestamp, 'MMM do, yyyy H:mm:ss')}> */}
-                        <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
-                        {/* </Tooltip> */}
+                        {activity.event.startsWith('server:sftp.') && (
+                            <span className='text-xs bg-green-900/30 text-green-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
+                                <FolderIcon fill='currentColor' className='w-3 h-3' />
+                                SFTP
+                            </span>
+                        )}
+                        {children}
                     </div>
                 </div>
-                {activity.hasAdditionalMetadata && <ActivityLogMetaButton meta={activity.properties} />}
+
+                {/* Compact metadata and timestamp */}
+                <div className='flex items-center gap-3 mt-1 text-xs text-zinc-400'>
+                    {activity.ip && (
+                        <span className='font-mono bg-zinc-800/30 px-1.5 py-0.5 rounded'>{activity.ip}</span>
+                    )}
+                    <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
+                    
+                    {/* Inline properties for compact view */}
+                    {!activity.hasAdditionalMetadata && activity.properties && Object.keys(activity.properties).length > 0 && (
+                        <span className='text-zinc-500 truncate max-w-xs'>
+                            {formatObjectToIdentString(activity.properties)}
+                        </span>
+                    )}
+                </div>
             </div>
+
+            {/* Metadata button */}
+            {activity.hasAdditionalMetadata && (
+                <div className='flex-shrink-0 ml-2'>
+                    <ActivityLogMetaButton meta={activity.properties} />
+                </div>
+            )}
         </div>
     );
 };

@@ -1,38 +1,74 @@
 import { useState } from 'react';
+import { faCode, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
-import MetaDataIcon from '@/components/elements/hugeicons/MetaData';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 
 const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
     const [open, setOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(JSON.stringify(meta, null, 2));
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy metadata:', err);
+        }
+    };
+
+    const metadataString = formatObjectToIdentString(meta);
+    const metadataJson = JSON.stringify(meta, null, 2);
 
     return (
-        <div className={'self-center md:px-4'}>
-            <Dialog open={open} onClose={() => setOpen(false)} hideCloseIcon title={'Metadata'}>
-                <pre
-                    className={
-                        'bg-zinc-900 rounded-sm p-2 font-mono text-sm leading-relaxed overflow-x-scroll whitespace-pre-wrap'
-                    }
-                >
-                    {formatObjectToIdentString(meta)}
-                </pre>
+        <>
+            <Dialog open={open} onClose={() => setOpen(false)} hideCloseIcon title={'Event Metadata'}>
+                <div className='space-y-4'>
+                    <div className='flex items-center justify-between'>
+                        <h4 className='text-sm font-medium text-zinc-300'>Formatted View</h4>
+                        <Button.Text
+                            variant={Button.Variants.Secondary}
+                            onClick={copyToClipboard}
+                            className='flex items-center gap-2 text-xs'
+                        >
+                            <FontAwesomeIcon icon={faCopy} className='w-3 h-3' />
+                            {copied ? 'Copied!' : 'Copy JSON'}
+                        </Button.Text>
+                    </div>
+                    
+                    <div className='bg-zinc-900 rounded-lg p-4 border border-zinc-800 max-h-96 overflow-auto'>
+                        <pre className='font-mono text-sm leading-relaxed whitespace-pre-wrap text-zinc-300'>
+                            {metadataString}
+                        </pre>
+                    </div>
+                    
+                    <div>
+                        <h4 className='text-sm font-medium text-zinc-300 mb-2'>Raw JSON</h4>
+                        <div className='bg-zinc-900 rounded-lg p-4 border border-zinc-800 max-h-64 overflow-auto'>
+                            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-400'>
+                                {metadataJson}
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                
                 <Dialog.Footer>
                     <Button.Text onClick={() => setOpen(false)}>Close</Button.Text>
                 </Dialog.Footer>
             </Dialog>
+            
             <button
-                aria-describedby={'View additional event metadata'}
-                className={
-                    'p-2 transition-colors duration-100 text-zinc-400 group-hover:text-zinc-300 hover:group-hover:text-zinc-50 cursor-pointer'
-                }
+                aria-label='View additional event metadata'
+                className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >
-                <MetaDataIcon fill='currentColor' className={'w-5 h-5'} />
+                <FontAwesomeIcon icon={faCode} className='w-3 h-3' />
             </button>
-        </div>
+        </>
     );
 };
 
