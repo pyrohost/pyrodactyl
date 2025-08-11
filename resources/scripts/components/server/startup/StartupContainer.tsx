@@ -23,8 +23,8 @@ import VariableBox from '@/components/server/startup/VariableBox';
 import { httpErrorToHuman } from '@/api/http';
 import processStartupCommand from '@/api/server/processStartupCommand';
 import resetStartupCommand from '@/api/server/resetStartupCommand';
-import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import revertDockerImage from '@/api/server/revertDockerImage';
+import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import updateStartupCommand from '@/api/server/updateStartupCommand';
 import getServerStartup from '@/api/swr/getServerStartup';
 
@@ -210,12 +210,11 @@ const StartupContainer = () => {
                     </p>
                     <div className='bg-linear-to-b from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-3'>
                         <p className='text-sm text-amber-200'>
-                            <span className='font-medium'>⚠️ Warning:</span> You will not be able to set a custom image back without contacting support.
+                            <span className='font-medium'>⚠️ Warning:</span> You will not be able to set a custom image
+                            back without contacting support.
                         </p>
                     </div>
-                    <p className='text-sm text-neutral-400'>
-                        Are you sure you want to continue?
-                    </p>
+                    <p className='text-sm text-neutral-400'>Are you sure you want to continue?</p>
                 </div>
             </Dialog.Confirm>
             <div className='space-y-6'>
@@ -452,13 +451,14 @@ const StartupContainer = () => {
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                                             <div className='flex-1'>
                                                 <p className='text-sm text-amber-200'>
-                                                    <span className='font-medium'>⚠️ Notice:</span> This server&apos;s Docker
-                                                    image has been manually set by an administrator and cannot be changed
-                                                    through this interface.
+                                                    <span className='font-medium'>⚠️ Notice:</span> This server&apos;s
+                                                    Docker image has been manually set by an administrator and cannot be
+                                                    changed through this interface.
                                                 </p>
                                                 {canEditDockerImage && (
                                                     <p className='text-xs text-amber-300/80 mt-2'>
-                                                        You can revert to the egg&apos;s default image, but you won&apos;t be able to set it back without contacting support.
+                                                        You can revert to the egg&apos;s default image, but you
+                                                        won&apos;t be able to set it back without contacting support.
                                                     </p>
                                                 )}
                                             </div>

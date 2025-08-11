@@ -1,16 +1,16 @@
-import { faHistory, faFilter, faDownload, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFilter, faHistory, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import PageContentBlock from '@/components/elements/PageContentBlock';
+import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import ActionButton from '@/components/elements/ActionButton';
-import PaginationFooter from '@/components/elements/table/PaginationFooter';
 import { Input } from '@/components/elements/inputs';
-import Select from '@/components/elements/Select';
+import PaginationFooter from '@/components/elements/table/PaginationFooter';
 
 import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
 
@@ -26,7 +26,7 @@ const ActivityLogContainer = () => {
     const [showFilters, setShowFilters] = useState(false);
     const [autoRefresh, setAutoRefresh] = useState(false);
     const [dateRange, setDateRange] = useState('all');
-    
+
     const { data, isValidating, error } = useActivityLogs(filters, {
         revalidateOnMount: true,
         revalidateOnFocus: false,
@@ -36,34 +36,35 @@ const ActivityLogContainer = () => {
     // Extract unique event types for filter dropdown
     const eventTypes = useMemo(() => {
         if (!data?.items) return [];
-        const types = [...new Set(data.items.map(item => item.event))];
+        const types = [...new Set(data.items.map((item) => item.event))];
         return types.sort();
     }, [data?.items]);
 
     // Filter data based on search term and event type
     const filteredData = useMemo(() => {
         if (!data?.items) return data;
-        
+
         let filtered = data.items;
-        
+
         if (searchTerm) {
-            filtered = filtered.filter(item =>
-                item.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.ip?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.relationships.actor?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                JSON.stringify(item.properties).toLowerCase().includes(searchTerm.toLowerCase())
+            filtered = filtered.filter(
+                (item) =>
+                    item.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.ip?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.relationships.actor?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    JSON.stringify(item.properties).toLowerCase().includes(searchTerm.toLowerCase()),
             );
         }
-        
+
         if (selectedEventType) {
-            filtered = filtered.filter(item => item.event === selectedEventType);
+            filtered = filtered.filter((item) => item.event === selectedEventType);
         }
-        
+
         // Apply date range filtering
         if (dateRange !== 'all') {
             const now = new Date();
             const cutoff = new Date();
-            
+
             switch (dateRange) {
                 case '1h':
                     cutoff.setHours(now.getHours() - 1);
@@ -78,27 +79,31 @@ const ActivityLogContainer = () => {
                     cutoff.setDate(now.getDate() - 30);
                     break;
             }
-            
-            filtered = filtered.filter(item => new Date(item.timestamp) >= cutoff);
+
+            filtered = filtered.filter((item) => new Date(item.timestamp) >= cutoff);
         }
-        
+
         return { ...data, items: filtered };
     }, [data, searchTerm, selectedEventType, dateRange]);
 
     const exportLogs = () => {
         if (!filteredData?.items) return;
-        
+
         const csvContent = [
             ['Timestamp', 'Event', 'Actor', 'IP Address', 'Properties'].join(','),
-            ...filteredData.items.map(item => [
-                new Date(item.timestamp).toISOString(),
-                item.event,
-                item.relationships.actor?.username || 'System',
-                item.ip || '',
-                JSON.stringify(item.properties).replace(/"/g, '""')
-            ].map(field => `"${field}"`).join(','))
+            ...filteredData.items.map((item) =>
+                [
+                    new Date(item.timestamp).toISOString(),
+                    item.event,
+                    item.relationships.actor?.username || 'System',
+                    item.ip || '',
+                    JSON.stringify(item.properties).replace(/"/g, '""'),
+                ]
+                    .map((field) => `"${field}"`)
+                    .join(','),
+            ),
         ].join('\n');
-        
+
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -115,7 +120,8 @@ const ActivityLogContainer = () => {
         setDateRange('all');
     };
 
-    const hasActiveFilters = filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
+    const hasActiveFilters =
+        filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
 
     // Keyboard shortcuts
     useEffect(() => {
@@ -154,7 +160,7 @@ const ActivityLogContainer = () => {
         <PageContentBlock title={'Account Activity Log'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'account'} />
-                
+
                 <div
                     className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
                     style={{
@@ -166,7 +172,7 @@ const ActivityLogContainer = () => {
                     <MainPageHeader title={'Activity Log'}>
                         <div className='flex gap-2 items-center flex-wrap'>
                             <ActionButton
-                                variant="secondary"
+                                variant='secondary'
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
@@ -176,7 +182,7 @@ const ActivityLogContainer = () => {
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
                             </ActionButton>
                             <ActionButton
-                                variant={autoRefresh ? "primary" : "secondary"}
+                                variant={autoRefresh ? 'primary' : 'secondary'}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
                                 className='flex items-center gap-2'
                                 title='Auto Refresh (Ctrl+R)'
@@ -185,7 +191,7 @@ const ActivityLogContainer = () => {
                                 {autoRefresh ? 'Live' : 'Refresh'}
                             </ActionButton>
                             <ActionButton
-                                variant="secondary"
+                                variant='secondary'
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
@@ -214,7 +220,7 @@ const ActivityLogContainer = () => {
                                 </div>
                                 <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
                             </div>
-                            
+
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                 <div>
                                     <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
@@ -232,7 +238,7 @@ const ActivityLogContainer = () => {
                                         />
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
                                     <Select
@@ -240,9 +246,17 @@ const ActivityLogContainer = () => {
                                         onChange={(e) => setSelectedEventType(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
-                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Events</option>
-                                        {eventTypes.map(type => (
-                                            <option key={type} value={type} style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>{type}</option>
+                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            All Events
+                                        </option>
+                                        {eventTypes.map((type) => (
+                                            <option
+                                                key={type}
+                                                value={type}
+                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                            >
+                                                {type}
+                                            </option>
                                         ))}
                                     </Select>
                                 </div>
@@ -254,18 +268,28 @@ const ActivityLogContainer = () => {
                                         onChange={(e) => setDateRange(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
-                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Time</option>
-                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last Hour</option>
-                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 24 Hours</option>
-                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 7 Days</option>
-                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 30 Days</option>
+                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            All Time
+                                        </option>
+                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last Hour
+                                        </option>
+                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 24 Hours
+                                        </option>
+                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 7 Days
+                                        </option>
+                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 30 Days
+                                        </option>
                                     </Select>
                                 </div>
-                                
+
                                 <div className='flex items-end'>
                                     {hasActiveFilters && (
                                         <ActionButton
-                                            variant="secondary"
+                                            variant='secondary'
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
@@ -299,7 +323,7 @@ const ActivityLogContainer = () => {
                                 </span>
                             )}
                         </div>
-                        
+
                         {!data && isValidating ? (
                             <Spinner centered />
                         ) : !filteredData?.items?.length ? (
@@ -310,22 +334,15 @@ const ActivityLogContainer = () => {
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? 'Try adjusting your filters or search terms to find the activity you\'re looking for.'
-                                        : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'
-                                    }
+                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
+                                        : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
-                                        <ActionButton
-                                            variant="secondary"
-                                            onClick={clearAllFilters}
-                                        >
+                                        <ActionButton variant='secondary' onClick={clearAllFilters}>
                                             Clear All Filters
                                         </ActionButton>
-                                        <ActionButton
-                                            variant="secondary"
-                                            onClick={() => setShowFilters(true)}
-                                        >
+                                        <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
                                             Adjust Filters
                                         </ActionButton>
                                     </div>
@@ -340,7 +357,7 @@ const ActivityLogContainer = () => {
                                 ))}
                             </div>
                         )}
-                        
+
                         {data && (
                             <div className='mt-4'>
                                 <PaginationFooter

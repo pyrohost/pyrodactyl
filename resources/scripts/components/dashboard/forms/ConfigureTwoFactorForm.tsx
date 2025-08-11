@@ -39,9 +39,13 @@ const ConfigureTwoFactorForm = () => {
             </p>
             <div className={`mt-6`}>
                 {isEnabled ? (
-                    <ActionButton variant="danger" onClick={() => setVisible('disable')}>Remove Authenticator App</ActionButton>
+                    <ActionButton variant='danger' onClick={() => setVisible('disable')}>
+                        Remove Authenticator App
+                    </ActionButton>
                 ) : (
-                    <ActionButton variant="primary" onClick={() => setVisible('enable')}>Enable Authenticator App</ActionButton>
+                    <ActionButton variant='primary' onClick={() => setVisible('enable')}>
+                        Enable Authenticator App
+                    </ActionButton>
                 )}
             </div>
         </div>

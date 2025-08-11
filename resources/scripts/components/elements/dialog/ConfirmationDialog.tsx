@@ -13,8 +13,12 @@ const ConfirmationDialog = ({ confirm = 'Okay', children, onConfirmed, ...props 
         <Dialog {...props} description={typeof children === 'string' ? children : undefined}>
             {typeof children !== 'string' && children}
             <Dialog.Footer>
-                <ActionButton variant="secondary" onClick={props.onClose}>Cancel</ActionButton>
-                <ActionButton variant="danger" onClick={onConfirmed}>{confirm}</ActionButton>
+                <ActionButton variant='secondary' onClick={props.onClose}>
+                    Cancel
+                </ActionButton>
+                <ActionButton variant='danger' onClick={onConfirmed}>
+                    {confirm}
+                </ActionButton>
             </Dialog.Footer>
         </Dialog>
     );

@@ -164,11 +164,11 @@ const BackupContextMenu = ({ backup }: Props) => {
                 <div className='flex flex-wrap gap-2'>
                     <Can action={'backup.download'}>
                         <ActionButton
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={doDownload}
                             disabled={loading}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                         >
                             <HugeIconsFileDownload className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>Download</span>
@@ -176,11 +176,11 @@ const BackupContextMenu = ({ backup }: Props) => {
                     </Can>
                     <Can action={'backup.restore'}>
                         <ActionButton
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={() => setModal('restore')}
                             disabled={loading}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                         >
                             <HugeIconsCloudUp className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>Restore</span>
@@ -188,22 +188,22 @@ const BackupContextMenu = ({ backup }: Props) => {
                     </Can>
                     <Can action={'backup.delete'}>
                         <ActionButton
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={onLockToggle}
                             disabled={loading}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                         >
                             <HugeIconsFileSecurity className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>{backup.isLocked ? 'Unlock' : 'Lock'}</span>
                         </ActionButton>
                         {!backup.isLocked && (
                             <ActionButton
-                                variant="danger"
-                                size="sm"
+                                variant='danger'
+                                size='sm'
                                 onClick={() => setModal('delete')}
                                 disabled={loading}
-                                className="flex items-center gap-2"
+                                className='flex items-center gap-2'
                             >
                                 <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                                 <span className='hidden sm:inline'>Delete</span>
@@ -213,11 +213,11 @@ const BackupContextMenu = ({ backup }: Props) => {
                 </div>
             ) : (
                 <ActionButton
-                    variant="danger"
-                    size="sm"
+                    variant='danger'
+                    size='sm'
                     onClick={() => setModal('delete')}
                     disabled={loading}
-                    className="flex items-center gap-2"
+                    className='flex items-center gap-2'
                 >
                     <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                     <span className='hidden sm:inline'>Delete</span>

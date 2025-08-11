@@ -7,9 +7,10 @@ import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import Field from '@/components/elements/Field';
 import Logo from '@/components/elements/PyroLogo';
-import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
+
 import CaptchaManager from '@/lib/captcha';
 
 import login from '@/api/auth/login';
@@ -37,9 +38,9 @@ function LoginContainer() {
         if (CaptchaManager.isEnabled()) {
             const captchaResponse = getCaptchaResponse();
             const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
-            
+
             console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
-            
+
             if (fieldName) {
                 if (captchaResponse) {
                     loginData = { ...values, [fieldName]: captchaResponse };
@@ -93,15 +94,9 @@ function LoginContainer() {
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    
-                    <Field 
-                        id='user' 
-                        type={'text'} 
-                        label={'Username or Email'} 
-                        name={'user'} 
-                        disabled={isSubmitting} 
-                    />
-                    
+
+                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
+
                     <div className={`relative mt-6`}>
                         <Field
                             id='password'
@@ -119,10 +114,12 @@ function LoginContainer() {
                     </div>
 
                     <Captcha
-                        className="mt-6"
+                        className='mt-6'
                         onError={(error) => {
                             console.error('Captcha error:', error);
-                            clearAndAddHttpError({ error: new Error('Captcha verification failed. Please try again.') });
+                            clearAndAddHttpError({
+                                error: new Error('Captcha verification failed. Please try again.'),
+                            });
                         }}
                     />
 

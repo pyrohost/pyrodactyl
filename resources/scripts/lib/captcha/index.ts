@@ -3,11 +3,7 @@ export { CaptchaManager } from './CaptchaManager';
 export { CaptchaProviderFactory } from './CaptchaProviderFactory';
 
 // Types and interfaces
-export type {
-    CaptchaConfig,
-    CaptchaProviderInterface,
-    CaptchaRenderConfig
-} from './CaptchaProvider';
+export type { CaptchaConfig, CaptchaProviderInterface, CaptchaRenderConfig } from './CaptchaProvider';
 
 export { BaseCaptchaProvider } from './CaptchaProvider';
 

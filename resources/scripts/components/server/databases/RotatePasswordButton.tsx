@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import Spinner from '@/components/elements/Spinner';
 import ActionButton from '@/components/elements/ActionButton';
+import Spinner from '@/components/elements/Spinner';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';

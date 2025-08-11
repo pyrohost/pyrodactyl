@@ -1,20 +1,20 @@
-import { faPlus, faTrashAlt, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faKey, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 
 import createApiKey from '@/api/account/createApiKey';
@@ -23,6 +23,7 @@ import getApiKeys, { ApiKey } from '@/api/account/getApiKeys';
 import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
+
 import { useFlashKey } from '@/plugins/useFlash';
 
 interface CreateValues {
@@ -78,9 +79,9 @@ const AccountApiContainer = () => {
     };
 
     const toggleKeyVisibility = (identifier: string) => {
-        setShowKeys(prev => ({
+        setShowKeys((prev) => ({
             ...prev,
-            [identifier]: !prev[identifier]
+            [identifier]: !prev[identifier],
         }));
     };
 
@@ -150,7 +151,7 @@ const AccountApiContainer = () => {
                 >
                     <MainPageHeader title='API Keys'>
                         <ActionButton
-                            variant="primary"
+                            variant='primary'
                             onClick={() => setShowCreateModal(true)}
                             className='flex items-center gap-2'
                         >
@@ -180,7 +181,6 @@ const AccountApiContainer = () => {
                             All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
                         </Dialog.Confirm>
 
-
                         {keys.length === 0 ? (
                             <div className='text-center py-12'>
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
@@ -188,7 +188,9 @@ const AccountApiContainer = () => {
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>No API Keys</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
-                                    {loading ? 'Loading your API keys...' : 'You haven\'t created any API keys yet. Create one to get started with the API.'}
+                                    {loading
+                                        ? 'Loading your API keys...'
+                                        : "You haven't created any API keys yet. Create one to get started with the API."}
                                 </p>
                             </div>
                         ) : (
@@ -207,20 +209,27 @@ const AccountApiContainer = () => {
                                             <div className='flex items-center justify-between'>
                                                 <div className='flex-1 min-w-0'>
                                                     <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>{key.description}</h4>
+                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>
+                                                            {key.description}
+                                                        </h4>
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
                                                         <span>
-                                                            Last used: {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : 'Never'}
+                                                            Last used:{' '}
+                                                            {key.lastUsedAt
+                                                                ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
+                                                                : 'Never'}
                                                         </span>
                                                         <div className='flex items-center gap-2'>
                                                             <span>Key:</span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
-                                                                {showKeys[key.identifier] ? key.identifier : '••••••••••••••••'}
+                                                                {showKeys[key.identifier]
+                                                                    ? key.identifier
+                                                                    : '••••••••••••••••'}
                                                             </code>
                                                             <ActionButton
-                                                                variant="secondary"
-                                                                size="sm"
+                                                                variant='secondary'
+                                                                size='sm'
                                                                 onClick={() => toggleKeyVisibility(key.identifier)}
                                                                 className='p-1 text-zinc-400 hover:text-zinc-300'
                                                             >
@@ -233,8 +242,8 @@ const AccountApiContainer = () => {
                                                     </div>
                                                 </div>
                                                 <ActionButton
-                                                    variant="danger"
-                                                    size="sm"
+                                                    variant='danger'
+                                                    size='sm'
                                                     className='ml-4'
                                                     onClick={() => setDeleteIdentifier(key.identifier)}
                                                 >

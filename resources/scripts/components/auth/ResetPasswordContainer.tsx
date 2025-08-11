@@ -6,16 +6,17 @@ import { object, ref, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
-import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
+
+import CaptchaManager from '@/lib/captcha';
 
 import performPasswordReset from '@/api/auth/performPasswordReset';
 import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
-import CaptchaManager from '@/lib/captcha';
 
 import Logo from '../elements/PyroLogo';
 
@@ -41,7 +42,7 @@ function ResetPasswordContainer() {
 
         // Get captcha response if enabled
         const captchaResponse = getCaptchaResponse();
-        
+
         let resetData: any = { token: params.token ?? '', password, passwordConfirmation };
         if (CaptchaManager.isEnabled() && captchaResponse) {
             const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();

@@ -234,7 +234,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             label={'Continue on Failure'}
                         />
                         <div className={`flex justify-end my-6`}>
-                            <ActionButton variant="primary" type={'submit'} disabled={isSubmitting}>
+                            <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
                                 {task ? 'Save Changes' : 'Create Task'}
                             </ActionButton>
                         </div>

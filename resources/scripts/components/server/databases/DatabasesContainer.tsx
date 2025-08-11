@@ -1,9 +1,9 @@
-import { For } from 'million/react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { useEffect, useState } from 'react';
-import { object, string } from 'yup';
 import { faDatabase } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { For } from 'million/react';
+import { useEffect, useState } from 'react';
+import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
@@ -102,7 +102,7 @@ const DatabasesContainer = () => {
                     </div>
                 </Can>
             </MainPageHeader>
-            
+
             <Formik
                 onSubmit={submitDatabase}
                 initialValues={{ databaseName: '', connectionsFrom: '' }}
@@ -141,7 +141,9 @@ const DatabasesContainer = () => {
                                     />
                                 </div>
                                 <div className={`flex gap-3 justify-end my-6`}>
-                                    <ActionButton variant="primary" type={'submit'}>Create Database</ActionButton>
+                                    <ActionButton variant='primary' type={'submit'}>
+                                        Create Database
+                                    </ActionButton>
                                 </div>
                             </Form>
                         </div>

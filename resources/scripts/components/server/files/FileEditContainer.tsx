@@ -237,9 +237,9 @@ const FileEditContainer = () => {
                     <Can action={'file.update'}>
                         <div className='flex gap-1 items-center justify-center'>
                             <ActionButton
-                                variant="primary"
-                                size="lg"
-                                className="rounded-l-full rounded-r-none pl-8 pr-6"
+                                variant='primary'
+                                size='lg'
+                                className='rounded-l-full rounded-r-none pl-8 pr-6'
                                 onClick={() => save()}
                             >
                                 Save{' '}
@@ -250,9 +250,9 @@ const FileEditContainer = () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <ActionButton
-                                        variant="primary"
-                                        size="lg"
-                                        className="rounded-r-full rounded-l-none px-2"
+                                        variant='primary'
+                                        size='lg'
+                                        className='rounded-r-full rounded-l-none px-2'
                                     >
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
@@ -283,11 +283,7 @@ const FileEditContainer = () => {
                     </Can>
                 ) : (
                     <Can action={'file.create'}>
-                        <ActionButton
-                            variant="secondary"
-                            size="lg"
-                            onClick={() => setModalVisible(true)}
-                        >
+                        <ActionButton variant='secondary' size='lg' onClick={() => setModalVisible(true)}>
                             Create File
                         </ActionButton>
                     </Can>

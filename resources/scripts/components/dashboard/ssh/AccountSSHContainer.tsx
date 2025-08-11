@@ -1,25 +1,26 @@
-import { faPlus, faTrashAlt, faKey, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faKey, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
+
 import { useFlashKey } from '@/plugins/useFlash';
 
 interface CreateValues {
@@ -31,7 +32,7 @@ const AccountSSHContainer = () => {
     const [deleteKey, setDeleteKey] = useState<{ name: string; fingerprint: string } | null>(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
-    
+
     const { clearAndAddHttpError } = useFlashKey('account');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { data, isValidating, error, mutate } = useSSHKeys({
@@ -45,17 +46,19 @@ const AccountSSHContainer = () => {
 
     const doDeletion = () => {
         if (!deleteKey) return;
-        
+
         clearAndAddHttpError();
         Promise.all([
             mutate((data) => data?.filter((value) => value.fingerprint !== deleteKey.fingerprint), false),
             deleteSSHKey(deleteKey.fingerprint),
-        ]).catch((error) => {
-            mutate(undefined, true).catch(console.error);
-            clearAndAddHttpError(error);
-        }).finally(() => {
-            setDeleteKey(null);
-        });
+        ])
+            .catch((error) => {
+                mutate(undefined, true).catch(console.error);
+                clearAndAddHttpError(error);
+            })
+            .finally(() => {
+                setDeleteKey(null);
+            });
     };
 
     const submitCreate = (values: CreateValues, { setSubmitting, resetForm }: FormikHelpers<CreateValues>) => {
@@ -75,16 +78,16 @@ const AccountSSHContainer = () => {
     };
 
     const toggleKeyVisibility = (fingerprint: string) => {
-        setShowKeys(prev => ({
+        setShowKeys((prev) => ({
             ...prev,
-            [fingerprint]: !prev[fingerprint]
+            [fingerprint]: !prev[fingerprint],
         }));
     };
 
     return (
         <PageContentBlock title={'SSH Keys'}>
             <FlashMessageRender byKey={'account'} />
-            
+
             {/* Create SSH Key Modal */}
             {showCreateModal && (
                 <Dialog.Confirm
@@ -111,7 +114,7 @@ const AccountSSHContainer = () => {
                         {({ isSubmitting }) => (
                             <Form id='create-ssh-form' className='space-y-4'>
                                 <SpinnerOverlay visible={isSubmitting} />
-                                
+
                                 <FormikFieldWrapper
                                     label='SSH Key Name'
                                     name='name'
@@ -134,7 +137,7 @@ const AccountSSHContainer = () => {
                     </Formik>
                 </Dialog.Confirm>
             )}
-            
+
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <div
                     className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
@@ -146,7 +149,7 @@ const AccountSSHContainer = () => {
                 >
                     <MainPageHeader title='SSH Keys'>
                         <ActionButton
-                            variant="primary"
+                            variant='primary'
                             onClick={() => setShowCreateModal(true)}
                             className='flex items-center gap-2'
                         >
@@ -173,9 +176,9 @@ const AccountSSHContainer = () => {
                             onClose={() => setDeleteKey(null)}
                             onConfirmed={doDeletion}
                         >
-                            Removing the <Code>{deleteKey?.name}</Code> SSH key will invalidate its usage across the Panel.
+                            Removing the <Code>{deleteKey?.name}</Code> SSH key will invalidate its usage across the
+                            Panel.
                         </Dialog.Confirm>
-
 
                         {!data || data.length === 0 ? (
                             <div className='text-center py-12'>
@@ -184,7 +187,9 @@ const AccountSSHContainer = () => {
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>No SSH Keys</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
-                                    {!data ? 'Loading your SSH keys...' : 'You haven\'t added any SSH keys yet. Add one to securely access your servers.'}
+                                    {!data
+                                        ? 'Loading your SSH keys...'
+                                        : "You haven't added any SSH keys yet. Add one to securely access your servers."}
                                 </p>
                             </div>
                         ) : (
@@ -203,25 +208,29 @@ const AccountSSHContainer = () => {
                                             <div className='flex items-center justify-between'>
                                                 <div className='flex-1 min-w-0'>
                                                     <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>{key.name}</h4>
+                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>
+                                                            {key.name}
+                                                        </h4>
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
-                                                        <span>
-                                                            Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}
-                                                        </span>
+                                                        <span>Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
                                                         <div className='flex items-center gap-2'>
                                                             <span>Fingerprint:</span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
-                                                                {showKeys[key.fingerprint] ? `SHA256:${key.fingerprint}` : 'SHA256:••••••••••••••••'}
+                                                                {showKeys[key.fingerprint]
+                                                                    ? `SHA256:${key.fingerprint}`
+                                                                    : 'SHA256:••••••••••••••••'}
                                                             </code>
                                                             <ActionButton
-                                                                variant="secondary"
-                                                                size="sm"
+                                                                variant='secondary'
+                                                                size='sm'
                                                                 onClick={() => toggleKeyVisibility(key.fingerprint)}
                                                                 className='p-1 text-zinc-400 hover:text-zinc-300'
                                                             >
                                                                 <FontAwesomeIcon
-                                                                    icon={showKeys[key.fingerprint] ? faEyeSlash : faEye}
+                                                                    icon={
+                                                                        showKeys[key.fingerprint] ? faEyeSlash : faEye
+                                                                    }
                                                                     className='w-3 h-3'
                                                                 />
                                                             </ActionButton>
@@ -229,10 +238,12 @@ const AccountSSHContainer = () => {
                                                     </div>
                                                 </div>
                                                 <ActionButton
-                                                    variant="danger"
-                                                    size="sm"
+                                                    variant='danger'
+                                                    size='sm'
                                                     className='ml-4'
-                                                    onClick={() => setDeleteKey({ name: key.name, fingerprint: key.fingerprint })}
+                                                    onClick={() =>
+                                                        setDeleteKey({ name: key.name, fingerprint: key.fingerprint })
+                                                    }
                                                 >
                                                     <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
                                                 </ActionButton>

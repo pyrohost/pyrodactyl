@@ -50,10 +50,10 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
             <ActionButton
-                variant="danger"
-                size="sm"
+                variant='danger'
+                size='sm'
                 onClick={() => setConfirm(true)}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
             >
                 <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                 <span className='hidden sm:inline'>Delete</span>

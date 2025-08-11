@@ -124,11 +124,11 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 </div>
                 <Can action={'schedule.update'}>
                     <ActionButton
-                        variant="secondary"
-                        size="sm"
-                        className="flex flex-row items-center gap-2 ml-auto sm:ml-0"
+                        variant='secondary'
+                        size='sm'
+                        className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
-                        aria-label="Edit scheduled task"
+                        aria-label='Edit scheduled task'
                     >
                         <FontAwesomeIcon icon={faPen} />
                         Edit
@@ -136,11 +136,11 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 </Can>
                 <Can action={'schedule.update'}>
                     <ActionButton
-                        variant="danger"
-                        size="sm"
+                        variant='danger'
+                        size='sm'
                         onClick={() => setVisible(true)}
-                        className="flex items-center gap-2"
-                        aria-label="Delete scheduled task"
+                        className='flex items-center gap-2'
+                        aria-label='Delete scheduled task'
                     >
                         <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
                         <span className='hidden sm:inline'>Delete</span>

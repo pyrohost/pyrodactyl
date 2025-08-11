@@ -49,7 +49,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                     >
                         {activity.event}
                     </Link>
-                    
+
                     {/* Compact badges */}
                     <div className='flex items-center gap-1 ml-auto'>
                         {activity.isApi && (
@@ -74,13 +74,15 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                         <span className='font-mono bg-zinc-800/30 px-1.5 py-0.5 rounded'>{activity.ip}</span>
                     )}
                     <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
-                    
+
                     {/* Inline properties for compact view */}
-                    {!activity.hasAdditionalMetadata && activity.properties && Object.keys(activity.properties).length > 0 && (
-                        <span className='text-zinc-500 truncate max-w-xs'>
-                            {formatObjectToIdentString(activity.properties)}
-                        </span>
-                    )}
+                    {!activity.hasAdditionalMetadata &&
+                        activity.properties &&
+                        Object.keys(activity.properties).length > 0 && (
+                            <span className='text-zinc-500 truncate max-w-xs'>
+                                {formatObjectToIdentString(activity.properties)}
+                            </span>
+                        )}
                 </div>
             </div>
 

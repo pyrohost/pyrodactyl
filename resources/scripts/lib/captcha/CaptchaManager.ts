@@ -1,6 +1,5 @@
 import { CaptchaConfig, CaptchaProviderInterface, CaptchaRenderConfig } from './CaptchaProvider';
 import { CaptchaProviderFactory } from './CaptchaProviderFactory';
-
 // Import types from the types file
 import './types';
 
@@ -34,7 +33,6 @@ export class CaptchaManager {
     public isEnabled(): boolean {
         return this.config.enabled && this.config.provider !== 'none';
     }
-
 
     /**
      * Get the current provider name
@@ -73,15 +71,14 @@ export class CaptchaManager {
      */
     public async renderWidget(
         container: string | HTMLElement,
-        options: Partial<CaptchaRenderConfig> = {}
+        options: Partial<CaptchaRenderConfig> = {},
     ): Promise<string | null> {
         if (!this.isEnabled()) {
             return null;
         }
 
-        const containerElement = typeof container === 'string'
-            ? document.querySelector(container) as HTMLElement
-            : container;
+        const containerElement =
+            typeof container === 'string' ? (document.querySelector(container) as HTMLElement) : container;
 
         if (!containerElement) {
             return null;
@@ -105,7 +102,7 @@ export class CaptchaManager {
             };
 
             const widgetId = await this.provider.render(containerElement, config);
-            
+
             if (widgetId) {
                 this.widgetId = widgetId;
             }
@@ -176,7 +173,7 @@ export class CaptchaManager {
         input.type = 'hidden';
         input.name = fieldName;
         input.value = this.getResponse() || '';
-        
+
         formElement.appendChild(input);
         return input;
     }
@@ -193,9 +190,11 @@ export class CaptchaManager {
         }
 
         // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('captcha:success', {
-            detail: { token, provider: this.config.provider }
-        }));
+        window.dispatchEvent(
+            new CustomEvent('captcha:success', {
+                detail: { token, provider: this.config.provider },
+            }),
+        );
     }
 
     /**
@@ -203,9 +202,11 @@ export class CaptchaManager {
      */
     private handleError(error: any): void {
         // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('captcha:error', {
-            detail: { error, provider: this.config.provider }
-        }));
+        window.dispatchEvent(
+            new CustomEvent('captcha:error', {
+                detail: { error, provider: this.config.provider },
+            }),
+        );
     }
 
     /**
@@ -213,9 +214,11 @@ export class CaptchaManager {
      */
     private handleExpired(): void {
         // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('captcha:expired', {
-            detail: { provider: this.config.provider }
-        }));
+        window.dispatchEvent(
+            new CustomEvent('captcha:expired', {
+                detail: { provider: this.config.provider },
+            }),
+        );
     }
 }
 

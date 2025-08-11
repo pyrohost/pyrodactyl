@@ -3,9 +3,9 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import ActionButton from '@/components/elements/ActionButton';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -68,7 +68,9 @@ const UpdateEmailAddressForm = () => {
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <ActionButton variant="primary" disabled={isSubmitting || !isValid}>Update Email</ActionButton>
+                            <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                Update Email
+                            </ActionButton>
                         </div>
                     </Form>
                 </Fragment>

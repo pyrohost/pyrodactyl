@@ -1,8 +1,8 @@
 import { CaptchaProviderInterface } from './CaptchaProvider';
-import { TurnstileProvider } from './providers/TurnstileProvider';
 import { HCaptchaProvider } from './providers/HCaptchaProvider';
 import { NullProvider } from './providers/NullProvider';
 import { RecaptchaProvider } from './providers/RecaptchaProvider';
+import { TurnstileProvider } from './providers/TurnstileProvider';
 
 export class CaptchaProviderFactory {
     private static providers: Map<string, () => CaptchaProviderInterface> = new Map([

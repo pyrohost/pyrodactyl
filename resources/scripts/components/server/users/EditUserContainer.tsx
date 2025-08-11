@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -15,10 +15,10 @@ const EditUserContainer = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const subusers = ServerContext.useStoreState((state) => state.subusers.data);
-    
+
     // Find the subuser by UUID
     const subuser = subusers.find((s: Subuser) => s.uuid === id);
 
@@ -42,12 +42,12 @@ const EditUserContainer = () => {
         return (
             <ServerContentBlock title={'Edit User'}>
                 <MainPageHeader title={'Edit User'}>
-                    <ActionButton 
-                        variant="secondary" 
+                    <ActionButton
+                        variant='secondary'
                         onClick={() => navigate(`/server/${serverId}/users`)}
-                        className="flex items-center gap-2"
+                        className='flex items-center gap-2'
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4" />
+                        <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
@@ -63,12 +63,12 @@ const EditUserContainer = () => {
         return (
             <ServerContentBlock title={'Edit User'}>
                 <MainPageHeader title={'Edit User'}>
-                    <ActionButton 
-                        variant="secondary" 
+                    <ActionButton
+                        variant='secondary'
                         onClick={() => navigate(`/server/${serverId}/users`)}
-                        className="flex items-center gap-2"
+                        className='flex items-center gap-2'
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4" />
+                        <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
@@ -79,7 +79,7 @@ const EditUserContainer = () => {
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>User not found</h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
-                            The user you're trying to edit could not be found.
+                            The user you&apos;re trying to edit could not be found.
                         </p>
                     </div>
                 </div>
@@ -90,13 +90,13 @@ const EditUserContainer = () => {
     return (
         <ServerContentBlock title={'Edit User'}>
             <MainPageHeader title={`Edit User: ${subuser.email}`}>
-                <ActionButton 
-                    variant="secondary" 
+                <ActionButton
+                    variant='secondary'
                     onClick={() => navigate(`/server/${serverId}/users`)}
-                    className="flex items-center gap-2"
+                    className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4" />
+                    <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>
@@ -105,7 +105,7 @@ const EditUserContainer = () => {
                 subuser={subuser}
                 onSuccess={handleSuccess}
                 onCancel={handleCancel}
-                flashKey="user:edit"
+                flashKey='user:edit'
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
             />

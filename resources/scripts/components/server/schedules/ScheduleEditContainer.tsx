@@ -4,20 +4,19 @@ import isEqual from 'react-fast-compare';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import ItemContainer from '@/components/elements/ItemContainer';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Spinner from '@/components/elements/Spinner';
-import ActionButton from '@/components/elements/ActionButton';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import DeleteScheduleButton from '@/components/server/schedules/DeleteScheduleButton';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
-import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
-
 import getServerSchedule from '@/api/server/schedules/getServerSchedule';
+import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
 
 import { ServerContext } from '@/state/server';
 
@@ -131,10 +130,18 @@ const ScheduleEditContainer = () => {
                         </div>
                         <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                             <Can action={'schedule.update'}>
-                                <ActionButton variant='secondary' onClick={toggleEditModal} className={'flex-1 min-w-max'}>
+                                <ActionButton
+                                    variant='secondary'
+                                    onClick={toggleEditModal}
+                                    className={'flex-1 min-w-max'}
+                                >
                                     Edit
                                 </ActionButton>
-                                <ActionButton variant='primary' onClick={() => setShowTaskModal(true)} className={'flex-1 min-w-max'}>
+                                <ActionButton
+                                    variant='primary'
+                                    onClick={() => setShowTaskModal(true)}
+                                    className={'flex-1 min-w-max'}
+                                >
                                     New Task
                                 </ActionButton>
                             </Can>
@@ -184,7 +191,11 @@ const ScheduleEditContainer = () => {
                             </Can>
                         )}
                     </div>
-                <TaskDetailsModal schedule={schedule} visible={showTaskModal} onModalDismissed={() => setShowTaskModal(false)} />
+                    <TaskDetailsModal
+                        schedule={schedule}
+                        visible={showTaskModal}
+                        onModalDismissed={() => setShowTaskModal(false)}
+                    />
                 </div>
             )}
         </PageContentBlock>

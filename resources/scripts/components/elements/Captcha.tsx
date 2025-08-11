@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import CaptchaManager from '@/lib/captcha';
 
 interface CaptchaProps {
@@ -16,7 +17,7 @@ export default function Captcha({
     onExpired,
     className,
     theme = 'auto',
-    size = 'normal'
+    size = 'normal',
 }: CaptchaProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [widgetId, setWidgetId] = useState<string | null>(null);
@@ -81,16 +82,13 @@ export default function Captcha({
                 if (!mounted) return;
 
                 // Render the widget
-                const id = await CaptchaManager.renderWidget(
-                    containerRef.current,
-                    {
-                        theme,
-                        size,
-                        onSuccess: handleSuccess,
-                        onError: handleError,
-                        onExpired: handleExpired,
-                    }
-                );
+                const id = await CaptchaManager.renderWidget(containerRef.current, {
+                    theme,
+                    size,
+                    onSuccess: handleSuccess,
+                    onError: handleError,
+                    onExpired: handleExpired,
+                });
 
                 if (mounted) {
                     setWidgetId(id);
@@ -149,16 +147,8 @@ export default function Captcha({
     return (
         <div className={className}>
             <div ref={containerRef} />
-            {isLoading && (
-                <div className="text-sm text-gray-500 mt-2">
-                    Loading captcha...
-                </div>
-            )}
-            {error && (
-                <div className="text-sm text-red-500 mt-2">
-                    {error}
-                </div>
-            )}
+            {isLoading && <div className='text-sm text-gray-500 mt-2'>Loading captcha...</div>}
+            {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
         </div>
     );
 }
@@ -170,7 +160,7 @@ export function getCaptchaResponse(): string | null {
     if (!CaptchaManager.isEnabled()) {
         return null;
     }
-    
+
     return CaptchaManager.getResponse();
 }
 

@@ -17,7 +17,6 @@ import { PageListContainer } from '@/components/elements/pages/PageList';
 import BackupRow from '@/components/server/backups/BackupRow';
 
 import createServerBackup from '@/api/server/backups/createServerBackup';
-
 import getServerBackups, { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
 
 import { ServerContext } from '@/state/server';
@@ -72,7 +71,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     </div>
                 </Can>
                 <div className={`flex justify-end mb-6`}>
-                    <ActionButton variant="primary" type={'submit'} disabled={isSubmitting}>
+                    <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
                         Start backup
                     </ActionButton>
                 </div>
@@ -90,11 +89,11 @@ const BackupContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
 
-    const hasBackupsInProgress = backups?.items.some(backup => backup.completedAt === null) || false;
+    const hasBackupsInProgress = backups?.items.some((backup) => backup.completedAt === null) || false;
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        
+
         if (hasBackupsInProgress) {
             interval = setInterval(() => {
                 mutate();

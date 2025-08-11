@@ -48,13 +48,13 @@ const UserRow = ({ subuser }: Props) => {
                         <div className='flex align-middle items-center justify-center gap-2'>
                             <Can action={'user.update'}>
                                 <ActionButton
-                                    variant="secondary"
-                                    size="sm"
-                                    className="flex items-center gap-2"
+                                    variant='secondary'
+                                    size='sm'
+                                    className='flex items-center gap-2'
                                     onClick={handleEditClick}
-                                    aria-label="Edit subuser"
+                                    aria-label='Edit subuser'
                                 >
-                                    <FontAwesomeIcon icon={faEdit} className="w-4 h-4" />
+                                    <FontAwesomeIcon icon={faEdit} className='w-4 h-4' />
                                     Edit
                                 </ActionButton>
                             </Can>

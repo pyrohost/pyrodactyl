@@ -322,10 +322,7 @@ const SoftwareContainer = () => {
                                         ))}
                                 </div>
                             </div>
-                            <ActionButton
-                                variant="primary"
-                                onClick={() => setVisible(true)}
-                            >
+                            <ActionButton variant='primary' onClick={() => setVisible(true)}>
                                 Change Egg
                             </ActionButton>
                         </div>
@@ -387,7 +384,12 @@ const SoftwareContainer = () => {
                                                         <p className='text-neutral-200 text-md'>
                                                             {nest.attributes.name}
                                                         </p>
-                                                        <ActionButton variant="primary" onClick={() => handleNestSelect(nest)}>Select</ActionButton>
+                                                        <ActionButton
+                                                            variant='primary'
+                                                            onClick={() => handleNestSelect(nest)}
+                                                        >
+                                                            Select
+                                                        </ActionButton>
                                                     </div>
                                                     <p className='text-neutral-400 text-xs mt-2'>
                                                         {nest.attributes.description}
@@ -414,7 +416,7 @@ const SoftwareContainer = () => {
                                                 <div className='flex items-center justify-between'>
                                                     <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
                                                     <ActionButton
-                                                        variant="primary"
+                                                        variant='primary'
                                                         onClick={async () => {
                                                             setSelectedEgg(egg);
                                                             await handleEggSelect(egg);
@@ -539,7 +541,7 @@ const SoftwareContainer = () => {
                                     <div className='border-t border-[#ffffff20]' />
 
                                     <div className='flex justify-center'>
-                                        <ActionButton variant="primary" onClick={() => confirmSelection()}>
+                                        <ActionButton variant='primary' onClick={() => confirmSelection()}>
                                             Confirm Selection
                                         </ActionButton>
                                     </div>
@@ -561,14 +563,12 @@ const SoftwareContainer = () => {
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6'>
                     <div className='p-6'>
                         <div className='flex items-center gap-3 mb-3'>
-                            <HugeIconsAlert
-                                fill='currentColor'
-                                className='w-6 h-6 text-brand flex-shrink-0'
-                            />
+                            <HugeIconsAlert fill='currentColor' className='w-6 h-6 text-brand flex-shrink-0' />
                             <h2 className='text-xl font-semibold text-zinc-100'>Danger Zone</h2>
                         </div>
                         <p className='text-sm text-neutral-300 leading-relaxed'>
-                            During this process some files may be deleted or modified. Either make a backup beforehand or select the backup option when prompted.
+                            During this process some files may be deleted or modified. Either make a backup beforehand
+                            or select the backup option when prompted.
                         </p>
                     </div>
                 </div>

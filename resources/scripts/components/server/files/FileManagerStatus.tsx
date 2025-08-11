@@ -53,20 +53,22 @@ const FileUploadList = () => {
                     {/* </Tooltip> */}
                     <Code className={'flex-1 truncate'}>{name}</Code>
                     <ActionButton
-                        variant="secondary"
-                        size="sm"
+                        variant='secondary'
+                        size='sm'
                         onClick={cancelFileUpload.bind(this, name)}
-                        className="hover:!text-red-400"
+                        className='hover:!text-red-400'
                     >
                         Cancel
                     </ActionButton>
                 </div>
             ))}
             <Dialog.Footer>
-                <ActionButton variant="danger" onClick={() => clearFileUploads()}>
+                <ActionButton variant='danger' onClick={() => clearFileUploads()}>
                     Cancel Uploads
                 </ActionButton>
-                <ActionButton variant="secondary" onClick={close}>Close</ActionButton>
+                <ActionButton variant='secondary' onClick={close}>
+                    Close
+                </ActionButton>
             </Dialog.Footer>
         </div>
     );
@@ -93,9 +95,9 @@ const FileManagerStatus = () => {
             {count > 0 && (
                 // <Tooltip content={`${count} files are uploading, click to view`}>
                 <ActionButton
-                    variant="secondary"
-                    size="sm"
-                    className="w-10 h-10 p-0"
+                    variant='secondary'
+                    size='sm'
+                    className='w-10 h-10 p-0'
                     onClick={() => (open.value = true)}
                 >
                     <svg

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 // import { Options } from '@/components/elements/button/types';
 import Can from '@/components/elements/Can';
 import {
@@ -11,7 +12,6 @@ import {
 } from '@/components/elements/DropdownMenu';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import ActionButton from '@/components/elements/ActionButton';
 import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
 import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -137,7 +137,7 @@ const JavaVersionModalFeature = () => {
                         Cancel
                     </Button> */}
                     <Can action={'startup.docker-image'}>
-                        <ActionButton variant="primary" onClick={updateJava} className={`w-full sm:w-auto`}>
+                        <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
                             Update
                         </ActionButton>
                     </Can>

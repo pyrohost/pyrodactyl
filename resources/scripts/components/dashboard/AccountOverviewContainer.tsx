@@ -76,7 +76,8 @@ const AccountOverviewContainer = () => {
                             </p>
                             <div className='flex flex-col gap-4'>
                                 <Code>
-                                    Version: {import.meta.env.VITE_PYRODACTYL_VERSION} - {import.meta.env.VITE_BRANCH_NAME}
+                                    Version: {import.meta.env.VITE_PYRODACTYL_VERSION} -{' '}
+                                    {import.meta.env.VITE_BRANCH_NAME}
                                 </Code>
                                 <Code>Commit : {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
                             </div>

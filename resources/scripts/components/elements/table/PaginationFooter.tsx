@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 
 import ActionButton from '@/components/elements/ActionButton';
 
@@ -44,29 +44,29 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>
                     <ActionButton
-                        variant="secondary"
-                        size="sm"
+                        variant='secondary'
+                        size='sm'
                         onClick={() => onPageSelect(current - 1)}
                         disabled={current <= 1}
-                        className="w-8 h-8 p-0 flex items-center justify-center"
+                        className='w-8 h-8 p-0 flex items-center justify-center'
                     >
                         <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3' />
                     </ActionButton>
                     {pages.previous.reverse().map((value) => (
                         <ActionButton
                             key={`previous-${value}`}
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={() => onPageSelect(value)}
-                            className="w-8 h-8 p-0 flex items-center justify-center"
+                            className='w-8 h-8 p-0 flex items-center justify-center'
                         >
                             {value}
                         </ActionButton>
                     ))}
                     <ActionButton
-                        variant="primary"
-                        size="sm"
-                        className="w-8 h-8 p-0 flex items-center justify-center"
+                        variant='primary'
+                        size='sm'
+                        className='w-8 h-8 p-0 flex items-center justify-center'
                         disabled
                     >
                         {current}
@@ -74,20 +74,20 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
                     {pages.next.map((value) => (
                         <ActionButton
                             key={`next-${value}`}
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={() => onPageSelect(value)}
-                            className="w-8 h-8 p-0 flex items-center justify-center"
+                            className='w-8 h-8 p-0 flex items-center justify-center'
                         >
                             {value}
                         </ActionButton>
                     ))}
                     <ActionButton
-                        variant="secondary"
-                        size="sm"
+                        variant='secondary'
+                        size='sm'
                         onClick={() => onPageSelect(current + 1)}
                         disabled={current >= total}
-                        className="w-8 h-8 p-0 flex items-center justify-center"
+                        className='w-8 h-8 p-0 flex items-center justify-center'
                     >
                         <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3' />
                     </ActionButton>

@@ -262,7 +262,12 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         />
                     </div>
                     <div className={`mb-6 text-right`}>
-                        <ActionButton variant="primary" className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
+                        <ActionButton
+                            variant='primary'
+                            className={'w-full sm:w-auto'}
+                            type={'submit'}
+                            disabled={isSubmitting}
+                        >
                             {schedule ? 'Save changes' : 'Create schedule'}
                         </ActionButton>
                     </div>

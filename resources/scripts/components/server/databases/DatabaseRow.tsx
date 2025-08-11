@@ -95,7 +95,12 @@ const DatabaseRow = ({ database }: Props) => {
                                     label={'Confirm Database Name'}
                                     description={'Enter the database name to confirm deletion.'}
                                 />
-                                <ActionButton variant="danger" type={'submit'} className='min-w-full my-6' disabled={!isValid}>
+                                <ActionButton
+                                    variant='danger'
+                                    type={'submit'}
+                                    className='min-w-full my-6'
+                                    disabled={!isValid}
+                                >
                                     Delete Database
                                 </ActionButton>
                             </Form>
@@ -199,20 +204,20 @@ const DatabaseRow = ({ database }: Props) => {
 
                     <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
                         <ActionButton
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={() => setConnectionVisible(true)}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                         >
                             <FontAwesomeIcon icon={faEye} className='w-4 h-4' />
                             <span className='hidden sm:inline'>Details</span>
                         </ActionButton>
                         <Can action={'database.delete'}>
                             <ActionButton
-                                variant="danger"
-                                size="sm"
+                                variant='danger'
+                                size='sm'
                                 onClick={() => setVisible(true)}
-                                className="flex items-center gap-2"
+                                className='flex items-center gap-2'
                             >
                                 <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
                                 <span className='hidden sm:inline'>Delete</span>

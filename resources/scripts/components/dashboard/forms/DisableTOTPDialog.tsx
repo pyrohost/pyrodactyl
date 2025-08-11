@@ -57,13 +57,20 @@ const DisableTOTPDialog = () => {
                 onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Dialog.Footer>
-                <ActionButton variant="secondary" onClick={close}>Cancel</ActionButton>
+                <ActionButton variant='secondary' onClick={close}>
+                    Cancel
+                </ActionButton>
                 {/* <Tooltip
                     delay={100}
                     disabled={password.length > 0}
                     content={'You must enter your account password to continue.'}
                 > */}
-                <ActionButton variant="danger" type={'submit'} form={'disable-totp-form'} disabled={submitting || !password.length}>
+                <ActionButton
+                    variant='danger'
+                    type={'submit'}
+                    form={'disable-totp-form'}
+                    disabled={submitting || !password.length}
+                >
                     Disable
                 </ActionButton>
                 {/* </Tooltip> */}

@@ -50,13 +50,13 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 All access to the server will be removed immediately.
             </ConfirmationModal>
             <ActionButton
-                variant="danger"
-                size="sm"
-                className="flex items-center gap-2"
+                variant='danger'
+                size='sm'
+                className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label="Delete subuser"
+                aria-label='Delete subuser'
             >
-                <FontAwesomeIcon icon={faTrashAlt} className="w-4 h-4" />
+                <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
                 Delete
             </ActionButton>
         </>

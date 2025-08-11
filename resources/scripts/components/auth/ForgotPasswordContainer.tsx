@@ -7,15 +7,16 @@ import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
-import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
+
+import CaptchaManager from '@/lib/captcha';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
 
 import useFlash from '@/plugins/useFlash';
-import CaptchaManager from '@/lib/captcha';
 
 import Logo from '../elements/PyroLogo';
 
@@ -31,7 +32,7 @@ const ForgotPasswordContainer = () => {
 
         // Get captcha response if enabled
         const captchaResponse = getCaptchaResponse();
-        
+
         let requestData: any = { email };
         if (CaptchaManager.isEnabled() && captchaResponse) {
             const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
@@ -78,10 +79,14 @@ const ForgotPasswordContainer = () => {
                         <Field id='email' label={'Email'} name={'email'} type={'email'} />
 
                         <Captcha
-                            className="mt-6"
+                            className='mt-6'
                             onError={(error) => {
                                 console.error('Captcha error:', error);
-                                addFlash({ type: 'error', title: 'Error', message: 'Captcha verification failed. Please try again.' });
+                                addFlash({
+                                    type: 'error',
+                                    title: 'Error',
+                                    message: 'Captcha verification failed. Please try again.',
+                                });
                             }}
                         />
 

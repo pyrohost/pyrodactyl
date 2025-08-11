@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Modal from '@/components/elements/Modal';
 import ActionButton from '@/components/elements/ActionButton';
+import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import saveFileContents from '@/api/server/files/saveFileContents';
@@ -83,8 +83,12 @@ const EulaModalFeature = () => {
                     .
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
-                    <ActionButton variant="secondary" onClick={() => setVisible(false)}>I don&apos;t accept</ActionButton>
-                    <ActionButton variant="primary" onClick={onAcceptEULA}>I accept</ActionButton>
+                    <ActionButton variant='secondary' onClick={() => setVisible(false)}>
+                        I don&apos;t accept
+                    </ActionButton>
+                    <ActionButton variant='primary' onClick={onAcceptEULA}>
+                        I accept
+                    </ActionButton>
                 </div>
             </div>
         </Modal>

@@ -1,10 +1,10 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
-import ActionButton from '@/components/elements/ActionButton';
 
 import renameFiles from '@/api/server/files/renameFiles';
 
@@ -82,7 +82,9 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                                 </p>
                             )}
                             <div className={`flex justify-end w-full my-6`}>
-                                <ActionButton variant="primary" type="submit">{useMoveTerminology ? 'Move' : 'Rename'}</ActionButton>
+                                <ActionButton variant='primary' type='submit'>
+                                    {useMoveTerminology ? 'Move' : 'Rename'}
+                                </ActionButton>
                             </div>
                         </div>
                     </Form>

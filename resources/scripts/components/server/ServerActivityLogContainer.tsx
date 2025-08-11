@@ -1,16 +1,16 @@
-import { faHistory, faFilter, faDownload, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFilter, faHistory, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import Select from '@/components/elements/Select';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import PaginationFooter from '@/components/elements/table/PaginationFooter';
 import { Input } from '@/components/elements/inputs';
-import Select from '@/components/elements/Select';
+import PaginationFooter from '@/components/elements/table/PaginationFooter';
 
 import { ActivityLogFilters } from '@/api/account/activity';
 import { useActivityLogs } from '@/api/server/activity';
@@ -35,7 +35,7 @@ const ServerActivityLogContainer = () => {
     // Extract unique event types for filter dropdown
     const eventTypes = useMemo(() => {
         if (!data?.items) return [];
-        const types = [...new Set(data.items.map(item => item.event))];
+        const types = [...new Set(data.items.map((item) => item.event))];
         return types.sort();
     }, [data?.items]);
 
@@ -46,16 +46,17 @@ const ServerActivityLogContainer = () => {
         let filtered = data.items;
 
         if (searchTerm) {
-            filtered = filtered.filter(item =>
-                item.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.ip?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.relationships.actor?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                JSON.stringify(item.properties).toLowerCase().includes(searchTerm.toLowerCase())
+            filtered = filtered.filter(
+                (item) =>
+                    item.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.ip?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.relationships.actor?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    JSON.stringify(item.properties).toLowerCase().includes(searchTerm.toLowerCase()),
             );
         }
 
         if (selectedEventType) {
-            filtered = filtered.filter(item => item.event === selectedEventType);
+            filtered = filtered.filter((item) => item.event === selectedEventType);
         }
 
         // Apply date range filtering
@@ -78,7 +79,7 @@ const ServerActivityLogContainer = () => {
                     break;
             }
 
-            filtered = filtered.filter(item => new Date(item.timestamp) >= cutoff);
+            filtered = filtered.filter((item) => new Date(item.timestamp) >= cutoff);
         }
 
         return { ...data, items: filtered };
@@ -89,13 +90,17 @@ const ServerActivityLogContainer = () => {
 
         const csvContent = [
             ['Timestamp', 'Event', 'Actor', 'IP Address', 'Properties'].join(','),
-            ...filteredData.items.map(item => [
-                new Date(item.timestamp).toISOString(),
-                item.event,
-                item.relationships.actor?.username || 'System',
-                item.ip || '',
-                JSON.stringify(item.properties).replace(/"/g, '""')
-            ].map(field => `"${field}"`).join(','))
+            ...filteredData.items.map((item) =>
+                [
+                    new Date(item.timestamp).toISOString(),
+                    item.event,
+                    item.relationships.actor?.username || 'System',
+                    item.ip || '',
+                    JSON.stringify(item.properties).replace(/"/g, '""'),
+                ]
+                    .map((field) => `"${field}"`)
+                    .join(','),
+            ),
         ].join('\n');
 
         const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -114,7 +119,8 @@ const ServerActivityLogContainer = () => {
         setDateRange('all');
     };
 
-    const hasActiveFilters = filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
+    const hasActiveFilters =
+        filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
 
     // Keyboard shortcuts
     useEffect(() => {
@@ -161,7 +167,7 @@ const ServerActivityLogContainer = () => {
                     <MainPageHeader title={'Activity Log'}>
                         <div className='flex gap-2 items-center flex-wrap'>
                             <ActionButton
-                                variant="secondary"
+                                variant='secondary'
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
@@ -171,7 +177,7 @@ const ServerActivityLogContainer = () => {
                                 {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
                             </ActionButton>
                             <ActionButton
-                                variant="secondary"
+                                variant='secondary'
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
@@ -226,9 +232,17 @@ const ServerActivityLogContainer = () => {
                                         onChange={(e) => setSelectedEventType(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
-                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Events</option>
-                                        {eventTypes.map(type => (
-                                            <option key={type} value={type} style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>{type}</option>
+                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            All Events
+                                        </option>
+                                        {eventTypes.map((type) => (
+                                            <option
+                                                key={type}
+                                                value={type}
+                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                            >
+                                                {type}
+                                            </option>
                                         ))}
                                     </Select>
                                 </div>
@@ -240,18 +254,28 @@ const ServerActivityLogContainer = () => {
                                         onChange={(e) => setDateRange(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
-                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Time</option>
-                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last Hour</option>
-                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 24 Hours</option>
-                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 7 Days</option>
-                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last 30 Days</option>
+                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            All Time
+                                        </option>
+                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last Hour
+                                        </option>
+                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 24 Hours
+                                        </option>
+                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 7 Days
+                                        </option>
+                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                            Last 30 Days
+                                        </option>
                                     </Select>
                                 </div>
-                                
+
                                 <div className='flex items-end'>
                                     {hasActiveFilters && (
                                         <ActionButton
-                                            variant="secondary"
+                                            variant='secondary'
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
@@ -296,22 +320,15 @@ const ServerActivityLogContainer = () => {
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? 'Try adjusting your filters or search terms to find the activity you\'re looking for.'
-                                        : 'Server activity logs will appear here as you manage your server. Start your server or perform actions to see them here.'
-                                    }
+                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
+                                        : 'Server activity logs will appear here as you manage your server. Start your server or perform actions to see them here.'}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
-                                        <ActionButton
-                                            variant="secondary"
-                                            onClick={clearAllFilters}
-                                        >
+                                        <ActionButton variant='secondary' onClick={clearAllFilters}>
                                             Clear All Filters
                                         </ActionButton>
-                                        <ActionButton
-                                            variant="secondary"
-                                            onClick={() => setShowFilters(true)}
-                                        >
+                                        <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
                                             Adjust Filters
                                         </ActionButton>
                                     </div>

@@ -86,18 +86,21 @@ export class RecaptchaProvider extends BaseCaptchaProvider {
                     return;
                 }
 
-                window.grecaptcha.execute(config.siteKey, { action: 'submit' }).then((token: string) => {
-                    hiddenInput.value = token;
-                    if (config.onSuccess) {
-                        config.onSuccess(token);
-                    }
-                    resolve('recaptcha-v3');
-                }).catch((error: any) => {
-                    if (config.onError) {
-                        config.onError(error);
-                    }
-                    reject(error);
-                });
+                window.grecaptcha
+                    .execute(config.siteKey, { action: 'submit' })
+                    .then((token: string) => {
+                        hiddenInput.value = token;
+                        if (config.onSuccess) {
+                            config.onSuccess(token);
+                        }
+                        resolve('recaptcha-v3');
+                    })
+                    .catch((error: any) => {
+                        if (config.onError) {
+                            config.onError(error);
+                        }
+                        reject(error);
+                    });
             });
         });
     }
@@ -116,12 +119,15 @@ export class RecaptchaProvider extends BaseCaptchaProvider {
             if (window.grecaptcha && this.siteKey) {
                 window.grecaptcha.ready(() => {
                     if (!window.grecaptcha) return;
-                    
-                    window.grecaptcha.execute(this.siteKey, { action: 'submit' }).then((token: string) => {
-                        input.value = token;
-                    }).catch(() => {
-                        // Silently handle errors during reset
-                    });
+
+                    window.grecaptcha
+                        .execute(this.siteKey, { action: 'submit' })
+                        .then((token: string) => {
+                            input.value = token;
+                        })
+                        .catch(() => {
+                            // Silently handle errors during reset
+                        });
                 });
             }
         }

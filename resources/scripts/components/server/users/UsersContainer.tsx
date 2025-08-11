@@ -1,16 +1,16 @@
+import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { faUser, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
-import ActionButton from '@/components/elements/ActionButton';
 import UserRow from '@/components/server/users/UserRow';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -58,16 +58,14 @@ const UsersContainer = () => {
                 <FlashMessageRender byKey={'users'} />
                 <MainPageHeader title={'Users'}>
                     <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                            0 users
-                        </p>
+                        <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
                         <Can action={'user.create'}>
                             <ActionButton
                                 variant='primary'
                                 onClick={() => navigate(`/server/${serverId}/users/new`)}
-                                className="flex items-center gap-2"
+                                className='flex items-center gap-2'
                             >
-                                <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+                                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
                                 New User
                             </ActionButton>
                         </Can>
@@ -85,16 +83,14 @@ const UsersContainer = () => {
             <FlashMessageRender byKey={'users'} />
             <MainPageHeader title={'Users'}>
                 <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                    <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                        {subusers.length} users
-                    </p>
+                    <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
                     <Can action={'user.create'}>
                         <ActionButton
                             variant='primary'
                             onClick={() => navigate(`/server/${serverId}/users/new`)}
-                            className="flex items-center gap-2"
+                            className='flex items-center gap-2'
                         >
-                            <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+                            <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
                             New User
                         </ActionButton>
                     </Can>

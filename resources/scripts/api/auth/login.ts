@@ -19,7 +19,7 @@ export default async (data: LoginData): Promise<LoginResponse> => {
 
         // Pass through all data including captcha responses
         const payload: Record<string, any> = {
-            ...data
+            ...data,
         };
 
         const response = await http.post('/auth/login', payload);

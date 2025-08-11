@@ -1,7 +1,7 @@
-import { faNetworkWired, faCheck, faTimes, faCrown, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCopy, faCrown, faNetworkWired, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import debounce from 'debounce';
-import { memo, useCallback, useState, useRef, useEffect } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -10,11 +10,11 @@ import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
-import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 
 import { ip } from '@/lib/formatters';
 
 import { Allocation } from '@/api/server/getServer';
+import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -36,9 +36,12 @@ const AllocationRow = ({ allocation }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = getServerAllocations();
 
-    const onNotesChanged = useCallback((id: number, notes: string) => {
-        mutate((data) => data?.map((a) => (a.id === id ? { ...a, notes } : a)), false);
-    }, []);
+    const onNotesChanged = useCallback(
+        (id: number, notes: string) => {
+            mutate((data) => data?.map((a) => (a.id === id ? { ...a, notes } : a)), false);
+        },
+        [mutate],
+    );
 
     const saveNotes = useCallback(() => {
         setLoading(true);
@@ -84,10 +87,10 @@ const AllocationRow = ({ allocation }: Props) => {
 
     const deleteAllocation = () => {
         if (!confirm('Are you sure you want to delete this allocation?')) return;
-        
+
         clearFlashes();
         setLoading(true);
-        
+
         deleteServerAllocation(uuid, allocation.id)
             .then(() => {
                 mutate((data) => data?.filter((a) => a.id !== allocation.id), false);
@@ -130,7 +133,7 @@ const AllocationRow = ({ allocation }: Props) => {
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
                         <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notes</p>
-                        
+
                         {isEditingNotes ? (
                             <div className='space-y-2'>
                                 <InputSpinner visible={loading}>
@@ -144,21 +147,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                     />
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
-                                    <ActionButton
-                                        variant="primary"
-                                        size="sm"
-                                        onClick={saveNotes}
-                                        disabled={loading}
-                                    >
+                                    <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
                                         <FontAwesomeIcon icon={faCheck} className='w-3 h-3 mr-1' />
                                         Save
                                     </ActionButton>
-                                    <ActionButton
-                                        variant="secondary"
-                                        size="sm"
-                                        onClick={cancelEdit}
-                                        disabled={loading}
-                                    >
+                                    <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
                                         <FontAwesomeIcon icon={faTimes} className='w-3 h-3 mr-1' />
                                         Cancel
                                     </ActionButton>
@@ -168,9 +161,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             <Can action={'allocation.update'}>
                                 <div
                                     className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${
-                                        allocation.notes
-                                            ? 'text-sm text-zinc-300'
-                                            : 'text-sm text-zinc-500 italic'
+                                        allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'
                                     }`}
                                     onClick={startEdit}
                                 >
@@ -184,11 +175,15 @@ const AllocationRow = ({ allocation }: Props) => {
                 <div className='flex items-center justify-center gap-2 sm:flex-col sm:gap-3'>
                     <Can action={'allocation.update'}>
                         <ActionButton
-                            variant="secondary"
-                            size="sm"
+                            variant='secondary'
+                            size='sm'
                             onClick={setPrimaryAllocation}
                             disabled={allocation.isDefault}
-                            title={allocation.isDefault ? 'This is already the primary allocation' : 'Make this the primary allocation'}
+                            title={
+                                allocation.isDefault
+                                    ? 'This is already the primary allocation'
+                                    : 'Make this the primary allocation'
+                            }
                         >
                             <FontAwesomeIcon icon={faCrown} className='w-3 h-3 mr-1' />
                             <span className='hidden sm:inline'>Make Primary</span>
@@ -197,11 +192,13 @@ const AllocationRow = ({ allocation }: Props) => {
                     </Can>
                     <Can action={'allocation.delete'}>
                         <ActionButton
-                            variant="danger"
-                            size="sm"
+                            variant='danger'
+                            size='sm'
                             onClick={deleteAllocation}
                             disabled={allocation.isDefault || loading}
-                            title={allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'}
+                            title={
+                                allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
+                            }
                         >
                             <FontAwesomeIcon icon={faTrash} className='w-3 h-3 mr-1' />
                             <span className='hidden sm:inline'>Delete</span>
