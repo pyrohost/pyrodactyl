@@ -222,6 +222,40 @@ class Server extends Model
     }
 
     /**
+     * Checks if the server has a custom docker image set by an administrator.
+     * A custom image is one that is not in the egg's allowed docker images.
+     */
+    public function hasCustomDockerImage(): bool
+    {
+        // Ensure we have egg data and docker images
+        if (!$this->egg || !is_array($this->egg->docker_images) || empty($this->egg->docker_images)) {
+            return false;
+        }
+        
+        return !in_array($this->image, array_values($this->egg->docker_images));
+    }
+
+    /**
+     * Gets the default docker image from the egg specification.
+     */
+    public function getDefaultDockerImage(): string
+    {
+        // Ensure we have egg data and docker images
+        if (!$this->egg || !is_array($this->egg->docker_images) || empty($this->egg->docker_images)) {
+            throw new \RuntimeException('Server egg has no docker images configured.');
+        }
+        
+        $eggDockerImages = $this->egg->docker_images;
+        $defaultImage = reset($eggDockerImages);
+        
+        if (empty($defaultImage)) {
+            throw new \RuntimeException('Server egg has no valid default docker image.');
+        }
+        
+        return $defaultImage;
+    }
+
+    /**
      * Gets the user who owns the server.
      */
     public function user(): BelongsTo

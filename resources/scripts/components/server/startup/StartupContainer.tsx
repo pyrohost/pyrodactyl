@@ -16,12 +16,14 @@ import { ServerError } from '@/components/elements/ScreenBlock';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import { Dialog } from '@/components/elements/dialog';
 import VariableBox from '@/components/server/startup/VariableBox';
 
 import { httpErrorToHuman } from '@/api/http';
 import processStartupCommand from '@/api/server/processStartupCommand';
 import resetStartupCommand from '@/api/server/resetStartupCommand';
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
+import revertDockerImage from '@/api/server/revertDockerImage';
 import updateStartupCommand from '@/api/server/updateStartupCommand';
 import getServerStartup from '@/api/swr/getServerStartup';
 
@@ -37,8 +39,10 @@ const StartupContainer = () => {
     const [editingCommand, setEditingCommand] = useState(false);
     const [commandValue, setCommandValue] = useState('');
     const [liveProcessedCommand, setLiveProcessedCommand] = useState('');
+    const [revertModalVisible, setRevertModalVisible] = useState(false);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const [canEditCommand] = usePermissions(['startup.command']);
+    const [canEditDockerImage] = usePermissions(['startup.docker-image']);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const server = ServerContext.useStoreState((state) => state.server.data!, isEqual);
@@ -91,6 +95,24 @@ const StartupContainer = () => {
 
         setSelectedDockerImage(uuid, image)
             .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:image', error });
+            })
+            .then(() => setLoading(false));
+    };
+
+    const revertToEggDefault = () => {
+        setLoading(true);
+        clearFlashes('startup:image');
+
+        revertDockerImage(uuid)
+            .then(() => {
+                // Get the first docker image from the egg as the default
+                const defaultImage = data ? Object.values(data.dockerImages)[0] || '' : '';
+                setServerFromState((s) => ({ ...s, dockerImage: defaultImage }));
+                setRevertModalVisible(false);
+            })
             .catch((error) => {
                 console.error(error);
                 clearAndAddHttpError({ key: 'startup:image', error });
@@ -174,6 +196,27 @@ const StartupContainer = () => {
         )
     ) : (
         <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
+            <Dialog.Confirm
+                open={revertModalVisible}
+                title={'Revert Docker Image'}
+                confirm={'Yes, revert to default'}
+                onClose={() => setRevertModalVisible(false)}
+                onConfirmed={revertToEggDefault}
+            >
+                <div className='space-y-3'>
+                    <p>
+                        This will revert your server&apos;s Docker image back to the egg&apos;s default specification.
+                    </p>
+                    <div className='bg-linear-to-b from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-3'>
+                        <p className='text-sm text-amber-200'>
+                            <span className='font-medium'>⚠️ Warning:</span> You will not be able to set a custom image back without contacting support.
+                        </p>
+                    </div>
+                    <p className='text-sm text-neutral-400'>
+                        Are you sure you want to continue?
+                    </p>
+                </div>
+            </Dialog.Confirm>
             <div className='space-y-6'>
                 <MainPageHeader direction='column' title='Startup Settings'>
                     <p className='text-sm text-neutral-400 leading-relaxed'>
@@ -397,11 +440,33 @@ const StartupContainer = () => {
                                 </div>
                                 {isCustomImage && (
                                     <div className='bg-linear-to-b from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-3 sm:p-4'>
-                                        <p className='text-sm text-amber-200'>
-                                            <span className='font-medium'>⚠️ Notice:</span> This server&apos;s Docker
-                                            image has been manually set by an administrator and cannot be changed
-                                            through this interface.
-                                        </p>
+                                        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
+                                            <div className='flex-1'>
+                                                <p className='text-sm text-amber-200'>
+                                                    <span className='font-medium'>⚠️ Notice:</span> This server&apos;s Docker
+                                                    image has been manually set by an administrator and cannot be changed
+                                                    through this interface.
+                                                </p>
+                                                {canEditDockerImage && (
+                                                    <p className='text-xs text-amber-300/80 mt-2'>
+                                                        You can revert to the egg&apos;s default image, but you won&apos;t be able to set it back without contacting support.
+                                                    </p>
+                                                )}
+                                            </div>
+                                            {canEditDockerImage && (
+                                                <div className='flex-shrink-0'>
+                                                    <InputSpinner visible={loading}>
+                                                        <button
+                                                            onClick={() => setRevertModalVisible(true)}
+                                                            disabled={loading}
+                                                            className='w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-amber-200 bg-linear-to-b from-amber-600/20 to-amber-700/20 border border-amber-500/40 rounded-xl hover:from-amber-500/30 hover:to-amber-600/30 hover:border-amber-500/60 hover:text-amber-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-manipulation'
+                                                        >
+                                                            Revert to Default
+                                                        </button>
+                                                    </InputSpinner>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
                             </div>

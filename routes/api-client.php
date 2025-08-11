@@ -149,6 +149,7 @@ Route::group([
     Route::post('/rename', [Client\Servers\SettingsController::class, 'rename']);
     Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall']);
     Route::put('/docker-image', [Client\Servers\SettingsController::class, 'dockerImage']);
+    Route::post('/docker-image/revert', [Client\Servers\SettingsController::class, 'revertDockerImage']);
     Route::put('/egg', [Client\Servers\SettingsController::class, 'changeEgg']);
   });
 });
