@@ -4,8 +4,8 @@
 import { useSignal } from '@preact/signals-react';
 import { useContext, useEffect } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 
 import asDialog from '@/hoc/asDialog';
@@ -52,19 +52,21 @@ const FileUploadList = () => {
                     </div>
                     {/* </Tooltip> */}
                     <Code className={'flex-1 truncate'}>{name}</Code>
-                    <button
+                    <ActionButton
+                        variant="secondary"
+                        size="sm"
                         onClick={cancelFileUpload.bind(this, name)}
-                        className={'text-zinc-500 hover:text-zinc-200 transition-colors duration-75 cursor-pointer'}
+                        className="hover:!text-red-400"
                     >
-                        FIXME: add X icon Cancel Upload
-                    </button>
+                        Cancel
+                    </ActionButton>
                 </div>
             ))}
             <Dialog.Footer>
-                <Button.Danger variant={Button.Variants.Secondary} onClick={() => clearFileUploads()}>
+                <ActionButton variant="danger" onClick={() => clearFileUploads()}>
                     Cancel Uploads
-                </Button.Danger>
-                <Button.Text onClick={close}>Close</Button.Text>
+                </ActionButton>
+                <ActionButton variant="secondary" onClick={close}>Close</ActionButton>
             </Dialog.Footer>
         </div>
     );
@@ -90,12 +92,14 @@ const FileManagerStatus = () => {
         <>
             {count > 0 && (
                 // <Tooltip content={`${count} files are uploading, click to view`}>
-                <button
-                    className={'flex items-center justify-center w-10 h-10 cursor-pointer'}
+                <ActionButton
+                    variant="secondary"
+                    size="sm"
+                    className="w-10 h-10 p-0"
                     onClick={() => (open.value = true)}
                 >
                     <svg
-                        className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
+                        className='animate-spin h-5 w-5 text-white'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
                         viewBox='0 0 24 24'
@@ -114,7 +118,7 @@ const FileManagerStatus = () => {
                             d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                         ></path>
                     </svg>
-                </button>
+                </ActionButton>
                 // </Tooltip>
             )}
             <FileUploadListDialog open={open.value} onClose={() => (open.value = false)} />

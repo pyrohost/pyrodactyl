@@ -11,7 +11,7 @@ import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import createApiKey from '@/api/account/createApiKey';
 import { ApiKey } from '@/api/account/getApiKeys';
@@ -88,9 +88,9 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
 
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
-                                <Button type='submit' disabled={isSubmitting}>
+                                <ActionButton type='submit' disabled={isSubmitting}>
                                     {isSubmitting ? 'Creating...' : 'Create API Key'}
-                                </Button>
+                                </ActionButton>
                             </div>
                         </Form>
                     )}

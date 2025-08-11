@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useMemo } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import { Button } from '@/components/elements/button/index';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
 import { Input } from '@/components/elements/inputs';
 import Select from '@/components/elements/Select';
@@ -25,13 +25,11 @@ const ServerActivityLogContainer = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedEventType, setSelectedEventType] = useState('');
     const [showFilters, setShowFilters] = useState(false);
-    const [autoRefresh, setAutoRefresh] = useState(false);
     const [dateRange, setDateRange] = useState('all');
 
     const { data, isValidating, error } = useActivityLogs(filters, {
         revalidateOnMount: true,
         revalidateOnFocus: false,
-        refreshInterval: autoRefresh ? 30000 : 0, // Auto-refresh every 30 seconds
     });
 
     // Extract unique event types for filter dropdown
@@ -127,10 +125,6 @@ const ServerActivityLogContainer = () => {
                         e.preventDefault();
                         setShowFilters(!showFilters);
                         break;
-                    case 'r':
-                        e.preventDefault();
-                        setAutoRefresh(!autoRefresh);
-                        break;
                     case 'e':
                         e.preventDefault();
                         exportLogs();
@@ -141,7 +135,7 @@ const ServerActivityLogContainer = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showFilters, autoRefresh]);
+    }, [showFilters]);
 
     useEffect(() => {
         setFilters((value) => ({ ...value, filters: { ip: hash.ip, event: hash.event } }));
@@ -166,27 +160,18 @@ const ServerActivityLogContainer = () => {
                 >
                     <MainPageHeader title={'Activity Log'}>
                         <div className='flex gap-2 items-center flex-wrap'>
-                            <Button.Text
-                                variant={Button.Variants.Secondary}
+                            <ActionButton
+                                variant="secondary"
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
                             >
                                 <FontAwesomeIcon icon={faFilter} className='w-4 h-4' />
                                 Filters
-                                {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
-                            </Button.Text>
-                            <Button.Text
-                                variant={autoRefresh ? Button.Variants.Primary : Button.Variants.Secondary}
-                                onClick={() => setAutoRefresh(!autoRefresh)}
-                                className='flex items-center gap-2'
-                                title='Auto Refresh (Ctrl+R)'
-                            >
-                                <FontAwesomeIcon icon={autoRefresh ? faTimes : faSearch} className='w-4 h-4' />
-                                {autoRefresh ? 'Live' : 'Refresh'}
-                            </Button.Text>
-                            <Button.Text
-                                variant={Button.Variants.Secondary}
+                                {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
+                            </ActionButton>
+                            <ActionButton
+                                variant="secondary"
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
@@ -194,7 +179,7 @@ const ServerActivityLogContainer = () => {
                             >
                                 <FontAwesomeIcon icon={faDownload} className='w-4 h-4' />
                                 Export
-                            </Button.Text>
+                            </ActionButton>
                         </div>
                     </MainPageHeader>
                 </div>
@@ -239,7 +224,7 @@ const ServerActivityLogContainer = () => {
                                     <Select
                                         value={selectedEventType}
                                         onChange={(e) => setSelectedEventType(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
+                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Events</option>
                                         {eventTypes.map(type => (
@@ -253,7 +238,7 @@ const ServerActivityLogContainer = () => {
                                     <Select
                                         value={dateRange}
                                         onChange={(e) => setDateRange(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
+                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>All Time</option>
                                         <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>Last Hour</option>
@@ -265,14 +250,14 @@ const ServerActivityLogContainer = () => {
                                 
                                 <div className='flex items-end'>
                                     {hasActiveFilters && (
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
                                             <FontAwesomeIcon icon={faTimes} className='w-4 h-4' />
                                             Clear All Filters
-                                        </Button.Text>
+                                        </ActionButton>
                                     )}
                                 </div>
                             </div>
@@ -293,7 +278,7 @@ const ServerActivityLogContainer = () => {
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                 <FontAwesomeIcon icon={faHistory} className='w-2.5 h-2.5 text-zinc-400' />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Server Activity Events</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>Events</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
                                     ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
@@ -317,18 +302,18 @@ const ServerActivityLogContainer = () => {
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={clearAllFilters}
                                         >
                                             Clear All Filters
-                                        </Button.Text>
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        </ActionButton>
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={() => setShowFilters(true)}
                                         >
                                             Adjust Filters
-                                        </Button.Text>
+                                        </ActionButton>
                                     </div>
                                 )}
                             </div>

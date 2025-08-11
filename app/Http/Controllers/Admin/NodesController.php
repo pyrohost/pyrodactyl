@@ -1,4 +1,4 @@
-<?php
+t<?php
 
 namespace Pterodactyl\Http\Controllers\Admin;
 
@@ -147,7 +147,7 @@ class NodesController extends Controller
     {
         $this->allocationRepository->update($request->input('allocation_id'), [
             'ip_alias' => (empty($request->input('alias'))) ? null : $request->input('alias'),
-        ]);
+        ], false); // Skip validation
 
         return response('', 204);
     }

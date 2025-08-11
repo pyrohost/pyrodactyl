@@ -8,10 +8,10 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { useContext, useEffect, useMemo } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import ItemContainer from '@/components/elements/ItemContainer';
-import { Button } from '@/components/elements/button/index';
 
 import asModal from '@/hoc/asModal';
 
@@ -262,9 +262,9 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         />
                     </div>
                     <div className={`mb-6 text-right`}>
-                        <Button className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
+                        <ActionButton variant="primary" className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
                             {schedule ? 'Save changes' : 'Create schedule'}
-                        </Button>
+                        </ActionButton>
                     </div>
                 </Form>
             )}

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import DisableTOTPDialog from '@/components/dashboard/forms/DisableTOTPDialog';
 import RecoveryTokensDialog from '@/components/dashboard/forms/RecoveryTokensDialog';
 import SetupTOTPDialog from '@/components/dashboard/forms/SetupTOTPDialog';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { ApplicationStore } from '@/state';
 
@@ -39,9 +39,9 @@ const ConfigureTwoFactorForm = () => {
             </p>
             <div className={`mt-6`}>
                 {isEnabled ? (
-                    <Button.Danger onClick={() => setVisible('disable')}>Remove Authenticator App</Button.Danger>
+                    <ActionButton variant="danger" onClick={() => setVisible('disable')}>Remove Authenticator App</ActionButton>
                 ) : (
-                    <Button onClick={() => setVisible('enable')}>Enable Authenticator App</Button>
+                    <ActionButton variant="primary" onClick={() => setVisible('enable')}>Enable Authenticator App</ActionButton>
                 )}
             </div>
         </div>

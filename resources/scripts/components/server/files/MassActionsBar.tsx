@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
@@ -101,11 +101,11 @@ const MassActionsBar = () => {
                         }
                     >
                         <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <Button onClick={() => setShowMove(true)}>Move</Button>
-                            <Button onClick={onClickCompress}>Archive</Button>
-                            <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
+                            <ActionButton onClick={() => setShowMove(true)}>Move</ActionButton>
+                            <ActionButton onClick={onClickCompress}>Archive</ActionButton>
+                            <ActionButton variant="danger" onClick={() => setShowConfirm(true)}>
                                 Delete
-                            </Button.Danger>
+                            </ActionButton>
                         </div>
                     </div>
                 </FadeTransition>

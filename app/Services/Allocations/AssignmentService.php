@@ -52,6 +52,12 @@ class AssignmentService
             // an array of records, which is not ideal for this use case, we need a SINGLE
             // IP to use, not multiple.
             $underlying = gethostbyname($data['allocation_ip']);
+            
+            // Validate that gethostbyname returned a valid IP
+            if (!filter_var($underlying, FILTER_VALIDATE_IP)) {
+                throw new DisplayException("gethostbyname returned invalid IP address: {$underlying} for input: {$data['allocation_ip']}");
+            }
+            
             $parsed = Network::parse($underlying);
         } catch (\Exception $exception) {
             /* @noinspection PhpUndefinedVariableInspection */
@@ -78,9 +84,16 @@ class AssignmentService
                     }
 
                     foreach ($block as $unit) {
+                        $ipString = $ip->__toString();
+                        
+                        // Validate the IP string before insertion
+                        if (!filter_var($ipString, FILTER_VALIDATE_IP)) {
+                            throw new DisplayException("Invalid IP address generated: {$ipString}");
+                        }
+                        
                         $insertData[] = [
                             'node_id' => $node->id,
-                            'ip' => $ip->__toString(),
+                            'ip' => $ipString,
                             'port' => (int) $unit,
                             'ip_alias' => array_get($data, 'allocation_alias'),
                             'server_id' => null,
@@ -91,9 +104,16 @@ class AssignmentService
                         throw new PortOutOfRangeException();
                     }
 
+                    $ipString = $ip->__toString();
+                    
+                    // Validate the IP string before insertion
+                    if (!filter_var($ipString, FILTER_VALIDATE_IP)) {
+                        throw new DisplayException("Invalid IP address generated: {$ipString}");
+                    }
+                    
                     $insertData[] = [
                         'node_id' => $node->id,
-                        'ip' => $ip->__toString(),
+                        'ip' => $ipString,
                         'port' => (int) $port,
                         'ip_alias' => array_get($data, 'allocation_alias'),
                         'server_id' => null,

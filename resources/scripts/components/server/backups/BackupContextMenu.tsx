@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -162,60 +163,65 @@ const BackupContextMenu = ({ backup }: Props) => {
             {backup.isSuccessful ? (
                 <div className='flex flex-wrap gap-2'>
                     <Can action={'backup.download'}>
-                        <button
-                            type='button'
+                        <ActionButton
+                            variant="secondary"
+                            size="sm"
                             onClick={doDownload}
                             disabled={loading}
-                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                            className="flex items-center gap-2"
                         >
                             <HugeIconsFileDownload className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>Download</span>
-                        </button>
+                        </ActionButton>
                     </Can>
                     <Can action={'backup.restore'}>
-                        <button
-                            type='button'
+                        <ActionButton
+                            variant="secondary"
+                            size="sm"
                             onClick={() => setModal('restore')}
                             disabled={loading}
-                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                            className="flex items-center gap-2"
                         >
                             <HugeIconsCloudUp className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>Restore</span>
-                        </button>
+                        </ActionButton>
                     </Can>
                     <Can action={'backup.delete'}>
-                        <button
-                            type='button'
+                        <ActionButton
+                            variant="secondary"
+                            size="sm"
                             onClick={onLockToggle}
                             disabled={loading}
-                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150 disabled:opacity-50'
+                            className="flex items-center gap-2"
                         >
                             <HugeIconsFileSecurity className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>{backup.isLocked ? 'Unlock' : 'Lock'}</span>
-                        </button>
+                        </ActionButton>
                         {!backup.isLocked && (
-                            <button
-                                type='button'
+                            <ActionButton
+                                variant="danger"
+                                size="sm"
                                 onClick={() => setModal('delete')}
                                 disabled={loading}
-                                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150 disabled:opacity-50'
+                                className="flex items-center gap-2"
                             >
                                 <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                                 <span className='hidden sm:inline'>Delete</span>
-                            </button>
+                            </ActionButton>
                         )}
                     </Can>
                 </div>
             ) : (
-                <button
-                    type='button'
+                <ActionButton
+                    variant="danger"
+                    size="sm"
                     onClick={() => setModal('delete')}
                     disabled={loading}
-                    className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150 disabled:opacity-50'
+                    className="flex items-center gap-2"
                 >
                     <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                     <span className='hidden sm:inline'>Delete</span>
-                </button>
+                </ActionButton>
             )}
         </>
     );

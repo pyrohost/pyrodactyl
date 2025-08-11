@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { Dialog, RenderDialogProps } from './';
 
@@ -13,8 +13,8 @@ const ConfirmationDialog = ({ confirm = 'Okay', children, onConfirmed, ...props 
         <Dialog {...props} description={typeof children === 'string' ? children : undefined}>
             {typeof children !== 'string' && children}
             <Dialog.Footer>
-                <Button.Text onClick={props.onClose}>Cancel</Button.Text>
-                <Button.Danger onClick={onConfirmed}>{confirm}</Button.Danger>
+                <ActionButton variant="secondary" onClick={props.onClose}>Cancel</ActionButton>
+                <ActionButton variant="danger" onClick={onConfirmed}>{confirm}</ActionButton>
             </Dialog.Footer>
         </Dialog>
     );

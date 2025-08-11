@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -68,7 +68,7 @@ const UpdateEmailAddressForm = () => {
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>Update Email</Button>
+                            <ActionButton variant="primary" disabled={isSubmitting || !isValid}>Update Email</ActionButton>
                         </div>
                     </Form>
                 </Fragment>

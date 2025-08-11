@@ -4,9 +4,9 @@ import { useContext, useEffect, useState } from 'react';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 
 import asDialog from '@/hoc/asDialog';
@@ -89,12 +89,12 @@ const NewDirectoryDialog = asDialog({
                         </p>
                     </Form>
                     <Dialog.Footer>
-                        <Button.Text className={'w-full sm:w-auto'} onClick={close}>
+                        <ActionButton variant="secondary" className={'w-full sm:w-auto'} onClick={close}>
                             Cancel
-                        </Button.Text>
-                        <Button className={'w-full sm:w-auto'} onClick={submitForm}>
+                        </ActionButton>
+                        <ActionButton variant="primary" className={'w-full sm:w-auto'} onClick={submitForm}>
                             Create
-                        </Button>
+                        </ActionButton>
                     </Dialog.Footer>
                 </>
             )}
@@ -108,16 +108,9 @@ const NewDirectoryButton = () => {
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
-            <button
-                style={{
-                    background:
-                        'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                }}
-                className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
-                onClick={setOpen.bind(this, true)}
-            >
+            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)}>
                 New Folder
-            </button>
+            </ActionButton>
         </>
     );
 };

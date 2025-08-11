@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -58,30 +59,19 @@ const NetworkContainer = () => {
         <ServerContentBlock title={'Network'}>
             <FlashMessageRender byKey={'server:network'} />
             <MainPageHeader title={'Network'}>
-                {!data ? null : (
-                    <>
-                        {allocationLimit > 0 && (
-                            <Can action={'allocation.create'}>
-                                <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                                    <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                        {data.length} of {allocationLimit} allowed allocations
-                                    </p>
-                                    {allocationLimit > data.length && (
-                                        <button
-                                            style={{
-                                                background:
-                                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                            }}
-                                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer hover:bg-[#ffffff11] transition-colors duration-150'
-                                            onClick={onCreateAllocation}
-                                        >
-                                            New Allocation
-                                        </button>
-                                    )}
-                                </div>
-                            </Can>
-                        )}
-                    </>
+                {data && allocationLimit > 0 && (
+                    <Can action={'allocation.create'}>
+                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                {data.length} of {allocationLimit} allowed allocations
+                            </p>
+                            {allocationLimit > data.length && (
+                                <ActionButton variant='primary' onClick={onCreateAllocation}>
+                                    New Allocation
+                                </ActionButton>
+                            )}
+                        </div>
+                    </Can>
                 )}
             </MainPageHeader>
 

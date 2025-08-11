@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import {
     DropdownMenu,
@@ -235,41 +236,39 @@ const FileEditContainer = () => {
                 {action === 'edit' ? (
                     <Can action={'file.update'}>
                         <div className='flex gap-1 items-center justify-center'>
-                            <button
-                                style={{
-                                    background:
-                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
-                                }}
-                                className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md cursor-pointer'
+                            <ActionButton
+                                variant="primary"
+                                size="lg"
+                                className="rounded-l-full rounded-r-none pl-8 pr-6"
                                 onClick={() => save()}
                             >
                                 Save{' '}
                                 <span className='ml-2 font-mono text-xs font-bold uppercase lg:inline-block hidden'>
                                     CTRL + S
                                 </span>
-                            </button>
+                            </ActionButton>
                             <DropdownMenu>
-                                <DropdownMenuTrigger
-                                    style={{
-                                        background:
-                                            'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
-                                    }}
-                                    className='h-[46px] px-2 py-3 border-[1px] border-[#ffffff12] rounded-r-full text-sm font-bold shadow-md'
-                                >
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        width='13'
-                                        height='13'
-                                        viewBox='0 0 13 13'
-                                        fill='none'
+                                <DropdownMenuTrigger asChild>
+                                    <ActionButton
+                                        variant="primary"
+                                        size="lg"
+                                        className="rounded-r-full rounded-l-none px-2"
                                     >
-                                        <path
-                                            fillRule='evenodd'
-                                            clipRule='evenodd'
-                                            d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
-                                            fill='white'
-                                        />
-                                    </svg>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            width='13'
+                                            height='13'
+                                            viewBox='0 0 13 13'
+                                            fill='none'
+                                        >
+                                            <path
+                                                fillRule='evenodd'
+                                                clipRule='evenodd'
+                                                d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
+                                                fill='white'
+                                            />
+                                        </svg>
+                                    </ActionButton>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                     className='max-h-[calc(100vh-4rem)] overflow-auto z-99999'
@@ -284,16 +283,13 @@ const FileEditContainer = () => {
                     </Can>
                 ) : (
                     <Can action={'file.create'}>
-                        <button
-                            style={{
-                                background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                            }}
-                            className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
+                        <ActionButton
+                            variant="secondary"
+                            size="lg"
                             onClick={() => setModalVisible(true)}
                         >
                             Create File
-                        </button>
+                        </ActionButton>
                     </Can>
                 )}
             </div>

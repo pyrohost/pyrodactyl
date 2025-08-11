@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -95,9 +95,9 @@ const DatabaseRow = ({ database }: Props) => {
                                     label={'Confirm Database Name'}
                                     description={'Enter the database name to confirm deletion.'}
                                 />
-                                <Button type={'submit'} color={'red'} className='min-w-full my-6' disabled={!isValid}>
+                                <ActionButton variant="danger" type={'submit'} className='min-w-full my-6' disabled={!isValid}>
                                     Delete Database
-                                </Button>
+                                </ActionButton>
                             </Form>
                         </div>
                     </Modal>
@@ -198,23 +198,25 @@ const DatabaseRow = ({ database }: Props) => {
                     </div>
 
                     <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
-                        <button
-                            type='button'
+                        <ActionButton
+                            variant="secondary"
+                            size="sm"
                             onClick={() => setConnectionVisible(true)}
-                            className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-[#ffffff19] rounded-lg text-sm text-zinc-300 hover:text-zinc-100 transition-colors duration-150'
+                            className="flex items-center gap-2"
                         >
                             <FontAwesomeIcon icon={faEye} className='w-4 h-4' />
                             <span className='hidden sm:inline'>Details</span>
-                        </button>
+                        </ActionButton>
                         <Can action={'database.delete'}>
-                            <button
-                                type='button'
+                            <ActionButton
+                                variant="danger"
+                                size="sm"
                                 onClick={() => setVisible(true)}
-                                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150'
+                                className="flex items-center gap-2"
                             >
                                 <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
                                 <span className='hidden sm:inline'>Delete</span>
-                            </button>
+                            </ActionButton>
                         </Can>
                     </div>
                 </div>

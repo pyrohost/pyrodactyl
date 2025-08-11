@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
-import Button from '@/components/elements/ButtonV2';
+import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Pagination from '@/components/elements/Pagination';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -114,6 +114,7 @@ const SoftwareContainer = () => {
     const { data, mutate } = getServerStartup(uuid, {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
+        rawStartupCommand: variables.invocation,
     });
 
     useEffect(() => {
@@ -307,26 +308,26 @@ const SoftwareContainer = () => {
 
             {!visible && (
                 <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08]'>
-                    <div className='w-full h-full'>
-                        <div className='flex items-center justify-between pb-4 p-2'>
-                            <div className='flex items-center gap-2'>
-                                <HugeIconsEggs fill='currentColor' />
+                    <div className='w-full h-full p-6'>
+                        <div className='flex items-center justify-between'>
+                            <div className='flex items-center gap-3'>
+                                <HugeIconsEggs fill='currentColor' className='w-8 h-8 text-brand' />
                                 <div className='flex flex-col'>
-                                    <h1 className='text-2xl'>Current Egg</h1>
+                                    <h1 className='text-2xl font-semibold text-zinc-100'>Current Egg</h1>
                                     {currentEggName &&
                                         (currentEggName?.includes(blank_egg_prefix) ? (
-                                            <p className='text-neutral-300 text-sm'>Please select a egg</p>
+                                            <p className='text-neutral-300 text-sm'>Please select an egg</p>
                                         ) : (
-                                            <p className='text-neutral-300 text-sm'>{currentEggName}</p>
+                                            <p className='text-neutral-300 text-sm font-medium'>{currentEggName}</p>
                                         ))}
                                 </div>
                             </div>
-                            <button
-                                className='rounded-full border-[1px] cursor-pointer border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-linear-to-b from-[#ffffff10] to-[#ffffff09] text-white'
+                            <ActionButton
+                                variant="primary"
                                 onClick={() => setVisible(true)}
                             >
                                 Change Egg
-                            </button>
+                            </ActionButton>
                         </div>
                     </div>
                 </div>
@@ -386,7 +387,7 @@ const SoftwareContainer = () => {
                                                         <p className='text-neutral-200 text-md'>
                                                             {nest.attributes.name}
                                                         </p>
-                                                        <Button onClick={() => handleNestSelect(nest)}>Select</Button>
+                                                        <ActionButton variant="primary" onClick={() => handleNestSelect(nest)}>Select</ActionButton>
                                                     </div>
                                                     <p className='text-neutral-400 text-xs mt-2'>
                                                         {nest.attributes.description}
@@ -412,14 +413,15 @@ const SoftwareContainer = () => {
                                             >
                                                 <div className='flex items-center justify-between'>
                                                     <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>
-                                                    <Button
+                                                    <ActionButton
+                                                        variant="primary"
                                                         onClick={async () => {
                                                             setSelectedEgg(egg);
                                                             await handleEggSelect(egg);
                                                         }}
                                                     >
                                                         Select
-                                                    </Button>
+                                                    </ActionButton>
                                                 </div>
                                                 <p className='text-neutral-400 text-xs mt-2'>
                                                     {renderEggDescription(egg.attributes.description, eggIndex)}
@@ -431,7 +433,9 @@ const SoftwareContainer = () => {
                             )) ||
                                 (step == 1 && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a game first</p>
+                                        <div className='text-center'>
+                                            <p className='text-neutral-300'>Please select a game first</p>
+                                        </div>
                                     </div>
                                 ))}
 
@@ -534,12 +538,18 @@ const SoftwareContainer = () => {
 
                                     <div className='border-t border-[#ffffff20]' />
 
-                                    <Button onClick={() => confirmSelection()}>Confirm</Button>
+                                    <div className='flex justify-center'>
+                                        <ActionButton variant="primary" onClick={() => confirmSelection()}>
+                                            Confirm Selection
+                                        </ActionButton>
+                                    </div>
                                 </div>
                             )) ||
                                 (step == 2 && !currentEggName?.includes(blank_egg_prefix) && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a egg first</p>
+                                        <div className='text-center'>
+                                            <p className='text-neutral-300'>Please select an egg first</p>
+                                        </div>
                                     </div>
                                 ))}
                         </div>
@@ -548,19 +558,18 @@ const SoftwareContainer = () => {
             )}
 
             {!visible && (
-                <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-2 h-full'>
-                        <HugeIconsAlert
-                            fill='currentColor'
-                            className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block'
-                        />
-                        <div className='flex flex-col pb-1  m-2'>
-                            <h1 className='text-xl'>Danger Zone</h1>
-                            <p className='text-sm text-neutral-300'>
-                                During this process some files may be deleted or modified either make a backup before
-                                hand or pick the option when prompted.
-                            </p>
+                <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6'>
+                    <div className='p-6'>
+                        <div className='flex items-center gap-3 mb-3'>
+                            <HugeIconsAlert
+                                fill='currentColor'
+                                className='w-6 h-6 text-brand flex-shrink-0'
+                            />
+                            <h2 className='text-xl font-semibold text-zinc-100'>Danger Zone</h2>
                         </div>
+                        <p className='text-sm text-neutral-300 leading-relaxed'>
+                            During this process some files may be deleted or modified. Either make a backup beforehand or select the backup option when prompted.
+                        </p>
                     </div>
                 </div>
             )}

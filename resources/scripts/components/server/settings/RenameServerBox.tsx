@@ -5,7 +5,7 @@ import { object, string } from 'yup';
 
 import Field from '@/components/elements/Field';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
@@ -25,7 +25,7 @@ const RenameServerForm = () => {
                 <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
                 <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
                 <div className={`mt-6 text-right`}>
-                    <Button type={'submit'}>Save</Button>
+                    <ActionButton variant="primary" type={'submit'}>Save</ActionButton>
                 </div>
             </Form>
         </TitledGreyBox>

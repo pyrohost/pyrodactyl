@@ -50,7 +50,7 @@ class NetworkAllocationController extends ClientApiController
     {
         $original = $allocation->notes;
 
-        $allocation->forceFill(['notes' => $request->input('notes')])->save();
+        $allocation->forceFill(['notes' => $request->input('notes')])->skipValidation()->save();
 
         if ($original !== $allocation->notes) {
             Activity::event('server:allocation.notes')

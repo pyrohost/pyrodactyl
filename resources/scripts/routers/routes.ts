@@ -17,6 +17,8 @@ import SettingsContainer from '@/components/server/settings/SettingsContainer';
 import ShellContainer from '@/components/server/shell/ShellContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
+import CreateUserContainer from '@/components/server/users/CreateUserContainer';
+import EditUserContainer from '@/components/server/users/EditUserContainer';
 
 // Each of the router files is already code split out appropriately — so
 // all the items above will only be loaded in when that router is loaded.
@@ -130,6 +132,18 @@ export default {
             permission: 'user.*',
             name: 'Users',
             component: UsersContainer,
+        },
+        {
+            route: 'users/new',
+            permission: 'user.*',
+            name: undefined,
+            component: CreateUserContainer,
+        },
+        {
+            route: 'users/:id/edit',
+            permission: 'user.*',
+            name: undefined,
+            component: EditUserContainer,
         },
         {
             route: 'backups/*',

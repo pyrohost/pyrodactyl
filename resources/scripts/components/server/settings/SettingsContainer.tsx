@@ -2,13 +2,13 @@ import { useStoreState } from 'easy-peasy';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Label from '@/components/elements/Label';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
 
 import { ip } from '@/lib/formatters';
@@ -78,7 +78,7 @@ const SettingsContainer = () => {
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <Button.Text variant={Button.Variants.Secondary}>Launch SFTP</Button.Text>
+                                    <ActionButton variant='secondary'>Launch SFTP</ActionButton>
                                 </a>
                             </div>
                         </div>

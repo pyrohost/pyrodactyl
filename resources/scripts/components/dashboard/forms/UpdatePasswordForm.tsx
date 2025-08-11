@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -93,7 +93,7 @@ const UpdatePasswordForm = () => {
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <Button disabled={isSubmitting || !isValid}>Update Password</Button>
+                                <ActionButton variant="primary" disabled={isSubmitting || !isValid}>Update Password</ActionButton>
                             </div>
                         </Form>
                     </Fragment>

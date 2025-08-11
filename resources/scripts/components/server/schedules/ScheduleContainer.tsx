@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -43,16 +44,9 @@ function ScheduleContainer() {
             <MainPageHeader title={'Schedules'}>
                 <Can action={'schedule.create'}>
                     <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
-                    <button
-                        style={{
-                            background:
-                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                        }}
-                        className='rounded-full border-[1px] border-[#ffffff12] px-8 py-3 text-sm font-bold shadow-md cursor-pointer'
-                        onClick={() => setVisible(true)}
-                    >
+                    <ActionButton variant='primary' onClick={() => setVisible(true)}>
                         New Schedule
-                    </button>
+                    </ActionButton>
                 </Can>
             </MainPageHeader>
             {!schedules.length && loading ? null : (

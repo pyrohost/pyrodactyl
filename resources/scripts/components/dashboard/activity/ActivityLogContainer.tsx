@@ -7,7 +7,7 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
 import { Input } from '@/components/elements/inputs';
 import Select from '@/components/elements/Select';
@@ -165,8 +165,8 @@ const ActivityLogContainer = () => {
                 >
                     <MainPageHeader title={'Activity Log'}>
                         <div className='flex gap-2 items-center flex-wrap'>
-                            <Button.Text
-                                variant={Button.Variants.Secondary}
+                            <ActionButton
+                                variant="secondary"
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
@@ -174,18 +174,18 @@ const ActivityLogContainer = () => {
                                 <FontAwesomeIcon icon={faFilter} className='w-4 h-4' />
                                 Filters
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
-                            </Button.Text>
-                            <Button.Text
-                                variant={autoRefresh ? Button.Variants.Primary : Button.Variants.Secondary}
+                            </ActionButton>
+                            <ActionButton
+                                variant={autoRefresh ? "primary" : "secondary"}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
                                 className='flex items-center gap-2'
                                 title='Auto Refresh (Ctrl+R)'
                             >
                                 <FontAwesomeIcon icon={autoRefresh ? faTimes : faSearch} className='w-4 h-4' />
                                 {autoRefresh ? 'Live' : 'Refresh'}
-                            </Button.Text>
-                            <Button.Text
-                                variant={Button.Variants.Secondary}
+                            </ActionButton>
+                            <ActionButton
+                                variant="secondary"
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
@@ -193,7 +193,7 @@ const ActivityLogContainer = () => {
                             >
                                 <FontAwesomeIcon icon={faDownload} className='w-4 h-4' />
                                 Export
-                            </Button.Text>
+                            </ActionButton>
                         </div>
                     </MainPageHeader>
                 </div>
@@ -264,14 +264,14 @@ const ActivityLogContainer = () => {
                                 
                                 <div className='flex items-end'>
                                     {hasActiveFilters && (
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
                                             <FontAwesomeIcon icon={faTimes} className='w-4 h-4' />
                                             Clear All Filters
-                                        </Button.Text>
+                                        </ActionButton>
                                     )}
                                 </div>
                             </div>
@@ -316,18 +316,18 @@ const ActivityLogContainer = () => {
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={clearAllFilters}
                                         >
                                             Clear All Filters
-                                        </Button.Text>
-                                        <Button.Text
-                                            variant={Button.Variants.Secondary}
+                                        </ActionButton>
+                                        <ActionButton
+                                            variant="secondary"
                                             onClick={() => setShowFilters(true)}
                                         >
                                             Adjust Filters
-                                        </Button.Text>
+                                        </ActionButton>
                                     </div>
                                 )}
                             </div>

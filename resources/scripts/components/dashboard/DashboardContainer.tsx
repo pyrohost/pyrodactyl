@@ -65,23 +65,28 @@ const DashboardContainer = () => {
 
     return (
         <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
-            <Tabs
-                defaultValue={dashboardDisplayOption}
-                onValueChange={(value) => {
-                    setDashboardDisplayOption(value);
-                }}
-                className='w-full'
-            >
-                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
+            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+                <Tabs
+                    defaultValue={dashboardDisplayOption}
+                    onValueChange={(value) => {
+                        setDashboardDisplayOption(value);
+                    }}
+                    className='w-full'
+                >
+                    <div
+                        className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                        style={{
+                            animationDelay: '50ms',
+                            animationTimingFunction:
+                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                        }}
+                    >
+                        <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    style={{
-                                        background:
-                                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                    }}
-                                    className='flex items-center gap-2 font-bold text-sm px-4 py-3 rounded-full border-[1px] border-[#ffffff12] hover:bg-[#ffffff11] transition-colors duration-150 cursor-pointer'
+                                    className='inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-[#ffffff11] px-3 py-1.5 text-sm font-medium text-[#ffffff88] transition-all hover:bg-[#ffffff23] hover:text-[#ffffff] focus-visible:outline-hidden'
                                 >
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -157,7 +162,8 @@ const DashboardContainer = () => {
                             </TabsTrigger>
                         </TabsList>
                     </div>
-                </MainPageHeader>
+                        </MainPageHeader>
+                    </div>
                 {!servers ? (
                     <div className='flex items-center justify-center py-12'>
                         <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -194,7 +200,7 @@ const DashboardContainer = () => {
                                                     >
                                                         <path
                                                             fillRule='evenodd'
-                                                            d='M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z'
+                                                            d='M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z'
                                                             clipRule='evenodd'
                                                         />
                                                     </svg>
@@ -243,11 +249,12 @@ const DashboardContainer = () => {
                                                     <svg
                                                         className='w-8 h-8 text-zinc-400'
                                                         fill='currentColor'
-                                                        viewBox='0 0 16 17'
+                                                        viewBox='0 0 20 20'
                                                     >
                                                         <path
-                                                            d='M1 3.1C1 2.54 1 2.26 1.109 2.046C1.20487 1.85785 1.35785 1.70487 1.546 1.609C1.76 1.5 2.04 1.5 2.6 1.5H5.4C5.96 1.5 6.24 1.5 6.454 1.609C6.64215 1.70487 6.79513 1.85785 6.891 2.046C7 2.26 7 2.54 7 3.1V3.9C7 4.46 7 4.74 6.891 4.954C6.79513 5.14215 6.64215 5.29513 6.454 5.391C6.24 5.5 5.96 5.5 5.4 5.5H2.6C2.04 5.5 1.76 5.5 1.546 5.391C1.35785 5.29513 1.20487 5.14215 1.109 4.954C1 4.74 1 4.46 1 3.9V3.1ZM9 3.1C9 2.54 9 2.26 9.109 2.046C9.20487 1.85785 9.35785 1.70487 9.546 1.609C9.76 1.5 10.04 1.5 10.6 1.5H13.4C13.96 1.5 14.24 1.5 14.454 1.609C14.6422 1.70487 14.7951 1.85785 14.891 2.046C15 2.26 15 2.54 15 3.1V3.9C15 4.46 15 4.74 14.891 4.954C14.7951 5.14215 14.6422 5.29513 14.454 5.391C14.24 5.5 13.96 5.5 13.4 5.5H10.6C10.04 5.5 9.76 5.5 9.546 5.391C9.35785 5.29513 9.20487 5.14215 9.109 4.954C9 4.74 9 4.46 9 3.9V3.1ZM1 8.1C1 7.54 1 7.26 1.109 7.046C1.20487 6.85785 1.35785 6.70487 1.546 6.609C1.76 6.5 2.04 6.5 2.6 6.5H5.4C5.96 6.5 6.24 6.5 6.454 6.609C6.64215 6.70487 6.79513 6.85785 6.891 7.046C7 7.26 7 7.54 7 8.1V8.9C7 9.46 7 9.74 6.891 9.954C6.79513 10.1422 6.64215 10.2951 6.454 10.391C6.24 10.5 5.96 10.5 5.4 10.5H2.6C2.04 10.5 1.76 10.5 1.546 10.391C1.35785 10.2951 1.20487 10.1422 1.109 9.954C1 9.74 1 9.46 1 8.9V8.1ZM9 8.1C9 7.54 9 7.26 9.109 7.046C9.20487 6.85785 9.35785 6.70487 9.546 6.609C9.76 6.5 10.04 6.5 10.6 6.5H13.4C13.96 6.5 14.24 6.5 14.454 6.609C14.6422 6.70487 14.7951 6.85785 14.891 7.046C15 7.26 15 7.54 15 8.1V8.9C15 9.46 15 9.74 14.891 9.954C14.7951 10.1422 14.6422 10.2951 14.454 10.391C14.24 10.5 13.96 10.5 13.4 10.5H10.6C10.04 10.5 9.76 10.5 9.546 10.391C9.35785 10.2951 9.20487 10.1422 9.109 9.954C9 9.74 9 9.46 9 8.9V8.1ZM1 13.1C1 12.54 1 12.26 1.109 12.046C1.20487 11.8578 1.35785 11.7049 1.546 11.609C1.76 11.5 2.04 11.5 2.6 11.5H5.4C5.96 11.5 6.24 11.5 6.454 11.609C6.64215 11.7049 6.79513 11.8578 6.891 12.046C7 12.26 7 12.54 7 13.1V13.9C7 14.46 7 14.74 6.891 14.954C6.79513 15.1422 6.64215 15.2951 6.454 15.391C6.24 15.5 5.96 15.5 5.4 15.5H2.6C2.04 15.5 1.76 15.5 1.546 15.391C1.35785 15.2951 1.20487 15.1422 1.109 14.954C1 14.74 1 14.46 1 13.9V13.1ZM9 13.1C9 12.54 9 12.26 9.109 12.046C9.20487 11.8578 9.35785 11.7049 9.546 11.609C9.76 11.5 10.04 11.5 10.6 11.5H13.4C13.96 11.5 14.24 11.5 14.454 11.609C14.6422 11.7049 14.7951 11.8578 14.891 12.046C15 12.26 15 12.54 15 13.1V13.9C15 14.46 15 14.74 14.891 14.954C14.7951 15.1422 14.6422 15.2951 14.454 15.391C14.24 15.5 13.96 15.5 13.4 15.5H10.6C10.04 15.5 9.76 15.5 9.546 15.391C9.35785 15.2951 9.20487 15.1422 9.109 14.954C9 14.74 9 14.46 9 13.9V13.1Z'
-                                                            fill='currentColor'
+                                                            fillRule='evenodd'
+                                                            d='M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z'
+                                                            clipRule='evenodd'
                                                         />
                                                     </svg>
                                                 </div>
@@ -267,7 +274,8 @@ const DashboardContainer = () => {
                         </TabsContent>
                     </>
                 )}
-            </Tabs>
+                </Tabs>
+            </div>
         </PageContentBlock>
     );
 };

@@ -2,7 +2,7 @@ import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -59,9 +59,9 @@ const ReinstallServerBox = () => {
                 </strong>
             </p>
             <div className={`mt-6 text-right`}>
-                <Button.Danger variant={Button.Variants.Secondary} onClick={() => setModalVisible(true)}>
+                <ActionButton variant="danger" onClick={() => setModalVisible(true)}>
                     Reinstall Server
-                </Button.Danger>
+                </ActionButton>
             </div>
         </TitledGreyBox>
     );

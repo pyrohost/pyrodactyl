@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -48,15 +49,16 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
             >
                 All access to the server will be removed immediately.
             </ConfirmationModal>
-            <button
-                type={'button'}
-                aria-label={'Delete subuser'}
-                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
+            <ActionButton
+                variant="danger"
+                size="sm"
+                className="flex items-center gap-2"
                 onClick={() => setShowConfirmation(true)}
+                aria-label="Delete subuser"
             >
-                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                <FontAwesomeIcon icon={faTrashAlt} className="w-4 h-4" />
                 Delete
-            </button>
+            </ActionButton>
         </>
     );
 };

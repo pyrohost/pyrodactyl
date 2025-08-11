@@ -6,6 +6,12 @@ export interface Props {
 }
 
 const checkboxStyle = css<Props>`
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.09);
     color-adjust: exact;
     background-origin: border-box;
     transition:
@@ -13,13 +19,27 @@ const checkboxStyle = css<Props>`
         box-shadow 25ms linear;
 
     &:checked {
-        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-        background-color: white;
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+        background-color: #3b82f6;
+        border-color: #3b82f6;
         background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.3);
     }
 
     &:focus {
-        box-shadow: 0 0 0 1px rgba(9, 103, 210, 0.25);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        border-color: #3b82f6;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 `;
 

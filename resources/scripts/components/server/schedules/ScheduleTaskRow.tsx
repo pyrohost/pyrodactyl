@@ -5,11 +5,12 @@ import {
     faPowerOff,
     faQuestion,
     faTerminal,
-    faTrash,
+    faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import ItemContainer from '@/components/elements/ItemContainer';
@@ -110,7 +111,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                     </div>
                 )}
             </div> */}
-            <div className={`flex flex-none items-end sm:items-center flex-col sm:flex-row`}>
+            <div className={`flex flex-none items-end sm:items-center flex-col sm:flex-row gap-2`}>
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
@@ -122,26 +123,28 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                     )}
                 </div>
                 <Can action={'schedule.update'}>
-                    <button
-                        type={'button'}
-                        aria-label={'Edit scheduled task'}
-                        className={`block text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 ml-auto sm:ml-0 cursor-pointer`}
+                    <ActionButton
+                        variant="secondary"
+                        size="sm"
+                        className="flex flex-row items-center gap-2 ml-auto sm:ml-0"
                         onClick={() => setIsEditing(true)}
+                        aria-label="Edit scheduled task"
                     >
-                        <FontAwesomeIcon icon={faPen} className={`px-5`} size='lg' />
+                        <FontAwesomeIcon icon={faPen} />
                         Edit
-                    </button>
+                    </ActionButton>
                 </Can>
                 <Can action={'schedule.update'}>
-                    <button
-                        type={'button'}
-                        aria-label={'Delete scheduled task'}
-                        className={`block text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 cursor-pointer`}
+                    <ActionButton
+                        variant="danger"
+                        size="sm"
                         onClick={() => setVisible(true)}
+                        className="flex items-center gap-2"
+                        aria-label="Delete scheduled task"
                     >
-                        <FontAwesomeIcon icon={faTrash} className={`px-5`} size='lg' />
-                        Delete
-                    </button>
+                        <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                        <span className='hidden sm:inline'>Delete</span>
+                    </ActionButton>
                 </Can>
             </div>
         </ItemContainer>

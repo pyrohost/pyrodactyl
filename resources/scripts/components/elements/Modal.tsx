@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
 
 import HugeIconsX from './hugeicons/X';
@@ -164,9 +164,9 @@ const Modal: React.FC<ModalProps> = ({
                                                 </div>
                                                 {closeButton && (
                                                     <div className={`my-6 sm:flex items-center justify-end`}>
-                                                        <Button onClick={onDismissed} className={`min-w-full`}>
+                                                        <ActionButton onClick={onDismissed} className={`min-w-full`}>
                                                             <div>Close</div>
-                                                        </Button>
+                                                        </ActionButton>
                                                     </div>
                                                 )}
                                             </div>

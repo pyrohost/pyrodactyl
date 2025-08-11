@@ -8,12 +8,14 @@ import Can from '@/components/elements/Can';
 import ItemContainer from '@/components/elements/ItemContainer';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import DeleteScheduleButton from '@/components/server/schedules/DeleteScheduleButton';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
-import NewTaskButton from '@/components/server/schedules/NewTaskButton';
-import RunScheduleButton from '@/components/server/schedules/RunScheduleButton';
 import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
+import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+
+import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
 
 import getServerSchedule from '@/api/server/schedules/getServerSchedule';
 
@@ -41,6 +43,8 @@ const ScheduleEditContainer = () => {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const [isLoading, setIsLoading] = useState(true);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showTaskModal, setShowTaskModal] = useState(false);
+    const [runLoading, setRunLoading] = useState(false);
 
     const schedule = ServerContext.useStoreState(
         (st) => st.schedules.data.find((s) => s.id === Number(scheduleId)),
@@ -67,6 +71,21 @@ const ScheduleEditContainer = () => {
     const toggleEditModal = useCallback(() => {
         setShowEditModal((s) => !s);
     }, []);
+
+    const onTriggerExecute = useCallback(() => {
+        clearFlashes('schedule');
+        setRunLoading(true);
+        triggerScheduleExecution(id, schedule!.id)
+            .then(() => {
+                setRunLoading(false);
+                appendSchedule({ ...schedule!, isProcessing: true });
+            })
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ error, key: 'schedules' });
+            })
+            .then(() => setRunLoading(false));
+    }, [schedule, id, clearFlashes, clearAndAddHttpError, appendSchedule]);
 
     return (
         <PageContentBlock title={'Schedules'}>
@@ -112,10 +131,12 @@ const ScheduleEditContainer = () => {
                         </div>
                         <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                             <Can action={'schedule.update'}>
-                                <Button.Text onClick={toggleEditModal} className={'flex-1 min-w-max'}>
+                                <ActionButton variant='secondary' onClick={toggleEditModal} className={'flex-1 min-w-max'}>
                                     Edit
-                                </Button.Text>
-                                <NewTaskButton schedule={schedule} className={'flex-1 min-w-max'} />
+                                </ActionButton>
+                                <ActionButton variant='primary' onClick={() => setShowTaskModal(true)} className={'flex-1 min-w-max'}>
+                                    New Task
+                                </ActionButton>
                             </Can>
                         </div>
                     </div>
@@ -151,10 +172,19 @@ const ScheduleEditContainer = () => {
                         </Can>
                         {schedule.tasks.length > 0 && (
                             <Can action={'schedule.update'}>
-                                <RunScheduleButton schedule={schedule} />
+                                <SpinnerOverlay visible={runLoading} size={'large'} />
+                                <ActionButton
+                                    variant='secondary'
+                                    className={'flex-1 sm:flex-none'}
+                                    disabled={schedule.isProcessing}
+                                    onClick={onTriggerExecute}
+                                >
+                                    Run Now
+                                </ActionButton>
                             </Can>
                         )}
                     </div>
+                <TaskDetailsModal schedule={schedule} visible={showTaskModal} onModalDismissed={() => setShowTaskModal(false)} />
                 </div>
             )}
         </PageContentBlock>

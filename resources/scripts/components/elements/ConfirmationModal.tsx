@@ -1,7 +1,7 @@
 import ModalContext from '@/context/ModalContext';
 import { useContext } from 'react';
 
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import asModal from '@/hoc/asModal';
 
@@ -21,8 +21,8 @@ const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed 
             <div className='flex flex-col w-full'>
                 <div className={`text-zinc-300`}>{children}</div>
                 <div className={`flex gap-4 items-center justify-end my-6`}>
-                    <Button.Text onClick={() => dismiss()}>Cancel</Button.Text>
-                    <Button onClick={() => onConfirmed()}>{buttonText}</Button>
+                    <ActionButton variant="secondary" onClick={() => dismiss()}>Cancel</ActionButton>
+                    <ActionButton onClick={() => onConfirmed()}>{buttonText}</ActionButton>
                 </div>
             </div>
         </>

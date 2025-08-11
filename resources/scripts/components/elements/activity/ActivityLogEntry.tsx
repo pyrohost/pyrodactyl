@@ -45,7 +45,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                     <span className='text-zinc-500'>•</span>
                     <Link
                         to={`#${pathTo({ event: activity.event })}`}
-                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-blue-400 transition-colors duration-150 truncate'
+                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-brand transition-colors duration-150 truncate'
                     >
                         {activity.event}
                     </Link>

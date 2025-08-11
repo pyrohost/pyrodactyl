@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 
@@ -48,14 +49,15 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <button
-                type='button'
+            <ActionButton
+                variant="danger"
+                size="sm"
                 onClick={() => setConfirm(true)}
-                className='flex items-center justify-center gap-2 px-3 py-2 bg-[#ffffff11] hover:bg-red-600/20 rounded-lg text-sm text-zinc-300 hover:text-red-400 transition-colors duration-150'
+                className="flex items-center gap-2"
             >
                 <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
                 <span className='hidden sm:inline'>Delete</span>
-            </button>
+            </ActionButton>
         </>
     );
 };

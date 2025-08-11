@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
+import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import {
     DropdownMenu,
@@ -281,28 +282,34 @@ const StartupContainer = () => {
                                 </div>
                                 <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t border-[#ffffff08]'>
                                     <InputSpinner visible={commandLoading}>
-                                        <button
+                                        <ActionButton
+                                            variant='primary'
+                                            size='md'
                                             onClick={updateCommand}
                                             disabled={commandLoading || !commandValue.trim()}
-                                            className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px] px-4 py-3 sm:px-6 text-sm font-medium text-white bg-linear-to-b from-green-600/70 to-green-700/70 border border-green-500/40 rounded-xl hover:from-green-500/80 hover:to-green-600/80 hover:border-green-500/60 disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-manipulation'
+                                            className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                         >
                                             {commandLoading ? 'Saving...' : 'Save Command'}
-                                        </button>
+                                        </ActionButton>
                                     </InputSpinner>
-                                    <button
+                                    <ActionButton
+                                        variant='secondary'
+                                        size='md'
                                         onClick={loadDefaultCommand}
                                         disabled={commandLoading}
-                                        className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px] px-4 py-3 sm:px-6 text-sm font-medium text-neutral-200 bg-linear-to-b from-[#ffffff12] to-[#ffffff08] border border-[#ffffff20] rounded-xl hover:from-[#ffffff18] hover:to-[#ffffff12] hover:border-[#ffffff30] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-manipulation'
+                                        className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                     >
                                         Load Default
-                                    </button>
-                                    <button
+                                    </ActionButton>
+                                    <ActionButton
+                                        variant='secondary'
+                                        size='md'
                                         onClick={cancelEditingCommand}
                                         disabled={commandLoading}
-                                        className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px] px-4 py-3 sm:px-6 text-sm font-medium text-neutral-300 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff15] rounded-xl hover:from-[#ffffff12] hover:to-[#ffffff08] hover:border-[#ffffff25] hover:text-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-manipulation'
+                                        className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                     >
                                         Cancel
-                                    </button>
+                                    </ActionButton>
                                 </div>
                             </div>
                         ) : (
@@ -312,12 +319,14 @@ const StartupContainer = () => {
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                                             <label className='text-sm font-medium text-neutral-300'>Raw Command</label>
                                             {canEditCommand && (
-                                                <button
+                                                <ActionButton
+                                                    variant='secondary'
+                                                    size='sm'
                                                     onClick={startEditingCommand}
-                                                    className='w-full sm:w-auto px-4 py-2.5 sm:py-2 text-sm sm:text-xs font-medium text-neutral-200 bg-linear-to-b from-[#ffffff10] to-[#ffffff08] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] hover:border-[#ffffff25] hover:text-white transition-all touch-manipulation'
+                                                    className='w-full sm:w-auto'
                                                 >
                                                     Edit Command
-                                                </button>
+                                                </ActionButton>
                                             )}
                                         </div>
                                         <CopyOnClick text={data.rawStartupCommand}>
@@ -456,13 +465,15 @@ const StartupContainer = () => {
                                             {canEditDockerImage && (
                                                 <div className='flex-shrink-0'>
                                                     <InputSpinner visible={loading}>
-                                                        <button
+                                                        <ActionButton
+                                                            variant='secondary'
+                                                            size='sm'
                                                             onClick={() => setRevertModalVisible(true)}
                                                             disabled={loading}
-                                                            className='w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-amber-200 bg-linear-to-b from-amber-600/20 to-amber-700/20 border border-amber-500/40 rounded-xl hover:from-amber-500/30 hover:to-amber-600/30 hover:border-amber-500/60 hover:text-amber-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all touch-manipulation'
+                                                            className='w-full sm:w-auto text-amber-200 bg-linear-to-b from-amber-600/20 to-amber-700/20 border-amber-500/40 hover:from-amber-500/30 hover:to-amber-600/30 hover:border-amber-500/60 hover:text-amber-100'
                                                         >
                                                             Revert to Default
-                                                        </button>
+                                                        </ActionButton>
                                                     </InputSpinner>
                                                 </div>
                                             )}

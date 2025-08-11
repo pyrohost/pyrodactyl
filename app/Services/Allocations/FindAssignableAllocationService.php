@@ -34,19 +34,41 @@ class FindAssignableAllocationService
             throw new AutoAllocationNotEnabledException();
         }
 
+        // Validate that the server has a valid primary allocation IP
+        if (!$server->allocation) {
+            throw new \Pterodactyl\Exceptions\DisplayException("Server has no primary allocation");
+        }
+        
+        $allocationIp = $server->allocation->ip;
+        
+        // If it's not a valid IP, try to resolve it as a hostname
+        if (!filter_var($allocationIp, FILTER_VALIDATE_IP)) {
+            $resolvedIp = gethostbyname($allocationIp);
+            
+            // If gethostbyname fails, it returns the original hostname
+            if ($resolvedIp === $allocationIp || !filter_var($resolvedIp, FILTER_VALIDATE_IP)) {
+                throw new \Pterodactyl\Exceptions\DisplayException(
+                    "Cannot resolve allocation IP/hostname '{$allocationIp}' to a valid IP address"
+                );
+            }
+            
+            // Use the resolved IP for allocation operations
+            $allocationIp = $resolvedIp;
+        }
+
         // Attempt to find a given available allocation for a server. If one cannot be found
         // we will fall back to attempting to create a new allocation that can be used for the
         // server.
         /** @var Allocation|null $allocation */
         $allocation = $server->node->allocations()
-            ->where('ip', $server->allocation->ip)
+            ->where('ip', $allocationIp)
             ->whereNull('server_id')
             ->inRandomOrder()
             ->first();
 
-        $allocation = $allocation ?? $this->createNewAllocation($server);
+        $allocation = $allocation ?? $this->createNewAllocation($server, $allocationIp);
 
-        $allocation->update(['server_id' => $server->id]);
+        $allocation->skipValidation()->update(['server_id' => $server->id]);
 
         return $allocation->refresh();
     }
@@ -62,7 +84,7 @@ class FindAssignableAllocationService
      * @throws \Pterodactyl\Exceptions\Service\Allocation\PortOutOfRangeException
      * @throws \Pterodactyl\Exceptions\Service\Allocation\TooManyPortsInRangeException
      */
-    protected function createNewAllocation(Server $server): Allocation
+    protected function createNewAllocation(Server $server, string $resolvedIp): Allocation
     {
         $start = config('pterodactyl.client_features.allocations.range_start', null);
         $end = config('pterodactyl.client_features.allocations.range_end', null);
@@ -77,7 +99,7 @@ class FindAssignableAllocationService
         // Get all of the currently allocated ports for the node so that we can figure out
         // which port might be available.
         $ports = $server->node->allocations()
-            ->where('ip', $server->allocation->ip)
+            ->where('ip', $resolvedIp)
             ->whereBetween('port', [$start, $end])
             ->pluck('port');
 
@@ -96,13 +118,13 @@ class FindAssignableAllocationService
         $port = $available[array_rand($available)];
 
         $this->service->handle($server->node, [
-            'allocation_ip' => $server->allocation->ip,
+            'allocation_ip' => $resolvedIp,
             'allocation_ports' => [$port],
         ]);
 
         /** @var Allocation $allocation */
         $allocation = $server->node->allocations()
-            ->where('ip', $server->allocation->ip)
+            ->where('ip', $resolvedIp)
             ->where('port', $port)
             ->firstOrFail();
 

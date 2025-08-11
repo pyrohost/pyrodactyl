@@ -4,7 +4,7 @@ import { join } from 'pathe';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import renameFiles from '@/api/server/files/renameFiles';
 
@@ -82,7 +82,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                                 </p>
                             )}
                             <div className={`flex justify-end w-full my-6`}>
-                                <Button>{useMoveTerminology ? 'Move' : 'Rename'}</Button>
+                                <ActionButton variant="primary" type="submit">{useMoveTerminology ? 'Move' : 'Rename'}</ActionButton>
                             </div>
                         </div>
                     </Form>

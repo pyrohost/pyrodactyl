@@ -4,7 +4,7 @@ import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
@@ -51,12 +51,12 @@ const RotatePasswordButton = ({
     };
 
     return (
-        <Button onClick={rotate} className='flex-none'>
+        <ActionButton onClick={rotate} className='flex-none'>
             <div className='flex justify-center items-center h-4 w-4'>
                 {!loading && <FontAwesomeIcon icon={faRotateRight}></FontAwesomeIcon>}
                 {loading && <Spinner size={'small'} />}
             </div>
-        </Button>
+        </ActionButton>
     );
 };
 
