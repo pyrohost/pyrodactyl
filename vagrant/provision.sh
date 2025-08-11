@@ -308,9 +308,9 @@ if [ -n "$API_KEY" ]; then
                 "cpu": 400
             },
             "feature_limits": {
-                "databases": 0,
-                "allocations": 1,
-                "backups": 0
+                "databases": 5,
+                "allocations": 5,
+                "backups": 5
             },
             "allocation": {
                 "default": 1
