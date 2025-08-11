@@ -1,3 +1,5 @@
+import { faNetworkWired } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import debounce from 'debounce';
 import { memo, useCallback, useState } from 'react';
 import isEqual from 'react-fast-compare';
@@ -57,40 +59,56 @@ const AllocationRow = ({ allocation }: Props) => {
 
     return (
         <div className='bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
-            <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3'>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
                 <div className='flex-1 min-w-0'>
-                    <div className='flex items-center gap-2 flex-wrap mb-2'>
-                        {allocation.alias ? (
-                            <CopyOnClick text={allocation.alias}>
-                                <h3 className='text-lg font-medium text-zinc-100 font-mono'>{allocation.alias}</h3>
-                            </CopyOnClick>
-                        ) : (
-                            <CopyOnClick text={ip(allocation.ip)}>
-                                <h3 className='text-lg font-medium text-zinc-100 font-mono'>{ip(allocation.ip)}</h3>
-                            </CopyOnClick>
-                        )}
-                        <span className='text-zinc-500'>:</span>
-                        <span className='text-lg font-medium text-zinc-100 font-mono'>{allocation.port}</span>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                            <FontAwesomeIcon icon={faNetworkWired} className='text-zinc-400 w-4 h-4' />
+                        </div>
+                        <div className='min-w-0 flex-1'>
+                            <div className='flex items-center flex-wrap'>
+                                {allocation.alias ? (
+                                    <CopyOnClick text={allocation.alias}>
+                                        <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>{allocation.alias}</h3>
+                                    </CopyOnClick>
+                                ) : (
+                                    <CopyOnClick text={ip(allocation.ip)}>
+                                        <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>{ip(allocation.ip)}</h3>
+                                    </CopyOnClick>
+                                )}
+                                <span className='text-zinc-500'>:</span>
+                                <span className='text-base font-medium text-zinc-100 font-mono'>{allocation.port}</span>
+                                {allocation.isDefault && (
+                                    <span className='text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded ml-2'>
+                                        Primary
+                                    </span>
+                                )}
+                            </div>
+                        </div>
                     </div>
-                    <div className='min-h-[2rem] flex items-end'>
+
+                    {allocation.notes && (
+                        <div className='mt-2'>
+                            <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Notes</p>
+                            <p className='text-sm text-zinc-400'>{allocation.notes}</p>
+                        </div>
+                    )}
+                    
+                    <div className='mt-3'>
                         <InputSpinner visible={loading}>
                             <Textarea
-                                className='w-full bg-transparent border-0 p-0 text-sm text-zinc-400 placeholder-zinc-500 resize-none focus:ring-0 focus:text-zinc-300'
+                                className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-2 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
                                 placeholder='Add notes for this allocation...'
                                 defaultValue={allocation.notes || undefined}
                                 onChange={(e) => setAllocationNotes(e.currentTarget.value)}
-                                rows={1}
+                                rows={2}
                             />
                         </InputSpinner>
                     </div>
                 </div>
 
-                <div className='flex items-center gap-2 flex-shrink-0'>
-                    {allocation.isDefault ? (
-                        <div className='flex items-center justify-center px-4 py-2 bg-brand/20 border border-brand/30 rounded-lg text-sm text-brand font-medium'>
-                            Primary Port
-                        </div>
-                    ) : (
+                <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
+                    {!allocation.isDefault && (
                         <>
                             <Can action={'allocation.update'}>
                                 <button
