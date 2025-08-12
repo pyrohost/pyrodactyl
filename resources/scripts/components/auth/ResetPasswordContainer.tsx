@@ -1,6 +1,6 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Formik, FormikHelpers } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 
@@ -18,6 +18,8 @@ import { httpErrorToHuman } from '@/api/http';
 
 import { ApplicationStore } from '@/state';
 
+import useFlash from '@/plugins/useFlash';
+
 import Logo from '../elements/PyroLogo';
 
 interface Values {
@@ -28,7 +30,11 @@ interface Values {
 function ResetPasswordContainer() {
     const [email, setEmail] = useState('');
 
-    const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+    const { clearFlashes, clearAndAddHttpError } = useFlash();
+
+    useEffect(() => {
+        clearFlashes();
+    }, []);
 
     const parsed = new URLSearchParams(location.search);
     if (email.length === 0 && parsed.get('email')) {
@@ -60,7 +66,9 @@ function ResetPasswordContainer() {
                 console.error(error);
 
                 setSubmitting(false);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                clearAndAddHttpError({
+                    error: new Error(error),
+                });
             });
     };
 
@@ -111,6 +119,16 @@ function ResetPasswordContainer() {
                                 type={'password'}
                             />
                         </div>
+                        <Captcha
+                            className='mt-6'
+                            onError={(error) => {
+                                console.error('Captcha error:', error);
+                                clearAndAddHttpError({
+                                    error: new Error('Captcha verification failed. Please try again.'),
+                                });
+                            }}
+                        />
+
                         <div className={`mt-6`}>
                             <Button
                                 className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
