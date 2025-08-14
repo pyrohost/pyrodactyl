@@ -1,4 +1,3 @@
-import { Actions, useStoreActions } from 'easy-peasy';
 import { Formik, FormikHelpers } from 'formik';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -14,9 +13,6 @@ import Input from '@/components/elements/Input';
 import CaptchaManager from '@/lib/captcha';
 
 import performPasswordReset from '@/api/auth/performPasswordReset';
-import { httpErrorToHuman } from '@/api/http';
-
-import { ApplicationStore } from '@/state';
 
 import useFlash from '@/plugins/useFlash';
 
@@ -24,7 +20,7 @@ import Logo from '../elements/PyroLogo';
 
 interface Values {
     password: string;
-    passwordConfirmation: string;
+    password_confirmation: string;
 }
 
 function ResetPasswordContainer() {
@@ -43,18 +39,37 @@ function ResetPasswordContainer() {
 
     const params = useParams<'token'>();
 
-    const submit = ({ password, passwordConfirmation }: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const submit = ({ password, password_confirmation }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
 
         // Get captcha response if enabled
         const captchaResponse = getCaptchaResponse();
 
-        let resetData: any = { token: params.token ?? '', password, passwordConfirmation };
-        if (CaptchaManager.isEnabled() && captchaResponse) {
+        let resetData: any = { token: params.token ?? '', password, password_confirmation };
+        if (CaptchaManager.isEnabled()) {
             const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
+
+            console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
+
             if (fieldName) {
-                resetData = { ...resetData, [fieldName]: captchaResponse };
+                if (captchaResponse) {
+                    resetData = {
+                        ...resetData,
+                        [fieldName]: captchaResponse,
+                    };
+
+                    console.log('Adding captcha to reset data:');
+                    console.debug(resetData);
+                } else {
+                    console.error('Captcha enabled but no response available');
+                    console.log(captchaResponse);
+                    clearAndAddHttpError({ error: new Error('Please complete the captcha verification.') });
+                    setSubmitting(false);
+                    return;
+                }
             }
+        } else {
+            console.log('Captcha not enabled');
         }
 
         performPasswordReset(email, resetData)
@@ -78,13 +93,13 @@ function ResetPasswordContainer() {
                 onSubmit={submit}
                 initialValues={{
                     password: '',
-                    passwordConfirmation: '',
+                    password_confirmation: '',
                 }}
                 validationSchema={object().shape({
                     password: string()
                         .required('A new password is required.')
                         .min(8, 'Your new password should be at least 8 characters in length.'),
-                    passwordConfirmation: string()
+                    password_confirmation: string()
                         .required('Your new password does not match.')
                         .oneOf([ref('password')], 'Your new password does not match.'),
                 })}
@@ -99,12 +114,10 @@ function ResetPasswordContainer() {
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
                         <div className='text-center'>
-                            {/* <label>Email</label> */}
-                            <Input className='text-center' value={email} isLight disabled />
+                            <Input className='text-center' value={email} disabled />
                         </div>
                         <div className={`mt-6`}>
                             <Field
-                                light
                                 label={'New Password'}
                                 name={'password'}
                                 type={'password'}
@@ -112,12 +125,7 @@ function ResetPasswordContainer() {
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <Field
-                                light
-                                label={'Confirm New Password'}
-                                name={'passwordConfirmation'}
-                                type={'password'}
-                            />
+                            <Field label={'Confirm New Password'} name={'password_confirmation'} type={'password'} />
                         </div>
                         <Captcha
                             className='mt-6'

@@ -4,6 +4,7 @@ interface Data {
     token: string;
     password: string;
     passwordConfirmation: string;
+    [key: string]: string;
 }
 
 interface PasswordResetResponse {
@@ -15,9 +16,7 @@ export default (email: string, data: Data): Promise<PasswordResetResponse> => {
     return new Promise((resolve, reject) => {
         http.post('/auth/password/reset', {
             email,
-            token: data.token,
-            password: data.password,
-            password_confirmation: data.passwordConfirmation,
+            ...data,
         })
             .then((response) =>
                 resolve({
