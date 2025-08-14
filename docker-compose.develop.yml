@@ -9,7 +9,7 @@ x-common:
         # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
-        DB_USERNAME: 'root'
+        DB_USERNAME: 'pterodactyl'
         # DB_PASSWORD: "Uncomment this to user your own password"
 
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
@@ -19,7 +19,7 @@ x-common:
     mail: &mail-environment
         MAIL_FROM: 'noreply@example.com'
         MAIL_DRIVER: 'smtp'
-        MAIL_HOST: 'mail'
+        MAIL_HOST: 'mailhog'
         MAIL_PORT: '1025'
         MAIL_USERNAME: ''
         MAIL_PASSWORD: ''
@@ -38,20 +38,18 @@ services:
         restart: always
         command: --default-authentication-plugin=mysql_native_password
         volumes:
-            - './local_docker/database:/var/lib/mysql'
+            - './srv/database:/var/lib/mysql'
         environment:
             <<: *db-environment
             MYSQL_DATABASE: 'panel'
             MYSQL_USER: 'pterodactyl'
+        ports:
+            - '3306:3306'
     cache:
         image: redis:alpine
         restart: always
     panel:
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-            args:
-                DEV: "true"
+        image: pyrodactyl:develop
         restart: always
         ports:
             - '3000:80'
@@ -61,21 +59,26 @@ services:
             - cache
         volumes:
             - '.:/app'
-            - './local_docker/var:/app/var'
-            - './local_docker/nginx/:/etc/nginx/http.d/'
-            - './local_docker/certs:/etc/letsencrypt'
-            - './local_docker/logs/:/app/storage/logs'
-            - './local_docker/pterodactyl/config/:/etc/pterodactyl'
-            # volumes set for the dirs below so the image's files are used instead of the host's files
-            - panel_vendor:/app/vendor
-            - panel_storage:/app/storage
-            - panel_bootstrap_cache:/app/bootstrap/cache
+            - './srv/var:/app/var'
+            - './srv/nginx/:/etc/nginx/http.d/'
+            - './srv/certs:/etc/letsencrypt'
+            - './srv/logs/:/app/storage/logs'
+            - './srv/pterodactyl/config/:/etc/pterodactyl'
+            # anonymous volumes below, meaning it'll use the image's directory instead of the host
+            - '/app/vendor'
+            # needed for linux permissions
+            # - '/app/storage'
+            # - '/app/storage/app/private'
+            - '/app/storage/framework/views'
+            - '/app/bootstrap/cache'
         environment:
             <<: [*panel-environment, *mail-environment]
-            DB_PASSWORD: *db-root-password
+            DB_PASSWORD: *db-password
             DB_ROOT_PASSWORD: *db-root-password
             APP_ENV: 'local'
             APP_DEBUG: 'true'
+            LOG_CHANNEL: 'stack'
+            LOG_LEVEL: 'debug'
             APP_ENVIRONMENT_ONLY: 'false'
             CACHE_DRIVER: 'redis'
             SESSION_DRIVER: 'redis'
@@ -86,14 +89,53 @@ services:
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
             WINGS_INTERNAL_IP: 'wings'
-            WINGS_DIR: '${PWD}/local_docker'
+            WINGS_DIR: '${PWD}'
             PYRODACTYL_DOCKER_DEV: 'true'
+            MAIL_HOST: 'mailhog'
+            MAIL_PORT: 1025
+            MAIL_DRIVER: 'smtp'
+            APP_BACKUP_DRIVER: 's3'
+            AWS_DEFAULT_REGION: 'us-west-2'
+            AWS_ACCESS_KEY_ID: 'minioadmin'
+            AWS_SECRET_ACCESS_KEY: 'minioadmin'
+            AWS_BACKUPS_BUCKET: 'pyrodactyl'
+            AWS_ENDPOINT: 'http://minio:9000'
+            AWS_USE_PATH_STYLE_ENDPOINT: 'true'
+
+    minio:
+        image: quay.io/minio/minio:latest
+        hostname: minio
+        expose:
+            - '9000'
+            - '9001'
+        volumes:
+            - ./srv/data1-1:/data1
+            - ./srv/data1-2:/data2
+        command: server --console-address ":9001" http://minio/data{1...2}
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+
+    createbuckets:
+        image: quay.io/minio/mc:latest
+        depends_on:
+            - minio
+        entrypoint: >
+            /bin/sh -c "
+              until mc alias set local http://minio:9000 minioadmin minioadmin; do
+                echo 'Waiting for MinIO to be ready...'
+                sleep 2
+              done &&
+              mc mb --ignore-existing local/pyrodactyl &&
+              echo 'Bucket created.'
+            "
+
     wings:
         # The default Wings image doesn't work on macOS Docker
         # This fork simply removes the incompatible `io.priority` cgroup v2 flag
         # For Linux users, you can use the default image by uncommenting the line below
-        image: ghcr.io/pterodactyl/wings:latest
-        # image: ghcr.io/he3als/wings-mac:latest
+        # image: ghcr.io/pterodactyl/wings:latest
+        image: ghcr.io/he3als/wings-mac:latest
         restart: always
         ports:
             - '8080:8080'
@@ -107,28 +149,29 @@ services:
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - '/etc/ssl/certs:/etc/ssl/certs:ro'
-            - './local_docker/pterodactyl/config/:/etc/pterodactyl/'
+            - './srv/pterodactyl/config/:/etc/pterodactyl/'
 
             # The volumes below need to be the exact same path in the container as on the host.
             #
             # The paths are currently hardcoded in the container on first run, meaning if you move
-            # this repo on your host, you'll need to delete "local_docker" folder so the paths can be recreated.
+            # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
             #
             # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
             # Do not change anything but the $PWD part as this is also hardcoded in the container.
 
-            - '${PWD}/local_docker/wings/tmp/:${PWD}/local_docker/wings/tmp/'
-            - '${PWD}/local_docker/wings/docker/containers/:${PWD}/local_docker/wings/docker/containers/'
-            - '${PWD}/local_docker/wings/:${PWD}/local_docker/wings/'
-            - '${PWD}/local_docker/wings/logs/:${PWD}/local_docker/wings/logs/'
+            - '${PWD}/srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - '${PWD}/srv/wings/:${PWD}/srv/wings/'
+            - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
+
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - '1025:1025'
+            - '8025:8025'
 
 networks:
     default:
         ipam:
             config:
                 - subnet: 172.20.0.0/16
-
-volumes:
-    panel_vendor:
-    panel_storage:
-    panel_bootstrap_cache:
