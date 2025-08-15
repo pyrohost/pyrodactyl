@@ -16,7 +16,6 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Dialog } from '@/components/elements/dialog';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import OperationProgressModal from '@/components/server/operations/OperationProgressModal';
@@ -24,10 +23,7 @@ import OperationProgressModal from '@/components/server/operations/OperationProg
 import { httpErrorToHuman } from '@/api/http';
 import getNests from '@/api/nests/getNests';
 import applyEggChange from '@/api/server/applyEggChange';
-import createServerBackup from '@/api/server/backups/createServerBackup';
-import deleteFiles from '@/api/server/files/deleteFiles';
 import previewEggChange, { EggPreview } from '@/api/server/previewEggChange';
-import reinstallServer from '@/api/server/reinstallServer';
 import { ServerOperation } from '@/api/server/serverOperations';
 import getServerBackups from '@/api/swr/getServerBackups';
 import getServerStartup from '@/api/swr/getServerStartup';
@@ -35,7 +31,6 @@ import getServerStartup from '@/api/swr/getServerStartup';
 import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
-import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 
 interface Egg {
     object: string;
@@ -75,12 +70,12 @@ type FlowStep = 'overview' | 'select-game' | 'select-software' | 'configure' | '
 const SoftwareContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [nests, setNests] = useState<Nest[]>();
-    const eggs = nests?.reduce(
-        (eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data],
-        [] as Egg[],
-    );
+    //const eggs = nests?.reduce(
+    //    (eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data],
+    //    [] as Egg[],
+    //);
     const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
-    const originalEgg = currentEgg;
+    //const originalEgg = currentEgg;
     const currentEggName =
         nests &&
         nests
@@ -385,7 +380,7 @@ const SoftwareContainer = () => {
                             </div>
                         )}
                         <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server's game or software configuration
+                            Manage your server&apos;s game or software configuration
                         </p>
                     </div>
                 </div>
@@ -547,7 +542,7 @@ const SoftwareContainer = () => {
                                                     onValueChange={setSelectedDockerImage}
                                                 >
                                                     {Object.entries(eggPreview.docker_images).map(
-                                                        ([displayName, actualImage]) => (
+                                                        ([displayName, _]) => (
                                                             <DropdownMenuRadioItem
                                                                 key={displayName}
                                                                 value={displayName}
@@ -830,7 +825,7 @@ const SoftwareContainer = () => {
             <div className='space-y-6'>
                 <MainPageHeader direction='column' title='Software Management'>
                     <p className='text-neutral-400 leading-relaxed'>
-                        Change your server's game or software with our guided configuration wizard
+                        Change your server&apos;s game or software with our guided configuration wizard
                     </p>
                 </MainPageHeader>
 
