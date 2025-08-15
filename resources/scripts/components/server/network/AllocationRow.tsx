@@ -10,6 +10,8 @@ import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
+import { Dialog } from '@/components/elements/dialog';
+import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { ip } from '@/lib/formatters';
 
@@ -31,6 +33,7 @@ const AllocationRow = ({ allocation }: Props) => {
     const [loading, setLoading] = useState(false);
     const [isEditingNotes, setIsEditingNotes] = useState(false);
     const [notesValue, setNotesValue] = useState(allocation.notes || '');
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -100,8 +103,8 @@ const AllocationRow = ({ allocation }: Props) => {
     };
 
     return (
-        <div className='bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
-            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+        <PageListItem>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-3 mb-3'>
                         <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
@@ -206,7 +209,7 @@ const AllocationRow = ({ allocation }: Props) => {
                     </Can>
                 </div>
             </div>
-        </div>
+        </PageListItem>
     );
 };
 

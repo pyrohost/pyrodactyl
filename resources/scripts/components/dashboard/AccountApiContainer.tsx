@@ -39,7 +39,7 @@ const AccountApiContainer = () => {
     const [apiKey, setApiKey] = useState('');
     const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
 
-    const { clearAndAddHttpError } = useFlashKey('account');
+    const { clearAndAddHttpError } = useFlashKey('api-keys');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
     useEffect(() => {

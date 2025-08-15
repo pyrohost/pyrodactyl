@@ -58,12 +58,6 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                                 API
                             </span>
                         )}
-                        {activity.event.startsWith('server:sftp.') && (
-                            <span className='text-xs bg-green-900/30 text-green-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
-                                <FolderIcon fill='currentColor' className='w-3 h-3' />
-                                SFTP
-                            </span>
-                        )}
                         {children}
                     </div>
                 </div>

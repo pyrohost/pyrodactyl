@@ -134,9 +134,21 @@ class BackupStatusController extends Controller
         ];
 
         $client = $adapter->getClient();
+        
         if (!$successful) {
-            $client->execute($client->getCommand('AbortMultipartUpload', $params));
-
+            try {
+                $client->execute($client->getCommand('AbortMultipartUpload', $params));
+                \Log::info('Aborted multipart upload for failed backup', [
+                    'backup_uuid' => $backup->uuid,
+                    'upload_id' => $backup->upload_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::warning('Failed to abort multipart upload', [
+                    'backup_uuid' => $backup->uuid,
+                    'upload_id' => $backup->upload_id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
             return;
         }
 
@@ -145,17 +157,56 @@ class BackupStatusController extends Controller
             'Parts' => [],
         ];
 
-        if (is_null($parts)) {
-            $params['MultipartUpload']['Parts'] = $client->execute($client->getCommand('ListParts', $params))['Parts'];
-        } else {
-            foreach ($parts as $part) {
-                $params['MultipartUpload']['Parts'][] = [
-                    'ETag' => $part['etag'],
-                    'PartNumber' => $part['part_number'],
-                ];
+        try {
+            if (is_null($parts)) {
+                $listPartsResult = $client->execute($client->getCommand('ListParts', $params));
+                $params['MultipartUpload']['Parts'] = $listPartsResult['Parts'] ?? [];
+            } else {
+                foreach ($parts as $part) {
+                    // Validate part data
+                    if (!isset($part['etag']) || !isset($part['part_number'])) {
+                        throw new DisplayException('Invalid part data provided for multipart upload completion.');
+                    }
+                    
+                    $params['MultipartUpload']['Parts'][] = [
+                        'ETag' => $part['etag'],
+                        'PartNumber' => (int) $part['part_number'],
+                    ];
+                }
             }
-        }
 
-        $client->execute($client->getCommand('CompleteMultipartUpload', $params));
+            // Ensure we have parts to complete
+            if (empty($params['MultipartUpload']['Parts'])) {
+                throw new DisplayException('No parts found for multipart upload completion.');
+            }
+
+            $client->execute($client->getCommand('CompleteMultipartUpload', $params));
+            
+            \Log::info('Successfully completed multipart upload', [
+                'backup_uuid' => $backup->uuid,
+                'upload_id' => $backup->upload_id,
+                'parts_count' => count($params['MultipartUpload']['Parts']),
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to complete multipart upload', [
+                'backup_uuid' => $backup->uuid,
+                'upload_id' => $backup->upload_id,
+                'error' => $e->getMessage(),
+            ]);
+            
+            // Try to abort the upload to clean up
+            try {
+                $client->execute($client->getCommand('AbortMultipartUpload', $params));
+            } catch (\Exception $abortException) {
+                \Log::warning('Failed to abort multipart upload after completion failure', [
+                    'backup_uuid' => $backup->uuid,
+                    'upload_id' => $backup->upload_id,
+                    'abort_error' => $abortException->getMessage(),
+                ]);
+            }
+            
+            throw $e;
+        }
     }
 }

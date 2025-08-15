@@ -13,6 +13,7 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
+import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -166,8 +167,8 @@ const DatabaseRow = ({ database }: Props) => {
                 </div>
             </Modal>
 
-            <div className='bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
-                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+            <PageListItem>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
                     <div className='flex-1 min-w-0'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
@@ -225,7 +226,7 @@ const DatabaseRow = ({ database }: Props) => {
                         </Can>
                     </div>
                 </div>
-            </div>
+            </PageListItem>
         </>
     );
 };

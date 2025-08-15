@@ -201,6 +201,7 @@ return [
     Pterodactyl\Providers\HashidsServiceProvider::class,
     Pterodactyl\Providers\RouteServiceProvider::class,
     Pterodactyl\Providers\RepositoryServiceProvider::class,
+    Pterodactyl\Providers\ServerOperationServiceProvider::class,
     Pterodactyl\Providers\ViewComposerServiceProvider::class,
 
     /*

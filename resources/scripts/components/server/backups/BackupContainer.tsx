@@ -142,7 +142,11 @@ const BackupContainer = () => {
         return (
             <ServerContentBlock title={'Backups'}>
                 <FlashMessageRender byKey={'backups'} />
-                <MainPageHeader title={'Backups'} />
+                <MainPageHeader direction='column' title={'Backups'}>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>
+                        Create and manage server backups to protect your data. Schedule automated backups, download existing ones, and restore when needed.
+                    </p>
+                </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
                 </div>
@@ -153,21 +157,29 @@ const BackupContainer = () => {
     return (
         <ServerContentBlock title={'Backups'}>
             <FlashMessageRender byKey={'backups'} />
-            <MainPageHeader title={'Backups'}>
-                <Can action={'backup.create'}>
-                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        {backupLimit > 0 && (
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                {backups.backupCount} of {backupLimit} backups
-                            </p>
-                        )}
-                        {backupLimit > 0 && backupLimit > backups.backupCount && (
-                            <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                New Backup
-                            </ActionButton>
-                        )}
-                    </div>
-                </Can>
+            <MainPageHeader
+                direction='column'
+                title={'Backups'}
+                titleChildren={
+                    <Can action={'backup.create'}>
+                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                            {backupLimit > 0 && (
+                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                    {backups.backupCount} of {backupLimit} backups
+                                </p>
+                            )}
+                            {backupLimit > 0 && backupLimit > backups.backupCount && (
+                                <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
+                                    New Backup
+                                </ActionButton>
+                            )}
+                        </div>
+                    </Can>
+                }
+            >
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    Create and manage server backups to protect your data. Schedule automated backups, download existing ones, and restore when needed.
+                </p>
             </MainPageHeader>
 
             {createModalVisible && (
@@ -187,7 +199,7 @@ const BackupContainer = () => {
             <Pagination data={backups} onPageSelect={setPage}>
                 {({ items }) =>
                     !items.length ? (
-                        <div className='flex flex-col items-center justify-center py-12 px-4'>
+                        <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                             <div className='text-center'>
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                                     <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>

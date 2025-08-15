@@ -191,34 +191,88 @@ class BackupController extends ClientApiController
    */
   public function restore(RestoreBackupRequest $request, Server $server, Backup $backup): JsonResponse
   {
-    // Cannot restore a backup unless a server is fully installed and not currently
-    // processing a different backup restoration request.
-    if (!is_null($server->status)) {
-      throw new BadRequestHttpException('This server is not currently in a state that allows for a backup to be restored.');
-    }
+    $this->validateServerForRestore($server);
 
-    if (!$backup->is_successful && is_null($backup->completed_at)) {
-      throw new BadRequestHttpException('This backup cannot be restored at this time: not completed or failed.');
-    }
+    $this->validateBackupForRestore($backup);
 
     $log = Activity::event('server:backup.restore')
       ->subject($backup)
       ->property(['name' => $backup->name, 'truncate' => $request->input('truncate')]);
 
     $log->transaction(function () use ($backup, $server, $request) {
+      // Double-check server state within transaction to prevent race conditions
+      $server->refresh();
+      if (!is_null($server->status)) {
+        throw new BadRequestHttpException('Server state changed during restore initiation. Please try again.');
+      }
+
       // If the backup is for an S3 file we need to generate a unique Download link for
       // it that will allow Wings to actually access the file.
+      $url = null;
       if ($backup->disk === Backup::ADAPTER_AWS_S3) {
-        $url = $this->downloadLinkService->handle($backup, $request->user());
+        try {
+          $url = $this->downloadLinkService->handle($backup, $request->user());
+        } catch (\Exception $e) {
+          throw new BadRequestHttpException('Failed to generate download link for S3 backup: ' . $e->getMessage());
+        }
       }
 
       // Update the status right away for the server so that we know not to allow certain
       // actions against it via the Panel API.
       $server->update(['status' => Server::STATUS_RESTORING_BACKUP]);
 
-      $this->daemonRepository->setServer($server)->restore($backup, $url ?? null, $request->input('truncate'));
+      try {
+        $this->daemonRepository->setServer($server)->restore($backup, $url, $request->input('truncate'));
+      } catch (\Exception $e) {
+        // If daemon request fails, reset server status
+        $server->update(['status' => null]);
+        throw $e;
+      }
     });
 
     return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);
+  }
+
+  /**
+   * Validate server state for backup restoration
+   */
+  private function validateServerForRestore(Server $server): void
+  {
+    // Cannot restore a backup unless a server is fully installed and not currently
+    // processing a different backup restoration request.
+    if (!is_null($server->status)) {
+      throw new BadRequestHttpException('This server is not currently in a state that allows for a backup to be restored.');
+    }
+
+    if ($server->isSuspended()) {
+      throw new BadRequestHttpException('Cannot restore backup for suspended server.');
+    }
+
+    if (!$server->isInstalled()) {
+      throw new BadRequestHttpException('Cannot restore backup for server that is not fully installed.');
+    }
+
+    if ($server->transfer) {
+      throw new BadRequestHttpException('Cannot restore backup while server is being transferred.');
+    }
+  }
+
+  /**
+   * Validate backup for restoration
+   */
+  private function validateBackupForRestore(Backup $backup): void
+  {
+    if (!$backup->is_successful && is_null($backup->completed_at)) {
+      throw new BadRequestHttpException('This backup cannot be restored at this time: not completed or failed.');
+    }
+
+    // Additional safety check for backup integrity
+    if (!$backup->is_successful) {
+      throw new BadRequestHttpException('Cannot restore a failed backup.');
+    }
+
+    if (is_null($backup->completed_at)) {
+      throw new BadRequestHttpException('Cannot restore backup that is still in progress.');
+    }
   }
 }

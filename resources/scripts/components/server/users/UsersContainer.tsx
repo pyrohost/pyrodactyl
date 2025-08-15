@@ -56,20 +56,28 @@ const UsersContainer = () => {
         return (
             <ServerContentBlock title={'Users'}>
                 <FlashMessageRender byKey={'users'} />
-                <MainPageHeader title={'Users'}>
-                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
-                        <Can action={'user.create'}>
-                            <ActionButton
-                                variant='primary'
-                                onClick={() => navigate(`/server/${serverId}/users/new`)}
-                                className='flex items-center gap-2'
-                            >
-                                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
-                                New User
-                            </ActionButton>
-                        </Can>
-                    </div>
+                <MainPageHeader
+                    direction='column'
+                    title={'Users'}
+                    titleChildren={
+                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
+                            <Can action={'user.create'}>
+                                <ActionButton
+                                    variant='primary'
+                                    onClick={() => navigate(`/server/${serverId}/users/new`)}
+                                    className='flex items-center gap-2'
+                                >
+                                    <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                                    New User
+                                </ActionButton>
+                            </Can>
+                        </div>
+                    }
+                >
+                    <p className='text-sm text-neutral-400 leading-relaxed'>
+                        Manage user access to your server. Grant specific permissions to other users to help you manage and maintain your server.
+                    </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -81,23 +89,31 @@ const UsersContainer = () => {
     return (
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} />
-            <MainPageHeader title={'Users'}>
-                <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                    <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
-                    <Can action={'user.create'}>
-                        <ActionButton
-                            variant='primary'
-                            onClick={() => navigate(`/server/${serverId}/users/new`)}
-                            className='flex items-center gap-2'
-                        >
-                            <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
-                            New User
-                        </ActionButton>
-                    </Can>
-                </div>
+            <MainPageHeader
+                direction='column'
+                title={'Users'}
+                titleChildren={
+                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
+                        <Can action={'user.create'}>
+                            <ActionButton
+                                variant='primary'
+                                onClick={() => navigate(`/server/${serverId}/users/new`)}
+                                className='flex items-center gap-2'
+                            >
+                                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                                New User
+                            </ActionButton>
+                        </Can>
+                    </div>
+                }
+            >
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    Manage user access to your server. Grant specific permissions to other users to help you manage and maintain your server.
+                </p>
             </MainPageHeader>
             {!subusers.length ? (
-                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <FontAwesomeIcon icon={faUser} className='w-8 h-8 text-zinc-400' />

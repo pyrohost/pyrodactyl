@@ -27,7 +27,7 @@ const CreateSSHKeyForm = () => {
     const { mutate } = useSSHKeys();
 
     const submit = (values: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
-        clearFlashes('account');
+        clearFlashes('ssh-keys');
         createSSHKey(values.name, values.publicKey)
             .then((key) => {
                 resetForm();
@@ -37,7 +37,7 @@ const CreateSSHKeyForm = () => {
             })
             .catch((error) => {
                 console.error(error);
-                addError({ key: 'account', message: httpErrorToHuman(error) });
+                addError({ key: 'ssh-keys', message: httpErrorToHuman(error) });
                 setSubmitting(false);
             });
     };

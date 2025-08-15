@@ -62,7 +62,7 @@ const AccountSSHContainer = () => {
     };
 
     const submitCreate = (values: CreateValues, { setSubmitting, resetForm }: FormikHelpers<CreateValues>) => {
-        clearFlashes('account');
+        clearFlashes('ssh-keys');
         createSSHKey(values.name, values.publicKey)
             .then((key) => {
                 resetForm();

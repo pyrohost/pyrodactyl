@@ -58,21 +58,29 @@ const NetworkContainer = () => {
     return (
         <ServerContentBlock title={'Network'}>
             <FlashMessageRender byKey={'server:network'} />
-            <MainPageHeader title={'Network'}>
-                {data && allocationLimit > 0 && (
-                    <Can action={'allocation.create'}>
-                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                {data.length} of {allocationLimit} allowed allocations
-                            </p>
-                            {allocationLimit > data.length && (
-                                <ActionButton variant='primary' onClick={onCreateAllocation}>
-                                    New Allocation
-                                </ActionButton>
-                            )}
-                        </div>
-                    </Can>
-                )}
+            <MainPageHeader
+                direction='column'
+                title={'Network'}
+                titleChildren={
+                    data && allocationLimit > 0 ? (
+                        <Can action={'allocation.create'}>
+                            <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                    {data.filter(allocation => !allocation.isDefault).length} of {allocationLimit} allowed allocations
+                                </p>
+                                {allocationLimit > data.filter(allocation => !allocation.isDefault).length && (
+                                    <ActionButton variant='primary' onClick={onCreateAllocation}>
+                                        New Allocation
+                                    </ActionButton>
+                                )}
+                            </div>
+                        </Can>
+                    ) : undefined
+                }
+            >
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    Configure network allocations for your server. Manage IP addresses and ports that your server can bind to for incoming connections.
+                </p>
             </MainPageHeader>
 
             {!data ? (
@@ -88,7 +96,7 @@ const NetworkContainer = () => {
                     </For>
                 </PageListContainer>
             ) : (
-                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>

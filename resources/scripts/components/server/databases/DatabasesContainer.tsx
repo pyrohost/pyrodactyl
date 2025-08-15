@@ -86,21 +86,29 @@ const DatabasesContainer = () => {
     return (
         <ServerContentBlock title={'Databases'}>
             <FlashMessageRender byKey={'databases'} />
-            <MainPageHeader title={'Databases'}>
-                <Can action={'database.create'}>
-                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        {databaseLimit > 0 && (
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                {databases.length} of {databaseLimit} databases
-                            </p>
-                        )}
-                        {databaseLimit > 0 && databaseLimit !== databases.length && (
-                            <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                New Database
-                            </ActionButton>
-                        )}
-                    </div>
-                </Can>
+            <MainPageHeader
+                direction='column'
+                title={'Databases'}
+                titleChildren={
+                    <Can action={'database.create'}>
+                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                            {databaseLimit > 0 && (
+                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                    {databases.length} of {databaseLimit} databases
+                                </p>
+                            )}
+                            {databaseLimit > 0 && databaseLimit !== databases.length && (
+                                <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
+                                    New Database
+                                </ActionButton>
+                            )}
+                        </div>
+                    </Can>
+                }
+            >
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    Create and manage MySQL databases for your server. Configure database access, manage users, and view connection details.
+                </p>
             </MainPageHeader>
 
             <Formik
@@ -162,7 +170,7 @@ const DatabasesContainer = () => {
                     </For>
                 </PageListContainer>
             ) : (
-                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <FontAwesomeIcon icon={faDatabase} className='w-8 h-8 text-zinc-400' />

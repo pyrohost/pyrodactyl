@@ -10,7 +10,7 @@ import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { useFlashKey } from '@/plugins/useFlash';
 
 const DeleteSSHKeyButton = ({ name, fingerprint }: { name: string; fingerprint: string }) => {
-    const { clearAndAddHttpError } = useFlashKey('account');
+    const { clearAndAddHttpError } = useFlashKey('ssh-keys');
     const [visible, setVisible] = useState(false);
     const { mutate } = useSSHKeys();
 

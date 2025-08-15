@@ -451,7 +451,7 @@ const StartupContainer = () => {
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                                             <div className='flex-1'>
                                                 <p className='text-sm text-amber-200'>
-                                                    <span className='font-medium'>⚠️ Notice:</span> This server&apos;s
+                                                    <span className='font-medium'>Notice:</span> This server&apos;s
                                                     Docker image has been manually set by an administrator and cannot be
                                                     changed through this interface.
                                                 </p>

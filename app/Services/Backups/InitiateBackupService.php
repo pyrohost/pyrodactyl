@@ -75,6 +75,9 @@ class InitiateBackupService
      */
     public function handle(Server $server, ?string $name = null, bool $override = false): Backup
     {
+        // Validate server state before creating backup
+        $this->validateServerForBackup($server);
+        
         $limit = config('backups.throttles.limit');
         $period = config('backups.throttles.period');
         if ($period > 0) {
@@ -108,21 +111,54 @@ class InitiateBackupService
         }
 
         return $this->connection->transaction(function () use ($server, $name) {
+            // Sanitize backup name to prevent injection
+            $backupName = trim($name) ?: sprintf('Backup at %s', CarbonImmutable::now()->toDateTimeString());
+            $backupName = preg_replace('/[^a-zA-Z0-9\s\-_\.]/', '', $backupName);
+            $backupName = substr($backupName, 0, 191); // Limit to database field length
+            
             /** @var Backup $backup */
             $backup = $this->repository->create([
                 'server_id' => $server->id,
                 'uuid' => Uuid::uuid4()->toString(),
-                'name' => trim($name) ?: sprintf('Backup at %s', CarbonImmutable::now()->toDateTimeString()),
+                'name' => $backupName,
                 'ignored_files' => array_values($this->ignoredFiles ?? []),
                 'disk' => $this->backupManager->getDefaultAdapter(),
                 'is_locked' => $this->isLocked,
             ], true, true);
 
-            $this->daemonBackupRepository->setServer($server)
-                ->setBackupAdapter($this->backupManager->getDefaultAdapter())
-                ->backup($backup);
+            try {
+                $this->daemonBackupRepository->setServer($server)
+                    ->setBackupAdapter($this->backupManager->getDefaultAdapter())
+                    ->backup($backup);
+            } catch (\Exception $e) {
+                // If daemon backup request fails, clean up the backup record
+                $backup->delete();
+                throw $e;
+            }
 
             return $backup;
         });
+    }
+
+    /**
+     * Validate that the server is in a valid state for backup creation
+     */
+    private function validateServerForBackup(Server $server): void
+    {
+        if ($server->isSuspended()) {
+            throw new TooManyBackupsException(0, 'Cannot create backup for suspended server.');
+        }
+        
+        if (!$server->isInstalled()) {
+            throw new TooManyBackupsException(0, 'Cannot create backup for server that is not fully installed.');
+        }
+        
+        if ($server->status === Server::STATUS_RESTORING_BACKUP) {
+            throw new TooManyBackupsException(0, 'Cannot create backup while server is restoring from another backup.');
+        }
+        
+        if ($server->transfer) {
+            throw new TooManyBackupsException(0, 'Cannot create backup while server is being transferred.');
+        }
     }
 }
