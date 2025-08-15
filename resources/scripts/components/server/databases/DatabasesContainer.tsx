@@ -53,13 +53,14 @@ const DatabasesContainer = () => {
     const setDatabases = ServerContext.useStoreActions((state) => state.databases.setDatabases);
     const appendDatabase = ServerContext.useStoreActions((actions) => actions.databases.appendDatabase);
 
-    const submitDatabase = (values: DatabaseValues, { setSubmitting }: FormikHelpers<DatabaseValues>) => {
+    const submitDatabase = (values: DatabaseValues, { setSubmitting, resetForm }: FormikHelpers<DatabaseValues>) => {
         clearFlashes('database:create');
         createServerDatabase(uuid, {
             databaseName: values.databaseName,
             connectionsFrom: values.connectionsFrom || '%',
         })
             .then((database) => {
+                resetForm();
                 appendDatabase(database);
                 setSubmitting(false);
                 setCreateModalVisible(false);
