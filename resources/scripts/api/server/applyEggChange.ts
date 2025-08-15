@@ -14,7 +14,6 @@ export interface ApplyEggChangeResponse {
     message: string;
     operation_id: string;
     status: string;
-    estimated_duration: string;
 }
 
 /**

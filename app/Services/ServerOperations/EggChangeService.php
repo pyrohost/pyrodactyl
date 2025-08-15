@@ -181,25 +181,6 @@ class EggChangeService
             'message' => 'Egg change operation has been queued for processing.',
             'operation_id' => $operation->operation_id,
             'status' => 'pending',
-            'estimated_duration' => 'This operation may take several minutes to complete.',
         ];
-    }
-
-    /**
-     * Get estimated duration for egg change operation.
-     */
-    public function getEstimatedDuration(bool $shouldBackup, bool $shouldWipe): string
-    {
-        $baseTime = 2;
-        
-        if ($shouldBackup) {
-            $baseTime += 5;
-        }
-        
-        if ($shouldWipe) {
-            $baseTime += 2;
-        }
-        
-        return "Estimated duration: {$baseTime}-" . ($baseTime + 3) . " minutes";
     }
 }

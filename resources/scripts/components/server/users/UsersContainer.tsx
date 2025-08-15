@@ -76,7 +76,8 @@ const UsersContainer = () => {
                     }
                 >
                     <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Manage user access to your server. Grant specific permissions to other users to help you manage and maintain your server.
+                        Manage user access to your server. Grant specific permissions to other users to help you manage
+                        and maintain your server.
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -109,7 +110,8 @@ const UsersContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Manage user access to your server. Grant specific permissions to other users to help you manage and maintain your server.
+                    Manage user access to your server. Grant specific permissions to other users to help you manage and
+                    maintain your server.
                 </p>
             </MainPageHeader>
             {!subusers.length ? (

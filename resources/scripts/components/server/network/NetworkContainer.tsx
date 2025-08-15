@@ -66,9 +66,10 @@ const NetworkContainer = () => {
                         <Can action={'allocation.create'}>
                             <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {data.filter(allocation => !allocation.isDefault).length} of {allocationLimit} allowed allocations
+                                    {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}{' '}
+                                    allowed allocations
                                 </p>
-                                {allocationLimit > data.filter(allocation => !allocation.isDefault).length && (
+                                {allocationLimit > data.filter((allocation) => !allocation.isDefault).length && (
                                     <ActionButton variant='primary' onClick={onCreateAllocation}>
                                         New Allocation
                                     </ActionButton>
@@ -79,7 +80,8 @@ const NetworkContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure network allocations for your server. Manage IP addresses and ports that your server can bind to for incoming connections.
+                    Configure network allocations for your server. Manage IP addresses and ports that your server can
+                    bind to for incoming connections.
                 </p>
             </MainPageHeader>
 

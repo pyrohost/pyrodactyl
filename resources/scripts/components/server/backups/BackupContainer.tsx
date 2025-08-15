@@ -144,7 +144,8 @@ const BackupContainer = () => {
                 <FlashMessageRender byKey={'backups'} />
                 <MainPageHeader direction='column' title={'Backups'}>
                     <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Create and manage server backups to protect your data. Schedule automated backups, download existing ones, and restore when needed.
+                        Create and manage server backups to protect your data. Schedule automated backups, download
+                        existing ones, and restore when needed.
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -178,7 +179,8 @@ const BackupContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Create and manage server backups to protect your data. Schedule automated backups, download existing ones, and restore when needed.
+                    Create and manage server backups to protect your data. Schedule automated backups, download existing
+                    ones, and restore when needed.
                 </p>
             </MainPageHeader>
 

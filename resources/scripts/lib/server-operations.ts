@@ -77,7 +77,7 @@ export const formatDuration = (createdAt: string, updatedAt: string): string => 
     const start = new Date(createdAt);
     const end = new Date(updatedAt);
     const duration = Math.floor((end.getTime() - start.getTime()) / 1000);
-    
+
     if (duration < 60) {
         return `${duration}s`;
     } else if (duration < 3600) {
@@ -91,7 +91,7 @@ export const formatDuration = (createdAt: string, updatedAt: string): string => 
  * Check if operation modal can be closed or dismissed.
  */
 export const canCloseOperation = (operation: any, error: string | null): boolean => {
-    return Boolean(operation && (operation.is_completed || operation.has_failed) || error);
+    return Boolean((operation && (operation.is_completed || operation.has_failed)) || error);
 };
 
 /**

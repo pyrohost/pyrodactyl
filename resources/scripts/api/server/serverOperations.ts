@@ -1,4 +1,5 @@
 import React from 'react';
+
 import http from '@/api/http';
 
 /**
@@ -12,7 +13,7 @@ export const OPERATION_STATUS = {
     CANCELLED: 'cancelled',
 } as const;
 
-export type OperationStatus = typeof OPERATION_STATUS[keyof typeof OPERATION_STATUS];
+export type OperationStatus = (typeof OPERATION_STATUS)[keyof typeof OPERATION_STATUS];
 
 /**
  * Polling configuration for operation status updates.
@@ -33,7 +34,7 @@ export interface ServerOperation {
     message: string;
     created_at: string;
     updated_at: string;
-    parameters?: Record<string, any>;
+    parameters?: Record<string, unknown>;
     is_active: boolean;
     is_completed: boolean;
     has_failed: boolean;
@@ -43,7 +44,6 @@ export interface ApplyEggChangeAsyncResponse {
     message: string;
     operation_id: string;
     status: string;
-    estimated_duration: string;
 }
 
 /**
@@ -70,7 +70,7 @@ export const pollOperationStatus = (
     operationId: string,
     onUpdate: (operation: ServerOperation) => void,
     onComplete: (operation: ServerOperation) => void,
-    onError: (error: Error) => void
+    onError: (error: Error) => void,
 ): (() => void) => {
     let timeoutId: NodeJS.Timeout | null = null;
     let intervalMs = POLLING_CONFIG.INITIAL_INTERVAL;
@@ -83,16 +83,16 @@ export const pollOperationStatus = (
 
         try {
             attempts++;
-            
+
             if (attempts > POLLING_CONFIG.MAX_ATTEMPTS) {
                 onError(new Error('Operation polling timed out after 15 minutes'));
                 return;
             }
 
             const operation = await getOperationStatus(uuid, operationId);
-            
+
             if (stopped) return;
-            
+
             onUpdate(operation);
 
             if (operation.is_completed || operation.has_failed) {
@@ -104,7 +104,7 @@ export const pollOperationStatus = (
                 if (attempts > POLLING_CONFIG.BACKOFF_THRESHOLD) {
                     intervalMs = Math.min(intervalMs * POLLING_CONFIG.BACKOFF_MULTIPLIER, maxInterval);
                 }
-                
+
                 const jitter = Math.random() * POLLING_CONFIG.JITTER_RANGE;
                 timeoutId = setTimeout(poll, intervalMs + jitter);
             } else {
@@ -136,33 +136,39 @@ export const useOperationPolling = () => {
 
     React.useEffect(() => {
         return () => {
-            activePollers.forEach(cleanup => cleanup());
+            activePollers.forEach((cleanup) => cleanup());
             activePollers.clear();
         };
     }, [activePollers]);
 
-    const startPolling = React.useCallback((
-        uuid: string,
-        operationId: string,
-        onUpdate: (operation: ServerOperation) => void,
-        onComplete: (operation: ServerOperation) => void,
-        onError: (error: Error) => void
-    ) => {
-        stopPolling(operationId);
-        const cleanup = pollOperationStatus(uuid, operationId, onUpdate, onComplete, onError);
-        activePollers.set(operationId, cleanup);
-    }, [activePollers]);
+    const startPolling = React.useCallback(
+        (
+            uuid: string,
+            operationId: string,
+            onUpdate: (operation: ServerOperation) => void,
+            onComplete: (operation: ServerOperation) => void,
+            onError: (error: Error) => void,
+        ) => {
+            stopPolling(operationId);
+            const cleanup = pollOperationStatus(uuid, operationId, onUpdate, onComplete, onError);
+            activePollers.set(operationId, cleanup);
+        },
+        [activePollers],
+    );
 
-    const stopPolling = React.useCallback((operationId: string) => {
-        const cleanup = activePollers.get(operationId);
-        if (cleanup) {
-            cleanup();
-            activePollers.delete(operationId);
-        }
-    }, [activePollers]);
+    const stopPolling = React.useCallback(
+        (operationId: string) => {
+            const cleanup = activePollers.get(operationId);
+            if (cleanup) {
+                cleanup();
+                activePollers.delete(operationId);
+            }
+        },
+        [activePollers],
+    );
 
     const stopAllPolling = React.useCallback(() => {
-        activePollers.forEach(cleanup => cleanup());
+        activePollers.forEach((cleanup) => cleanup());
         activePollers.clear();
     }, [activePollers]);
 
@@ -170,6 +176,6 @@ export const useOperationPolling = () => {
         startPolling,
         stopPolling,
         stopAllPolling,
-        hasActivePolling: (operationId: string) => activePollers.has(operationId)
+        hasActivePolling: (operationId: string) => activePollers.has(operationId),
     };
 };

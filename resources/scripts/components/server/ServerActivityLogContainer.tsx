@@ -193,7 +193,8 @@ const ServerActivityLogContainer = () => {
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Monitor all server activity and track user actions. Filter events, search for specific activities, and export logs for audit purposes.
+                            Monitor all server activity and track user actions. Filter events, search for specific
+                            activities, and export logs for audit purposes.
                         </p>
                     </MainPageHeader>
                 </div>
