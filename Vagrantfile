@@ -10,6 +10,9 @@ Vagrant.configure("2") do |config|
     3000,  # app
     3306,  # database
     8080,  # alt-http
+    8025,  # mailpit web ui
+    9000,  # minio api
+    9001,  # minio console
     25565, # test ports...
     25566,
     25567
