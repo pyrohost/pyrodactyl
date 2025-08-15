@@ -170,7 +170,6 @@ const OperationProgressModal: React.FC<Props> = ({
                                     <p className='text-sm text-neutral-300'>{operation.message || 'Processing...'}</p>
                                 </div>
 
-
                                 {isActiveStatus(operation.status) && (
                                     <div className='w-full bg-[#ffffff08] rounded-full h-1.5'>
                                         <div

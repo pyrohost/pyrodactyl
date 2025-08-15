@@ -70,7 +70,6 @@ export const getStatusIconType = (status: OperationStatus): 'spinner' | 'success
     }
 };
 
-
 /**
  * Check if operation modal can be closed or dismissed.
  */
