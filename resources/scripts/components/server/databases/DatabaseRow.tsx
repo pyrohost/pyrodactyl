@@ -1,7 +1,6 @@
 import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { For } from 'million/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { object, string } from 'yup';
@@ -54,17 +53,23 @@ const DatabaseRow = ({ database }: Props) => {
             .oneOf([database.name.split('_', 2)[1] || '', database.name], 'The database name must be provided.'),
     });
 
-    const submit = (_: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
+    const submit = (_: { confirm: string }, { setSubmitting, resetForm }: FormikHelpers<{ confirm: string }>) => {
         clearFlashes();
         deleteServerDatabase(uuid, database.id)
             .then(() => {
+                resetForm();
                 setVisible(false);
                 setTimeout(() => removeDatabase(database.id), 150);
+                setSubmitting(false);
             })
             .catch((error) => {
+                resetForm();
                 console.error(error);
                 setSubmitting(false);
-                addError({ key: 'database:delete', message: httpErrorToHuman(error) });
+                addError({
+                    key: 'database:delete',
+                    message: httpErrorToHuman(error),
+                });
             });
     };
 
