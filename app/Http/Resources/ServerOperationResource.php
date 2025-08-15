@@ -30,7 +30,6 @@ class ServerOperationResource extends JsonResource
             'created_at' => $operation->created_at->toISOString(),
             'updated_at' => $operation->updated_at->toISOString(),
             'started_at' => $operation->started_at?->toISOString(),
-            'duration_seconds' => $operation->getDurationInSeconds(),
             'parameters' => $operation->parameters,
             'meta' => [
                 'is_active' => $operation->isActive(),

@@ -7,7 +7,6 @@ import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 import {
     UI_CONFIG,
     canCloseOperation,
-    formatDuration,
     formatOperationId,
     getStatusIconType,
     getStatusStyling,
@@ -171,9 +170,6 @@ const OperationProgressModal: React.FC<Props> = ({
                                     <p className='text-sm text-neutral-300'>{operation.message || 'Processing...'}</p>
                                 </div>
 
-                                <div className='text-xs text-neutral-400'>
-                                    Duration: {formatDuration(operation.created_at, operation.updated_at)}
-                                </div>
 
                                 {isActiveStatus(operation.status) && (
                                     <div className='w-full bg-[#ffffff08] rounded-full h-1.5'>

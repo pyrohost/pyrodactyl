@@ -300,10 +300,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             $elapsed = Carbon::now()->diffInSeconds($startTime);
             if ($elapsed - $lastProgressUpdate >= 30) {
-                $minutes = floor($elapsed / 60);
-                $seconds = $elapsed % 60;
-                $timeStr = $minutes > 0 ? "{$minutes}m {$seconds}s" : "{$seconds}s";
-                $operation->updateProgress("Backup in progress... ({$timeStr} elapsed)");
+                $operation->updateProgress("Backup in progress...");
                 $lastProgressUpdate = $elapsed;
             }
 

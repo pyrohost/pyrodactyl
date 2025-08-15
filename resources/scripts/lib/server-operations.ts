@@ -70,22 +70,6 @@ export const getStatusIconType = (status: OperationStatus): 'spinner' | 'success
     }
 };
 
-/**
- * Format operation duration for display.
- */
-export const formatDuration = (createdAt: string, updatedAt: string): string => {
-    const start = new Date(createdAt);
-    const end = new Date(updatedAt);
-    const duration = Math.floor((end.getTime() - start.getTime()) / 1000);
-
-    if (duration < 60) {
-        return `${duration}s`;
-    } else if (duration < 3600) {
-        return `${Math.floor(duration / 60)}m ${duration % 60}s`;
-    } else {
-        return `${Math.floor(duration / 3600)}h ${Math.floor((duration % 3600) / 60)}m`;
-    }
-};
 
 /**
  * Check if operation modal can be closed or dismissed.

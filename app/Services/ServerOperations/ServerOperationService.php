@@ -132,7 +132,6 @@ class ServerOperationService
             'created_at' => $operation->created_at->toDateTimeString(),
             'updated_at' => $operation->updated_at->toDateTimeString(),
             'started_at' => $operation->started_at?->toDateTimeString(),
-            'duration' => $operation->getDurationInSeconds(),
             'parameters' => $operation->parameters,
             'is_active' => $operation->isActive(),
             'is_completed' => $operation->isCompleted(),
