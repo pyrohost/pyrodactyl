@@ -26,27 +26,11 @@ interface Props {
 const BackupRow = ({ backup }: Props) => {
     const { mutate } = getServerBackups();
 
-    useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {
+    useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async () => {
         try {
-            const parsed = JSON.parse(data);
-
-            await mutate(
-                (data) => ({
-                    ...data!,
-                    items: data!.items.map((b) =>
-                        b.uuid !== backup.uuid
-                            ? b
-                            : {
-                                  ...b,
-                                  isSuccessful: parsed.is_successful || true,
-                                  checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
-                                  bytes: parsed.file_size || 0,
-                                  completedAt: new Date(),
-                              },
-                    ),
-                }),
-                false,
-            );
+            // When backup completes, refresh the backup list from API to get accurate completion time
+            // This ensures we get the exact completion timestamp from the database, not the websocket receive time
+            await mutate();
         } catch (e) {
             console.warn(e);
         }
