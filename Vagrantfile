@@ -1,4 +1,5 @@
 Vagrant.configure("2") do |config|
+  # Fallback box for other providers
   config.vm.box = "ubuntu/jammy64"
   config.vm.hostname = "pyrodactyl-dev"
 
@@ -22,7 +23,8 @@ Vagrant.configure("2") do |config|
       auto_correct: false
   end
 
-  config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb, override|
+    override.vm.box = "ubuntu/jammy64"
     vb.name   = "pyrodactyl-dev"
     vb.memory = ram
     vb.cpus   = cpus
@@ -33,7 +35,8 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
   end
 
-  config.vm.provider "vmware_desktop" do |v|
+  config.vm.provider "vmware_desktop" do |v, override|
+    override.vm.box = "ubuntu/jammy64"
     v.vmx["memsize"]                = ram.to_s
     v.vmx["numvcpus"]               = cpus.to_s
     v.vmx["tools.upgrade.policy"]   = "manual"
@@ -44,7 +47,8 @@ Vagrant.configure("2") do |config|
     v.vmx["ethernet0.addressType"]  = "generated"
   end
 
-  config.vm.provider "libvirt" do |lv|
+  config.vm.provider "libvirt" do |lv, override|
+    override.vm.box = "generic/ubuntu2204"
     lv.memory = ram
     lv.cpus   = cpus
   end
@@ -61,8 +65,7 @@ Vagrant.configure("2") do |config|
       type: "nfs",
       nfs_version: 4,
       nfs_udp: false,
-      mount_options: ["rw","vers=4","tcp","fsc","rsize=1048576","wsize=1048576"],
-      owner: "vagrant", group: "vagrant"
+      mount_options: ["rw","vers=4","tcp","fsc","rsize=1048576","wsize=1048576"]
   end
 
   config.vm.provision "shell",
