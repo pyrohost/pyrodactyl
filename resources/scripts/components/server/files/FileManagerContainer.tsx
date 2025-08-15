@@ -117,8 +117,8 @@ const FileManagerContainer = () => {
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server files and directories. Upload, download, edit, and organize your server's
-                            file system with our integrated file manager.
+                            Manage your server files and directories. Upload, download, edit, and organize your
+                            server&apos;s file system with our integrated file manager.
                         </p>
                     </MainPageHeader>
                     <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
