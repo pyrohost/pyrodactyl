@@ -60,12 +60,7 @@ const UpdateEmailAddressForm = () => {
                     <Form className={`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
                         <div className={`mt-6`}>
-                            <Field
-                                id={'confirm_password'}
-                                type={'password'}
-                                name={'password'}
-                                label={'Confirm Password'}
-                            />
+                            <Field id={'confirm_password'} type={'password'} name={'password'} label={'Password'} />
                         </div>
                         <div className={`mt-6`}>
                             <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
