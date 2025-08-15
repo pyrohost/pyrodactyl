@@ -4,12 +4,12 @@ namespace Pterodactyl\Http\Controllers\Api\Client\Nests;
 
 use Pterodactyl\Models\Egg;
 use Pterodactyl\Models\Nest;
-use Pterodactyl\Transformers\Api\Client\EggTransformer;
+use Pterodactyl\Transformers\Api\Application\EggTransformer;
 use Pterodactyl\Http\Requests\Api\Application\Nests\Eggs\GetEggRequest;
 use Pterodactyl\Http\Requests\Api\Application\Nests\Eggs\GetEggsRequest;
-use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
+use Pterodactyl\Http\Controllers\Api\Application\ApplicationApiController;
 
-class EggController extends ClientApiController
+class EggController extends ApplicationApiController
 {
     /**
      * Return all eggs that exist for a given nest.

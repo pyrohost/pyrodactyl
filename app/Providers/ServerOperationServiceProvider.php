@@ -2,9 +2,7 @@
 
 namespace Pterodactyl\Providers;
 
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
-use Pterodactyl\Console\Commands\Server\CleanupServerOperationsCommand;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ServerOperationRateLimit;
 
 /**
@@ -20,9 +18,7 @@ class ServerOperationServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->commands([
-            CleanupServerOperationsCommand::class,
-        ]);
+        // No commands to register currently
     }
 
     /**
@@ -32,18 +28,6 @@ class ServerOperationServiceProvider extends ServiceProvider
     {
         $router = $this->app['router'];
         $router->aliasMiddleware('server.operation.rate-limit', ServerOperationRateLimit::class);
-
-        if (config('server_operations.cleanup.enabled', true)) {
-            $this->app->booted(function () {
-                $schedule = $this->app->make(Schedule::class);
-                
-                $schedule->command('p:server:cleanup-operations --force')
-                    ->daily()
-                    ->at('02:00')
-                    ->withoutOverlapping()
-                    ->runInBackground();
-            });
-        }
 
         $this->publishes([
             __DIR__ . '/../../config/server_operations.php' => config_path('server_operations.php'),
