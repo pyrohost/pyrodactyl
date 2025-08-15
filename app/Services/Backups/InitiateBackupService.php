@@ -3,7 +3,6 @@
 namespace Pterodactyl\Services\Backups;
 
 use Ramsey\Uuid\Uuid;
-use Carbon\CarbonImmutable;
 use Webmozart\Assert\Assert;
 use Pterodactyl\Models\Backup;
 use Pterodactyl\Models\Server;
@@ -78,15 +77,10 @@ class InitiateBackupService
         // Validate server state before creating backup
         $this->validateServerForBackup($server);
         
-        $limit = config('backups.throttles.limit');
-        $period = config('backups.throttles.period');
-        if ($period > 0) {
-            $previous = $this->repository->getBackupsGeneratedDuringTimespan($server->id, $period);
-            if ($previous->count() >= $limit) {
-                $message = sprintf('Only %d backups may be generated within a %d second span of time.', $limit, $period);
-
-                throw new TooManyRequestsHttpException((int) CarbonImmutable::now()->diffInSeconds($previous->last()->created_at->addSeconds($period)), $message);
-            }
+        // Check for existing backups in progress (only allow one at a time)
+        $inProgressBackups = $this->repository->getBackupsInProgress($server->id);
+        if ($inProgressBackups->count() > 0) {
+            throw new TooManyRequestsHttpException(30, 'A backup is already in progress. Please wait for it to complete before starting another.');
         }
 
         // Check if the server has reached or exceeded its backup limit.
