@@ -19,7 +19,7 @@ x-common:
     mail: &mail-environment
         MAIL_FROM: 'noreply@example.com'
         MAIL_DRIVER: 'smtp'
-        MAIL_HOST: 'mailhog'
+        MAIL_HOST: 'mailpit'
         MAIL_PORT: '1025'
         MAIL_USERNAME: ''
         MAIL_PASSWORD: ''
@@ -89,7 +89,7 @@ services:
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
             WINGS_INTERNAL_IP: 'wings'
-            WINGS_DIR: '${PWD}'
+            WINGS_DIR: '${PWD}/srv/'
             PYRODACTYL_DOCKER_DEV: 'true'
             MAIL_HOST: 'mailhog'
             MAIL_PORT: 1025
@@ -159,19 +159,33 @@ services:
             # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
             # Do not change anything but the $PWD part as this is also hardcoded in the container.
 
-            - '${PWD}/srv/wings/tmp/:${PWD}/srv/wings/tmp/'
-            - '${PWD}/srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
-            - '${PWD}/srv/wings/:${PWD}/srv/wings/'
-            - '${PWD}/srv/wings/logs/:${PWD}/srv/wings/logs/'
+            - './srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - './srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - './srv/wings/:${PWD}/srv/wings/'
+            - './wings/logs/:${PWD}/srv/wings/logs/'
 
-    mailhog:
-        image: mailhog/mailhog
+
+    mailpit:
+        image: axllent/mailpit
+        volumes:
+            - ./data/mailpit/:/data
         ports:
             - '1025:1025'
             - '8025:8025'
+        environment:
+          MP_MAX_MESSAGES: ${MP_MAX_MESSAGES:-5000}
+          MP_DATABASE: ${MP_DATABASE:-/data/mailpit.db}
+          MP_SMTP_AUTH_ACCEPT_ANY: ${MP_SMTP_AUTH_ACCEPT_ANY:-1}
+          MP_SMTP_AUTH_ALLOW_INSECURE: ${MP_SMTP_AUTH_ALLOW_INSECURE:-1}
 
 networks:
     default:
         ipam:
             config:
                 - subnet: 172.20.0.0/16
+
+volumes:
+    panel_vendor:
+    panel_storage:
+    panel_bootstrap_cache:
+    mailpit_data:
