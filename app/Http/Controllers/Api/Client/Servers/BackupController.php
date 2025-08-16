@@ -13,6 +13,7 @@ use Pterodactyl\Services\Backups\DeleteBackupService;
 use Pterodactyl\Services\Backups\DownloadLinkService;
 use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Services\Backups\InitiateBackupService;
+use Pterodactyl\Services\Backups\ServerStateService;
 use Pterodactyl\Repositories\Wings\DaemonBackupRepository;
 use Pterodactyl\Transformers\Api\Client\BackupTransformer;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
@@ -31,6 +32,7 @@ class BackupController extends ClientApiController
     private InitiateBackupService $initiateBackupService,
     private DownloadLinkService $downloadLinkService,
     private BackupRepository $repository,
+    private ServerStateService $serverStateService,
   ) {
     parent::__construct();
   }
@@ -194,12 +196,36 @@ class BackupController extends ClientApiController
     $this->validateServerForRestore($server);
 
     $this->validateBackupForRestore($backup);
+    
+    // Validate server state compatibility if backup has state data
+    if ($this->serverStateService->hasServerState($backup)) {
+      $compatibility = $this->serverStateService->validateRestoreCompatibility($backup);
+      
+      if (!empty($compatibility['errors'])) {
+        throw new BadRequestHttpException('Cannot restore backup: ' . implode(' ', $compatibility['errors']));
+      }
+      
+      // Log warnings for user awareness
+      if (!empty($compatibility['warnings'])) {
+        \Log::warning('Backup restore compatibility warnings', [
+          'backup_uuid' => $backup->uuid,
+          'server_uuid' => $server->uuid,
+          'warnings' => $compatibility['warnings'],
+        ]);
+      }
+    }
 
+    $hasServerState = $this->serverStateService->hasServerState($backup);
+    
     $log = Activity::event('server:backup.restore')
       ->subject($backup)
-      ->property(['name' => $backup->name, 'truncate' => $request->input('truncate')]);
+      ->property([
+        'name' => $backup->name,
+        'truncate' => $request->input('truncate'),
+        'has_server_state' => $hasServerState,
+      ]);
 
-    $log->transaction(function () use ($backup, $server, $request) {
+    $log->transaction(function () use ($backup, $server, $request, $hasServerState) {
       // Double-check server state within transaction to prevent race conditions
       $server->refresh();
       if (!is_null($server->status)) {
@@ -222,9 +248,16 @@ class BackupController extends ClientApiController
       $server->update(['status' => Server::STATUS_RESTORING_BACKUP]);
 
       try {
+        // Start the file restoration process on Wings
         $this->daemonRepository->setServer($server)->restore($backup, $url, $request->input('truncate'));
+        
+        // If backup has server state, restore it immediately
+        // This is safe to do now since we're in a transaction and the daemon request succeeded
+        if ($hasServerState) {
+          $this->serverStateService->restoreServerState($server, $backup);
+        }
       } catch (\Exception $e) {
-        // If daemon request fails, reset server status
+        // If either daemon request or state restoration fails, reset server status
         $server->update(['status' => null]);
         throw $e;
       }

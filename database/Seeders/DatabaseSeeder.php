@@ -13,10 +13,5 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(NestSeeder::class);
         $this->call(EggSeeder::class);
-        
-        // Run development seeder in local environment
-        if (app()->environment('local')) {
-            $this->call(DevelopmentSeeder::class);
-        }
     }
 }
