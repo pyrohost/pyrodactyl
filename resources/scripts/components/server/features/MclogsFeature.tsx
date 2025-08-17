@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -82,8 +82,8 @@ const MclogsFeature = () => {
 
     // Listen for console output and detect crashes
     useWebsocketEvent(SocketEvent.CONSOLE_OUTPUT, (data: string) => {
-        // Only analyze if server is not running (likely crashed)
-        if (status === 'running') return;
+        // Only analyze if server is stopped (not starting up or running)
+        if (status !== 'offline') return;
 
         if (isCrashLine(data)) {
             debouncedAnalyzeCrash();

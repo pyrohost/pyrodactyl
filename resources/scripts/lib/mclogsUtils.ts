@@ -22,11 +22,6 @@ const CRASH_INDICATORS = [
     'Crash Report',
     '---- Minecraft Crash Report ----',
     'A detailed walkthrough of the error',
-    'org.spigotmc.',
-    'net.minecraft.',
-    'com.mojang.',
-    'net.minecraftforge.',
-    'net.fabricmc.',
 
     // Generic server crashes
     'Internal server error',
@@ -42,8 +37,6 @@ const CRASH_INDICATORS = [
     'Server marked as offline',
     'Crashed with exit code',
     'Unexpected shutdown',
-    'ERROR',
-    'FATAL',
 ];
 
 /**
