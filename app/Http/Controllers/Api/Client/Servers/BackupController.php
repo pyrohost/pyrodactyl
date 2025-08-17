@@ -51,7 +51,12 @@ class BackupController extends ClientApiController
 
     $limit = min($request->query('per_page') ?? 20, 50);
 
-    return $this->fractal->collection($server->backups()->paginate($limit))
+    // Sort backups: locked ones first, then by created_at descending (latest first)
+    $backups = $server->backups()
+      ->orderByRaw('is_locked DESC, created_at DESC')
+      ->paginate($limit);
+
+    return $this->fractal->collection($backups)
       ->transformWith($this->getTransformer(BackupTransformer::class))
       ->addMeta([
         'backup_count' => $this->repository->getNonFailedBackups($server)->count(),
