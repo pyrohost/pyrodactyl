@@ -95,6 +95,7 @@ const SoftwareContainer = () => {
     const [currentOperationId, setCurrentOperationId] = useState<string | null>(null);
     const [showOperationModal, setShowOperationModal] = useState(false);
     const [showWipeConfirmation, setShowWipeConfirmation] = useState(false);
+    const [wipeCountdown, setWipeCountdown] = useState(5);
 
     // Configuration options
     const [shouldBackup, setShouldBackup] = useState(false);
@@ -144,6 +145,26 @@ const SoftwareContainer = () => {
             setShouldBackup(backupLimit > 0 && backups.backupCount < backupLimit);
         }
     }, [backups, backupLimit]);
+
+    // Countdown effect for wipe confirmation modal
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (showWipeConfirmation && wipeCountdown > 0) {
+            interval = setInterval(() => {
+                setWipeCountdown((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [showWipeConfirmation, wipeCountdown]);
+
+    // Reset countdown when wipe confirmation modal opens
+    useEffect(() => {
+        if (showWipeConfirmation) {
+            setWipeCountdown(5);
+        }
+    }, [showWipeConfirmation]);
 
     // Flow control functions
     const resetFlow = () => {
@@ -866,10 +887,11 @@ const SoftwareContainer = () => {
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
                 title='Wipe All Files Without Backup?'
-                buttonText='Yes, Wipe Files'
+                buttonText={wipeCountdown > 0 ? `Yes, Wipe Files (${wipeCountdown}s)` : 'Yes, Wipe Files'}
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
                 onModalDismissed={() => setShowWipeConfirmation(false)}
+                disabled={wipeCountdown > 0}
             >
                 <div className='space-y-4'>
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>

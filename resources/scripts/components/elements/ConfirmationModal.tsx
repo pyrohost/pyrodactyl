@@ -10,10 +10,11 @@ type Props = {
     buttonText: string;
     onConfirmed: () => void;
     showSpinnerOverlay?: boolean;
+    disabled?: boolean;
     children: React.ReactNode;
 };
 
-const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed }) => {
+const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed, disabled }) => {
     const { dismiss } = useContext(ModalContext);
 
     return (
@@ -24,7 +25,7 @@ const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed 
                     <ActionButton variant='secondary' onClick={() => dismiss()}>
                         Cancel
                     </ActionButton>
-                    <ActionButton onClick={() => onConfirmed()}>{buttonText}</ActionButton>
+                    <ActionButton onClick={() => onConfirmed()} disabled={disabled}>{buttonText}</ActionButton>
                 </div>
             </div>
         </>
