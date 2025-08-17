@@ -18,6 +18,36 @@ interface MobileTopBarProps {
 }
 
 const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootAdmin }: MobileTopBarProps) => {
+    const handleMenuToggle = () => {
+        try {
+            if (onMenuToggle && typeof onMenuToggle === 'function') {
+                onMenuToggle();
+            }
+        } catch (error) {
+            console.error('Error in mobile menu toggle:', error);
+        }
+    };
+
+    const handleLogout = () => {
+        try {
+            if (onTriggerLogout && typeof onTriggerLogout === 'function') {
+                onTriggerLogout();
+            }
+        } catch (error) {
+            console.error('Error in logout trigger:', error);
+        }
+    };
+
+    const handleAdminPanel = () => {
+        try {
+            if (onSelectAdminPanel && typeof onSelectAdminPanel === 'function') {
+                onSelectAdminPanel();
+            }
+        } catch (error) {
+            console.error('Error in admin panel select:', error);
+        }
+    };
+
     return (
         <div className='lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#ffffff08] h-16 flex items-center justify-between px-4'>
             {/* Logo */}
@@ -44,7 +74,7 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='z-99999' sideOffset={8}>
                         {rootAdmin && onSelectAdminPanel && (
-                            <DropdownMenuItem onSelect={onSelectAdminPanel}>
+                            <DropdownMenuItem onSelect={handleAdminPanel}>
                                 Admin Panel
                                 <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
                                     Staff
@@ -52,13 +82,13 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={handleLogout}>Log Out</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
 
                 {/* Menu Toggle Button */}
                 <button
-                    onClick={onMenuToggle}
+                    onClick={handleMenuToggle}
                     className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 cursor-pointer'
                     aria-label='Toggle navigation menu'
                 >

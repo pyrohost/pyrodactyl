@@ -84,12 +84,12 @@ const SoftwareContainer = () => {
         }
         
         const foundNest = nests.find((nest) =>
-            nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)
+            nest?.attributes?.relationships?.eggs?.data?.find((egg) => egg?.attributes?.uuid === currentEgg)
         );
         
-        return foundNest?.attributes.relationships.eggs.data.find(
-            (egg) => egg.attributes.uuid === currentEgg
-        )?.attributes.name;
+        return foundNest?.attributes?.relationships?.eggs?.data?.find(
+            (egg) => egg?.attributes?.uuid === currentEgg
+        )?.attributes?.name;
     }, [nests, currentEgg]);
     const backupLimit = serverData?.featureLimits.backups ?? 0;
     const { data: backups } = getServerBackups();
@@ -420,7 +420,15 @@ const SoftwareContainer = () => {
                 <div className='flex-shrink-0 w-full sm:w-auto'>
                     <ActionButton
                         variant='primary'
-                        onClick={() => setCurrentStep('select-game')}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            try {
+                                setCurrentStep('select-game');
+                            } catch (error) {
+                                console.error('Error in change software click:', error);
+                            }
+                        }}
                         className='w-full sm:w-auto'
                         disabled={isLoading}
                     >
@@ -439,16 +447,16 @@ const SoftwareContainer = () => {
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
                     {nests?.map((nest) =>
-                        nest.attributes.name.includes(hidden_nest_prefix) ? null : (
+                        nest?.attributes?.name?.includes(hidden_nest_prefix) ? null : (
                             <button
-                                key={nest.attributes.uuid}
+                                key={nest?.attributes?.uuid}
                                 onClick={() => handleNestSelection(nest)}
                                 className='p-4 sm:p-5 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left active:bg-[#ffffff12] touch-manipulation'
                             >
                                 <h3 className='font-semibold text-neutral-200 mb-2 text-base sm:text-lg'>
-                                    {nest.attributes.name}
+                                    {nest?.attributes?.name}
                                 </h3>
-                                {renderDescription(nest.attributes.description, `nest-${nest.attributes.uuid}`)}
+                                {renderDescription(nest?.attributes?.description || '', `nest-${nest?.attributes?.uuid}`)}
                             </button>
                         ),
                     )}
@@ -481,7 +489,7 @@ const SoftwareContainer = () => {
                     </div>
                 ) : (
                     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
-                        {selectedNest?.attributes.relationships.eggs.data.map((egg) => (
+                        {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => (
                             <button
                                 key={egg.attributes.uuid}
                                 onClick={() => handleEggSelection(egg)}
@@ -489,14 +497,14 @@ const SoftwareContainer = () => {
                                 className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
                             >
                                 <div className='flex items-center gap-2 mb-2'>
-                                    {isLoading && selectedEgg?.attributes.uuid === egg.attributes.uuid && (
+                                    {isLoading && selectedEgg?.attributes?.uuid === egg?.attributes?.uuid && (
                                         <Spinner size='small' />
                                     )}
                                     <h3 className='font-semibold text-neutral-200 text-sm sm:text-base'>
-                                        {egg.attributes.name}
+                                        {egg?.attributes?.name}
                                     </h3>
                                 </div>
-                                {renderDescription(egg.attributes.description, `egg-${egg.attributes.uuid}`)}
+                                {renderDescription(egg?.attributes?.description || '', `egg-${egg?.attributes?.uuid}`)}
                             </button>
                         ))}
                     </div>
