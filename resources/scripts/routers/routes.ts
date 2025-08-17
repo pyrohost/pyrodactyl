@@ -7,7 +7,7 @@ import ActivityLogContainer from '@/components/dashboard/activity/ActivityLogCon
 import AccountSSHContainer from '@/components/dashboard/ssh/AccountSSHContainer';
 import ServerActivityLogContainer from '@/components/server/ServerActivityLogContainer';
 import BackupContainer from '@/components/server/backups/BackupContainer';
-import ServerHomeContainer from '@/components/server/console/ServerHomeContainer';
+import ServerConsoleContainer from '@/components/server/console/ServerConsoleContainer';
 import DatabasesContainer from '@/components/server/databases/DatabasesContainer';
 import FileManagerContainer from '@/components/server/files/FileManagerContainer';
 import ModrinthContainer from '@/components/server/modrinth/ModrinthContainer';
@@ -90,7 +90,7 @@ export default {
             path: '',
             permission: null,
             name: 'Console',
-            component: ServerHomeContainer,
+            component: ServerConsoleContainer,
             end: true,
         },
         {

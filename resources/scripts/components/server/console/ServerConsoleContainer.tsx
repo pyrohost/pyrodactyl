@@ -1,5 +1,3 @@
-import { faChartBar, faServer, faTerminal } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { memo } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -17,6 +15,7 @@ import StatGraphs from '@/components/server/console/StatGraphs';
 import { ServerContext } from '@/state/server';
 
 import Features from '@feature/Features';
+import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -103,6 +102,20 @@ const ServerConsoleContainer = () => {
                             <ServerDetailsBlock />
                         </div>
                     </div>
+
+                    {/* Crash Analysis Card - only shows if mclogs feature is enabled */}
+                    {eggFeatures.map((v) => v.toLowerCase()).includes('mclogs') && (
+                        <div
+                            className='transform-gpu skeleton-anim-2'
+                            style={{
+                                animationDelay: '150ms',
+                                animationTimingFunction:
+                                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                            }}
+                        >
+                            <CrashAnalysisCard />
+                        </div>
+                    )}
 
                     <div
                         className='transform-gpu skeleton-anim-2'
