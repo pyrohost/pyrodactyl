@@ -68,20 +68,21 @@ const blank_egg_prefix = '@';
 type FlowStep = 'overview' | 'select-game' | 'select-software' | 'configure' | 'review';
 
 const SoftwareContainer = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const serverData = ServerContext.useStoreState((state) => state.server.data);
+    const uuid = serverData?.uuid;
     const [nests, setNests] = useState<Nest[]>();
     //const eggs = nests?.reduce(
     //    (eggArray, nest) => [...eggArray, ...nest.attributes.relationships.eggs.data],
     //    [] as Egg[],
     //);
-    const currentEgg = ServerContext.useStoreState((state) => state.server.data!.egg);
+    const currentEgg = serverData?.egg;
     //const originalEgg = currentEgg;
     const currentEggName =
-        nests &&
+        nests && currentEgg &&
         nests
             .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))
             ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
-    const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
+    const backupLimit = serverData?.featureLimits.backups ?? 0;
     const { data: backups } = getServerBackups();
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
@@ -118,14 +119,14 @@ const SoftwareContainer = () => {
 
     const variables = ServerContext.useStoreState(
         ({ server }) => ({
-            variables: server.data!.variables,
-            invocation: server.data!.invocation,
-            dockerImage: server.data!.dockerImage,
+            variables: server.data?.variables || [],
+            invocation: server.data?.invocation || '',
+            dockerImage: server.data?.dockerImage || '',
         }),
         isEqual,
     );
 
-    const { data, mutate } = getServerStartup(uuid, {
+    const { data, mutate } = getServerStartup(uuid || '', {
         ...variables,
         dockerImages: { [variables.dockerImage]: variables.dockerImage },
         rawStartupCommand: variables.invocation,
@@ -191,7 +192,7 @@ const SoftwareContainer = () => {
     };
 
     const handleEggSelection = async (egg: Egg) => {
-        if (!selectedNest) return;
+        if (!selectedNest || !uuid) return;
 
         setIsLoading(true);
         setSelectedEgg(egg);
@@ -251,7 +252,7 @@ const SoftwareContainer = () => {
     };
 
     const executeApplyChanges = async () => {
-        if (!selectedEgg || !selectedNest || !eggPreview) return;
+        if (!selectedEgg || !selectedNest || !eggPreview || !uuid) return;
 
         setIsLoading(true);
 
@@ -852,6 +853,20 @@ const SoftwareContainer = () => {
             </TitledGreyBox>
         </div>
     );
+
+    // Show loading state if server data is not available
+    if (!serverData) {
+        return (
+            <ServerContentBlock title='Software Management'>
+                <div className='flex items-center justify-center h-64'>
+                    <div className='flex flex-col items-center text-center'>
+                        <Spinner size='large' />
+                        <p className='text-neutral-400 mt-4'>Loading server information...</p>
+                    </div>
+                </div>
+            </ServerContentBlock>
+        );
+    }
 
     return (
         <ServerContentBlock title='Software Management'>
