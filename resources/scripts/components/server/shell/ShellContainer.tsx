@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
@@ -77,12 +77,20 @@ const SoftwareContainer = () => {
     //);
     const currentEgg = serverData?.egg;
     //const originalEgg = currentEgg;
-    const currentEggName =
-        nests &&
-        currentEgg &&
-        nests
-            .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))
-            ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
+    const currentEggName = useMemo(() => {
+        // Don't attempt calculation until both nests data and currentEgg are available
+        if (!nests || !currentEgg) {
+            return undefined;
+        }
+        
+        const foundNest = nests.find((nest) =>
+            nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)
+        );
+        
+        return foundNest?.attributes.relationships.eggs.data.find(
+            (egg) => egg.attributes.uuid === currentEgg
+        )?.attributes.name;
+    }, [nests, currentEgg]);
     const backupLimit = serverData?.featureLimits.backups ?? 0;
     const { data: backups } = getServerBackups();
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);

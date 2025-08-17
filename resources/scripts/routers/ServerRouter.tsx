@@ -42,7 +42,6 @@ import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
-import getNests from '@/api/nests/getNests';
 
 import { ServerContext } from '@/state/server';
 
@@ -126,28 +125,6 @@ const NetworkingSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; 
 );
 NetworkingSidebarItem.displayName = 'NetworkingSidebarItem';
 
-interface Egg {
-    object: string;
-    attributes: {
-        uuid: string;
-        name: string;
-        description: string;
-    };
-}
-
-interface Nest {
-    object: string;
-    attributes: {
-        id: number;
-        name: string;
-        relationships: {
-            eggs: {
-                object: string;
-                data: Egg[];
-            };
-        };
-    };
-}
 
 /**
  * Creates a swipe event from an X and Y location at start and current co-ords.
@@ -173,7 +150,6 @@ const ServerRouter = () => {
     const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases ?? 0);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups ?? 0);
     const allocationLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.allocations ?? 0);
-    const [nests, setNests] = useState<Nest[]>();
 
     // Mobile menu state
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -186,20 +162,6 @@ const ServerRouter = () => {
         setMobileMenuVisible(false);
     };
 
-    const egg_name =
-        nests &&
-        nests
-            .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
-            ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id)?.attributes.name;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getNests();
-            setNests(data);
-        };
-
-        fetchData();
-    }, []);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -334,7 +296,6 @@ const ServerRouter = () => {
                         isVisible={isMobileMenuVisible}
                         onClose={closeMobileMenu}
                         serverId={id}
-                        eggName={egg_name}
                         databaseLimit={databaseLimit}
                         backupLimit={backupLimit}
                         allocationLimit={allocationLimit}
@@ -406,84 +367,83 @@ const ServerRouter = () => {
                                     <HugeIconsHome fill='currentColor' />
                                     <p>Home</p>
                                 </NavLink>
-                                {egg_name && !egg_name?.includes(blank_egg_prefix) && (
-                                    <>
-                                        <Can action={'file.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationFiles}
-                                                to={`/server/${id}/files`}
-                                            >
-                                                <HugeIconsFolder fill='currentColor' />
-                                                <p>Files</p>
-                                            </NavLink>
-                                        </Can>
-                                        <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => {}} />
-                                        <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => {}} />
-                                        <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => {}} />
-                                        <Can action={'user.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationUsers}
-                                                to={`/server/${id}/users`}
-                                                end
-                                            >
-                                                <HugeIconsPeople fill='currentColor' />
-                                                <p>Users</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can
-                                            action={[
-                                                'startup.read',
-                                                'startup.update',
-                                                'startup.command',
-                                                'startup.docker-image',
-                                            ]}
-                                            matchAny
+                                <>
+                                    <Can action={'file.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationFiles}
+                                            to={`/server/${id}/files`}
                                         >
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationStartup}
-                                                to={`/server/${id}/startup`}
-                                                end
-                                            >
-                                                <HugeIconsConsole fill='currentColor' />
-                                                <p>Startup</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'schedule.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationSchedules}
-                                                to={`/server/${id}/schedules`}
-                                            >
-                                                <HugeIconsClock fill='currentColor' />
-                                                <p>Schedules</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={['settings.*', 'file.sftp']} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationSettings}
-                                                to={`/server/${id}/settings`}
-                                                end
-                                            >
-                                                <HugeIconsDashboardSettings fill='currentColor' />
-                                                <p>Settings</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={['activity.*', 'activity.read']} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationActivity}
-                                                to={`/server/${id}/activity`}
-                                                end
-                                            >
-                                                <HugeIconsPencil fill='currentColor' />
-                                                <p>Activity</p>
-                                            </NavLink>
-                                        </Can>
-                                        {/* TODO: finish modrinth support *\}
+                                            <HugeIconsFolder fill='currentColor' />
+                                            <p>Files</p>
+                                        </NavLink>
+                                    </Can>
+                                    <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => { }} />
+                                    <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => { }} />
+                                    <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => { }} />
+                                    <Can action={'user.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationUsers}
+                                            to={`/server/${id}/users`}
+                                            end
+                                        >
+                                            <HugeIconsPeople fill='currentColor' />
+                                            <p>Users</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can
+                                        action={[
+                                            'startup.read',
+                                            'startup.update',
+                                            'startup.command',
+                                            'startup.docker-image',
+                                        ]}
+                                        matchAny
+                                    >
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationStartup}
+                                            to={`/server/${id}/startup`}
+                                            end
+                                        >
+                                            <HugeIconsConsole fill='currentColor' />
+                                            <p>Startup</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={'schedule.*'} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationSchedules}
+                                            to={`/server/${id}/schedules`}
+                                        >
+                                            <HugeIconsClock fill='currentColor' />
+                                            <p>Schedules</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={['settings.*', 'file.sftp']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationSettings}
+                                            to={`/server/${id}/settings`}
+                                            end
+                                        >
+                                            <HugeIconsDashboardSettings fill='currentColor' />
+                                            <p>Settings</p>
+                                        </NavLink>
+                                    </Can>
+                                    <Can action={['activity.*', 'activity.read']} matchAny>
+                                        <NavLink
+                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                                            ref={NavigationActivity}
+                                            to={`/server/${id}/activity`}
+                                            end
+                                        >
+                                            <HugeIconsPencil fill='currentColor' />
+                                            <p>Activity</p>
+                                        </NavLink>
+                                    </Can>
+                                    {/* TODO: finish modrinth support *\}
                     {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny>
                         <NavLink
                             className='flex flex-row items-center sm:hidden md:show'
@@ -495,8 +455,7 @@ const ServerRouter = () => {
                             <p>Mods/Plugins</p>
                         </NavLink>
                     </Can> */}
-                                    </>
-                                )}
+                                </>
                                 <Can action={'startup.software'}>
                                     <NavLink
                                         className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -522,7 +481,7 @@ const ServerRouter = () => {
                                 className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
-                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>

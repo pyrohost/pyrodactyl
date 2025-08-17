@@ -104,7 +104,6 @@ interface ServerMobileMenuProps {
     isVisible: boolean;
     onClose: () => void;
     serverId?: string;
-    eggName?: string;
     databaseLimit?: number;
     backupLimit?: number;
     allocationLimit?: number;
@@ -114,7 +113,6 @@ export const ServerMobileMenu = ({
     isVisible,
     onClose,
     serverId,
-    eggName,
     databaseLimit = 0,
     backupLimit = 0,
     allocationLimit = 0,
@@ -147,8 +145,6 @@ export const ServerMobileMenu = ({
         </NavLink>
     );
 
-    const blank_egg_prefix = '@';
-
     if (!serverId) return null;
 
     return (
@@ -157,8 +153,7 @@ export const ServerMobileMenu = ({
                 Home
             </NavigationItem>
 
-            {eggName && !eggName?.includes(blank_egg_prefix) && (
-                <>
+            <>
                     <Can action={'file.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/files`} icon={HugeIconsFolder}>
                             Files
@@ -221,8 +216,7 @@ export const ServerMobileMenu = ({
                             Activity
                         </NavigationItem>
                     </Can>
-                </>
-            )}
+            </>
 
             <Can action={'startup.software'}>
                 <NavigationItem to={`/server/${serverId}/shell`} icon={HugeIconsController} end>
