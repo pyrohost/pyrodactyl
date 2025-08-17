@@ -134,114 +134,115 @@ const OperationProgressModal: React.FC<Props> = ({
             onClose={canClose ? handleClose : () => {}}
             preventExternalClose={!canClose}
             hideCloseIcon={!canClose}
-            title={`${operationType}`}
+            title={operationType}
         >
-            <div className='w-full max-w-sm mx-auto'>
-                <div className='space-y-6'>
-                    {/* Operation ID */}
-                    {operationId && (
-                        <div className='text-center'>
-                            <p className='text-xs text-zinc-500 font-mono bg-zinc-800/30 px-2 py-1 rounded'>
+            <div className='space-y-4'>
+                {/* Operation ID */}
+                {operationId && (
+                    <div className='flex justify-center'>
+                        <div className='px-3 py-1.5 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
+                            <p className='text-xs text-zinc-400 font-mono'>
                                 ID: {formatOperationId(operationId)}
                             </p>
                         </div>
-                    )}
-                    
-                    {/* Error State */}
-                    {error ? (
-                        <div className='space-y-4 text-center'>
-                            <div className='flex items-center justify-center space-x-2'>
-                                <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400' />
-                                <span className='text-red-400 font-medium'>Error</span>
-                            </div>
-                            <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-left'>
-                                <p className='text-sm text-red-300'>{error}</p>
-                            </div>
+                    </div>
+                )}
+                
+                {/* Error State */}
+                {error ? (
+                    <div className='space-y-4'>
+                        <div className='flex items-center justify-center space-x-3'>
+                            <HugeIconsAlert fill='currentColor' className='w-6 h-6 text-red-400' />
+                            <span className='text-red-400 font-semibold text-lg'>Error</span>
                         </div>
-                    ) : operation ? (
-                        /* Operation State */
-                        <div className='space-y-5'>
-                            {/* Status Header */}
-                            <div className='text-center'>
-                                <div className='flex items-center justify-center space-x-3 mb-4'>
-                                    {renderStatusIcon(operation.status)}
-                                    <span
-                                        className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-zinc-300'}`}
-                                    >
-                                        {operation.status}
-                                    </span>
-                                </div>
-                            </div>
+                        <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
+                            <p className='text-sm text-red-300'>{error}</p>
+                        </div>
+                    </div>
+                ) : operation ? (
+                    /* Operation State */
+                    <div className='space-y-4'>
+                        {/* Status Header */}
+                        <div className='flex items-center justify-center space-x-3'>
+                            {renderStatusIcon(operation.status)}
+                            <span
+                                className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-zinc-300'}`}
+                            >
+                                {operation.status}
+                            </span>
+                        </div>
 
-                            {/* Message Box */}
-                            <div className='p-4 bg-zinc-800/40 border border-zinc-700/50 rounded-lg'>
-                                <p className='text-sm text-zinc-300 text-center'>
-                                    {operation.message || 'Processing...'}
+                        {/* Message Box */}
+                        <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
+                            <p className='text-sm text-zinc-300 text-center'>
+                                {operation.message || 'Processing...'}
+                            </p>
+                        </div>
+
+                        {/* Progress Bar for Active Operations */}
+                        {isActiveStatus(operation.status) && (
+                            <div className='space-y-3'>
+                                <div className='w-full bg-[#ffffff11] rounded-full h-2 border border-[#ffffff12]'>
+                                    <div
+                                        className='bg-brand h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
+                                        style={{ width: `${UI_CONFIG.ESTIMATED_PROGRESS_WIDTH}%` }}
+                                    />
+                                </div>
+                                <p className='text-xs text-zinc-500 text-center'>
+                                    This window will close automatically when complete
                                 </p>
                             </div>
+                        )}
 
-                            {/* Progress Bar for Active Operations */}
-                            {isActiveStatus(operation.status) && (
-                                <div className='space-y-2'>
-                                    <div className='w-full bg-zinc-800/60 rounded-full h-2'>
-                                        <div
-                                            className='bg-brand h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
-                                            style={{ width: `${UI_CONFIG.ESTIMATED_PROGRESS_WIDTH}%` }}
-                                        />
+                        {/* Success State */}
+                        {isCompletedStatus(operation.status) && (
+                            <div className='p-4 bg-green-500/10 border border-green-500/20 rounded-lg'>
+                                <div className='flex items-center justify-center space-x-2 mb-2'>
+                                    <div className='w-5 h-5 rounded-full bg-green-400 flex items-center justify-center'>
+                                        <div className='w-2 h-2 rounded-full bg-white' />
                                     </div>
-                                    <div className='text-center'>
-                                        <p className='text-xs text-zinc-500'>
-                                            This window will close automatically when complete
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Success State */}
-                            {isCompletedStatus(operation.status) && (
-                                <div
-                                    className={`p-4 ${statusStyling?.bgColor} border ${statusStyling?.borderColor} rounded-lg text-center`}
-                                >
-                                    <p className={`text-sm ${statusStyling?.textColor} font-medium mb-1`}>
-                                        ✓ Operation completed successfully
+                                    <p className='text-sm text-green-300 font-medium'>
+                                        Operation completed successfully
                                     </p>
-                                    {autoCloseTimer && (
-                                        <p className='text-xs text-green-200'>
-                                            Closing automatically in 3 seconds
-                                        </p>
-                                    )}
                                 </div>
-                            )}
-
-                            {/* Failed State */}
-                            {isFailedStatus(operation.status) && (
-                                <div
-                                    className={`p-4 ${statusStyling?.bgColor} border ${statusStyling?.borderColor} rounded-lg text-center`}
-                                >
-                                    <p className={`text-sm ${statusStyling?.textColor} font-medium mb-1`}>
-                                        ✗ Operation failed
+                                {autoCloseTimer && (
+                                    <p className='text-xs text-green-200 text-center'>
+                                        Closing automatically in 3 seconds
                                     </p>
-                                    {operation.message && (
-                                        <p className='text-xs text-red-200'>{operation.message}</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        /* Loading State */
-                        <div className='text-center space-y-4'>
-                            <div className='flex items-center justify-center space-x-3'>
-                                <Spinner size={'small'} />
-                                <span className='text-zinc-400 font-medium'>Initializing...</span>
+                                )}
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
+
+                        {/* Failed State */}
+                        {isFailedStatus(operation.status) && (
+                            <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
+                                <div className='flex items-center justify-center space-x-2 mb-2'>
+                                    <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400' />
+                                    <p className='text-sm text-red-300 font-medium'>
+                                        Operation failed
+                                    </p>
+                                </div>
+                                {operation.message && (
+                                    <p className='text-xs text-red-200 text-center'>{operation.message}</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    /* Loading State */
+                    <div className='flex items-center justify-center space-x-3 py-4'>
+                        <Spinner size={'small'} />
+                        <span className='text-zinc-400 font-medium'>Initializing...</span>
+                    </div>
+                )}
             </div>
 
             {canClose && (
                 <Dialog.Footer>
-                    <ActionButton onClick={handleClose} variant='primary' className='w-full'>
+                    <ActionButton onClick={handleClose} variant='secondary' className='mr-3'>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton onClick={handleClose} variant='primary'>
                         {operation?.is_completed ? 'Done' : 'Close'}
                     </ActionButton>
                 </Dialog.Footer>
