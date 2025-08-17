@@ -277,6 +277,10 @@ class Node extends Model
         $memoryLimit = $this->memory * (1 + ($this->memory_overallocate / 100));
         $diskLimit = $this->disk * (1 + ($this->disk_overallocate / 100));
 
-        return ($this->sum_memory + $memory) <= $memoryLimit && ($this->sum_disk + $disk) <= $diskLimit;
+        // Calculate used resources excluding servers marked for exclusion
+        $usedMemory = $this->servers()->where('exclude_from_resource_calculation', false)->sum('memory');
+        $usedDisk = $this->servers()->where('exclude_from_resource_calculation', false)->sum('disk');
+
+        return ($usedMemory + $memory) <= $memoryLimit && ($usedDisk + $disk) <= $diskLimit;
     }
 }

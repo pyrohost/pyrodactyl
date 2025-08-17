@@ -230,6 +230,14 @@
 
                         <p class="small text-muted no-margin">Terminates the server if it breaches the memory limits. Enabling OOM killer may cause server processes to exit unexpectedly.</p>
                     </div>
+                    <div class="form-group col-xs-12">
+                        <div class="checkbox checkbox-primary no-margin-bottom">
+                            <input type="checkbox" id="pExcludeFromResourceCalculation" name="exclude_from_resource_calculation" value="1" {{ \Pterodactyl\Helpers\Utilities::checked('exclude_from_resource_calculation', 0) }} />
+                            <label for="pExcludeFromResourceCalculation" class="strong">Exclude from Resource Calculation</label>
+                        </div>
+
+                        <p class="small text-muted no-margin">When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.</p>
+                    </div>
                 </div>
             </div>
         </div>

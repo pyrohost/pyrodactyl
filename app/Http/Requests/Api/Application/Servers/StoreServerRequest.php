@@ -33,6 +33,7 @@ class StoreServerRequest extends ApplicationApiRequest
             'environment' => 'present|array',
             'skip_scripts' => 'sometimes|boolean',
             'oom_disabled' => 'sometimes|boolean',
+            'exclude_from_resource_calculation' => 'sometimes|boolean',
 
             // Resource limitations
             'limits' => 'required|array',
@@ -97,6 +98,7 @@ class StoreServerRequest extends ApplicationApiRequest
             'allocation_limit' => array_get($data, 'feature_limits.allocations'),
             'backup_limit' => array_get($data, 'feature_limits.backups'),
             'oom_disabled' => array_get($data, 'oom_disabled'),
+            'exclude_from_resource_calculation' => array_get($data, 'exclude_from_resource_calculation', false),
         ];
     }
 

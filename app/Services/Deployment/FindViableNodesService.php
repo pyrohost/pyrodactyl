@@ -117,7 +117,10 @@ class FindViableNodesService
                 "$memCap  - COALESCE(SUM(servers.memory), 0) AS free_memory, " .
                 "$diskCap - COALESCE(SUM(servers.disk),   0) AS free_disk"
             )
-            ->leftJoin('servers', 'servers.node_id', '=', 'nodes.id')
+            ->leftJoin('servers', function ($join) {
+                $join->on('servers.node_id', '=', 'nodes.id')
+                     ->where('servers.exclude_from_resource_calculation', '=', false);
+            })
             ->where('nodes.public', true)
             ->when(
                 $this->locations !== [],

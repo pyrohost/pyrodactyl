@@ -34,6 +34,7 @@ use Pterodactyl\Exceptions\Http\Server\ServerStateConflictException;
  * @property int $cpu
  * @property string|null $threads
  * @property bool $oom_disabled
+ * @property bool $exclude_from_resource_calculation
  * @property int $allocation_id
  * @property int $nest_id
  * @property int $egg_id
@@ -136,6 +137,7 @@ class Server extends Model
     protected $attributes = [
         'status' => self::STATUS_INSTALLING,
         'oom_disabled' => true,
+        'exclude_from_resource_calculation' => false,
         'installed_at' => null,
     ];
 
@@ -163,6 +165,7 @@ class Server extends Model
         'cpu' => 'required|numeric|min:0',
         'threads' => 'nullable|regex:/^[0-9-,]+$/',
         'oom_disabled' => 'sometimes|boolean',
+        'exclude_from_resource_calculation' => 'sometimes|boolean',
         'disk' => 'required|numeric|min:0',
         'allocation_id' => 'required|bail|unique:servers|exists:allocations,id',
         'nest_id' => 'required|exists:nests,id',
@@ -189,6 +192,7 @@ class Server extends Model
         'io' => 'integer',
         'cpu' => 'integer',
         'oom_disabled' => 'boolean',
+        'exclude_from_resource_calculation' => 'boolean',
         'allocation_id' => 'integer',
         'nest_id' => 'integer',
         'egg_id' => 'integer',
