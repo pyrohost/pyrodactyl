@@ -12,7 +12,8 @@
         "eula",
         "java_version",
         "pid_limit",
-        "mod/forge"
+        "mod/forge",
+        "mclogs"
     ],
     "docker_images": {
         "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",

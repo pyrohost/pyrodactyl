@@ -12,7 +12,8 @@
         "eula",
         "java_version",
         "pid_limit",
-        "plugin/sponge"
+        "plugin/sponge",
+        "mclogs"
     ],
     "docker_images": {
         "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",

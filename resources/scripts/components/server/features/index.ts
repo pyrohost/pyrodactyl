@@ -14,6 +14,7 @@ const features: Record<string, ComponentType> = {
     // Not anymore, there's a fix!
     pid_limit: lazy(() => import('@feature/PIDLimitModalFeature')),
     steam_disk_space: lazy(() => import('@feature/SteamDiskSpaceFeature')),
+    mclogs: lazy(() => import('@feature/MclogsFeature')),
 };
 
 export default features;
