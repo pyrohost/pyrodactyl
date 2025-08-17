@@ -1,5 +1,3 @@
-import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
@@ -8,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
+import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
+import HugeIconsUser from '@/components/elements/hugeicons/User';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
@@ -68,7 +68,7 @@ const UsersContainer = () => {
                                     onClick={() => navigate(`/server/${serverId}/users/new`)}
                                     className='flex items-center gap-2'
                                 >
-                                    <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                                    <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
                                     New User
                                 </ActionButton>
                             </Can>
@@ -102,7 +102,7 @@ const UsersContainer = () => {
                                 onClick={() => navigate(`/server/${serverId}/users/new`)}
                                 className='flex items-center gap-2'
                             >
-                                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                                <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
                                 New User
                             </ActionButton>
                         </Can>
@@ -118,7 +118,7 @@ const UsersContainer = () => {
                 <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <FontAwesomeIcon icon={faUser} className='w-8 h-8 text-zinc-400' />
+                            <HugeIconsUser className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>No users found</h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>

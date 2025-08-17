@@ -1,5 +1,3 @@
-import { faEye, faEyeSlash, faKey, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -11,6 +9,11 @@ import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import HugeIconsEye from '@/components/elements/hugeicons/Eye';
+import HugeIconsEyeSlash from '@/components/elements/hugeicons/EyeSlash';
+import HugeIconsKey from '@/components/elements/hugeicons/Key';
+import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 import Input from '@/components/elements/Input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -157,7 +160,7 @@ const AccountApiContainer = () => {
                                 onClick={() => setShowCreateModal(true)}
                                 className='flex items-center gap-2'
                             >
-                                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                                <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
                                 Create API Key
                             </ActionButton>
                         }
@@ -187,7 +190,7 @@ const AccountApiContainer = () => {
                         {keys.length === 0 ? (
                             <div className='text-center py-12'>
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <FontAwesomeIcon icon={faKey} className='w-8 h-8 text-zinc-400' />
+                                    <HugeIconsKey className='w-8 h-8 text-zinc-400' fill='currentColor' />
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>No API Keys</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
@@ -236,10 +239,11 @@ const AccountApiContainer = () => {
                                                                 onClick={() => toggleKeyVisibility(key.identifier)}
                                                                 className='p-1 text-zinc-400 hover:text-zinc-300'
                                                             >
-                                                                <FontAwesomeIcon
-                                                                    icon={showKeys[key.identifier] ? faEyeSlash : faEye}
-                                                                    className='w-3 h-3'
-                                                                />
+                                                                {showKeys[key.identifier] ? (
+                                                                    <HugeIconsEyeSlash className='w-3 h-3' fill='currentColor' />
+                                                                ) : (
+                                                                    <HugeIconsEye className='w-3 h-3' fill='currentColor' />
+                                                                )}
                                                             </ActionButton>
                                                         </div>
                                                     </div>
@@ -250,7 +254,7 @@ const AccountApiContainer = () => {
                                                     className='ml-4'
                                                     onClick={() => setDeleteIdentifier(key.identifier)}
                                                 >
-                                                    <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                                                    <HugeIconsTrash className='w-4 h-4' fill='currentColor' />
                                                 </ActionButton>
                                             </div>
                                         </div>

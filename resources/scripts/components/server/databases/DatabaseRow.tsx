@@ -1,5 +1,3 @@
-import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -15,6 +13,9 @@ import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsEye from '@/components/elements/hugeicons/Eye';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
@@ -179,7 +180,7 @@ const DatabaseRow = ({ database }: Props) => {
                     <div className='flex-1 min-w-0'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <FontAwesomeIcon icon={faDatabase} className='text-zinc-400 w-4 h-4' />
+                                <HugeIconsDatabase fill='currentColor' className='text-zinc-400 w-4 h-4' />
                             </div>
                             <div className='min-w-0 flex-1'>
                                 <CopyOnClick text={database.name}>
@@ -217,7 +218,7 @@ const DatabaseRow = ({ database }: Props) => {
                             onClick={() => setConnectionVisible(true)}
                             className='flex items-center gap-2'
                         >
-                            <FontAwesomeIcon icon={faEye} className='w-4 h-4' />
+                            <HugeIconsEye fill='currentColor' className='w-4 h-4' />
                             <span className='hidden sm:inline'>Details</span>
                         </ActionButton>
                         <Can action={'database.delete'}>
@@ -227,7 +228,7 @@ const DatabaseRow = ({ database }: Props) => {
                                 onClick={() => setVisible(true)}
                                 className='flex items-center gap-2'
                             >
-                                <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
                                 <span className='hidden sm:inline'>Delete</span>
                             </ActionButton>
                         </Can>

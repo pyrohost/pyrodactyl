@@ -1,10 +1,9 @@
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
@@ -56,7 +55,7 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 onClick={() => setShowConfirmation(true)}
                 aria-label='Delete subuser'
             >
-                <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
                 Delete
             </ActionButton>
         </>

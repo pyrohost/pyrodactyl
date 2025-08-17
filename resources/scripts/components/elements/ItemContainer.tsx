@@ -1,6 +1,4 @@
-import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { v4 } from 'uuid';
 
 import CopyOnClick from './CopyOnClick';
@@ -9,7 +7,7 @@ export interface ContainerProps {
     title: string;
     description: string;
     children?: React.ReactNode;
-    icon?: IconDefinition;
+    icon?: React.ComponentType<{ className?: string; fill?: string }>;
     labelClasses?: string;
     titleClasses?: string;
     descriptionClasses?: string;
@@ -36,7 +34,7 @@ const ItemContainer = ({
         >
             {icon && (
                 <div className={`w-10 h-10 items-center justify-center hidden sm:flex`}>
-                    <FontAwesomeIcon icon={icon} />
+                    {React.createElement(icon, { className: 'w-6 h-6', fill: 'currentColor' })}
                 </div>
             )}
             <div className={`flex flex-1 flex-col`}>

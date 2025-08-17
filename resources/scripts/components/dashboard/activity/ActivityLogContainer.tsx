@@ -1,9 +1,12 @@
-import { faDownload, faFilter, faHistory, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
+import HugeIconsDownload from '@/components/elements/hugeicons/Download';
+import HugeIconsFilter from '@/components/elements/hugeicons/Filter';
+import HugeIconsHistory from '@/components/elements/hugeicons/History';
+import HugeIconsSearch from '@/components/elements/hugeicons/Search';
+import HugeIconsX from '@/components/elements/hugeicons/X';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Select from '@/components/elements/Select';
@@ -177,7 +180,7 @@ const ActivityLogContainer = () => {
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
                             >
-                                <FontAwesomeIcon icon={faFilter} className='w-4 h-4' />
+                                <HugeIconsFilter className='w-4 h-4' fill='currentColor' />
                                 Filters
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
                             </ActionButton>
@@ -187,7 +190,11 @@ const ActivityLogContainer = () => {
                                 className='flex items-center gap-2'
                                 title='Auto Refresh (Ctrl+R)'
                             >
-                                <FontAwesomeIcon icon={autoRefresh ? faTimes : faSearch} className='w-4 h-4' />
+                                {autoRefresh ? (
+                                    <HugeIconsX className='w-4 h-4' fill='currentColor' />
+                                ) : (
+                                    <HugeIconsSearch className='w-4 h-4' fill='currentColor' />
+                                )}
                                 {autoRefresh ? 'Live' : 'Refresh'}
                             </ActionButton>
                             <ActionButton
@@ -197,7 +204,7 @@ const ActivityLogContainer = () => {
                                 className='flex items-center gap-2'
                                 title='Export CSV (Ctrl+E)'
                             >
-                                <FontAwesomeIcon icon={faDownload} className='w-4 h-4' />
+                                <HugeIconsDownload className='w-4 h-4' fill='currentColor' />
                                 Export
                             </ActionButton>
                         </div>
@@ -216,7 +223,7 @@ const ActivityLogContainer = () => {
                         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                             <div className='flex items-center gap-2 mb-4'>
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                    <FontAwesomeIcon icon={faFilter} className='w-2.5 h-2.5 text-zinc-400' />
+                                    <HugeIconsFilter className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                                 </div>
                                 <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
                             </div>
@@ -225,10 +232,7 @@ const ActivityLogContainer = () => {
                                 <div>
                                     <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
                                     <div className='relative'>
-                                        <FontAwesomeIcon
-                                            icon={faSearch}
-                                            className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
-                                        />
+                                        <HugeIconsSearch className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10' fill='currentColor' />
                                         <Input.Text
                                             type='text'
                                             placeholder='Search events, IPs, users...'
@@ -293,7 +297,7 @@ const ActivityLogContainer = () => {
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
-                                            <FontAwesomeIcon icon={faTimes} className='w-4 h-4' />
+                                            <HugeIconsX className='w-4 h-4' fill='currentColor' />
                                             Clear All Filters
                                         </ActionButton>
                                     )}
@@ -314,7 +318,7 @@ const ActivityLogContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                         <div className='flex items-center gap-2 mb-4'>
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <FontAwesomeIcon icon={faHistory} className='w-2.5 h-2.5 text-zinc-400' />
+                                <HugeIconsHistory className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                             </div>
                             <h3 className='text-base font-semibold text-zinc-100'>Activity Events</h3>
                             {filteredData?.items && (
@@ -328,7 +332,7 @@ const ActivityLogContainer = () => {
                             <Spinner centered />
                         ) : !filteredData?.items?.length ? (
                             <div className='text-center py-12'>
-                                <FontAwesomeIcon icon={faHistory} className='w-16 h-16 text-zinc-600 mb-4' />
+                                <HugeIconsHistory className='w-16 h-16 text-zinc-600 mb-4' fill='currentColor' />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
                                     {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
                                 </h3>

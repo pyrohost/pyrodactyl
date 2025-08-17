@@ -1,9 +1,8 @@
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
+import HugeIconsArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
@@ -33,7 +32,7 @@ const CreateUserContainer = () => {
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
+                    <HugeIconsArrowLeft className='w-4 h-4' fill='currentColor' />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>

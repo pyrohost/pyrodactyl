@@ -1,9 +1,11 @@
 'use client';
 
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import HugeIconsCheck from '@/components/elements/hugeicons/Check';
+import HugeIconsChevronDown from '@/components/elements/hugeicons/ChevronDown';
+import HugeIconsChevronUp from '@/components/elements/hugeicons/ChevronUp';
 
 export interface ScrollItem {
     id: string | number;
@@ -58,9 +60,9 @@ export function ExpandableScrollBox({
             >
                 <span className='truncate'>{selectedItem ? selectedItem.label : placeholder}</span>
                 {isOpen ? (
-                    <ChevronUpIcon className='ml-2 h-5 w-5 shrink-0' />
+                    <HugeIconsChevronUp className='ml-2 h-5 w-5 shrink-0' />
                 ) : (
-                    <ChevronDownIcon className='ml-2 h-5 w-5 shrink-0' />
+                    <HugeIconsChevronDown className='ml-2 h-5 w-5 shrink-0' />
                 )}
             </button>
 
@@ -96,7 +98,7 @@ export function ExpandableScrollBox({
                                 onClick={() => handleSelect(item)}
                             >
                                 <span>{item.label}</span>
-                                {selectedItem?.id === item.id && <CheckIcon className='h-4 w-4 text-custom-red' />}
+                                {selectedItem?.id === item.id && <HugeIconsCheck className='h-4 w-4 text-custom-red' />}
                             </div>
                         ))}
                     </div>

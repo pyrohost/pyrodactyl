@@ -1,8 +1,8 @@
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import ActionButton from '@/components/elements/ActionButton';
+import HugeIconsChevronLeft from '@/components/elements/hugeicons/ChevronLeft';
+import HugeIconsChevronRight from '@/components/elements/hugeicons/ChevronRight';
 
 import { PaginationDataSet } from '@/api/http';
 
@@ -50,7 +50,7 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
                         disabled={current <= 1}
                         className='w-8 h-8 p-0 flex items-center justify-center'
                     >
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3' />
+                        <HugeIconsChevronLeft fill='currentColor' className='w-3 h-3' />
                     </ActionButton>
                     {pages.previous.reverse().map((value) => (
                         <ActionButton
@@ -89,7 +89,7 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
                         disabled={current >= total}
                         className='w-8 h-8 p-0 flex items-center justify-center'
                     >
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3' />
+                        <HugeIconsChevronRight fill='currentColor' className='w-3 h-3' />
                     </ActionButton>
                 </div>
             )}

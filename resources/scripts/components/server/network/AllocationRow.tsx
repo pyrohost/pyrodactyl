@@ -1,5 +1,3 @@
-import { faCheck, faCopy, faCrown, faNetworkWired, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
@@ -13,6 +11,12 @@ import InputSpinner from '@/components/elements/InputSpinner';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
 import { PageListItem } from '@/components/elements/pages/PageList';
+import HugeIconsCheck from '@/components/elements/hugeicons/Check';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsCrown from '@/components/elements/hugeicons/Crown';
+import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
+import HugeIconsX from '@/components/elements/hugeicons/X';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { ip } from '@/lib/formatters';
 
@@ -110,7 +114,7 @@ const AllocationRow = ({ allocation }: Props) => {
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-3 mb-3'>
                         <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                            <FontAwesomeIcon icon={faNetworkWired} className='text-zinc-400 w-4 h-4' />
+                            <HugeIconsNetworkAntenna fill='currentColor' className='text-zinc-400 w-4 h-4' />
                         </div>
                         <div className='min-w-0 flex-1'>
                             <div className='flex items-center flex-wrap gap-2'>
@@ -119,15 +123,15 @@ const AllocationRow = ({ allocation }: Props) => {
                                         <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>
                                             {allocation.alias ? allocation.alias : ip(allocation.ip)}:{allocation.port}
                                         </h3>
-                                        <FontAwesomeIcon
-                                            icon={faCopy}
+                                        <HugeIconsCopy
+                                            fill='currentColor'
                                             className='w-3 h-3 text-zinc-500 group-hover:text-zinc-400 transition-colors'
                                         />
                                     </div>
                                 </CopyOnClick>
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
-                                        <FontAwesomeIcon icon={faCrown} className='w-3 h-3' />
+                                        <HugeIconsCrown fill='currentColor' className='w-3 h-3' />
                                         Primary
                                     </span>
                                 )}
@@ -153,11 +157,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
                                     <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
-                                        {loading ? <Spinner size='small' /> : <FontAwesomeIcon icon={faCheck} className='w-3 h-3 mr-1' />}
+                                        {loading ? <Spinner size='small' /> : <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />}
                                         Save
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
-                                        <FontAwesomeIcon icon={faTimes} className='w-3 h-3 mr-1' />
+                                        <HugeIconsX fill='currentColor' className='w-3 h-3 mr-1' />
                                         Cancel
                                     </ActionButton>
                                 </div>
@@ -190,7 +194,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     : 'Make this the primary allocation'
                             }
                         >
-                            <FontAwesomeIcon icon={faCrown} className='w-3 h-3 mr-1' />
+                            <HugeIconsCrown fill='currentColor' className='w-3 h-3 mr-1' />
                             <span className='hidden sm:inline'>Make Primary</span>
                             <span className='sm:hidden'>Primary</span>
                         </ActionButton>
@@ -205,7 +209,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
                             }
                         >
-                            {deleteLoading ? <Spinner size='small' /> : <FontAwesomeIcon icon={faTrash} className='w-3 h-3 mr-1' />}
+                            {deleteLoading ? <Spinner size='small' /> : <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />}
                             <span className='hidden sm:inline'>Delete</span>
                         </ActionButton>
                     </Can>

@@ -1,8 +1,9 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { CheckIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import HugeIconsCheck from './hugeicons/Check';
+import HugeIconsChevronRight from './hugeicons/ChevronRight';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -32,7 +33,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
         {...props}
     >
         {children}
-        <ChevronRightIcon className='ml-auto h-4 w-4' />
+        <HugeIconsChevronRight className='ml-auto h-4 w-4' fill='currentColor' />
     </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
@@ -104,7 +105,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     >
         <span className='absolute left-2 flex h-3.5 w-3.5 items-center justify-center'>
             <DropdownMenuPrimitive.ItemIndicator>
-                <CheckIcon className='h-4 w-4' />
+                <HugeIconsCheck className='h-4 w-4' fill='currentColor' />
             </DropdownMenuPrimitive.ItemIndicator>
         </span>
         {children}

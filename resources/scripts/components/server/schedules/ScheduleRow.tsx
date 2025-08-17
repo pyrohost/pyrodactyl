@@ -1,7 +1,6 @@
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 
+import HugeIconsCalendar from '@/components/elements/hugeicons/Calendar';
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
@@ -10,7 +9,7 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
     <>
         <div className={`flex-auto`}>
             <div className='flex flex-row flex-none align-middle items-center gap-6'>
-                <FontAwesomeIcon icon={faCalendarAlt} className='flex-none' />
+                <HugeIconsCalendar className='flex-none' fill='currentColor' />
                 <div>
                     <div className='flex flex-row items-center gap-2 text-lg'>
                         <p>{schedule.name}</p>

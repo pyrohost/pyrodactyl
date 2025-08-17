@@ -1,9 +1,9 @@
-import { faCode, faCopy } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsCode from '@/components/elements/hugeicons/Code';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 
@@ -35,7 +35,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                             onClick={copyToClipboard}
                             className='flex items-center gap-2 text-xs'
                         >
-                            <FontAwesomeIcon icon={faCopy} className='w-3 h-3' />
+                            <HugeIconsCopy className='w-3 h-3' />
                             {copied ? 'Copied!' : 'Copy JSON'}
                         </ActionButton>
                     </div>
@@ -68,7 +68,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >
-                <FontAwesomeIcon icon={faCode} className='w-3 h-3' />
+                <HugeIconsCode className='w-3 h-3' />
             </button>
         </>
     );

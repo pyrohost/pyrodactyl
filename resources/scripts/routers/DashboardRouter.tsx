@@ -14,13 +14,14 @@ import {
 } from '@/components/elements/DropdownMenu';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
+import MobileTopBar from '@/components/elements/MobileTopBar';
+import { DashboardMobileMenu } from '@/components/elements/MobileFullScreenMenu';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
-import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http from '@/api/http';
 
@@ -28,121 +29,16 @@ const DashboardRouter = () => {
     const location = useLocation();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
-    // ************************** BEGIN SIDEBAR GESTURE ************************** //
+    // Mobile menu state
+    const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
 
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
-    const [isSidebarBetween, setSidebarBetween] = useState(false);
-    const [doneOnLoad, setDoneOnLoad] = useState(false);
-
-    const [sidebarPosition, setSidebarPosition] = useState(-1000);
-    const sidebarRef = useRef<HTMLDivElement>(null);
-    const [touchStartX, setTouchStartX] = useState<number | null>(null);
-
-    const showSideBar = (shown: boolean) => {
-        setSidebarVisible(shown);
-
-        // @ts-expect-error - Legacy type suppression
-        if (!shown) setSidebarPosition(-500);
-        else setSidebarPosition(0);
+    const toggleMobileMenu = () => {
+        setMobileMenuVisible(!isMobileMenuVisible);
     };
 
-    const checkIfMinimal = () => {
-        // @ts-expect-error - Legacy type suppression
-        if (!(window.getComputedStyle(sidebarRef.current, null).display === 'block')) {
-            showSideBar(true);
-            return true;
-        }
-
-        // showSideBar(false);
-        return false;
+    const closeMobileMenu = () => {
+        setMobileMenuVisible(false);
     };
-
-    const toggleSidebar = () => {
-        if (checkIfMinimal()) return;
-        showSideBar(!isSidebarVisible);
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (isSidebarVisible && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-                if (checkIfMinimal()) return;
-                showSideBar(false);
-            }
-        };
-
-        // to do, develop a bit more. This is currently a hack and probably not robust.
-        const windowResize = () => {
-            if (window.innerWidth > 1023) {
-                showSideBar(true);
-                return true;
-            }
-
-            showSideBar(false);
-            return false;
-        };
-
-        if (!doneOnLoad) {
-            windowResize();
-            setDoneOnLoad(true);
-        }
-
-        window.addEventListener('resize', windowResize);
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-            window.removeEventListener('resize', windowResize);
-        };
-    }, [isSidebarVisible]);
-
-    // Handle touch events for swipe to close
-    const handleTouchStart = (e: React.TouchEvent) => {
-        if (checkIfMinimal()) return;
-        // @ts-expect-error - Legacy type suppression it is not "possibly undefined." Pretty much guarunteed to work.
-
-        if (isSidebarVisible) setTouchStartX(e.touches[0].clientX - sidebarRef.current?.clientWidth);
-        // @ts-expect-error - Legacy type suppression
-        else setTouchStartX(e.touches[0].clientX);
-    };
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        if (checkIfMinimal()) return;
-
-        // @ts-expect-error - Legacy type suppression go to sleep TSC
-        const sidebarWidth = sidebarRef.current.clientWidth;
-        // @ts-expect-error - Legacy type suppression
-        if (e.touches[0].clientX - touchStartX < 30) {
-            setSidebarPosition(-sidebarWidth);
-            return;
-        }
-
-        // @ts-expect-error - Legacy type suppression
-        const clampedValue = Math.max(Math.min(e.touches[0].clientX - touchStartX, sidebarWidth), 0) - sidebarWidth;
-
-        setSidebarBetween(false);
-
-        console.group('updateDragLocation');
-        console.info(`start ${clampedValue}`);
-        console.groupEnd();
-
-        setSidebarPosition(clampedValue);
-    };
-
-    const handleTouchEnd = () => {
-        if (checkIfMinimal()) return;
-
-        setTouchStartX(null);
-        setSidebarBetween(true);
-
-        // @ts-expect-error - Legacy type suppression
-        if ((sidebarPosition - sidebarRef.current?.clientWidth) / sidebarRef.current?.clientWidth > -1.35) {
-            showSideBar(true);
-        } else {
-            showSideBar(false);
-        }
-    };
-
-    // *************************** END SIDEBAR GESTURE *************************** //
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -192,32 +88,23 @@ const DashboardRouter = () => {
 
     return (
         <Fragment key={'dashboard-router'}>
-            {isSidebarVisible && (
-                <div
-                    className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-9998 transition-opacity duration-300 '
-                    onClick={() => showSideBar(false)}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                />
-            )}
-            <button
-                id='sidebarToggle'
-                className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md cursor-pointer'
-                onClick={toggleSidebar}
-                aria-label='Toggle sidebar'
-            >
-                <HugeIconsHamburger fill='currentColor' />
-            </button>
+            {/* Mobile Top Bar */}
+            <MobileTopBar
+                onMenuToggle={toggleMobileMenu}
+                onTriggerLogout={onTriggerLogout}
+                onSelectAdminPanel={onSelectAdminPanel}
+                rootAdmin={rootAdmin}
+            />
 
-            <MainSidebar
-                ref={sidebarRef}
-                className={`fixed inset-y-0 left-0 z-9999 w-[300px] bg-[#1a1a1a] ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} absolute backdrop-blur-xs lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
-                style={{
-                    // this is needed so we can set the positioning. If you can do it in tailwind, please do. I'm no expert - why_context
-                    transform: `translate(${sidebarPosition}px)`,
-                }}
-            >
+            {/* Mobile Full Screen Menu */}
+            <DashboardMobileMenu
+                isVisible={isMobileMenuVisible}
+                onClose={closeMobileMenu}
+            />
+
+            <div className="flex flex-row w-full lg:pt-0 pt-16">
+                {/* Desktop Sidebar */}
+                <MainSidebar className="hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]">
                 <div
                     className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
                     style={{
@@ -238,8 +125,8 @@ const DashboardRouter = () => {
                     }}
                 />
                 <div className='relative flex flex-row items-center justify-between h-8'>
-                    <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                        <Logo />
+                    <NavLink to={'/'} className='flex shrink-0 h-8 w-fit'>
+                        <Logo uniqueId="desktop-sidebar" />
                         {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
                     </NavLink>
                     <DropdownMenu>
@@ -272,7 +159,7 @@ const DashboardRouter = () => {
                     </DropdownMenu>
                 </div>
                 <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper ' onClick={toggleSidebar}>
+                <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                     <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
@@ -289,32 +176,33 @@ const DashboardRouter = () => {
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
                     </NavLink>
-                </ul>
-            </MainSidebar>
+                    </ul>
+                </MainSidebar>
 
-            <Suspense fallback={null}>
-                <MainWrapper onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
-                    <main
-                        data-pyro-main=''
-                        data-pyro-transitionrouter=''
-                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
-                    >
-                        <Routes>
-                            <Route path='' element={<DashboardContainer />} />
+                <Suspense fallback={null}>
+                    <MainWrapper className="w-full">
+                        <main
+                            data-pyro-main=''
+                            data-pyro-transitionrouter=''
+                            className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                        >
+                            <Routes>
+                                <Route path='' element={<DashboardContainer />} />
 
-                            {routes.account.map(({ route, component: Component }) => (
-                                <Route
-                                    key={route}
-                                    path={`/account/${route}`.replace('//', '/')}
-                                    element={<Component />}
-                                />
-                            ))}
+                                {routes.account.map(({ route, component: Component }) => (
+                                    <Route
+                                        key={route}
+                                        path={`/account/${route}`.replace('//', '/')}
+                                        element={<Component />}
+                                    />
+                                ))}
 
-                            <Route path='*' element={<NotFound />} />
-                        </Routes>
-                    </main>
-                </MainWrapper>
-            </Suspense>
+                                <Route path='*' element={<NotFound />} />
+                            </Routes>
+                        </main>
+                    </MainWrapper>
+                </Suspense>
+            </div>
         </Fragment>
     );
 };

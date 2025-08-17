@@ -1,15 +1,3 @@
-import {
-    faCalendarAlt,
-    faClone,
-    faCog,
-    faDatabase,
-    faFile,
-    faNetworkWired,
-    faServer,
-    faShield,
-    faUser,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -20,6 +8,15 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import PermissionRow from '@/components/server/users/PermissionRow';
+import HugeIconsCalendar from '@/components/elements/hugeicons/Calendar';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsSettings from '@/components/elements/hugeicons/Settings';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsFile from '@/components/elements/hugeicons/File';
+import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
+import HugeIconsServer from '@/components/elements/hugeicons/Server';
+import HugeIconsShield from '@/components/elements/hugeicons/Shield';
+import HugeIconsUser from '@/components/elements/hugeicons/User';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 
@@ -97,23 +94,23 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
     const getPermissionIcon = (key: string) => {
         switch (key) {
             case 'control':
-                return faServer;
+                return HugeIconsServer;
             case 'user':
-                return faUser;
+                return HugeIconsUser;
             case 'file':
-                return faFile;
+                return HugeIconsFile;
             case 'backup':
-                return faClone;
+                return HugeIconsCopy;
             case 'allocation':
-                return faNetworkWired;
+                return HugeIconsNetworkAntenna;
             case 'startup':
-                return faCog;
+                return HugeIconsSettings;
             case 'database':
-                return faDatabase;
+                return HugeIconsDatabase;
             case 'schedule':
-                return faCalendarAlt;
+                return HugeIconsCalendar;
             default:
-                return faShield;
+                return HugeIconsShield;
         }
     };
 
@@ -144,7 +141,7 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff12] rounded-xl p-6'>
                                 <div className='flex items-center gap-3 mb-6'>
                                     <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <FontAwesomeIcon icon={faUser} className='w-5 h-5 text-brand' />
+                                        <HugeIconsUser fill='currentColor' className='w-5 h-5 text-brand' />
                                     </div>
                                     <h3 className='text-xl font-semibold text-zinc-100'>User Information</h3>
                                 </div>
@@ -163,7 +160,7 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             <div className='flex items-center justify-between mb-6'>
                                 <div className='flex items-center gap-3'>
                                     <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <FontAwesomeIcon icon={faCog} className='w-5 h-5 text-brand' />
+                                        <HugeIconsSettings fill='currentColor' className='w-5 h-5 text-brand' />
                                     </div>
                                     <h3 className='text-xl font-semibold text-zinc-100'>Detailed Permissions</h3>
                                 </div>
@@ -193,7 +190,7 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                                 <div className='mb-6 p-4 bg-brand/10 border border-brand/20 rounded-lg'>
                                     <div className='flex items-center gap-3 mb-2'>
-                                        <FontAwesomeIcon icon={faShield} className='w-5 h-5 text-brand' />
+                                        <HugeIconsShield fill='currentColor' className='w-5 h-5 text-brand' />
                                         <span className='text-sm font-semibold text-brand'>Permission Restriction</span>
                                     </div>
                                     <p className='text-sm text-zinc-300 leading-relaxed'>
@@ -209,10 +206,10 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                         <div key={key} className='border border-[#ffffff12] rounded-lg p-4'>
                                             <div className='flex items-start justify-between mb-3'>
                                                 <div className='flex items-start gap-3 flex-1 min-w-0'>
-                                                    <FontAwesomeIcon
-                                                        icon={getPermissionIcon(key)}
-                                                        className='w-4 h-4 text-brand flex-shrink-0 mt-0.5'
-                                                    />
+                                                    {(() => {
+                                                        const Icon = getPermissionIcon(key);
+                                                        return <Icon fill='currentColor' className='w-4 h-4 text-brand flex-shrink-0 mt-0.5' />;
+                                                    })()}
                                                     <div className='flex-1 min-w-0'>
                                                         <h4 className='font-medium text-zinc-200 capitalize'>{key}</h4>
                                                         <p className='text-xs text-zinc-400 mt-1 break-words'>

@@ -1,9 +1,9 @@
-import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
+import HugeIconsArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
+import HugeIconsUser from '@/components/elements/hugeicons/User';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
@@ -47,7 +47,7 @@ const EditUserContainer = () => {
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
+                        <HugeIconsArrowLeft className='w-4 h-4' fill='currentColor' />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
@@ -68,14 +68,14 @@ const EditUserContainer = () => {
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
+                        <HugeIconsArrowLeft className='w-4 h-4' fill='currentColor' />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
                 <div className='flex flex-col items-center justify-center py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <FontAwesomeIcon icon={faUser} className='w-8 h-8 text-zinc-400' />
+                            <HugeIconsUser className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>User not found</h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
@@ -96,7 +96,7 @@ const EditUserContainer = () => {
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <FontAwesomeIcon icon={faArrowLeft} className='w-4 h-4' />
+                    <HugeIconsArrowLeft className='w-4 h-4' fill='currentColor' />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>

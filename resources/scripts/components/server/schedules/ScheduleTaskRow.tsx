@@ -1,13 +1,4 @@
-import {
-    IconDefinition,
-    faClone,
-    faPen,
-    faPowerOff,
-    faQuestion,
-    faTerminal,
-    faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ComponentType } from 'react';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -16,6 +7,14 @@ import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsPower from '@/components/elements/hugeicons/Power';
+import HugeIconsQuestion from '@/components/elements/hugeicons/Question';
+import HugeIconsTerminal from '@/components/elements/hugeicons/Terminal';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
+import { HugeIconProps } from '@/components/elements/hugeicons/props';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
@@ -30,16 +29,16 @@ interface Props {
     task: Task;
 }
 
-const getActionDetails = (action: string): [string, IconDefinition, boolean?] => {
+const getActionDetails = (action: string): [string, ComponentType<HugeIconProps>, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command', faTerminal, true];
+            return ['Send Command', HugeIconsTerminal, true];
         case 'power':
-            return ['Send Power Action', faPowerOff];
+            return ['Send Power Action', HugeIconsPower];
         case 'backup':
-            return ['Create Backup', faClone];
+            return ['Create Backup', HugeIconsCopy];
         default:
-            return ['Unknown Action', faQuestion];
+            return ['Unknown Action', HugeIconsQuestion];
     }
 };
 
@@ -130,7 +129,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         onClick={() => setIsEditing(true)}
                         aria-label='Edit scheduled task'
                     >
-                        <FontAwesomeIcon icon={faPen} />
+                        <HugeIconsPencil fill='currentColor' />
                         Edit
                     </ActionButton>
                 </Can>
@@ -142,7 +141,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         className='flex items-center gap-2'
                         aria-label='Delete scheduled task'
                     >
-                        <FontAwesomeIcon icon={faTrashAlt} className='w-4 h-4' />
+                        <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
                         <span className='hidden sm:inline'>Delete</span>
                     </ActionButton>
                 </Can>
