@@ -314,18 +314,10 @@ const MclogsFeature = () => {
                 {renderAnalysisContent()}
 
                 <div className='flex justify-end gap-3 mt-6 pt-4 border-t border-neutral-700'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={manualAnalyze}
-                        disabled={analyzing}
-                    >
+                    <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
                         {analyzing ? 'Analyzing...' : 'Analyze Again'}
                     </ActionButton>
-                    <ActionButton
-                        variant='primary'
-                        onClick={closeModal}
-                        disabled={analyzing}
-                    >
+                    <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
                         Close
                     </ActionButton>
                 </div>

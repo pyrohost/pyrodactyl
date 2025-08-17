@@ -37,9 +37,9 @@ export const CRASH_INDICATORS = [
 ];
 
 const CRASH_REGEX = [
-    /hs_err_pid\d+\.log/i,                 // JVM fatal report files
+    /hs_err_pid\d+\.log/i, // JVM fatal report files
     /\bexit code[: ]\s*(1|137|139|143)\b/i, // common crash exit codes
-    /\boom-?killer?\b/i,                   // OOM killer
+    /\boom-?killer?\b/i, // OOM killer
 ];
 
 export const isCrashLine = (line: string): boolean => {
@@ -76,8 +76,8 @@ export const extractRelevantLogs = (
     const before = isMcReportHeader ? Math.max(linesBefore, 100) : linesBefore;
     const after = isMcReportHeader ? Math.max(linesAfter, 100) : linesAfter;
 
-    let start = Math.max(0, hit - before);
-    let end = Math.min(logs.length, hit + after);
+    const start = Math.max(0, hit - before);
+    const end = Math.min(logs.length, hit + after);
 
     let slice = logs.slice(start, end);
 
