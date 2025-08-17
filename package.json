@@ -111,6 +111,7 @@
         "lint:turbo": "turbo lint",
         "dev": "vite",
         "dev:docker": "cross-env APP_URL=\"http://localhost:3000\" vite",
+        "dev:vagrant": "vagrant up && pnpm run dev",
         "compose": "docker compose down && docker compose up -d",
         "compose:down": "docker compose down",
         "build": "vite build",
