@@ -185,9 +185,8 @@ class BackupController extends ClientApiController
    * to begin the process of finding (or downloading) the backup and unpacking it
    * over the server files.
    *
-   * If the "truncate" flag is passed through in this request then all the
-   * files that currently exist on the server will be deleted before restoring.
-   * Otherwise, the archive will simply be unpacked over the existing files.
+   * All files that currently exist on the server will be deleted before restoring
+   * the backup to ensure a clean restoration process.
    *
    * @throws \Throwable
    */
@@ -221,7 +220,7 @@ class BackupController extends ClientApiController
       ->subject($backup)
       ->property([
         'name' => $backup->name,
-        'truncate' => $request->input('truncate'),
+        'truncate' => true,
         'has_server_state' => $hasServerState,
       ]);
 
@@ -248,8 +247,8 @@ class BackupController extends ClientApiController
       $server->update(['status' => Server::STATUS_RESTORING_BACKUP]);
 
       try {
-        // Start the file restoration process on Wings
-        $this->daemonRepository->setServer($server)->restore($backup, $url, $request->input('truncate'));
+        // Start the file restoration process on Wings (always truncate for clean restore)
+        $this->daemonRepository->setServer($server)->restore($backup, $url);
         
         // If backup has server state, restore it immediately
         // This is safe to do now since we're in a transaction and the daemon request succeeded

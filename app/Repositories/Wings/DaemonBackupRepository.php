@@ -54,10 +54,11 @@ class DaemonBackupRepository extends DaemonRepository
 
     /**
      * Sends a request to Wings to begin restoring a backup for a server.
+     * Always truncates the directory for a clean restore.
      *
      * @throws DaemonConnectionException
      */
-    public function restore(Backup $backup, ?string $url = null, bool $truncate = false): ResponseInterface
+    public function restore(Backup $backup, ?string $url = null): ResponseInterface
     {
         Assert::isInstanceOf($this->server, Server::class);
 
@@ -67,7 +68,7 @@ class DaemonBackupRepository extends DaemonRepository
                 [
                     'json' => [
                         'adapter' => $backup->disk,
-                        'truncate_directory' => $truncate,
+                        'truncate_directory' => true,
                         'download_url' => $url ?? '',
                     ],
                 ]

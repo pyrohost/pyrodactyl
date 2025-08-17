@@ -14,6 +14,6 @@ class RestoreBackupRequest extends ClientApiRequest
 
     public function rules(): array
     {
-        return ['truncate' => 'required|boolean'];
+        return [];
     }
 }
