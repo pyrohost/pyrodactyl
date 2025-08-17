@@ -10,6 +10,7 @@ import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
+import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
@@ -31,6 +32,7 @@ interface Props {
 
 const AllocationRow = ({ allocation }: Props) => {
     const [loading, setLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [isEditingNotes, setIsEditingNotes] = useState(false);
     const [notesValue, setNotesValue] = useState(allocation.notes || '');
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -92,14 +94,14 @@ const AllocationRow = ({ allocation }: Props) => {
         if (!confirm('Are you sure you want to delete this allocation?')) return;
 
         clearFlashes();
-        setLoading(true);
+        setDeleteLoading(true);
 
         deleteServerAllocation(uuid, allocation.id)
             .then(() => {
                 mutate((data) => data?.filter((a) => a.id !== allocation.id), false);
             })
             .catch((error) => clearAndAddHttpError(error))
-            .then(() => setLoading(false));
+            .then(() => setDeleteLoading(false));
     };
 
     return (
@@ -151,7 +153,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
                                     <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
-                                        <FontAwesomeIcon icon={faCheck} className='w-3 h-3 mr-1' />
+                                        {loading ? <Spinner size='small' /> : <FontAwesomeIcon icon={faCheck} className='w-3 h-3 mr-1' />}
                                         Save
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
@@ -198,12 +200,12 @@ const AllocationRow = ({ allocation }: Props) => {
                             variant='danger'
                             size='sm'
                             onClick={deleteAllocation}
-                            disabled={allocation.isDefault || loading}
+                            disabled={allocation.isDefault || deleteLoading}
                             title={
                                 allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
                             }
                         >
-                            <FontAwesomeIcon icon={faTrash} className='w-3 h-3 mr-1' />
+                            {deleteLoading ? <Spinner size='small' /> : <FontAwesomeIcon icon={faTrash} className='w-3 h-3 mr-1' />}
                             <span className='hidden sm:inline'>Delete</span>
                         </ActionButton>
                     </Can>

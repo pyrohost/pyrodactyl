@@ -43,7 +43,7 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 title={`Remove ${subuser.username}?`}
                 buttonText={`Remove ${subuser.username}`}
                 visible={showConfirmation}
-                showSpinnerOverlay={loading}
+                loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >

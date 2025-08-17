@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import Spinner from '@/components/elements/Spinner';
 
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -94,7 +95,8 @@ const UpdatePasswordForm = () => {
                             </div>
                             <div className={`mt-6`}>
                                 <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
-                                    Update Password
+                                    {isSubmitting && <Spinner size='small' />}
+                                    {isSubmitting ? 'Updating...' : 'Update Password'}
                                 </ActionButton>
                             </div>
                         </Form>

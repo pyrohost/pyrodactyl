@@ -96,6 +96,7 @@ const SoftwareContainer = () => {
     const [showOperationModal, setShowOperationModal] = useState(false);
     const [showWipeConfirmation, setShowWipeConfirmation] = useState(false);
     const [wipeCountdown, setWipeCountdown] = useState(5);
+    const [wipeLoading, setWipeLoading] = useState(false);
 
     // Configuration options
     const [shouldBackup, setShouldBackup] = useState(false);
@@ -315,7 +316,8 @@ const SoftwareContainer = () => {
 
     const handleWipeConfirm = () => {
         setShowWipeConfirmation(false);
-        executeApplyChanges();
+        setWipeLoading(true);
+        executeApplyChanges().finally(() => setWipeLoading(false));
     };
 
     const handleOperationComplete = (operation: ServerOperation) => {
@@ -410,7 +412,9 @@ const SoftwareContainer = () => {
                         variant='primary'
                         onClick={() => setCurrentStep('select-game')}
                         className='w-full sm:w-auto'
+                        disabled={isLoading}
                     >
+                        {isLoading && <Spinner size='small' />}
                         Change Software
                     </ActionButton>
                 </div>
@@ -471,11 +475,17 @@ const SoftwareContainer = () => {
                             <button
                                 key={egg.attributes.uuid}
                                 onClick={() => handleEggSelection(egg)}
-                                className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation'
+                                disabled={isLoading}
+                                className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
                             >
-                                <h3 className='font-semibold text-neutral-200 mb-2 text-sm sm:text-base'>
-                                    {egg.attributes.name}
-                                </h3>
+                                <div className='flex items-center gap-2 mb-2'>
+                                    {isLoading && selectedEgg?.attributes.uuid === egg.attributes.uuid && (
+                                        <Spinner size='small' />
+                                    )}
+                                    <h3 className='font-semibold text-neutral-200 text-sm sm:text-base'>
+                                        {egg.attributes.name}
+                                    </h3>
+                                </div>
                                 {renderDescription(egg.attributes.description, `egg-${egg.attributes.uuid}`)}
                             </button>
                         ))}
@@ -697,9 +707,10 @@ const SoftwareContainer = () => {
                     <ActionButton
                         variant='primary'
                         onClick={proceedToReview}
-                        disabled={!eggPreview}
+                        disabled={!eggPreview || isLoading}
                         className='w-full sm:w-auto'
                     >
+                        {isLoading && <Spinner size='small' />}
                         Review Changes
                     </ActionButton>
                 </div>
@@ -833,7 +844,8 @@ const SoftwareContainer = () => {
                     >
                         Back to Configure
                     </ActionButton>
-                    <ActionButton variant='primary' onClick={applyChanges} className='w-full sm:w-auto'>
+                    <ActionButton variant='primary' onClick={applyChanges} disabled={isLoading} className='w-full sm:w-auto'>
+                        {isLoading && <Spinner size='small' />}
                         Apply Changes
                     </ActionButton>
                 </div>
@@ -892,6 +904,7 @@ const SoftwareContainer = () => {
                 onConfirmed={handleWipeConfirm}
                 onModalDismissed={() => setShowWipeConfirmation(false)}
                 disabled={wipeCountdown > 0}
+                loading={wipeLoading}
             >
                 <div className='space-y-4'>
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>

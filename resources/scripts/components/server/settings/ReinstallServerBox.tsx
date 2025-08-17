@@ -14,9 +14,11 @@ import { ServerContext } from '@/state/server';
 const ReinstallServerBox = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
     const reinstall = () => {
+        setLoading(true);
         clearFlashes('settings');
         reinstallServer(uuid)
             .then(() => {
@@ -31,7 +33,10 @@ const ReinstallServerBox = () => {
 
                 addFlash({ key: 'settings', type: 'error', message: httpErrorToHuman(error) });
             })
-            .then(() => setModalVisible(false));
+            .then(() => {
+                setLoading(false);
+                setModalVisible(false);
+            });
     };
 
     useEffect(() => {
@@ -46,6 +51,7 @@ const ReinstallServerBox = () => {
                 confirm={'Yes, reinstall server'}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
+                loading={loading}
             >
                 Your server will be stopped and some files may be deleted or modified during this process, are you sure
                 you wish to continue?

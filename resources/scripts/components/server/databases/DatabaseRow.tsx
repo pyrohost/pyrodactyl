@@ -12,6 +12,7 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
+import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
@@ -105,9 +106,10 @@ const DatabaseRow = ({ database }: Props) => {
                                     variant='danger'
                                     type={'submit'}
                                     className='min-w-full my-6'
-                                    disabled={!isValid}
+                                    disabled={!isValid || isSubmitting}
                                 >
-                                    Delete Database
+                                    {isSubmitting && <Spinner size='small' />}
+                                    {isSubmitting ? 'Deleting...' : 'Delete Database'}
                                 </ActionButton>
                             </Form>
                         </div>

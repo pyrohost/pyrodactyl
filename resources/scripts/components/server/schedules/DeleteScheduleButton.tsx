@@ -47,8 +47,8 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
                 title={'Delete Schedule'}
                 confirm={'Delete'}
                 onConfirmed={onDelete}
+                loading={isLoading}
             >
-                <SpinnerOverlay visible={isLoading} />
                 All tasks will be removed and any running processes will be terminated.
             </Dialog.Confirm>
             <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>

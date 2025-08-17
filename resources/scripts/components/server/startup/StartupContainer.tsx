@@ -203,6 +203,7 @@ const StartupContainer = () => {
                 confirm={'Yes, revert to default'}
                 onClose={() => setRevertModalVisible(false)}
                 onConfirmed={revertToEggDefault}
+                loading={loading}
             >
                 <div className='space-y-3'>
                     <p>
@@ -288,6 +289,7 @@ const StartupContainer = () => {
                                             disabled={commandLoading || !commandValue.trim()}
                                             className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                         >
+                                            {commandLoading && <Spinner size='small' />}
                                             {commandLoading ? 'Saving...' : 'Save Command'}
                                         </ActionButton>
                                     </InputSpinner>
@@ -472,6 +474,7 @@ const StartupContainer = () => {
                                                             disabled={loading}
                                                             className='w-full sm:w-auto text-amber-200 bg-linear-to-b from-amber-600/20 to-amber-700/20 border-amber-500/40 hover:from-amber-500/30 hover:to-amber-600/30 hover:border-amber-500/60 hover:text-amber-100'
                                                         >
+                                                            {loading && <Spinner size='small' />}
                                                             Revert to Default
                                                         </ActionButton>
                                                     </InputSpinner>

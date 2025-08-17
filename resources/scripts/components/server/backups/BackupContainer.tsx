@@ -13,6 +13,7 @@ import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import Pagination from '@/components/elements/Pagination';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import Spinner from '@/components/elements/Spinner';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import BackupRow from '@/components/server/backups/BackupRow';
 
@@ -72,7 +73,8 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                 </Can>
                 <div className={`flex justify-end mb-6`}>
                     <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
-                        Start backup
+                        {isSubmitting && <Spinner size='small' />}
+                        {isSubmitting ? 'Creating backup...' : 'Start backup'}
                     </ActionButton>
                 </div>
             </Form>

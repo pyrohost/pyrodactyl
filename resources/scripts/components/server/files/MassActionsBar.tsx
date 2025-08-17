@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
@@ -74,6 +75,7 @@ const MassActionsBar = () => {
                     confirm={'Delete'}
                     onClose={() => setShowConfirm(false)}
                     onConfirmed={onClickConfirmDeletion}
+                    loading={loading}
                 >
                     <p className={'mb-2'}>
                         Are you sure you want to delete&nbsp;
@@ -101,9 +103,16 @@ const MassActionsBar = () => {
                         }
                     >
                         <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <ActionButton onClick={() => setShowMove(true)}>Move</ActionButton>
-                            <ActionButton onClick={onClickCompress}>Archive</ActionButton>
-                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)}>
+                            <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
+                                {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
+                                Move
+                            </ActionButton>
+                            <ActionButton onClick={onClickCompress} disabled={loading}>
+                                {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
+                                Archive
+                            </ActionButton>
+                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
+                                {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
                                 Delete
                             </ActionButton>
                         </div>
