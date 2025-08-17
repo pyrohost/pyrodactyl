@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Dialog } from '@/components/elements/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,16 +9,23 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Dialog } from '@/components/elements/dialog';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
 import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
-import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http, { httpErrorToHuman } from '@/api/http';
-import { restoreServerBackup, renameServerBackup, deleteServerBackup, getServerBackupDownloadUrl } from '@/api/server/backups';
+import {
+    deleteServerBackup,
+    getServerBackupDownloadUrl,
+    renameServerBackup,
+    restoreServerBackup,
+} from '@/api/server/backups';
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -112,9 +117,9 @@ const BackupContextMenu = ({ backup }: Props) => {
                                 b.uuid !== backup.uuid
                                     ? b
                                     : {
-                                        ...b,
-                                        isLocked: !b.isLocked,
-                                    },
+                                          ...b,
+                                          isLocked: !b.isLocked,
+                                      },
                             ),
                         }),
                         false,
@@ -137,9 +142,9 @@ const BackupContextMenu = ({ backup }: Props) => {
                                 b.uuid !== backup.uuid
                                     ? b
                                     : {
-                                        ...b,
-                                        name: newName.trim(),
-                                    },
+                                          ...b,
+                                          name: newName.trim(),
+                                      },
                             ),
                         }),
                         false,
@@ -184,16 +189,10 @@ const BackupContextMenu = ({ backup }: Props) => {
 
     return (
         <>
-            <Dialog
-                open={modal === 'rename'}
-                onClose={() => setModal('')}
-                title="Rename Backup"
-            >
+            <Dialog open={modal === 'rename'} onClose={() => setModal('')} title='Rename Backup'>
                 <div className='space-y-4'>
                     <div>
-                        <label className='block text-sm font-medium text-zinc-200 mb-2'>
-                            Backup Name
-                        </label>
+                        <label className='block text-sm font-medium text-zinc-200 mb-2'>Backup Name</label>
                         <input
                             type='text'
                             value={newName}
@@ -226,16 +225,13 @@ const BackupContextMenu = ({ backup }: Props) => {
             >
                 This backup will no longer be protected from automated or accidental deletions.
             </Dialog.Confirm>
-            <Dialog
-                open={modal === 'restore'}
-                onClose={() => setModal('')}
-                title="Restore Backup"
-            >
+            <Dialog open={modal === 'restore'} onClose={() => setModal('')} title='Restore Backup'>
                 <div className='space-y-4'>
                     <div className='space-y-2'>
-                        <p className='text-sm font-medium text-zinc-200'>"{backup.name}"</p>
+                        <p className='text-sm font-medium text-zinc-200'>&quot;{backup.name}&quot;</p>
                         <p className='text-sm text-zinc-400'>
-                            Your server will be stopped during the restoration process. You will not be able to control the power state, access the file manager, or create additional backups until completed.
+                            Your server will be stopped during the restoration process. You will not be able to control
+                            the power state, access the file manager, or create additional backups until completed.
                         </p>
                     </div>
 
@@ -247,7 +243,8 @@ const BackupContextMenu = ({ backup }: Props) => {
                                     Destructive Action - Complete Server Restore
                                 </h4>
                                 <p className='text-xs text-red-300'>
-                                    All current files and server configuration will be deleted and replaced with the backup data. This action cannot be undone.
+                                    All current files and server configuration will be deleted and replaced with the
+                                    backup data. This action cannot be undone.
                                 </p>
                             </div>
                         </div>
@@ -258,15 +255,8 @@ const BackupContextMenu = ({ backup }: Props) => {
                     <ActionButton onClick={() => setModal('')} variant='secondary'>
                         Cancel
                     </ActionButton>
-                    <ActionButton
-                        onClick={() => doRestorationAction()}
-                        variant='danger'
-                        disabled={countdown > 0}
-                    >
-                        {countdown > 0
-                            ? `Delete All & Restore (${countdown}s)`
-                            : 'Delete All & Restore Backup'
-                        }
+                    <ActionButton onClick={() => doRestorationAction()} variant='danger' disabled={countdown > 0}>
+                        {countdown > 0 ? `Delete All & Restore (${countdown}s)` : 'Delete All & Restore Backup'}
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>
