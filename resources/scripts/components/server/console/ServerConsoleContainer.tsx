@@ -11,11 +11,11 @@ import Console from '@/components/server/console/Console';
 import PowerButtons from '@/components/server/console/PowerButtons';
 import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import StatGraphs from '@/components/server/console/StatGraphs';
+import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
 import { ServerContext } from '@/state/server';
 
 import Features from '@feature/Features';
-import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 

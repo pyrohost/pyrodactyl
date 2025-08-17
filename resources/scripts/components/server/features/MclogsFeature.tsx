@@ -1,4 +1,3 @@
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -8,10 +7,7 @@ import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 import HugeIconsCheck from '@/components/elements/hugeicons/Check';
-import HugeIconsChevronDown from '@/components/elements/hugeicons/ChevronDown';
-import HugeIconsChevronRight from '@/components/elements/hugeicons/ChevronRight';
 import HugeIconsLink from '@/components/elements/hugeicons/Link';
-import HugeIconsTerminal from '@/components/elements/hugeicons/Terminal';
 import { SocketEvent } from '@/components/server/events';
 
 import { debounce, isCrashLine } from '@/lib/mclogsUtils';
@@ -27,8 +23,6 @@ const CRASH_DETECTION_DEBOUNCE = 1500; // 1.5 seconds
 const MANUAL_ANALYZE_DEBOUNCE = 1000; // 1 second for manual clicks
 const LOG_FILE_PATH = '/logs/latest.log';
 const MAX_CONSOLE_BUFFER = 300;
-
-type Problem = MclogsInsight['analysis']['problems'][number];
 
 // Shared analysis logic hook
 const useLogAnalysis = () => {
@@ -151,8 +145,8 @@ const useLogAnalysis = () => {
             mountedRef.current = false;
             // Best-effort cancel if debounce util provides cancel()
             try {
-                (analyzeCrashDebounced as any)?.cancel?.();
-                (manualAnalyze as any)?.cancel?.();
+                (analyzeCrashDebounced as { cancel?: () => void })?.cancel?.();
+                (manualAnalyze as { cancel?: () => void })?.cancel?.();
             } catch {
                 // no-op
             }
@@ -282,7 +276,7 @@ const AnalysisModal = ({
             <Spinner size='large' />
             <h3 className='text-lg font-medium text-neutral-200 mt-4'>Analyzing Server Logs</h3>
             <p className='text-neutral-400 mt-2 text-center max-w-md'>
-                We're analyzing your server logs with mclo.gs to identify potential issues and provide solutions.
+                We&apos;re analyzing your server logs with mclo.gs to identify potential issues and provide solutions.
             </p>
         </div>
     );
@@ -298,7 +292,8 @@ const AnalysisModal = ({
                         <p className='text-neutral-300 mt-2'>{error}</p>
                         {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
                             <p className='text-neutral-400 mt-3 text-sm'>
-                                This usually means the log file doesn't exist yet. Try starting your server to generate logs first.
+                                This usually means the log file doesn&apos;t exist yet. Try starting your server to
+                                generate logs first.
                             </p>
                         )}
                     </div>
@@ -310,7 +305,7 @@ const AnalysisModal = ({
     // Render server information header
     const renderServerInfo = () => {
         if (!analysis) return null;
-        
+
         const information = analysis.analysis?.information ?? [];
         const serverVersion = analysis.version;
         const serverType = analysis.title;
@@ -329,13 +324,15 @@ const AnalysisModal = ({
                         Powered by mclo.gs
                     </a>
                 </div>
-                
+
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                     <div className='bg-blue-500/5 rounded-lg p-3'>
                         <p className='text-blue-400 font-medium text-sm mb-1'>Server Type</p>
-                        <p className='text-neutral-200'>{serverType} {serverVersion}</p>
+                        <p className='text-neutral-200'>
+                            {serverType} {serverVersion}
+                        </p>
                     </div>
-                    
+
                     {information.slice(0, 3).map((info, idx) => (
                         <div key={idx} className='bg-blue-500/5 rounded-lg p-3'>
                             <p className='text-blue-400 font-medium text-sm mb-1'>{info.label}</p>
@@ -343,7 +340,7 @@ const AnalysisModal = ({
                         </div>
                     ))}
                 </div>
-                
+
                 {information.length > 3 && (
                     <details className='mt-3'>
                         <summary className='text-blue-400 text-sm cursor-pointer hover:text-blue-300 transition-colors'>
@@ -366,9 +363,9 @@ const AnalysisModal = ({
     // Render errors section
     const renderErrors = () => {
         if (!analysis) return null;
-        
+
         const problems = analysis.analysis?.problems ?? [];
-        
+
         if (problems.length === 0) {
             return (
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
@@ -377,7 +374,8 @@ const AnalysisModal = ({
                         <div>
                             <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
                             <p className='text-neutral-300 mt-2'>
-                                No specific issues were found in your server logs. The crash may be due to configuration problems or resource limitations.
+                                No specific issues were found in your server logs. The crash may be due to configuration
+                                problems or resource limitations.
                             </p>
                         </div>
                     </div>
@@ -387,19 +385,20 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4 mb-6'>
-                <h3 className='text-lg font-semibold text-red-400'>
-                    Issues Found ({problems.length})
-                </h3>
-                
+                <h3 className='text-lg font-semibold text-red-400'>Issues Found ({problems.length})</h3>
+
                 <div className='space-y-3'>
                     {problems.map((problem, idx) => (
                         <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
                             <div className='p-4'>
                                 <div className='flex items-start gap-3'>
-                                    <HugeIconsAlert className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                                    <HugeIconsAlert
+                                        className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
+                                        fill='currentColor'
+                                    />
                                     <div className='flex-1'>
                                         <h4 className='font-medium text-red-400 mb-2'>{problem.message}</h4>
-                                        
+
                                         {!!problem.entry?.lines?.length && (
                                             <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
                                                 <p className='text-red-400/70 text-sm mb-2 font-medium'>Error Log:</p>
@@ -409,7 +408,9 @@ const AnalysisModal = ({
                                                             <span className='text-red-500/50 mr-3 select-none w-10 text-right flex-shrink-0'>
                                                                 {line.number}
                                                             </span>
-                                                            <span className='text-red-300/90 break-all'>{line.content}</span>
+                                                            <span className='text-red-300/90 break-all'>
+                                                                {line.content}
+                                                            </span>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -428,18 +429,16 @@ const AnalysisModal = ({
     // Render recommendations section
     const renderRecommendations = () => {
         if (!analysis) return null;
-        
+
         const problems = analysis.analysis?.problems ?? [];
-        const allSolutions = problems.flatMap(problem => problem.solutions || []);
-        
+        const allSolutions = problems.flatMap((problem) => problem.solutions || []);
+
         if (allSolutions.length === 0) return null;
 
         return (
             <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-green-400'>
-                    Recommended Solutions ({allSolutions.length})
-                </h3>
-                
+                <h3 className='text-lg font-semibold text-green-400'>Recommended Solutions ({allSolutions.length})</h3>
+
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
                     <div className='space-y-3'>
                         {allSolutions.map((solution, idx) => (
