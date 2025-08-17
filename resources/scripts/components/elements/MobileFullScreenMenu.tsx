@@ -1,20 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import HugeIconsHome from '@/components/elements/hugeicons/Home';
+
+import Can from '@/components/elements/Can';
 import HugeIconsApi from '@/components/elements/hugeicons/Api';
-import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
-import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import HugeIconsConsole from '@/components/elements/hugeicons/Console';
-import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsClock from '@/components/elements/hugeicons/Clock';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
-import HugeIconsPeople from '@/components/elements/hugeicons/People';
-import HugeIconsClock from '@/components/elements/hugeicons/Clock';
-import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsConsole from '@/components/elements/hugeicons/Console';
 import HugeIconsController from '@/components/elements/hugeicons/Controller';
+import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
+import HugeIconsHome from '@/components/elements/hugeicons/Home';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsPeople from '@/components/elements/hugeicons/People';
+import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsX from '@/components/elements/hugeicons/X';
-import Can from '@/components/elements/Can';
 
 interface MobileFullScreenMenuProps {
     isVisible: boolean;
@@ -26,23 +27,21 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
     if (!isVisible) return null;
 
     return (
-        <div className="lg:hidden fixed inset-0 z-9999 bg-[#1a1a1a] pt-16">
+        <div className='lg:hidden fixed inset-0 z-9999 bg-[#1a1a1a] pt-16'>
             {/* Close button */}
             <button
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-                aria-label="Close menu"
+                className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
+                aria-label='Close menu'
             >
-                <HugeIconsX fill="currentColor" />
+                <HugeIconsX fill='currentColor' />
             </button>
-            
+
             {/* Full screen navigation menu */}
-            <div className="h-full overflow-y-auto">
-                <div className="p-6">
+            <div className='h-full overflow-y-auto'>
+                <div className='p-6'>
                     {/* Menu items */}
-                    <nav className="space-y-2">
-                        {children}
-                    </nav>
+                    <nav className='space-y-2'>{children}</nav>
                 </div>
             </div>
         </div>
@@ -55,7 +54,12 @@ interface DashboardMobileMenuProps {
 }
 
 export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => {
-    const NavigationItem = ({ to, icon: Icon, children, end = false }: {
+    const NavigationItem = ({
+        to,
+        icon: Icon,
+        children,
+        end = false,
+    }: {
         to: string;
         icon: React.ComponentType<{ fill: string }>;
         children: React.ReactNode;
@@ -73,23 +77,23 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
             }
             onClick={onClose}
         >
-            <Icon fill="currentColor" />
-            <span className="text-lg font-medium">{children}</span>
+            <Icon fill='currentColor' />
+            <span className='text-lg font-medium'>{children}</span>
         </NavLink>
     );
 
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
-            <NavigationItem to="/" icon={HugeIconsHome} end>
+            <NavigationItem to='/' icon={HugeIconsHome} end>
                 Servers
             </NavigationItem>
-            <NavigationItem to="/account/api" icon={HugeIconsApi} end>
+            <NavigationItem to='/account/api' icon={HugeIconsApi} end>
                 API Keys
             </NavigationItem>
-            <NavigationItem to="/account/ssh" icon={HugeIconsSsh} end>
+            <NavigationItem to='/account/ssh' icon={HugeIconsSsh} end>
                 SSH Keys
             </NavigationItem>
-            <NavigationItem to="/account" icon={HugeIconsDashboardSettings} end>
+            <NavigationItem to='/account' icon={HugeIconsDashboardSettings} end>
                 Settings
             </NavigationItem>
         </MobileFullScreenMenu>
@@ -106,16 +110,21 @@ interface ServerMobileMenuProps {
     allocationLimit?: number;
 }
 
-export const ServerMobileMenu = ({ 
-    isVisible, 
-    onClose, 
+export const ServerMobileMenu = ({
+    isVisible,
+    onClose,
     serverId,
     eggName,
     databaseLimit = 0,
     backupLimit = 0,
-    allocationLimit = 0
+    allocationLimit = 0,
 }: ServerMobileMenuProps) => {
-    const NavigationItem = ({ to, icon: Icon, children, end = false }: {
+    const NavigationItem = ({
+        to,
+        icon: Icon,
+        children,
+        end = false,
+    }: {
         to: string;
         icon: React.ComponentType<{ fill: string }>;
         children: React.ReactNode;
@@ -133,8 +142,8 @@ export const ServerMobileMenu = ({
             }
             onClick={onClose}
         >
-            <Icon fill="currentColor" />
-            <span className="text-lg font-medium">{children}</span>
+            <Icon fill='currentColor' />
+            <span className='text-lg font-medium'>{children}</span>
         </NavLink>
     );
 
@@ -147,7 +156,7 @@ export const ServerMobileMenu = ({
             <NavigationItem to={`/server/${serverId}`} icon={HugeIconsHome} end>
                 Home
             </NavigationItem>
-            
+
             {eggName && !eggName?.includes(blank_egg_prefix) && (
                 <>
                     <Can action={'file.*'} matchAny>
@@ -155,7 +164,7 @@ export const ServerMobileMenu = ({
                             Files
                         </NavigationItem>
                     </Can>
-                    
+
                     {databaseLimit > 0 && (
                         <Can action={'database.*'} matchAny>
                             <NavigationItem to={`/server/${serverId}/databases`} icon={HugeIconsDatabase} end>
@@ -163,7 +172,7 @@ export const ServerMobileMenu = ({
                             </NavigationItem>
                         </Can>
                     )}
-                    
+
                     {backupLimit > 0 && (
                         <Can action={'backup.*'} matchAny>
                             <NavigationItem to={`/server/${serverId}/backups`} icon={HugeIconsCloudUp} end>
@@ -171,7 +180,7 @@ export const ServerMobileMenu = ({
                             </NavigationItem>
                         </Can>
                     )}
-                    
+
                     {allocationLimit > 0 && (
                         <Can action={'allocation.*'} matchAny>
                             <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
@@ -179,31 +188,34 @@ export const ServerMobileMenu = ({
                             </NavigationItem>
                         </Can>
                     )}
-                    
+
                     <Can action={'user.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/users`} icon={HugeIconsPeople} end>
                             Users
                         </NavigationItem>
                     </Can>
-                    
-                    <Can action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']} matchAny>
+
+                    <Can
+                        action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']}
+                        matchAny
+                    >
                         <NavigationItem to={`/server/${serverId}/startup`} icon={HugeIconsConsole} end>
                             Startup
                         </NavigationItem>
                     </Can>
-                    
+
                     <Can action={'schedule.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/schedules`} icon={HugeIconsClock}>
                             Schedules
                         </NavigationItem>
                     </Can>
-                    
+
                     <Can action={['settings.*', 'file.sftp']} matchAny>
                         <NavigationItem to={`/server/${serverId}/settings`} icon={HugeIconsDashboardSettings} end>
                             Settings
                         </NavigationItem>
                     </Can>
-                    
+
                     <Can action={['activity.*', 'activity.read']} matchAny>
                         <NavigationItem to={`/server/${serverId}/activity`} icon={HugeIconsPencil} end>
                             Activity
@@ -211,7 +223,7 @@ export const ServerMobileMenu = ({
                     </Can>
                 </>
             )}
-            
+
             <Can action={'startup.software'}>
                 <NavigationItem to={`/server/${serverId}/shell`} icon={HugeIconsController} end>
                     Software

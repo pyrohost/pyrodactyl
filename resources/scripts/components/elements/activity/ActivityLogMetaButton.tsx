@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 import HugeIconsCode from '@/components/elements/hugeicons/Code';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 

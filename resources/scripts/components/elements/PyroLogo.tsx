@@ -1,7 +1,9 @@
 // million-ignore
 const Logo = ({ className, uniqueId }: { className?: string; uniqueId?: string } = {}) => {
-    const gradientId = uniqueId ? `paint0_radial_${uniqueId}` : `paint0_radial_${Math.random().toString(36).substr(2, 9)}`;
-    
+    const gradientId = uniqueId
+        ? `paint0_radial_${uniqueId}`
+        : `paint0_radial_${Math.random().toString(36).substr(2, 9)}`;
+
     return (
         <svg
             xmlns='http://www.w3.org/2000/svg'

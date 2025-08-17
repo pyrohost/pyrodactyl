@@ -78,7 +78,8 @@ const SoftwareContainer = () => {
     const currentEgg = serverData?.egg;
     //const originalEgg = currentEgg;
     const currentEggName =
-        nests && currentEgg &&
+        nests &&
+        currentEgg &&
         nests
             .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg))
             ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === currentEgg)?.attributes.name;
@@ -845,7 +846,12 @@ const SoftwareContainer = () => {
                     >
                         Back to Configure
                     </ActionButton>
-                    <ActionButton variant='primary' onClick={applyChanges} disabled={isLoading} className='w-full sm:w-auto'>
+                    <ActionButton
+                        variant='primary'
+                        onClick={applyChanges}
+                        disabled={isLoading}
+                        className='w-full sm:w-auto'
+                    >
                         {isLoading && <Spinner size='small' />}
                         Apply Changes
                     </ActionButton>

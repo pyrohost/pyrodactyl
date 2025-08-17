@@ -6,8 +6,6 @@ import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
-
 import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import HugeIconsPower from '@/components/elements/hugeicons/Power';
@@ -15,6 +13,7 @@ import HugeIconsQuestion from '@/components/elements/hugeicons/Question';
 import HugeIconsTerminal from '@/components/elements/hugeicons/Terminal';
 import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 import { HugeIconProps } from '@/components/elements/hugeicons/props';
+import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';

@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
-import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
-import HugeIconsUser from '@/components/elements/hugeicons/User';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
+import HugeIconsUser from '@/components/elements/hugeicons/User';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import UserRow from '@/components/server/users/UserRow';
 

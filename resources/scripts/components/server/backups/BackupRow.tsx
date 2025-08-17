@@ -2,15 +2,16 @@ import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
 import Spinner from '@/components/elements/Spinner';
+import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
+import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
-import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 
 import { bytesToString } from '@/lib/formatters';
 
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
+
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import BackupContextMenu from './BackupContextMenu';
@@ -65,9 +66,7 @@ const BackupRow = ({ backup }: Props) => {
                             Locked
                         </span>
                     </div>
-                    {backup.checksum && (
-                        <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>
-                    )}
+                    {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
                 </div>
 
                 {/* Size Info */}

@@ -7,16 +7,16 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
-import PermissionRow from '@/components/server/users/PermissionRow';
 import HugeIconsCalendar from '@/components/elements/hugeicons/Calendar';
 import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
-import HugeIconsSettings from '@/components/elements/hugeicons/Settings';
 import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsFile from '@/components/elements/hugeicons/File';
 import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
 import HugeIconsServer from '@/components/elements/hugeicons/Server';
+import HugeIconsSettings from '@/components/elements/hugeicons/Settings';
 import HugeIconsShield from '@/components/elements/hugeicons/Shield';
 import HugeIconsUser from '@/components/elements/hugeicons/User';
+import PermissionRow from '@/components/server/users/PermissionRow';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 
@@ -208,7 +208,12 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                 <div className='flex items-start gap-3 flex-1 min-w-0'>
                                                     {(() => {
                                                         const Icon = getPermissionIcon(key);
-                                                        return <Icon fill='currentColor' className='w-4 h-4 text-brand flex-shrink-0 mt-0.5' />;
+                                                        return (
+                                                            <Icon
+                                                                fill='currentColor'
+                                                                className='w-4 h-4 text-brand flex-shrink-0 mt-0.5'
+                                                            />
+                                                        );
                                                     })()}
                                                     <div className='flex-1 min-w-0'>
                                                         <h4 className='font-medium text-zinc-200 capitalize'>{key}</h4>

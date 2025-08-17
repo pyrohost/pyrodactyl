@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
-import HugeIconsArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import HugeIconsArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import { ServerContext } from '@/state/server';

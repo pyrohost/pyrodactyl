@@ -7,10 +7,10 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal from '@/components/elements/Modal';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 

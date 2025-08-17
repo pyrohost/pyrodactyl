@@ -187,7 +187,10 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     {timezoneInfo.isDifferent && (
                         <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
                             <div className={'flex items-start gap-3'}>
-                                <HugeIconsAlert fill='currentColor' className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'} />
+                                <HugeIconsAlert
+                                    fill='currentColor'
+                                    className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
+                                />
                                 <div className={'text-sm'}>
                                     <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
                                     <p className={'text-blue-200/80 text-xs mb-2'}>

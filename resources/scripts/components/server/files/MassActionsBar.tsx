@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import Spinner from '@/components/elements/Spinner';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';

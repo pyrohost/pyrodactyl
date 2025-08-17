@@ -52,7 +52,7 @@ const RotatePasswordButton = ({
     return (
         <ActionButton onClick={rotate} className='flex-none'>
             <div className='flex justify-center items-center h-4 w-4'>
-                {!loading && <HugeIconsRefresh className="h-4 w-4" />}
+                {!loading && <HugeIconsRefresh className='h-4 w-4' />}
                 {loading && <Spinner size={'small'} />}
             </div>
         </ActionButton>

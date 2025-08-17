@@ -2,11 +2,11 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import { useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 
+import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
+import HugeIconsDownload from '@/components/elements/hugeicons/Download';
 import ChartBlock from '@/components/server/console/ChartBlock';
 import { useChart, useChartTickLabel } from '@/components/server/console/chart';
 import { SocketEvent } from '@/components/server/events';
-import HugeIconsDownload from '@/components/elements/hugeicons/Download';
-import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 
 import { bytesToString } from '@/lib/formatters';
 import { hexToRgba } from '@/lib/helpers';
@@ -111,7 +111,10 @@ const StatGraphs = () => {
                             <Tooltip.Root delayDuration={200}>
                                 <Tooltip.Trigger asChild>
                                     <div className='flex items-center cursor-default'>
-                                        <HugeIconsDownload fill='currentColor' className='mr-2 w-4 h-4 text-yellow-400' />
+                                        <HugeIconsDownload
+                                            fill='currentColor'
+                                            className='mr-2 w-4 h-4 text-yellow-400'
+                                        />
                                     </div>
                                 </Tooltip.Trigger>
                                 <Tooltip.Portal>

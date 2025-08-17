@@ -22,7 +22,9 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
             <div
                 className={clsx(
                     'flex',
-                    direction === 'row' ? 'flex-col sm:flex-row sm:items-center' : 'flex-col sm:flex-row sm:items-start',
+                    direction === 'row'
+                        ? 'flex-col sm:flex-row sm:items-center'
+                        : 'flex-col sm:flex-row sm:items-start',
                     'justify-between',
                     'gap-4',
                 )}
@@ -32,11 +34,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
                         {title}
                     </h1>
                 </div>
-                {titleChildren && (
-                    <div className='flex-shrink-0 w-full sm:w-auto'>
-                        {titleChildren}
-                    </div>
-                )}
+                {titleChildren && <div className='flex-shrink-0 w-full sm:w-auto'>{titleChildren}</div>}
             </div>
             {direction === 'column' && children && <div className='-mt-2 md:-mt-4'>{children}</div>}
         </HeaderWrapper>

@@ -25,7 +25,9 @@ const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed,
                     <ActionButton variant='secondary' onClick={() => dismiss()}>
                         Cancel
                     </ActionButton>
-                    <ActionButton onClick={() => onConfirmed()} disabled={disabled}>{buttonText}</ActionButton>
+                    <ActionButton onClick={() => onConfirmed()} disabled={disabled}>
+                        {buttonText}
+                    </ActionButton>
                 </div>
             </div>
         </>

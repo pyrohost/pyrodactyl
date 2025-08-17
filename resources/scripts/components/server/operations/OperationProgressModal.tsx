@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { Dialog } from '@/components/elements/dialog';
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
+import { Dialog } from '@/components/elements/dialog';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 
 import {
@@ -141,13 +141,11 @@ const OperationProgressModal: React.FC<Props> = ({
                 {operationId && (
                     <div className='flex justify-center'>
                         <div className='px-3 py-1.5 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
-                            <p className='text-xs text-zinc-400 font-mono'>
-                                ID: {formatOperationId(operationId)}
-                            </p>
+                            <p className='text-xs text-zinc-400 font-mono'>ID: {formatOperationId(operationId)}</p>
                         </div>
                     </div>
                 )}
-                
+
                 {/* Error State */}
                 {error ? (
                     <div className='space-y-4'>
@@ -174,9 +172,7 @@ const OperationProgressModal: React.FC<Props> = ({
 
                         {/* Message Box */}
                         <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
-                            <p className='text-sm text-zinc-300 text-center'>
-                                {operation.message || 'Processing...'}
-                            </p>
+                            <p className='text-sm text-zinc-300 text-center'>{operation.message || 'Processing...'}</p>
                         </div>
 
                         {/* Progress Bar for Active Operations */}
@@ -218,9 +214,7 @@ const OperationProgressModal: React.FC<Props> = ({
                             <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                                 <div className='flex items-center justify-center space-x-2 mb-2'>
                                     <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400' />
-                                    <p className='text-sm text-red-300 font-medium'>
-                                        Operation failed
-                                    </p>
+                                    <p className='text-sm text-red-300 font-medium'>Operation failed</p>
                                 </div>
                                 {operation.message && (
                                     <p className='text-xs text-red-200 text-center'>{operation.message}</p>

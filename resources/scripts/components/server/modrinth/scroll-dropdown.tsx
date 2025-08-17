@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import HugeIconsCheck from '@/components/elements/hugeicons/Check';
 import HugeIconsChevronDown from '@/components/elements/hugeicons/ChevronDown';
 import HugeIconsChevronUp from '@/components/elements/hugeicons/ChevronUp';
+
+import { cn } from '@/lib/utils';
 
 export interface ScrollItem {
     id: string | number;

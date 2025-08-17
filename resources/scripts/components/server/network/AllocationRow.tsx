@@ -10,13 +10,13 @@ import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
-import { PageListItem } from '@/components/elements/pages/PageList';
 import HugeIconsCheck from '@/components/elements/hugeicons/Check';
 import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 import HugeIconsCrown from '@/components/elements/hugeicons/Crown';
 import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
-import HugeIconsX from '@/components/elements/hugeicons/X';
 import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
+import HugeIconsX from '@/components/elements/hugeicons/X';
+import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { ip } from '@/lib/formatters';
 
@@ -157,7 +157,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
                                     <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
-                                        {loading ? <Spinner size='small' /> : <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />}
+                                        {loading ? (
+                                            <Spinner size='small' />
+                                        ) : (
+                                            <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />
+                                        )}
                                         Save
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
@@ -209,7 +213,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                 allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
                             }
                         >
-                            {deleteLoading ? <Spinner size='small' /> : <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />}
+                            {deleteLoading ? (
+                                <Spinner size='small' />
+                            ) : (
+                                <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />
+                            )}
                             <span className='hidden sm:inline'>Delete</span>
                         </ActionButton>
                     </Can>

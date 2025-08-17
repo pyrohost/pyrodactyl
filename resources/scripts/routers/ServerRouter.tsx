@@ -18,8 +18,8 @@ import {
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import MobileTopBar from '@/components/elements/MobileTopBar';
 import { ServerMobileMenu } from '@/components/elements/MobileFullScreenMenu';
+import MobileTopBar from '@/components/elements/MobileTopBar';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
@@ -342,7 +342,7 @@ const ServerRouter = () => {
 
                     <div className='flex flex-row w-full lg:pt-0 pt-16'>
                         {/* Desktop Sidebar */}
-                        <MainSidebar className="hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]">
+                        <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]'>
                             <div
                                 className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                                 style={{
@@ -363,7 +363,7 @@ const ServerRouter = () => {
                             />
                             <div className='flex flex-row items-center justify-between h-8'>
                                 <NavLink to={'/'} className='flex shrink-0 h-8 w-fit'>
-                                    <Logo uniqueId="server-desktop-sidebar" />
+                                    <Logo uniqueId='server-desktop-sidebar' />
                                 </NavLink>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -418,17 +418,9 @@ const ServerRouter = () => {
                                                 <p>Files</p>
                                             </NavLink>
                                         </Can>
-                                        <DatabasesSidebarItem
-                                            id={id}
-                                            ref={NavigationDatabases}
-                                            onClick={() => {}}
-                                        />
+                                        <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => {}} />
                                         <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => {}} />
-                                        <NetworkingSidebarItem
-                                            id={id}
-                                            ref={NavigationNetworking}
-                                            onClick={() => {}}
-                                        />
+                                        <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => {}} />
                                         <Can action={'user.*'} matchAny>
                                             <NavLink
                                                 className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -519,7 +511,7 @@ const ServerRouter = () => {
                             </ul>
                         </MainSidebar>
 
-                        <MainWrapper className="w-full">
+                        <MainWrapper className='w-full'>
                             <CommandMenu />
                             <InstallListener />
                             <TransferListener />

@@ -1,10 +1,11 @@
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import HugeIconsCheck from '@/components/elements/hugeicons/Check';
 import HugeIconsChevronRight from '@/components/elements/hugeicons/ChevronRight';
 import HugeIconsDotFilled from '@/components/elements/hugeicons/DotFilled';
+
+import { cn } from '@/lib/utils';
 
 const ContextMenu = ContextMenuPrimitive.Root;
 

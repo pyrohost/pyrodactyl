@@ -2,16 +2,16 @@ import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
-import HugeIconsDownload from '@/components/elements/hugeicons/Download';
-import HugeIconsFilter from '@/components/elements/hugeicons/Filter';
-import HugeIconsHistory from '@/components/elements/hugeicons/History';
-import HugeIconsSearch from '@/components/elements/hugeicons/Search';
-import HugeIconsX from '@/components/elements/hugeicons/X';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Select from '@/components/elements/Select';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
+import HugeIconsDownload from '@/components/elements/hugeicons/Download';
+import HugeIconsFilter from '@/components/elements/hugeicons/Filter';
+import HugeIconsHistory from '@/components/elements/hugeicons/History';
+import HugeIconsSearch from '@/components/elements/hugeicons/Search';
+import HugeIconsX from '@/components/elements/hugeicons/X';
 import { Input } from '@/components/elements/inputs';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
 
@@ -223,7 +223,10 @@ const ServerActivityLogContainer = () => {
                                 <div>
                                     <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
                                     <div className='relative'>
-                                        <HugeIconsSearch className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10' fill='currentColor' />
+                                        <HugeIconsSearch
+                                            className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
+                                            fill='currentColor'
+                                        />
                                         <Input.Text
                                             type='text'
                                             placeholder='Search events, IPs, users...'

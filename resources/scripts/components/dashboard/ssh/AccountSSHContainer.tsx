@@ -8,16 +8,16 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import HugeIconsEye from '@/components/elements/hugeicons/Eye';
-import HugeIconsEyeSlash from '@/components/elements/hugeicons/EyeSlash';
-import HugeIconsKey from '@/components/elements/hugeicons/Key';
-import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
-import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 import Input from '@/components/elements/Input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsEye from '@/components/elements/hugeicons/Eye';
+import HugeIconsEyeSlash from '@/components/elements/hugeicons/EyeSlash';
+import HugeIconsKey from '@/components/elements/hugeicons/Key';
+import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
@@ -234,9 +234,15 @@ const AccountSSHContainer = () => {
                                                                 className='p-1 text-zinc-400 hover:text-zinc-300'
                                                             >
                                                                 {showKeys[key.fingerprint] ? (
-                                                                    <HugeIconsEyeSlash className='w-3 h-3' fill='currentColor' />
+                                                                    <HugeIconsEyeSlash
+                                                                        className='w-3 h-3'
+                                                                        fill='currentColor'
+                                                                    />
                                                                 ) : (
-                                                                    <HugeIconsEye className='w-3 h-3' fill='currentColor' />
+                                                                    <HugeIconsEye
+                                                                        className='w-3 h-3'
+                                                                        fill='currentColor'
+                                                                    />
                                                                 )}
                                                             </ActionButton>
                                                         </div>

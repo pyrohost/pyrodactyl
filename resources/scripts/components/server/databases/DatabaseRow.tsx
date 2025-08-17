@@ -11,11 +11,11 @@ import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import { PageListItem } from '@/components/elements/pages/PageList';
-import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import HugeIconsEye from '@/components/elements/hugeicons/Eye';
 import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
+import { PageListItem } from '@/components/elements/pages/PageList';
+import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
