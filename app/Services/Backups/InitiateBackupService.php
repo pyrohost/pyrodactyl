@@ -12,6 +12,7 @@ use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Repositories\Wings\DaemonBackupRepository;
 use Pterodactyl\Exceptions\Service\Backup\TooManyBackupsException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Carbon\CarbonImmutable;
 
 class InitiateBackupService
 {
@@ -28,6 +29,7 @@ class InitiateBackupService
         private DaemonBackupRepository $daemonBackupRepository,
         private DeleteBackupService $deleteBackupService,
         private BackupManager $backupManager,
+        private ServerStateService $serverStateService,
     ) {
     }
 
@@ -110,6 +112,8 @@ class InitiateBackupService
             $backupName = preg_replace('/[^a-zA-Z0-9\s\-_\.]/', '', $backupName);
             $backupName = substr($backupName, 0, 191); // Limit to database field length
             
+            $serverState = $this->serverStateService->captureServerState($server);
+            
             /** @var Backup $backup */
             $backup = $this->repository->create([
                 'server_id' => $server->id,
@@ -118,6 +122,7 @@ class InitiateBackupService
                 'ignored_files' => array_values($this->ignoredFiles ?? []),
                 'disk' => $this->backupManager->getDefaultAdapter(),
                 'is_locked' => $this->isLocked,
+                'server_state' => $serverState,
             ], true, true);
 
             try {
