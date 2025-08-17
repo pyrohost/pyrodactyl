@@ -115,6 +115,47 @@ class BackupController extends ClientApiController
   }
 
   /**
+   * Rename a backup.
+   *
+   * @throws AuthorizationException
+   */
+  public function rename(Request $request, Server $server, Backup $backup): array
+  {
+    if (!$request->user()->can(Permission::ACTION_BACKUP_DELETE, $server)) {
+      throw new AuthorizationException();
+    }
+
+    $request->validate([
+      'name' => 'required|string|min:1|max:191',
+    ]);
+
+    $oldName = $backup->name;
+    $newName = trim($request->input('name'));
+    
+    // Sanitize backup name to prevent injection
+    $newName = preg_replace('/[^a-zA-Z0-9\s\-_\.\(\)→:,]/', '', $newName);
+    $newName = substr($newName, 0, 191); // Limit to database field length
+    
+    if (empty($newName)) {
+      throw new BadRequestHttpException('Backup name cannot be empty after sanitization.');
+    }
+
+    $backup->update(['name' => $newName]);
+
+    Activity::event('server:backup.rename')
+      ->subject($backup)
+      ->property([
+        'old_name' => $oldName,
+        'new_name' => $newName,
+      ])
+      ->log();
+
+    return $this->fractal->item($backup)
+      ->transformWith($this->getTransformer(BackupTransformer::class))
+      ->toArray();
+  }
+
+  /**
    * Returns information about a single backup.
    *
    * @throws AuthorizationException

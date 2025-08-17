@@ -115,7 +115,23 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
     {
         $operation->updateProgress('Creating backup before proceeding...');
         
-        $backupName = "Software Change Backup - " . now()->format('Y-m-d H:i:s');
+        // Get current and target egg names for better backup naming
+        $currentEgg = $this->server->egg;
+        $targetEgg = Egg::find($this->eggId);
+        
+        // Create descriptive backup name
+        $backupName = sprintf(
+            'Pre-Change Backup: %s → %s (%s)',
+            $currentEgg->name ?? 'Unknown',
+            $targetEgg->name ?? 'Unknown',
+            now()->format('M j, Y g:i A')
+        );
+        
+        // Limit backup name length to prevent database issues
+        if (strlen($backupName) > 190) {
+            $backupName = substr($backupName, 0, 187) . '...';
+        }
+        
         $backup = $backupService
             ->setIsLocked(false)
             ->handle($this->server, $backupName);

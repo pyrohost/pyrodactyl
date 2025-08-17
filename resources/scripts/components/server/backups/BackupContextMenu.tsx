@@ -4,16 +4,23 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenu';
 import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
 import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
+import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 
 import http, { httpErrorToHuman } from '@/api/http';
-import { restoreServerBackup } from '@/api/server/backups';
-import deleteBackup from '@/api/server/backups/deleteBackup';
-import getBackupDownloadUrl from '@/api/server/backups/getBackupDownloadUrl';
+import { restoreServerBackup, renameServerBackup, deleteServerBackup, getServerBackupDownloadUrl } from '@/api/server/backups';
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -31,13 +38,14 @@ const BackupContextMenu = ({ backup }: Props) => {
     const [modal, setModal] = useState('');
     const [loading, setLoading] = useState(false);
     const [countdown, setCountdown] = useState(5);
+    const [newName, setNewName] = useState(backup.name);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { mutate } = getServerBackups();
 
     const doDownload = () => {
         setLoading(true);
         clearFlashes('backups');
-        getBackupDownloadUrl(uuid, backup.uuid)
+        getServerBackupDownloadUrl(uuid, backup.uuid)
             .then((url) => {
                 // @ts-expect-error this is valid
                 window.location = url;
@@ -52,7 +60,7 @@ const BackupContextMenu = ({ backup }: Props) => {
     const doDeletion = () => {
         setLoading(true);
         clearFlashes('backups');
-        deleteBackup(uuid, backup.uuid)
+        deleteServerBackup(uuid, backup.uuid)
             .then(
                 async () =>
                     await mutate(
@@ -104,9 +112,9 @@ const BackupContextMenu = ({ backup }: Props) => {
                                 b.uuid !== backup.uuid
                                     ? b
                                     : {
-                                          ...b,
-                                          isLocked: !b.isLocked,
-                                      },
+                                        ...b,
+                                        isLocked: !b.isLocked,
+                                    },
                             ),
                         }),
                         false,
@@ -114,6 +122,37 @@ const BackupContextMenu = ({ backup }: Props) => {
             )
             .catch((error) => alert(httpErrorToHuman(error)))
             .then(() => setModal(''));
+    };
+
+    const doRename = () => {
+        setLoading(true);
+        clearFlashes('backups');
+        renameServerBackup(uuid, backup.uuid, newName.trim())
+            .then(
+                async () =>
+                    await mutate(
+                        (data) => ({
+                            ...data!,
+                            items: data!.items.map((b) =>
+                                b.uuid !== backup.uuid
+                                    ? b
+                                    : {
+                                        ...b,
+                                        name: newName.trim(),
+                                    },
+                            ),
+                        }),
+                        false,
+                    ),
+            )
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'backups', error });
+            })
+            .then(() => {
+                setLoading(false);
+                setModal('');
+            });
     };
 
     // Countdown effect for restore modal
@@ -136,8 +175,49 @@ const BackupContextMenu = ({ backup }: Props) => {
         }
     }, [modal]);
 
+    // Reset name when modal opens
+    useEffect(() => {
+        if (modal === 'rename') {
+            setNewName(backup.name);
+        }
+    }, [modal, backup.name]);
+
     return (
         <>
+            <Dialog
+                open={modal === 'rename'}
+                onClose={() => setModal('')}
+                title="Rename Backup"
+            >
+                <div className='space-y-4'>
+                    <div>
+                        <label className='block text-sm font-medium text-zinc-200 mb-2'>
+                            Backup Name
+                        </label>
+                        <input
+                            type='text'
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                            placeholder='Enter backup name...'
+                            maxLength={191}
+                        />
+                    </div>
+                </div>
+
+                <Dialog.Footer>
+                    <ActionButton onClick={() => setModal('')} variant='secondary'>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton
+                        onClick={doRename}
+                        variant='primary'
+                        disabled={!newName.trim() || newName.trim() === backup.name}
+                    >
+                        Rename Backup
+                    </ActionButton>
+                </Dialog.Footer>
+            </Dialog>
             <Dialog.Confirm
                 open={modal === 'unlock'}
                 onClose={() => setModal('')}
@@ -158,7 +238,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                             Your server will be stopped during the restoration process. You will not be able to control the power state, access the file manager, or create additional backups until completed.
                         </p>
                     </div>
-                    
+
                     <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                         <div className='flex items-start space-x-3'>
                             <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
@@ -201,56 +281,55 @@ const BackupContextMenu = ({ backup }: Props) => {
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
-                <div className='flex flex-wrap gap-2'>
-                    <Can action={'backup.download'}>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                         <ActionButton
                             variant='secondary'
                             size='sm'
-                            onClick={doDownload}
                             disabled={loading}
-                            className='flex items-center gap-2'
+                            className='flex items-center justify-center w-8 h-8 p-0 hover:bg-zinc-700'
                         >
-                            <HugeIconsFileDownload className='h-4 w-4' fill='currentColor' />
-                            <span className='hidden sm:inline'>Download</span>
+                            <HugeIconsHamburger className='h-4 w-4' fill='currentColor' />
                         </ActionButton>
-                    </Can>
-                    <Can action={'backup.restore'}>
-                        <ActionButton
-                            variant='secondary'
-                            size='sm'
-                            onClick={() => setModal('restore')}
-                            disabled={loading}
-                            className='flex items-center gap-2'
-                        >
-                            <HugeIconsCloudUp className='h-4 w-4' fill='currentColor' />
-                            <span className='hidden sm:inline'>Restore</span>
-                        </ActionButton>
-                    </Can>
-                    <Can action={'backup.delete'}>
-                        <ActionButton
-                            variant='secondary'
-                            size='sm'
-                            onClick={onLockToggle}
-                            disabled={loading}
-                            className='flex items-center gap-2'
-                        >
-                            <HugeIconsFileSecurity className='h-4 w-4' fill='currentColor' />
-                            <span className='hidden sm:inline'>{backup.isLocked ? 'Unlock' : 'Lock'}</span>
-                        </ActionButton>
-                        {!backup.isLocked && (
-                            <ActionButton
-                                variant='danger'
-                                size='sm'
-                                onClick={() => setModal('delete')}
-                                disabled={loading}
-                                className='flex items-center gap-2'
-                            >
-                                <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
-                                <span className='hidden sm:inline'>Delete</span>
-                            </ActionButton>
-                        )}
-                    </Can>
-                </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end' className='w-48'>
+                        <Can action={'backup.download'}>
+                            <DropdownMenuItem onClick={doDownload} className='cursor-pointer'>
+                                <HugeIconsFileDownload className='h-4 w-4 mr-2' fill='currentColor' />
+                                Download
+                            </DropdownMenuItem>
+                        </Can>
+                        <Can action={'backup.restore'}>
+                            <DropdownMenuItem onClick={() => setModal('restore')} className='cursor-pointer'>
+                                <HugeIconsCloudUp className='h-4 w-4 mr-2' fill='currentColor' />
+                                Restore
+                            </DropdownMenuItem>
+                        </Can>
+                        <Can action={'backup.delete'}>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setModal('rename')} className='cursor-pointer'>
+                                <HugeIconsPencil className='h-4 w-4 mr-2' fill='currentColor' />
+                                Rename
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={onLockToggle} className='cursor-pointer'>
+                                <HugeIconsFileSecurity className='h-4 w-4 mr-2' fill='currentColor' />
+                                {backup.isLocked ? 'Unlock' : 'Lock'}
+                            </DropdownMenuItem>
+                            {!backup.isLocked && (
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => setModal('delete')}
+                                        className='cursor-pointer text-red-400 focus:text-red-300'
+                                    >
+                                        <HugeIconsDelete className='h-4 w-4 mr-2' fill='currentColor' />
+                                        Delete
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </Can>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             ) : (
                 <ActionButton
                     variant='danger'
