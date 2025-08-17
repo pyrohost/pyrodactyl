@@ -94,6 +94,22 @@
                             </p>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="exclude_from_resource_calculation" class="control-label">Resource Calculation</label>
+                        <div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="pResourceCalcIncluded" value="0" name="exclude_from_resource_calculation" @if(!$server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcIncluded">Included</label>
+                            </div>
+                            <div class="radio radio-warning radio-inline">
+                                <input type="radio" id="pResourceCalcExcluded" value="1" name="exclude_from_resource_calculation" @if($server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcExcluded">Excluded</label>
+                            </div>
+                            <p class="text-muted small">
+                                When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

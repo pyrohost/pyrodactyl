@@ -59,6 +59,10 @@
                                     @else
                                         <span class="label label-success">Active</span>
                                     @endif
+                                    
+                                    @if($server->exclude_from_resource_calculation)
+                                        <br><small><span class="label label-info" title="Excluded from resource calculations">Excluded</span></small>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <a class="btn btn-xs btn-default" href="/server/{{ $server->uuidShort }}"><i class="fa fa-wrench"></i></a>
