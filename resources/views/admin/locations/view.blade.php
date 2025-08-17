@@ -27,8 +27,8 @@
         $totalMemory += $memoryLimit;
         $totalDisk += $diskLimit;
 
-        $nodeAllocatedMemory = $node->servers->sum('memory');
-        $nodeAllocatedDisk = $node->servers->sum('disk');
+        $nodeAllocatedMemory = $node->servers->where('exclude_from_resource_calculation', false)->sum('memory');
+        $nodeAllocatedDisk = $node->servers->where('exclude_from_resource_calculation', false)->sum('disk');
 
         $allocatedMemory += $nodeAllocatedMemory;
         $allocatedDisk += $nodeAllocatedDisk;
@@ -119,11 +119,11 @@
                             <td><code>{{ $node->fqdn }}</code></td>
                             @php
                                 $nodeMemoryLimit = $node->memory * (1 + ($node->memory_overallocate / 100));
-                                $nodeAllocatedMemory = $node->servers->sum('memory');
+                                $nodeAllocatedMemory = $node->servers->where('exclude_from_resource_calculation', false)->sum('memory');
                                 $nodeMemoryPercent = $nodeMemoryLimit > 0 ? ($nodeAllocatedMemory / $nodeMemoryLimit) * 100 : 0;
 
                                 $nodeDiskLimit = $node->disk * (1 + ($node->disk_overallocate / 100));
-                                $nodeAllocatedDisk = $node->servers->sum('disk');
+                                $nodeAllocatedDisk = $node->servers->where('exclude_from_resource_calculation', false)->sum('disk');
                                 $nodeDiskPercent = $nodeDiskLimit > 0 ? ($nodeAllocatedDisk / $nodeDiskLimit) * 100 : 0;
 
                                 $nodeMemoryColor = $nodeMemoryPercent < 50 ? '#50af51' : ($nodeMemoryPercent < 70 ? '#e0a800' : '#d9534f');

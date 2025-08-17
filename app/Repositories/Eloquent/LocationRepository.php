@@ -42,8 +42,8 @@ class LocationRepository extends EloquentRepository implements LocationRepositor
                 $totalMemory += $memoryLimit;
                 $totalDisk += $diskLimit;
     
-                $nodeAllocatedMemory = $node->servers->sum('memory');
-                $nodeAllocatedDisk = $node->servers->sum('disk');
+                $nodeAllocatedMemory = $node->servers->where('exclude_from_resource_calculation', false)->sum('memory');
+                $nodeAllocatedDisk = $node->servers->where('exclude_from_resource_calculation', false)->sum('disk');
     
                 $allocatedMemory += $nodeAllocatedMemory;
                 $allocatedDisk += $nodeAllocatedDisk;
