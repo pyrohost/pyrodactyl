@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
@@ -82,14 +82,13 @@ const SoftwareContainer = () => {
         if (!nests || !currentEgg) {
             return undefined;
         }
-        
+
         const foundNest = nests.find((nest) =>
-            nest?.attributes?.relationships?.eggs?.data?.find((egg) => egg?.attributes?.uuid === currentEgg)
+            nest?.attributes?.relationships?.eggs?.data?.find((egg) => egg?.attributes?.uuid === currentEgg),
         );
-        
-        return foundNest?.attributes?.relationships?.eggs?.data?.find(
-            (egg) => egg?.attributes?.uuid === currentEgg
-        )?.attributes?.name;
+
+        return foundNest?.attributes?.relationships?.eggs?.data?.find((egg) => egg?.attributes?.uuid === currentEgg)
+            ?.attributes?.name;
     }, [nests, currentEgg]);
     const backupLimit = serverData?.featureLimits.backups ?? 0;
     const { data: backups } = getServerBackups();
@@ -456,7 +455,10 @@ const SoftwareContainer = () => {
                                 <h3 className='font-semibold text-neutral-200 mb-2 text-base sm:text-lg'>
                                     {nest?.attributes?.name}
                                 </h3>
-                                {renderDescription(nest?.attributes?.description || '', `nest-${nest?.attributes?.uuid}`)}
+                                {renderDescription(
+                                    nest?.attributes?.description || '',
+                                    `nest-${nest?.attributes?.uuid}`,
+                                )}
                             </button>
                         ),
                     )}

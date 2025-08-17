@@ -67,7 +67,7 @@ export const analyzeLogs = async (logContent: string): Promise<MclogsInsight> =>
     }
 
     const data = await response.json();
-    
+
     if ('success' in data && data.success === false) {
         throw new Error(data.error || 'Failed to analyze logs');
     }
@@ -86,7 +86,7 @@ export const getInsights = async (logId: string): Promise<MclogsInsight> => {
     }
 
     const data = await response.json();
-    
+
     if ('success' in data && data.success === false) {
         throw new Error(data.error || 'Log not found');
     }

@@ -125,7 +125,6 @@ const NetworkingSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; 
 );
 NetworkingSidebarItem.displayName = 'NetworkingSidebarItem';
 
-
 /**
  * Creates a swipe event from an X and Y location at start and current co-ords.
  * Important to create a shared, but not public, space for methods.
@@ -161,7 +160,6 @@ const ServerRouter = () => {
     const closeMobileMenu = () => {
         setMobileMenuVisible(false);
     };
-
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -378,9 +376,9 @@ const ServerRouter = () => {
                                             <p>Files</p>
                                         </NavLink>
                                     </Can>
-                                    <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => { }} />
-                                    <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => { }} />
-                                    <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => { }} />
+                                    <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => {}} />
+                                    <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => {}} />
+                                    <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => {}} />
                                     <Can action={'user.*'} matchAny>
                                         <NavLink
                                             className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -481,7 +479,7 @@ const ServerRouter = () => {
                                 className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
-                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>

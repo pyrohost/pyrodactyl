@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -11,9 +11,10 @@ import HugeIconsLink from '@/components/elements/hugeicons/Link';
 import HugeIconsTerminal from '@/components/elements/hugeicons/Terminal';
 import { SocketEvent } from '@/components/server/events';
 
-import { analyzeLogs, MclogsInsight } from '@/api/mclo.gs/mclogsApi';
+import { debounce, isCrashLine } from '@/lib/mclogsUtils';
+
+import { MclogsInsight, analyzeLogs } from '@/api/mclo.gs/mclogsApi';
 import getFileContents from '@/api/server/files/getFileContents';
-import { isCrashLine, debounce } from '@/lib/mclogsUtils';
 
 import { ServerContext } from '@/state/server';
 
@@ -27,7 +28,7 @@ const MclogsFeature = () => {
     const [analyzing, setAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState<MclogsInsight | null>(null);
     const [error, setError] = useState<string | null>(null);
-    
+
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const lastCrashDetectionRef = useRef<number>(0);
@@ -49,7 +50,7 @@ const MclogsFeature = () => {
             try {
                 // Read the latest.log file
                 const logContent = await getFileContents(uuid, LOG_FILE_PATH);
-                
+
                 if (!logContent || logContent.trim().length === 0) {
                     throw new Error('No log content found in latest.log');
                 }
@@ -64,12 +65,11 @@ const MclogsFeature = () => {
                 } else {
                     toast.info('Log analysis complete - no specific issues detected');
                 }
-
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : 'Failed to analyze server logs';
                 setError(errorMessage);
                 console.error('Mclogs analysis failed:', err);
-                
+
                 // Only show error toast for unexpected errors, not file not found
                 if (!errorMessage.includes('latest.log')) {
                     toast.error('Failed to analyze server logs');
@@ -77,7 +77,7 @@ const MclogsFeature = () => {
             } finally {
                 setAnalyzing(false);
             }
-        }, CRASH_DETECTION_DEBOUNCE)
+        }, CRASH_DETECTION_DEBOUNCE),
     ).current;
 
     // Listen for console output and detect crashes
@@ -119,13 +119,16 @@ const MclogsFeature = () => {
                     )}
                 </div>
             </div>
-            
+
             {problem.solutions.length > 0 && (
                 <div className='ml-6 space-y-1'>
                     <p className='text-xs font-medium text-green-400'>Suggested Solutions:</p>
                     {problem.solutions.map((solution, idx) => (
                         <div key={idx} className='flex items-start gap-2'>
-                            <HugeIconsCheck className='w-3 h-3 text-green-400 mt-0.5 flex-shrink-0' fill='currentColor' />
+                            <HugeIconsCheck
+                                className='w-3 h-3 text-green-400 mt-0.5 flex-shrink-0'
+                                fill='currentColor'
+                            />
                             <p className='text-xs text-green-300'>{solution.message}</p>
                         </div>
                     ))}
@@ -155,7 +158,7 @@ const MclogsFeature = () => {
                             <p className='text-sm mt-1'>{error}</p>
                             {error.includes('latest.log') && (
                                 <p className='text-sm mt-2 text-neutral-400'>
-                                    This usually means the log file doesn't exist yet. Try running the server first.
+                                    This usually means the log file doesn&apos;t exist yet. Try running the server first.
                                 </p>
                             )}
                         </div>
@@ -178,15 +181,21 @@ const MclogsFeature = () => {
                 <div className='p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg'>
                     <h3 className='font-semibold text-blue-400 mb-2'>Server Information</h3>
                     <div className='text-sm space-y-1'>
-                        <p><span className='text-neutral-400'>Software:</span> {analysis.title}</p>
-                        <p><span className='text-neutral-400'>Version:</span> {analysis.version}</p>
+                        <p>
+                            <span className='text-neutral-400'>Software:</span> {analysis.title}
+                        </p>
+                        <p>
+                            <span className='text-neutral-400'>Version:</span> {analysis.version}
+                        </p>
                     </div>
                 </div>
 
                 {/* Problems */}
                 {analysis.analysis.problems.length > 0 && (
                     <div className='space-y-4'>
-                        <h3 className='font-semibold text-red-400'>Issues Found ({analysis.analysis.problems.length})</h3>
+                        <h3 className='font-semibold text-red-400'>
+                            Issues Found ({analysis.analysis.problems.length})
+                        </h3>
                         <div className='space-y-4'>
                             {analysis.analysis.problems.map((problem, idx) => (
                                 <div key={idx} className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -218,7 +227,10 @@ const MclogsFeature = () => {
                     <div className='p-4 bg-green-500/10 border border-green-500/20 rounded-lg'>
                         <div className='flex items-center gap-2'>
                             <HugeIconsCheck className='w-5 h-5 text-green-400' fill='currentColor' />
-                            <p>No specific issues were detected in your server logs. The crash may be due to a configuration issue or resource limitation.</p>
+                            <p>
+                                No specific issues were detected in your server logs. The crash may be due to a
+                                configuration issue or resource limitation.
+                            </p>
                         </div>
                     </div>
                 )}

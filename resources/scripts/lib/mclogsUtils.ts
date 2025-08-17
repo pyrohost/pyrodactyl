@@ -5,7 +5,7 @@ const CRASH_INDICATORS = [
     // Java crash indicators
     'Exception in thread',
     'java.lang.OutOfMemoryError',
-    'java.lang.StackOverflowError', 
+    'java.lang.StackOverflowError',
     'java.lang.NullPointerException',
     'java.lang.ClassNotFoundException',
     'java.lang.NoClassDefFoundError',
@@ -16,7 +16,7 @@ const CRASH_INDICATORS = [
     'java.io.FileNotFoundException',
     'java.net.ConnectException',
     'java.sql.SQLException',
-    
+
     // Minecraft-specific crashes
     'Server crash report',
     'Crash Report',
@@ -27,7 +27,7 @@ const CRASH_INDICATORS = [
     'com.mojang.',
     'net.minecraftforge.',
     'net.fabricmc.',
-    
+
     // Generic server crashes
     'Internal server error',
     'Server crashed',
@@ -36,7 +36,7 @@ const CRASH_INDICATORS = [
     'Segmentation fault',
     'Core dumped',
     'Aborted',
-    
+
     // Status messages that indicate crashes
     'Process marked as offline',
     'Server marked as offline',
@@ -51,7 +51,7 @@ const CRASH_INDICATORS = [
  */
 export const isCrashLine = (line: string): boolean => {
     const lowerLine = line.toLowerCase();
-    return CRASH_INDICATORS.some(indicator => lowerLine.includes(indicator.toLowerCase()));
+    return CRASH_INDICATORS.some((indicator) => lowerLine.includes(indicator.toLowerCase()));
 };
 
 /**
@@ -68,7 +68,7 @@ export const extractRelevantLogs = (logs: string[], maxLines: number = 100): str
  */
 export const debounce = <T extends (...args: any[]) => void>(
     func: T,
-    delay: number
+    delay: number,
 ): ((...args: Parameters<T>) => void) => {
     let timeoutId: NodeJS.Timeout;
     return (...args: Parameters<T>) => {

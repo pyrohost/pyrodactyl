@@ -154,68 +154,65 @@ export const ServerMobileMenu = ({
             </NavigationItem>
 
             <>
-                    <Can action={'file.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/files`} icon={HugeIconsFolder}>
-                            Files
+                <Can action={'file.*'} matchAny>
+                    <NavigationItem to={`/server/${serverId}/files`} icon={HugeIconsFolder}>
+                        Files
+                    </NavigationItem>
+                </Can>
+
+                {databaseLimit > 0 && (
+                    <Can action={'database.*'} matchAny>
+                        <NavigationItem to={`/server/${serverId}/databases`} icon={HugeIconsDatabase} end>
+                            Databases
                         </NavigationItem>
                     </Can>
+                )}
 
-                    {databaseLimit > 0 && (
-                        <Can action={'database.*'} matchAny>
-                            <NavigationItem to={`/server/${serverId}/databases`} icon={HugeIconsDatabase} end>
-                                Databases
-                            </NavigationItem>
-                        </Can>
-                    )}
-
-                    {backupLimit > 0 && (
-                        <Can action={'backup.*'} matchAny>
-                            <NavigationItem to={`/server/${serverId}/backups`} icon={HugeIconsCloudUp} end>
-                                Backups
-                            </NavigationItem>
-                        </Can>
-                    )}
-
-                    {allocationLimit > 0 && (
-                        <Can action={'allocation.*'} matchAny>
-                            <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
-                                Networking
-                            </NavigationItem>
-                        </Can>
-                    )}
-
-                    <Can action={'user.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/users`} icon={HugeIconsPeople} end>
-                            Users
+                {backupLimit > 0 && (
+                    <Can action={'backup.*'} matchAny>
+                        <NavigationItem to={`/server/${serverId}/backups`} icon={HugeIconsCloudUp} end>
+                            Backups
                         </NavigationItem>
                     </Can>
+                )}
 
-                    <Can
-                        action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']}
-                        matchAny
-                    >
-                        <NavigationItem to={`/server/${serverId}/startup`} icon={HugeIconsConsole} end>
-                            Startup
+                {allocationLimit > 0 && (
+                    <Can action={'allocation.*'} matchAny>
+                        <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
+                            Networking
                         </NavigationItem>
                     </Can>
+                )}
 
-                    <Can action={'schedule.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/schedules`} icon={HugeIconsClock}>
-                            Schedules
-                        </NavigationItem>
-                    </Can>
+                <Can action={'user.*'} matchAny>
+                    <NavigationItem to={`/server/${serverId}/users`} icon={HugeIconsPeople} end>
+                        Users
+                    </NavigationItem>
+                </Can>
 
-                    <Can action={['settings.*', 'file.sftp']} matchAny>
-                        <NavigationItem to={`/server/${serverId}/settings`} icon={HugeIconsDashboardSettings} end>
-                            Settings
-                        </NavigationItem>
-                    </Can>
+                <Can action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']} matchAny>
+                    <NavigationItem to={`/server/${serverId}/startup`} icon={HugeIconsConsole} end>
+                        Startup
+                    </NavigationItem>
+                </Can>
 
-                    <Can action={['activity.*', 'activity.read']} matchAny>
-                        <NavigationItem to={`/server/${serverId}/activity`} icon={HugeIconsPencil} end>
-                            Activity
-                        </NavigationItem>
-                    </Can>
+                <Can action={'schedule.*'} matchAny>
+                    <NavigationItem to={`/server/${serverId}/schedules`} icon={HugeIconsClock}>
+                        Schedules
+                    </NavigationItem>
+                </Can>
+
+                <Can action={['settings.*', 'file.sftp']} matchAny>
+                    <NavigationItem to={`/server/${serverId}/settings`} icon={HugeIconsDashboardSettings} end>
+                        Settings
+                    </NavigationItem>
+                </Can>
+
+                <Can action={['activity.*', 'activity.read']} matchAny>
+                    <NavigationItem to={`/server/${serverId}/activity`} icon={HugeIconsPencil} end>
+                        Activity
+                    </NavigationItem>
+                </Can>
             </>
 
             <Can action={'startup.software'}>
