@@ -23,7 +23,7 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
-const CRASH_DETECTION_DEBOUNCE = 3000; // 3 seconds
+const CRASH_DETECTION_DEBOUNCE = 1500; // 1.5 seconds
 const MANUAL_ANALYZE_DEBOUNCE = 1000; // 1 second for manual clicks
 const LOG_FILE_PATH = '/logs/latest.log';
 const MAX_CONSOLE_BUFFER = 300;
@@ -222,13 +222,10 @@ export const CrashAnalysisCard = () => {
         <>
             <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                 <Alert type={getCardType()}>
-                    <div className='flex items-start justify-between gap-3'>
-                        <div className='flex items-start gap-2 flex-1'>
-                            <HugeIconsAlert className='w-5 h-5 mt-0.5 flex-shrink-0' fill='currentColor' />
-                            <div className='flex-1'>
-                                <p className='font-medium text-sm'>Crash Analysis</p>
-                                <p className='text-sm mt-1'>{getCardMessage()}</p>
-                            </div>
+                    <div className='flex items-center justify-between gap-3'>
+                        <div className='flex-1'>
+                            <p className='font-medium text-sm'>Crash Analysis</p>
+                            <p className='text-sm mt-1'>{getCardMessage()}</p>
                         </div>
                         <div className='flex items-center gap-2 flex-shrink-0'>
                             {canViewAnalysis && (
@@ -279,158 +276,205 @@ const AnalysisModal = ({
         onClose();
     };
 
-    const renderProblemSolutions = (problem: Problem, problemIndex: number) => (
-        <Disclosure defaultOpen={problemIndex === 0}>
-            {({ open }) => (
-                <div className='border border-red-500/20 rounded-lg overflow-hidden'>
-                    <DisclosureButton className='w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/15 transition-colors'>
-                        <div className='flex items-center justify-between'>
-                            <div className='flex items-center gap-2'>
-                                <HugeIconsAlert className='w-4 h-4 text-red-400 flex-shrink-0' fill='currentColor' />
-                                <p className='text-sm font-medium text-red-400 text-left truncate'>{problem.message}</p>
-                            </div>
-                            {open ? (
-                                <HugeIconsChevronDown className='w-4 h-4 text-red-400 flex-shrink-0' />
-                            ) : (
-                                <HugeIconsChevronRight className='w-4 h-4 text-red-400 flex-shrink-0' />
-                            )}
-                        </div>
-                    </DisclosureButton>
-
-                    <DisclosurePanel className='px-3 pb-3'>
-                        {!!problem.entry?.lines?.length && (
-                            <div className='mt-2 p-2 bg-red-500/5 border border-red-500/10 rounded text-xs font-mono'>
-                                <div className='text-red-400/70 text-xs mb-1 font-sans'>Crash Log:</div>
-                                <div className='max-h-32 overflow-y-auto space-y-1'>
-                                    {problem.entry.lines.map((line, idx) => (
-                                        <div key={idx} className='flex'>
-                                            <span className='text-red-500/50 mr-3 select-none w-8 text-right flex-shrink-0'>
-                                                {line.number}
-                                            </span>
-                                            <span className='text-red-300/90 break-all'>{line.content}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {!!problem.solutions?.length && (
-                            <div className='mt-3 space-y-2'>
-                                <p className='text-xs font-medium text-green-400'>Solutions:</p>
-                                <div className='space-y-1'>
-                                    {problem.solutions.map((solution, idx) => (
-                                        <div key={idx} className='flex items-start gap-2'>
-                                            <HugeIconsCheck
-                                                className='w-3 h-3 text-green-400 mt-0.5 flex-shrink-0'
-                                                fill='currentColor'
-                                            />
-                                            <p className='text-xs text-green-300/90'>{solution.message}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </DisclosurePanel>
-                </div>
-            )}
-        </Disclosure>
+    // Render loading state
+    const renderLoadingState = () => (
+        <div className='flex flex-col items-center justify-center py-12' aria-busy='true'>
+            <Spinner size='large' />
+            <h3 className='text-lg font-medium text-neutral-200 mt-4'>Analyzing Server Logs</h3>
+            <p className='text-neutral-400 mt-2 text-center max-w-md'>
+                We're analyzing your server logs with mclo.gs to identify potential issues and provide solutions.
+            </p>
+        </div>
     );
 
-    // Render analysis content helper function
-    const renderAnalysisContent = () => {
-        if (analyzing) {
+    // Render error state
+    const renderErrorState = () => (
+        <div className='space-y-6'>
+            <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
+                <div className='flex items-start gap-3'>
+                    <HugeIconsAlert className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                    <div className='flex-1'>
+                        <h3 className='font-semibold text-red-400 text-lg'>Analysis Failed</h3>
+                        <p className='text-neutral-300 mt-2'>{error}</p>
+                        {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
+                            <p className='text-neutral-400 mt-3 text-sm'>
+                                This usually means the log file doesn't exist yet. Try starting your server to generate logs first.
+                            </p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    // Render server information header
+    const renderServerInfo = () => {
+        if (!analysis) return null;
+        
+        const information = analysis.analysis?.information ?? [];
+        const serverVersion = analysis.version;
+        const serverType = analysis.title;
+
+        return (
+            <div className='bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6'>
+                <div className='flex items-center justify-between mb-3'>
+                    <h3 className='text-lg font-semibold text-blue-400'>Server Information</h3>
+                    <a
+                        href='https://mclo.gs'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors'
+                    >
+                        <HugeIconsLink className='w-4 h-4' />
+                        Powered by mclo.gs
+                    </a>
+                </div>
+                
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                    <div className='bg-blue-500/5 rounded-lg p-3'>
+                        <p className='text-blue-400 font-medium text-sm mb-1'>Server Type</p>
+                        <p className='text-neutral-200'>{serverType} {serverVersion}</p>
+                    </div>
+                    
+                    {information.slice(0, 3).map((info, idx) => (
+                        <div key={idx} className='bg-blue-500/5 rounded-lg p-3'>
+                            <p className='text-blue-400 font-medium text-sm mb-1'>{info.label}</p>
+                            <p className='text-neutral-200 break-all'>{info.value}</p>
+                        </div>
+                    ))}
+                </div>
+                
+                {information.length > 3 && (
+                    <details className='mt-3'>
+                        <summary className='text-blue-400 text-sm cursor-pointer hover:text-blue-300 transition-colors'>
+                            Show {information.length - 3} more details
+                        </summary>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mt-3'>
+                            {information.slice(3).map((info, idx) => (
+                                <div key={idx} className='bg-blue-500/5 rounded-lg p-3'>
+                                    <p className='text-blue-400 font-medium text-sm mb-1'>{info.label}</p>
+                                    <p className='text-neutral-200 break-all'>{info.value}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </details>
+                )}
+            </div>
+        );
+    };
+
+    // Render errors section
+    const renderErrors = () => {
+        if (!analysis) return null;
+        
+        const problems = analysis.analysis?.problems ?? [];
+        
+        if (problems.length === 0) {
             return (
-                <div className='flex flex-col items-center justify-center py-8' aria-busy='true'>
-                    <Spinner size='large' />
-                    <p className='text-neutral-400 mt-4'>Analyzing server logs with mclo.gs...</p>
-                    <p className='text-neutral-500 text-sm mt-1'>This may take a few moments</p>
+                <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
+                    <div className='flex items-start gap-3'>
+                        <HugeIconsCheck className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                        <div>
+                            <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
+                            <p className='text-neutral-300 mt-2'>
+                                No specific issues were found in your server logs. The crash may be due to configuration problems or resource limitations.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             );
         }
 
-        if (error) {
-            return (
-                <Alert type='danger'>
-                    <div className='flex items-start gap-2'>
-                        <HugeIconsAlert className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' fill='currentColor' />
-                        <div>
-                            <p className='font-medium'>Analysis Failed</p>
-                            <p className='text-sm mt-1'>{error}</p>
-                            {(/latest\.log/i.test(error) || /no log content/i.test(error)) && (
-                                <p className='text-sm mt-2 text-neutral-400'>
-                                    This usually means the log file doesn&apos;t exist yet. Try running the server
-                                    first.
-                                </p>
-                            )}
+        return (
+            <div className='space-y-4 mb-6'>
+                <h3 className='text-lg font-semibold text-red-400'>
+                    Issues Found ({problems.length})
+                </h3>
+                
+                <div className='space-y-3'>
+                    {problems.map((problem, idx) => (
+                        <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
+                            <div className='p-4'>
+                                <div className='flex items-start gap-3'>
+                                    <HugeIconsAlert className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                                    <div className='flex-1'>
+                                        <h4 className='font-medium text-red-400 mb-2'>{problem.message}</h4>
+                                        
+                                        {!!problem.entry?.lines?.length && (
+                                            <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
+                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>Error Log:</p>
+                                                <div className='max-h-40 overflow-y-auto font-mono text-sm space-y-1'>
+                                                    {problem.entry.lines.map((line, lineIdx) => (
+                                                        <div key={lineIdx} className='flex'>
+                                                            <span className='text-red-500/50 mr-3 select-none w-10 text-right flex-shrink-0'>
+                                                                {line.number}
+                                                            </span>
+                                                            <span className='text-red-300/90 break-all'>{line.content}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </Alert>
-            );
-        }
+                    ))}
+                </div>
+            </div>
+        );
+    };
 
+    // Render recommendations section
+    const renderRecommendations = () => {
+        if (!analysis) return null;
+        
+        const problems = analysis.analysis?.problems ?? [];
+        const allSolutions = problems.flatMap(problem => problem.solutions || []);
+        
+        if (allSolutions.length === 0) return null;
+
+        return (
+            <div className='space-y-4'>
+                <h3 className='text-lg font-semibold text-green-400'>
+                    Recommended Solutions ({allSolutions.length})
+                </h3>
+                
+                <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
+                    <div className='space-y-3'>
+                        {allSolutions.map((solution, idx) => (
+                            <div key={idx} className='flex items-start gap-3'>
+                                <div className='bg-green-500/20 rounded-full p-1 flex-shrink-0 mt-0.5'>
+                                    <HugeIconsCheck className='w-4 h-4 text-green-400' fill='currentColor' />
+                                </div>
+                                <div className='flex-1'>
+                                    <p className='text-neutral-200 leading-relaxed'>{solution.message}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // Main content renderer
+    const renderContent = () => {
+        if (analyzing) return renderLoadingState();
+        if (error) return renderErrorState();
         if (!analysis) {
             return (
-                <div className='text-center py-8'>
+                <div className='text-center py-12'>
                     <p className='text-neutral-400'>No analysis data available</p>
                 </div>
             );
         }
 
-        const problems = analysis.analysis?.problems ?? [];
-        const information = analysis.analysis?.information ?? [];
-
         return (
-            <div className='space-y-4'>
-                {/* Server Info - Compact */}
-                <div className='p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg'>
-                    <div className='flex items-center justify-between text-sm'>
-                        <div className='flex items-center gap-4'>
-                            <span className='text-blue-400 font-medium'>
-                                {analysis.title} {analysis.version}
-                            </span>
-                        </div>
-                        <span className='text-neutral-400 text-xs'>mclo.gs analysis</span>
-                    </div>
-                </div>
-
-                {/* Problems */}
-                {problems.length > 0 && (
-                    <div className='space-y-3'>
-                        <h3 className='font-semibold text-red-400 text-sm'>Issues Found ({problems.length})</h3>
-                        <div className='space-y-2'>
-                            {problems.map((problem, idx) => (
-                                <div key={idx}>{renderProblemSolutions(problem, idx)}</div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Information - Condensed */}
-                {information.length > 0 && (
-                    <div className='space-y-3'>
-                        <h3 className='font-semibold text-blue-400 text-sm'>Server Details</h3>
-                        <div className='grid grid-cols-2 gap-2'>
-                            {information.map((info, idx) => (
-                                <div key={idx} className='p-2 bg-blue-500/10 border border-blue-500/20 rounded text-xs'>
-                                    <span className='font-medium text-blue-400'>{info.label}:</span>
-                                    <span className='ml-1 text-neutral-300 break-all'>{info.value}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {problems.length === 0 && (
-                    <div className='p-3 bg-green-500/10 border border-green-500/20 rounded-lg'>
-                        <div className='flex items-center gap-2'>
-                            <HugeIconsCheck className='w-4 h-4 text-green-400' fill='currentColor' />
-                            <p className='text-sm'>
-                                No specific issues detected. The crash may be due to configuration or resource
-                                limitations.
-                            </p>
-                        </div>
-                    </div>
-                )}
+            <div className='space-y-6'>
+                {renderServerInfo()}
+                {renderErrors()}
+                {renderRecommendations()}
             </div>
         );
     };
@@ -443,30 +487,14 @@ const AnalysisModal = ({
             title='Server Log Analysis'
             showSpinnerOverlay={false}
         >
-            <div className='w-full max-w-2xl'>
-                <div className='flex items-center justify-between mb-3'>
-                    <div className='flex items-center gap-2'>
-                        <HugeIconsTerminal className='w-4 h-4 text-orange-400' fill='currentColor' />
-                        <span className='text-sm text-neutral-400'>Log Analysis</span>
-                    </div>
-                    <a
-                        href='https://mclo.gs'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1'
-                    >
-                        <HugeIconsLink className='w-3 h-3' />
-                        mclo.gs
-                    </a>
-                </div>
+            <div className='w-full max-w-4xl'>
+                {renderContent()}
 
-                {renderAnalysisContent()}
-
-                <div className='flex justify-end gap-2 mt-4 pt-3 border-t border-neutral-700'>
-                    <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing} size='sm'>
+                <div className='flex justify-center gap-3 mt-8 pt-4 border-t border-neutral-700'>
+                    <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
                         {analyzing ? 'Analyzing...' : 'Analyze Again'}
                     </ActionButton>
-                    <ActionButton variant='primary' onClick={closeModal} disabled={analyzing} size='sm'>
+                    <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
                         Close
                     </ActionButton>
                 </div>
