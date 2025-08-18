@@ -1,4 +1,4 @@
-t<?php
+<?php
 
 namespace Pterodactyl\Http\Controllers\Admin;
 
