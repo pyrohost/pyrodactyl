@@ -70,55 +70,59 @@ type FlowStep = 'overview' | 'select-game' | 'select-software' | 'configure' | '
 // Laravel-style validation function
 const validateEnvironmentVariables = (variables: any[], pendingVariables: Record<string, string>): string[] => {
     const errors: string[] = [];
-    
+
     variables.forEach((variable) => {
         if (!variable.user_editable) return; // Skip non-editable variables
-        
+
         const value = pendingVariables[variable.env_variable] || '';
         const rules = variable.rules || '';
-        const ruleArray = rules.split('|').map(rule => rule.trim()).filter(rule => rule.length > 0);
-        
+        const ruleArray = rules
+            .split('|')
+            .map((rule) => rule.trim())
+            .filter((rule) => rule.length > 0);
+
         // Check if variable is required (backend automatically adds nullable if not present)
         const isRequired = ruleArray.includes('required');
         const isNullable = ruleArray.includes('nullable') || !isRequired;
-        
+
         // If required and empty/null
         if (isRequired && (!value || value.trim() === '')) {
             errors.push(`${variable.name} is required.`);
             return;
         }
-        
+
         // If nullable and empty, skip other validations
         if (isNullable && (!value || value.trim() === '')) {
             return;
         }
-        
+
         // Validate each rule
         ruleArray.forEach((rule) => {
             const [ruleName, ruleValue] = rule.split(':');
-            
+
             switch (ruleName) {
                 case 'string':
                     if (typeof value !== 'string') {
                         errors.push(`${variable.name} must be a string.`);
                     }
                     break;
-                    
+
                 case 'integer':
                 case 'numeric':
                     if (value && isNaN(Number(value))) {
                         errors.push(`${variable.name} must be a number.`);
                     }
                     break;
-                    
-                case 'boolean':
+
+                case 'boolean': {
                     const boolValues = ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off'];
                     if (value && !boolValues.includes(value.toLowerCase())) {
                         errors.push(`${variable.name} must be true or false.`);
                     }
                     break;
-                    
-                case 'min':
+                }
+
+                case 'min': {
                     if (ruleValue && value) {
                         const minValue = parseInt(ruleValue);
                         if (value.length < minValue) {
@@ -126,8 +130,9 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         }
                     }
                     break;
-                    
-                case 'max':
+                }
+
+                case 'max': {
                     if (ruleValue && value) {
                         const maxValue = parseInt(ruleValue);
                         if (value.length > maxValue) {
@@ -135,26 +140,29 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         }
                     }
                     break;
-                    
-                case 'between':
+                }
+
+                case 'between': {
                     if (ruleValue && value) {
-                        const [min, max] = ruleValue.split(',').map(v => parseInt(v.trim()));
+                        const [min, max] = ruleValue.split(',').map((v) => parseInt(v.trim()));
                         if (value.length < min || value.length > max) {
                             errors.push(`${variable.name} must be between ${min} and ${max} characters.`);
                         }
                     }
                     break;
-                    
-                case 'in':
+                }
+
+                case 'in': {
                     if (ruleValue && value) {
-                        const allowedValues = ruleValue.split(',').map(v => v.trim());
+                        const allowedValues = ruleValue.split(',').map((v) => v.trim());
                         if (!allowedValues.includes(value)) {
                             errors.push(`${variable.name} must be one of: ${allowedValues.join(', ')}.`);
                         }
                     }
                     break;
-                    
-                case 'regex':
+                }
+
+                case 'regex': {
                     if (ruleValue && value) {
                         try {
                             // Handle Laravel regex format: regex:/pattern/flags
@@ -170,25 +178,26 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         }
                     }
                     break;
-                    
+                }
+
                 case 'alpha':
                     if (value && !/^[a-zA-Z]+$/.test(value)) {
                         errors.push(`${variable.name} may only contain letters.`);
                     }
                     break;
-                    
+
                 case 'alpha_num':
                     if (value && !/^[a-zA-Z0-9]+$/.test(value)) {
                         errors.push(`${variable.name} may only contain letters and numbers.`);
                     }
                     break;
-                    
+
                 case 'alpha_dash':
                     if (value && !/^[a-zA-Z0-9_-]+$/.test(value)) {
                         errors.push(`${variable.name} may only contain letters, numbers, dashes and underscores.`);
                     }
                     break;
-                    
+
                 case 'url':
                     if (value) {
                         try {
@@ -198,38 +207,43 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         }
                     }
                     break;
-                    
+
                 case 'email':
                     if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
                         errors.push(`${variable.name} must be a valid email address.`);
                     }
                     break;
-                    
-                case 'ip':
+
+                case 'ip': {
                     if (value) {
-                        const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+                        const ipRegex =
+                            /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
                         if (!ipRegex.test(value)) {
                             errors.push(`${variable.name} must be a valid IP address.`);
                         }
                     }
                     break;
-                    
+                }
+
                 // Skip validation rules that don't apply to frontend
                 case 'required':
                 case 'nullable':
                 case 'sometimes':
                     break;
-                    
+
                 default:
                     // Unknown rule - log for debugging but don't error
-                    if (process.env.NODE_ENV === 'development' && !['string', 'array', 'file', 'image'].includes(ruleName)) {
+                    if (
+                        process.env.NODE_ENV === 'development' &&
+                        !['string', 'array', 'file', 'image'].includes(ruleName)
+                    ) {
                         console.warn(`Unknown validation rule: ${ruleName} for variable ${variable.name}`);
                     }
                     break;
             }
         });
     });
-    
+
     return errors;
 };
 
@@ -409,6 +423,23 @@ const SoftwareContainer = () => {
 
     const handleVariableChange = (envVariable: string, value: string) => {
         setPendingVariables((prev) => ({ ...prev, [envVariable]: value }));
+
+        // Validate this specific variable in real-time and update errors
+        if (eggPreview) {
+            const variable = eggPreview.variables.find((v) => v.env_variable === envVariable);
+            if (variable) {
+                const errors = validateEnvironmentVariables([variable], { [envVariable]: value });
+                setVariableErrors((prev) => {
+                    const newErrors = { ...prev };
+                    if (errors.length > 0 && errors[0]) {
+                        newErrors[envVariable] = errors[0];
+                    } else {
+                        delete newErrors[envVariable];
+                    }
+                    return newErrors;
+                });
+            }
+        }
     };
 
     const proceedToReview = () => {
@@ -436,7 +467,7 @@ const SoftwareContainer = () => {
         try {
             // Validate all variables using Laravel-style validation rules
             const validationErrors = validateEnvironmentVariables(eggPreview.variables, pendingVariables);
-            
+
             if (validationErrors.length > 0) {
                 throw new Error(`Validation failed:\n${validationErrors.join('\n')}`);
             }
@@ -793,6 +824,16 @@ const SoftwareContainer = () => {
                                                     {!variable.user_editable && (
                                                         <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
                                                             Read-only
+                                                        </span>
+                                                    )}
+                                                    {variable.user_editable && variable.rules.includes('required') && (
+                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded'>
+                                                            Required
+                                                        </span>
+                                                    )}
+                                                    {variable.user_editable && !variable.rules.includes('required') && (
+                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-neutral-500/20 text-neutral-400 rounded'>
+                                                            Optional
                                                         </span>
                                                     )}
                                                 </label>
