@@ -8,6 +8,9 @@ on:
     types:
       - published
 
+permissions:
+    packages: write
+
 jobs:
   build-dev:
     runs-on: ubuntu-latest
