@@ -3,7 +3,7 @@ name: Docker Build and Release Workflow
 on:
   push:
     branches:
-      - dev
+      - main
   release:
     types:
       - published
@@ -11,7 +11,7 @@ on:
 jobs:
   build-dev:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && !contains(github.event.head_commit.message, 'Update version to')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'Update version to')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,7 +31,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:canary
+          tags: |
+            ghcr.io/${{ github.repository }}:canary
+            ghcr.io/${{ github.repository }}:dev
+
           platforms: linux/amd64
 
   build-release:
@@ -59,6 +62,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
             ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:main
           platforms: linux/amd64,linux/arm64
 
   update-version:
