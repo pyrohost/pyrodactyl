@@ -123,18 +123,18 @@ const BackupContextMenu = ({ backup }: Props) => {
                 title={`Unlock "${backup.name}"`}
                 onConfirmed={onLockToggle}
             >
-                This backup will no longer be protected from automated or accidental deletions.
+                Esta copia ya no estará protegida de eliminaciones automáticas o accidentales.
             </Dialog.Confirm>
             <Dialog.Confirm
                 open={modal === 'restore'}
                 onClose={() => setModal('')}
-                confirm={'Restore'}
-                title={`Restore "${backup.name}"`}
+                confirm={'Restaurar'}
+                title={`Restaurar "${backup.name}"`}
                 onConfirmed={() => doRestorationAction()}
             >
                 <p>
-                    Your server will be stopped. You will not be able to control the power state, access the file
-                    manager, or create additional backups until completed.
+                    Tu servidor se detendrá. No podrás controlar el estado, acceder al administrador de archivos o
+                    crear nuevas copias hasta que se complete el proceso.
                 </p>
                 <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded-sm`}>
                     <label htmlFor={'restore_truncate'} className={`text-base flex items-center cursor-pointer`}>
@@ -145,18 +145,18 @@ const BackupContextMenu = ({ backup }: Props) => {
                             checked={truncate}
                             onChange={() => setTruncate((s) => !s)}
                         />
-                        Delete all files before restoring backup.
+                        Eliminar todos los archivos antes de resetear la cuenta.
                     </label>
                 </p>
             </Dialog.Confirm>
             <Dialog.Confirm
-                title={`Delete "${backup.name}"`}
-                confirm={'Continue'}
+                title={`Eliminar "${backup.name}"`}
+                confirm={'Continuar'}
                 open={modal === 'delete'}
                 onClose={() => setModal('')}
                 onConfirmed={doDeletion}
             >
-                This is a permanent operation. The backup cannot be recovered once deleted.
+                Esto es una operación irreversible. La copia no se podrá recuperar nunca más una vez se elimine.
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
@@ -164,25 +164,25 @@ const BackupContextMenu = ({ backup }: Props) => {
                     <Can action={'backup.download'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                             <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
-                            Download Backup
+                            Descargar
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.restore'}>
                         <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
                             <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
-                            Restore Backup
+                            Restaurar
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.delete'}>
                         <>
                             <ContextMenuItem className='flex gap-2' onClick={onLockToggle}>
                                 <HugeIconsFileSecurity className='h-4! w-4!' fill='currentColor' />
-                                {backup.isLocked ? 'Unlock' : 'Lock'}
+                                {backup.isLocked ? 'Desbloquear' : 'Bloquear'}
                             </ContextMenuItem>
                             {!backup.isLocked && (
                                 <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
                                     <HugeIconsDelete className='h-4! w-4!' fill='currentColor' />
-                                    Delete Backup
+                                    Eliminar
                                 </ContextMenuItem>
                             )}
                         </>
@@ -193,7 +193,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     onClick={() => setModal('delete')}
                     className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2 cursor-pointer`}
                 >
-                    Delete Backup
+                    Eliminar
                 </button>
             )}
         </>

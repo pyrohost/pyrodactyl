@@ -49,23 +49,23 @@ const UsersContainer = () => {
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
         return (
-            <ServerContentBlock title={'Users'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Users</h1>
+            <ServerContentBlock title={'Usuarios'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Usuarios</h1>
             </ServerContentBlock>
         );
     }
 
     return (
-        <ServerContentBlock title={'Users'}>
+        <ServerContentBlock title={'Usuarios'}>
             <FlashMessageRender byKey={'users'} />
-            <MainPageHeader title={'Users'}>
+            <MainPageHeader title={'Usuarios'}>
                 <Can action={'user.create'}>
                     <AddSubuserButton />
                 </Can>
             </MainPageHeader>
             {!subusers.length ? (
                 <p className={`text-center text-sm text-zinc-300`}>
-                    Your server does not have any additional users. Add others to help you manage your server.
+                    Tu servidor no tiene ningún usuario adicional. Agrega a otros usuarios que te ayuden a administrar tu servidor.
                 </p>
             ) : (
                 <PageListContainer data-pyro-users-container-users>

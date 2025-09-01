@@ -20,11 +20,11 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                     {formatObjectToIdentString(meta)}
                 </pre>
                 <Dialog.Footer>
-                    <Button.Text onClick={() => setOpen(false)}>Close</Button.Text>
+                    <Button.Text onClick={() => setOpen(false)}>Cerrar</Button.Text>
                 </Dialog.Footer>
             </Dialog>
             <button
-                aria-describedby={'View additional event metadata'}
+                aria-describedby={'Ver datos adicionales'}
                 className={
                     'p-2 transition-colors duration-100 text-zinc-400 group-hover:text-zinc-300 hover:group-hover:text-zinc-50 cursor-pointer'
                 }

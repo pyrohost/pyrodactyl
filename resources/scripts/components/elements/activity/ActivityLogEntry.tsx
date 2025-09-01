@@ -36,7 +36,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                 <div className={'flex-1 px-4 sm:px-0'}>
                     <div className={'flex items-center text-zinc-50'}>
                         {/* <Tooltip placement={'top'} content={actor?.email || 'System User'}> */}
-                        <span>{actor?.username || 'System'}</span>
+                        <span>{actor?.username || 'Sistema'}</span>
                         {/* </Tooltip> */}
                         <span className={'text-zinc-400'}>&nbsp;&mdash;&nbsp;</span>
                         <Link

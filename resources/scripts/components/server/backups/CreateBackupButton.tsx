@@ -29,24 +29,24 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     const { isSubmitting } = useFormikContext<Values>();
 
     return (
-        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Create server backup'>
+        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Crear copia de seguridad'>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
                 <Field
                     name={'name'}
-                    label={'Backup name'}
-                    description={'If provided, the name that should be used to reference this backup.'}
+                    label={'Nombre de la copia'}
+                    description={'El nombre que referenciará esta copia de seguridad.'}
                 />
                 <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
                         className='flex flex-col gap-2'
                         name={'ignored'}
-                        label={'Ignored Files & Directories'}
+                        label={'Archivos y carpetas ignoradas'}
                         description={`
-                            Enter the files or folders to ignore while generating this backup. Leave blank to use
-                            the contents of the .pteroignore file in the root of the server directory if present.
-                            Wildcard matching of files and folders is supported in addition to negating a rule by
-                            prefixing the path with an exclamation point.
+                            Introduce los archivos o carpetas que ignorar al generar la copia de seguridad. Déjalo
+                            en blanco para usar el contenido del archivo .pteroignore en la carpeta raíz de tu
+                            servidor si existe. También puedes usar wildcards (*) y negar una regla usando un signo
+                            de exclamación como prefijo.
                         `}
                     >
                         <FormikField
@@ -61,14 +61,14 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     <div className={`my-6`}>
                         <FormikSwitchV2
                             name={'isLocked'}
-                            label={'Locked'}
-                            description={'Prevents this backup from being deleted until explicitly unlocked.'}
+                            label={'Bloqueado'}
+                            description={'Previene que esta copia se elimine automáticamente o accidentalmente.'}
                         />
                     </div>
                 </Can>
                 <div className={`flex justify-end mb-6`}>
                     <Button role={'switch'} type={'submit'} disabled={isSubmitting}>
-                        Start backup
+                        Crear
                     </Button>
                 </div>
             </Form>
@@ -125,7 +125,7 @@ const CreateBackupButton = () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                 onClick={() => setVisible(true)}
             >
-                New Backup
+                Nueva copia
             </button>
         </>
     );

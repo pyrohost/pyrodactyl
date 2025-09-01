@@ -18,7 +18,7 @@ const NewTaskButton = ({ schedule, className }: Props) => {
         <>
             <TaskDetailsModal schedule={schedule} visible={visible} onModalDismissed={() => setVisible(false)} />
             <Button onClick={() => setVisible(true)} className={clsx(className)}>
-                New Task
+                Nueva tarea
             </Button>
         </>
     );

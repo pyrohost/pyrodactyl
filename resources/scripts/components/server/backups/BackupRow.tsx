@@ -74,7 +74,7 @@ const BackupRow = ({ backup }: Props) => {
                                             <span
                                                 className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
                                             >
-                                                Failed
+                                                Error
                                             </span>
                                         )}
                                         <div className={`flex gap-2 items-center justify-center`}>

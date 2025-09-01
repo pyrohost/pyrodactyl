@@ -20,12 +20,12 @@ interface Values {
 
 const RenameServerForm = () => {
     return (
-        <TitledGreyBox title={'Server Details'}>
+        <TitledGreyBox title={'Detalles del servidor'}>
             <Form className='flex flex-col gap-4'>
-                <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
+                <Field id={'name'} name={'name'} label={'Nombre del servidor'} type={'text'} />
+                <Field id={'description'} name={'description'} label={'Descripción del servidor'} type={'text'} />
                 <div className={`mt-6 text-right`}>
-                    <Button type={'submit'}>Save</Button>
+                    <Button type={'submit'}>Guardar</Button>
                 </div>
             </Form>
         </TitledGreyBox>
@@ -39,14 +39,14 @@ const RenameServerBox = () => {
 
     const submit = ({ name, description }: Values) => {
         clearFlashes('settings');
-        toast('Updating server details...');
+        toast('Actualizando detalles del servidor...');
         renameServer(server.uuid, name, description)
             .then(() => setServer({ ...server, name, description }))
             .catch((error) => {
                 console.error(error);
                 addError({ key: 'settings', message: httpErrorToHuman(error) });
             })
-            .then(() => toast.success('Server details updated!'));
+            .then(() => toast.success('Se han actualizado los detalles del servidor.,'));
     };
 
     return (

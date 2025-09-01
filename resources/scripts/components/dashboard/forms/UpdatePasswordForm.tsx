@@ -19,11 +19,11 @@ interface Values {
 }
 
 const schema = Yup.object().shape({
-    current: Yup.string().min(1).required('You must provide your current account password.'),
+    current: Yup.string().min(1).required('Debes indicar tu contraseña actual.'),
     password: Yup.string().min(8).required(),
     confirmPassword: Yup.string().test(
         'password',
-        'Password confirmation does not match the password you entered.',
+        'Las contraseñas no coinciden.',
         function (value) {
             return value === this.parent.password;
         },
@@ -71,16 +71,16 @@ const UpdatePasswordForm = () => {
                                 id={'current_password'}
                                 type={'password'}
                                 name={'current'}
-                                label={'Current Password'}
+                                label={'Contraseña actual'}
                             />
                             <div className={`mt-6`}>
                                 <Field
                                     id={'new_password'}
                                     type={'password'}
                                     name={'password'}
-                                    label={'New Password'}
+                                    label={'Nueva contraseña'}
                                     description={
-                                        'Your new password should be at least 8 characters in length and unique to this website.'
+                                        'Tu nueva contraseña debe contener al menos 8 caracteres y no puede haber sido usada antes.'
                                     }
                                 />
                             </div>
@@ -89,11 +89,11 @@ const UpdatePasswordForm = () => {
                                     id={'confirm_new_password'}
                                     type={'password'}
                                     name={'confirmPassword'}
-                                    label={'Confirm New Password'}
+                                    label={'Confirma tu nueva contraseña'}
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <Button disabled={isSubmitting || !isValid}>Update Password</Button>
+                                <Button disabled={isSubmitting || !isValid}>Actualizar</Button>
                             </div>
                         </Form>
                     </Fragment>

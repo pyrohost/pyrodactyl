@@ -60,15 +60,15 @@ const getTimezoneInfo = (serverTimezone: string) => {
         // - values mean ahead of UTC
         offsetDifferenceMinutes = userOffsetValue - serverOffsetValue;
     } catch {
-        serverOffsetString = 'Unknown';
+        serverOffsetString = 'Desconocido';
         isServerTimezoneValid = false;
     }
 
     let differenceDescription = '';
     if (!isServerTimezoneValid) {
-        differenceDescription = 'at an unknown difference to';
+        differenceDescription = 'a una diferencia desconocida de';
     } else if (offsetDifferenceMinutes === 0) {
-        differenceDescription = 'same time';
+        differenceDescription = 'misma hora';
     } else {
         const offsetDifferenceHours = offsetDifferenceMinutes / 60;
         const absDifferenceHours = Math.abs(offsetDifferenceHours);
@@ -76,16 +76,16 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
         if (absDifferenceHours === Math.floor(absDifferenceHours)) {
             // whole hours
-            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+            differenceDescription = `${absDifferenceHours} hora${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'adelantado de' : 'atrasado de'}`;
         } else {
             // hours & minutes
             const hours = Math.floor(absDifferenceHours);
             const minutes = Math.abs(offsetDifferenceMinutes % 60);
 
             if (hours > 0) {
-                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead of' : 'behind'}`;
+                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'adelantado de' : 'atrasado de'}`;
             } else {
-                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+                differenceDescription = `${minutes} minuto${minutes !== 1 ? 's' : ''} ${isAhead ? 'adelantado de' : 'atrasado de'}`;
             }
         }
     }
@@ -108,14 +108,14 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Unknown');
+    const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Desconocido');
 
     const timezoneInfo = useMemo(() => {
         return getTimezoneInfo(serverTimezone);
     }, [serverTimezone]);
 
     useEffect(() => {
-        setPropOverrides({ title: schedule ? 'Edit schedule' : 'Create new schedule' });
+        setPropOverrides({ title: schedule ? 'Editar programa' : 'Crear nuevo programa' });
     }, []);
 
     useEffect(() => {
@@ -173,15 +173,15 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     <FlashMessageRender byKey={'schedule:edit'} />
                     <Field
                         name={'name'}
-                        label={'Schedule name'}
-                        description={'A human readable identifier for this schedule.'}
+                        label={'Nombre del programa'}
+                        description={'Un nombre que te ayude a identificar este programa.'}
                     />
                     <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
-                        <Field name={'minute'} label={'Minute'} />
-                        <Field name={'hour'} label={'Hour'} />
-                        <Field name={'dayOfMonth'} label={'Day of month'} />
-                        <Field name={'month'} label={'Month'} />
-                        <Field name={'dayOfWeek'} label={'Day of week'} />
+                        <Field name={'minute'} label={'Minuto'} />
+                        <Field name={'hour'} label={'Hora'} />
+                        <Field name={'dayOfMonth'} label={'Día del mes'} />
+                        <Field name={'month'} label={'Mes'} />
+                        <Field name={'dayOfWeek'} label={'Día de la semana'} />
                     </div>
 
                     {timezoneInfo.isDifferent && (
@@ -189,19 +189,19 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             <div className={'flex items-start gap-3'}>
                                 <FontAwesomeIcon icon={faInfoCircle} className={'text-blue-400 mt-0.5 flex-shrink-0'} />
                                 <div className={'text-sm'}>
-                                    <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
+                                    <p className={'text-blue-100 font-medium mb-1'}>Información de la zona horaria</p>
                                     <p className={'text-blue-200/80 text-xs mb-2'}>
-                                        Times shown here are configured for the server timezone.
+                                        Aquí se muestran los tiempos configurados para la zona horaria del servidor.
                                         {timezoneInfo.difference !== 'same time' && (
                                             <span className={'text-blue-100 font-medium'}>
                                                 {' '}
-                                                The server is {timezoneInfo.difference} your timezone.
+                                                El servidor está {timezoneInfo.difference} tu zona horaria.
                                             </span>
                                         )}
                                     </p>
                                     <div className={'mt-2 text-xs space-y-1'}>
                                         <div className={'text-blue-200/60'}>
-                                            Your timezone:
+                                            Tu zona horaria:
                                             <span className={'font-mono'}>
                                                 {' '}
                                                 {formatTimezoneDisplay(
@@ -211,7 +211,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                             </span>
                                         </div>
                                         <div className={'text-blue-200/60'}>
-                                            Server timezone:
+                                            Zona horaria del servidor:
                                             <span className={'font-mono'}>
                                                 {' '}
                                                 {formatTimezoneDisplay(
@@ -227,15 +227,15 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     )}
 
                     <p className={`text-zinc-400 text-xs mt-2`}>
-                        The schedule system supports the use of Cronjob syntax when defining when tasks should begin
-                        running. Use the fields above to specify when these tasks should begin running.
+                        El sistema de programas soporta la sintaxis de Cronjob para definir cuándo se ejecutarán
+                        las tareas. Usa los campos anteriores para especificar los tiempos del programa.
                     </p>
 
                     <div className='gap-3 my-6 flex flex-col'>
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                             <ItemContainer
-                                description={'Online editor for cron schedule experessions.'}
-                                title={'Crontab Guru'}
+                                description={'Editor en línea de expresiones Crontab.'}
+                                title={'Gurú Crontab'}
                                 // defaultChecked={showCheatsheet}
                                 // onChange={() => setShowCheetsheet((s) => !s)}
                                 labelClasses='cursor-pointer'
@@ -252,18 +252,18 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         )} */}
                         <FormikSwitchV2
                             name={'onlyWhenOnline'}
-                            description={'Only execute this schedule when the server is running.'}
-                            label={'Only When Server Is Online'}
+                            description={'Este programa solo se ejecutará cuando el servidor se encuentre en línea.'}
+                            label={'Cuando esté en línea'}
                         />
                         <FormikSwitchV2
                             name={'enabled'}
-                            description={'This schedule will be executed automatically if enabled.'}
-                            label={'Schedule Enabled'}
+                            description={'Este programa se ejecutará automáticamente habilitando esta casilla.'}
+                            label={'Automatizado'}
                         />
                     </div>
                     <div className={`mb-6 text-right`}>
                         <Button className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
-                            {schedule ? 'Save changes' : 'Create schedule'}
+                            {schedule ? 'Guardar cambios' : 'Crear programa'}
                         </Button>
                     </div>
                 </Form>

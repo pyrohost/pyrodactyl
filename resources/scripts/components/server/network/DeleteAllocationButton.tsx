@@ -41,14 +41,14 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={confirm}
                 onClose={() => setConfirm(false)}
-                title={'Remove Allocation'}
-                confirm={'Delete'}
+                title={'Eliminar puerto'}
+                confirm={'Eliminar'}
                 onConfirmed={deleteAllocation}
             >
-                This allocation will be immediately removed from your server.
+                Este puerto se eliminará inmediatamente de tu servidor.
             </Dialog.Confirm>
             <button className='cursor-pointer' onClick={() => setConfirm(true)}>
-                Delete
+                Eliminar
             </button>
         </>
     );

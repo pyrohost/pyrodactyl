@@ -61,7 +61,7 @@ const ForgotPasswordContainer = () => {
 
     const handleCaptchaError = (provider: string) => {
         setToken('');
-        addFlash({ type: 'error', title: 'CAPTCHA Error', message: `${provider} challenge failed.` });
+        addFlash({ type: 'error', title: 'Error de CAPTCHA', message: `El CAPTCHA de ${provider} ha fallado.` });
     };
 
     const handleCaptchaExpire = () => {
@@ -72,7 +72,7 @@ const ForgotPasswordContainer = () => {
         clearFlashes();
 
         if ((isTurnstileEnabled || isFriendlyEnabled || isHCaptchaEnabled) && !token) {
-            addFlash({ type: 'error', title: 'Error', message: 'Please complete the CAPTCHA challenge.' });
+            addFlash({ type: 'error', title: 'Error', message: 'Por favor, resuelve el CAPTCHA.' });
             setSubmitting(false);
             return;
         }
@@ -92,7 +92,7 @@ const ForgotPasswordContainer = () => {
         http.post('/auth/password', requestData)
             .then((response) => {
                 resetForm();
-                addFlash({ type: 'success', title: 'Success', message: response.data.status || 'Email sent!' });
+                addFlash({ type: 'success', title: 'Éxito', message: response.data.status || 'Se ha enviado el correo electrónico.' });
             })
             .catch((error) => {
                 console.error(error);
@@ -111,7 +111,7 @@ const ForgotPasswordContainer = () => {
                 onSubmit={handleSubmission}
                 initialValues={{ email: '' }}
                 validationSchema={object().shape({
-                    email: string().email('Enter a valid email address.').required('Email is required.'),
+                    email: string().email('Introduce una dirección de correo electrónico válida.').required('Se requiere una dirección de correo.'),
                 })}
             >
                 {({ isSubmitting }) => (
@@ -122,11 +122,11 @@ const ForgotPasswordContainer = () => {
                             </div>
                         </Link>
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                        <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
+                        <h2 className='text-xl font-extrabold mb-2'>Resetear contraseña</h2>
                         <div className='text-sm mb-6'>
-                            We&apos;ll send you an email with a link to reset your password.
+                            Te enviaremos un correo electrónico a tu dirección con un enlace para restablecer tu contraseña.
                         </div>
-                        <Field id='email' label={'Email'} name={'email'} type={'email'} />
+                        <Field id='email' label={'Tu dirección de correo electrónico'} name={'email'} type={'email'} />
 
                         {/* CAPTCHA Components */}
                         {isTurnstileEnabled && (
@@ -181,7 +181,7 @@ const ForgotPasswordContainer = () => {
                                 isLoading={isSubmitting}
                                 disabled={isSubmitting}
                             >
-                                Send Email
+                                Enviar correo
                             </Button>
                         </div>
 
@@ -193,7 +193,7 @@ const ForgotPasswordContainer = () => {
                                 to='/auth/login'
                                 className='block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                             >
-                                Return to Login
+                                Volver al inicio de sesión
                             </Link>
                         </div>
                     </LoginFormContainer>

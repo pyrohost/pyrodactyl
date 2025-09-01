@@ -44,29 +44,29 @@ const AccountApiContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'Account API'}>
+        <PageContentBlock title={'Claves API'}>
             {/* Flash messages will now appear at the top of the page */}
             <FlashMessageRender byKey='account' />
             <div className='md:flex flex-nowrap my-10 space-x-8'>
-                <ContentBox title={'Create API Key'} className='flex-none w-full md:w-1/1'>
+                <ContentBox title={'Crear clave API'} className='flex-none w-full md:w-1/1'>
                     <CreateApiKeyForm onKeyCreated={(key) => setKeys((s) => [...s!, key])} />
                 </ContentBox>
             </div>
-            <ContentBox title={'API Keys'}>
+            <ContentBox title={'Claves API'}>
                 <SpinnerOverlay visible={loading} />
                 <Dialog.Confirm
-                    title={'Delete API Key'}
-                    confirm={'Delete Key'}
+                    title={'Eliminar clave API'}
+                    confirm={'Eliminar la clave'}
                     open={!!deleteIdentifier}
                     onClose={() => setDeleteIdentifier('')}
                     onConfirmed={() => doDeletion(deleteIdentifier)}
                 >
-                    All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
+                    Todas las peticiones que usen la clave <Code>{deleteIdentifier}</Code> quedarán invalidadas.
                 </Dialog.Confirm>
 
                 {keys.length === 0 ? (
                     <p className='text-center text-sm text-gray-500'>
-                        {loading ? 'Loading...' : 'No API keys exist for this account.'}
+                        {loading ? 'Cargando...' : 'No existen claves API en esta cuenta.'}
                     </p>
                 ) : (
                     keys.map((key) => (
@@ -75,8 +75,8 @@ const AccountApiContainer = () => {
                                 <div className='flex-1'>
                                     <p className='text-sm font-medium'>{key.description}</p>
                                     <p className='text-xs text-gray-500 uppercase'>
-                                        Last used:{' '}
-                                        {key.lastUsedAt ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm') : 'Never'}
+                                        Último uso:{' '}
+                                        {key.lastUsedAt ? format(key.lastUsedAt, 'd MMM, yyyy HH:mm') : 'Nunca'}
                                     </p>
                                 </div>
                                 <p className='text-sm text-gray-600 hidden md:block'>

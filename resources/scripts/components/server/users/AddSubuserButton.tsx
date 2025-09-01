@@ -16,7 +16,7 @@ const AddSubuserButton = () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                 onClick={() => setVisible(true)}
             >
-                New User
+                Nuevo usuario
             </button>
         </>
     );

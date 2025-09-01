@@ -48,7 +48,7 @@ const SteamDiskSpaceFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title='Out of available disk space'
+            title='Sin espacio en el disco'
         >
             <FlashMessageRender key={'feature:steamDiskSpace'} />
             <div className={`flex-col`}>
@@ -67,8 +67,8 @@ const SteamDiskSpaceFeature = () => {
                 ) : (
                     <>
                         <p className={`mt-4`}>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
+                            Este servidor ha agotado el espacio máximo en disco y no puede completar el proceso de
+                            instalación o actualización. Por favor, contacta con el equipo de soporte.
                         </p>
                     </>
                 )}

@@ -34,8 +34,8 @@ const ActivityLogContainer = () => {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Account Activity Log'}>
-            <ContentBox title='Account Activity Log'>
+        <PageContentBlock title={'Registro de actividad'}>
+            <ContentBox title='Registro de actividad'>
                 <FlashMessageRender byKey={'account'} />
                 {(filters.filters?.event || filters.filters?.ip) && (
                     <div className={'flex justify-end mb-2'}>
@@ -44,7 +44,7 @@ const ActivityLogContainer = () => {
                             className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
                             onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
                         >
-                            Clear Filters
+                            Limpiar filtros
                         </Link>
                     </div>
                 )}

@@ -10,7 +10,7 @@ const NewFileButton = ({ id }: { id: string }) => {
                 }}
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-none text-sm font-bold shadow-md'
             >
-                New File
+                Nuevo archivo
             </div>
         </NavLink>
     );

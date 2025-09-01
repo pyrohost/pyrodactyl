@@ -36,9 +36,9 @@ const ServerActivityLogContainer = () => {
     }, [error]);
 
     return (
-        <ServerContentBlock title={'Activity Log'}>
+        <ServerContentBlock title={'Registro de actividad'}>
             <FlashMessageRender byKey={'server:activity'} />
-            <ContentBox title='Server Activity Logs'>
+            <ContentBox title='Actividad del servidor'>
                 {(filters.filters?.event || filters.filters?.ip) && (
                     <div className={'flex justify-end mb-2'}>
                         <Link
@@ -46,7 +46,7 @@ const ServerActivityLogContainer = () => {
                             className={clsx(btnStyles.button, btnStyles.text, 'w-full sm:w-auto')}
                             onClick={() => setFilters((value) => ({ ...value, filters: {} }))}
                         >
-                            Clear Filters
+                            Limpiar filtro
                             {/* FIXME: X icon */}
                         </Link>
                     </div>
@@ -54,7 +54,7 @@ const ServerActivityLogContainer = () => {
                 {!data && isValidating ? (
                     <Spinner centered />
                 ) : !data?.items.length ? (
-                    <p className={'text-sm text-center text-zinc-400'}>No activity logs available for this server.</p>
+                    <p className={'text-sm text-center text-zinc-400'}>No hay registros de actividad en este servidor.</p>
                 ) : (
                     <div>
                         {data?.items.map((activity) => (

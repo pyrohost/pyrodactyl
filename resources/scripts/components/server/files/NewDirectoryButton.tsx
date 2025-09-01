@@ -24,7 +24,7 @@ interface Values {
 }
 
 const schema = object().shape({
-    directoryName: string().required('A valid directory name must be provided.'),
+    directoryName: string().required('Debes indicar un nombre de carpeta válido.'),
 });
 
 // removed to prevent linting issues, you're welcome.
@@ -45,7 +45,7 @@ const schema = object().shape({
 // });
 
 const NewDirectoryDialog = asDialog({
-    title: 'New Folder',
+    title: 'Nueva carpeta',
 })(() => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -79,7 +79,7 @@ const NewDirectoryDialog = asDialog({
                     <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
                         <p className={`mt-2 text-xs! break-all`}>
-                            <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
+                            <span className={`text-zinc-200`}>Esta carpeta se guardará como&nbsp;</span>
                             <Code>
                                 /root/
                                 <span className={`text-blue-200`}>
@@ -90,10 +90,10 @@ const NewDirectoryDialog = asDialog({
                     </Form>
                     <Dialog.Footer>
                         <Button.Text className={'w-full sm:w-auto'} onClick={close}>
-                            Cancel
+                            Cancelar
                         </Button.Text>
                         <Button className={'w-full sm:w-auto'} onClick={submitForm}>
-                            Create
+                            Crear
                         </Button>
                     </Dialog.Footer>
                 </>
@@ -116,7 +116,7 @@ const NewDirectoryButton = () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
                 onClick={setOpen.bind(this, true)}
             >
-                New Folder
+                Nueva carpeta
             </button>
         </>
     );

@@ -23,7 +23,7 @@ const ReinstallServerBox = () => {
                 addFlash({
                     key: 'settings',
                     type: 'success',
-                    message: 'Your server has begun the reinstallation process.',
+                    message: 'Tu servidor ha iniciado el proceso de instalación.',
                 });
             })
             .catch((error) => {
@@ -39,28 +39,27 @@ const ReinstallServerBox = () => {
     }, []);
 
     return (
-        <TitledGreyBox title={'Reinstall Server'}>
+        <TitledGreyBox title={'Reinstalar servidor'}>
             <Dialog.Confirm
                 open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
+                title={'Confirmar la reinstalación'}
+                confirm={'Sí, quiero reinstalar el servidor'}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
             >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
+                Tu servidor se detendrá y algunos archivos podrán ser eliminados o modificados durante este proceso.
+                ¿Quieres continuar?
             </Dialog.Confirm>
             <p className={`text-sm`}>
-                Reinstalling your server will stop it, and then re-run the installation script that initially set it
-                up.&nbsp;
+                Reinstalar tu servidor lo detendrá para después ejecutar el script de instalación.
                 <strong className={`font-medium`}>
-                    Some files may be deleted or modified during this process, please back up your data before
-                    continuing.
+                    Algunos archivos podrán ser eliminados o modificados durante el proceso. Por favor, asegúrate de hacer
+                    una copia de seguridad antes.
                 </strong>
             </p>
             <div className={`mt-6 text-right`}>
                 <Button.Danger variant={Button.Variants.Secondary} onClick={() => setModalVisible(true)}>
-                    Reinstall Server
+                    Reinstalar
                 </Button.Danger>
             </div>
         </TitledGreyBox>

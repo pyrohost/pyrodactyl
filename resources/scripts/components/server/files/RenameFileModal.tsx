@@ -65,14 +65,14 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                     {...props}
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
-                    title={useMoveTerminology ? 'Moving files/folders' : 'Renaming file/folder'}
+                    title={useMoveTerminology ? 'Moviendo archivos/carpetas' : 'Renombrando archivos/carpetas'}
                 >
                     <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
+                            <Field type={'string'} id={'file_name'} name={'name'} label={'Nombre del archivo'} autoFocus />
                             {useMoveTerminology && (
                                 <p className={`mt-2 text-xs! break-all`}>
-                                    <strong className={`text-sm text-zinc-200`}>New location: </strong>
+                                    <strong className={`text-sm text-zinc-200`}>Nueva ubicación: </strong>
                                     <Code>
                                         /root/
                                         <span className={`text-blue-200`}>
@@ -82,7 +82,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                                 </p>
                             )}
                             <div className={`flex justify-end w-full my-6`}>
-                                <Button>{useMoveTerminology ? 'Move' : 'Rename'}</Button>
+                                <Button>{useMoveTerminology ? 'Mover' : 'Renombrar'}</Button>
                             </div>
                         </div>
                     </Form>

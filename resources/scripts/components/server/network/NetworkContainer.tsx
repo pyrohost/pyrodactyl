@@ -54,15 +54,15 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock showFlashKey={'server:network'} title={'Network'}>
-            <MainPageHeader title={'Network'}>
+        <ServerContentBlock showFlashKey={'server:network'} title={'Red'}>
+            <MainPageHeader title={'Red'}>
                 {!data ? null : (
                     <>
                         {allocationLimit > 0 && (
                             <Can action={'allocation.create'}>
                                 <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                                     <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
-                                        {data.length} of {allocationLimit} allowed allocations
+                                        {data.length} de {allocationLimit} asignaciones permitidas
                                     </p>
                                     {allocationLimit > data.length && (
                                         <button
@@ -73,7 +73,7 @@ const NetworkContainer = () => {
                                             className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                                             onClick={onCreateAllocation}
                                         >
-                                            New Allocation
+                                            Nueva asignación
                                         </button>
                                     )}
                                 </div>

@@ -35,7 +35,7 @@ const MassActionsBar = () => {
     const onClickCompress = () => {
         setLoading(true);
         clearFlashes('files');
-        setLoadingMessage('Archiving files...');
+        setLoadingMessage('Comprimiendo archivos...');
 
         compressFiles(uuid, directory, selectedFiles)
             .then(() => mutate())
@@ -48,7 +48,7 @@ const MassActionsBar = () => {
         setLoading(true);
         setShowConfirm(false);
         clearFlashes('files');
-        setLoadingMessage('Deleting files...');
+        setLoadingMessage('Eliminando archivos...');
 
         deleteFiles(uuid, directory, selectedFiles)
             .then(async () => {
@@ -69,21 +69,21 @@ const MassActionsBar = () => {
                     {loadingMessage}
                 </SpinnerOverlay>
                 <Dialog.Confirm
-                    title={'Delete Files'}
+                    title={'Eliminar archivos'}
                     open={showConfirm}
-                    confirm={'Delete'}
+                    confirm={'Eliminar'}
                     onClose={() => setShowConfirm(false)}
                     onConfirmed={onClickConfirmDeletion}
                 >
                     <p className={'mb-2'}>
-                        Are you sure you want to delete&nbsp;
-                        <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} files</span>? This is a
-                        permanent action and the files cannot be recovered.
+                        ¿Deseas eliminar
+                        <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} archivos</span>? Esta
+                        acción es permanente e irreversible.
                     </p>
                     {selectedFiles.slice(0, 15).map((file) => (
                         <li key={file}>{file}</li>
                     ))}
-                    {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
+                    {selectedFiles.length > 15 && <li>y otros {selectedFiles.length - 15}</li>}
                 </Dialog.Confirm>
                 {showMove && (
                     <RenameFileModal
@@ -101,10 +101,10 @@ const MassActionsBar = () => {
                         }
                     >
                         <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <Button onClick={() => setShowMove(true)}>Move</Button>
-                            <Button onClick={onClickCompress}>Archive</Button>
+                            <Button onClick={() => setShowMove(true)}>Mover</Button>
+                            <Button onClick={onClickCompress}>Comprimir</Button>
                             <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
-                                Delete
+                                Eliminar
                             </Button.Danger>
                         </div>
                     </div>

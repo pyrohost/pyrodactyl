@@ -63,7 +63,7 @@ const DashboardContainer = () => {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+        <PageContentBlock title={'Panel de control'} showFlashKey={'dashboard'}>
             <Tabs
                 defaultValue={dashboardDisplayOption}
                 onValueChange={(value) => {
@@ -71,7 +71,7 @@ const DashboardContainer = () => {
                 }}
                 className='w-full'
             >
-                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
+                <MainPageHeader title={showOnlyAdmin ? 'Otros servidores' : 'Tus servidores'}>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -88,7 +88,7 @@ const DashboardContainer = () => {
                                             fill='white'
                                         />
                                     </svg>
-                                    <div>Filter</div>
+                                    <div>Filtrar</div>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='13'
@@ -107,20 +107,19 @@ const DashboardContainer = () => {
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
-                                <div className='text-xs opacity-50 text-center'>More filters coming soon!</div>
                                 {rootAdmin && (
                                     <DropdownMenuItem
                                         onSelect={() => {
                                             setShowOnlyAdmin((s) => !s);
                                         }}
                                     >
-                                        {showOnlyAdmin ? 'Show personal servers' : 'Show other servers'}
+                                        {showOnlyAdmin ? 'Mostrar tus servidores' : 'Mostrar otros servidores'}
                                     </DropdownMenuItem>
                                 )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <TabsList>
-                            <TabsTrigger aria-label='View servers in a list layout.' value='list'>
+                            <TabsTrigger aria-label='Ver en vista de lista.' value='list'>
                                 <svg
                                     width='16'
                                     height='17'
@@ -134,7 +133,7 @@ const DashboardContainer = () => {
                                     />
                                 </svg>
                             </TabsTrigger>
-                            <TabsTrigger aria-label='View servers in a grid layout.' value='grid'>
+                            <TabsTrigger aria-label='Ver en vista de cuadrícula.' value='grid'>
                                 <svg
                                     width='16'
                                     height='17'
@@ -175,8 +174,8 @@ const DashboardContainer = () => {
                                     ) : (
                                         <p className={`text-center text-sm text-zinc-400`}>
                                             {showOnlyAdmin
-                                                ? 'There are no other servers to display.'
-                                                : 'There are no servers associated with your account.'}
+                                                ? 'No hay otros servidores que mostrar.'
+                                                : 'No hay servidores asociados a tu cuenta.'}
                                         </p>
                                     )
                                 }
@@ -207,8 +206,8 @@ const DashboardContainer = () => {
                                         ) : (
                                             <p className={`text-center text-sm text-zinc-400`}>
                                                 {showOnlyAdmin
-                                                    ? 'There are no other servers to display.'
-                                                    : 'There are no servers associated with your account.'}
+                                                    ? 'No hay otros servidores que mostrar.'
+                                                    : 'No hay servidores asociados con tu cuenta.'}
                                             </p>
                                         )
                                     }

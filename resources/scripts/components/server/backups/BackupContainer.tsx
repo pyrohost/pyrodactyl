@@ -34,20 +34,20 @@ const BackupContainer = () => {
 
     if (!backups || (error && isValidating)) {
         return (
-            <ServerContentBlock title={'Backups'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+            <ServerContentBlock title={'Copias de seguridad'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Copias de seguridad</h1>
             </ServerContentBlock>
         );
     }
 
     return (
-        <ServerContentBlock title={'Backups'}>
-            <MainPageHeader title={'Backups'}>
+        <ServerContentBlock title={'Copias de seguridad'}>
+            <MainPageHeader title={'Copias de seguridad'}>
                 <Can action={'backup.create'}>
                     <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {backupLimit > 0 && backups.backupCount > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
-                                {backups.backupCount} of {backupLimit} backups
+                                {backups.backupCount} de {backupLimit} copias
                             </p>
                         )}
                         {backupLimit > 0 && backupLimit > backups.backupCount && <CreateBackupButton />}
@@ -63,8 +63,8 @@ const BackupContainer = () => {
                         !backupLimit ? null : (
                             <p className={`text-center text-sm text-zinc-300`}>
                                 {page > 1
-                                    ? "Looks like we've run out of backups to show you, try going back a page."
-                                    : 'Your server does not have any backups.'}
+                                    ? "Parece que nos hemos quedado sin copias que mostrarte. Prueba a ir una página atrás."
+                                    : 'Tu servidor no tiene ninguna copia de seguridad.'}
                             </p>
                         )
                     ) : (
@@ -77,7 +77,7 @@ const BackupContainer = () => {
                 }
             </Pagination>
             {backupLimit === 0 && (
-                <p className={`text-center text-sm text-zinc-300`}>Backups cannot be created for this server.</p>
+                <p className={`text-center text-sm text-zinc-300`}>No se pueden crear copias en este servidor.</p>
             )}
         </ServerContentBlock>
     );

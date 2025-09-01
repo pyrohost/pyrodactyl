@@ -21,14 +21,14 @@ interface Values {
 
 const schema = object().shape({
     databaseName: string()
-        .required('A database name must be provided.')
-        .min(3, 'Database name must be at least 3 characters.')
-        .max(48, 'Database name must not exceed 48 characters.')
+        .required('Debes indicar un nombre para la base de datos.')
+        .min(3, 'El nombre de la base de datos debe contener al menos 3 caracteres.')
+        .max(48, 'El nombre de la base de datos no puede pasar de los 48 caracteres.')
         .matches(
             /^[\w\-.]{3,48}$/,
-            'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.',
+            'El nombre de la base de datos solo puede contener caracteres alfanuméricos, barras bajas, guiones y/o puntos.',
         ),
-    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'A valid host address must be provided.'),
+    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'Debes indicar una dirección válida.'),
 });
 
 const CreateDatabaseButton = () => {
@@ -70,7 +70,7 @@ const CreateDatabaseButton = () => {
                             resetForm();
                             setVisible(false);
                         }}
-                        title='Create new database'
+                        title='Crear base de datos'
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
@@ -79,22 +79,22 @@ const CreateDatabaseButton = () => {
                                     type={'string'}
                                     id={'database_name'}
                                     name={'databaseName'}
-                                    label={'Database Name'}
-                                    description={'A descriptive name for your database instance.'}
+                                    label={'Nombre de la base de datos'}
+                                    description={'Un nombre descriptivo para tu base de datos.'}
                                 />
                                 <div className={`mt-6`}>
                                     <Field
                                         type={'string'}
                                         id={'connections_from'}
                                         name={'connectionsFrom'}
-                                        label={'Connections From'}
+                                        label={'Conexiones de'}
                                         description={
-                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
+                                            'Las conexiones que se permitirán. Déjalo en blanco para permitir conexiones desde cualquier dirección.'
                                         }
                                     />
                                 </div>
                                 <div className={`flex gap-3 justify-end my-6`}>
-                                    <Button type={'submit'}>Create Database</Button>
+                                    <Button type={'submit'}>Crear</Button>
                                 </div>
                             </Form>
                         </div>
@@ -109,7 +109,7 @@ const CreateDatabaseButton = () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                 onClick={() => setVisible(true)}
             >
-                New Database
+                Nueva base de datos
             </button>
         </>
     );

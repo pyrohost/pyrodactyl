@@ -41,14 +41,14 @@ const DatabasesContainer = () => {
     }, []);
 
     return (
-        <ServerContentBlock title={'Databases'}>
+        <ServerContentBlock title={'Bases de datos'}>
             <FlashMessageRender byKey={'databases'} />
-            <MainPageHeader title={'Databases'}>
+            <MainPageHeader title={'Bases de datos'}>
                 <Can action={'database.create'}>
                     <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
-                                {databases.length} of {databaseLimit} databases
+                                {databases.length} de {databaseLimit} bases de datos
                             </p>
                         )}
                         {databaseLimit > 0 && databaseLimit !== databases.length && <CreateDatabaseButton />}
@@ -71,8 +71,8 @@ const DatabasesContainer = () => {
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
-                                ? 'Your server does not have any databases.'
-                                : 'Databases cannot be created for this server.'}
+                                ? 'Tu servidor no tiene ninguna base de datos.'
+                                : 'No se pueden crear bases de datos para este servidor.'}
                         </p>
                     )}
                 </>

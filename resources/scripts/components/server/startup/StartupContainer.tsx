@@ -94,25 +94,25 @@ const StartupContainer = () => {
         !error || (error && isValidating) ? (
             <Spinner centered size={Spinner.Size.LARGE} />
         ) : (
-            <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
+            <ServerError title={'Vaya!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
-            <MainPageHeader direction='column' title='Startup Settings'>
+        <ServerContentBlock title={'Ajustes de inicio'} showFlashKey={'startup:image'}>
+            <MainPageHeader direction='column' title='Ajustes de inicio'>
                 <h2 className='text-sm'>
-                    These settings are used to control how your server starts up. Please be careful when modifying these
-                    settings as they can cause your server to become inoperable.
+                    Estos ajustes controlan cómo inicia tu servidor. Por favor, ten cuidado al modificar estos valores, ya
+                    que pueden ocasionar daños en tu servidor.
                 </h2>
             </MainPageHeader>
             <div className={`flex gap-8 lg:flex-row flex-col`}>
-                <TitledGreyBox title={'Startup Command'} className={`col-span-2`}>
+                <TitledGreyBox title={'Comando de inicio'} className={`col-span-2`}>
                     <CopyOnClick text={data.invocation}>
                         <div className={`px-1 py-2`}>
                             <p className={`font-mono bg-zinc-900 rounded-sm py-2 px-4`}>{data.invocation}</p>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className='min-w-80'>
+                <TitledGreyBox title={'Imagen de Docker'} className='min-w-80'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>
@@ -155,8 +155,8 @@ const StartupContainer = () => {
                                 </DropdownMenu>
                             </InputSpinner>
                             <p className={`text-xs mt-2`}>
-                                This is an advanced feature allowing you to select a Docker image to use when running
-                                this server instance.
+                                Esta es una opción avanzada que te permite seleccionar la imagen de Docker a usar cuando
+                                se ejecute el servidor.
                             </p>
                         </>
                     ) : (
@@ -164,8 +164,8 @@ const StartupContainer = () => {
                             <span className={`text-neutral-400`}>{variables.dockerImage}</span>
                             {isCustomImage && (
                                 <p className={`text-xs text-zinc-300 mt-2`}>
-                                    This {"server's"} Docker image has been manually set by an administrator and cannot
-                                    be changed through this UI.
+                                    Esta imagen de Docker ha sido manualmente establecida por un administrador y no se
+                                    puede cambiar mediante el panel de control.
                                 </p>
                             )}
                         </>

@@ -27,7 +27,7 @@ const CronBox = ({ title, value }: { title: string; value: string }) => (
 
 const ActivePill = ({ active }: { active: boolean }) => (
     <span className='flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white'>
-        {active ? 'Active' : 'Inactive'}
+        {active ? 'Activo' : 'Inactivo'}
     </span>
 );
 
@@ -69,7 +69,7 @@ const ScheduleEditContainer = () => {
     }, []);
 
     return (
-        <PageContentBlock title={'Schedules'}>
+        <PageContentBlock title={'Programas'}>
             <FlashMessageRender byKey={'schedules'} />
             {!schedule || isLoading ? (
                 <Spinner size={'large'} centered />
@@ -85,16 +85,16 @@ const ScheduleEditContainer = () => {
                                     <span
                                         className={`flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white`}
                                     >
-                                        Processing
+                                        Procesando
                                     </span>
                                 ) : (
                                     <ActivePill active={schedule.isActive} />
                                 )}
                             </h3>
                             <p className={`mt-1 text-sm`}>
-                                <strong>Last run at:&nbsp;</strong>
+                                <strong>Última ejecución:&nbsp;</strong>
                                 {schedule.lastRunAt ? (
-                                    format(schedule.lastRunAt, "MMM do 'at' h:mma")
+                                    format(schedule.lastRunAt, "do MMM 'a las' h:mma")
                                 ) : (
                                     <span>N/A</span>
                                 )}
@@ -102,9 +102,9 @@ const ScheduleEditContainer = () => {
                                 <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
                                 <br className={`sm:hidden`} />
 
-                                <strong>Next run at:&nbsp;</strong>
+                                <strong>Siguiente ejecución:&nbsp;</strong>
                                 {schedule.nextRunAt ? (
-                                    format(schedule.nextRunAt, "MMM do 'at' h:mma")
+                                    format(schedule.nextRunAt, "do MMM 'a las' h:mma")
                                 ) : (
                                     <span>N/A</span>
                                 )}
@@ -113,18 +113,18 @@ const ScheduleEditContainer = () => {
                         <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                             <Can action={'schedule.update'}>
                                 <Button.Text onClick={toggleEditModal} className={'flex-1 min-w-max'}>
-                                    Edit
+                                    Editar
                                 </Button.Text>
                                 <NewTaskButton schedule={schedule} className={'flex-1 min-w-max'} />
                             </Can>
                         </div>
                     </div>
                     <div className={`grid grid-cols-3 sm:grid-cols-5 gap-4`}>
-                        <CronBox title={'Minute'} value={schedule.cron.minute} />
-                        <CronBox title={'Hour'} value={schedule.cron.hour} />
-                        <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
-                        <CronBox title={'Month'} value={schedule.cron.month} />
-                        <CronBox title={'Day (Week)'} value={schedule.cron.dayOfWeek} />
+                        <CronBox title={'Minuto'} value={schedule.cron.minute} />
+                        <CronBox title={'Hora'} value={schedule.cron.hour} />
+                        <CronBox title={'Día (mes)'} value={schedule.cron.dayOfMonth} />
+                        <CronBox title={'Mes'} value={schedule.cron.month} />
+                        <CronBox title={'Día (semana)'} value={schedule.cron.dayOfWeek} />
                     </div>
                     <div>
                         {schedule.tasks.length > 0

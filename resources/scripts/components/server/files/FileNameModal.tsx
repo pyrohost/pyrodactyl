@@ -38,19 +38,19 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                         resetForm();
                         onDismissed();
                     }}
-                    title='New file'
+                    title='Nuevo archivo'
                     {...props}
                 >
                     <Form className='m-0 w-full flex flex-col gap-4'>
                         <Field
                             id={'fileName'}
                             name={'fileName'}
-                            label={'File Name'}
-                            description={'Enter the name that this file should be saved as.'}
+                            label={'Nombre del archivo'}
+                            description={'Introduce el nombre del nuevo archivo.'}
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>
-                            <Button>Create File</Button>
+                            <Button>Crear archivo</Button>
                         </div>
                     </Form>
                 </Modal>

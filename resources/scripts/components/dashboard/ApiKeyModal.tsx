@@ -21,8 +21,8 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 
             {/* Modal Header */}
             <p className='text-sm text-white-600 mt-2'>
-                The API key you have requested is shown below. Please store it in a safe place, as it will not be shown
-                again.
+                La clave API que has solicitado se mostrará a continuación. Por favor, guárdala en un sitio seguro,
+                la clave no volverá a mostrarse.
             </p>
 
             {/* API Key Display Section */}
@@ -44,7 +44,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
                     onClick={() => dismiss()}
                     className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-hidden focus:ring-2 focus:ring-gray-500 cursor-pointer'
                 >
-                    Close
+                    Cerrar
                 </Button>
             </div>
         </div>
@@ -54,7 +54,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 ApiKeyModal.displayName = 'ApiKeyModal';
 
 export default asModal<Props>({
-    title: 'Your API Key',
+    title: 'Tu clave API',
     closeOnEscape: true, // Allows closing the modal by pressing Escape
     closeOnBackground: true, // Allows closing by clicking outside the modal
 })(ApiKeyModal);

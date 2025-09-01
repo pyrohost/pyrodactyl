@@ -48,7 +48,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
     const [canEditUser] = usePermissions(subuser ? ['user.update'] : ['user.create']);
 
     useEffect(() => {
-        setPropOverrides({ title: subuser ? `Permissions for ${subuser.email}` : 'Create new subuser' });
+        setPropOverrides({ title: subuser ? `Permisos de ${subuser.email}` : 'Crear subusuario' });
     }, []);
 
     // The permissions that can be modified by this user.
@@ -104,9 +104,9 @@ const EditSubuserModal = ({ subuser }: Props) => {
             }
             validationSchema={object().shape({
                 email: string()
-                    .max(191, 'Email addresses must not exceed 191 characters.')
-                    .email('A valid email address must be provided.')
-                    .required('A valid email address must be provided.'),
+                    .max(191, 'Las direcciones de correo no pueden exceder los 191 caracteres.')
+                    .email('Debes indicar una dirección de correo electrónico válida.')
+                    .required('Debes indicar una dirección de correo electrónico válida.'),
                 permissions: array().of(string()),
             })}
         >
@@ -115,8 +115,8 @@ const EditSubuserModal = ({ subuser }: Props) => {
                 {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                     <div className={`mt-4 pl-4 py-2 border-l-4 border-blue-400`}>
                         <p className={`text-sm text-zinc-300`}>
-                            Only permissions which your account is currently assigned may be selected when creating or
-                            modifying other users.
+                            Solo puedes seleccionar permisos que tenga tu cuenta a la hora de crear o modificar otros
+                            usuarios.
                         </p>
                     </div>
                 )}
@@ -124,9 +124,9 @@ const EditSubuserModal = ({ subuser }: Props) => {
                     <div className={`mb-6`}>
                         <Field
                             name={'email'}
-                            label={'User Email'}
+                            label={'Correo del usuario'}
                             description={
-                                'Enter the email address of the user you wish to invite as a subuser for this server.'
+                                'Introduce la dirección de correo electrónico del usuario que quieres añadir.'
                             }
                         />
                     </div>
@@ -157,7 +157,7 @@ const EditSubuserModal = ({ subuser }: Props) => {
                 <Can action={subuser ? 'user.update' : 'user.create'}>
                     <div className={`my-6 flex justify-end`}>
                         <Button type={'submit'} className={`w-full sm:w-auto`}>
-                            {subuser ? 'Save' : 'Invite User'}
+                            {subuser ? 'Guardar' : 'Invitar'}
                         </Button>
                     </div>
                 </Can>

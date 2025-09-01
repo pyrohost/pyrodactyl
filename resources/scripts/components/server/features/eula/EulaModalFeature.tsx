@@ -71,20 +71,20 @@ const EulaModalFeature = () => {
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
                 <p className={`text-zinc-200`}>
-                    Before starting your Minecraft server, you need to accept the{' '}
+                    Antes de iniciar tu servidor de Minecraft, debes aceptar los{' '}
                     <a
                         target={'_blank'}
                         className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
                         rel={'noreferrer noopener'}
                         href='https://www.aka.ms/MinecraftEULA'
                     >
-                        Minecraft EULA
+                        Términos de Minecraft (EULA)
                     </a>
                     .
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
-                    <Button.Text onClick={() => setVisible(false)}>I don&apos;t accept</Button.Text>
-                    <Button onClick={onAcceptEULA}>I accept</Button>
+                    <Button.Text onClick={() => setVisible(false)}>No acepto</Button.Text>
+                    <Button onClick={onAcceptEULA}>Acepto</Button>
                 </div>
             </div>
         </Modal>

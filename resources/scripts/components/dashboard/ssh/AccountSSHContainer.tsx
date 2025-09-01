@@ -29,29 +29,29 @@ const AccountSSHContainer = () => {
     const doDeletion = (fingerprint: string) => {};
 
     return (
-        <PageContentBlock title={'SSH Keys'}>
+        <PageContentBlock title={'Claves SSH'}>
             <FlashMessageRender byKey={'account'} />
             <div className='md:flex flex-nowrap my-10 space-x-8'>
                 {/* Create SSH Key Section */}
-                <ContentBox title={'Add SSH Key'} className='flex-none w-full md:w-1/1'>
+                <ContentBox title={'Agregar clave SSH'} className='flex-none w-full md:w-1/1'>
                     <CreateSSHKeyForm />
                 </ContentBox>
             </div>
             {/* SSH Keys List Section */}
-            <ContentBox title={'SSH Keys'}>
+            <ContentBox title={'Claves SSH'}>
                 <SpinnerOverlay visible={!data && isValidating} />
                 <Dialog.Confirm
-                    title={'Delete SSH Key'}
-                    confirm={'Delete Key'}
+                    title={'Eliminar clave SSH'}
+                    confirm={'Eliminar la clave'}
                     open={!!deleteIdentifier}
                     onClose={() => setDeleteIdentifier('')}
                     onConfirmed={() => doDeletion(deleteIdentifier)}
                 >
-                    Deleting this key will revoke access for any system using it.
+                    Eliminar esta clave revocará el acceso a cualquier aplicación que la esté utilizando.
                 </Dialog.Confirm>
                 {!data || data.length === 0 ? (
                     <p className='text-center text-sm text-gray-500'>
-                        {!data ? 'Loading...' : 'No SSH keys exist for this account.'}
+                        {!data ? 'Cargando...' : 'No existe ninguna clave SSH para esta cuenta.'}
                     </p>
                 ) : (
                     data.map((key) => (
@@ -60,7 +60,7 @@ const AccountSSHContainer = () => {
                                 <div className='flex-1'>
                                     <p className='text-sm font-medium'>{key.name}</p>
                                     <p className='text-xs text-gray-500 uppercase'>
-                                        Added on: {format(key.createdAt, 'MMM d, yyyy HH:mm')}
+                                        Creada el: {format(key.createdAt, 'd MMM, yyyy HH:mm')}
                                     </p>
                                 </div>
                                 <p className='text-sm text-gray-600 hidden md:block'>

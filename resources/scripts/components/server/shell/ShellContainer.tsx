@@ -59,7 +59,7 @@ const MAX_DESCRIPTION_LENGTH = 100;
 const steps = [
     {
         slug: 'game',
-        title: 'Game',
+        title: 'Juego',
     },
     {
         slug: 'software',
@@ -67,7 +67,7 @@ const steps = [
     },
     {
         slug: 'options-variables',
-        title: 'Options & Variables',
+        title: 'Opciones y variables',
     },
 ];
 const hidden_nest_prefix = '!';
@@ -179,7 +179,7 @@ const SoftwareContainer = () => {
     const reinstall = () => {
         reinstallServer(uuid)
             .then(() => {
-                toast.success('Server has been reinstalled successfully.');
+                toast.success('El servidor se ha reinstalado correctamente.');
             })
             .catch((error) => {
                 console.error(error);
@@ -208,7 +208,7 @@ const SoftwareContainer = () => {
     const confirmSelection = async () => {
         if (shouldBackup) {
             await createServerBackup(uuid, {
-                name: `${currentEggName} -> ${selectedEgg?.attributes.name} Migration - ${new Date().toLocaleString()}`,
+                name: `${currentEggName} -> ${selectedEgg?.attributes.name} Migración - ${new Date().toLocaleString()}`,
                 isLocked: false,
             }).catch((error) => {
                 toast.error(httpErrorToHuman(error));
@@ -276,7 +276,7 @@ const SoftwareContainer = () => {
                             className='text-brand cursor-pointer'
                             onClick={() => toggleDescriptionVisibility(index)}
                         >
-                            Show More
+                            Mostrar más
                         </button>
                     </>
                 ) : (
@@ -287,7 +287,7 @@ const SoftwareContainer = () => {
                                 className='text-brand cursor-pointer'
                                 onClick={() => toggleDescriptionVisibility(index)}
                             >
-                                <span className='text-neutral-400'>..</span>Show Less
+                                <span className='text-neutral-400'>..</span>Mostrar menos
                             </button>
                         )}
                     </>
@@ -300,8 +300,8 @@ const SoftwareContainer = () => {
         <ServerContentBlock title='Software'>
             <MainPageHeader direction='column' title='Software'>
                 <h2 className='text-sm'>
-                    Welcome to the software management page. Here you can change the game or software that is running on
-                    your server.
+                    Te damos la bienvenida a la página de administración del software. Aquí puedes cambiar el software
+                    que se ejecuta en tu servidor.
                 </h2>
             </MainPageHeader>
 
@@ -312,10 +312,10 @@ const SoftwareContainer = () => {
                             <div className='flex items-center gap-2'>
                                 <HugeIconsEggs fill='currentColor' />
                                 <div className='flex flex-col'>
-                                    <h1 className='text-2xl'>Current Egg</h1>
+                                    <h1 className='text-2xl'>Imagen actual</h1>
                                     {currentEggName &&
                                         (currentEggName?.includes(blank_egg_prefix) ? (
-                                            <p className='text-neutral-300 text-sm'>Please select a egg</p>
+                                            <p className='text-neutral-300 text-sm'>Por favor, selecciona una imagen</p>
                                         ) : (
                                             <p className='text-neutral-300 text-sm'>{currentEggName}</p>
                                         ))}
@@ -325,7 +325,7 @@ const SoftwareContainer = () => {
                                 className='rounded-full border-[1px] cursor-pointer border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-linear-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
                             >
-                                Change Egg
+                                Cambiar imagen
                             </button>
                         </div>
                     </div>
@@ -386,7 +386,7 @@ const SoftwareContainer = () => {
                                                         <p className='text-neutral-200 text-md'>
                                                             {nest.attributes.name}
                                                         </p>
-                                                        <Button onClick={() => handleNestSelect(nest)}>Select</Button>
+                                                        <Button onClick={() => handleNestSelect(nest)}>Seleccionar</Button>
                                                     </div>
                                                     <p className='text-neutral-400 text-xs mt-2'>
                                                         {nest.attributes.description}
@@ -418,7 +418,7 @@ const SoftwareContainer = () => {
                                                             await handleEggSelect(egg);
                                                         }}
                                                     >
-                                                        Select
+                                                        Seleccionar
                                                     </Button>
                                                 </div>
                                                 <p className='text-neutral-400 text-xs mt-2'>
@@ -431,7 +431,7 @@ const SoftwareContainer = () => {
                             )) ||
                                 (step == 1 && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a game first</p>
+                                        <p className='text-neutral-300 '>Por favor, selecciona un juego antes</p>
                                     </div>
                                 ))}
 
@@ -446,14 +446,15 @@ const SoftwareContainer = () => {
                                                             htmlFor='backup'
                                                             className='text-neutral-300 text-md font-bold'
                                                         >
-                                                            Backups
+                                                            Copia de seguridad
                                                         </label>
                                                         <label
                                                             htmlFor='backup'
                                                             className='text-neutral-500 text-sm font-semibold'
                                                         >
-                                                            Would you like to create a backup before continuing? Some
-                                                            data may be modified for removed during the process.
+                                                            ¿Quieres crear una copia de seguridad antes de continuar?
+                                                            Algunos archivos podrían ser modificados o eliminados durante
+                                                            el proceso
                                                         </label>
                                                     </div>
                                                     <Switch
@@ -469,15 +470,15 @@ const SoftwareContainer = () => {
                                                             htmlFor='backup'
                                                             className='text-neutral-300 text-md font-bold'
                                                         >
-                                                            Backups
+                                                            Copia de seguridad
                                                         </label>
                                                         <label
                                                             htmlFor='backup'
                                                             className='text-neutral-500 text-sm font-semibold'
                                                         >
-                                                            You have reached the backup limit for this server. If you
-                                                            wish to create a backup cancel now and delete one or more
-                                                            existing backups
+                                                            Has alcanzado el límite de copias de seguridad para este
+                                                            servidor. Si quieres crear una copia de seguridad, cancela
+                                                            primero este proceso y borra una o más copias existentes
                                                         </label>
                                                     </div>
                                                     <Switch name='backup' disabled />
@@ -487,14 +488,13 @@ const SoftwareContainer = () => {
                                         <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
                                             <div className='flex flex-col'>
                                                 <label htmlFor='wipe' className='text-neutral-300 text-md font-bold'>
-                                                    Wipe Data
+                                                    Eliminar datos
                                                 </label>
                                                 <label
                                                     htmlFor='wipe'
                                                     className='text-neutral-500 text-sm font-semibold'
                                                 >
-                                                    In some cases you might want to completely wipe your server like if
-                                                    you are changing to a different game.
+                                                    En algunos casos, podría interesarte eliminar tu servidor completamente
                                                 </label>
                                             </div>
                                             <Switch
@@ -534,12 +534,12 @@ const SoftwareContainer = () => {
 
                                     <div className='border-t border-[#ffffff20]' />
 
-                                    <Button onClick={() => confirmSelection()}>Confirm</Button>
+                                    <Button onClick={() => confirmSelection()}>Confirmar</Button>
                                 </div>
                             )) ||
                                 (step == 2 && !currentEggName?.includes(blank_egg_prefix) && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a egg first</p>
+                                        <p className='text-neutral-300 '>Por favor, selecciona una imagen antes</p>
                                     </div>
                                 ))}
                         </div>
@@ -555,10 +555,10 @@ const SoftwareContainer = () => {
                             className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block'
                         />
                         <div className='flex flex-col pb-1  m-2'>
-                            <h1 className='text-xl'>Danger Zone</h1>
+                            <h1 className='text-xl'>Zona de peligro</h1>
                             <p className='text-sm text-neutral-300'>
-                                During this process some files may be deleted or modified either make a backup before
-                                hand or pick the option when prompted.
+                                Durante este proceso algunos archivos serán modificados y/o eliminados. Haz una copia de seguridad
+                                antes de iniciar el proceeso o selecciona la opción cuando se te pregunte.
                             </p>
                         </div>
                     </div>

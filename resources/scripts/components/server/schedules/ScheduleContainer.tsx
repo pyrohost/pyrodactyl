@@ -38,9 +38,9 @@ function ScheduleContainer() {
     }, []);
 
     return (
-        <ServerContentBlock title={'Schedules'}>
+        <ServerContentBlock title={'Programas'}>
             <FlashMessageRender byKey={'schedules'} />
-            <MainPageHeader title={'Schedules'}>
+            <MainPageHeader title={'Programas'}>
                 <Can action={'schedule.create'}>
                     <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
                     <button
@@ -51,7 +51,7 @@ function ScheduleContainer() {
                         className='rounded-full border-[1px] border-[#ffffff12] px-8 py-3 text-sm font-bold shadow-md cursor-pointer'
                         onClick={() => setVisible(true)}
                     >
-                        New Schedule
+                        Nuevo programa
                     </button>
                 </Can>
             </MainPageHeader>
@@ -59,7 +59,7 @@ function ScheduleContainer() {
                 <>
                     {schedules.length === 0 ? (
                         <p className={`text-center text-sm text-neutral-300`}>
-                            There are no schedules configured for this server.
+                            No hay programas configurados en este servidor.
                         </p>
                     ) : (
                         <PageListContainer data-pyro-schedules>

@@ -59,7 +59,7 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
             {({ isSubmitting }) => (
                 <Modal
                     {...props}
-                    title='Configure permissions'
+                    title='Configurar permisos'
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
                 >
@@ -70,15 +70,15 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
                                     type={'string'}
                                     id={'file_mode'}
                                     name={'mode'}
-                                    label={'File Mode'}
+                                    label={'Modo de archivo'}
                                     description={
-                                        'This is intended for advanced users. You may irreperably damage your server by changing file permissions.'
+                                        'Esto está pensado para usuarios avanzados. Por favor, procede con precaución: puedes dañar permanentemente tu servidor al cambiar los permisos de archivo'
                                     }
                                     autoFocus
                                 />
                             </div>
                             <div className={`flex justify-end w-full my-6`}>
-                                <Button>Update</Button>
+                                <Button>Actualizar</Button>
                             </div>
                         </div>
                     </Form>

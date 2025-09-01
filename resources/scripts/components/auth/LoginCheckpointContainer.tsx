@@ -41,18 +41,18 @@ function LoginCheckpointForm() {
                     </div>
                 </Link>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
+                <h2 className='text-xl font-extrabold mb-2'>Autenticación de dos factores</h2>
+                <div className='text-sm mb-6'>Verifica tu sesión usando el código generado por tu dispositivo.</div>
 
                 <div className={`mt-6`}>
                     <Field
                         name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
+                        title={isMissingDevice ? 'Código de recuperación' : 'Clave de autenticación'}
                         placeholder='000000'
                         description={
                             isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
+                                ? 'Introduce uno de los códigos de recuperación generados cuando habilitaste la autenticación de dos factores para tu cuenta.'
+                                : 'Introduce la clave de autenticación generada por tu dispositivo.'
                         }
                         type={'text'}
                         autoComplete={'one-time-code'}
@@ -86,7 +86,7 @@ function LoginCheckpointForm() {
                             'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                         }
                     >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                        {!isMissingDevice ? "He perdido mi dispositivo" : 'Tengo mi dispositivo'}
                     </span>
                 </div>
                 <div
@@ -98,7 +98,7 @@ function LoginCheckpointForm() {
                             'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                         }
                     >
-                        Return to Login
+                        Volver al inicio de sesión
                     </Link>
                 </div>
             </LoginFormContainer>

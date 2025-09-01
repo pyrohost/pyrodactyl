@@ -79,13 +79,13 @@ const FileEditContainer = () => {
     const save = (name?: string) => {
         return new Promise<void>((resolve, reject) => {
             setLoading(true);
-            toast.success(`Saving ${name ?? filename}...`);
+            toast.success(`Guardando ${name ?? filename}...`);
             clearFlashes('files:view');
             if (fetchFileContent) {
                 fetchFileContent()
                     .then((content) => saveFileContents(uuid, name ?? filename, content))
                     .then(() => {
-                        toast.success(`Saved ${name ?? filename}!`);
+                        toast.success(`Se ha guardado ${name ?? filename}.`);
                         if (name) {
                             navigate(`/server/${id}/files/edit/${encodePathSegments(name)}`);
                         }
@@ -107,7 +107,7 @@ const FileEditContainer = () => {
             if (instance) {
                 // they'll stack immediately, so this'll ease that
                 setTimeout(() => {
-                    toast.success('Your server is restarting.');
+                    toast.success('Tu servidor se está reiniciando.');
                 }, 500);
                 instance.send('set state', 'restart');
             }
@@ -121,7 +121,7 @@ const FileEditContainer = () => {
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0!'>
+        <PageContentBlock title={action === 'edit' ? `Editando ${filename}` : `Nuevo archivo`} className='p-0!'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -136,12 +136,10 @@ const FileEditContainer = () => {
             {filename === '.pteroignore' ? (
                 <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded-sm border-cyan-400`}>
                     <p className={`text-neutral-300 text-sm`}>
-                        You&apos;re editing a{' '}
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pteroignore</code> file. Any files
-                        or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>). You can negate
-                        a prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>).
+                        Estás editando un archivo
+                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pteroignore</code>. Cualquier archivo
+                        o carpeta en esta lista se excluirá de futuras copias de seguridad. Puedes usar wildcards (*) y/o
+                        negar una regla usando una exclamación.
                     </p>
                 </div>
             ) : null}
@@ -243,7 +241,7 @@ const FileEditContainer = () => {
                                 className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md cursor-pointer'
                                 onClick={() => save()}
                             >
-                                Save{' '}
+                                Guardar{' '}
                                 <span className='ml-2 font-mono text-xs font-bold uppercase lg:inline-block hidden'>
                                     CTRL + S
                                 </span>
@@ -276,7 +274,7 @@ const FileEditContainer = () => {
                                     sideOffset={8}
                                 >
                                     <DropdownMenuItem onSelect={() => saveAndRestart()}>
-                                        Save & Restart
+                                        Guardar y reiniciar
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -292,7 +290,7 @@ const FileEditContainer = () => {
                             className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                             onClick={() => setModalVisible(true)}
                         >
-                            Create File
+                            Crear archivo
                         </button>
                     </Can>
                 )}

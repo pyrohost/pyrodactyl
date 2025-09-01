@@ -95,11 +95,11 @@ const FileManagerContainer = () => {
     });
 
     if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+        return <ServerError title={'Parece que algo ha fallado.'} message={httpErrorToHuman(error)} />;
     }
 
     return (
-        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={'Administrador de archivos'} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
                 <ErrorBoundary>
                     <MainPageHeader title={'Files'}>
@@ -128,7 +128,7 @@ const FileManagerContainer = () => {
             {!files ? null : (
                 <>
                     {!files.length ? (
-                        <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
+                        <p className={`text-sm text-zinc-400 text-center`}>Esta carpeta está vacía.</p>
                     ) : (
                         <>
                             <div ref={parentRef} style={{ height: `calc(100vh - 194px)`, overflowY: 'scroll' }}>
@@ -160,7 +160,7 @@ const FileManagerContainer = () => {
                                             ref={searchInputRef}
                                             className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                                             type='text'
-                                            placeholder='Search...'
+                                            placeholder='Buscar...'
                                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                                         />
                                     </div>

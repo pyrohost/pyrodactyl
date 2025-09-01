@@ -103,7 +103,7 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
                     )}
                     <div className={`w-1/5 text-right mr-4 hidden md:block text-xs`} title={file.modifiedAt.toString()}>
                         {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
-                            ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
+                            ? format(file.modifiedAt, 'do MMM, yyyy h:mma')
                             : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}
                     </div>
                 </MemoizedClickable>
