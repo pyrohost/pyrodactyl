@@ -47,7 +47,7 @@ services:
         image: redis:alpine
         restart: always
     panel:
-        image: ghcr.io/pyrohost/pyrodactyl:main
+        image: ghcr.io/pyrohost/pyrodactyl:latest
         restart: always
         ports:
             - '80:80'
