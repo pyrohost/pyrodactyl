@@ -141,7 +141,7 @@ const AllocationRow = ({ allocation }: Props) => {
 
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notes</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notas</p>
 
                         {isEditingNotes ? (
                             <div className='space-y-2'>
@@ -149,7 +149,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     <Textarea
                                         ref={textareaRef}
                                         className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-3 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
-                                        placeholder='Add notes for this allocation...'
+                                        placeholder='Escribir notas para esta asignación...'
                                         value={notesValue}
                                         onChange={(e) => setNotesValue(e.currentTarget.value)}
                                         rows={3}
@@ -162,11 +162,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                         ) : (
                                             <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />
                                         )}
-                                        Save
+                                        Guardar
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
                                         <HugeIconsX fill='currentColor' className='w-3 h-3 mr-1' />
-                                        Cancel
+                                        Cancelar
                                     </ActionButton>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     }`}
                                     onClick={startEdit}
                                 >
-                                    {allocation.notes || 'Click to add notes...'}
+                                    {allocation.notes || 'Clic para escribir notas...'}
                                 </div>
                             </Can>
                         )}
@@ -194,13 +194,13 @@ const AllocationRow = ({ allocation }: Props) => {
                             disabled={allocation.isDefault}
                             title={
                                 allocation.isDefault
-                                    ? 'This is already the primary allocation'
-                                    : 'Make this the primary allocation'
+                                    ? 'Esta ya es la asignación primaria'
+                                    : 'Convertir en asignación primaria'
                             }
                         >
                             <HugeIconsCrown fill='currentColor' className='w-3 h-3 mr-1' />
-                            <span className='hidden sm:inline'>Make Primary</span>
-                            <span className='sm:hidden'>Primary</span>
+                            <span className='hidden sm:inline'>Hacer primaria</span>
+                            <span className='sm:hidden'>Primaria</span>
                         </ActionButton>
                     </Can>
                     <Can action={'allocation.delete'}>
@@ -210,7 +210,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             onClick={deleteAllocation}
                             disabled={allocation.isDefault || deleteLoading}
                             title={
-                                allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
+                                allocation.isDefault ? 'No puedes eliminar la asignación primaria' : 'Eliminar esta asignación'
                             }
                         >
                             {deleteLoading ? (
@@ -218,7 +218,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             ) : (
                                 <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />
                             )}
-                            <span className='hidden sm:inline'>Delete</span>
+                            <span className='hidden sm:inline'>Eliminar</span>
                         </ActionButton>
                     </Can>
                 </div>

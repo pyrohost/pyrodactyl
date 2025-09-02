@@ -155,7 +155,7 @@ const ServerActivityLogContainer = () => {
     }, [error]);
 
     return (
-        <ServerContentBlock title={'Activity Log'}>
+        <ServerContentBlock title={'Registro de actividad'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'server:activity'} />
 
@@ -169,17 +169,17 @@ const ServerActivityLogContainer = () => {
                 >
                     <MainPageHeader
                         direction='column'
-                        title={'Activity Log'}
+                        title={'Registro de actividad'}
                         titleChildren={
                             <div className='flex gap-2 items-center flex-wrap'>
                                 <ActionButton
                                     variant='secondary'
                                     onClick={() => setShowFilters(!showFilters)}
                                     className='flex items-center gap-2'
-                                    title='Toggle Filters (Ctrl+F)'
+                                    title='Alternar filtros (Ctrl+F)'
                                 >
                                     <HugeIconsFilter className='w-4 h-4' fill='currentColor' />
-                                    Filters
+                                    Filtros
                                     {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
                                 </ActionButton>
                                 <ActionButton
@@ -187,17 +187,17 @@ const ServerActivityLogContainer = () => {
                                     onClick={exportLogs}
                                     disabled={!filteredData?.items?.length}
                                     className='flex items-center gap-2'
-                                    title='Export CSV (Ctrl+E)'
+                                    title='Exportar CSV (Ctrl+E)'
                                 >
                                     <HugeIconsDownload className='w-4 h-4' fill='currentColor' />
-                                    Export
+                                    Exportar
                                 </ActionButton>
                             </div>
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Monitor all server activity and track user actions. Filter events, search for specific
-                            activities, and export logs for audit purposes.
+                            Monitoriza la actividad de tu servidor y rastrea las acciones de los usuarios. Filtra por
+                            eventos, busca actividades específicas y exporta registros para auditoría.
                         </p>
                     </MainPageHeader>
                 </div>
@@ -216,12 +216,12 @@ const ServerActivityLogContainer = () => {
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                     <HugeIconsFilter className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                <h3 className='text-base font-semibold text-zinc-100'>Filtros</h3>
                             </div>
 
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Buscar</label>
                                     <div className='relative'>
                                         <HugeIconsSearch
                                             className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
@@ -229,7 +229,7 @@ const ServerActivityLogContainer = () => {
                                         />
                                         <Input.Text
                                             type='text'
-                                            placeholder='Search events, IPs, users...'
+                                            placeholder='Buscar eventos, IPs, usuarios...'
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             style={{ paddingLeft: '2.5rem' }}
@@ -238,14 +238,14 @@ const ServerActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Tipo de evento</label>
                                     <Select
                                         value={selectedEventType}
                                         onChange={(e) => setSelectedEventType(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Events
+                                            Todos
                                         </option>
                                         {eventTypes.map((type) => (
                                             <option
@@ -260,26 +260,26 @@ const ServerActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Time Range</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Rango de tiempo</label>
                                     <Select
                                         value={dateRange}
                                         onChange={(e) => setDateRange(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Time
+                                            Siempre
                                         </option>
                                         <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last Hour
+                                            Última hora
                                         </option>
                                         <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 24 Hours
+                                            Últimas 24 horas
                                         </option>
                                         <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 7 Days
+                                            Últimos 7 días
                                         </option>
                                         <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 30 Days
+                                            Últimos 30 días
                                         </option>
                                     </Select>
                                 </div>
@@ -292,7 +292,7 @@ const ServerActivityLogContainer = () => {
                                             className='flex items-center gap-2 w-full'
                                         >
                                             <HugeIconsX className='w-4 h-4' fill='currentColor' />
-                                            Clear All Filters
+                                            Limpiar filtros
                                         </ActionButton>
                                     )}
                                 </div>
@@ -314,7 +314,7 @@ const ServerActivityLogContainer = () => {
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                 <HugeIconsHistory className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Events</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>Eventos</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
                                     ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
@@ -328,20 +328,20 @@ const ServerActivityLogContainer = () => {
                             <div className='text-center py-12'>
                                 <HugeIconsHistory className='w-16 h-16 text-zinc-600 mb-4' fill='currentColor' />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? 'No Matching Activity' : 'No Server Activity Yet'}
+                                    {hasActiveFilters ? 'No se ha encontrado actividad' : 'Aún no hay actividad'}
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
-                                        : 'Server activity logs will appear here as you manage your server. Start your server or perform actions to see them here.'}
+                                        ? "Intenta ajustar los filtros para encontrar lo que buscas."
+                                        : 'Aquí aparecerá la actividad relacionada con tu cuenta.'}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
                                         <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            Clear All Filters
+                                            Limpiar filtros
                                         </ActionButton>
                                         <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
-                                            Adjust Filters
+                                            Ajustar filtros
                                         </ActionButton>
                                     </div>
                                 )}

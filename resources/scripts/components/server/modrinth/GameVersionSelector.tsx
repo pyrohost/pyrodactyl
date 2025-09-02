@@ -32,7 +32,7 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch versions: ${response.statusText}`);
+                    throw new Error(`Error al obtener versiones: ${response.statusText}`);
                 }
 
                 const data = await response.json();
@@ -40,10 +40,10 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                     setMinecraftVersions(data);
                     persistent.gameVersions = data;
                 } else {
-                    throw new Error('Invalid data format received from API.');
+                    throw new Error('Se ha recibido un formato inválido desde la API.');
                 }
             } catch (error) {
-                toast.error('Failed to fetch Minecraft versions.');
+                toast.error('Error al obtener las versiones de Minecraft.');
                 console.error(error);
             } finally {
                 setIsLoading(false);
@@ -72,7 +72,7 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
     return (
         <div>
             {isLoading ? (
-                <p>Loading versions...</p>
+                <p>Cargando versiones...</p>
             ) : (
                 <>
                     {filteredVersions.length > 0 ? (
@@ -83,14 +83,14 @@ const GameVersionSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                             />
                             <div className='mb-4'>
                                 <Checkbox
-                                    label='Show Snapshots'
+                                    label='Mostrar snapshots'
                                     checked={isSnapshotSelected}
                                     onChange={handleSnapshotToggle}
                                 />
                             </div>
                         </>
                     ) : (
-                        <p>No versions found</p>
+                        <p>No se han encontrado versiones</p>
                     )}
                 </>
             )}

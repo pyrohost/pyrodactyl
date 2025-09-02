@@ -47,7 +47,7 @@ const ModrinthContainer = () => {
                 const response = await axios.get('/api/client/version');
                 setAppVersion(response.data.version);
             } catch (error) {
-                toast.error('Failed to fetch app version.');
+                toast.error('No se ha podido obtener la versión de la aplicación.');
             }
         }
         getAppVersion();
@@ -58,7 +58,7 @@ const ModrinthContainer = () => {
     }, [location]);
 
     if (!appVersion) {
-        return <div>Loading...</div>;
+        return <div>Cargando...</div>;
     }
 
     return (
@@ -69,11 +69,11 @@ const ModrinthContainer = () => {
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl md:w-1/6'
-                    title='Settings'
+                    title='Ajustes'
                 >
                     <Can action={'modrinth.loader'}>
                         <ModBox>
-                            <ContentBox title='Loader' className=''>
+                            <ContentBox title='Cargador' className=''>
                                 <LoaderSelector
                                     appVersion={appVersion}
                                     baseUrl={url}
@@ -84,7 +84,7 @@ const ModrinthContainer = () => {
                     </Can>
                     <Can action={'modrinth.version'}>
                         <ModBox>
-                            <ContentBox title='Version' className='scrollbar-thumb-red-700'>
+                            <ContentBox title='Versión' className='scrollbar-thumb-red-700'>
                                 <GameVersionSelector
                                     appVersion={appVersion}
                                     baseUrl={url}
@@ -128,7 +128,7 @@ const ModrinthContainer = () => {
                         <input
                             className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                             type='text'
-                            placeholder='Search'
+                            placeholder='Buscar'
                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                             // onChange={(event) => console.log(event.target.value)}
                         />

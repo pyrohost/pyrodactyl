@@ -6,7 +6,7 @@ const NewFileButton = ({ id }: { id: string }) => {
     return (
         <NavLink to={`/server/${id}/files/new${window.location.hash}`}>
             <ActionButton variant='secondary' size='md'>
-                New File
+                Nuevo archivo
             </ActionButton>
         </NavLink>
     );

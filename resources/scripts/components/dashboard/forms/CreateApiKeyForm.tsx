@@ -70,18 +70,18 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
 
                             {/* Description Field */}
                             <FormikFieldWrapper
-                                label='Description'
+                                label='Descripción'
                                 name='description'
-                                description='A description of this API key.'
+                                description='Una descripción para tu clave API.'
                             >
                                 <Field name='description' as={Input} className='w-full' />
                             </FormikFieldWrapper>
 
                             {/* Allowed IPs Field */}
                             <FormikFieldWrapper
-                                label='Allowed IPs'
+                                label='IPs permitidas'
                                 name='allowedIps'
-                                description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.'
+                                description='Déjalo en blanco para permitir la conexión desde cualquier IP, o pon cada dirección en una nueva línea para restringir el acceso.'
                             >
                                 <Field name='allowedIps' as={Input} className='w-full' />
                             </FormikFieldWrapper>
@@ -89,7 +89,7 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
                                 <ActionButton type='submit' disabled={isSubmitting}>
-                                    {isSubmitting ? 'Creating...' : 'Create API Key'}
+                                    {isSubmitting ? 'Creando...' : 'Crear clave API'}
                                 </ActionButton>
                             </div>
                         </Form>

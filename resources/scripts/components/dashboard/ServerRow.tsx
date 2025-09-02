@@ -131,25 +131,25 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     isSuspended ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
+                                {server.status === 'suspended' ? 'Suspendido' : 'Error de conexión'}
                             </span>
                         </div>
                     ) : server.isTransferring || server.status ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-zinc-100 text-xs`}>
                                 {server.isTransferring
-                                    ? 'Transferring'
+                                    ? 'Transfiriendo'
                                     : server.status === 'installing'
-                                      ? 'Installing'
+                                      ? 'Instalando'
                                       : server.status === 'restoring_backup'
-                                        ? 'Restoring Backup'
-                                        : 'Unavailable'}
+                                        ? 'Restaurando'
+                                        : 'No disponible'}
                             </span>
                         </div>
                     ) : (
                         // <Spinner size={'small'} />
                         // <></>
-                        <div className='text-xs opacity-25'>Sit tight!</div>
+                        <div className='text-xs opacity-25'>¡Siéntate y relájate!</div>
                     )
                 ) : (
                     <Fragment>
@@ -171,11 +171,12 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Storage</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Almacenamiento</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {bytesToString(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
+                            <p className={`text-xs text-zinc-600 text-center mt-1`}>de {diskLimit}</p>
                         </div>
                     </Fragment>
                 )}

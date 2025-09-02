@@ -15,26 +15,26 @@ const ConflictStateRenderer = () => {
         <div className={'flex flex-col items-center justify-center h-full'}>
             <Spinner size={'large'} />
             <div className='flex flex-col mt-4 text-center'>
-                <label className='text-neutral-100 text-lg font-bold'>Server is Installing</label>
+                <label className='text-neutral-100 text-lg font-bold'>El servidor se está instalando</label>
                 <label className='text-neutral-500 text-md font-semibold mt-1'>
-                    Your server should be ready soon, for more details visit the home page.
+                    Tu servidor estará disponible pronto. Puedes ver más detalles en la página de inicio.
                 </label>
             </div>
         </div>
     ) : status === 'suspended' ? (
-        <ScreenBlock title={'Server Suspended'} message={'This server is suspended and cannot be accessed.'} />
+        <ScreenBlock title={'Servidor suspendido'} message={'Este servidor ha sido suspendido y no puede ser accedido.'} />
     ) : isNodeUnderMaintenance ? (
         <ScreenBlock
-            title={'Node under Maintenance'}
-            message={'The node of this server is currently under maintenance.'}
+            title={'Nodo en mantenimiento'}
+            message={'El nodo en el que se aloja este servidor se encuentra en mantenimiento.'}
         />
     ) : (
         <ScreenBlock
-            title={isTransferring ? 'Transferring' : 'Restoring from Backup'}
+            title={isTransferring ? 'Transfiriendo' : 'Restaurando'}
             message={
                 isTransferring
-                    ? 'Your server is being transferred to a new node, please check back later.'
-                    : 'Your server is currently being restored from a backup, please check back in a few minutes.'
+                    ? 'Tu servidor se está transfiriendo a un nuevo nodo, por favor vuelve más tarde.'
+                    : 'Tu servidor se está restaurando desde una copia de seguridad, por favor vuelve más tarde.'
             }
         />
     );

@@ -64,10 +64,10 @@ const FileUploadList = () => {
             ))}
             <Dialog.Footer>
                 <ActionButton variant='danger' onClick={() => clearFileUploads()}>
-                    Cancel Uploads
+                    Cancelar subidas
                 </ActionButton>
                 <ActionButton variant='secondary' onClick={close}>
-                    Close
+                    Cerrar
                 </ActionButton>
             </Dialog.Footer>
         </div>
@@ -75,8 +75,8 @@ const FileUploadList = () => {
 };
 
 const FileUploadListDialog = asDialog({
-    title: 'File Uploads',
-    description: 'The following files are being uploaded to your server.',
+    title: 'Transferencias',
+    description: 'Los siguientes archivos se están subiendo a tu servidor.',
 })(FileUploadList);
 
 const FileManagerStatus = () => {

@@ -469,7 +469,7 @@ const SoftwareContainer = () => {
             const validationErrors = validateEnvironmentVariables(eggPreview.variables, pendingVariables);
 
             if (validationErrors.length > 0) {
-                throw new Error(`Validation failed:\n${validationErrors.join('\n')}`);
+                throw new Error(`Validación fallida:\n${validationErrors.join('\n')}`);
             }
 
             // Convert display name back to actual image for backend
@@ -503,12 +503,12 @@ const SoftwareContainer = () => {
             setCurrentOperationId(response.operation_id);
             setShowOperationModal(true);
 
-            toast.success('Software change operation started successfully');
+            toast.success('Se ha iniciado la operación de cambio de software');
 
             // Reset the configuration flow but keep the modal open
             resetFlow();
         } catch (error) {
-            console.error('Failed to start egg change operation:', error);
+            console.error('Fallo al iniciar la operación de cambio de software:', error);
             toast.error(httpErrorToHuman(error));
         } finally {
             setIsLoading(false);
@@ -523,17 +523,17 @@ const SoftwareContainer = () => {
 
     const handleOperationComplete = (operation: ServerOperation) => {
         if (operation.is_completed) {
-            toast.success('Your software configuration has been applied successfully');
+            toast.success('La configuración del software se ha aplicado correctamente');
 
             // Refresh server data to reflect changes
             mutate();
         } else if (operation.has_failed) {
-            toast.error(operation.message || 'The software configuration change failed');
+            toast.error(operation.message || 'No se ha podido aplicar la nueva configuración de software');
         }
     };
 
     const handleOperationError = (error: Error) => {
-        toast.error(error.message || 'An error occurred while monitoring the operation');
+        toast.error(error.message || 'Ha ocurrido un error al monitorizar la operación');
     };
 
     const closeOperationModal = () => {
@@ -558,7 +558,7 @@ const SoftwareContainer = () => {
                             onClick={() => toggleDescription(id)}
                             className='text-brand hover:underline font-medium'
                         >
-                            Show more
+                            Mostrar más
                         </button>
                     </>
                 ) : (
@@ -571,7 +571,7 @@ const SoftwareContainer = () => {
                                     onClick={() => toggleDescription(id)}
                                     className='text-brand hover:underline font-medium'
                                 >
-                                    Show less
+                                    Mostrar menos
                                 </button>
                             </>
                         )}
@@ -582,7 +582,7 @@ const SoftwareContainer = () => {
     };
 
     const renderOverview = () => (
-        <TitledGreyBox title='Current Software'>
+        <TitledGreyBox title='Software actual'>
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
                 <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
                     <div className='w-10 h-10 sm:w-12 sm:h-12 bg-[#ffffff11] rounded-lg flex items-center justify-center flex-shrink-0'>
@@ -591,7 +591,7 @@ const SoftwareContainer = () => {
                     <div className='min-w-0 flex-1'>
                         {currentEggName ? (
                             currentEggName.includes(blank_egg_prefix) ? (
-                                <p className='text-amber-400 font-medium text-sm sm:text-base'>No software selected</p>
+                                <p className='text-amber-400 font-medium text-sm sm:text-base'>Sin seleccionar</p>
                             ) : (
                                 <p className='text-neutral-200 font-medium text-sm sm:text-base truncate'>
                                     {currentEggName}
@@ -600,11 +600,11 @@ const SoftwareContainer = () => {
                         ) : (
                             <div className='flex items-center gap-2'>
                                 <Spinner size='small' />
-                                <span className='text-neutral-400 text-sm'>Loading...</span>
+                                <span className='text-neutral-400 text-sm'>Cargando...</span>
                             </div>
                         )}
                         <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server&apos;s game or software configuration
+                            Administra la configuración del software de tu servidor
                         </p>
                     </div>
                 </div>
@@ -617,14 +617,14 @@ const SoftwareContainer = () => {
                             try {
                                 setCurrentStep('select-game');
                             } catch (error) {
-                                console.error('Error in change software click:', error);
+                                console.error('Error al cambiar el software:', error);
                             }
                         }}
                         className='w-full sm:w-auto'
                         disabled={isLoading}
                     >
                         {isLoading && <Spinner size='small' />}
-                        Change Software
+                        Cambiar software
                     </ActionButton>
                 </div>
             </div>
@@ -632,7 +632,7 @@ const SoftwareContainer = () => {
     );
 
     const renderGameSelection = () => (
-        <TitledGreyBox title='Select Category'>
+        <TitledGreyBox title='Seleccionar categoría'>
             <div className='space-y-4'>
                 <p className='text-sm text-neutral-400'>Choose the type of game or software you want to run</p>
 
@@ -735,17 +735,17 @@ const SoftwareContainer = () => {
                             <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
                                 <div>
                                     <label className='text-sm font-medium text-neutral-300 block mb-2'>
-                                        Startup Command
+                                        Comando de inicio
                                     </label>
                                     <textarea
                                         value={customStartup}
                                         onChange={(e) => setCustomStartup(e.target.value)}
-                                        placeholder='Enter custom startup command...'
+                                        placeholder='Introduce un comando personalizado...'
                                         rows={3}
                                         className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-brand transition-colors font-mono resize-none'
                                     />
                                     <p className='text-xs text-neutral-400 mt-1'>
-                                        Use variables like{' '}
+                                        Usa variables como{' '}
                                         {eggPreview.variables
                                             .map((v) => `{{${v.env_variable}}}`)
                                             .slice(0, 3)
@@ -755,14 +755,14 @@ const SoftwareContainer = () => {
                                 </div>
                                 <div>
                                     <label className='text-sm font-medium text-neutral-300 block mb-2'>
-                                        Docker Image
+                                        Imagen de Docker
                                     </label>
                                     {eggPreview.docker_images && Object.keys(eggPreview.docker_images).length > 1 ? (
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <button className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 focus:outline-none focus:border-brand transition-colors text-left flex items-center justify-between hover:border-[#ffffff20]'>
                                                     <span className='truncate'>
-                                                        {selectedDockerImage || 'Select image...'}
+                                                        {selectedDockerImage || 'Seleccionar imagen...'}
                                                     </span>
                                                     <svg
                                                         className='w-4 h-4 text-neutral-400 flex-shrink-0'
@@ -801,11 +801,11 @@ const SoftwareContainer = () => {
                                     ) : (
                                         <div className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
                                             {(eggPreview.docker_images && Object.keys(eggPreview.docker_images)[0]) ||
-                                                'Default Image'}
+                                                'Imagen por defecto'}
                                         </div>
                                     )}
                                     <p className='text-xs text-neutral-400 mt-1'>
-                                        Container runtime environment for your server
+                                        Entorno del contenedor de tu servidor
                                     </p>
                                 </div>
                             </div>
@@ -814,7 +814,7 @@ const SoftwareContainer = () => {
                         {/* Environment Variables */}
                         {eggPreview.variables.length > 0 && (
                             <div className='space-y-4'>
-                                <h3 className='text-lg font-semibold text-neutral-200'>Environment Variables</h3>
+                                <h3 className='text-lg font-semibold text-neutral-200'>Variables de entorno</h3>
                                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                                     {eggPreview.variables.map((variable) => (
                                         <div key={variable.env_variable} className='space-y-3'>
@@ -823,17 +823,17 @@ const SoftwareContainer = () => {
                                                     {variable.name}
                                                     {!variable.user_editable && (
                                                         <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
-                                                            Read-only
+                                                            Solo lectura
                                                         </span>
                                                     )}
                                                     {variable.user_editable && variable.rules.includes('required') && (
                                                         <span className='ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded'>
-                                                            Required
+                                                            Requerido
                                                         </span>
                                                     )}
                                                     {variable.user_editable && !variable.rules.includes('required') && (
                                                         <span className='ml-2 px-2 py-0.5 text-xs bg-neutral-500/20 text-neutral-400 rounded'>
-                                                            Optional
+                                                            Opcional
                                                         </span>
                                                     )}
                                                 </label>
@@ -852,7 +852,7 @@ const SoftwareContainer = () => {
                                                         onChange={(e) =>
                                                             handleVariableChange(variable.env_variable, e.target.value)
                                                         }
-                                                        placeholder={variable.default_value || 'Enter value...'}
+                                                        placeholder={variable.default_value || 'Introduce el valor...'}
                                                         className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${
                                                             variableErrors[variable.env_variable]
                                                                 ? 'border-red-500 focus:border-red-500'
@@ -869,7 +869,7 @@ const SoftwareContainer = () => {
                                                 <div className='w-full px-3 py-2 bg-[#ffffff04] border border-[#ffffff08] rounded-lg text-sm text-neutral-300 font-mono'>
                                                     {pendingVariables[variable.env_variable] ||
                                                         variable.default_value ||
-                                                        'Not set'}
+                                                        'Sin establecer'}
                                                 </div>
                                             )}
 
@@ -878,7 +878,7 @@ const SoftwareContainer = () => {
                                                     {variable.env_variable}
                                                 </span>
                                                 {variable.rules && (
-                                                    <span className='text-neutral-500'>Rules: {variable.rules}</span>
+                                                    <span className='text-neutral-500'>Reglas: {variable.rules}</span>
                                                 )}
                                             </div>
                                         </div>
@@ -889,17 +889,17 @@ const SoftwareContainer = () => {
 
                         {/* Safety Options */}
                         <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Safety Options</h3>
+                            <h3 className='text-lg font-semibold text-neutral-200'>Opciones de seguridad</h3>
                             <div className='space-y-3'>
                                 <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
                                     <div className='flex-1 min-w-0 pr-4'>
                                         <label className='text-sm font-medium text-neutral-200 block mb-1'>
-                                            Create Backup
+                                            Crear copia
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
                                             {backupLimit > 0 && (backups?.backupCount || 0) < backupLimit
-                                                ? 'Automatically create a backup before applying changes'
-                                                : 'Backup limit reached or not available'}
+                                                ? 'Crear una copia automáticamente antes de aplicar los cambios'
+                                                : 'Has alcanzado el límite de copias para tu servidor'}
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
@@ -914,10 +914,10 @@ const SoftwareContainer = () => {
                                 <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
                                     <div className='flex-1 min-w-0 pr-4'>
                                         <label className='text-sm font-medium text-neutral-200 block mb-1'>
-                                            Wipe Files
+                                            Borrar archivos
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            Delete all files before installing new software
+                                            Elimina todos los archivos antes de instalar el nuevo software
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
@@ -935,7 +935,7 @@ const SoftwareContainer = () => {
                         onClick={() => setCurrentStep('select-software')}
                         className='w-full sm:w-auto'
                     >
-                        Back to Software
+                        Volver al Software
                     </ActionButton>
                     <ActionButton
                         variant='primary'
@@ -944,7 +944,7 @@ const SoftwareContainer = () => {
                         className='w-full sm:w-auto'
                     >
                         {isLoading && <Spinner size='small' />}
-                        Review Changes
+                        Revisar cambios
                     </ActionButton>
                 </div>
             </TitledGreyBox>
@@ -958,26 +958,26 @@ const SoftwareContainer = () => {
                     <div className='space-y-6'>
                         {/* Summary */}
                         <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Change Summary</h3>
+                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Resumen de los cambios</h3>
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
                                 <div>
-                                    <span className='text-neutral-400'>From:</span>
+                                    <span className='text-neutral-400'>De:</span>
                                     <div className='text-neutral-200 font-medium'>
-                                        {currentEggName || 'No software'}
+                                        {currentEggName || 'Sin software'}
                                     </div>
                                 </div>
                                 <div>
-                                    <span className='text-neutral-400'>To:</span>
+                                    <span className='text-neutral-400'>A:</span>
                                     <div className='text-brand font-medium'>{selectedEgg.attributes.name}</div>
                                 </div>
                                 <div>
-                                    <span className='text-neutral-400'>Category:</span>
+                                    <span className='text-neutral-400'>Categoría:</span>
                                     <div className='text-neutral-200 font-medium'>{selectedNest?.attributes.name}</div>
                                 </div>
                                 <div>
-                                    <span className='text-neutral-400'>Docker Image:</span>
+                                    <span className='text-neutral-400'>Imagen de Docker:</span>
                                     <div className='text-neutral-200 font-medium text-xs'>
-                                        {selectedDockerImage || 'Default'}
+                                        {selectedDockerImage || 'Por defecto'}
                                     </div>
                                 </div>
                             </div>
@@ -985,16 +985,16 @@ const SoftwareContainer = () => {
 
                         {/* Startup Command Review */}
                         <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Startup Configuration</h3>
+                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Configuración de inicio</h3>
                             <div className='space-y-3'>
                                 <div>
-                                    <span className='text-neutral-400 text-sm'>Startup Command:</span>
+                                    <span className='text-neutral-400 text-sm'>Comando de inicio:</span>
                                     <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg font-mono text-sm text-neutral-200 whitespace-pre-wrap'>
                                         {customStartup || eggPreview.egg.startup}
                                     </div>
                                 </div>
                                 <div>
-                                    <span className='text-neutral-400 text-sm'>Docker Image:</span>
+                                    <span className='text-neutral-400 text-sm'>Imagen de Docker:</span>
                                     <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
                                         {selectedDockerImage || 'Default Image'}
                                     </div>
@@ -1005,7 +1005,7 @@ const SoftwareContainer = () => {
                         {/* Configuration Review */}
                         {eggPreview.variables.length > 0 && (
                             <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                                <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Variable Configuration</h3>
+                                <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Configuración de variables</h3>
                                 <div className='space-y-2'>
                                     {eggPreview.variables.map((variable) => (
                                         <div
@@ -1021,7 +1021,7 @@ const SoftwareContainer = () => {
                                             <div className='text-brand font-mono text-sm'>
                                                 {pendingVariables[variable.env_variable] ||
                                                     variable.default_value ||
-                                                    'Not set'}
+                                                    'Sin establecer'}
                                             </div>
                                         </div>
                                     ))}
@@ -1029,105 +1029,19 @@ const SoftwareContainer = () => {
                             </div>
                         )}
 
-                        {/* Safety Options Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Safety Options</h3>
-                            <div className='space-y-2'>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Create Backup</span>
-                                    <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
-                                        {shouldBackup ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Wipe Files</span>
-                                    <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
-                                        {shouldWipe ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Warning */}
-                        <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
-                            <div className='flex items-start gap-3'>
-                                <HugeIconsAlert
-                                    fill='currentColor'
-                                    className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
-                                />
-                                <div>
-                                    <h4 className='text-amber-400 font-semibold mb-2'>Important Warning</h4>
-                                    <ul className='text-sm text-neutral-300 space-y-1'>
-                                        <li>• Your server will be stopped and reinstalled</li>
-                                        <li>• This process may take several minutes to complete</li>
-                                        <li>• Some files may be modified or removed during installation</li>
-                                        <li>• Make sure you have backups of important data</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('configure')}
-                        className='w-full sm:w-auto'
-                    >
-                        Back to Configure
-                    </ActionButton>
-                    <ActionButton
-                        variant='primary'
-                        onClick={applyChanges}
-                        disabled={isLoading}
-                        className='w-full sm:w-auto'
-                    >
-                        {isLoading && <Spinner size='small' />}
-                        Apply Changes
-                    </ActionButton>
-                </div>
-            </TitledGreyBox>
-        </div>
-    );
-
-    // Show loading state if server data is not available
-    if (!serverData) {
-        return (
-            <ServerContentBlock title='Software Management'>
-                <div className='flex items-center justify-center h-64'>
-                    <div className='flex flex-col items-center text-center'>
-                        <Spinner size='large' />
-                        <p className='text-neutral-400 mt-4'>Loading server information...</p>
-                    </div>
-                </div>
-            </ServerContentBlock>
-        );
-    }
-
-    return (
-        <ServerContentBlock title='Software Management'>
-            <div className='space-y-6'>
-                <MainPageHeader direction='column' title='Software Management'>
-                    <p className='text-neutral-400 leading-relaxed'>
-                        Change your server&apos;s game or software with our guided configuration wizard
-                    </p>
-                </MainPageHeader>
-
-                {/* Progress indicator */}
-                {currentStep !== 'overview' && (
-                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                        <div className='flex items-center justify-between mb-2'>
-                            <span className='text-sm font-medium text-neutral-200 capitalize'>
-                                {currentStep.replace('-', ' ')}
-                            </span>
-                            <span className='text-sm text-neutral-400'>
-                                Step{' '}
-                                {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
-                                    currentStep,
-                                )}{' '}
-                                of 4
-                            </span>
+            {!visible && (
+                <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
+                    <div className='flex flex-row items-center gap-2 h-full'>
+                        <HugeIconsAlert
+                            fill='currentColor'
+                            className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block'
+                        />
+                        <div className='flex flex-col pb-1  m-2'>
+                            <h1 className='text-xl'>Zona de peligro</h1>
+                            <p className='text-sm text-neutral-300'>
+                                Durante el proceso, algunos archivos pueden ser eliminados o modificados. Haz una copia
+                                antes de proceder o selecciona la opción cuando se te pregunte.
+                            </p>
                         </div>
                         <div className='w-full bg-[#ffffff12] rounded-full h-2'>
                             <div
@@ -1150,8 +1064,8 @@ const SoftwareContainer = () => {
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
-                title='Wipe All Files Without Backup?'
-                buttonText={wipeCountdown > 0 ? `Yes, Wipe Files (${wipeCountdown}s)` : 'Yes, Wipe Files'}
+                title='¿Quieres borrar los archivos sin hacer una copia antes?'
+                buttonText={wipeCountdown > 0 ? `Sí, borra los archivos (${wipeCountdown}s)` : 'Sí, borra los archivos'}
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
                 onModalDismissed={() => setShowWipeConfirmation(false)}
@@ -1162,27 +1076,27 @@ const SoftwareContainer = () => {
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                         <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
                         <div>
-                            <h4 className='text-red-400 font-semibold mb-2'>DANGER: No Backup Selected</h4>
+                            <h4 className='text-red-400 font-semibold mb-2'>PELIGRO: No has creado una copia</h4>
                             <p className='text-sm text-neutral-300'>
-                                You have chosen to wipe all files <strong>without creating a backup</strong>. This
-                                action will <strong>permanently delete ALL files</strong> on your server and cannot be
-                                undone.
+                                Has escogido eliminar todos los archivos <strong>sin crear una copia</strong>. Esta
+                                acción <strong>eliminará permanentemente TODOS los archivos</strong> de tu servidor
+                                y no podrá deshacerse.
                             </p>
                         </div>
                     </div>
                     <div className='text-sm text-neutral-300 space-y-2'>
                         <p>
-                            <strong>What will happen:</strong>
+                            <strong>Lo que pasará:</strong>
                         </p>
                         <ul className='list-disc list-inside space-y-1 ml-4'>
-                            <li>All server files will be permanently deleted</li>
-                            <li>Your server will be stopped and reinstalled</li>
-                            <li>Any custom configurations or data will be lost</li>
-                            <li>This action cannot be reversed</li>
+                            <li>Todos los archivos del servidor se eliminarán permanentemente</li>
+                            <li>Tu servidor se detendrá y reinstalará el software</li>
+                            <li>Cualquier configuración personalizada o datos se perderán</li>
+                            <li>La acción es irreversible</li>
                         </ul>
                     </div>
                     <p className='text-sm text-neutral-300'>
-                        Are you absolutely sure you want to proceed without a backup?
+                        ¿Estás completamente seguro de seguir sin hacer una copia antes?
                     </p>
                 </div>
             </ConfirmationModal>

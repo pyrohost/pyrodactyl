@@ -24,7 +24,7 @@ interface ExpandableScrollBoxProps {
 }
 
 export function ExpandableScrollBox({
-    placeholder = 'Select an option',
+    placeholder = 'Selecciona una opción',
     items = [],
     maxHeight = '300px',
     className = '',

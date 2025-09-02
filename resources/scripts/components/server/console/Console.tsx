@@ -51,7 +51,7 @@ const terminalProps: ITerminalOptions = {
 };
 
 const Console = () => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
+    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@zelora~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(
         () =>
@@ -78,7 +78,7 @@ const Console = () => {
         switch (status) {
             // Sent by either the source or target node if a failure occurs.
             case 'failure':
-                terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
+                terminal.writeln(TERMINAL_PRELUDE + 'La transferencia ha fallado.\u001b[0m');
                 return;
         }
     };
@@ -89,7 +89,7 @@ const Console = () => {
         );
 
     const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+        terminal.writeln(TERMINAL_PRELUDE + 'Servidor marcado como ' + state + '...\u001b[0m');
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -215,8 +215,8 @@ const Console = () => {
                         <input
                             className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-zinc-100 placeholder-zinc-500 border-0 outline-none focus:ring-0 focus:outline-none focus:bg-[#1a1a1a] transition-colors duration-150'
                             type='text'
-                            placeholder='Enter a command...'
-                            aria-label='Console command input.'
+                            placeholder='Introduce un comando...'
+                            aria-label='Comandos de consola.'
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}
                             autoCorrect='off'

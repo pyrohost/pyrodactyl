@@ -56,8 +56,8 @@ const CreateSSHKeyForm = () => {
                     onSubmit={submit}
                     initialValues={{ name: '', publicKey: '' }}
                     validationSchema={object().shape({
-                        name: string().required('SSH Key Name is required'),
-                        publicKey: string().required('Public Key is required'),
+                        name: string().required('Debes darle un nombre a la clave SSH'),
+                        publicKey: string().required('Se requiere una clave pública'),
                     })}
                 >
                     {({ isSubmitting }) => (
@@ -67,18 +67,18 @@ const CreateSSHKeyForm = () => {
 
                             {/* SSH Key Name Field */}
                             <FormikFieldWrapper
-                                label='SSH Key Name'
+                                label='Nombre de la clave'
                                 name='name'
-                                description='A name to identify this SSH key.'
+                                description='Un nombre que te ayude a identificar esta clave.'
                             >
                                 <Field name='name' as={Input} className='w-full' />
                             </FormikFieldWrapper>
 
                             {/* Public Key Field */}
                             <FormikFieldWrapper
-                                label='Public Key'
+                                label='Clave pública'
                                 name='publicKey'
-                                description='Enter your public SSH key.'
+                                description='Introduce tu clave SSH pública.'
                             >
                                 <Field name='publicKey' as={Input} className='w-full' />
                             </FormikFieldWrapper>
@@ -86,7 +86,7 @@ const CreateSSHKeyForm = () => {
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
                                 <ActionButton type='submit' disabled={isSubmitting}>
-                                    {isSubmitting ? 'Creating...' : 'Create SSH Key'}
+                                    {isSubmitting ? 'Creando...' : 'Crear clave SSH'}
                                 </ActionButton>
                             </div>
                         </Form>

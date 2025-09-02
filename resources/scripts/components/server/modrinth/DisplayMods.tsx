@@ -75,7 +75,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 })),
             );
         } catch (error) {
-            toast.error('Failed to fetch projects.');
+            toast.error('Error al obtener proyectos.');
             console.error('Error fetching projects:', error);
         } finally {
             setIsLoading(false);
@@ -101,11 +101,11 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                 className='btn btn-primary mb-4 flex hidden cursor-pointer'
                 disabled={isLoading}
             >
-                {isLoading ? 'Loading...' : 'Fetch Projects'}
+                {isLoading ? 'Cargando...' : 'Obtener proyectos'}
             </button>
 
             {isLoading ? (
-                <p className='text-white'>Loading projects...</p>
+                <p className='text-white'>Cargando proyectos...</p>
             ) : projects.length > 0 ? (
                 projects.map((project) => (
                     <ContentBox
@@ -145,16 +145,16 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                     <h2 className='text-lg font-semibold text-white'>{project.title}</h2>
                                 </a>
                                 <p className='text-sm text-gray-300 mb-2'>
-                                    Author: <span className='font-medium'>{project.author}</span>
+                                    Autor: <span className='font-medium'>{project.author}</span>
                                 </p>
                                 <p className='text-sm text-gray-400'>{project.description}</p>
                             </div>
                             <div className='flex flex-col py-2 px-6 mx-6'>
                                 <p className='text-sm'>
-                                    {formatNumber(project.downloads)} <span className='text-gray-600'>Downloads</span>
+                                    {formatNumber(project.downloads)} <span className='text-gray-600'>Descargas</span>
                                 </p>
                                 <p className='text-sm pt-2'>
-                                    {project.versions.at(-1)} <span className='text-gray-600'>Latest</span>
+                                    {project.versions.at(-1)} <span className='text-gray-600'>Última</span>
                                 </p>
                             </div>
                             <div className='flex flex-col py-2 px-6 mx-6'>
@@ -162,7 +162,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                                     className='flex items-center border-2 border-solid rounded-sm py-1 px-6 border-brand hover:border-white hover:bg-red-600 hover:scale-110 justify-center cursor-pointer'
                                     onClick={() => setModalProject(project.project_id)}
                                 >
-                                    <HugeIconsDownload className='px-2 mx-2' fill='currentColor' /> Install
+                                    <HugeIconsDownload className='px-2 mx-2' fill='currentColor' /> Instalar
                                 </button>
                                 {modalProject === project.project_id && (
                                     <DownloadModModel
@@ -177,7 +177,7 @@ const ProjectSelector: React.FC<Props> = ({ appVersion, baseUrl, nonApiUrl }) =>
                     </ContentBox>
                 ))
             ) : (
-                <p className='text-white'>No projects available...</p>
+                <p className='text-white'>No hay proyectos disponibles...</p>
             )}
         </div>
     );

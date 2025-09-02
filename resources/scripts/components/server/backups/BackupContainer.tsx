@@ -34,24 +34,23 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     const { isSubmitting } = useFormikContext<BackupValues>();
 
     return (
-        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Create server backup'>
+        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Crear copia de seguridad'>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
                 <Field
                     name={'name'}
-                    label={'Backup name'}
-                    description={'If provided, the name that should be used to reference this backup.'}
+                    label={'Nombre de la copia'}
+                    description={'El nombre que identificará esta copia de seguridad.'}
                 />
                 <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
                         className='flex flex-col gap-2'
                         name={'ignored'}
-                        label={'Ignored Files & Directories'}
+                        label={'Archivos y carpetas ignoradas'}
                         description={`
-                            Enter the files or folders to ignore while generating this backup. Leave blank to use
-                            the contents of the .pteroignore file in the root of the server directory if present.
-                            Wildcard matching of files and folders is supported in addition to negating a rule by
-                            prefixing the path with an exclamation point.
+                            Introduce los archivos y/o carpetas que se ignorarán al generar esta copia. Deja este
+                            campo en blanco para usar el contenido de tu archivo .pteroignore como referencia (si
+                            existe). También puedes usar wildcards (*) y negar reglas con un signo de exclamación.
                         `}
                     >
                         <FormikField
@@ -142,12 +141,12 @@ const BackupContainer = () => {
 
     if (!backups || (error && isValidating)) {
         return (
-            <ServerContentBlock title={'Backups'}>
+            <ServerContentBlock title={'Copias de seguridad'}>
                 <FlashMessageRender byKey={'backups'} />
-                <MainPageHeader direction='column' title={'Backups'}>
+                <MainPageHeader direction='column' title={'Copias de seguridad'}>
                     <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Create and manage server backups to protect your data. Schedule automated backups, download
-                        existing ones, and restore when needed.
+                        Crea y gestiona copias de seguridad de tu servidor para proteger tus archivos. Programa copias automáticas,
+                        descarga las existentes y restáuralas cuando lo necesites.
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -158,22 +157,22 @@ const BackupContainer = () => {
     }
 
     return (
-        <ServerContentBlock title={'Backups'}>
+        <ServerContentBlock title={'Copias de seguridad'}>
             <FlashMessageRender byKey={'backups'} />
             <MainPageHeader
                 direction='column'
-                title={'Backups'}
+                title={'Copias de seguridad'}
                 titleChildren={
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             {backupLimit > 0 && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {backups.backupCount} of {backupLimit} backups
+                                    {backups.backupCount} de {backupLimit} copias
                                 </p>
                             )}
                             {backupLimit > 0 && backupLimit > backups.backupCount && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                    New Backup
+                                    Nueva copia
                                 </ActionButton>
                             )}
                         </div>
@@ -181,8 +180,8 @@ const BackupContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Create and manage server backups to protect your data. Schedule automated backups, download existing
-                    ones, and restore when needed.
+                    Crea y gestiona copias de seguridad de tu servidor para proteger tus archivos. Programa copias automáticas,
+                    descarga las existentes y restáuralas cuando lo necesites.
                 </p>
             </MainPageHeader>
 
@@ -215,12 +214,12 @@ const BackupContainer = () => {
                                     </svg>
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {backupLimit > 0 ? 'No backups found' : 'Backups unavailable'}
+                                    {backupLimit > 0 ? 'No hay copias' : 'Copias no disponibles'}
                                 </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
                                     {backupLimit > 0
-                                        ? 'Your server does not have any backups. Create one to get started.'
-                                        : 'Backups cannot be created for this server.'}
+                                        ? 'Tu servidor no tiene ninguna copia de seguridad. Crea una para empezar.'
+                                        : 'No se pueden crear copias de seguridad en este servidor.'}
                                 </p>
                             </div>
                         </div>

@@ -79,8 +79,8 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
-                6-digit code it generates below.
+                Escanea el código QR usando una aplicación de autenticación, o usa el código si no tienes cámara.
+                Una vez hecho, introduce el código de 6 dígitos generado en el siguiente campo.
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -95,7 +95,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 pattern={'\\d{6}'}
             />
             <label htmlFor={'totp-password'} className={'block mt-3'}>
-                Account Password
+                Contraseña de tu cuenta
             </label>
             <Input.Text
                 variant={Input.Text.Variants.Loose}
@@ -106,7 +106,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             />
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={close}>
-                    Cancel
+                    Cancelar
                 </ActionButton>
                 {/* <Tooltip
                     disabled={password.length > 0 && value.length === 6}
@@ -123,7 +123,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
-                    Enable
+                    Habilitar
                 </ActionButton>
                 {/* </Tooltip> */}
             </Dialog.Footer>
@@ -132,6 +132,6 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
 };
 
 export default asDialog({
-    title: 'Enable Authenticator App',
-    description: "You'll be required to enter a verification code each time you sign in.",
+    title: 'Habilitar 2-FA',
+    description: "Deberás verificar tu sesión usando la aplicación de autenticación cada vez que intentes entrar al panel.",
 })(ConfigureTwoFactorForm);
