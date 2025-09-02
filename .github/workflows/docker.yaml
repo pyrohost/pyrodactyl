@@ -33,7 +33,7 @@ jobs:
               id: docker_meta
               uses: docker/metadata-action@v5
               with:
-                  images: ghcr.io/pyrohost/pyrodactyl
+                  images: ghcr.io/U8092/pyrodactyl
                   flavor: latest=auto
                   tags: |
                       type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
