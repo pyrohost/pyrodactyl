@@ -193,49 +193,49 @@ const StartupContainer = () => {
                 </div>
             </div>
         ) : (
-            <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
+            <ServerError title={'¡Vaya!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
+        <ServerContentBlock title={'Ajustes de inicio'} showFlashKey={'startup:image'}>
             <Dialog.Confirm
                 open={revertModalVisible}
-                title={'Revert Docker Image'}
-                confirm={'Yes, revert to default'}
+                title={'Revertir imagen de Docker'}
+                confirm={'Sí, revertir'}
                 onClose={() => setRevertModalVisible(false)}
                 onConfirmed={revertToEggDefault}
                 loading={loading}
             >
                 <div className='space-y-3'>
                     <p>
-                        This will revert your server&apos;s Docker image back to the egg&apos;s default specification.
+                        Esto revertirá la imagen de Docker de tu servidor a su configuración inicial.
                     </p>
                     <div className='bg-linear-to-b from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-3'>
                         <p className='text-sm text-amber-200'>
-                            <span className='font-medium'>⚠️ Warning:</span> You will not be able to set a custom image
-                            back without contacting support.
+                            <span className='font-medium'>⚠️ Aviso:</span> No podrás volver a configurar la imagen de Docker
+                            sin contactar con el soporte.
                         </p>
                     </div>
-                    <p className='text-sm text-neutral-400'>Are you sure you want to continue?</p>
+                    <p className='text-sm text-neutral-400'>¿Quieres continuar?</p>
                 </div>
             </Dialog.Confirm>
             <div className='space-y-6'>
-                <MainPageHeader direction='column' title='Startup Settings'>
+                <MainPageHeader direction='column' title='Ajustes de inicio'>
                     <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Configure how your server starts up. These settings control the startup command and environment
-                        variables.
+                        Configura el inicio de tu servidor. Estos ajustes controlan el comando de inicio y las variables
+                        de entorno.
                         <span className='text-amber-400 font-medium'>
                             {' '}
-                            Exercise caution when modifying these settings.
+                            Ten cuidado a la hora de modificar estos ajustes.
                         </span>
                     </p>
                 </MainPageHeader>
 
                 <div className='space-y-6'>
-                    <TitledGreyBox title={'Startup Command'} className='p-6'>
+                    <TitledGreyBox title={'Comando de inicio'} className='p-6'>
                         <div className='space-y-4 mb-6'>
                             <p className='text-sm text-neutral-400 leading-relaxed'>
-                                Configure the command that starts your server. You can edit the raw command or view the
-                                processed version with variables resolved.
+                                Configura el comando que inicia tu servidor. Puedes editar el comando directamente o
+                                ver la versión procesada con las variables ajustadas.
                             </p>
                         </div>
                         {editingCommand ? (
@@ -243,13 +243,13 @@ const StartupContainer = () => {
                                 <div className='grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6'>
                                     <div>
                                         <label className='block text-sm font-medium text-neutral-300 mb-3'>
-                                            Raw Command
+                                            Comando
                                         </label>
                                         <textarea
                                             className='w-full h-32 sm:h-36 md:h-40 px-3 py-3 sm:px-4 sm:py-4 text-sm sm:text-base font-mono bg-linear-to-b from-[#ffffff12] to-[#ffffff08] border-2 border-blue-500/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/60 placeholder:text-neutral-500 transition-all touch-manipulation'
                                             value={commandValue}
                                             onChange={(e) => handleCommandChange(e.target.value)}
-                                            placeholder='Enter startup command with variables like {{SERVER_MEMORY}} or {{SERVER_PORT}}...'
+                                            placeholder='Introduce variables como {{SERVER_MEMORY}} o {{SERVER_PORT}}...'
                                             style={{
                                                 wordBreak: 'break-all',
                                                 overflowWrap: 'break-word',
@@ -259,7 +259,7 @@ const StartupContainer = () => {
                                     </div>
                                     <div>
                                         <label className='block text-sm font-medium text-neutral-300 mb-3'>
-                                            Live Preview
+                                            Vista en directo
                                         </label>
                                         <CopyOnClick text={liveProcessedCommand}>
                                             <div className='cursor-pointer group'>
@@ -273,7 +273,7 @@ const StartupContainer = () => {
                                                         }}
                                                     >
                                                         {liveProcessedCommand ||
-                                                            'Enter a command to see the live preview...'}
+                                                            'Introduce un comando para ver la vista en directo...'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -290,7 +290,7 @@ const StartupContainer = () => {
                                             className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                         >
                                             {commandLoading && <Spinner size='small' />}
-                                            {commandLoading ? 'Saving...' : 'Save Command'}
+                                            {commandLoading ? 'Guardando...' : 'Guardar comando'}
                                         </ActionButton>
                                     </InputSpinner>
                                     <ActionButton
@@ -300,7 +300,7 @@ const StartupContainer = () => {
                                         disabled={commandLoading}
                                         className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                     >
-                                        Load Default
+                                        Cargar valor por defecto
                                     </ActionButton>
                                     <ActionButton
                                         variant='secondary'
@@ -309,7 +309,7 @@ const StartupContainer = () => {
                                         disabled={commandLoading}
                                         className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                     >
-                                        Cancel
+                                        Cancelar
                                     </ActionButton>
                                 </div>
                             </div>
@@ -318,7 +318,7 @@ const StartupContainer = () => {
                                 {data.rawStartupCommand && (
                                     <div className='space-y-3'>
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
-                                            <label className='text-sm font-medium text-neutral-300'>Raw Command</label>
+                                            <label className='text-sm font-medium text-neutral-300'>Comando</label>
                                             {canEditCommand && (
                                                 <ActionButton
                                                     variant='secondary'
@@ -326,7 +326,7 @@ const StartupContainer = () => {
                                                     onClick={startEditingCommand}
                                                     className='w-full sm:w-auto'
                                                 >
-                                                    Edit Command
+                                                    Editar
                                                 </ActionButton>
                                             )}
                                         </div>
@@ -351,10 +351,10 @@ const StartupContainer = () => {
                                 <div className='space-y-3'>
                                     <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
                                         <label className='text-sm font-medium text-neutral-300'>
-                                            Processed Command
+                                            Comando procesado
                                         </label>
                                         <span className='text-xs text-neutral-500 bg-neutral-800/50 px-2 py-1 rounded border border-neutral-700/50 w-fit'>
-                                            Read-only
+                                            Solo lectura
                                         </span>
                                     </div>
                                     <CopyOnClick text={data.invocation}>
@@ -378,11 +378,11 @@ const StartupContainer = () => {
                         )}
                     </TitledGreyBox>
 
-                    <TitledGreyBox title={'Docker Image'} className='p-6'>
+                    <TitledGreyBox title={'Imagen de Docker'} className='p-6'>
                         <div className='space-y-4 mb-6'>
                             <p className='text-sm text-neutral-400 leading-relaxed'>
-                                The container image used to run your server. Different images provide different software
-                                versions and configurations.
+                                La imagen de contenedor que ejecuta tu servidor. Usar otra imagen puede cambiar el software,
+                                la versión o la configuración.
                             </p>
                         </div>
                         {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
@@ -453,14 +453,14 @@ const StartupContainer = () => {
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                                             <div className='flex-1'>
                                                 <p className='text-sm text-amber-200'>
-                                                    <span className='font-medium'>Notice:</span> This server&apos;s
-                                                    Docker image has been manually set by an administrator and cannot be
-                                                    changed through this interface.
+                                                    <span className='font-medium'>Aviso:</span> La imagen de Docker de
+                                                    este servidor ha sido establecida por un administrador y no se puede
+                                                    modificar.
                                                 </p>
                                                 {canEditDockerImage && (
                                                     <p className='text-xs text-amber-300/80 mt-2'>
-                                                        You can revert to the egg&apos;s default image, but you
-                                                        won&apos;t be able to set it back without contacting support.
+                                                        Puedes revertir a la imagen por defecto, pero no puedes cambiarla
+                                                        sin contactar con el soporte técnico.
                                                     </p>
                                                 )}
                                             </div>
@@ -475,7 +475,7 @@ const StartupContainer = () => {
                                                             className='w-full sm:w-auto text-amber-200 bg-linear-to-b from-amber-600/20 to-amber-700/20 border-amber-500/40 hover:from-amber-500/30 hover:to-amber-600/30 hover:border-amber-500/60 hover:text-amber-100'
                                                         >
                                                             {loading && <Spinner size='small' />}
-                                                            Revert to Default
+                                                            Revertir
                                                         </ActionButton>
                                                     </InputSpinner>
                                                 </div>
@@ -491,16 +491,16 @@ const StartupContainer = () => {
                 {data && data.variables.length > 0 && (
                     <div className='space-y-6'>
                         <div className='space-y-3'>
-                            <h3 className='text-2xl font-extrabold text-neutral-200'>Environment Variables</h3>
+                            <h3 className='text-2xl font-extrabold text-neutral-200'>Variables de entorno</h3>
                             <p className='text-sm text-neutral-400 leading-relaxed'>
-                                Configure environment variables that will be available to your server. These variables
-                                can be used to customize server behavior and settings.
+                                Configura las variables de entorno que estarán disponibles para tu servidor. Estas variables
+                                controlan el comportamiento del servidor y otros ajustes varios.
                             </p>
                         </div>
 
                         <div className='bg-linear-to-b from-[#ffffff04] to-[#ffffff02] border border-[#ffffff08] rounded-xl p-4'>
                             <div className='space-y-3'>
-                                <h4 className='text-sm font-medium text-neutral-300'>Global Server Variables</h4>
+                                <h4 className='text-sm font-medium text-neutral-300'>Variables globales</h4>
                                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs'>
                                     <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
                                         <span className='font-mono text-neutral-400'>{'{{SERVER_MEMORY}}'}</span>
@@ -527,7 +527,7 @@ const StartupContainer = () => {
                                     <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
                                         <span className='font-mono text-neutral-400'>{'{{SERVER_NAME}}'}</span>
                                         <span className='text-neutral-300 font-mono truncate'>
-                                            {server?.name || 'My Server'}
+                                            {server?.name || 'Mi servidor en Zelora'}
                                         </span>
                                     </div>
                                     <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>

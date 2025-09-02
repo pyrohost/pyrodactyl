@@ -31,7 +31,7 @@ const UserRow = ({ subuser }: Props) => {
             <div className={`sm:ml-4 flex-1 overflow-hidden flex flex-col`}>
                 <p className={`truncate text-lg`}>{subuser.email}</p>
                 <p className={`mt-1 md:mt-0 text-xs text-zinc-400 truncate sm:text-left text-center`}>
-                    {subuser.twoFactorEnabled ? 'MFA Enabled' : 'MFA Disabled'}
+                    {subuser.twoFactorEnabled ? '2-FA habilitado' : '2-FA deshabilitado'}
                 </p>
             </div>
 
@@ -40,7 +40,7 @@ const UserRow = ({ subuser }: Props) => {
                     <p className={`font-medium text-center`}>
                         {subuser.permissions.filter((permission) => permission !== 'websocket.connect').length}
                     </p>
-                    <p className={`text-xs text-zinc-500 uppercase`}>Permissions</p>
+                    <p className={`text-xs text-zinc-500 uppercase`}>Permisos</p>
                 </div>
                 {subuser.uuid !== uuid && (
                     <>
@@ -51,10 +51,10 @@ const UserRow = ({ subuser }: Props) => {
                                     size='sm'
                                     className='flex items-center gap-2'
                                     onClick={handleEditClick}
-                                    aria-label='Edit subuser'
+                                    aria-label='Editar usuario'
                                 >
                                     <HugeIconsPencil className='w-4 h-4' fill='currentColor' />
-                                    Edit
+                                    Editar
                                 </ActionButton>
                             </Can>
                             <Can action={'user.delete'}>

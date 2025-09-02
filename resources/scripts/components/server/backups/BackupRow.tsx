@@ -54,7 +54,7 @@ const BackupRow = ({ backup }: Props) => {
                     <div className='flex items-center gap-2 mb-1'>
                         {backup.completedAt !== null && !backup.isSuccessful && (
                             <span className='bg-red-500/20 border border-red-500/30 py-0.5 px-2 rounded text-red-300 text-xs font-medium'>
-                                Failed
+                                Fallo
                             </span>
                         )}
                         <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
@@ -63,7 +63,7 @@ const BackupRow = ({ backup }: Props) => {
                                 backup.isLocked ? 'opacity-100' : 'opacity-0'
                             }`}
                         >
-                            Locked
+                            Bloqueada
                         </span>
                     </div>
                     {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
@@ -72,14 +72,14 @@ const BackupRow = ({ backup }: Props) => {
                 {/* Size Info */}
                 {backup.completedAt !== null && backup.isSuccessful && (
                     <div className='hidden sm:block flex-shrink-0 text-right'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide'>Size</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide'>Tamaño</p>
                         <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
                     </div>
                 )}
 
                 {/* Date Info */}
                 <div className='hidden sm:block flex-shrink-0 text-right min-w-[120px]'>
-                    <p className='text-xs text-zinc-500 uppercase tracking-wide'>Created</p>
+                    <p className='text-xs text-zinc-500 uppercase tracking-wide'>Creación</p>
                     <p
                         className='text-sm text-zinc-300 font-medium'
                         title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}

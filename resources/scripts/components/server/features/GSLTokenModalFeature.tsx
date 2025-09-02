@@ -75,26 +75,26 @@ const GSLTokenModalFeature = () => {
                 onDismissed={() => setVisible(false)}
                 closeOnBackground={false}
                 showSpinnerOverlay={loading}
-                title='Invalid GSL token!'
+                title='Clave GSL inválida'
             >
                 <FlashMessageRender key={'feature:gslToken'} />
                 <Form>
-                    <p>It seems like your Gameserver Login Token (GSL token) is invalid or has expired.</p>
+                    <p>Parece que tu clave GSL es inválida o ha expirado.</p>
                     <p className={`mt-3`}>
-                        You can either generate a new one and enter it below or leave the field blank to remove it
-                        completely.
+                        Puedes generar una nueva e introducirla a continuación o dejar el campo vacío para eliminarla
+                        completamente.
                     </p>
                     <div className={`sm:flex items-center mt-6`}>
                         <Field
                             name={'gslToken'}
-                            label={'GSL Token'}
-                            description={'Visit https://steamcommunity.com/dev/managegameservers to generate a token.'}
+                            label={'Clave GSL'}
+                            description={'Visita https://steamcommunity.com/dev/managegameservers para generar una clave.'}
                             autoFocus
                         />
                     </div>
                     <div className={`my-6 sm:flex items-center justify-end`}>
                         <ActionButton variant='primary' type={'submit'}>
-                            Update GSL Token
+                            Actualizar clave GSL
                         </ActionButton>
                     </div>
                 </Form>

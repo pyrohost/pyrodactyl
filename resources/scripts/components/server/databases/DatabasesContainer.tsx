@@ -84,22 +84,22 @@ const DatabasesContainer = () => {
     }, []);
 
     return (
-        <ServerContentBlock title={'Databases'}>
+        <ServerContentBlock title={'Bases de datos'}>
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader
                 direction='column'
-                title={'Databases'}
+                title={'Bases de datos'}
                 titleChildren={
                     <Can action={'database.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             {databaseLimit > 0 && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {databases.length} of {databaseLimit} databases
+                                    {databases.length} de {databaseLimit} bases de datos
                                 </p>
                             )}
                             {databaseLimit > 0 && databaseLimit !== databases.length && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                    New Database
+                                    Nueva base de datos
                                 </ActionButton>
                             )}
                         </div>
@@ -107,8 +107,8 @@ const DatabasesContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Create and manage MySQL databases for your server. Configure database access, manage users, and view
-                    connection details.
+                    Crea y gestiona bases de datos MySQL para tu servidor. Configura el acceso, administra los usuarios y
+                    comprueba los detalles de conexión.
                 </p>
             </MainPageHeader>
 
@@ -126,7 +126,7 @@ const DatabasesContainer = () => {
                             resetForm();
                             setCreateModalVisible(false);
                         }}
-                        title='Create new database'
+                        title='Crear base de datos'
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
@@ -135,23 +135,23 @@ const DatabasesContainer = () => {
                                     type={'string'}
                                     id={'database_name'}
                                     name={'databaseName'}
-                                    label={'Database Name'}
-                                    description={'A descriptive name for your database instance.'}
+                                    label={'Nombre'}
+                                    description={'Un nombre que describa tu base de datos.'}
                                 />
                                 <div className={`mt-6`}>
                                     <Field
                                         type={'string'}
                                         id={'connections_from'}
                                         name={'connectionsFrom'}
-                                        label={'Connections From'}
+                                        label={'Conexiones permitidas'}
                                         description={
-                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
+                                            'Las conexiones que se permitirán. Déjalo en blanco para permitir conexiones de cualquier dirección IP.'
                                         }
                                     />
                                 </div>
                                 <div className={`flex gap-3 justify-end my-6`}>
                                     <ActionButton variant='primary' type={'submit'}>
-                                        Create Database
+                                        Crear
                                     </ActionButton>
                                 </div>
                             </Form>
@@ -177,12 +177,12 @@ const DatabasesContainer = () => {
                             <HugeIconsDatabase className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                            {databaseLimit > 0 ? 'No databases found' : 'Databases unavailable'}
+                            {databaseLimit > 0 ? 'No hay bases de datos' : 'Bases de datos no disponibles'}
                         </h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
                             {databaseLimit > 0
-                                ? 'Your server does not have any databases. Create one to get started.'
-                                : 'Databases cannot be created for this server.'}
+                                ? 'Tu servidor no tiene ninguna base de datos.'
+                                : 'No se pueden crear bases de datos para este servidor.'}
                         </p>
                     </div>
                 </div>

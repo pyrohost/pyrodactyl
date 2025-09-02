@@ -54,14 +54,14 @@ const UsersContainer = () => {
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
         return (
-            <ServerContentBlock title={'Users'}>
+            <ServerContentBlock title={'Usuarios'}>
                 <FlashMessageRender byKey={'users'} />
                 <MainPageHeader
                     direction='column'
-                    title={'Users'}
+                    title={'Usuarios'}
                     titleChildren={
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>0 usuarios</p>
                             <Can action={'user.create'}>
                                 <ActionButton
                                     variant='primary'
@@ -69,15 +69,15 @@ const UsersContainer = () => {
                                     className='flex items-center gap-2'
                                 >
                                     <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
-                                    New User
+                                    Nuevo usuario
                                 </ActionButton>
                             </Can>
                         </div>
                     }
                 >
                     <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Manage user access to your server. Grant specific permissions to other users to help you manage
-                        and maintain your server.
+                        Gestiona el acceso de otros usuarios a tu servidor. Otorga permisos específicos a personas de
+                        confianza que te ayuden a administrar y mantener tu servidor.
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -88,14 +88,14 @@ const UsersContainer = () => {
     }
 
     return (
-        <ServerContentBlock title={'Users'}>
+        <ServerContentBlock title={'Usuarios'}>
             <FlashMessageRender byKey={'users'} />
             <MainPageHeader
                 direction='column'
-                title={'Users'}
+                title={'Usuarios'}
                 titleChildren={
                     <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
+                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} usuarios</p>
                         <Can action={'user.create'}>
                             <ActionButton
                                 variant='primary'
@@ -103,15 +103,15 @@ const UsersContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
-                                New User
+                                Nuevo usuario
                             </ActionButton>
                         </Can>
                     </div>
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Manage user access to your server. Grant specific permissions to other users to help you manage and
-                    maintain your server.
+                    Gestiona el acceso de otros usuarios a tu servidor. Otorga permisos específicos a personas de
+                    confianza que te ayuden a administrar y mantener tu servidor.
                 </p>
             </MainPageHeader>
             {!subusers.length ? (
@@ -120,9 +120,9 @@ const UsersContainer = () => {
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <HugeIconsUser className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>No users found</h3>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>No se han encontrado usuarios</h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
-                            Your server does not have any additional users. Add others to help you manage your server.
+                            Tu servidor no tiene usuarios adicionales. Añade otros para que te ayuden a gestionar tu servidor.
                         </p>
                     </div>
                 </div>

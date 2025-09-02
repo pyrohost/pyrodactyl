@@ -48,7 +48,7 @@ const DropdownButton = ({ list }: Props) => {
                     className='flex items-center justify-between w-full px-4 py-2 rounded-lg overflow-show'
                     onClick={() => setOpen(!open)}
                 >
-                    <span className='truncate'>Selected Version: {list[0].version_number}</span>
+                    <span className='truncate'>Versión: {list[0].version_number}</span>
                     <ChevronDownIcon className='w-4 h-4 ml-2' />
                 </Button>
                 {open && (

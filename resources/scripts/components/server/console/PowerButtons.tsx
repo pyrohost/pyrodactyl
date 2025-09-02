@@ -28,11 +28,11 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
 
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success('Tu servidor se está iniciando.');
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success('Tu servidor se está reiniciando.');
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success('Tu servidor se está deteniendo.');
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
@@ -61,11 +61,11 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                 open={open}
                 hideCloseIcon
                 onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
+                title={'Forzar detención'}
+                confirm={'Continuar'}
                 onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
             >
-                Forcibly stopping a server can lead to data corruption.
+                Forzar la detención de un servidor puede llevar a la corrupción de archivos.
             </Dialog.Confirm>
             <Can action={'control.start'}>
                 <button
@@ -86,7 +86,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
-                    Start
+                    Iniciar
                 </button>
             </Can>
             <Can action={'control.restart'}>
@@ -99,7 +99,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
                 >
-                    Restart
+                    Reiniciar
                 </button>
             </Can>
             <Can action={'control.stop'}>
@@ -121,7 +121,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >
-                    {killable ? 'Kill' : 'Stop'}
+                    {killable ? 'Forzar detención' : 'Detener'}
                 </button>
             </Can>
         </div>

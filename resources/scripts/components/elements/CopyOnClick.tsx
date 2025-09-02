@@ -23,7 +23,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${truncatedText} to clipboard.`);
+        toast(`Se ha copiado ${truncatedText} al portapapeles.`);
 
         const timeout = setTimeout(() => {
             setCopied(false);

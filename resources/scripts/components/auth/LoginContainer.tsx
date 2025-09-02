@@ -48,7 +48,7 @@ function LoginContainer() {
                 } else {
                     // Captcha is enabled but no response - show error
                     console.error('Captcha enabled but no response available');
-                    clearAndAddHttpError({ error: new Error('Please complete the captcha verification.') });
+                    clearAndAddHttpError({ error: new Error('Por favor, completa la verificación.') });
                     setSubmitting(false);
                     return;
                 }
@@ -69,7 +69,7 @@ function LoginContainer() {
                 setSubmitting(false);
 
                 if (error.code === 'InvalidCredentials') {
-                    clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
+                    clearAndAddHttpError({ error: new Error('El usuario o contraseña no son válidos. Por favor, inténtalo de nuevo.') });
                 } else if (error.code === 'DisplayException') {
                     clearAndAddHttpError({ error: new Error(error.detail || error.message) });
                 } else {
@@ -83,8 +83,8 @@ function LoginContainer() {
             onSubmit={onSubmit}
             initialValues={{ user: '', password: '' }}
             validationSchema={object().shape({
-                user: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
+                user: string().required('Debes introducir tu nombre de usuario o dirección de correo electrónico'),
+                password: string().required('Por favor, introduce la contraseña de tu cuenta.'),
             })}
         >
             {({ isSubmitting }) => (
@@ -93,15 +93,13 @@ function LoginContainer() {
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-
-                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
-
+                    <h2 className='text-xl font-extrabold mb-2'>Iniciar sesión</h2>
+                    <Field id='user' type={'text'} label={'Usuario o correo electrónico'} name={'user'} disabled={isSubmitting} />
                     <div className={`relative mt-6`}>
                         <Field
                             id='password'
                             type={'password'}
-                            label={'Password'}
+                            label={'Contraseña'}
                             name={'password'}
                             disabled={isSubmitting}
                         />
@@ -109,7 +107,7 @@ function LoginContainer() {
                             to={'/auth/password'}
                             className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
                         >
-                            Forgot Password?
+                            ¿Has olvidado tu contraseña?
                         </Link>
                     </div>
 
@@ -118,7 +116,7 @@ function LoginContainer() {
                         onError={(error) => {
                             console.error('Captcha error:', error);
                             clearAndAddHttpError({
-                                error: new Error('Captcha verification failed. Please try again.'),
+                                error: new Error('Ha fallado la verificación. Por favor, inténtalo de nuevo.'),
                             });
                         }}
                     />
@@ -131,7 +129,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Login
+                            Iniciar sesión
                         </Button>
                     </div>
                 </LoginFormContainer>

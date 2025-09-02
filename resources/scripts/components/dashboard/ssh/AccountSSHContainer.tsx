@@ -88,7 +88,7 @@ const AccountSSHContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'SSH Keys'}>
+        <PageContentBlock title={'Claves SSH'}>
             <FlashMessageRender byKey={'account'} />
 
             {/* Create SSH Key Modal */}
@@ -96,8 +96,8 @@ const AccountSSHContainer = () => {
                 <Dialog.Confirm
                     open={showCreateModal}
                     onClose={() => setShowCreateModal(false)}
-                    title='Add SSH Key'
-                    confirm='Add Key'
+                    title='Agregar clave SSH'
+                    confirm='Agregar clave'
                     onConfirmed={() => {
                         const form = document.getElementById('create-ssh-form') as HTMLFormElement;
                         if (form) {
@@ -110,8 +110,8 @@ const AccountSSHContainer = () => {
                         onSubmit={submitCreate}
                         initialValues={{ name: '', publicKey: '' }}
                         validationSchema={object().shape({
-                            name: string().required('SSH Key Name is required'),
-                            publicKey: string().required('Public Key is required'),
+                            name: string().required('Debes indicar el nombre de la clave SSH'),
+                            publicKey: string().required('Debes indicar la clave pública'),
                         })}
                     >
                         {({ isSubmitting }) => (
@@ -119,17 +119,17 @@ const AccountSSHContainer = () => {
                                 <SpinnerOverlay visible={isSubmitting} />
 
                                 <FormikFieldWrapper
-                                    label='SSH Key Name'
+                                    label='Nombre de la clave SSH'
                                     name='name'
-                                    description='A name to identify this SSH key.'
+                                    description='Un nombre que identifique esta clave SSH.'
                                 >
                                     <Field name='name' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
                                 <FormikFieldWrapper
-                                    label='Public Key'
+                                    label='Clave pública'
                                     name='publicKey'
-                                    description='Enter your public SSH key.'
+                                    description='Tu clave SSH pública.'
                                 >
                                     <Field name='publicKey' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
@@ -151,7 +151,7 @@ const AccountSSHContainer = () => {
                     }}
                 >
                     <MainPageHeader
-                        title='SSH Keys'
+                        title='Claves SSH'
                         titleChildren={
                             <ActionButton
                                 variant='primary'
@@ -159,7 +159,7 @@ const AccountSSHContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
-                                Add SSH Key
+                                Agregar clave SSH
                             </ActionButton>
                         }
                     />
@@ -176,14 +176,14 @@ const AccountSSHContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={!data && isValidating} />
                         <Dialog.Confirm
-                            title={'Delete SSH Key'}
-                            confirm={'Delete Key'}
+                            title={'Eliminar clave SSH'}
+                            confirm={'Eliminar clave'}
                             open={!!deleteKey}
                             onClose={() => setDeleteKey(null)}
                             onConfirmed={doDeletion}
                         >
-                            Removing the <Code>{deleteKey?.name}</Code> SSH key will invalidate its usage across the
-                            Panel.
+                            Eliminar la clave <Code>{deleteKey?.name}</Code> la invalidará totalmente del
+                            panel y sus aplicaciones.
                         </Dialog.Confirm>
 
                         {!data || data.length === 0 ? (
@@ -191,11 +191,11 @@ const AccountSSHContainer = () => {
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                                     <HugeIconsKey className='w-8 h-8 text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No SSH Keys</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No hay claves SSH</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
                                     {!data
-                                        ? 'Loading your SSH keys...'
-                                        : "You haven't added any SSH keys yet. Add one to securely access your servers."}
+                                        ? 'Cargando tus claves SSH...'
+                                        : "Aún no tienes ninguna clave SSH. Crea una para gestionar tu servidor de forma segura."}
                                 </p>
                             </div>
                         ) : (
@@ -219,9 +219,9 @@ const AccountSSHContainer = () => {
                                                         </h4>
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
-                                                        <span>Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
+                                                        <span>Agregada: {format(key.createdAt, 'd MMM, yyyy HH:mm')}</span>
                                                         <div className='flex items-center gap-2'>
-                                                            <span>Fingerprint:</span>
+                                                            <span>Huella:</span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
                                                                 {showKeys[key.fingerprint]
                                                                     ? `SHA256:${key.fingerprint}`

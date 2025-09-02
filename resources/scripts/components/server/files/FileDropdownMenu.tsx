@@ -54,11 +54,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doCopy = () => {
         clearFlashes('files');
-        toast.info('Duplicating...');
+        toast.info('Duplicando...');
 
         copyFile(uuid, join(directory, file.name))
             .then(() => mutate())
-            .then(() => toast.success('File successfully duplicated.'))
+            .then(() => toast.success('El archivo se ha duplicado con éxito.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -75,21 +75,21 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doArchive = () => {
         clearFlashes('files');
-        toast.info('Archiving files...');
+        toast.info('Comprimiendo archivos...');
 
         compressFiles(uuid, directory, [file.name])
             .then(() => mutate())
-            .then(() => toast.success('Files successfully archived.'))
+            .then(() => toast.success('Los archivos se han comprimido con éxito.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doUnarchive = () => {
         clearFlashes('files');
-        toast.info('Unarchiving files...');
+        toast.info('Descomprimiendo archivos...');
 
         decompressFiles(uuid, directory, file.name)
             .then(() => mutate())
-            .then(() => toast.success('Files successfully unarchived.'))
+            .then(() => toast.success('Los archivos se han descomprimido con éxito.'))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -98,12 +98,12 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             <Dialog.Confirm
                 open={showConfirmation}
                 onClose={() => setShowConfirmation(false)}
-                title={`Delete ${file.isFile ? 'File' : 'Directory'}`}
-                confirm={'Delete'}
+                title={`Eliminar ${file.isFile ? 'archivo' : 'directorio'}`}
+                confirm={'Eliminar'}
                 onConfirmed={doDeletion}
             >
-                You will not be able to recover the contents of
-                <span className={'font-semibold text-zinc-50'}> {file.name}</span> once deleted.
+                No podrás recuperar el contenido de 
+                <span className={'font-semibold text-zinc-50'}> {file.name}</span> una vez se elimine.
             </Dialog.Confirm>
             {modal ? (
                 modal === 'chmod' ? (
@@ -127,22 +127,22 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 <Can action={'file.update'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
                         <HugeIconsPencil className='h-4! w-4!' fill='currentColor' />
-                        <span>Rename</span>
+                        <span>Renombrar</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
                         <HugeIconsMoveTo className='h-4! w-4!' fill='currentColor' />
-                        <span>Move</span>
+                        <span>Mover</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
                         <HugeIconsFileSecurity className='h-4! w-4!' fill='currentColor' />
-                        <span>Permissions</span>
+                        <span>Permisos</span>
                     </ContextMenuItem>
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onClick={doCopy}>
                             <HugeIconsCopy className='h-4! w-4!' fill='currentColor' />
-                            <span>Duplicate</span>
+                            <span>Duplicar</span>
                         </ContextMenuItem>
                     </Can>
                 )}
@@ -150,27 +150,27 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'}>
                             <HugeIconsFileZip className='h-4! w-4!' fill='currentColor' />
-                            <span>Unarchive</span>
+                            <span>Descomprimir</span>
                         </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
                             <HugeIconsFileZip className='h-4! w-4!' fill='currentColor' />
-                            <span>Archive</span>
+                            <span>Comprimir</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
                     <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                         <HugeIconsFileDownload className='h-4! w-4!' fill='currentColor' />
-                        <span>Download</span>
+                        <span>Descargar</span>
                     </ContextMenuItem>
                 )}
                 <Can action={'file.delete'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
                         <HugeIconsDelete className='h-4! w-4!' fill='currentColor' />
-                        <span>Delete</span>
+                        <span>Eliminar</span>
                     </ContextMenuItem>
                 </Can>
             </ContextMenuContent>

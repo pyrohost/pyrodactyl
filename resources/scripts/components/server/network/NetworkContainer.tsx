@@ -56,22 +56,22 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock title={'Network'}>
+        <ServerContentBlock title={'Red'}>
             <FlashMessageRender byKey={'server:network'} />
             <MainPageHeader
                 direction='column'
-                title={'Network'}
+                title={'Red'}
                 titleChildren={
                     data && allocationLimit > 0 ? (
                         <Can action={'allocation.create'}>
                             <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}{' '}
-                                    allowed allocations
+                                    {data.filter((allocation) => !allocation.isDefault).length} de {allocationLimit}{' '}
+                                    asignaciones permitidas
                                 </p>
                                 {allocationLimit > data.filter((allocation) => !allocation.isDefault).length && (
                                     <ActionButton variant='primary' onClick={onCreateAllocation}>
-                                        New Allocation
+                                        Nueva asignación
                                     </ActionButton>
                                 )}
                             </div>
@@ -80,8 +80,8 @@ const NetworkContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure network allocations for your server. Manage IP addresses and ports that your server can
-                    bind to for incoming connections.
+                    Configura las asignaciones de tu servidor. Gestiona las direcciones IP y puertos que tu servidor puede
+                    usar para las conexiones entrantes.
                 </p>
             </MainPageHeader>
 

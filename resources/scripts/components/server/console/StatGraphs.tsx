@@ -21,8 +21,8 @@ const StatGraphs = () => {
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
 
     const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
-    const memory = useChartTickLabel('Memory', limits.memory, 'MiB');
-    const network = useChart('Network', {
+    const memory = useChartTickLabel('Memoria', limits.memory, 'MiB');
+    const network = useChart('Red', {
         sets: 2,
         options: {
             scales: {
@@ -38,7 +38,7 @@ const StatGraphs = () => {
         callback(opts, index) {
             return {
                 ...opts,
-                label: !index ? 'Network In' : 'Network Out',
+                label: !index ? 'Red (Entrada)' : 'Red (Salida)',
                 borderColor: !index ? '#facc15' : '#60a5fa',
                 backgroundColor: hexToRgba(!index ? '#facc15' : '#60a5fa', 0.09),
             };
@@ -81,7 +81,7 @@ const StatGraphs = () => {
                 }}
             >
                 <ChartBlock title={'CPU'}>
-                    <Line aria-label='CPU Usage' role='img' {...cpu.props} />
+                    <Line aria-label='Uso de CPU' role='img' {...cpu.props} />
                 </ChartBlock>
             </div>
             <div
@@ -93,7 +93,7 @@ const StatGraphs = () => {
                 }}
             >
                 <ChartBlock title={'RAM'}>
-                    <Line aria-label='Memory Usage' role='img' {...memory.props} />
+                    <Line aria-label='Uso de RAM' role='img' {...memory.props} />
                 </ChartBlock>
             </div>
             <div
@@ -105,7 +105,7 @@ const StatGraphs = () => {
                 }}
             >
                 <ChartBlock
-                    title={'Network Activity'}
+                    title={'Actividad de Red'}
                     legend={
                         <div className='flex gap-2'>
                             <Tooltip.Root delayDuration={200}>
@@ -123,7 +123,7 @@ const StatGraphs = () => {
                                         className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
                                         sideOffset={5}
                                     >
-                                        Inbound
+                                        Entrante
                                         <Tooltip.Arrow className='fill-gray-800' />
                                     </Tooltip.Content>
                                 </Tooltip.Portal>
@@ -141,7 +141,7 @@ const StatGraphs = () => {
                                         className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
                                         sideOffset={5}
                                     >
-                                        Outbound
+                                        Saliente
                                         <Tooltip.Arrow className='fill-gray-800' />
                                     </Tooltip.Content>
                                 </Tooltip.Portal>
@@ -149,7 +149,7 @@ const StatGraphs = () => {
                         </div>
                     }
                 >
-                    <Line aria-label='Network Activity. Download and upload activity' role='img' {...network.props} />
+                    <Line aria-label='Actividad de red. Entrante y saliente' role='img' {...network.props} />
                 </ChartBlock>
             </div>
         </Tooltip.Provider>
