@@ -90,7 +90,6 @@ const AccountApiContainer = () => {
 
     return (
         <PageContentBlock title={'Claves API'}>
-            {/* Flash messages will now appear at the top of the page */}
             <FlashMessageRender byKey='account' />
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
@@ -124,7 +123,7 @@ const AccountApiContainer = () => {
                                 <FormikFieldWrapper
                                     label='Descripción'
                                     name='description'
-                                    description='Una descripción para la clave API.'
+                                    description='Una descripción breve sobre esta clave API.'
                                 >
                                     <Field name='description' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
@@ -132,7 +131,7 @@ const AccountApiContainer = () => {
                                 <FormikFieldWrapper
                                     label='Direcciones IP permitidas'
                                     name='allowedIps'
-                                    description='Deja el campo en vacío para permitir la conexión desde cualquier dirección IP, o escribe cada una en una línea independiente.'
+                                    description='Deja este campo vacío para permitir cualquier dirección o especifica cada IP en una línea nueva.'
                                 >
                                     <Field name='allowedIps' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
@@ -179,35 +178,25 @@ const AccountApiContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={loading} />
                         <Dialog.Confirm
-                            title={'Borrar clave API'}
-                            confirm={'Borrar clave'}
+                            title={'Eliminar clave API'}
+                            confirm={'Eliminar clave'}
                             open={!!deleteIdentifier}
                             onClose={() => setDeleteIdentifier('')}
                             onConfirmed={() => doDeletion(deleteIdentifier)}
                         >
-                            Todas las peticiones que usen la clave <Code>{deleteIdentifier}</Code> quedarán invalidadas.
+                            Todas las peticiones que usen la calve <Code>{deleteIdentifier}</Code> quedarán invalidadas.
                         </Dialog.Confirm>
 
-                {keys.length === 0 ? (
-                    <p className='text-center text-sm text-gray-500'>
-                        {loading ? 'Cargando...' : 'No existen claves API en esta cuenta.'}
-                    </p>
-                ) : (
-                    keys.map((key) => (
-                        <div key={key.identifier} className='flex flex-col mb-6 space-y-4'>
-                            <div className='flex items-center justify-between space-x-4 border border-gray-300 rounded-lg p-4 transition duration-200'>
-                                <div className='flex-1'>
-                                    <p className='text-sm font-medium'>{key.description}</p>
-                                    <p className='text-xs text-gray-500 uppercase'>
-                                        Último uso:{' '}
-                                        {key.lastUsedAt ? format(key.lastUsedAt, 'd MMM, yyyy HH:mm') : 'Nunca'}
-                                    </p>
+                        {keys.length === 0 ? (
+                            <div className='text-center py-12'>
+                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                                    <HugeIconsKey className='w-8 h-8 text-zinc-400' fill='currentColor' />
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>No hay claves API</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
                                     {loading
                                         ? 'Cargando tus claves API...'
-                                        : "No tienes ninguna clave API. Crea una para empezar a usarla."}
+                                        : "Aún no tienes ninguna clave API. Crea una para empezar."}
                                 </p>
                             </div>
                         ) : (
