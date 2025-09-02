@@ -82,18 +82,20 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
-      - name: Checkout release branch
+      - name: Checkout main branch at release commit
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.release.target_commitish }}
 
       - name: Update version in config/app.php
         run: sed -i "s/'version' => 'canary'/'version' => '${{ github.event.release.tag_name }}'/g" config/app.php
 
-      - name: Commit and push changes
+      - name: Commit and push to release branch
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name "pyrodactyl-ci"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B release
           git add config/app.php
           git commit -m "Update version to ${{ github.event.release.tag_name }} in config/app.php"
-          git push origin ${{ github.event.release.tag_name }}
+          git push origin release --force
+
