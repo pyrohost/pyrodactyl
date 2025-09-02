@@ -287,6 +287,7 @@ const SoftwareContainer = () => {
     const [showWipeConfirmation, setShowWipeConfirmation] = useState(false);
     const [wipeCountdown, setWipeCountdown] = useState(5);
     const [wipeLoading, setWipeLoading] = useState(false);
+    const [shiftPressed, setShiftPressed] = useState(false);
 
     // Configuration options
     const [shouldBackup, setShouldBackup] = useState(false);
@@ -356,6 +357,24 @@ const SoftwareContainer = () => {
             setWipeCountdown(5);
         }
     }, [showWipeConfirmation]);
+
+    const handleKeyDown = (event) => {
+        if (event.shiftKey) setShiftPressed(true);
+    };
+
+    const handleKeyUp = (event) => {
+        if (!event.shiftKey) setShiftPressed(false);
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keyup', handleKeyUp);
+        };
+    });
 
     // Flow control functions
     const resetFlow = () => {
@@ -1155,7 +1174,7 @@ const SoftwareContainer = () => {
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
                 onModalDismissed={() => setShowWipeConfirmation(false)}
-                disabled={wipeCountdown > 0}
+                disabled={wipeCountdown > 0 && !shiftPressed}
                 loading={wipeLoading}
             >
                 <div className='space-y-4'>
