@@ -39,14 +39,14 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     return (
         <>
             <ConfirmationModal
-                title={`Eliminar ${subuser.username}?`}
-                buttonText={`Eliminar ${subuser.username}`}
+                title={`Eliminar a ${subuser.username}?`}
+                buttonText={`Eliminar a ${subuser.username}`}
                 visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
-                El acceso del usuario al servidor se revocará inmediatamente.
+                El acceso al servidor se revocará inmediatamente.
             </ConfirmationModal>
             <ActionButton
                 variant='danger'
@@ -55,9 +55,9 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 onClick={() => setShowConfirmation(true)}
                 aria-label='Eliminar usuario'
             >
-                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
                 Eliminar
-            </button>
+            </ActionButton>
         </>
     );
 };
