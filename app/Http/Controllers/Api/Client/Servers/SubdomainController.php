@@ -60,7 +60,7 @@ class SubdomainController extends ClientApiController
                 ->property([
                     'subdomain' => $request->input('subdomain'),
                     'domain_id' => $request->input('domain_id'),
-                    'type' => $server->fresh()->subdomain_type, // Get the auto-selected type
+                    'type' => $server->fresh()->subdomain_type,
                 ])
                 ->log();
 
@@ -74,7 +74,7 @@ class SubdomainController extends ClientApiController
                 'domain_id' => $request->input('domain_id'),
                 'error' => $e->getMessage(),
             ]);
-            
+
             return new JsonResponse(['error' => 'Failed to configure subdomain'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -97,7 +97,7 @@ class SubdomainController extends ClientApiController
                     'new_subdomain' => $request->input('subdomain'),
                     'old_domain_id' => $server->domain_id,
                     'new_domain_id' => $request->input('domain_id'),
-                    'type' => $server->fresh()->subdomain_type, // Get the auto-selected type
+                    'type' => $server->fresh()->subdomain_type,
                 ])
                 ->log();
 
@@ -111,7 +111,7 @@ class SubdomainController extends ClientApiController
                 'domain_id' => $request->input('domain_id'),
                 'error' => $e->getMessage(),
             ]);
-            
+
             return new JsonResponse(['error' => 'Failed to update subdomain'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -124,7 +124,7 @@ class SubdomainController extends ClientApiController
         try {
             $oldSubdomain = $server->subdomain;
             $oldDomain = $server->domain_id;
-            
+
             $this->subdomainService->removeSubdomain($server);
 
             Activity::event('server:subdomain.remove')
@@ -142,7 +142,7 @@ class SubdomainController extends ClientApiController
                 'server_id' => $server->id,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return new JsonResponse(['error' => 'Failed to remove subdomain'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -172,37 +172,37 @@ class SubdomainController extends ClientApiController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Failed to check availability'], Response::HTTP_BAD_REQUEST);
         }
-    
-        /**
-         * Sync DNS records for the server's subdomain.
-         */
-        public function syncDns(Server $server): JsonResponse
-        {
-            if (!$server->hasSubdomain()) {
-                return new JsonResponse(['error' => 'Server has no subdomain configured'], Response::HTTP_BAD_REQUEST);
-            }
-    
-            try {
-                $result = $this->dnsManager->createSubdomainRecords($server);
-                
-                if ($result) {
-                    Activity::event('server:subdomain.dns-sync')
-                        ->property(['subdomain' => $server->subdomain])
-                        ->log();
-                        
-                    return new JsonResponse(['message' => 'DNS records synchronized successfully']);
-                } else {
-                    return new JsonResponse(['error' => 'Failed to synchronize DNS records'], Response::HTTP_INTERNAL_SERVER_ERROR);
-                }
-            } catch (\Exception $e) {
-                Log::error('Failed to sync DNS records', [
-                    'server_id' => $server->id,
-                    'subdomain' => $server->subdomain,
-                    'error' => $e->getMessage(),
-                ]);
-                
+    }
+
+    /**
+     * Sync DNS records for the server's subdomain.
+     */
+    public function syncDns(Server $server): JsonResponse
+    {
+        if (!$server->hasSubdomain()) {
+            return new JsonResponse(['error' => 'Server has no subdomain configured'], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $result = $this->dnsManager->createSubdomainRecords($server);
+
+            if ($result) {
+                Activity::event('server:subdomain.dns-sync')
+                    ->property(['subdomain' => $server->subdomain])
+                    ->log();
+
+                return new JsonResponse(['message' => 'DNS records synchronized successfully']);
+            } else {
                 return new JsonResponse(['error' => 'Failed to synchronize DNS records'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
+        } catch (\Exception $e) {
+            Log::error('Failed to sync DNS records', [
+                'server_id' => $server->id,
+                'subdomain' => $server->subdomain,
+                'error' => $e->getMessage(),
+            ]);
+
+            return new JsonResponse(['error' => 'Failed to synchronize DNS records'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -221,5 +221,4 @@ class SubdomainController extends ClientApiController
             })
             ->toArray();
     }
-
-    /**
+}
