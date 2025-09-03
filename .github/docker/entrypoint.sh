@@ -112,7 +112,7 @@ fi
     echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
 
     # Create a developer user
-    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password
+    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password dev
     mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
 
     # Make a location and node for the panel
@@ -157,12 +157,12 @@ fi
         fi
       }
 
-      update_config "root_directory" "$WINGS_DIR/srv/wings/"
-      update_config "log_directory" "$WINGS_DIR/srv/wings/logs/"
-      update_config "data" "$WINGS_DIR/srv/wings/volumes"
-      update_config "archive_directory" "$WINGS_DIR/srv/wings/archives"
-      update_config "backup_directory" "$WINGS_DIR/srv/wings/backups"
-      update_config "tmp_directory" "$WINGS_DIR/srv/wings/tmp/"
+      update_config "root_directory" "$WINGS_DIR/wings/"
+      update_config "log_directory" "$WINGS_DIR/wings/logs/"
+      update_config "data" "$WINGS_DIR/wings/volumes"
+      update_config "archive_directory" "$WINGS_DIR/wings/archives"
+      update_config "backup_directory" "$WINGS_DIR/wings/backups"
+      update_config "tmp_directory" "$WINGS_DIR/wings/tmp/"
     fi
 
     echo "Saving Wings configuration file to '$WINGS_CONFIG'..."
