@@ -103,21 +103,21 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
             switch (ruleName) {
                 case 'string':
                     if (typeof value !== 'string') {
-                        errors.push(`${variable.name} must be a string.`);
+                        errors.push(`${variable.name} debe contener texto.`);
                     }
                     break;
 
                 case 'integer':
                 case 'numeric':
                     if (value && isNaN(Number(value))) {
-                        errors.push(`${variable.name} must be a number.`);
+                        errors.push(`${variable.name} debe ser numérico.`);
                     }
                     break;
 
                 case 'boolean': {
                     const boolValues = ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off'];
                     if (value && !boolValues.includes(value.toLowerCase())) {
-                        errors.push(`${variable.name} must be true or false.`);
+                        errors.push(`${variable.name} debe ser 'true' o 'false'.`);
                     }
                     break;
                 }
@@ -126,7 +126,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const minValue = parseInt(ruleValue);
                         if (value.length < minValue) {
-                            errors.push(`${variable.name} must be at least ${minValue} characters.`);
+                            errors.push(`${variable.name} debe contener al menos ${minValue} caracteres.`);
                         }
                     }
                     break;
@@ -136,7 +136,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const maxValue = parseInt(ruleValue);
                         if (value.length > maxValue) {
-                            errors.push(`${variable.name} may not be greater than ${maxValue} characters.`);
+                            errors.push(`${variable.name} no puede exceder los ${maxValue} caracteres.`);
                         }
                     }
                     break;
@@ -146,7 +146,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const [min, max] = ruleValue.split(',').map((v) => parseInt(v.trim()));
                         if (value.length < min || value.length > max) {
-                            errors.push(`${variable.name} must be between ${min} and ${max} characters.`);
+                            errors.push(`${variable.name} debe contener entre ${min} y ${max} caracteres.`);
                         }
                     }
                     break;
@@ -156,7 +156,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const allowedValues = ruleValue.split(',').map((v) => v.trim());
                         if (!allowedValues.includes(value)) {
-                            errors.push(`${variable.name} must be one of: ${allowedValues.join(', ')}.`);
+                            errors.push(`${variable.name} debe ser uno de los siguientes: ${allowedValues.join(', ')}.`);
                         }
                     }
                     break;
@@ -170,7 +170,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                             if (regexMatch) {
                                 const regex = new RegExp(regexMatch[1], regexMatch[2]);
                                 if (!regex.test(value)) {
-                                    errors.push(`${variable.name} format is invalid.`);
+                                    errors.push(`${variable.name} no tiene un formato válido.`);
                                 }
                             }
                         } catch (e) {
@@ -182,19 +182,19 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'alpha':
                     if (value && !/^[a-zA-Z]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters.`);
+                        errors.push(`${variable.name} solo puede contener letras.`);
                     }
                     break;
 
                 case 'alpha_num':
                     if (value && !/^[a-zA-Z0-9]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters and numbers.`);
+                        errors.push(`${variable.name} solo puede contener letras y números.`);
                     }
                     break;
 
                 case 'alpha_dash':
                     if (value && !/^[a-zA-Z0-9_-]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters, numbers, dashes and underscores.`);
+                        errors.push(`${variable.name} solo puede contener letras, números, guiones y guiones bajos.`);
                     }
                     break;
 
@@ -203,14 +203,14 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         try {
                             new URL(value);
                         } catch {
-                            errors.push(`${variable.name} must be a valid URL.`);
+                            errors.push(`${variable.name} debe ser un enlace válido.`);
                         }
                     }
                     break;
 
                 case 'email':
                     if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                        errors.push(`${variable.name} must be a valid email address.`);
+                        errors.push(`${variable.name} debe ser una dirección de correo válida.`);
                     }
                     break;
 
@@ -219,7 +219,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         const ipRegex =
                             /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
                         if (!ipRegex.test(value)) {
-                            errors.push(`${variable.name} must be a valid IP address.`);
+                            errors.push(`${variable.name} debe ser una dirección IP válida.`);
                         }
                     }
                     break;
@@ -503,12 +503,12 @@ const SoftwareContainer = () => {
             setCurrentOperationId(response.operation_id);
             setShowOperationModal(true);
 
-            toast.success('Se ha iniciado la operación de cambio de software');
+            toast.success('La operación de cambio de software se ha iniciado');
 
             // Reset the configuration flow but keep the modal open
             resetFlow();
         } catch (error) {
-            console.error('Fallo al iniciar la operación de cambio de software:', error);
+            console.error('La operación de cambio de software ha fallado:', error);
             toast.error(httpErrorToHuman(error));
         } finally {
             setIsLoading(false);
@@ -528,12 +528,12 @@ const SoftwareContainer = () => {
             // Refresh server data to reflect changes
             mutate();
         } else if (operation.has_failed) {
-            toast.error(operation.message || 'No se ha podido aplicar la nueva configuración de software');
+            toast.error(operation.message || 'La configuración del software ha fallado');
         }
     };
 
     const handleOperationError = (error: Error) => {
-        toast.error(error.message || 'Ha ocurrido un error al monitorizar la operación');
+        toast.error(error.message || 'Ha ocurrido un error al monitorizar la acción');
     };
 
     const closeOperationModal = () => {
@@ -591,7 +591,7 @@ const SoftwareContainer = () => {
                     <div className='min-w-0 flex-1'>
                         {currentEggName ? (
                             currentEggName.includes(blank_egg_prefix) ? (
-                                <p className='text-amber-400 font-medium text-sm sm:text-base'>Sin seleccionar</p>
+                                <p className='text-amber-400 font-medium text-sm sm:text-base'>No has seleccionado el software</p>
                             ) : (
                                 <p className='text-neutral-200 font-medium text-sm sm:text-base truncate'>
                                     {currentEggName}
@@ -604,7 +604,7 @@ const SoftwareContainer = () => {
                             </div>
                         )}
                         <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed'>
-                            Administra la configuración del software de tu servidor
+                            Administra la configuración de software de tu servidor
                         </p>
                     </div>
                 </div>
@@ -617,7 +617,7 @@ const SoftwareContainer = () => {
                             try {
                                 setCurrentStep('select-game');
                             } catch (error) {
-                                console.error('Error al cambiar el software:', error);
+                                console.error('Error in change software click:', error);
                             }
                         }}
                         className='w-full sm:w-auto'
@@ -632,9 +632,9 @@ const SoftwareContainer = () => {
     );
 
     const renderGameSelection = () => (
-        <TitledGreyBox title='Seleccionar categoría'>
+        <TitledGreyBox title='Selecciona la categoría'>
             <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the type of game or software you want to run</p>
+                <p className='text-sm text-neutral-400'>Selecciona la categoría del software</p>
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
                     {nests?.map((nest) =>
@@ -662,7 +662,7 @@ const SoftwareContainer = () => {
                         onClick={() => setCurrentStep('overview')}
                         className='w-full sm:w-auto'
                     >
-                        Back to Overview
+                        Volver
                     </ActionButton>
                 </div>
             </div>
@@ -670,15 +670,15 @@ const SoftwareContainer = () => {
     );
 
     const renderSoftwareSelection = () => (
-        <TitledGreyBox title={`Select Software - ${selectedNest?.attributes.name}`}>
+        <TitledGreyBox title={`Selecciona el software - ${selectedNest?.attributes.name}`}>
             <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the specific software version for your server</p>
+                <p className='text-sm text-neutral-400'>Escoge la versión de software específica</p>
 
                 {isLoading ? (
                     <div className='flex items-center justify-center py-16'>
                         <div className='flex flex-col items-center text-center'>
                             <Spinner size='large' />
-                            <p className='text-neutral-400 mt-4'>Loading software options...</p>
+                            <p className='text-neutral-400 mt-4'>Cargando opciones...</p>
                         </div>
                     </div>
                 ) : (
@@ -710,14 +710,14 @@ const SoftwareContainer = () => {
                         onClick={() => setCurrentStep('select-game')}
                         className='w-full sm:w-auto'
                     >
-                        Back to Games
+                        Volver
                     </ActionButton>
                     <ActionButton
                         variant='secondary'
                         onClick={() => setCurrentStep('overview')}
                         className='w-full sm:w-auto'
                     >
-                        Cancel
+                        Cancelar
                     </ActionButton>
                 </div>
             </div>
@@ -731,7 +731,7 @@ const SoftwareContainer = () => {
                     <div className='space-y-6'>
                         {/* Software Configuration */}
                         <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Software Configuration</h3>
+                            <h3 className='text-lg font-semibold text-neutral-200'>Configuración del Software</h3>
                             <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
                                 <div>
                                     <label className='text-sm font-medium text-neutral-300 block mb-2'>
@@ -745,7 +745,7 @@ const SoftwareContainer = () => {
                                         className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-brand transition-colors font-mono resize-none'
                                     />
                                     <p className='text-xs text-neutral-400 mt-1'>
-                                        Usa variables como{' '}
+                                        Puedes usar variables como{' '}
                                         {eggPreview.variables
                                             .map((v) => `{{${v.env_variable}}}`)
                                             .slice(0, 3)
@@ -762,7 +762,7 @@ const SoftwareContainer = () => {
                                             <DropdownMenuTrigger asChild>
                                                 <button className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 focus:outline-none focus:border-brand transition-colors text-left flex items-center justify-between hover:border-[#ffffff20]'>
                                                     <span className='truncate'>
-                                                        {selectedDockerImage || 'Seleccionar imagen...'}
+                                                        {selectedDockerImage || 'Selecciona una imagen...'}
                                                     </span>
                                                     <svg
                                                         className='w-4 h-4 text-neutral-400 flex-shrink-0'
@@ -801,11 +801,11 @@ const SoftwareContainer = () => {
                                     ) : (
                                         <div className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
                                             {(eggPreview.docker_images && Object.keys(eggPreview.docker_images)[0]) ||
-                                                'Imagen por defecto'}
+                                                'Por defecto'}
                                         </div>
                                     )}
                                     <p className='text-xs text-neutral-400 mt-1'>
-                                        Entorno del contenedor de tu servidor
+                                        El entorno de contenedor de tu servidor
                                     </p>
                                 </div>
                             </div>
@@ -852,7 +852,7 @@ const SoftwareContainer = () => {
                                                         onChange={(e) =>
                                                             handleVariableChange(variable.env_variable, e.target.value)
                                                         }
-                                                        placeholder={variable.default_value || 'Introduce el valor...'}
+                                                        placeholder={variable.default_value || 'Introduce un valor...'}
                                                         className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${
                                                             variableErrors[variable.env_variable]
                                                                 ? 'border-red-500 focus:border-red-500'
@@ -898,8 +898,8 @@ const SoftwareContainer = () => {
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
                                             {backupLimit > 0 && (backups?.backupCount || 0) < backupLimit
-                                                ? 'Crear una copia automáticamente antes de aplicar los cambios'
-                                                : 'Has alcanzado el límite de copias para tu servidor'}
+                                                ? 'Crear una copia de seguridad antes de aplicar los cambios'
+                                                : 'Se ha alcanzado el límite de copias'}
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
@@ -917,7 +917,7 @@ const SoftwareContainer = () => {
                                             Borrar archivos
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            Elimina todos los archivos antes de instalar el nuevo software
+                                            Borra todos los archivos antes de reinstalar el servidor
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
@@ -935,7 +935,7 @@ const SoftwareContainer = () => {
                         onClick={() => setCurrentStep('select-software')}
                         className='w-full sm:w-auto'
                     >
-                        Volver al Software
+                        Volver
                     </ActionButton>
                     <ActionButton
                         variant='primary'
@@ -953,7 +953,7 @@ const SoftwareContainer = () => {
 
     const renderReview = () => (
         <div className='space-y-6'>
-            <TitledGreyBox title='Review Changes'>
+            <TitledGreyBox title='Revisa los cambios'>
                 {selectedEgg && eggPreview && (
                     <div className='space-y-6'>
                         {/* Summary */}
@@ -996,7 +996,7 @@ const SoftwareContainer = () => {
                                 <div>
                                     <span className='text-neutral-400 text-sm'>Imagen de Docker:</span>
                                     <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
-                                        {selectedDockerImage || 'Default Image'}
+                                        {selectedDockerImage || 'Por defecto'}
                                     </div>
                                 </div>
                             </div>
@@ -1029,19 +1029,105 @@ const SoftwareContainer = () => {
                             </div>
                         )}
 
-            {!visible && (
-                <div className='relative rounded-xl overflow-hidden shadow-md border-[1px] border-[#ffffff07] bg-[#ffffff08] mt-6 p-1 flex flex-row justify-between items-center'>
-                    <div className='flex flex-row items-center gap-2 h-full'>
-                        <HugeIconsAlert
-                            fill='currentColor'
-                            className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block'
-                        />
-                        <div className='flex flex-col pb-1  m-2'>
-                            <h1 className='text-xl'>Zona de peligro</h1>
-                            <p className='text-sm text-neutral-300'>
-                                Durante el proceso, algunos archivos pueden ser eliminados o modificados. Haz una copia
-                                antes de proceder o selecciona la opción cuando se te pregunte.
-                            </p>
+                        {/* Safety Options Review */}
+                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Opciones de seguridad</h3>
+                            <div className='space-y-2'>
+                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                    <span className='text-neutral-200'>Crear copia</span>
+                                    <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
+                                        {shouldBackup ? 'Sí' : 'No'}
+                                    </span>
+                                </div>
+                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                    <span className='text-neutral-200'>Borrar archivos</span>
+                                    <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
+                                        {shouldWipe ? 'Sí' : 'No'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Warning */}
+                        <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
+                            <div className='flex items-start gap-3'>
+                                <HugeIconsAlert
+                                    fill='currentColor'
+                                    className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
+                                />
+                                <div>
+                                    <h4 className='text-amber-400 font-semibold mb-2'>Aviso importante</h4>
+                                    <ul className='text-sm text-neutral-300 space-y-1'>
+                                        <li>• Tu servidor se detendrá y reinstalará</li>
+                                        <li>• El proceso puede tardar varios minutos en completarse</li>
+                                        <li>• Los archivos podrían ser modificados o eliminados durante el proceso</li>
+                                        <li>• Asegúrate de tener una copia de seguridad</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                    <ActionButton
+                        variant='secondary'
+                        onClick={() => setCurrentStep('configure')}
+                        className='w-full sm:w-auto'
+                    >
+                        Volver
+                    </ActionButton>
+                    <ActionButton
+                        variant='primary'
+                        onClick={applyChanges}
+                        disabled={isLoading}
+                        className='w-full sm:w-auto'
+                    >
+                        {isLoading && <Spinner size='small' />}
+                        Aplicar
+                    </ActionButton>
+                </div>
+            </TitledGreyBox>
+        </div>
+    );
+
+    // Show loading state if server data is not available
+    if (!serverData) {
+        return (
+            <ServerContentBlock title='Gestión del software'>
+                <div className='flex items-center justify-center h-64'>
+                    <div className='flex flex-col items-center text-center'>
+                        <Spinner size='large' />
+                        <p className='text-neutral-400 mt-4'>Cargando información...</p>
+                    </div>
+                </div>
+            </ServerContentBlock>
+        );
+    }
+
+    return (
+        <ServerContentBlock title='Gestión del software'>
+            <div className='space-y-6'>
+                <MainPageHeader direction='column' title='Gestión del software'>
+                    <p className='text-neutral-400 leading-relaxed'>
+                        Cambia el software de tu servidor de manera simple
+                    </p>
+                </MainPageHeader>
+
+                {/* Progress indicator */}
+                {currentStep !== 'overview' && (
+                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                        <div className='flex items-center justify-between mb-2'>
+                            <span className='text-sm font-medium text-neutral-200 capitalize'>
+                                {currentStep.replace('-', ' ')}
+                            </span>
+                            <span className='text-sm text-neutral-400'>
+                                Paso{' '}
+                                {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
+                                    currentStep,
+                                )}{' '}
+                                de 4
+                            </span>
                         </div>
                         <div className='w-full bg-[#ffffff12] rounded-full h-2'>
                             <div
@@ -1064,7 +1150,7 @@ const SoftwareContainer = () => {
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
-                title='¿Quieres borrar los archivos sin hacer una copia antes?'
+                title='¿Eliminar todos los archivos sin hacer una copia?'
                 buttonText={wipeCountdown > 0 ? `Sí, borra los archivos (${wipeCountdown}s)` : 'Sí, borra los archivos'}
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
@@ -1076,27 +1162,27 @@ const SoftwareContainer = () => {
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                         <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
                         <div>
-                            <h4 className='text-red-400 font-semibold mb-2'>PELIGRO: No has creado una copia</h4>
+                            <h4 className='text-red-400 font-semibold mb-2'>AVISO: No has seleccionado una copia</h4>
                             <p className='text-sm text-neutral-300'>
                                 Has escogido eliminar todos los archivos <strong>sin crear una copia</strong>. Esta
-                                acción <strong>eliminará permanentemente TODOS los archivos</strong> de tu servidor
-                                y no podrá deshacerse.
+                                acción eliminará <strong>permanentemente</strong> TODOS los archivos de tu servidor.
+                                No podrás volver atrás.
                             </p>
                         </div>
                     </div>
                     <div className='text-sm text-neutral-300 space-y-2'>
                         <p>
-                            <strong>Lo que pasará:</strong>
+                            <strong>Lo que ocurrirá:</strong>
                         </p>
                         <ul className='list-disc list-inside space-y-1 ml-4'>
                             <li>Todos los archivos del servidor se eliminarán permanentemente</li>
-                            <li>Tu servidor se detendrá y reinstalará el software</li>
-                            <li>Cualquier configuración personalizada o datos se perderán</li>
-                            <li>La acción es irreversible</li>
+                            <li>El servidor se detendrá y reinstalará</li>
+                            <li>Cualquier configuración o información se perderá en el proceso</li>
+                            <li>Esta acción es completamente irreversible</li>
                         </ul>
                     </div>
                     <p className='text-sm text-neutral-300'>
-                        ¿Estás completamente seguro de seguir sin hacer una copia antes?
+                        ¿Estás completamente seguro de continuar sin hacer una copia antes?
                     </p>
                 </div>
             </ConfirmationModal>
@@ -1105,7 +1191,7 @@ const SoftwareContainer = () => {
             <OperationProgressModal
                 visible={showOperationModal}
                 operationId={currentOperationId}
-                operationType='Software Change'
+                operationType='Cambio de software'
                 onClose={closeOperationModal}
                 onComplete={handleOperationComplete}
                 onError={handleOperationError}
