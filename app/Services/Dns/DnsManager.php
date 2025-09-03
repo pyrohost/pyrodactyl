@@ -34,7 +34,7 @@ class DnsManager
     public function getProvider(Domain $domain): DnsProviderInterface
     {
         $providerClass = $this->providers[$domain->dns_provider] ?? null;
-        
+
         if (!$providerClass) {
             throw new Exception("Unsupported DNS provider: {$domain->dns_provider}");
         }
@@ -139,7 +139,7 @@ class DnsManager
     public function getAvailableProviders(): array
     {
         $providers = [];
-        
+
         foreach ($this->providers as $key => $class) {
             if (class_exists($class)) {
                 $instance = new $class([]);
@@ -159,7 +159,7 @@ class DnsManager
     public function validateProviderConfig(string $provider, array $config): array
     {
         $providerClass = $this->providers[$provider] ?? null;
-        
+
         if (!$providerClass || !class_exists($providerClass)) {
             return ['Invalid DNS provider'];
         }
@@ -167,3 +167,4 @@ class DnsManager
         $instance = new $providerClass([]);
         return $instance->validateConfig($config);
     }
+}
