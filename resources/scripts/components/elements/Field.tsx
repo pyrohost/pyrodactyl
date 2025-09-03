@@ -11,7 +11,7 @@ interface OwnProps {
 type Props = OwnProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'>;
 
 const Field = forwardRef<HTMLInputElement, Props>(
-    ({ id, name = false, label, description, validate, ...props }, ref) => (
+    ({ id, name, label, description, validate, className, ...props }, ref) => (
         <FormikField innerRef={ref} name={name} validate={validate}>
             {({ field, form: { errors, touched } }: FieldProps) => (
                 <div className='flex flex-col gap-2'>
@@ -21,7 +21,7 @@ const Field = forwardRef<HTMLInputElement, Props>(
                         </label>
                     )}
                     <input
-                        className='px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm'
+                        className={`px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm border border-[#ffffff17] focus:border-[#ffffff33] transition-colors ${className || ''}`}
                         id={id}
                         {...field}
                         {...props}

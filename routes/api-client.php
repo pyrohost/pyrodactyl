@@ -161,6 +161,15 @@ Route::group([
             ->middleware('server.operation.rate-limit');
     });
 
+    Route::group(['prefix' => '/subdomain'], function () {
+        Route::get('/', [Client\Servers\SubdomainController::class, 'index']);
+        Route::post('/', [Client\Servers\SubdomainController::class, 'store']);
+        Route::put('/', [Client\Servers\SubdomainController::class, 'update']);
+        Route::delete('/', [Client\Servers\SubdomainController::class, 'destroy']);
+        Route::get('/check-availability', [Client\Servers\SubdomainController::class, 'checkAvailability']);
+        Route::post('/sync-dns', [Client\Servers\SubdomainController::class, 'syncDns']);
+    });
+
     Route::group(['prefix' => '/operations'], function () {
         Route::get('/', [Client\Servers\SettingsController::class, 'getServerOperations']);
         Route::get('/{operationId}', [Client\Servers\SettingsController::class, 'getOperationStatus']);

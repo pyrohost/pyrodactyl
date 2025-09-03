@@ -117,6 +117,11 @@
               <i class="bi bi-database-fill"></i> <span>Databases</span>
             </a>
           </li>
+          <li class="{{ !starts_with(Route::currentRouteName(), 'admin.domains') ?: 'active' }}">
+            <a href="{{ route('admin.domains') }}">
+              <i class="bi bi-cloud-fill"></i> <span>Domains</span>
+            </a>
+          </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.locations') ?: 'active' }}">
             <a href="{{ route('admin.locations') }}">
               <i class="bi bi-globe-americas"></i> <span>Locations</span>

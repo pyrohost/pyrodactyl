@@ -72,7 +72,8 @@ class NetworkAllocationController extends ClientApiController
      */
     public function setPrimary(SetPrimaryAllocationRequest $request, Server $server, Allocation $allocation): array
     {
-        $this->serverRepository->update($server->id, ['allocation_id' => $allocation->id]);
+        // Update the server model directly to trigger Eloquent events for DNS updates
+        $server->update(['allocation_id' => $allocation->id]);
 
         Activity::event('server:allocation.primary')
             ->subject($allocation)

@@ -26,6 +26,7 @@ class EventServiceProvider extends ServiceProvider
 
     protected $subscribe = [
         AuthenticationListener::class,
+        \Pterodactyl\Listeners\Server\ServerDnsListener::class,
     ];
 
     /**

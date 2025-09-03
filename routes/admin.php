@@ -81,6 +81,27 @@ Route::group(['prefix' => 'settings'], function () {
 
 /*
 |--------------------------------------------------------------------------
+| Domain Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /admin/domains
+|
+*/
+Route::group(['prefix' => 'domains'], function () {
+  Route::get('/', [Admin\DomainController::class, 'index'])->name('admin.domains');
+  Route::get('/view/{domain:id}', [Admin\DomainController::class, 'view'])->name('admin.domains.view');
+
+  Route::post('/', [Admin\DomainController::class, 'create']);
+  Route::post('/view/{domain:id}/test-connection', [Admin\DomainController::class, 'testConnection'])->name('admin.domains.test-connection');
+  Route::post('/validate-config', [Admin\DomainController::class, 'validateConfig'])->name('admin.domains.validate-config');
+  
+  Route::get('/provider/{provider}/config', [Admin\DomainController::class, 'getProviderConfig'])->name('admin.domains.provider-config');
+
+  Route::patch('/view/{domain:id}', [Admin\DomainController::class, 'update']);
+});
+
+/*
+|--------------------------------------------------------------------------
 | User Controller Routes
 |--------------------------------------------------------------------------
 |

@@ -9,6 +9,7 @@ import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
+import SubdomainBox from '@/components/server/network/SubdomainBox';
 
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -84,6 +85,10 @@ const NetworkContainer = () => {
                     bind to for incoming connections.
                 </p>
             </MainPageHeader>
+
+            <div className="mb-8">
+                <SubdomainBox />
+            </div>
 
             {!data ? (
                 <div className='flex items-center justify-center py-12'>

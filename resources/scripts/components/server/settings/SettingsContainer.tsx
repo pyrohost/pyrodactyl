@@ -33,16 +33,15 @@ const SettingsContainer = () => {
                     server name and reinstall when needed.
                 </p>
             </MainPageHeader>
-            <Can action={'settings.rename'}>
-                <div className={`mb-6 md:mb-10`}>
+            <div className='space-y-6'>
+                <Can action={'settings.rename'}>
                     <RenameServerBox />
-                </div>
-            </Can>
+                </Can>
 
-            <div className='w-full h-full flex flex-col gap-8'>
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />
                 </Can>
+
                 <TitledGreyBox title={'Debug Information'}>
                     <div className={`flex items-center justify-between text-sm`}>
                         <p>Node</p>
@@ -55,8 +54,9 @@ const SettingsContainer = () => {
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
+
                 <Can action={'file.sftp'}>
-                    <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
+                    <TitledGreyBox title={'SFTP Details'}>
                         <div className={`flex items-center justify-between text-sm`}>
                             <Label>Server Address</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>

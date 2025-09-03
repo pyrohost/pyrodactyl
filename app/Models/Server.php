@@ -22,6 +22,9 @@ use Pterodactyl\Exceptions\Http\Server\ServerStateConflictException;
  * @property string $uuidShort
  * @property int $node_id
  * @property string $name
+ * @property string|null $subdomain
+ * @property string $subdomain_type
+ * @property int|null $domain_id
  * @property string $description
  * @property string|null $status
  * @property bool $skip_scripts
@@ -60,6 +63,7 @@ use Pterodactyl\Exceptions\Http\Server\ServerStateConflictException;
  * @property int|null $mounts_count
  * @property Nest $nest
  * @property Node $node
+ * @property Domain|null $domain
  * @property \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property int|null $notifications_count
  * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\Schedule[] $schedules
@@ -155,6 +159,9 @@ class Server extends Model
         'external_id' => 'sometimes|nullable|string|between:1,191|unique:servers',
         'owner_id' => 'required|integer|exists:users,id',
         'name' => 'required|string|min:1|max:191',
+        'subdomain' => 'nullable|string|min:1|max:63|regex:/^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?$/',
+        'subdomain_type' => 'nullable|string',
+        'domain_id' => 'nullable|integer|exists:domains,id',
         'node_id' => 'required|exists:nodes,id',
         'description' => 'string',
         'status' => 'nullable|string',
@@ -185,6 +192,7 @@ class Server extends Model
         'node_id' => 'integer',
         'skip_scripts' => 'boolean',
         'owner_id' => 'integer',
+        'domain_id' => 'integer',
         'memory' => 'integer',
         'overhead_memory' => 'integer',
         'swap' => 'integer',
@@ -334,6 +342,14 @@ class Server extends Model
     }
 
     /**
+     * Gets information for the domain associated with this server.
+     */
+    public function domain(): BelongsTo
+    {
+        return $this->belongsTo(Domain::class);
+    }
+
+    /**
      * Gets information for the tasks associated with this server.
      */
     public function schedules(): HasMany
@@ -423,5 +439,113 @@ class Server extends Model
         ) {
             throw new ServerStateConflictException($this);
         }
+    }
+
+    /**
+     * Check if the server supports subdomains. All servers support subdomains.
+     */
+    public function supportsSubdomains(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get available game presets for this server.
+     */
+    public function getAvailableGamePresets(): array
+    {
+        $gameRegistry = app(\Pterodactyl\Services\Games\GameRegistry::class);
+        return $gameRegistry->getAvailableForServer($this);
+    }
+
+    /**
+     * Get the current game preset for this server.
+     */
+    public function getGamePreset(): ?\Pterodactyl\Services\Games\GamePreset
+    {
+        $gameRegistry = app(\Pterodactyl\Services\Games\GameRegistry::class);
+        return $gameRegistry->getForServer($this);
+    }
+
+    /**
+     * Get the DNS record requirements for this server's game.
+     */
+    public function getDnsRecordRequirements(): array
+    {
+        $preset = $this->getGamePreset();
+        if (!$preset) {
+            return ['A']; // Default to A record
+        }
+
+        return array_column($preset->getDnsRecords(), 'type');
+    }
+
+    /**
+     * Get the full domain name for this server (subdomain + domain).
+     */
+    public function getFullDomainName(): ?string
+    {
+        if (!$this->subdomain || !$this->domain) {
+            return null;
+        }
+
+        return $this->subdomain . '.' . $this->domain->name;
+    }
+
+    /**
+     * Check if the server has a subdomain configured.
+     */
+    public function hasSubdomain(): bool
+    {
+        return !empty($this->subdomain) && !is_null($this->domain_id);
+    }
+
+    /**
+     * Validate that the subdomain is available for this server.
+     */
+    public function validateSubdomainAvailability(): bool
+    {
+        if (!$this->subdomain || !$this->domain_id) {
+            return true; // No subdomain to validate
+        }
+
+        // Check if any other server is using this subdomain on the same domain
+        return !self::where('subdomain', $this->subdomain)
+            ->where('domain_id', $this->domain_id)
+            ->where('id', '!=', $this->id ?? 0)
+            ->exists();
+    }
+
+    /**
+     * Validate that the server's egg supports the selected game type.
+     */
+    public function validateGameTypeSupport(): bool
+    {
+        if (!$this->subdomain_type) {
+            return true; // No game type to validate
+        }
+
+        $gameRegistry = app(\Pterodactyl\Services\Games\GameRegistry::class);
+        $availableGames = $gameRegistry->getAvailableForServer($this);
+        $gameNames = array_map(fn($preset) => $preset->getName(), $availableGames);
+        
+        return in_array($this->subdomain_type, $gameNames);
+    }
+
+    /**
+     * Get the subdomain configuration including game preset and DNS requirements.
+     */
+    public function getSubdomainConfig(): ?array
+    {
+        if (!$this->hasSubdomain()) {
+            return null;
+        }
+        
+        return [
+            'subdomain' => $this->subdomain,
+            'domain' => $this->domain->name ?? null,
+            'full_domain' => $this->getFullDomainName(),
+            'game' => $this->subdomain_type,
+        ];
     }
 }
