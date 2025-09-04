@@ -9,6 +9,7 @@ const Logo = ({ className, uniqueId }: { className?: string; uniqueId?: string }
         width="284"
         height="61"
         viewBox="0 0 75.141665 16.139584"
+        className={className || "flex h-full w-full shrink-0"}
         xmlns="http://www.w3.org/2000/svg">
         <defs
             id="defs1" />
