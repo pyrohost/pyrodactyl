@@ -16,7 +16,7 @@ const ConfirmationDialog = ({ confirm = 'Okay', children, onConfirmed, loading, 
             {typeof children !== 'string' && children}
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={props.onClose}>
-                    Cancel
+                    Cancelar
                 </ActionButton>
                 <ActionButton variant='danger' onClick={onConfirmed} disabled={loading}>
                     <div className='flex items-center gap-2'>
