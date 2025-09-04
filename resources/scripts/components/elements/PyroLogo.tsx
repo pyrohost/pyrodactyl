@@ -6,6 +6,8 @@ const Logo = ({ className, uniqueId }: { className?: string; uniqueId?: string }
 
     return (
         <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={className || 'flex h-full w-full shrink-0'}
             width="951.9187"
             height="252.33301"
             viewBox="0 0 251.86182 66.763107">
