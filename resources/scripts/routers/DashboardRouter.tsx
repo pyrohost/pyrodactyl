@@ -144,14 +144,14 @@ const DashboardRouter = () => {
                             <DropdownMenuContent className='z-99999' sideOffset={8}>
                                 {rootAdmin && (
                                     <DropdownMenuItem onSelect={onSelectAdminPanel}>
-                                        Admin Panel
+                                        Administración
                                         <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
                                             Staff
                                         </span>
                                     </DropdownMenuItem>
                                 )}
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={onTriggerLogout}>Cerrar sesión</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -159,19 +159,19 @@ const DashboardRouter = () => {
                     <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                         <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                             <HugeIconsHome fill='currentColor' />
-                            <p>Servers</p>
+                            <p>Servidores</p>
                         </NavLink>
                         <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                             <HugeIconsApi fill='currentColor' />
-                            <p>API Keys</p>
+                            <p>Claves API</p>
                         </NavLink>
                         <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
                             <HugeIconsSsh fill='currentColor' />
-                            <p>SSH Keys</p>
+                            <p>Claves SSH</p>
                         </NavLink>
                         <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                             <HugeIconsDashboardSettings fill='currentColor' />
-                            <p>Settings</p>
+                            <p>Ajustes</p>
                         </NavLink>
                     </ul>
                 </MainSidebar>
