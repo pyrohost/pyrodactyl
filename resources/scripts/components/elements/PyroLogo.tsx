@@ -10,9 +10,7 @@ const Logo = ({ className, uniqueId }: { className?: string; uniqueId?: string }
             height="252.33301"
             viewBox="0 0 251.86182 66.763107"
             version="1.1"
-            id="svg1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:svg="http://www.w3.org/2000/svg">
+            id="svg1">
             <defs
                 id="defs1" />
             <g
