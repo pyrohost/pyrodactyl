@@ -157,7 +157,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>CPU</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {stats.cpuUsagePercent.toFixed(2)}%
+                                    {stats.cpuUsagePercent.toFixed(2)}% de {cpuLimit}%
                                 </p>
                             </div>
                         </div>
@@ -165,7 +165,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>RAM</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.memoryUsageInBytes, 0)}
+                                    {bytesToString(stats.memoryUsageInBytes, 0)} de {memoryLimit}
                                 </p>
                             </div>
                         </div>
@@ -173,10 +173,10 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Almacenamiento</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.diskUsageInBytes, 0)}
+                                    {bytesToString(stats.diskUsageInBytes, 0)} de {diskLimit}
                                 </p>
                             </div>
-                            <p className={`text-xs text-zinc-600 text-center mt-1`}>de {diskLimit}</p>
+                            {/*<p className={`text-xs text-zinc-600 text-center mt-1`}>de {diskLimit}</p>*/}
                         </div>
                     </Fragment>
                 )}
