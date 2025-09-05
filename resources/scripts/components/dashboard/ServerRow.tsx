@@ -94,7 +94,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
 
     const diskLimit = server.limits.disk !== 0 ? bytesToString(mbToBytes(server.limits.disk)) : 'Sin límite';
     const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Sin límite';
-    const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + ' %' : 'Sin límite';
+    const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + '%' : 'Sin límite';
 
     return (
         <StatusIndicatorBox as={Link} to={`/server/${server.id}`} className={className} $status={stats?.status}>
@@ -157,7 +157,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>CPU</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {stats.cpuUsagePercent.toFixed(2)}% de {cpuLimit}%
+                                    {stats.cpuUsagePercent.toFixed(2)}% de {cpuLimit}
                                 </p>
                             </div>
                         </div>
