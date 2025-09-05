@@ -36,9 +36,9 @@ class RemovedFromServer extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->error()
-            ->greeting('Hello ' . $this->server->user . '.')
-            ->line('You have been removed as a subuser for the following server.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Visit Panel', route('index'));
+            ->greeting('Hola ' . $this->server->user . ',')
+            ->line('Alguien te ha revocado el acceso al panel del siguiente servidor:')
+            ->line('Nombre del servidor: ' . $this->server->name)
+            ->action('Ir al panel', route('index'));
     }
 }
