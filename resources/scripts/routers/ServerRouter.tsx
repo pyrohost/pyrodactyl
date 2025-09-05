@@ -65,7 +65,7 @@ const DatabasesSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; o
                     end
                 >
                     <HugeIconsDatabase fill='currentColor' />
-                    <p>Databases</p>
+                    <p>Bases de datos</p>
                 </NavLink>
             </Can>
         );
@@ -90,7 +90,7 @@ const BackupsSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onC
                     end
                 >
                     <HugeIconsCloudUp fill='currentColor' />
-                    <p>Backups</p>
+                    <p>Bases de datos</p>
                 </NavLink>
             </Can>
         );
@@ -117,7 +117,7 @@ const NetworkingSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; 
                     end
                 >
                     <HugeIconsConnections fill='currentColor' />
-                    <p>Networking</p>
+                    <p>Red</p>
                 </NavLink>
             </Can>
         );
@@ -277,7 +277,7 @@ const ServerRouter = () => {
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
                 error ? (
-                    <ServerError title='Something went wrong' message={error} />
+                    <ServerError title='Algo ha fallado' message={error} />
                 ) : null
             ) : (
                 <>
@@ -342,14 +342,14 @@ const ServerRouter = () => {
                                     <DropdownMenuContent className='z-99999 select-none relative' sideOffset={8}>
                                         {rootAdmin && (
                                             <DropdownMenuItem onSelect={onSelectManageServer}>
-                                                Manage Server
+                                                Administrar servidor
                                                 <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs select-none'>
                                                     Staff
                                                 </span>
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                        <DropdownMenuItem onSelect={onTriggerLogout}>Cerrar sesión</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
@@ -363,7 +363,7 @@ const ServerRouter = () => {
                                     end
                                 >
                                     <HugeIconsHome fill='currentColor' />
-                                    <p>Home</p>
+                                    <p>Consola</p>
                                 </NavLink>
                                 <>
                                     <Can action={'file.*'} matchAny>
@@ -373,7 +373,7 @@ const ServerRouter = () => {
                                             to={`/server/${id}/files`}
                                         >
                                             <HugeIconsFolder fill='currentColor' />
-                                            <p>Files</p>
+                                            <p>Archivos</p>
                                         </NavLink>
                                     </Can>
                                     <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => {}} />
@@ -387,7 +387,7 @@ const ServerRouter = () => {
                                             end
                                         >
                                             <HugeIconsPeople fill='currentColor' />
-                                            <p>Users</p>
+                                            <p>Usuarios</p>
                                         </NavLink>
                                     </Can>
                                     <Can
@@ -406,7 +406,7 @@ const ServerRouter = () => {
                                             end
                                         >
                                             <HugeIconsConsole fill='currentColor' />
-                                            <p>Startup</p>
+                                            <p>Inicio</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'schedule.*'} matchAny>
@@ -416,7 +416,7 @@ const ServerRouter = () => {
                                             to={`/server/${id}/schedules`}
                                         >
                                             <HugeIconsClock fill='currentColor' />
-                                            <p>Schedules</p>
+                                            <p>Programas</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={['settings.*', 'file.sftp']} matchAny>
@@ -427,7 +427,7 @@ const ServerRouter = () => {
                                             end
                                         >
                                             <HugeIconsDashboardSettings fill='currentColor' />
-                                            <p>Settings</p>
+                                            <p>Ajustes</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={['activity.*', 'activity.read']} matchAny>
@@ -438,7 +438,7 @@ const ServerRouter = () => {
                                             end
                                         >
                                             <HugeIconsPencil fill='currentColor' />
-                                            <p>Activity</p>
+                                            <p>Actividad</p>
                                         </NavLink>
                                     </Can>
                                     {/* TODO: finish modrinth support *\}
@@ -454,6 +454,7 @@ const ServerRouter = () => {
                         </NavLink>
                     </Can> */}
                                 </>
+                                {/*
                                 <Can action={'startup.software'}>
                                     <NavLink
                                         className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -465,6 +466,7 @@ const ServerRouter = () => {
                                         <p>Software</p>
                                     </NavLink>
                                 </Can>
+                                */}
                             </ul>
                         </MainSidebar>
 
