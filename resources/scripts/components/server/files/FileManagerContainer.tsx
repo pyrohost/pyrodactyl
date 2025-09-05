@@ -104,7 +104,7 @@ const FileManagerContainer = () => {
                 <ErrorBoundary>
                     <MainPageHeader
                         direction='column'
-                        title={'Files'}
+                        title={'Administrador de archivos'}
                         titleChildren={
                             <Can action={'file.create'}>
                                 <div className='flex flex-row gap-1'>
@@ -117,8 +117,8 @@ const FileManagerContainer = () => {
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server files and directories. Upload, download, edit, and organize your
-                            server&apos;s file system with our integrated file manager.
+                            Gestiona los archivos y carpetas de tu servidor. Sube, descarga, edita y organiza el
+                            sistema de archivos de tu servidor con nuestro administrador de archivos integrado.
                         </p>
                     </MainPageHeader>
                     <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>

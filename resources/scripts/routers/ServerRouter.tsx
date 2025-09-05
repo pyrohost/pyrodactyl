@@ -90,7 +90,7 @@ const BackupsSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onC
                     end
                 >
                     <HugeIconsCloudUp fill='currentColor' />
-                    <p>Bases de datos</p>
+                    <p>Copias de seguridad</p>
                 </NavLink>
             </Can>
         );
