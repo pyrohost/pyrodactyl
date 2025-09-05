@@ -95,7 +95,7 @@ const AllocationRow = ({ allocation }: Props) => {
     };
 
     const deleteAllocation = () => {
-        if (!confirm('Are you sure you want to delete this allocation?')) return;
+        if (!confirm('¿Quieres eliminar esta asignación?')) return;
 
         clearFlashes();
         setDeleteLoading(true);
@@ -132,7 +132,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
                                         <HugeIconsCrown fill='currentColor' className='w-3 h-3' />
-                                        Primary
+                                        Primaria
                                     </span>
                                 )}
                             </div>
