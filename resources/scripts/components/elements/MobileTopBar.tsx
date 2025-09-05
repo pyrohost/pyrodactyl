@@ -75,14 +75,14 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                     <DropdownMenuContent className='z-99999' sideOffset={8}>
                         {rootAdmin && onSelectAdminPanel && (
                             <DropdownMenuItem onSelect={handleAdminPanel}>
-                                Admin Panel
+                                Panel de administración
                                 <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
                                     Staff
                                 </span>
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={handleLogout}>Log Out</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={handleLogout}>Cerrar sesión</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
 
