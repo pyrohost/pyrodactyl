@@ -134,7 +134,8 @@ class ServerObserver
             }
         } else {
             // New software supports subdomains, check if record type changed
-            if ($feature->getRecordType() !== $activeSubdomain->record_type) {
+            $newRecordType = str_replace('subdomain_', '', $feature->getFeatureName());
+            if ($newRecordType !== $activeSubdomain->record_type) {
                 try {
                     // Delete old records and create new ones
                     $this->subdomainService->deleteSubdomain($activeSubdomain);
