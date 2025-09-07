@@ -1,14 +1,3 @@
-# Contributing
-
-pyro.host does not accept Pull Requests (PRs) _for new functionality_ from users that are not currently employed 
-or affiliated by Pyro. It has become overwhelming to try and give the proper time and attention that such 
-complicated PRs tend to require — and deserve. As a result, it is in the project's best interest to limit the scope 
-of work on new functionality to work done within the Pyro team.
-
-PRs that address existing _bugs_ with a corresponding issue opened in our issue tracker will continue to be accepted
-and reviewed. Their scope is often significantly more targeted, and simply improving upon existing and well defined
-logic.
-
 ### Responsible Disclosure
 
 This is a fairly in-depth project and makes use of a lot of parts. We strive to keep everything as secure as possible
@@ -20,7 +9,7 @@ publicly disclose whatever issue you have found. We understand how frustrating i
 no one will respond to you. This holds us to a standard of providing prompt attention to any issues that arise and
 keeping this community safe.
 
-If you've found what you believe is a security issue please email `team@pyro.host`. Please check
+If you've found what you believe is a security issue please email `naterfute@pyro.host`. Please check
 [SECURITY.md](/SECURITY.md) for additional details.
 
 ### Contact Us
