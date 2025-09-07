@@ -13,7 +13,8 @@
         "java_version",
         "pid_limit",
         "mod/fabric",
-        "mclogs"
+        "mclogs",
+        "subdomain_minecraft"
     ],
     "docker_images": {
         "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",

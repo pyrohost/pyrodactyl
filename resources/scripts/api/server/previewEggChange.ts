@@ -19,6 +19,11 @@ export interface EggPreview {
     }>;
     docker_images: Record<string, string>;
     default_docker_image: string | null;
+    warnings?: Array<{
+        type: string;
+        message: string;
+        severity: string;
+    }>;
 }
 
 /**

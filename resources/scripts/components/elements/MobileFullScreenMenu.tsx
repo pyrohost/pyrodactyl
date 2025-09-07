@@ -107,6 +107,7 @@ interface ServerMobileMenuProps {
     databaseLimit?: number;
     backupLimit?: number;
     allocationLimit?: number;
+    subdomainSupported?: boolean;
 }
 
 export const ServerMobileMenu = ({
@@ -116,6 +117,7 @@ export const ServerMobileMenu = ({
     databaseLimit = 0,
     backupLimit = 0,
     allocationLimit = 0,
+    subdomainSupported = false,
 }: ServerMobileMenuProps) => {
     const NavigationItem = ({
         to,
@@ -176,7 +178,7 @@ export const ServerMobileMenu = ({
                     </Can>
                 )}
 
-                {allocationLimit > 0 && (
+                {(allocationLimit > 0 || subdomainSupported) && (
                     <Can action={'allocation.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
                             Networking

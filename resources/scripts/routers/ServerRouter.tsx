@@ -42,6 +42,7 @@ import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
+import { getSubdomainInfo, SubdomainInfo } from '@/api/server/network/subdomain';
 
 import { ServerContext } from '@/state/server';
 
@@ -100,12 +101,29 @@ BackupsSidebarItem.displayName = 'BackupsSidebarItem';
 
 const NetworkingSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
     ({ id, onClick }, ref) => {
+        const [subdomainSupported, setSubdomainSupported] = useState(false);
         const allocationLimit = ServerContext.useStoreState(
             (state) => state.server.data?.featureLimits.allocations ?? 0,
         );
+        const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
 
-        // Hide if no allocation access (limit is 0)
-        if (allocationLimit === 0) return null;
+        useEffect(() => {
+            const checkSubdomainSupport = async () => {
+                try {
+                    if (uuid) {
+                        const data = await getSubdomainInfo(uuid);
+                        setSubdomainSupported(data.supported);
+                    }
+                } catch (error) {
+                    setSubdomainSupported(false);
+                }
+            };
+
+            checkSubdomainSupport();
+        }, [uuid]);
+
+        // Show if either allocations are available OR subdomains are supported
+        if (allocationLimit === 0 && !subdomainSupported) return null;
 
         return (
             <Can action={'allocation.*'} matchAny>
@@ -138,6 +156,7 @@ const ServerRouter = () => {
 
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [error, setError] = useState('');
+    const [subdomainSupported, setSubdomainSupported] = useState(false);
 
     const id = ServerContext.useStoreState((state) => state.server.data?.id);
     const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
@@ -195,6 +214,23 @@ const ServerRouter = () => {
             clearServerState();
         };
     }, [params.id]);
+
+    useEffect(() => {
+        const checkSubdomainSupport = async () => {
+            try {
+                if (uuid) {
+                    const data = await getSubdomainInfo(uuid);
+                    setSubdomainSupported(data.supported);
+                }
+            } catch (error) {
+                setSubdomainSupported(false);
+            }
+        };
+
+        if (uuid) {
+            checkSubdomainSupport();
+        }
+    }, [uuid]);
 
     // Define refs for navigation buttons.
     const NavigationHome = useRef(null);
@@ -297,6 +333,7 @@ const ServerRouter = () => {
                         databaseLimit={databaseLimit}
                         backupLimit={backupLimit}
                         allocationLimit={allocationLimit}
+                        subdomainSupported={subdomainSupported}
                     />
 
                     <div className='flex flex-row w-full lg:pt-0 pt-16'>

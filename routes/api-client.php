@@ -119,6 +119,16 @@ Route::group([
         Route::delete('/allocations/{allocation}', [Client\Servers\NetworkAllocationController::class, 'delete']);
     });
 
+    Route::group(['prefix' => '/subdomain'], function () {
+        Route::get('/', [Client\Servers\SubdomainController::class, 'index']);
+        Route::post('/', [Client\Servers\SubdomainController::class, 'store'])
+            ->middleware('throttle:5,1'); // Max 5 creates/replaces per minute
+        Route::delete('/', [Client\Servers\SubdomainController::class, 'destroy'])
+            ->middleware('throttle:5,1'); // Max 5 deletes per minute
+        Route::post('/check-availability', [Client\Servers\SubdomainController::class, 'checkAvailability'])
+            ->middleware('throttle:20,1'); // Max 20 availability checks per minute
+    });
+
     Route::group(['prefix' => '/users'], function () {
         Route::get('/', [Client\Servers\SubuserController::class, 'index']);
         Route::post('/', [Client\Servers\SubuserController::class, 'store']);

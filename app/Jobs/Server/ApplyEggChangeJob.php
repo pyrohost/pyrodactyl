@@ -23,6 +23,7 @@ use Pterodactyl\Services\Servers\StartupModificationService;
 use Pterodactyl\Repositories\Wings\DaemonFileRepository;
 use Pterodactyl\Exceptions\Service\Backup\BackupFailedException;
 use Pterodactyl\Services\ServerOperations\ServerOperationService;
+use Pterodactyl\Services\Subdomain\SubdomainManagementService;
 
 /**
  * Queue job to apply server egg configuration changes.
@@ -64,7 +65,8 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         ReinstallServerService $reinstallServerService,
         StartupModificationService $startupModificationService,
         DaemonFileRepository $fileRepository,
-        ServerOperationService $operationService
+        ServerOperationService $operationService,
+        SubdomainManagementService $subdomainService
     ): void {
         $operation = null;
         
@@ -96,7 +98,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                 $this->wipeServerFiles($fileRepository, $operation, $backup);
             }
 
-            $this->applyServerChanges($egg, $startupModificationService, $reinstallServerService, $operation);
+            $this->applyServerChanges($egg, $startupModificationService, $reinstallServerService, $operation, $subdomainService);
 
             $this->logSuccessfulChange();
 
@@ -210,11 +212,49 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         Egg $egg,
         StartupModificationService $startupModificationService,
         ReinstallServerService $reinstallServerService,
-        ServerOperation $operation
+        ServerOperation $operation,
+        SubdomainManagementService $subdomainService
     ): void {
         $operation->updateProgress('Applying software configuration...');
         
-        DB::transaction(function () use ($egg, $startupModificationService, $reinstallServerService, $operation) {
+        DB::transaction(function () use ($egg, $startupModificationService, $reinstallServerService, $operation, $subdomainService) {
+            // Check if we need to remove subdomain before changing egg
+            $activeSubdomain = $this->server->activeSubdomain;
+            if ($activeSubdomain) {
+                // Create a temporary server with the new egg to check compatibility
+                $tempServer = clone $this->server;
+                $tempServer->egg = $egg;
+                $tempServer->egg_id = $egg->id;
+                
+                // If new egg doesn't support subdomains, delete the existing subdomain
+                if (!$tempServer->supportsSubdomains()) {
+                    $operation->updateProgress('Removing incompatible subdomain...');
+                    
+                    try {
+                        $subdomainService->deleteSubdomain($activeSubdomain);
+                        
+                        Activity::actor($this->user)->event('server:subdomain.deleted-egg-change')
+                            ->property([
+                                'operation_id' => $this->operationId,
+                                'subdomain' => $activeSubdomain->full_domain,
+                                'reason' => 'new_egg_incompatible',
+                                'from_egg' => $this->server->egg_id,
+                                'to_egg' => $this->eggId,
+                            ])
+                            ->log();
+                    } catch (Exception $e) {
+                        Log::warning('Failed to delete subdomain during egg change', [
+                            'server_id' => $this->server->id,
+                            'subdomain' => $activeSubdomain->full_domain,
+                            'error' => $e->getMessage(),
+                        ]);
+                        
+                        // Continue with egg change even if subdomain deletion fails
+                        $operation->updateProgress('Warning: Could not fully remove subdomain, continuing with egg change...');
+                    }
+                }
+            }
+            
             if ($this->server->egg_id !== $this->eggId || $this->server->nest_id !== $this->nestId) {
                 $this->server->update([
                     'egg_id' => $this->eggId,

@@ -389,6 +389,82 @@ class Server extends Model
     }
 
     /**
+     * Gets all subdomains associated with this server.
+     */
+    public function subdomains(): HasMany
+    {
+        return $this->hasMany(ServerSubdomain::class);
+    }
+
+    /**
+     * Gets the active subdomain for this server.
+     */
+    public function activeSubdomain(): HasOne
+    {
+        return $this->hasOne(ServerSubdomain::class)->where('is_active', true);
+    }
+
+    /**
+     * Check if this server supports subdomains based on its egg features.
+     */
+    public function supportsSubdomains(): bool
+    {
+        if (!$this->egg) {
+            return false;
+        }
+
+        // Check direct features
+        if (is_array($this->egg->features)) {
+            foreach ($this->egg->features as $feature) {
+                if (str_starts_with($feature, 'subdomain_')) {
+                    return true;
+                }
+            }
+        }
+
+        // Check inherited features
+        if (is_array($this->egg->inherit_features)) {
+            foreach ($this->egg->inherit_features as $feature) {
+                if (str_starts_with($feature, 'subdomain_')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the subdomain feature type for this server.
+     */
+    public function getSubdomainFeature(): ?string
+    {
+        if (!$this->egg) {
+            return null;
+        }
+
+        // Check direct features
+        if (is_array($this->egg->features)) {
+            foreach ($this->egg->features as $feature) {
+                if (str_starts_with($feature, 'subdomain_')) {
+                    return $feature;
+                }
+            }
+        }
+
+        // Check inherited features
+        if (is_array($this->egg->inherit_features)) {
+            foreach ($this->egg->inherit_features as $feature) {
+                if (str_starts_with($feature, 'subdomain_')) {
+                    return $feature;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Checks if the server is currently in a user-accessible state. If not, an
      * exception is raised. This should be called whenever something needs to make
      * sure the server is not in a weird state that should block user access.

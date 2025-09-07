@@ -8,6 +8,7 @@ use Pterodactyl\Models\Egg;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Models\User;
 use Pterodactyl\Jobs\Server\ApplyEggChangeJob;
+use Pterodactyl\Services\Subdomain\SubdomainManagementService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -20,7 +21,8 @@ class EggChangeService
 {
     public function __construct(
         private ServerOperationService $operationService,
-        private ServerStateValidationService $validationService
+        private ServerStateValidationService $validationService,
+        private SubdomainManagementService $subdomainService
     ) {}
 
     /**
@@ -41,7 +43,10 @@ class EggChangeService
         $variables = $egg->variables()->orderBy('name')->get();
         $dockerImages = $egg->docker_images ?? [];
         
-        return [
+        // Check subdomain compatibility
+        $subdomainWarning = $this->checkSubdomainCompatibility($server, $egg);
+        
+        $result = [
             'egg' => [
                 'id' => $egg->id,
                 'name' => e($egg->name),
@@ -63,6 +68,13 @@ class EggChangeService
             'docker_images' => $dockerImages,
             'default_docker_image' => !empty($dockerImages) ? array_keys($dockerImages)[0] : null,
         ];
+        
+        // Add subdomain warning if applicable
+        if ($subdomainWarning) {
+            $result['warnings'] = [$subdomainWarning];
+        }
+        
+        return $result;
     }
 
     /**
@@ -182,5 +194,43 @@ class EggChangeService
             'operation_id' => $operation->operation_id,
             'status' => 'pending',
         ];
+    }
+
+    /**
+     * Check if changing to the new egg will affect subdomain compatibility.
+     */
+    private function checkSubdomainCompatibility(Server $server, Egg $newEgg): ?array
+    {
+        // Check if server currently has an active subdomain
+        $activeSubdomain = $server->activeSubdomain;
+        
+        if (!$activeSubdomain) {
+            return null; // No subdomain to worry about
+        }
+        
+        // Check if the current egg supports subdomains
+        $currentSupportsSubdomain = $server->supportsSubdomains();
+        
+        if (!$currentSupportsSubdomain) {
+            return null; // Current egg doesn't support subdomains anyway
+        }
+        
+        // Create a temporary server instance with the new egg to test compatibility
+        $tempServer = clone $server;
+        $tempServer->egg = $newEgg;
+        $tempServer->egg_id = $newEgg->id;
+        
+        // Check if the new egg supports subdomains
+        $newSupportsSubdomain = $tempServer->supportsSubdomains();
+        
+        if (!$newSupportsSubdomain) {
+            return [
+                'type' => 'subdomain_incompatible',
+                'message' => "Warning: The new egg does not support subdomains. Your current subdomain ({$activeSubdomain->full_domain}) will be deleted when you apply this change.",
+                'severity' => 'warning',
+            ];
+        }
+        
+        return null; // New egg supports subdomains, no warning needed
     }
 }

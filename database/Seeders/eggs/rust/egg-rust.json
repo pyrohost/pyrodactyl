@@ -9,7 +9,8 @@
     "author": "support@pterodactyl.io",
     "description": "The only aim in Rust is to survive. To do this you will need to overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals for meat. Protect yourself from other players, and kill them for meat. Create alliances with other players and form a town. Do whatever it takes to survive.",
     "features": [
-        "steam_disk_space"
+        "steam_disk_space",
+        "subdomain_rust"
     ],
     "docker_images": {
         "ghcr.io\/pterodactyl\/games:rust": "ghcr.io\/pterodactyl\/games:rust"

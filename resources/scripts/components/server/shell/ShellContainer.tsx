@@ -392,6 +392,17 @@ const SoftwareContainer = () => {
             const preview = await previewEggChange(uuid, egg.attributes.id, selectedNest.attributes.id);
             setEggPreview(preview);
 
+            // Check for subdomain compatibility warnings
+            if (preview.warnings && preview.warnings.length > 0) {
+                const subdomainWarning = preview.warnings.find(w => w.type === 'subdomain_incompatible');
+                if (subdomainWarning) {
+                    toast.error(subdomainWarning.message, {
+                        duration: 8000,
+                        dismissible: true,
+                    });
+                }
+            }
+
             // Initialize variables with current values or defaults
             const initialVariables: Record<string, string> = {};
             preview.variables.forEach((variable) => {
@@ -1048,7 +1059,44 @@ const SoftwareContainer = () => {
                             </div>
                         </div>
 
-                        {/* Warning */}
+                        {/* Subdomain Warnings */}
+                        {eggPreview.warnings && eggPreview.warnings.length > 0 && (
+                            <div className='space-y-3'>
+                                {eggPreview.warnings.map((warning, index) => (
+                                    <div
+                                        key={index}
+                                        className={`p-4 border rounded-lg ${
+                                            warning.severity === 'error'
+                                                ? 'bg-red-500/10 border-red-500/20'
+                                                : 'bg-amber-500/10 border-amber-500/20'
+                                        }`}
+                                    >
+                                        <div className='flex items-start gap-3'>
+                                            <HugeIconsAlert
+                                                fill='currentColor'
+                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                                                    warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                }`}
+                                            />
+                                            <div>
+                                                <h4
+                                                    className={`font-semibold mb-2 ${
+                                                        warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                    }`}
+                                                >
+                                                    {warning.type === 'subdomain_incompatible'
+                                                        ? 'Subdomain Will Be Deleted'
+                                                        : 'Warning'}
+                                                </h4>
+                                                <p className='text-sm text-neutral-300'>{warning.message}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* General Warning */}
                         <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
                             <div className='flex items-start gap-3'>
                                 <HugeIconsAlert
