@@ -75,8 +75,7 @@
           <ul class="nav navbar-nav">
             <li class="user-menu">
               <a href="{{ route('account') }}">
-                <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(Auth::user()->email)) }}?s=160"
-                  class="user-image" alt="User Image">
+
                 <span class="hidden-xs">{{ Auth::user()->name_first }} {{ Auth::user()->name_last }}</span>
               </a>
             </li>
@@ -159,22 +158,22 @@
         <div class="row">
           <div class="col-xs-12">
             @if (count($errors) > 0)
-          <div class="alert alert-danger">
-            There was an error validating the data provided.<br><br>
-            <ul>
-            @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-            </ul>
-          </div>
-      @endif
+              <div class="alert alert-danger">
+                There was an error validating the data provided.<br><br>
+                <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
             @foreach (Alert::getMessages() as $type => $messages)
-            @foreach ($messages as $message)
-          <div class="alert alert-{{ $type }} alert-dismissable" role="alert">
-            {!! $message !!}
-          </div>
-          @endforeach
-      @endforeach
+              @foreach ($messages as $message)
+                <div class="alert alert-{{ $type }} alert-dismissable" role="alert">
+                  {!! $message !!}
+                </div>
+              @endforeach
+            @endforeach
           </div>
         </div>
         @yield('content')
@@ -206,29 +205,29 @@
 
   @if(Auth::user()->root_admin)
     <script>
-    $('#logoutButton').on('click', function (event) {
-      event.preventDefault();
+      $('#logoutButton').on('click', function (event) {
+        event.preventDefault();
 
-      var that = this;
-      swal({
-      title: 'Do you want to log out?',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d9534f',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Log out'
-      }, function () {
-      $.ajax({
-        type: 'POST',
-        url: '{{ route('auth.logout') }}',
-        data: {
-        _token: '{{ csrf_token() }}'
-        }, complete: function () {
-        window.location.href = '{{route('auth.login')}}';
-        }
+        var that = this;
+        swal({
+          title: 'Do you want to log out?',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d9534f',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Log out'
+        }, function () {
+          $.ajax({
+            type: 'POST',
+            url: '{{ route('auth.logout') }}',
+            data: {
+              _token: '{{ csrf_token() }}'
+            }, complete: function () {
+              window.location.href = '{{route('auth.login')}}';
+            }
+          });
+        });
       });
-      });
-    });
     </script>
   @endif
 
