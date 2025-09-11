@@ -74,7 +74,7 @@ const VariableBox = ({ variable }: Props) => {
         <div className='flex flex-col justify-between gap-4 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className='space-y-3'>
-                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3'>
+                <div className='flex flex-col items-baseline sm:flex-row sm:justify-between gap-2 sm:gap-3'>
                     <div className='flex items-center gap-2 min-w-0'>
                         {!variable.isEditable && (
                             <HugeIconsSquareLock
@@ -84,7 +84,7 @@ const VariableBox = ({ variable }: Props) => {
                         )}
                         <span className='text-sm font-medium text-neutral-200 break-words'>{variable.name}</span>
                     </div>
-                    <div className='text-xs text-neutral-500 font-mono bg-neutral-800/30 px-2 py-1 rounded border border-neutral-700/30 w-fit'>
+                    <div className='text-xs leading-5 text-neutral-500 font-mono rounded w-fit'>
                         {variable.envVariable}
                     </div>
                 </div>

@@ -1006,7 +1006,7 @@ const SoftwareContainer = () => {
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>Docker Image:</span>
-                                    <div className='text-neutral-200 font-medium text-xs'>
+                                    <div className='text-neutral-200 font-medium'>
                                         {selectedDockerImage || 'Default'}
                                     </div>
                                 </div>
@@ -1123,13 +1123,15 @@ const SoftwareContainer = () => {
                                     className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
                                 />
                                 <div>
-                                    <h4 className='text-amber-400 font-semibold mb-2'>Important Warning</h4>
-                                    <ul className='text-sm text-neutral-300 space-y-1'>
-                                        <li>• Your server will be stopped and reinstalled</li>
-                                        <li>• This process may take several minutes to complete</li>
-                                        <li>• Some files may be modified or removed during installation</li>
-                                        <li>• Make sure you have backups of important data</li>
+                                    <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
+                                    <ul className='text-sm text-neutral-300'>
+                                        <li>• Stop and reinstall your server</li>
+                                        <li>• Take several minutes to complete</li>
+                                        <li>• Modify and remove some files</li>
                                     </ul>
+                                    <span className='text-sm font-bold mt-4'>
+                                        Please ensure you have backups of important data before proceeding.
+                                    </span>
                                 </div>
                             </div>
                         </div>
