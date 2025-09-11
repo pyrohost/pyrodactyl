@@ -17,7 +17,7 @@
 }
 
 .file_row {
-    @apply flex items-center rounded-sm border-[1px] border-[#ffffff07] bg-[#ffffff08] p-1 text-sm no-underline transition;
+    @apply flex items-center border-[1px] border-[#ffffff07] bg-[#ffffff08] p-1 text-sm no-underline transition first:rounded-t-sm last:rounded-b-sm;
     @apply hover:bg-[#ffffff12] hover:duration-0;
 
     & > .details {

@@ -52,7 +52,11 @@ export const deleteSubdomain = (uuid: string): Promise<void> => {
     });
 };
 
-export const checkSubdomainAvailability = (uuid: string, subdomain: string, domainId: number): Promise<AvailabilityResponse> => {
+export const checkSubdomainAvailability = (
+    uuid: string,
+    subdomain: string,
+    domainId: number,
+): Promise<AvailabilityResponse> => {
     return new Promise((resolve, reject) => {
         http.post(`/api/client/servers/${uuid}/subdomain/check-availability`, {
             subdomain,

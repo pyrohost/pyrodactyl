@@ -179,10 +179,15 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
                         <Field name={'minute'} label={'Minute'} />
                         <Field name={'hour'} label={'Hour'} />
+                        <Field name={'dayOfWeek'} label={'Day of week'} />
                         <Field name={'dayOfMonth'} label={'Day of month'} />
                         <Field name={'month'} label={'Month'} />
-                        <Field name={'dayOfWeek'} label={'Day of week'} />
                     </div>
+
+                    <p className={`text-zinc-400 text-xs mt-2`}>
+                        The schedule system uses Cronjob syntax when defining when tasks should begin running. Use the
+                        fields above to specify when these tasks should begin running.
+                    </p>
 
                     {timezoneInfo.isDifferent && (
                         <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
@@ -228,11 +233,6 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             </div>
                         </div>
                     )}
-
-                    <p className={`text-zinc-400 text-xs mt-2`}>
-                        The schedule system supports the use of Cronjob syntax when defining when tasks should begin
-                        running. Use the fields above to specify when these tasks should begin running.
-                    </p>
 
                     <div className='gap-3 my-6 flex flex-col'>
                         <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>

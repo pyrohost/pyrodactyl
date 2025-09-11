@@ -332,7 +332,7 @@ const StartupContainer = () => {
                                         </div>
                                         <CopyOnClick text={data.rawStartupCommand}>
                                             <div className='cursor-pointer group'>
-                                                <div className='font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff10] rounded-xl py-3 px-3 sm:py-4 sm:px-4 text-sm sm:text-base min-h-[3.5rem] sm:min-h-[4rem] overflow-auto group-hover:border-[#ffffff20] transition-all'>
+                                                <div className='font-mono bg-linear-to-b from-[#ffffff08] to-[#ffffff05] flex flex-row items-center border border-[#ffffff10] rounded-xl py-3 px-3 sm:py-4 sm:px-4 text-sm sm:text-base min-h-[3.5rem] sm:min-h-[4rem] overflow-auto group-hover:border-[#ffffff20] transition-all'>
                                                     <span
                                                         className='break-all text-neutral-200'
                                                         style={{
@@ -349,17 +349,15 @@ const StartupContainer = () => {
                                     </div>
                                 )}
                                 <div className='space-y-3'>
-                                    <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+                                    <div className='flex flex-col items-center sm:flex-row gap-2'>
                                         <label className='text-sm font-medium text-neutral-300'>
                                             Processed Command
                                         </label>
-                                        <span className='text-xs text-neutral-500 bg-neutral-800/50 px-2 py-1 rounded border border-neutral-700/50 w-fit'>
-                                            Read-only
-                                        </span>
+                                        <span className='text-xs text-neutral-500 rounded w-fit'>Read-only</span>
                                     </div>
                                     <CopyOnClick text={data.invocation}>
                                         <div className='cursor-pointer group'>
-                                            <div className='font-mono bg-linear-to-b from-[#ffffff04] to-[#ffffff02] border border-[#ffffff08] rounded-xl py-3 px-3 sm:py-4 sm:px-4 text-sm sm:text-base min-h-[3.5rem] sm:min-h-[4rem] overflow-auto group-hover:border-[#ffffff15] transition-all'>
+                                            <div className='font-mono bg-linear-to-b from-[#ffffff04] to-[#ffffff02] flex flex-row items-center border border-[#ffffff08] rounded-xl py-3 px-3 sm:py-4 sm:px-4 text-sm sm:text-base min-h-[3.5rem] sm:min-h-[4rem] overflow-auto group-hover:border-[#ffffff15] transition-all'>
                                                 <span
                                                     className='break-all text-neutral-300'
                                                     style={{
@@ -390,7 +388,7 @@ const StartupContainer = () => {
                                 <InputSpinner visible={loading}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <button className='w-full flex items-center justify-between gap-3 font-medium text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-3 rounded-xl bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] hover:border-[#ffffff25] transition-all cursor-pointer touch-manipulation'>
+                                            <button className='w-full flex items-center justify-between gap-3 font-medium text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-3 rounded-md bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] hover:from-[#ffffff15] hover:to-[#ffffff10] hover:border-[#ffffff25] transition-all cursor-pointer touch-manipulation'>
                                                 <span className='truncate text-left font-mono text-neutral-200'>
                                                     {Object.keys(data.dockerImages).find(
                                                         (key) => data.dockerImages[key] === variables.dockerImage,
@@ -502,37 +500,53 @@ const StartupContainer = () => {
                             <div className='space-y-3'>
                                 <h4 className='text-sm font-medium text-neutral-300'>Global Server Variables</h4>
                                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs'>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_MEMORY}}'}</span>
-                                        <span className='text-neutral-300 font-mono'>
-                                            {server?.limits?.memory || 1024}
-                                        </span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_MEMORY'}</span>
+                                        <CopyOnClick text={server?.limits?.memory || 'null'}>
+                                            <span className='text-neutral-300 font-mono'>
+                                                {server?.limits?.memory || 'null'}
+                                            </span>
+                                        </CopyOnClick>
                                     </div>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_IP}}'}</span>
-                                        <span className='text-neutral-300 font-mono'>
-                                            {server?.allocations?.find((a) => a.isDefault)?.ip || '0.0.0.0'}
-                                        </span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_IP'}</span>
+                                        <CopyOnClick text={server?.allocations?.find((a) => a.isDefault)?.ip || 'null'}>
+                                            <span className='text-neutral-300 font-mono'>
+                                                {server?.allocations?.find((a) => a.isDefault)?.ip || 'null'}
+                                            </span>
+                                        </CopyOnClick>
                                     </div>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_PORT}}'}</span>
-                                        <span className='text-neutral-300 font-mono'>
-                                            {server?.allocations?.find((a) => a.isDefault)?.port || 25565}
-                                        </span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_PORT'}</span>
+                                        <CopyOnClick
+                                            text={server?.allocations?.find((a) => a.isDefault)?.port || 'null'}
+                                        >
+                                            <span className='text-neutral-300 font-mono'>
+                                                {server?.allocations?.find((a) => a.isDefault)?.port || 'null'}
+                                            </span>
+                                        </CopyOnClick>
                                     </div>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_UUID}}'}</span>
-                                        <span className='text-neutral-300 font-mono text-xs truncate'>{uuid}</span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_UUID'}</span>
+                                        <CopyOnClick text={uuid}>
+                                            <span className='text-neutral-300 font-mono text-xs truncate'>{uuid}</span>
+                                        </CopyOnClick>
                                     </div>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_NAME}}'}</span>
-                                        <span className='text-neutral-300 font-mono truncate'>
-                                            {server?.name || 'My Server'}
-                                        </span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_NAME'}</span>
+                                        <CopyOnClick text={server?.name || 'null'}>
+                                            <span className='text-neutral-300 font-mono truncate'>
+                                                {server?.name || 'null'}
+                                            </span>
+                                        </CopyOnClick>
                                     </div>
-                                    <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'{{SERVER_CPU}}'}</span>
-                                        <span className='text-neutral-300 font-mono'>{server?.limits?.cpu || 100}</span>
+                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
+                                        <span className='font-mono text-neutral-400'>{'SERVER_CPU'}</span>
+                                        <CopyOnClick text={server?.limits?.cpu || 'null'}>
+                                            <span className='text-neutral-300 font-mono'>
+                                                {server?.limits?.cpu || 'null'}
+                                            </span>
+                                        </CopyOnClick>
                                     </div>
                                 </div>
                             </div>

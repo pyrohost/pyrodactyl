@@ -60,12 +60,10 @@ const NetworkContainer = () => {
         <ServerContentBlock title={'Network'}>
             <FlashMessageRender byKey={'server:network'} />
 
-            <MainPageHeader
-                direction='column'
-                title={'Networking'}
-            >
+            <MainPageHeader direction='column' title={'Networking'}>
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure network settings for your server. Manage subdomains, IP addresses and ports that your server can bind to for incoming connections.
+                    Configure network settings for your server. Manage subdomains, IP addresses and ports that your
+                    server can bind to for incoming connections.
                 </p>
             </MainPageHeader>
 
@@ -102,7 +100,10 @@ const NetworkContainer = () => {
                         <PageListContainer data-pyro-network-container-allocations>
                             <For each={data} memo>
                                 {(allocation) => (
-                                    <AllocationRow key={`${allocation.ip}:${allocation.port}`} allocation={allocation} />
+                                    <AllocationRow
+                                        key={`${allocation.ip}:${allocation.port}`}
+                                        allocation={allocation}
+                                    />
                                 )}
                             </For>
                         </PageListContainer>

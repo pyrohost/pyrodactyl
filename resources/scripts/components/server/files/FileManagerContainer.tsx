@@ -173,44 +173,22 @@ const FileManagerContainer = () => {
                                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                                         />
                                     </div>
-                                    <For
-                                        each={rowVirtualizer.getVirtualItems()}
-                                        style={{
-                                            height: `${rowVirtualizer.getTotalSize()}px`,
-                                            width: '100%',
-                                            overflow: 'hidden',
-                                            borderRadius: '0.5rem',
-                                            position: 'relative',
-                                        }}
-                                        as='div'
-                                        memo
-                                    >
-                                        {(virtualItem) => {
-                                            if (filesArray[virtualItem.index] !== undefined) {
+                                    <div className='w-full overflow-hidden rounded-lg gap-0.5 flex flex-col'>
+                                        {rowVirtualizer.getVirtualItems().map((item) => {
+                                            if (filesArray[item.index] !== undefined) {
                                                 return (
-                                                    <div
-                                                        key={virtualItem.key}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            left: 0,
-                                                            height: `${virtualItem.size}px`,
-                                                            width: '100%',
-                                                            paddingBottom: '1px',
-                                                            transform: `translateY(${virtualItem.start}px)`,
-                                                        }}
-                                                    >
+                                                    <div key={item.key} className='w-full'>
                                                         <FileObjectRow
                                                             // @ts-expect-error - Legacy type suppression
-                                                            file={filesArray[virtualItem.index]}
-                                                            key={filesArray[virtualItem.index]?.name}
+                                                            file={filesArray[item.index]}
+                                                            key={filesArray[item.index]?.name}
                                                         />
                                                     </div>
                                                 );
                                             }
                                             return <></>;
-                                        }}
-                                    </For>
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                             <MassActionsBar />

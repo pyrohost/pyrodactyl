@@ -95,13 +95,11 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
                             </svg>
                         )}
                     </div>
-                    <div className={`flex-1 truncate font-bold text-sm`}>{file.name}</div>
+                    <div className='flex-1 truncate font-bold text-sm'>{file.name}</div>
                     {file.isFile && (
-                        <div className={`w-1/6 text-right mr-4 hidden sm:block text-xs`}>
-                            {bytesToString(file.size)}
-                        </div>
+                        <div className='w-1/6 text-right mr-4 hidden sm:block text-xs'>{bytesToString(file.size)}</div>
                     )}
-                    <div className={`w-1/5 text-right mr-4 hidden md:block text-xs`} title={file.modifiedAt.toString()}>
+                    <div className='w-1/5 text-right mr-4 hidden md:block text-xs' title={file.modifiedAt.toString()}>
                         {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
                             ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
                             : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}

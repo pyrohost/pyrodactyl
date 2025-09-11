@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -9,16 +9,17 @@ import Input from '@/components/elements/Input';
 import Select from '@/components/elements/Select';
 import HugeIconsLink from '@/components/elements/hugeicons/Link';
 
-import { ServerContext } from '@/state/server';
-import { useFlashKey } from '@/plugins/useFlash';
-
 import {
+    SubdomainInfo,
+    checkSubdomainAvailability,
+    deleteSubdomain,
     getSubdomainInfo,
     setSubdomain,
-    deleteSubdomain,
-    checkSubdomainAvailability,
-    SubdomainInfo,
 } from '@/api/server/network/subdomain';
+
+import { ServerContext } from '@/state/server';
+
+import { useFlashKey } from '@/plugins/useFlash';
 
 interface AvailableDomain {
     id: number;
@@ -39,8 +40,9 @@ const CleanInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<
             className={`border-0 bg-transparent focus:ring-0 outline-none text-white placeholder-zinc-400 ${className}`}
             {...props}
         />
-    )
-); CleanInput.displayName = 'CleanInput';
+    ),
+);
+CleanInput.displayName = 'CleanInput';
 
 const CleanSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
     ({ className = '', children, ...props }, ref) => (
@@ -51,13 +53,22 @@ const CleanSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttribut
         >
             {children}
         </select>
-    )
-); CleanSelect.displayName = 'CleanSelect';
+    ),
+);
+CleanSelect.displayName = 'CleanSelect';
 
 const validationSchema = yup.object().shape({
-    subdomain: yup.string().required('A subdomain name is required.').min(1, 'Subdomain must be at least 1 character.').max(63, 'Subdomain cannot exceed 63 characters.').matches(/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/i, 'Subdomain can only contain lowercase letters, numbers, and hyphens. It must start and end with a letter or number.'),
+    subdomain: yup
+        .string()
+        .required('A subdomain name is required.')
+        .min(1, 'Subdomain must be at least 1 character.')
+        .max(63, 'Subdomain cannot exceed 63 characters.')
+        .matches(
+            /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/i,
+            'Subdomain can only contain lowercase letters, numbers, and hyphens. It must start and end with a letter or number.',
+        ),
     domain_id: yup.string().required('A domain must be selected.'),
-});;
+});
 
 const SubdomainManagement = () => {
     const [loading, setLoading] = useState(false);
@@ -89,48 +100,56 @@ const SubdomainManagement = () => {
         }
     };
 
-    const checkAvailability = useCallback(async (subdomain: string, domainId: string) => {
-        if (!subdomain?.trim() || !domainId) {
-            setAvailabilityStatus(null);
-            return;
-        }
+    const checkAvailability = useCallback(
+        async (subdomain: string, domainId: string) => {
+            if (!subdomain?.trim() || !domainId) {
+                setAvailabilityStatus(null);
+                return;
+            }
 
-        // Don't check availability for current subdomain unless domain changed
-        if (subdomainInfo?.current_subdomain &&
-            subdomainInfo.current_subdomain.attributes.subdomain === subdomain.trim() &&
-            subdomainInfo.current_subdomain.attributes.domain_id.toString() === domainId) {
-            setAvailabilityStatus(null);
-            return;
-        }
+            // Don't check availability for current subdomain unless domain changed
+            if (
+                subdomainInfo?.current_subdomain &&
+                subdomainInfo.current_subdomain.attributes.subdomain === subdomain.trim() &&
+                subdomainInfo.current_subdomain.attributes.domain_id.toString() === domainId
+            ) {
+                setAvailabilityStatus(null);
+                return;
+            }
 
-        try {
-            setCheckingAvailability(true);
-            const response = await checkSubdomainAvailability(uuid, subdomain.trim(), parseInt(domainId));
-            setAvailabilityStatus({
-                checked: true,
-                available: response.available,
-                message: response.message,
-            });
-        } catch (error) {
-            setAvailabilityStatus({
-                checked: true,
-                available: false,
-                message: 'Failed to check availability. Please try again.',
-            });
-        } finally {
-            setCheckingAvailability(false);
-        }
-    }, [uuid, subdomainInfo?.current_subdomain]);
+            try {
+                setCheckingAvailability(true);
+                const response = await checkSubdomainAvailability(uuid, subdomain.trim(), parseInt(domainId));
+                setAvailabilityStatus({
+                    checked: true,
+                    available: response.available,
+                    message: response.message,
+                });
+            } catch (error) {
+                setAvailabilityStatus({
+                    checked: true,
+                    available: false,
+                    message: 'Failed to check availability. Please try again.',
+                });
+            } finally {
+                setCheckingAvailability(false);
+            }
+        },
+        [uuid, subdomainInfo?.current_subdomain],
+    );
 
-    const debouncedCheckAvailability = useCallback((subdomain: string, domainId: string) => {
-        if (debounceTimeoutRef.current) {
-            clearTimeout(debounceTimeoutRef.current);
-        }
+    const debouncedCheckAvailability = useCallback(
+        (subdomain: string, domainId: string) => {
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
+            }
 
-        debounceTimeoutRef.current = setTimeout(() => {
-            checkAvailability(subdomain, domainId);
-        }, 500);
-    }, [checkAvailability]);
+            debounceTimeoutRef.current = setTimeout(() => {
+                checkAvailability(subdomain, domainId);
+            }, 500);
+        },
+        [checkAvailability],
+    );
 
     useEffect(() => {
         return () => {
@@ -140,7 +159,10 @@ const SubdomainManagement = () => {
         };
     }, []);
 
-    const handleSetSubdomain = async (values: SubdomainFormValues, { setSubmitting, resetForm }: FormikHelpers<SubdomainFormValues>) => {
+    const handleSetSubdomain = async (
+        values: SubdomainFormValues,
+        { setSubmitting, resetForm }: FormikHelpers<SubdomainFormValues>,
+    ) => {
         try {
             clearFlashes();
             setLoading(true);
@@ -161,7 +183,11 @@ const SubdomainManagement = () => {
     };
 
     const handleDeleteSubdomain = async () => {
-        if (!confirm('Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.')) {
+        if (
+            !confirm(
+                'Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.',
+            )
+        ) {
             return;
         }
 
@@ -205,11 +231,17 @@ const SubdomainManagement = () => {
                     <div className='text-center'>
                         <div className='w-12 h-12 mx-auto mb-3 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <svg className='w-6 h-6 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
-                                <path fillRule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clipRule='evenodd' />
+                                <path
+                                    fillRule='evenodd'
+                                    d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z'
+                                    clipRule='evenodd'
+                                />
                             </svg>
                         </div>
                         <h4 className='text-md font-medium text-zinc-200 mb-1'>No domains configured</h4>
-                        <p className='text-sm text-zinc-400 max-w-sm'>Contact your administrator to configure subdomain support for this server.</p>
+                        <p className='text-sm text-zinc-400 max-w-sm'>
+                            Contact your administrator to configure subdomain support for this server.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -223,8 +255,14 @@ const SubdomainManagement = () => {
                 <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
                 {subdomainInfo?.current_subdomain && (
                     <div className='flex items-center gap-2 text-sm ml-auto'>
-                        <div className={`w-2 h-2 rounded-full ${subdomainInfo.current_subdomain.attributes.is_active ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                        <span className={subdomainInfo.current_subdomain.attributes.is_active ? 'text-green-400' : 'text-red-400'}>
+                        <div
+                            className={`w-2 h-2 rounded-full ${subdomainInfo.current_subdomain.attributes.is_active ? 'bg-green-400' : 'bg-red-400'}`}
+                        ></div>
+                        <span
+                            className={
+                                subdomainInfo.current_subdomain.attributes.is_active ? 'text-green-400' : 'text-red-400'
+                            }
+                        >
                             {subdomainInfo.current_subdomain.attributes.is_active ? 'Active' : 'Inactive'}
                         </span>
                     </div>
@@ -272,9 +310,13 @@ const SubdomainManagement = () => {
                 <Formik
                     initialValues={{
                         subdomain: subdomainInfo?.current_subdomain?.attributes?.subdomain || '',
-                        domain_id: subdomainInfo?.current_subdomain?.attributes?.domain_id?.toString() ||
-                                 (subdomainInfo?.available_domains as AvailableDomain[])?.find(d => d.is_default)?.id.toString() ||
-                                 subdomainInfo?.available_domains?.[0]?.id.toString() || ''
+                        domain_id:
+                            subdomainInfo?.current_subdomain?.attributes?.domain_id?.toString() ||
+                            (subdomainInfo?.available_domains as AvailableDomain[])
+                                ?.find((d) => d.is_default)
+                                ?.id.toString() ||
+                            subdomainInfo?.available_domains?.[0]?.id.toString() ||
+                            '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={handleSetSubdomain}
@@ -320,11 +362,13 @@ const SubdomainManagement = () => {
                                                     }
                                                 }}
                                             >
-                                                {(subdomainInfo?.available_domains as AvailableDomain[])?.map((domain) => (
-                                                    <option key={domain.id} value={domain.id}>
-                                                        .{domain.name}
-                                                    </option>
-                                                )) || []}
+                                                {(subdomainInfo?.available_domains as AvailableDomain[])?.map(
+                                                    (domain) => (
+                                                        <option key={domain.id} value={domain.id}>
+                                                            .{domain.name}
+                                                        </option>
+                                                    ),
+                                                ) || []}
                                             </Field>
                                         </div>
                                     </div>
@@ -332,17 +376,25 @@ const SubdomainManagement = () => {
 
                                 {/* Availability Status */}
                                 {(checkingAvailability || availabilityStatus) && (
-                                    <div className={`rounded-lg p-4 border ${checkingAvailability ? 'bg-blue-500/10 border-blue-500/20' : availabilityStatus?.available ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}>
+                                    <div
+                                        className={`rounded-lg p-4 border ${checkingAvailability ? 'bg-blue-500/10 border-blue-500/20' : availabilityStatus?.available ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}
+                                    >
                                         {checkingAvailability ? (
                                             <div className='flex items-center text-sm text-blue-300'>
                                                 <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400 mr-3'></div>
                                                 Checking availability...
                                             </div>
-                                        ) : availabilityStatus && (
-                                            <div className={`text-sm flex items-center font-medium ${availabilityStatus.available ? 'text-green-300' : 'text-red-300'}`}>
-                                                <div className={`w-3 h-3 rounded-full mr-3 ${availabilityStatus.available ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                                                {availabilityStatus.message}
-                                            </div>
+                                        ) : (
+                                            availabilityStatus && (
+                                                <div
+                                                    className={`text-sm flex items-center font-medium ${availabilityStatus.available ? 'text-green-300' : 'text-red-300'}`}
+                                                >
+                                                    <div
+                                                        className={`w-3 h-3 rounded-full mr-3 ${availabilityStatus.available ? 'bg-green-400' : 'bg-red-400'}`}
+                                                    ></div>
+                                                    {availabilityStatus.message}
+                                                </div>
+                                            )
                                         )}
                                     </div>
                                 )}
@@ -369,7 +421,14 @@ const SubdomainManagement = () => {
                                             type='submit'
                                             variant='primary'
                                             size='sm'
-                                            disabled={isSubmitting || loading || !isValid || !values.subdomain.trim() || !values.domain_id || (availabilityStatus?.checked && !availabilityStatus?.available)}
+                                            disabled={
+                                                isSubmitting ||
+                                                loading ||
+                                                !isValid ||
+                                                !values.subdomain.trim() ||
+                                                !values.domain_id ||
+                                                (availabilityStatus?.checked && !availabilityStatus?.available)
+                                            }
                                         >
                                             {isSubmitting ? 'Saving...' : 'Save Changes'}
                                         </ActionButton>
@@ -379,7 +438,14 @@ const SubdomainManagement = () => {
                                         type='submit'
                                         variant='primary'
                                         size='sm'
-                                        disabled={isSubmitting || loading || !isValid || !values.subdomain.trim() || !values.domain_id || (availabilityStatus?.checked && !availabilityStatus?.available)}
+                                        disabled={
+                                            isSubmitting ||
+                                            loading ||
+                                            !isValid ||
+                                            !values.subdomain.trim() ||
+                                            !values.domain_id ||
+                                            (availabilityStatus?.checked && !availabilityStatus?.available)
+                                        }
                                     >
                                         {isSubmitting ? 'Creating...' : 'Create Subdomain'}
                                     </ActionButton>

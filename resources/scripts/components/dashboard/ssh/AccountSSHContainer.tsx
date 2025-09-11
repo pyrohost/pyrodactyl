@@ -36,7 +36,7 @@ const AccountSSHContainer = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
 
-    const { clearAndAddHttpError } = useFlashKey('account');
+    const { clearAndAddHttpError } = useFlashKey('account:ssh-keys');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { data, isValidating, error, mutate } = useSSHKeys({
         revalidateOnMount: true,
@@ -65,7 +65,7 @@ const AccountSSHContainer = () => {
     };
 
     const submitCreate = (values: CreateValues, { setSubmitting, resetForm }: FormikHelpers<CreateValues>) => {
-        clearFlashes('ssh-keys');
+        clearFlashes('account:ssh-keys');
         createSSHKey(values.name, values.publicKey)
             .then((key) => {
                 resetForm();
@@ -75,7 +75,7 @@ const AccountSSHContainer = () => {
             })
             .catch((error) => {
                 console.error(error);
-                addError({ key: 'account', message: httpErrorToHuman(error) });
+                addError({ key: 'account:ssh-keys', message: httpErrorToHuman(error) });
                 setSubmitting(false);
             });
     };
@@ -89,7 +89,7 @@ const AccountSSHContainer = () => {
 
     return (
         <PageContentBlock title={'SSH Keys'}>
-            <FlashMessageRender byKey={'account'} />
+            <FlashMessageRender byKey='account:ssh-keys' />
 
             {/* Create SSH Key Modal */}
             {showCreateModal && (
