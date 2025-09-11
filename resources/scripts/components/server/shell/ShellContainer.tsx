@@ -413,7 +413,7 @@ const SoftwareContainer = () => {
 
             // Check for subdomain compatibility warnings
             if (preview.warnings && preview.warnings.length > 0) {
-                const subdomainWarning = preview.warnings.find(w => w.type === 'subdomain_incompatible');
+                const subdomainWarning = preview.warnings.find((w) => w.type === 'subdomain_incompatible');
                 if (subdomainWarning) {
                     toast.error(subdomainWarning.message, {
                         duration: 8000,

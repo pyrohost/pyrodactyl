@@ -42,7 +42,7 @@ import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
-import { getSubdomainInfo, SubdomainInfo } from '@/api/server/network/subdomain';
+import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
 
 import { ServerContext } from '@/state/server';
 
