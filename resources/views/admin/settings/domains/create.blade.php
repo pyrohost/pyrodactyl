@@ -29,8 +29,8 @@
               <div class="form-group col-md-6">
                 <label for="name" class="control-label">Domain Name <span class="field-required"></span></label>
                 <div>
-                  <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" 
-                         placeholder="example.com" required />
+                  <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}"
+                    placeholder="example.com" required />
                   <p class="text-muted small">The domain name that will be used for subdomains (e.g., example.com).</p>
                 </div>
               </div>
@@ -71,10 +71,10 @@
                 <label class="control-label">Status</label>
                 <div>
                   <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary @if(old('is_active', true)) active @endif">
+                    <label class="btn btn-outline-primary @if(old('is_active', true)) active @endif">
                       <input type="radio" name="is_active" value="1" @if(old('is_active', true)) checked @endif> Active
                     </label>
-                    <label class="btn btn-primary @if(!old('is_active', true)) active @endif">
+                    <label class="btn btn-outline-primary @if(!old('is_active', true)) active @endif">
                       <input type="radio" name="is_active" value="0" @if(!old('is_active', true)) checked @endif> Inactive
                     </label>
                   </div>
@@ -85,14 +85,15 @@
                 <label class="control-label">Default Domain</label>
                 <div>
                   <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary @if(old('is_default', false)) active @endif">
+                    <label class="btn btn-outline-primary @if(old('is_default', false)) active @endif">
                       <input type="radio" name="is_default" value="1" @if(old('is_default', false)) checked @endif> Yes
                     </label>
-                    <label class="btn btn-primary @if(!old('is_default', false)) active @endif">
+                    <label class="btn btn-outline-primary @if(!old('is_default', false)) active @endif">
                       <input type="radio" name="is_default" value="0" @if(!old('is_default', false)) checked @endif> No
                     </label>
                   </div>
-                  <p class="text-muted small">Whether this domain should be used as the default for automatic subdomain generation.</p>
+                  <p class="text-muted small">Whether this domain should be used as the default for automatic subdomain
+                    generation.</p>
                 </div>
               </div>
             </div>
@@ -117,7 +118,7 @@
 @section('footer-scripts')
   @parent
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       const $providerSelect = $('#dns_provider');
       const $configBox = $('#dns-config-box');
       const $configContent = $('#dns-config-content');
@@ -125,9 +126,9 @@
       const $form = $('#domain-form');
 
       // Handle provider selection
-      $providerSelect.change(function() {
+      $providerSelect.change(function () {
         const provider = $(this).val();
-        
+
         if (provider) {
           loadProviderConfig(provider);
           $testButton.prop('disabled', false);
@@ -138,10 +139,10 @@
       });
 
       // Test connection
-      $testButton.click(function() {
+      $testButton.click(function () {
         const $button = $(this);
         const $spinner = $button.find('.fa-spin');
-        
+
         // Gather form data
         const formData = {
           dns_provider: $providerSelect.val(),
@@ -149,7 +150,7 @@
         };
 
         // Collect DNS config fields
-        $configContent.find('input').each(function() {
+        $configContent.find('input').each(function () {
           const name = $(this).attr('name');
           if (name && name.startsWith('dns_config[')) {
             const key = name.replace('dns_config[', '').replace(']', '');
@@ -164,45 +165,45 @@
           _token: '{{ csrf_token() }}',
           ...formData
         })
-        .done(function(response) {
-          if (response.success) {
-            swal({
-              type: 'success',
-              title: 'Connection Successful',
-              text: response.message
-            });
-          } else {
+          .done(function (response) {
+            if (response.success) {
+              swal({
+                type: 'success',
+                title: 'Connection Successful',
+                text: response.message
+              });
+            } else {
+              swal({
+                type: 'error',
+                title: 'Connection Failed',
+                text: response.message
+              });
+            }
+          })
+          .fail(function (xhr) {
+            const response = xhr.responseJSON || {};
             swal({
               type: 'error',
               title: 'Connection Failed',
-              text: response.message
+              text: response.message || 'An unexpected error occurred.'
             });
-          }
-        })
-        .fail(function(xhr) {
-          const response = xhr.responseJSON || {};
-          swal({
-            type: 'error',
-            title: 'Connection Failed',
-            text: response.message || 'An unexpected error occurred.'
+          })
+          .always(function () {
+            $button.prop('disabled', false);
+            $spinner.hide();
           });
-        })
-        .always(function() {
-          $button.prop('disabled', false);
-          $spinner.hide();
-        });
       });
 
       // Load provider configuration
       function loadProviderConfig(provider) {
         $.get(`{{ route('admin.settings.domains.provider-schema', ':provider') }}`.replace(':provider', provider))
-          .done(function(response) {
+          .done(function (response) {
             if (response.success) {
               renderConfigForm(response.schema);
               $configBox.show();
             }
           })
-          .fail(function() {
+          .fail(function () {
             $configBox.hide();
           });
       }
@@ -210,29 +211,29 @@
       // Render configuration form
       function renderConfigForm(schema) {
         let html = '<div class="row">';
-        
-        Object.keys(schema).forEach(function(key) {
+
+        Object.keys(schema).forEach(function (key) {
           const field = schema[key];
           const oldValue = `{{ old('dns_config.${key}') }}`.replace('${key}', key);
-          
+
           html += `
-            <div class="form-group col-md-6">
-              <label for="dns_config_${key}" class="control-label">
-                ${field.description || key} 
-                ${field.required ? '<span class="field-required"></span>' : ''}
-              </label>
-              <div>
-                <input type="${field.sensitive ? 'password' : 'text'}" 
-                       name="dns_config[${key}]" 
-                       id="dns_config_${key}" 
-                       class="form-control" 
-                       value="${oldValue}"
-                       ${field.required ? 'required' : ''} />
-              </div>
-            </div>
-          `;
+                          <div class="form-group col-md-6">
+                            <label for="dns_config_${key}" class="control-label">
+                              ${field.description || key} 
+                              ${field.required ? '<span class="field-required"></span>' : ''}
+                            </label>
+                            <div>
+                              <input type="${field.sensitive ? 'password' : 'text'}" 
+                                     name="dns_config[${key}]" 
+                                     id="dns_config_${key}" 
+                                     class="form-control" 
+                                     value="${oldValue}"
+                                     ${field.required ? 'required' : ''} />
+                            </div>
+                          </div>
+                        `;
         });
-        
+
         html += '</div>';
         $configContent.html(html);
       }
