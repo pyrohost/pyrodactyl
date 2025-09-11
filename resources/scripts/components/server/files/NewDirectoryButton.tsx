@@ -75,7 +75,7 @@ const NewDirectoryDialog = asDialog({
         <Formik onSubmit={submit} validationSchema={schema} initialValues={{ directoryName: '' }}>
             {({ submitForm, values }) => (
                 <>
-                    <FlashMessageRender byKey={'files:directory-modal'} />
+                    <FlashMessageRender byKey='files:directory-modal' />
                     <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
                         <p className={`mt-2 text-xs! break-all`}>
