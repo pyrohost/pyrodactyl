@@ -217,7 +217,7 @@ class Permission extends Model
     ],
 
     'modrinth' => [
-      'description' => 'Permissions that control a user\'s access to downloading mods using in app modrinth',
+      'description' => 'Permissions that control a user\'s access to downloading and updating mods.',
       'keys' => [
         'version' => 'Allows a user to change what version to download for',
         'loader' => 'Allows a user to change what loader to download for',
