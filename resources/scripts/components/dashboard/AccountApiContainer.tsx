@@ -65,7 +65,7 @@ const AccountApiContainer = () => {
     };
 
     const submitCreate = (values: CreateValues, { setSubmitting, resetForm }: FormikHelpers<CreateValues>) => {
-        clearFlashes('account');
+        clearFlashes('account:api-keys');
         createApiKey(values.description, values.allowedIps)
             .then(({ secretToken, ...key }) => {
                 resetForm();
@@ -76,7 +76,7 @@ const AccountApiContainer = () => {
             })
             .catch((error) => {
                 console.error(error);
-                addError({ key: 'account', message: httpErrorToHuman(error) });
+                addError({ key: 'account:api-keys', message: httpErrorToHuman(error) });
                 setSubmitting(false);
             });
     };
@@ -90,7 +90,7 @@ const AccountApiContainer = () => {
 
     return (
         <PageContentBlock title={'API Keys'}>
-            <FlashMessageRender byKey='account' />
+            <FlashMessageRender byKey='account:api-keys' />
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
             {/* Create API Key Modal */}
@@ -131,7 +131,7 @@ const AccountApiContainer = () => {
                                 <FormikFieldWrapper
                                     label='Allowed IPs'
                                     name='allowedIps'
-                                    description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.'
+                                    description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line. Note: You can also use CIDR ranges here.'
                                 >
                                     <Field name='allowedIps' as={Input} className='w-full' />
                                 </FormikFieldWrapper>

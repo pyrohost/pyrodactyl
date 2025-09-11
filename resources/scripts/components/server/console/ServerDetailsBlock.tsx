@@ -6,10 +6,11 @@ import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
+import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
+
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-import { getSubdomainInfo, SubdomainInfo } from '@/api/server/network/subdomain';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 
@@ -58,7 +59,10 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     // Get display address (subdomain if available and active, otherwise IP)
     const displayAddress = useMemo(() => {
-        if (subdomainInfo?.current_subdomain?.attributes?.is_active && subdomainInfo.current_subdomain.attributes.full_domain) {
+        if (
+            subdomainInfo?.current_subdomain?.attributes?.is_active &&
+            subdomainInfo.current_subdomain.attributes.full_domain
+        ) {
             return subdomainInfo.current_subdomain.attributes.full_domain;
         }
         return allocation;
