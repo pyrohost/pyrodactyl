@@ -122,7 +122,7 @@ const FileEditContainer = () => {
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0!'>
+        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0! h-full'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -134,7 +134,7 @@ const FileEditContainer = () => {
                 </div>
             </ErrorBoundary>
 
-            {filename === '.pteroignore' ? (
+            {['.pyroignore', '.pteroignore'].includes(filename) ? (
                 <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded-sm border-cyan-400`}>
                     <p className={`text-neutral-300 text-sm`}>
                         You&apos;re editing a{' '}
@@ -156,11 +156,8 @@ const FileEditContainer = () => {
                 }}
             />
 
-            <div
-                className={`relative h-full bg-[#ffffff11] border-[1px] border-[#ffffff07] border-t-0 [&>div>div]:h-full [&>div>div]:outline-hidden! w-full`}
-            >
+            <div className='h-full relative bg-[#ffffff11] border-[1px] border-[#ffffff07] border-t-0 [&>div>div]:h-full [&>div>div]:outline-hidden! w-full flex-grow'>
                 <Editor
-                    style={{ height: 'calc(100vh - 86px)', width: '100%' }}
                     filename={filename}
                     initialContent={content}
                     language={language}
@@ -177,10 +174,11 @@ const FileEditContainer = () => {
                             save();
                         }
                     }}
+                    className='w-full h-full'
                 />
             </div>
 
-            <div className={`flex flex-row items-center gap-4 absolute top-2.5 right-2`}>
+            <div className='flex flex-row items-center gap-4 absolute top-2.5 right-2'>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md h-fit bg-[#ffffff11]'>
                         <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
@@ -217,7 +215,7 @@ const FileEditContainer = () => {
                             />
                         </svg>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='max-h-[calc(100vh-4rem)] overflow-auto z-99999' sideOffset={8}>
+                    <DropdownMenuContent className='max-h-50 overflow-auto z-99999' sideOffset={8}>
                         <For each={languages.sort((a, b) => a.name.localeCompare(b.name))} memo>
                             {(language) => (
                                 <DropdownMenuItem

@@ -140,14 +140,10 @@ const FileManagerContainer = () => {
                         <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
                     ) : (
                         <>
-                            <div ref={parentRef} style={{ height: `calc(100vh - 194px)`, overflowY: 'scroll' }}>
+                            <div ref={parentRef}>
                                 <div
                                     data-pyro-file-manager-files
-                                    style={{
-                                        background:
-                                            'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(16, 16, 16) 0%, rgb(4, 4, 4) 100%)',
-                                    }}
-                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl ml-14 mr-12'
+                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl sm:ml-12 sm:mr-12 mx-2 bg-[radial-gradient(124.75%_124.75%_at_50.01%_-10.55%,_rgb(16,16,16)_0%,rgb(4,4,4)_100%)]'
                                 >
                                     <div className='relative w-full h-full mb-1'>
                                         <svg
