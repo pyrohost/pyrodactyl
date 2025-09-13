@@ -41,7 +41,7 @@ class NetworkAllocationController extends ClientApiController
     }
 
     /**
-     * Set the primary allocation for a server.
+     * Set the notes for an allocation.
      *
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
@@ -85,7 +85,7 @@ class NetworkAllocationController extends ClientApiController
     }
 
     /**
-     * Set the notes for the allocation for a server.
+     * Create a new allocation for a server.
      *s.
      *
      * @throws DisplayException
