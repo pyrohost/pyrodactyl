@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string|null $description
  * @property int $location_id
  * @property string $fqdn
+ * @property string|null $internal_fqdn
+ * @property bool $use_separate_fqdns
  * @property string $scheme
  * @property bool $behind_proxy
  * @property bool $maintenance_mode
@@ -77,18 +79,34 @@ class Node extends Model
         'behind_proxy' => 'boolean',
         'public' => 'boolean',
         'maintenance_mode' => 'boolean',
+        'use_separate_fqdns' => 'boolean',
     ];
 
     /**
      * Fields that are mass assignable.
      */
     protected $fillable = [
-        'public', 'name', 'location_id',
-        'fqdn', 'scheme', 'behind_proxy',
-        'memory', 'memory_overallocate', 'disk',
-        'disk_overallocate', 'upload_size', 'daemonBase',
-        'daemonSFTP', 'daemonListen',
-        'description', 'maintenance_mode',
+        'uuid',
+        'public',
+        'name',
+        'location_id',
+        'fqdn',
+        'internal_fqdn',
+        'use_separate_fqdns',
+        'scheme',
+        'behind_proxy',
+        'memory',
+        'memory_overallocate',
+        'disk',
+        'disk_overallocate',
+        'upload_size',
+        'daemonBase',
+        'daemonSFTP',
+        'daemonListen',
+        'daemon_token_id',
+        'daemon_token',
+        'description',
+        'maintenance_mode',
     ];
 
     public static array $validationRules = [
@@ -97,6 +115,8 @@ class Node extends Model
         'location_id' => 'required|exists:locations,id',
         'public' => 'boolean',
         'fqdn' => 'required|string',
+        'internal_fqdn' => 'nullable|string',
+        'use_separate_fqdns' => 'sometimes|boolean',
         'scheme' => 'required',
         'behind_proxy' => 'boolean',
         'memory' => 'required|numeric|min:1',
@@ -122,14 +142,40 @@ class Node extends Model
         'daemonSFTP' => 2022,
         'daemonListen' => 8080,
         'maintenance_mode' => false,
+        'use_separate_fqdns' => false,
     ];
 
     /**
      * Get the connection address to use when making calls to this node.
+     * This will use the internal FQDN if separate FQDNs are enabled and internal_fqdn is set,
+     * otherwise it will fall back to the regular fqdn.
      */
     public function getConnectionAddress(): string
     {
+        $fqdn = $this->getInternalFqdn();
+        return sprintf('%s://%s:%s', $this->scheme, $fqdn, $this->daemonListen);
+    }
+
+    /**
+     * Get the browser connection address for WebSocket connections.
+     * This always uses the public fqdn field.
+     */
+    public function getBrowserConnectionAddress(): string
+    {
         return sprintf('%s://%s:%s', $this->scheme, $this->fqdn, $this->daemonListen);
+    }
+
+    /**
+     * Get the appropriate FQDN for internal panel-to-Wings communication.
+     */
+    public function getInternalFqdn(): string
+    {
+        // Use internal FQDN if it's provided and not empty
+        if (!empty($this->internal_fqdn)) {
+            return $this->internal_fqdn;
+        }
+
+        return $this->fqdn;
     }
 
     /**
@@ -147,8 +193,8 @@ class Node extends Model
                 'port' => $this->daemonListen,
                 'ssl' => [
                     'enabled' => (!$this->behind_proxy && $this->scheme === 'https'),
-                    'cert' => '/etc/letsencrypt/live/' . Str::lower($this->fqdn) . '/fullchain.pem',
-                    'key' => '/etc/letsencrypt/live/' . Str::lower($this->fqdn) . '/privkey.pem',
+                    'cert' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/fullchain.pem',
+                    'key' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/privkey.pem',
                 ],
                 'upload_limit' => $this->upload_size,
             ],
@@ -231,6 +277,10 @@ class Node extends Model
         $memoryLimit = $this->memory * (1 + ($this->memory_overallocate / 100));
         $diskLimit = $this->disk * (1 + ($this->disk_overallocate / 100));
 
-        return ($this->sum_memory + $memory) <= $memoryLimit && ($this->sum_disk + $disk) <= $diskLimit;
+        // Calculate used resources excluding servers marked for exclusion
+        $usedMemory = $this->servers()->where('exclude_from_resource_calculation', false)->sum('memory');
+        $usedDisk = $this->servers()->where('exclude_from_resource_calculation', false)->sum('disk');
+
+        return ($usedMemory + $memory) <= $memoryLimit && ($usedDisk + $disk) <= $diskLimit;
     }
 }

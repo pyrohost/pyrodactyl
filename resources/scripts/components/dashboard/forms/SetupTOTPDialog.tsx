@@ -1,14 +1,14 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { Actions, useStoreActions } from 'easy-peasy';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
 
@@ -26,13 +26,13 @@ interface Props {
 }
 
 const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
+    const { t } = useTranslation(); // Moved inside the component
     const [submitting, setSubmitting] = useState(false);
     const [value, setValue] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState<TwoFactorTokenData | null>(null);
     const { clearAndAddHttpError } = useFlashKey('account:two-step');
     const updateUserData = useStoreActions((actions: Actions<ApplicationStore>) => actions.user.updateUserData);
-    const { t } = useTranslation();
 
     const { close, setProps } = useContext(DialogWrapperContext);
 
@@ -68,11 +68,11 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     return (
         <form id={'enable-totp-form'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
-            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow mx-auto mt-6'}>
+            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow-sm mx-auto mt-6'}>
                 {!token ? (
                     <Spinner />
                 ) : (
-                    <QRCode renderAs={'svg'} value={token.image_url_data} className={`w-full h-full shadow-none`} />
+                    <QRCodeSVG value={token.image_url_data} className={`w-full h-full shadow-none`} />
                 )}
             </div>
             <CopyOnClick text={token?.secret}>
@@ -81,10 +81,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                <Trans i18nKey={'settings.2fa.setup.description'}>
-                    Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
-                    6-digit code it generates below.
-                </Trans>
+                {t('settings.2fa.setup.description')}
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -109,7 +106,9 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Dialog.Footer>
-                <Button.Text onClick={close}>{t('cancel')}</Button.Text>
+                <ActionButton variant='secondary' onClick={close}>
+                    {t('cancel')}
+                </ActionButton>
                 {/* <Tooltip
                     disabled={password.length > 0 && value.length === 6}
                     content={
@@ -119,20 +118,30 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     }
                     delay={100}
                 > */}
-                <Button
+                <ActionButton
+                    variant='primary'
                     disabled={!token || value.length !== 6 || !password.length}
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
                     {t('enable')}
-                </Button>
+                </ActionButton>
                 {/* </Tooltip> */}
             </Dialog.Footer>
         </form>
     );
 };
 
-export default asDialog({
-    title: 'Enable Authenticator App',
-    description: "You'll be required to enter a verification code each time you sign in.",
-})(ConfigureTwoFactorForm);
+// Create a wrapper component to handle the dialog with translations
+const ConfigureTwoFactorDialogWrapper = (props: any) => {
+    const { t } = useTranslation();
+
+    const DialogComponent = asDialog({
+        title: t('settings.2fa.setup.title'),
+        description: t('settings.2fa.setup.description_dialog'),
+    })(ConfigureTwoFactorForm);
+
+    return <DialogComponent {...props} />;
+};
+
+export default ConfigureTwoFactorDialogWrapper;

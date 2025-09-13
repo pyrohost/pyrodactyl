@@ -6,11 +6,11 @@ import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
+import ActionButton from '@/components/elements/ActionButton';
 import ContentBox from '@/components/elements/ContentBox';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 
 import createApiKey from '@/api/account/createApiKey';
 import { ApiKey } from '@/api/account/getApiKeys';
@@ -23,7 +23,7 @@ interface Values {
     allowedIps: string;
 }
 
-export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
+const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
     const { t } = useTranslation();
     const [apiKey, setApiKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -88,9 +88,9 @@ export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
 
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
-                                <Button type='submit' disabled={isSubmitting}>
+                                <ActionButton type='submit' disabled={isSubmitting}>
                                     {isSubmitting ? t('common.creating') : t('api.create_api_key')}
-                                </Button>
+                                </ActionButton>
                             </div>
                         </Form>
                     )}
@@ -99,3 +99,6 @@ export default ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
         </>
     );
 };
+
+CreateApiKeyForm.displayName = 'CreateApiKeyForm';
+export default CreateApiKeyForm;

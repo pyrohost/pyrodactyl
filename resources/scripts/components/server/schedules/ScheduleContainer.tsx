@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -41,29 +42,46 @@ function ScheduleContainer() {
     }, []);
 
     return (
-        <ServerContentBlock title={'Schedules'}>
+        <ServerContentBlock title={t('server_titles.schedules')}>
             <FlashMessageRender byKey={'schedules'} />
-            <MainPageHeader title={t('server_titles.schedules')}>
-                <Can action={'schedule.create'}>
-                    <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
-                    <button
-                        style={{
-                            background:
-                                'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                        }}
-                        className='rounded-full border-[1px] border-[#ffffff12] px-8 py-3 text-sm font-bold shadow-md'
-                        onClick={() => setVisible(true)}
-                    >
-                        {t('server_schedules.new_schedule_button')}
-                    </button>
-                </Can>
+            <MainPageHeader
+                direction='column'
+                title={t('server_titles.schedules')}
+                titleChildren={
+                    <Can action={'schedule.create'}>
+                        <ActionButton variant='primary' onClick={() => setVisible(true)}>
+                            {t('server_schedules.new_schedule_button')}
+                        </ActionButton>
+                    </Can>
+                }
+            >
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    {t('server.schedules.automate_tasks')}
+                </p>
             </MainPageHeader>
+            <Can action={'schedule.create'}>
+                <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
+            </Can>
             {!schedules.length && loading ? null : (
                 <>
                     {schedules.length === 0 ? (
-                        <p className={`text-center text-sm text-neutral-300`}>
-                            There are no schedules configured for this server.
-                        </p>
+                        <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
+                            <div className='text-center'>
+                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                                    <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                                        <path
+                                            fillRule='evenodd'
+                                            d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z'
+                                            clipRule='evenodd'
+                                        />
+                                    </svg>
+                                </div>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>{t('server.schedules.no_schedules_found')}</h3>
+                                <p className='text-sm text-zinc-400 max-w-sm'>
+                                    {t('server.schedules.no_scheduled_tasks')}
+                                </p>
+                            </div>
+                        </div>
                     ) : (
                         <PageListContainer data-pyro-schedules>
                             {schedules.map((schedule) => (

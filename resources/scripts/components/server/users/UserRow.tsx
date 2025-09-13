@@ -1,26 +1,30 @@
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStoreState } from 'easy-peasy';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import { PageListItem } from '@/components/elements/pages/PageList';
-import EditSubuserModal from '@/components/server/users/EditSubuserModal';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 
+import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
 interface Props {
     subuser: Subuser;
 }
 
-export default ({ subuser }: Props) => {
+const UserRow = ({ subuser }: Props) => {
     const uuid = useStoreState((state) => state.user!.data!.uuid);
-    const [visible, setVisible] = useState(false);
+    const navigate = useNavigate();
+    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+
+    const handleEditClick = () => {
+        navigate(`/server/${serverId}/users/${subuser.uuid}/edit`);
+    };
 
     return (
         <PageListItem>
-            <EditSubuserModal subuser={subuser} visible={visible} onModalDismissed={() => setVisible(false)} />
             <div className={`w-10 h-10 rounded-full bg-white border-2 border-zinc-800 overflow-hidden hidden md:block`}>
                 <img className={`w-full h-full`} src={`${subuser.image}?s=400`} />
             </div>
@@ -40,20 +44,21 @@ export default ({ subuser }: Props) => {
                 </div>
                 {subuser.uuid !== uuid && (
                     <>
-                        <div className='flex align-middle items-center justify-center'>
+                        <div className='flex align-middle items-center justify-center gap-2'>
+                            <Can action={'user.update'}>
+                                <ActionButton
+                                    variant='secondary'
+                                    size='sm'
+                                    className='flex items-center gap-2'
+                                    onClick={handleEditClick}
+                                    aria-label='Edit subuser'
+                                >
+                                    <HugeIconsPencil className='w-4 h-4' fill='currentColor' />
+                                    Edit
+                                </ActionButton>
+                            </Can>
                             <Can action={'user.delete'}>
                                 <RemoveSubuserButton subuser={subuser} />
-                            </Can>
-                            <Can action={'user.update'}>
-                                <button
-                                    type={'button'}
-                                    aria-label={'Edit subuser'}
-                                    className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
-                                    onClick={() => setVisible(true)}
-                                >
-                                    <FontAwesomeIcon icon={faEdit} className={`px-5`} size='lg' />
-                                    Edit
-                                </button>
                             </Can>
                         </div>
                     </>
@@ -62,3 +67,5 @@ export default ({ subuser }: Props) => {
         </PageListItem>
     );
 };
+
+export default UserRow;

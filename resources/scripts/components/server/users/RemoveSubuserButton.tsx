@@ -1,9 +1,9 @@
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
@@ -12,7 +12,7 @@ import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
-export default ({ subuser }: { subuser: Subuser }) => {
+const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -27,6 +27,7 @@ export default ({ subuser }: { subuser: Subuser }) => {
             .then(() => {
                 setLoading(false);
                 removeSubuser(subuser.uuid);
+                setShowConfirmation(false);
             })
             .catch((error) => {
                 console.error(error);
@@ -41,21 +42,24 @@ export default ({ subuser }: { subuser: Subuser }) => {
                 title={`Remove ${subuser.username}?`}
                 buttonText={`Remove ${subuser.username}`}
                 visible={showConfirmation}
-                showSpinnerOverlay={loading}
+                loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
                 All access to the server will be removed immediately.
             </ConfirmationModal>
-            <button
-                type={'button'}
-                aria-label={'Delete subuser'}
-                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
+            <ActionButton
+                variant='danger'
+                size='sm'
+                className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
+                aria-label='Delete subuser'
             >
-                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
                 Delete
-            </button>
+            </ActionButton>
         </>
     );
 };
+
+export default RemoveSubuserButton;

@@ -1,19 +1,28 @@
 import debounce from 'debounce';
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
-import { Button } from '@/components/elements/button/index';
+import Spinner from '@/components/elements/Spinner';
+import { Dialog } from '@/components/elements/dialog';
+import HugeIconsCheck from '@/components/elements/hugeicons/Check';
+import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
+import HugeIconsCrown from '@/components/elements/hugeicons/Crown';
+import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
+import HugeIconsX from '@/components/elements/hugeicons/X';
 import { PageListItem } from '@/components/elements/pages/PageList';
-import DeleteAllocationButton from '@/components/server/network/DeleteAllocationButton';
 
 import { ip } from '@/lib/formatters';
 
 import { Allocation } from '@/api/server/getServer';
+import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import setPrimaryServerAllocation from '@/api/server/network/setPrimaryServerAllocation';
 import setServerAllocationNotes from '@/api/server/network/setServerAllocationNotes';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -27,24 +36,56 @@ interface Props {
 }
 
 const AllocationRow = ({ allocation }: Props) => {
+    const { t } = useTranslation();
+
     const [loading, setLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [isEditingNotes, setIsEditingNotes] = useState(false);
+    const [notesValue, setNotesValue] = useState(allocation.notes || '');
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = getServerAllocations();
 
-    const onNotesChanged = useCallback((id: number, notes: string) => {
-        mutate((data) => data?.map((a) => (a.id === id ? { ...a, notes } : a)), false);
-    }, []);
+    const onNotesChanged = useCallback(
+        (id: number, notes: string) => {
+            mutate((data) => data?.map((a) => (a.id === id ? { ...a, notes } : a)), false);
+        },
+        [mutate],
+    );
 
-    const setAllocationNotes = debounce((notes: string) => {
+    const saveNotes = useCallback(() => {
         setLoading(true);
         clearFlashes();
 
-        setServerAllocationNotes(uuid, allocation.id, notes)
-            .then(() => onNotesChanged(allocation.id, notes))
+        setServerAllocationNotes(uuid, allocation.id, notesValue)
+            .then(() => {
+                onNotesChanged(allocation.id, notesValue);
+                setIsEditingNotes(false);
+            })
             .catch((error) => clearAndAddHttpError(error))
             .then(() => setLoading(false));
-    }, 750);
+    }, [uuid, allocation.id, notesValue, onNotesChanged, clearFlashes, clearAndAddHttpError]);
+
+    const cancelEdit = useCallback(() => {
+        setNotesValue(allocation.notes || '');
+        setIsEditingNotes(false);
+    }, [allocation.notes]);
+
+    const startEdit = useCallback(() => {
+        setIsEditingNotes(true);
+        setTimeout(() => textareaRef.current?.focus(), 0);
+    }, []);
+
+    useEffect(() => {
+        setNotesValue(allocation.notes || '');
+    }, [allocation.notes]);
+
+    // Format the full allocation string for copying
+    const allocationString = allocation.alias
+        ? `${allocation.alias}:${allocation.port}`
+        : `${ip(allocation.ip)}:${allocation.port}`;
 
     const setPrimaryAllocation = () => {
         clearFlashes();
@@ -56,61 +97,138 @@ const AllocationRow = ({ allocation }: Props) => {
         });
     };
 
+    const deleteAllocation = () => {
+        if (!confirm(t('server.network.subdomain.confirm_delete'))) return;
+
+        clearFlashes();
+        setDeleteLoading(true);
+
+        deleteServerAllocation(uuid, allocation.id)
+            .then(() => {
+                mutate((data) => data?.filter((a) => a.id !== allocation.id), false);
+            })
+            .catch((error) => clearAndAddHttpError(error))
+            .then(() => setDeleteLoading(false));
+    };
+
     return (
         <PageListItem>
-            <div className={'flex items-center w-full md:w-auto'}>
-                <div className={'mr-4 flex-1 md:w-40'}>
-                    {allocation.alias ? (
-                        <CopyOnClick text={allocation.alias}>
-                            <div>
-                                <Code dark className={'w-40 truncate'}>
-                                    {allocation.alias}
-                                </Code>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
+                <div className='flex-1 min-w-0'>
+                    <div className='flex items-center gap-3 mb-3'>
+                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                            <HugeIconsNetworkAntenna fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                        </div>
+                        <div className='min-w-0 flex-1'>
+                            <div className='flex items-center flex-wrap gap-2'>
+                                <CopyOnClick text={allocationString}>
+                                    <div className='flex items-center gap-2 cursor-pointer hover:text-zinc-50 transition-colors group'>
+                                        <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>
+                                            {allocation.alias ? allocation.alias : ip(allocation.ip)}:{allocation.port}
+                                        </h3>
+                                        <HugeIconsCopy
+                                            fill='currentColor'
+                                            className='w-3 h-3 text-zinc-500 group-hover:text-zinc-400 transition-colors'
+                                        />
+                                    </div>
+                                </CopyOnClick>
+                                {allocation.isDefault && (
+                                    <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
+                                        <HugeIconsCrown fill='currentColor' className='w-3 h-3' />
+                                        Primary
+                                    </span>
+                                )}
                             </div>
-                        </CopyOnClick>
-                    ) : (
-                        <CopyOnClick text={ip(allocation.ip)}>
-                            <div>
-                                <Code dark>{ip(allocation.ip)}</Code>
+                        </div>
+                    </div>
+
+                    {/* Notes Section - Inline Editable */}
+                    <div className='mt-3'>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>
+                            {t('server.network.allocation.notes')}
+                        </p>
+
+                        {isEditingNotes ? (
+                            <div className='space-y-2'>
+                                <InputSpinner visible={loading}>
+                                    <Textarea
+                                        ref={textareaRef}
+                                        className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-3 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
+                                        placeholder={t('server.network.allocation.notes_placeholder')}
+                                        value={notesValue}
+                                        onChange={(e) => setNotesValue(e.currentTarget.value)}
+                                        rows={3}
+                                    />
+                                </InputSpinner>
+                                <div className='flex items-center gap-2'>
+                                    <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
+                                        {loading ? (
+                                            <Spinner size='small' />
+                                        ) : (
+                                            <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />
+                                        )}
+                                        {t('save')}
+                                    </ActionButton>
+                                    <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
+                                        <HugeIconsX fill='currentColor' className='w-3 h-3 mr-1' />
+                                        {t('cancel')}
+                                    </ActionButton>
+                                </div>
                             </div>
-                        </CopyOnClick>
-                    )}
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        {allocation.alias ? 'Hostname' : 'IP Address'}
-                    </label>
+                        ) : (
+                            <Can action={'allocation.update'}>
+                                <div
+                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${
+                                        allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'
+                                    }`}
+                                    onClick={startEdit}
+                                >
+                                    {allocation.notes || t('server.network.allocation.add_notes')}
+                                </div>
+                            </Can>
+                        )}
+                    </div>
                 </div>
-                <div className={'w-16 md:w-24 overflow-hidden'}>
-                    <Code dark>{allocation.port}</Code>
-                    <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        Port
-                    </label>
+
+                <div className='flex items-center justify-center gap-2 sm:flex-col sm:gap-3'>
+                    <Can action={'allocation.update'}>
+                        <ActionButton
+                            variant='secondary'
+                            size='sm'
+                            onClick={setPrimaryAllocation}
+                            disabled={allocation.isDefault}
+                            title={
+                                allocation.isDefault
+                                    ? t('server.network.allocation.already_primary')
+                                    : t('server.network.allocation.make_primary')
+                            }
+                        >
+                            <HugeIconsCrown fill='currentColor' className='w-3 h-3 mr-1' />
+                            <span className='hidden sm:inline'>Make Primary</span>
+                            <span className='sm:hidden'>Primary</span>
+                        </ActionButton>
+                    </Can>
+                    <Can action={'allocation.delete'}>
+                        <ActionButton
+                            variant='danger'
+                            size='sm'
+                            onClick={deleteAllocation}
+                            disabled={allocation.isDefault || deleteLoading}
+                            title={
+                                allocation.isDefault
+                                    ? t('server.network.allocation.connot_delete_primary')
+                                    : t('server.network.allocation.delete_allocation')
+                            }
+                        >
+                            {deleteLoading ? (
+                                <Spinner size='small' />
+                            ) : (
+                                <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />
+                            )}
+                            <span className='hidden sm:inline'>{t('delete')}</span>
+                        </ActionButton>
+                    </Can>
                 </div>
-            </div>
-            <div className={'mt-4 w-full md:mt-0 md:flex-1 md:w-auto'}>
-                <InputSpinner visible={loading}>
-                    <Textarea
-                        className={'bg-transparent p-4 rounded-xl w-full'}
-                        placeholder={'Notes'}
-                        defaultValue={allocation.notes || undefined}
-                        onChange={(e) => setAllocationNotes(e.currentTarget.value)}
-                    />
-                </InputSpinner>
-            </div>
-            <div className={'flex justify-end space-x-4 mt-4 w-full md:mt-0 md:w-48'}>
-                {allocation.isDefault ? (
-                    <p>Primary Port</p>
-                ) : (
-                    <>
-                        <Can action={'allocation.delete'}>
-                            <DeleteAllocationButton allocation={allocation.id} />
-                        </Can>
-                        <Can action={'allocation.update'}>
-                            <Button.Text size={Button.Sizes.Small} onClick={setPrimaryAllocation}>
-                                Make Primary
-                            </Button.Text>
-                        </Can>
-                    </>
-                )}
             </div>
         </PageListItem>
     );

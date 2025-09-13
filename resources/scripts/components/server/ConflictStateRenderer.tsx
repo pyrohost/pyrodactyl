@@ -4,7 +4,7 @@ import { ServerContext } from '@/state/server';
 
 import Spinner from '../elements/Spinner';
 
-export default () => {
+const ConflictStateRenderer = () => {
     const status = ServerContext.useStoreState((state) => state.server.data?.status || null);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data?.isTransferring || false);
     const isNodeUnderMaintenance = ServerContext.useStoreState(
@@ -12,11 +12,11 @@ export default () => {
     );
 
     return status === 'installing' || status === 'install_failed' || status === 'reinstall_failed' ? (
-        <div className={'flex items-center justify-center h-full'}>
+        <div className={'flex flex-col items-center justify-center h-full'}>
             <Spinner size={'large'} />
-            <div className='flex flex-col ml-4'>
+            <div className='flex flex-col mt-4 text-center'>
                 <label className='text-neutral-100 text-lg font-bold'>Server is Installing</label>
-                <label className='text-neutral-500 text-md font-semibold'>
+                <label className='text-neutral-500 text-md font-semibold mt-1'>
                     Your server should be ready soon, for more details visit the home page.
                 </label>
             </div>
@@ -39,3 +39,5 @@ export default () => {
         />
     );
 };
+
+export default ConflictStateRenderer;

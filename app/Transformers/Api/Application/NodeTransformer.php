@@ -40,7 +40,7 @@ class NodeTransformer extends BaseTransformer
         $response[$node->getUpdatedAtColumn()] = $this->formatTimestamp($node->updated_at);
         $response[$node->getCreatedAtColumn()] = $this->formatTimestamp($node->created_at);
 
-        $resources = $node->servers()->select(['memory', 'disk'])->get();
+        $resources = $node->servers()->where('exclude_from_resource_calculation', false)->select(['memory', 'disk'])->get();
 
         $response['allocated_resources'] = [
             'memory' => $resources->sum('memory'),

@@ -7,12 +7,18 @@ import Can from '@/components/elements/Can';
 
 import { ServerContext } from '@/state/server';
 
+import ModrinthLogo from '../ModrinthLogo';
+import HugeIconsClock from '../hugeicons/Clock';
 import HugeIconsCloudUp from '../hugeicons/CloudUp';
 import HugeIconsConnections from '../hugeicons/Connections';
+import HugeIconsConsole from '../hugeicons/Console';
+import HugeIconsController from '../hugeicons/Controller';
 import HugeIconsDashboardSettings from '../hugeicons/DashboardSettings';
 import HugeIconsDatabase from '../hugeicons/Database';
 import HugeIconsFolder from '../hugeicons/Folder';
 import HugeIconsHome from '../hugeicons/Home';
+import HugeIconsPencil from '../hugeicons/Pencil';
+import HugeIconsPeople from '../hugeicons/People';
 import HugeIconsZap from '../hugeicons/Zap';
 
 const CommandMenu = () => {
@@ -89,10 +95,46 @@ const CommandMenu = () => {
                             Networking
                         </Command.Item>
                     </Can>
+                    <Can action={'user.*'} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/users')}>
+                            <HugeIconsPeople fill='currentColor' />
+                            Users
+                        </Command.Item>
+                    </Can>
+                    <Can action={['startup.*']} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/startup')}>
+                            <HugeIconsConsole fill='currentColor' />
+                            Startup
+                        </Command.Item>
+                    </Can>
+                    <Can action={['schedule.*']} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/schedules')}>
+                            <HugeIconsClock fill='currentColor' />
+                            Schedules
+                        </Command.Item>
+                    </Can>
                     <Can action={['settings.*', 'file.sftp']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/settings')}>
                             <HugeIconsDashboardSettings fill='currentColor' />
                             Settings
+                        </Command.Item>
+                    </Can>
+                    <Can action={['activity.*']} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/activity')}>
+                            <HugeIconsPencil fill='currentColor' />
+                            Activity
+                        </Command.Item>
+                    </Can>
+                    <Can action={['modrinth.*']} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/mods')}>
+                            <ModrinthLogo />
+                            Mods/Plugins
+                        </Command.Item>
+                    </Can>
+                    <Can action={['software.*']} matchAny>
+                        <Command.Item onSelect={() => cmdkNavigate('/shell')}>
+                            <HugeIconsController fill='currentColor' />
+                            Software
                         </Command.Item>
                     </Can>
                 </Command.Group>

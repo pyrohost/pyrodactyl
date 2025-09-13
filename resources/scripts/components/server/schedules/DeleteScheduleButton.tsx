@@ -1,8 +1,8 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -16,7 +16,7 @@ interface Props {
     onDeleted: () => void;
 }
 
-export default ({ scheduleId, onDeleted }: Props) => {
+const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -47,17 +47,15 @@ export default ({ scheduleId, onDeleted }: Props) => {
                 title={'Delete Schedule'}
                 confirm={'Delete'}
                 onConfirmed={onDelete}
+                loading={isLoading}
             >
-                <SpinnerOverlay visible={isLoading} />
                 All tasks will be removed and any running processes will be terminated.
             </Dialog.Confirm>
-            <Button.Danger
-                variant={Button.Variants.Secondary}
-                className={'flex-1 sm:flex-none border-transparent'}
-                onClick={() => setVisible(true)}
-            >
+            <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
                 Delete
-            </Button.Danger>
+            </ActionButton>
         </>
     );
 };
+
+export default DeleteScheduleButton;

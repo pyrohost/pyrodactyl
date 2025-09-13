@@ -66,7 +66,7 @@ const options: ChartOptions<'line'> = {
 };
 
 function getOptions(opts?: DeepPartial<ChartOptions<'line'>> | undefined): ChartOptions<'line'> {
-    // @ts-ignore I'm not even going to try to tell you what this error means
+    // @ts-expect-error - deepmerge type compatibility issue with ChartOptions
     return deepmerge(options, opts || {});
 }
 

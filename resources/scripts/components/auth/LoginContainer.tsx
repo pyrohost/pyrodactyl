@@ -1,35 +1,31 @@
-import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import Reaptcha from 'reaptcha';
 import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
+import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import Field from '@/components/elements/Field';
+import Logo from '@/components/elements/PyroLogo';
+
+import CaptchaManager from '@/lib/captcha';
 
 import login from '@/api/auth/login';
 
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
-
 interface Values {
-    username: string;
+    user: string;
     password: string;
 }
 
 function LoginContainer() {
     const { t } = useTranslation();
-    const ref = useRef<Reaptcha>(null);
-    const [token, setToken] = useState('');
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { enabled: recaptchaEnabled, siteKey } = useStoreState((state) => state.settings.data!.recaptcha);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,72 +35,70 @@ function LoginContainer() {
     const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes();
 
-        // If there is no token in the state yet, request the token and then abort this submit request
-        // since it will be re-submitted when the recaptcha data is returned by the component.
-        if (recaptchaEnabled && !token) {
-            ref.current!.execute().catch((error) => {
-                console.error(error);
+        // Get captcha response if enabled
+        let loginData: any = values;
+        if (CaptchaManager.isEnabled()) {
+            const captchaResponse = getCaptchaResponse();
+            const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
 
-                setSubmitting(false);
-                clearAndAddHttpError({ error });
-            });
+            console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
 
-            return;
-        }
-
-        login({ ...values, recaptchaData: token })
-            .then((response) => {
-                if (response.complete) {
-                    // @ts-expect-error this is valid
-                    window.location = response.intended || '/';
+            if (fieldName) {
+                if (captchaResponse) {
+                    loginData = { ...values, [fieldName]: captchaResponse };
+                    console.log('Adding captcha to login data:', loginData);
+                } else {
+                    console.error(t('auth.captcha.no_response'));
+                    clearAndAddHttpError({
+                        error: new Error(t('auth.captcha.please_complete')),
+                    });
+                    setSubmitting(false);
                     return;
                 }
+            }
+        } else {
+            console.log('Captcha not enabled');
+        }
 
-                navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
-            })
-            .catch((error) => {
-                console.error(error);
-
-                setToken('');
-                // https://github.com/jsardev/reaptcha/issues/218
-                if (ref.current) {
-                    setTimeout(() => {
-                        if (ref.current) {
-                            ref.current.reset();
-                        }
-                    }, 500);
+        login(loginData)
+            .then((response) => {
+                if (response.complete) {
+                    window.location.href = response.intended || '/';
+                    return;
                 }
-
+                navigate('/auth/login/checkpoint', {
+                    state: { token: response.confirmationToken },
+                });
+            })
+            .catch((error: any) => {
                 setSubmitting(false);
-                clearAndAddHttpError({ error });
+
+                if (error.code === 'InvalidCredentials') {
+                    clearAndAddHttpError({
+                        error: new Error(t('auth.validation.invalid_username_password')),
+                    });
+                } else if (error.code === 'DisplayException') {
+                    clearAndAddHttpError({
+                        error: new Error(error.detail || error.message),
+                    });
+                } else {
+                    clearAndAddHttpError({ error });
+                }
             });
     };
 
     return (
         <Formik
             onSubmit={onSubmit}
-            initialValues={{ username: '', password: '' }}
+            initialValues={{ user: '', password: '' }}
             validationSchema={object().shape({
-                username: string().required(t('auth.validation.username_required')),
+                user: string().required(t('auth.validation.username_required')),
                 password: string().required(t('auth.validation.password_required')),
             })}
         >
-            {({ isSubmitting, setSubmitting, submitForm }) => (
+            {({ isSubmitting, isValid }) => (
                 <LoginFormContainer className={`w-full flex`}>
                     <div className='flex h-12 mb-4 items-center w-full'>
-                        {/* temp src */}
-                        {/* <img
-                            className='w-full max-w-full h-full'
-                            loading='lazy'
-                            decoding='async'
-                            alt=''
-                            aria-hidden
-                            style={{
-                                color: 'transparent',
-                            }}
-                            src='https://i.imgur.com/Hbum4fc.png'
-                        /> */}
-                        {/* <NavLink to={'/'} className='flex shrink-0 h-full w-fit'> */}
                         <Logo />
                     </div>
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
@@ -113,7 +107,7 @@ function LoginContainer() {
                         id='usernameOrEmail'
                         type={'text'}
                         label={t('auth.username_or_email')}
-                        name={'username'}
+                        name={'user'}
                         disabled={isSubmitting}
                     />
                     <div className={`relative mt-6`}>
@@ -131,33 +125,28 @@ function LoginContainer() {
                             {t('auth.forgot_password')}
                         </Link>
                     </div>
+
+                    <Captcha
+                        className='mt-6'
+                        onError={(error) => {
+                            console.error('Captcha error:', error);
+                            clearAndAddHttpError({
+                                error: new Error(t('auth.captcha.verification_failed')),
+                            });
+                        }}
+                    />
+
                     <div className={`mt-6`}>
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2`}
+                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
                             type={'submit'}
                             size={'xlarge'}
                             isLoading={isSubmitting}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !isValid}
                         >
                             {t('auth.login')}
                         </Button>
                     </div>
-                    {recaptchaEnabled && (
-                        <Reaptcha
-                            ref={ref}
-                            size={'invisible'}
-                            sitekey={siteKey || '_invalid_key'}
-                            onVerify={(response) => {
-                                setToken(response);
-                                // Ensure submitForm is called after token is updated
-                                setTimeout(submitForm, 100);
-                            }}
-                            onExpire={() => {
-                                setSubmitting(false);
-                                setToken('');
-                            }}
-                        />
-                    )}
                 </LoginFormContainer>
             )}
         </Formik>

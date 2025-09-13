@@ -10,6 +10,7 @@ interface Response {
     invocation: string;
     variables: ServerEggVariable[];
     dockerImages: Record<string, string>;
+    rawStartupCommand: string;
 }
 
 export default (uuid: string, fallbackData?: Response, config?: SWRConfiguration<Response, AxiosError>) =>
@@ -24,6 +25,7 @@ export default (uuid: string, fallbackData?: Response, config?: SWRConfiguration
                 variables,
                 invocation: data.meta.startup_command,
                 dockerImages: data.meta.docker_images || {},
+                rawStartupCommand: data.meta.raw_startup_command,
             };
         },
         { fallbackData, errorRetryCount: 3, ...(config ?? {}) },

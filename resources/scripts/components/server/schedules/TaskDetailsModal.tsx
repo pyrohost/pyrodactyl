@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { boolean, number, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import { Textarea } from '@/components/elements/Input';
 import Select from '@/components/elements/Select';
-import { Button } from '@/components/elements/button/index';
 
 import asModal from '@/hoc/asModal';
 
@@ -234,9 +234,9 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             label={'Continue on Failure'}
                         />
                         <div className={`flex justify-end my-6`}>
-                            <Button type={'submit'} disabled={isSubmitting}>
+                            <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
                                 {task ? 'Save Changes' : 'Create Task'}
-                            </Button>
+                            </ActionButton>
                         </div>
                     </Form>
                 )}

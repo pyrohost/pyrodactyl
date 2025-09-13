@@ -9,8 +9,8 @@ import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 
-export default ({ name, fingerprint }: { name: string; fingerprint: string }) => {
-    const { clearAndAddHttpError } = useFlashKey('account');
+const DeleteSSHKeyButton = ({ name, fingerprint }: { name: string; fingerprint: string }) => {
+    const { clearAndAddHttpError } = useFlashKey('ssh-keys');
     const [visible, setVisible] = useState(false);
     const { mutate } = useSSHKeys();
 
@@ -37,9 +37,14 @@ export default ({ name, fingerprint }: { name: string; fingerprint: string }) =>
             >
                 Removing the <Code>{name}</Code> SSH key will invalidate its usage across the Panel.
             </Dialog.Confirm>
-            <button className={`p-2 text-red-500 hover:text-red-700`} onClick={() => setVisible(true)}>
-                <FontAwesomeIcon icon={faTrashAlt} size='lg' />{' '}
+            <button
+                className='p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-150'
+                onClick={() => setVisible(true)}
+            >
+                <FontAwesomeIcon icon={faTrashAlt} size='lg' />
             </button>
         </>
     );
 };
+
+export default DeleteSSHKeyButton;

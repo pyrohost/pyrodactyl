@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
-import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
-import Input from '@/components/elements/Input';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/elements/DropdownMenu';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
+import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
+import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
 import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
 import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
 import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
+import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
+import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http, { httpErrorToHuman } from '@/api/http';
-import { restoreServerBackup } from '@/api/server/backups';
-import deleteBackup from '@/api/server/backups/deleteBackup';
-import getBackupDownloadUrl from '@/api/server/backups/getBackupDownloadUrl';
+import {
+    deleteServerBackup,
+    getServerBackupDownloadUrl,
+    renameServerBackup,
+    restoreServerBackup,
+} from '@/api/server/backups';
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -24,19 +37,20 @@ interface Props {
     backup: ServerBackup;
 }
 
-export default ({ backup }: Props) => {
+const BackupContextMenu = ({ backup }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
     const [modal, setModal] = useState('');
     const [loading, setLoading] = useState(false);
-    const [truncate, setTruncate] = useState(false);
+    const [countdown, setCountdown] = useState(5);
+    const [newName, setNewName] = useState(backup.name);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { mutate } = getServerBackups();
 
     const doDownload = () => {
         setLoading(true);
         clearFlashes('backups');
-        getBackupDownloadUrl(uuid, backup.uuid)
+        getServerBackupDownloadUrl(uuid, backup.uuid)
             .then((url) => {
                 // @ts-expect-error this is valid
                 window.location = url;
@@ -51,7 +65,7 @@ export default ({ backup }: Props) => {
     const doDeletion = () => {
         setLoading(true);
         clearFlashes('backups');
-        deleteBackup(uuid, backup.uuid)
+        deleteServerBackup(uuid, backup.uuid)
             .then(
                 async () =>
                     await mutate(
@@ -73,7 +87,7 @@ export default ({ backup }: Props) => {
     const doRestorationAction = () => {
         setLoading(true);
         clearFlashes('backups');
-        restoreServerBackup(uuid, backup.uuid, truncate)
+        restoreServerBackup(uuid, backup.uuid)
             .then(() =>
                 setServerFromState((s) => ({
                     ...s,
@@ -115,8 +129,94 @@ export default ({ backup }: Props) => {
             .then(() => setModal(''));
     };
 
+    const doRename = () => {
+        setLoading(true);
+        clearFlashes('backups');
+        renameServerBackup(uuid, backup.uuid, newName.trim())
+            .then(
+                async () =>
+                    await mutate(
+                        (data) => ({
+                            ...data!,
+                            items: data!.items.map((b) =>
+                                b.uuid !== backup.uuid
+                                    ? b
+                                    : {
+                                          ...b,
+                                          name: newName.trim(),
+                                      },
+                            ),
+                        }),
+                        false,
+                    ),
+            )
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'backups', error });
+            })
+            .then(() => {
+                setLoading(false);
+                setModal('');
+            });
+    };
+
+    // Countdown effect for restore modal
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (modal === 'restore' && countdown > 0) {
+            interval = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [modal, countdown]);
+
+    // Reset countdown when modal opens
+    useEffect(() => {
+        if (modal === 'restore') {
+            setCountdown(5);
+        }
+    }, [modal]);
+
+    // Reset name when modal opens
+    useEffect(() => {
+        if (modal === 'rename') {
+            setNewName(backup.name);
+        }
+    }, [modal, backup.name]);
+
     return (
         <>
+            <Dialog open={modal === 'rename'} onClose={() => setModal('')} title='Rename Backup'>
+                <div className='space-y-4'>
+                    <div>
+                        <label className='block text-sm font-medium text-zinc-200 mb-2'>Backup Name</label>
+                        <input
+                            type='text'
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                            placeholder='Enter backup name...'
+                            maxLength={191}
+                        />
+                    </div>
+                </div>
+
+                <Dialog.Footer>
+                    <ActionButton onClick={() => setModal('')} variant='secondary'>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton
+                        onClick={doRename}
+                        variant='primary'
+                        disabled={!newName.trim() || newName.trim() === backup.name}
+                    >
+                        Rename Backup
+                    </ActionButton>
+                </Dialog.Footer>
+            </Dialog>
             <Dialog.Confirm
                 open={modal === 'unlock'}
                 onClose={() => setModal('')}
@@ -125,30 +225,41 @@ export default ({ backup }: Props) => {
             >
                 This backup will no longer be protected from automated or accidental deletions.
             </Dialog.Confirm>
-            <Dialog.Confirm
-                open={modal === 'restore'}
-                onClose={() => setModal('')}
-                confirm={'Restore'}
-                title={`Restore "${backup.name}"`}
-                onConfirmed={() => doRestorationAction()}
-            >
-                <p>
-                    Your server will be stopped. You will not be able to control the power state, access the file
-                    manager, or create additional backups until completed.
-                </p>
-                <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded`}>
-                    <label htmlFor={'restore_truncate'} className={`text-base flex items-center cursor-pointer`}>
-                        <Input
-                            type={'checkbox'}
-                            id={'restore_truncate'}
-                            value={'true'}
-                            checked={truncate}
-                            onChange={() => setTruncate((s) => !s)}
-                        />
-                        Delete all files before restoring backup.
-                    </label>
-                </p>
-            </Dialog.Confirm>
+            <Dialog open={modal === 'restore'} onClose={() => setModal('')} title='Restore Backup'>
+                <div className='space-y-4'>
+                    <div className='space-y-2'>
+                        <p className='text-sm font-medium text-zinc-200'>&quot;{backup.name}&quot;</p>
+                        <p className='text-sm text-zinc-400'>
+                            Your server will be stopped during the restoration process. You will not be able to control
+                            the power state, access the file manager, or create additional backups until completed.
+                        </p>
+                    </div>
+
+                    <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
+                        <div className='flex items-start space-x-3'>
+                            <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
+                            <div className='space-y-1'>
+                                <h4 className='text-sm text-red-200 font-medium'>
+                                    Destructive Action - Complete Server Restore
+                                </h4>
+                                <p className='text-xs text-red-300'>
+                                    All current files and server configuration will be deleted and replaced with the
+                                    backup data. This action cannot be undone.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <Dialog.Footer>
+                    <ActionButton onClick={() => setModal('')} variant='secondary'>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton onClick={() => doRestorationAction()} variant='danger' disabled={countdown > 0}>
+                        {countdown > 0 ? `Delete All & Restore (${countdown}s)` : 'Delete All & Restore Backup'}
+                    </ActionButton>
+                </Dialog.Footer>
+            </Dialog>
             <Dialog.Confirm
                 title={`Delete "${backup.name}"`}
                 confirm={'Continue'}
@@ -160,42 +271,69 @@ export default ({ backup }: Props) => {
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
-                <ContextMenuContent className='flex flex-col gap-1'>
-                    <Can action={'backup.download'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
-                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
-                            Download Backup
-                        </ContextMenuItem>
-                    </Can>
-                    <Can action={'backup.restore'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
-                            <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
-                            Restore Backup
-                        </ContextMenuItem>
-                    </Can>
-                    <Can action={'backup.delete'}>
-                        <>
-                            <ContextMenuItem className='flex gap-2' onClick={onLockToggle}>
-                                <HugeIconsFileSecurity className='!h-4 !w-4' fill='currentColor' />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <ActionButton
+                            variant='secondary'
+                            size='sm'
+                            disabled={loading}
+                            className='flex items-center justify-center w-8 h-8 p-0 hover:bg-zinc-700'
+                        >
+                            <HugeIconsHamburger className='h-4 w-4' fill='currentColor' />
+                        </ActionButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end' className='w-48'>
+                        <Can action={'backup.download'}>
+                            <DropdownMenuItem onClick={doDownload} className='cursor-pointer'>
+                                <HugeIconsFileDownload className='h-4 w-4 mr-2' fill='currentColor' />
+                                Download
+                            </DropdownMenuItem>
+                        </Can>
+                        <Can action={'backup.restore'}>
+                            <DropdownMenuItem onClick={() => setModal('restore')} className='cursor-pointer'>
+                                <HugeIconsCloudUp className='h-4 w-4 mr-2' fill='currentColor' />
+                                Restore
+                            </DropdownMenuItem>
+                        </Can>
+                        <Can action={'backup.delete'}>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setModal('rename')} className='cursor-pointer'>
+                                <HugeIconsPencil className='h-4 w-4 mr-2' fill='currentColor' />
+                                Rename
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={onLockToggle} className='cursor-pointer'>
+                                <HugeIconsFileSecurity className='h-4 w-4 mr-2' fill='currentColor' />
                                 {backup.isLocked ? 'Unlock' : 'Lock'}
-                            </ContextMenuItem>
+                            </DropdownMenuItem>
                             {!backup.isLocked && (
-                                <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
-                                    <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
-                                    Delete Backup
-                                </ContextMenuItem>
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => setModal('delete')}
+                                        className='cursor-pointer text-red-400 focus:text-red-300'
+                                    >
+                                        <HugeIconsDelete className='h-4 w-4 mr-2' fill='currentColor' />
+                                        Delete
+                                    </DropdownMenuItem>
+                                </>
                             )}
-                        </>
-                    </Can>
-                </ContextMenuContent>
+                        </Can>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             ) : (
-                <button
+                <ActionButton
+                    variant='danger'
+                    size='sm'
                     onClick={() => setModal('delete')}
-                    className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
+                    disabled={loading}
+                    className='flex items-center gap-2'
                 >
-                    Delete Backup
-                </button>
+                    <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
+                    <span className='hidden sm:inline'>Delete</span>
+                </ActionButton>
             )}
         </>
     );
 };
+
+export default BackupContextMenu;

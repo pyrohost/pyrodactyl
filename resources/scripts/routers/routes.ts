@@ -7,7 +7,7 @@ import ActivityLogContainer from '@/components/dashboard/activity/ActivityLogCon
 import AccountSSHContainer from '@/components/dashboard/ssh/AccountSSHContainer';
 import ServerActivityLogContainer from '@/components/server/ServerActivityLogContainer';
 import BackupContainer from '@/components/server/backups/BackupContainer';
-import ServerConsole from '@/components/server/console/ServerConsoleContainer';
+import ServerConsoleContainer from '@/components/server/console/ServerConsoleContainer';
 import DatabasesContainer from '@/components/server/databases/DatabasesContainer';
 import FileManagerContainer from '@/components/server/files/FileManagerContainer';
 import ModrinthContainer from '@/components/server/modrinth/ModrinthContainer';
@@ -16,6 +16,8 @@ import ScheduleContainer from '@/components/server/schedules/ScheduleContainer';
 import SettingsContainer from '@/components/server/settings/SettingsContainer';
 import ShellContainer from '@/components/server/shell/ShellContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
+import CreateUserContainer from '@/components/server/users/CreateUserContainer';
+import EditUserContainer from '@/components/server/users/EditUserContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
 
 // Each of the router files is already code split out appropriately — so
@@ -88,7 +90,7 @@ export default {
             path: '',
             permission: null,
             name: 'Console',
-            component: ServerConsole,
+            component: ServerConsoleContainer,
             end: true,
         },
         {
@@ -130,6 +132,18 @@ export default {
             permission: 'user.*',
             name: 'Users',
             component: UsersContainer,
+        },
+        {
+            route: 'users/new',
+            permission: 'user.*',
+            name: undefined,
+            component: CreateUserContainer,
+        },
+        {
+            route: 'users/:id/edit',
+            permission: 'user.*',
+            name: undefined,
+            component: EditUserContainer,
         },
         {
             route: 'backups/*',

@@ -48,4 +48,6 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
     );
 }, isEqual);
 
+PermissionTitleBox.displayName = 'PermissionTitleBox';
+
 export default PermissionTitleBox;

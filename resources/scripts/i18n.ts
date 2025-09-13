@@ -21,7 +21,7 @@ i18n
         // Default language
         fallbackLng: 'en',
         // Supported languages
-        supportedLngs: ['en', 'vi'],
+        supportedLngs: ['en', 'vi', 'es'],
         // Do not use dots to separate keys
         debug: false,
         // Configure loading of namespaces

@@ -16,20 +16,20 @@ interface Props {
 
 interface Spinner extends React.FC<Props> {
     Size: Record<'SMALL' | 'BASE' | 'LARGE', SpinnerSize>;
-    Suspense: React.FC<Props>;
+    Suspense: React.FC<{ children: React.ReactNode }>; // ✅ Correct
 }
 
 const spin = keyframes`
     to { transform: rotate(360deg); }
 `;
 
-// noinspection CssOverwrittenProperties
 const SpinnerComponent = styled.div<Props>`
     width: 32px;
     height: 32px;
     border-width: 3px;
     border-radius: 50%;
     animation: ${spin} 1s cubic-bezier(0.55, 0.25, 0.25, 0.7) infinite;
+    aspect-ratio: 1 / 1;
 
     ${(props) =>
         props.size === 'small'
@@ -55,12 +55,18 @@ const SpinnerComponent = styled.div<Props>`
 const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
     visible &&
     (centered ? (
-        <div className={`flex justify-center items-center`}>
+        <div
+            className={`
+              flex justify-center items-center w-full
+              sm:absolute sm:inset-0 sm:z-50
+          `}
+        >
             <SpinnerComponent {...props} />
         </div>
     ) : (
         <SpinnerComponent {...props} />
     ));
+
 Spinner.displayName = 'Spinner';
 
 Spinner.Size = {
@@ -69,16 +75,8 @@ Spinner.Size = {
     LARGE: 'large',
 };
 
-/**
- * Component Suspense kết hợp với Spinner
- * @param children Nội dung bên trong
- * @param centered Hiển thị spinner chính giữa
- * @param size Kích thước spinner
- * @param fallback Component hiển thị khi đang loading (mặc định là Spinner)
- * @param props Props khác
- */
-Spinner.Suspense = ({ children, centered = true, size = Spinner.Size.LARGE, fallback = null, ...props }) => (
-    <Suspense fallback={fallback ?? <Spinner centered={centered} size={size} {...props} />}>
+Spinner.Suspense = ({ children }) => (
+    <Suspense fallback={<Spinner centered size={Spinner.Size.LARGE} />}>
         <ErrorBoundary>{children}</ErrorBoundary>
     </Suspense>
 );

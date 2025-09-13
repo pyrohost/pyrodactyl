@@ -2,8 +2,8 @@ import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
+import ActionButton from '@/components/elements/ActionButton';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -12,13 +12,15 @@ import reinstallServer from '@/api/server/reinstallServer';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default () => {
+const ReinstallServerBox = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { t } = useTranslation();
 
     const reinstall = () => {
+        setLoading(true);
         clearFlashes('settings');
         reinstallServer(uuid)
             .then(() => {
@@ -33,7 +35,10 @@ export default () => {
 
                 addFlash({ key: 'settings', type: 'error', message: httpErrorToHuman(error) });
             })
-            .then(() => setModalVisible(false));
+            .then(() => {
+                setLoading(false);
+                setModalVisible(false);
+            });
     };
 
     useEffect(() => {
@@ -48,6 +53,7 @@ export default () => {
                 confirm={t('server.settings.reinstall.confirm.confirm')}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
+                loading={loading}
             >
                 {t('server.settings.reinstall.confirm.description')}
             </Dialog.Confirm>
@@ -62,10 +68,12 @@ export default () => {
                 </Trans>
             </p>
             <div className={`mt-6 text-right`}>
-                <Button.Danger variant={Button.Variants.Secondary} onClick={() => setModalVisible(true)}>
+                <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
                     {t('server.settings.reinstall.button')}
-                </Button.Danger>
+                </ActionButton>
             </div>
         </TitledGreyBox>
     );
 };
+
+export default ReinstallServerBox;

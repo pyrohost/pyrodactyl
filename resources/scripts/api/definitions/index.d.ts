@@ -4,7 +4,7 @@ import { FractalResponseData, FractalResponseList } from '../http';
 
 export type UUID = string;
 
-export interface Model {}
+export type Model = object;
 
 interface ModelWithRelationships extends Model {
     relationships: Record<string, FractalResponseData | FractalResponseList | undefined>;

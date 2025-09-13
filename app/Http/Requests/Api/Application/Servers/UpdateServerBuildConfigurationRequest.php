@@ -17,9 +17,11 @@ class UpdateServerBuildConfigurationRequest extends ServerWriteRequest
         return [
             'allocation' => $rules['allocation_id'],
             'oom_disabled' => $rules['oom_disabled'],
+            'exclude_from_resource_calculation' => $rules['exclude_from_resource_calculation'],
 
             'limits' => 'sometimes|array',
             'limits.memory' => $this->requiredToOptional('memory', $rules['memory'], true),
+            'limits.overhead_memory' => $this->requiredToOptional('overhead_memory', $rules['overhead_memory'], true),
             'limits.swap' => $this->requiredToOptional('swap', $rules['swap'], true),
             'limits.io' => $this->requiredToOptional('io', $rules['io'], true),
             'limits.cpu' => $this->requiredToOptional('cpu', $rules['cpu'], true),
@@ -31,6 +33,7 @@ class UpdateServerBuildConfigurationRequest extends ServerWriteRequest
             //
             // @see https://github.com/pterodactyl/panel/issues/1500
             'memory' => $this->requiredToOptional('memory', $rules['memory']),
+            'overhead_memory' => $this->requiredToOptional('overhead_memory', $rules['overhead_memory']),
             'swap' => $this->requiredToOptional('swap', $rules['swap']),
             'io' => $this->requiredToOptional('io', $rules['io']),
             'cpu' => $this->requiredToOptional('cpu', $rules['cpu']),

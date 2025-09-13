@@ -24,19 +24,33 @@
             </div>
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
-                    <tbody>
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Short Code</th>
                             <th>Description</th>
+                            <th class="text-center">Memory Alloc%</th>
+                            <th class="text-center">Disk Alloc%</th>
                             <th class="text-center">Nodes</th>
                             <th class="text-center">Servers</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         @foreach ($locations as $location)
+                            @php
+                                $memoryColor = $location->memory_percent < 50 ? '#50af51' : ($location->memory_percent < 70 ? '#e0a800' : '#d9534f');
+                                $diskColor = $location->disk_percent < 50 ? '#50af51' : ($location->disk_percent < 70 ? '#e0a800' : '#d9534f');
+                            @endphp
                             <tr>
                                 <td><code>{{ $location->id }}</code></td>
                                 <td><a href="{{ route('admin.locations.view', $location->id) }}">{{ $location->short }}</a></td>
                                 <td>{{ $location->long }}</td>
+                                <td class="text-center" style="color: {{ $memoryColor }}" title="Allocated: {{ humanizeSize($location->allocated_memory * 1024 * 1024) }} / Total: {{ humanizeSize($location->total_memory * 1024 * 1024) }}">
+                                    {{ round($location->memory_percent) }}%
+                                </td>
+                                <td class="text-center" style="color: {{ $diskColor }}" title="Allocated: {{ humanizeSize($location->allocated_disk * 1024 * 1024) }} / Total: {{ humanizeSize($location->total_disk * 1024 * 1024) }}">
+                                    {{ round($location->disk_percent) }}%
+                                </td>
                                 <td class="text-center">{{ $location->nodes_count }}</td>
                                 <td class="text-center">{{ $location->servers_count }}</td>
                             </tr>

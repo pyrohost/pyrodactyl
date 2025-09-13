@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
 
@@ -25,8 +25,12 @@ const DisableTOTPDialog = () => {
     const updateUserData = useStoreActions((actions) => actions.user.updateUserData);
 
     useEffect(() => {
-        setProps((state) => ({ ...state, preventExternalClose: submitting }));
-    }, [submitting]);
+        setProps({
+            title: t('settings.2fa.disable.title'),
+            description: t('settings.2fa.disable.description'),
+            preventExternalClose: submitting,
+        });
+    }, [submitting, t]);
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,22 +63,21 @@ const DisableTOTPDialog = () => {
                 onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Dialog.Footer>
-                <Button.Text onClick={close}>{t('cancel')}</Button.Text>
-                {/* <Tooltip
-                    delay={100}
-                    disabled={password.length > 0}
-                    content={'You must enter your account password to continue.'}
-                > */}
-                <Button.Danger type={'submit'} form={'disable-totp-form'} disabled={submitting || !password.length}>
+                <ActionButton variant='secondary' onClick={close}>
+                    {t('cancel')}
+                </ActionButton>
+                <ActionButton
+                    variant='danger'
+                    type={'submit'}
+                    form={'disable-totp-form'}
+                    disabled={submitting || !password.length}
+                >
                     {t('settings.2fa.buttons.disable')}
-                </Button.Danger>
-                {/* </Tooltip> */}
+                </ActionButton>
             </Dialog.Footer>
         </form>
     );
 };
 
-export default asDialog({
-    title: 'Remove Authenticator App',
-    description: 'Removing your authenticator app will make your account less secure.',
-})(DisableTOTPDialog);
+// Export with empty initial props since we set them dynamically in the component
+export default asDialog()(DisableTOTPDialog);

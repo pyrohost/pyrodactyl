@@ -37,6 +37,11 @@ class NodeUpdateService
             $data['daemon_token_id'] = Str::random(Node::DAEMON_TOKEN_ID_LENGTH);
         }
 
+        // Automatically set use_separate_fqdns based on whether internal_fqdn is provided
+        if (isset($data['internal_fqdn'])) {
+            $data['use_separate_fqdns'] = !empty($data['internal_fqdn']);
+        }
+
         [$updated, $exception] = $this->connection->transaction(function () use ($data, $node) {
             /** @var Node $updated */
             $updated = $this->repository->withFreshModel()->update($node->id, $data, true, true);
@@ -51,7 +56,17 @@ class NodeUpdateService
                 // node doesn't actually care about this.
                 //
                 // @see https://github.com/pterodactyl/panel/issues/1931
-                $node->fqdn = $updated->fqdn;
+
+                // Update the node's internal FQDN fields if they were changed
+                if (isset($data['fqdn'])) {
+                    $node->fqdn = $updated->fqdn;
+                }
+                if (isset($data['internal_fqdn'])) {
+                    $node->internal_fqdn = $updated->internal_fqdn;
+                }
+                if (isset($data['use_separate_fqdns'])) {
+                    $node->use_separate_fqdns = $updated->use_separate_fqdns;
+                }
 
                 $this->configurationRepository->setNode($node)->update($updated);
             } catch (DaemonConnectionException $exception) {

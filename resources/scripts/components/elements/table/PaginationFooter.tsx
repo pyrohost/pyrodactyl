@@ -1,12 +1,10 @@
 import clsx from 'clsx';
 
-import { Button } from '@/components/elements/button/index';
-import ArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
-import ArrowRight from '@/components/elements/hugeicons/ArrowRight';
+import ActionButton from '@/components/elements/ActionButton';
+import HugeIconsChevronLeft from '@/components/elements/hugeicons/ChevronLeft';
+import HugeIconsChevronRight from '@/components/elements/hugeicons/ChevronRight';
 
 import { PaginationDataSet } from '@/api/http';
-
-// FIXME: add icons back
 
 interface Props {
     className?: string;
@@ -34,13 +32,6 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
         return null;
     }
 
-    const buttonProps = (page: number) => ({
-        size: Button.Sizes.Small,
-        shape: Button.Shapes.IconSquare,
-        variant: Button.Variants.Secondary,
-        onClick: () => onPageSelect(page),
-    });
-
     return (
         <div className={clsx('flex items-center justify-between my-2', className)}>
             <p className={'text-sm text-zinc-500'}>
@@ -52,25 +43,54 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
             </p>
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>
-                    <Button.Text {...buttonProps(1)} disabled={pages.previous.length !== 2}>
-                        <ArrowLeft fill='currentColor' className={'w-3 h-3'} />
-                    </Button.Text>
+                    <ActionButton
+                        variant='secondary'
+                        size='sm'
+                        onClick={() => onPageSelect(current - 1)}
+                        disabled={current <= 1}
+                        className='w-8 h-8 p-0 flex items-center justify-center'
+                    >
+                        <HugeIconsChevronLeft fill='currentColor' className='w-3 h-3' />
+                    </ActionButton>
                     {pages.previous.reverse().map((value) => (
-                        <Button.Text key={`previous-${value}`} {...buttonProps(value)}>
+                        <ActionButton
+                            key={`previous-${value}`}
+                            variant='secondary'
+                            size='sm'
+                            onClick={() => onPageSelect(value)}
+                            className='w-8 h-8 p-0 flex items-center justify-center'
+                        >
                             {value}
-                        </Button.Text>
+                        </ActionButton>
                     ))}
-                    <Button size={Button.Sizes.Small} shape={Button.Shapes.IconSquare}>
+                    <ActionButton
+                        variant='primary'
+                        size='sm'
+                        className='w-8 h-8 p-0 flex items-center justify-center'
+                        disabled
+                    >
                         {current}
-                    </Button>
+                    </ActionButton>
                     {pages.next.map((value) => (
-                        <Button.Text key={`next-${value}`} {...buttonProps(value)}>
+                        <ActionButton
+                            key={`next-${value}`}
+                            variant='secondary'
+                            size='sm'
+                            onClick={() => onPageSelect(value)}
+                            className='w-8 h-8 p-0 flex items-center justify-center'
+                        >
                             {value}
-                        </Button.Text>
+                        </ActionButton>
                     ))}
-                    <Button.Text {...buttonProps(total)} disabled={pages.next.length !== 2}>
-                        <ArrowRight fill='currentColor' className={'w-3 h-3'} />
-                    </Button.Text>
+                    <ActionButton
+                        variant='secondary'
+                        size='sm'
+                        onClick={() => onPageSelect(current + 1)}
+                        disabled={current >= total}
+                        className='w-8 h-8 p-0 flex items-center justify-center'
+                    >
+                        <HugeIconsChevronRight fill='currentColor' className='w-3 h-3' />
+                    </ActionButton>
                 </div>
             )}
         </div>

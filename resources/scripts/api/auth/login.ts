@@ -1,38 +1,61 @@
 import http from '@/api/http';
 
-export interface LoginResponse {
+interface LoginData {
+    user: string;
+    password: string;
+    [key: string]: any; // Allow additional fields like captcha responses
+}
+
+interface LoginResponse {
     complete: boolean;
     intended?: string;
     confirmationToken?: string;
+    error?: string;
 }
 
-export interface LoginData {
-    username: string;
-    password: string;
-    recaptchaData?: string | null;
-}
+export default async (data: LoginData): Promise<LoginResponse> => {
+    try {
+        await http.get('/sanctum/csrf-cookie');
 
-export default ({ username, password, recaptchaData }: LoginData): Promise<LoginResponse> => {
-    return new Promise((resolve, reject) => {
-        http.get('/sanctum/csrf-cookie')
-            .then(() =>
-                http.post('/auth/login', {
-                    user: username,
-                    password,
-                    'g-recaptcha-response': recaptchaData,
-                }),
-            )
-            .then((response) => {
-                if (!(response.data instanceof Object)) {
-                    return reject(new Error('An error occurred while processing the login request.'));
-                }
+        // Pass through all data including captcha responses
+        const payload: Record<string, any> = {
+            ...data,
+        };
 
-                return resolve({
-                    complete: response.data.data.complete,
-                    intended: response.data.data.intended || undefined,
-                    confirmationToken: response.data.data.confirmation_token || undefined,
-                });
-            })
-            .catch(reject);
-    });
+        const response = await http.post('/auth/login', payload);
+
+        if (!response.data || typeof response.data !== 'object') {
+            throw new Error('Invalid server response format');
+        }
+
+        return {
+            complete: response.data.complete ?? response.data.data?.complete ?? false,
+            intended: response.data.intended ?? response.data.data?.intended,
+            confirmationToken:
+                response.data.confirmationToken ??
+                response.data.data?.confirmation_token ??
+                response.data.data?.confirmationToken,
+            error: response.data.error ?? response.data.message,
+        };
+    } catch (error: any) {
+        const loginError = new Error(
+            error.response?.data?.error ??
+                error.response?.data?.message ??
+                error.message ??
+                'Login failed. Please try again.',
+        ) as any;
+
+        loginError.response = error.response;
+        loginError.detail = error.response?.data?.errors?.[0]?.detail;
+        loginError.code = error.response?.data?.errors?.[0]?.code;
+
+        console.error('Login API Error:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            detail: loginError.detail,
+            message: loginError.message,
+        });
+
+        throw loginError;
+    }
 };

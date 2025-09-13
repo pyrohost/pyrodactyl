@@ -1,13 +1,36 @@
 import react from '@vitejs/plugin-react-swc';
 import * as child from 'child_process';
+import fs from 'fs';
 import laravel from 'laravel-vite-plugin';
 import million from 'million/compiler';
 import { fileURLToPath } from 'node:url';
+import path from 'path';
 import { dirname, resolve } from 'pathe';
 import { defineConfig } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
 
 import packageJson from './package.json';
+
+function getLaravelAppVersion() {
+    try {
+        const configPath = path.resolve(__dirname, 'config/app.php');
+        const configContent = fs.readFileSync(configPath, 'utf8');
+
+        const versionMatch = configContent.match(/'version'\s*=>\s*'(.*?)'/);
+
+        if (versionMatch && versionMatch[1]) {
+            return versionMatch[1];
+        }
+
+        // Fallback to package.json version if not found in Laravel config
+        return packageJson.version;
+    } catch (error) {
+        console.error('Error reading Laravel config:', error);
+        return packageJson.version;
+    }
+}
+
+const laravelVersion = getLaravelAppVersion();
 
 let branchName;
 let commitHash;
@@ -33,13 +56,12 @@ export default defineConfig({
         outDir: 'public/build',
 
         rollupOptions: {
-            input: 'resources/scripts/index.tsx',
+            input: path.resolve('resources/scripts/index.tsx'),
             output: {
-                // @ts-ignore
+                // @ts-expect-error It won't fail lol
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
-                        // @ts-expect-error
-                        // It won't fail lol
+                        // @ts-expect-error It won't fail lol
                         return id.toString().split('node_modules/')[1].split('/')[0].toString();
                     }
                 },
@@ -48,7 +70,7 @@ export default defineConfig({
     },
 
     define: {
-        'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(packageJson.version),
+        'import.meta.env.VITE_PYRODACTYL_VERSION': JSON.stringify(laravelVersion),
         'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
         'import.meta.env.VITE_BRANCH_NAME': JSON.stringify(branchName),
         'import.meta.env.VITE_PYRODACTYL_BUILD_NUMBER': JSON.stringify(packageJson.buildNumber),

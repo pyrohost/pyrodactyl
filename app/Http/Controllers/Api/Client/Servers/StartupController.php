@@ -5,12 +5,14 @@ namespace Pterodactyl\Http\Controllers\Api\Client\Servers;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Services\Servers\StartupCommandService;
+use Pterodactyl\Services\Servers\StartupCommandUpdateService;
 use Pterodactyl\Repositories\Eloquent\ServerVariableRepository;
 use Pterodactyl\Transformers\Api\Client\EggVariableTransformer;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Startup\GetStartupRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Startup\UpdateStartupVariableRequest;
+use Pterodactyl\Http\Requests\Api\Client\Servers\Startup\UpdateStartupCommandRequest;
 
 class StartupController extends ClientApiController
 {
@@ -19,6 +21,7 @@ class StartupController extends ClientApiController
      */
     public function __construct(
         private StartupCommandService $startupCommandService,
+        private StartupCommandUpdateService $startupCommandUpdateService,
         private ServerVariableRepository $repository,
     ) {
         parent::__construct();
@@ -95,5 +98,60 @@ class StartupController extends ClientApiController
                 'raw_startup_command' => $server->startup,
             ])
             ->toArray();
+    }
+
+    /**
+     * Updates the startup command for a server.
+     *
+     * @throws \Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException
+     * @throws \Throwable
+     */
+    public function updateCommand(UpdateStartupCommandRequest $request, Server $server): array
+    {
+        $this->startupCommandUpdateService->handle($server, $request->input('startup'));
+
+        $startup = $this->startupCommandService->handle($server);
+
+        return $this->fractal->collection(
+            $server->variables()->where('user_viewable', true)->get()
+        )
+            ->transformWith($this->getTransformer(EggVariableTransformer::class))
+            ->addMeta([
+                'startup_command' => $startup,
+                'docker_images' => $server->egg->docker_images,
+                'raw_startup_command' => $server->startup,
+            ])
+            ->toArray();
+    }
+
+    /**
+     * Returns the default startup command for the server's egg.
+     */
+    public function getDefaultCommand(GetStartupRequest $request, Server $server): array
+    {
+        return [
+            'default_startup_command' => $server->egg->startup,
+        ];
+    }
+
+    /**
+     * Process a startup command with variables for live preview.
+     */
+    public function processCommand(GetStartupRequest $request, Server $server): array
+    {
+        $command = $request->input('command', $server->startup);
+        
+        // Temporarily update the server's startup command for processing
+        $originalStartup = $server->startup;
+        $server->startup = $command;
+        
+        $processedCommand = $this->startupCommandService->handle($server, false);
+        
+        // Restore original startup command
+        $server->startup = $originalStartup;
+        
+        return [
+            'processed_command' => $processedCommand,
+        ];
     }
 }

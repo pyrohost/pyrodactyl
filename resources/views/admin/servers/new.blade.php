@@ -177,6 +177,19 @@
                     </div>
 
                     <div class="form-group col-xs-6">
+                        <label for="pOverheadMemory">Overhead Memory</label>
+
+                        <div class="input-group">
+                            <input type="text" id="pOverheadMemory" name="overhead_memory" class="form-control" value="{{ old('overhead_memory', 0) }}" />
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+
+                        <p class="text-muted small">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                    </div>
+                </div>
+
+                <div class="box-body row">
+                    <div class="form-group col-xs-6">
                         <label for="pSwap">Swap</label>
 
                         <div class="input-group">
@@ -216,6 +229,14 @@
                         </div>
 
                         <p class="small text-muted no-margin">Terminates the server if it breaches the memory limits. Enabling OOM killer may cause server processes to exit unexpectedly.</p>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <div class="checkbox checkbox-primary no-margin-bottom">
+                            <input type="checkbox" id="pExcludeFromResourceCalculation" name="exclude_from_resource_calculation" value="1" {{ \Pterodactyl\Helpers\Utilities::checked('exclude_from_resource_calculation', 0) }} />
+                            <label for="pExcludeFromResourceCalculation" class="strong">Exclude from Resource Calculation</label>
+                        </div>
+
+                        <p class="small text-muted no-margin">When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.</p>
                     </div>
                 </div>
             </div>

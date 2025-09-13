@@ -1,26 +1,36 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
+import Spinner from '@/components/elements/Spinner';
 
 import { Dialog, RenderDialogProps } from './';
 
 type ConfirmationProps = Omit<RenderDialogProps, 'description' | 'children'> & {
     children: React.ReactNode;
-    confirm?: string | undefined;
+    confirm?: string;
+    loading?: boolean;
     onConfirmed: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-export default ({ confirm, children, onConfirmed, ...props }: ConfirmationProps) => {
+const ConfirmationDialog = ({ children, confirm, onConfirmed, loading, ...props }: ConfirmationProps) => {
     const { t } = useTranslation();
-    const confirmText = confirm || t('ok');
 
     return (
         <Dialog {...props} description={typeof children === 'string' ? children : undefined}>
             {typeof children !== 'string' && children}
             <Dialog.Footer>
-                <Button.Text onClick={props.onClose}>{t('cancel')}</Button.Text>
-                <Button.Danger onClick={onConfirmed}>{confirmText}</Button.Danger>
+                <ActionButton variant='secondary' onClick={props.onClose}>
+                    {t('cancel')}
+                </ActionButton>
+                <ActionButton variant='danger' onClick={onConfirmed} disabled={loading}>
+                    <div className='flex items-center gap-2'>
+                        {loading && <Spinner size='small' />}
+                        <span>{confirm ?? t('ok')}</span>
+                    </div>
+                </ActionButton>
             </Dialog.Footer>
         </Dialog>
     );
 };
+
+export default ConfirmationDialog;

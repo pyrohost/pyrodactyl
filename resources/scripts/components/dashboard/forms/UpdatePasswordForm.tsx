@@ -4,9 +4,10 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
+import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -19,25 +20,19 @@ interface Values {
     confirmPassword: string;
 }
 
-export default () => {
-    const { t } = useTranslation();
-
-    const schema = Yup.object().shape({
-        current: Yup.string().min(1).required(t('settings.password.validation.current_required')),
-        password: Yup.string()
-            .min(8, t('settings.password.validation.at_least_8_characters'))
-            .required(t('settings.password.validation.password_required')),
-        confirmPassword: Yup.string().test(
-            'password',
-            t('settings.password.validation.password_mismatch'),
-            function (value) {
-                return value === this.parent.password;
-            },
-        ),
-    });
-
+const UpdatePasswordForm = () => {
+    const { t } = useTranslation(); // Moved inside the component
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+
+    // Define the validation schema inside the component to access the t function
+    const schema = Yup.object().shape({
+        current: Yup.string().min(1).required(t('settings.password.validation.current_required')),
+        password: Yup.string().min(8).required(t('settings.password.validation.password_required')),
+        confirmPassword: Yup.string()
+            .required(t('settings.password.validation.confirm_required'))
+            .oneOf([Yup.ref('password')], t('settings.password.validation.passwords_must_match')),
+    });
 
     if (!user) {
         return null;
@@ -96,9 +91,10 @@ export default () => {
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <Button disabled={isSubmitting || !isValid}>
-                                    {t('settings.password.update_password')}
-                                </Button>
+                                <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                    {isSubmitting && <Spinner size='small' />}
+                                    {isSubmitting ? t('common.updating') : t('settings.password.update_password')}
+                                </ActionButton>
                             </div>
                         </Form>
                     </Fragment>
@@ -107,3 +103,5 @@ export default () => {
         </Fragment>
     );
 };
+
+export default UpdatePasswordForm;

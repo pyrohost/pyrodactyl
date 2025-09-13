@@ -10,7 +10,7 @@ interface Props {
     isNewFile?: boolean;
 }
 
-export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
+const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
@@ -46,7 +46,7 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
     };
 
     return (
-        <div className={`group select-none flex flex-grow-0 items-center text-sm overflow-x-hidden`}>
+        <div className={`group select-none flex grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
             <NavLink to={`/server/${id}/files`} className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
                 root
@@ -95,3 +95,5 @@ export default ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
         </div>
     );
 };
+
+export default FileManagerBreadcrumbs;

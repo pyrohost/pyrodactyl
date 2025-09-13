@@ -2,9 +2,9 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { object, string } from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
 
 import { ServerContext } from '@/state/server';
 
@@ -16,7 +16,7 @@ interface Values {
     fileName: string;
 }
 
-export default ({ onFileNamed, onDismissed, ...props }: Props) => {
+const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
@@ -50,7 +50,7 @@ export default ({ onFileNamed, onDismissed, ...props }: Props) => {
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>
-                            <Button>Create File</Button>
+                            <ActionButton variant='primary'>Create File</ActionButton>
                         </div>
                     </Form>
                 </Modal>
@@ -58,3 +58,5 @@ export default ({ onFileNamed, onDismissed, ...props }: Props) => {
         </Formik>
     );
 };
+
+export default FileNameModal;

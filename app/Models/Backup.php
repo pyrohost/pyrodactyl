@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property bool $is_locked
  * @property string $name
  * @property string[] $ignored_files
+ * @property array|null $server_state
  * @property string $disk
  * @property string|null $checksum
  * @property int $bytes
@@ -45,6 +46,7 @@ class Backup extends Model
         'is_successful' => 'bool',
         'is_locked' => 'bool',
         'ignored_files' => 'array',
+        'server_state' => 'array',
         'bytes' => 'int',
         'completed_at' => 'datetime',
     ];
@@ -66,6 +68,7 @@ class Backup extends Model
         'is_locked' => 'boolean',
         'name' => 'required|string',
         'ignored_files' => 'array',
+        'server_state' => 'nullable|array',
         'disk' => 'required|string',
         'checksum' => 'nullable|string',
         'bytes' => 'numeric',

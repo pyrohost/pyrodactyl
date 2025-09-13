@@ -1,15 +1,15 @@
 import { Trans, useTranslation } from 'react-i18next';
 
+import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Alert } from '@/components/elements/alert';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogProps } from '@/components/elements/dialog';
 
 interface RecoveryTokenDialogProps extends DialogProps {
     tokens: string[];
 }
 
-export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
+const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
     const { t } = useTranslation();
     const grouped = [] as [string, string][];
     tokens.forEach((token, index) => {
@@ -29,7 +29,7 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
         >
             <Dialog.Icon position={'container'} type={'success'} />
             <CopyOnClick text={tokens.join('\n')} showInNotification={false}>
-                <pre className={'bg-zinc-800 rounded p-2 mt-6'}>
+                <pre className={'bg-zinc-800 rounded-sm p-2 mt-6'}>
                     {grouped.map((value) => (
                         <span key={value.join('_')} className={'block'}>
                             {value[0]}
@@ -44,8 +44,12 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
                 {t('settings.2fa.recovery.alert')}
             </Alert>
             <Dialog.Footer>
-                <Button.Text onClick={onClose}>{t('done')}</Button.Text>
+                <ActionButton variant='primary' onClick={onClose}>
+                    {t('done')}
+                </ActionButton>
             </Dialog.Footer>
         </Dialog>
     );
 };
+
+export default RecoveryTokensDialog;

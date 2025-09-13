@@ -1,10 +1,9 @@
-import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
+import HugeIconsRefresh from '@/components/elements/hugeicons/Refresh';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
@@ -13,7 +12,13 @@ import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePasswor
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (database: ServerDatabase) => void }) => {
+const RotatePasswordButton = ({
+    databaseId,
+    onUpdate,
+}: {
+    databaseId: string;
+    onUpdate: (database: ServerDatabase) => void;
+}) => {
     const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const server = ServerContext.useStoreState((state) => state.server.data!);
@@ -45,11 +50,13 @@ export default ({ databaseId, onUpdate }: { databaseId: string; onUpdate: (datab
     };
 
     return (
-        <Button onClick={rotate} className='flex-none'>
+        <ActionButton onClick={rotate} className='flex-none'>
             <div className='flex justify-center items-center h-4 w-4'>
-                {!loading && <FontAwesomeIcon icon={faRotateRight}></FontAwesomeIcon>}
+                {!loading && <HugeIconsRefresh className='h-4 w-4' />}
                 {loading && <Spinner size={'small'} />}
             </div>
-        </Button>
+        </ActionButton>
     );
 };
+
+export default RotatePasswordButton;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 // import { Options } from '@/components/elements/button/types';
 import Can from '@/components/elements/Can';
 import {
@@ -11,7 +12,6 @@ import {
 } from '@/components/elements/DropdownMenu';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
 import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
 import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -102,7 +102,7 @@ const JavaVersionModalFeature = () => {
                         <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] inner-border-[1px] inner-border-[#ffffff15] border border-transparent rounded-xl shadow-sm hover:from-[#ffffff05] hover:to-[#ffffff04]'
+                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer'
                                     disabled={!data}
                                 >
                                     {selectedVersion
@@ -121,7 +121,7 @@ const JavaVersionModalFeature = () => {
                                     )}
                                 </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className='z-[99999]' sideOffset={8}>
+                            <DropdownMenuContent className='z-99999' sideOffset={8}>
                                 <DropdownMenuRadioGroup value={selectedVersion} onValueChange={setSelectedVersion}>
                                     {data &&
                                         Object.keys(data.dockerImages).map((key) => (
@@ -137,9 +137,9 @@ const JavaVersionModalFeature = () => {
                         Cancel
                     </Button> */}
                     <Can action={'startup.docker-image'}>
-                        <Button onClick={updateJava} className={`w-full sm:w-auto`}>
+                        <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
                             Update
-                        </Button>
+                        </ActionButton>
                     </Can>
                 </div>
             </div>

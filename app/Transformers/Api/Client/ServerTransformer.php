@@ -55,6 +55,7 @@ class ServerTransformer extends BaseClientTransformer
       'description' => $server->description,
       'limits' => [
         'memory' => $server->memory,
+        'overhead_memory' => $server->overhead_memory,
         'swap' => $server->swap,
         'disk' => $server->disk,
         'io' => $server->io,

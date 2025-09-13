@@ -1,18 +1,20 @@
-import { faDatabase, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { For } from 'million/react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
+import Spinner from '@/components/elements/Spinner';
+import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
+import HugeIconsEye from '@/components/elements/hugeicons/Eye';
+import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
+import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -34,7 +36,7 @@ interface Props {
     database: ServerDatabase;
 }
 
-export default ({ database }: Props) => {
+const DatabaseRow = ({ database }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { addError, clearFlashes } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -53,17 +55,23 @@ export default ({ database }: Props) => {
             .oneOf([database.name.split('_', 2)[1] || '', database.name], 'The database name must be provided.'),
     });
 
-    const submit = (_: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
+    const submit = (_: { confirm: string }, { setSubmitting, resetForm }: FormikHelpers<{ confirm: string }>) => {
         clearFlashes();
         deleteServerDatabase(uuid, database.id)
             .then(() => {
+                resetForm();
                 setVisible(false);
                 setTimeout(() => removeDatabase(database.id), 150);
+                setSubmitting(false);
             })
             .catch((error) => {
+                resetForm();
                 console.error(error);
                 setSubmitting(false);
-                addError({ key: 'database:delete', message: httpErrorToHuman(error) });
+                addError({
+                    key: 'database:delete',
+                    message: httpErrorToHuman(error),
+                });
             });
     };
 
@@ -95,9 +103,15 @@ export default ({ database }: Props) => {
                                     label={'Confirm Database Name'}
                                     description={'Enter the database name to confirm deletion.'}
                                 />
-                                <Button type={'submit'} color={'red'} className='min-w-full my-6' disabled={!isValid}>
-                                    Delete Database
-                                </Button>
+                                <ActionButton
+                                    variant='danger'
+                                    type={'submit'}
+                                    className='min-w-full my-6'
+                                    disabled={!isValid || isSubmitting}
+                                >
+                                    {isSubmitting && <Spinner size='small' />}
+                                    {isSubmitting ? 'Deleting...' : 'Delete Database'}
+                                </ActionButton>
                             </Form>
                         </div>
                     </Modal>
@@ -161,74 +175,68 @@ export default ({ database }: Props) => {
                 </div>
             </Modal>
 
-            {/* Title */}
-            <div className={`flex-auto box-border min-w-fit`}>
-                <div className='flex flex-row flex-none align-middle items-center gap-6'>
-                    <FontAwesomeIcon icon={faDatabase} className='flex-none' />
-                    <div>
-                        <CopyOnClick text={database.name}>
-                            <p className='text-lg'>{database.name}</p>
-                        </CopyOnClick>
-                        <CopyOnClick text={database.connectionString}>
-                            <p className={`text-xs text-zinc-400 font-mono`}>{database.connectionString}</p>
-                        </CopyOnClick>
+            <PageListItem>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
+                    <div className='flex-1 min-w-0'>
+                        <div className='flex items-center gap-3 mb-2'>
+                            <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                                <HugeIconsDatabase fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                            </div>
+                            <div className='min-w-0 flex-1'>
+                                <CopyOnClick text={database.name}>
+                                    <h3 className='text-base font-medium text-zinc-100 truncate'>{database.name}</h3>
+                                </CopyOnClick>
+                            </div>
+                        </div>
+
+                        <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm'>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Endpoint</p>
+                                <CopyOnClick text={database.connectionString}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.connectionString}</p>
+                                </CopyOnClick>
+                            </div>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>From</p>
+                                <CopyOnClick text={database.allowConnectionsFrom}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.allowConnectionsFrom}</p>
+                                </CopyOnClick>
+                            </div>
+                            <div>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Username</p>
+                                <CopyOnClick text={database.username}>
+                                    <p className='text-zinc-300 font-mono truncate'>{database.username}</p>
+                                </CopyOnClick>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
+                        <ActionButton
+                            variant='secondary'
+                            size='sm'
+                            onClick={() => setConnectionVisible(true)}
+                            className='flex items-center gap-2'
+                        >
+                            <HugeIconsEye fill='currentColor' className='w-4 h-4' />
+                            <span className='hidden sm:inline'>Details</span>
+                        </ActionButton>
+                        <Can action={'database.delete'}>
+                            <ActionButton
+                                variant='danger'
+                                size='sm'
+                                onClick={() => setVisible(true)}
+                                className='flex items-center gap-2'
+                            >
+                                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
+                                <span className='hidden sm:inline'>Delete</span>
+                            </ActionButton>
+                        </Can>
                     </div>
                 </div>
-            </div>
-
-            {/* Properties + buttons */}
-            <div className={`flex flex-col items-center sm:gap-12 gap-4 sm:flex-row`}>
-                <div className='flex flex-wrap gap-4 justify-center m-auto'>
-                    <For
-                        each={[
-                            { label: 'Endpoint', value: database.connectionString },
-                            { label: 'From', value: database.allowConnectionsFrom },
-                            { label: 'Username', value: database.username },
-                        ]}
-                        memo
-                    >
-                        {(db, index) => (
-                            <div key={index} className='text-center'>
-                                <CopyOnClick text={db.value}>
-                                    <p className='text-sm'>{db.value}</p>
-                                </CopyOnClick>
-                                <p className='mt-1 text-xs text-zinc-500 uppercase select-none'>{db.label}</p>
-                            </div>
-                        )}
-                    </For>
-                </div>
-
-                <div className='flex align-middle items-center justify-center'>
-                    <button
-                        type={'button'}
-                        aria-label={'View database connection details'}
-                        className={`text-sm p-2 text-zinc-500 hover:text-zinc-100 transition-colors duration-150 mr-4 flex align-middle items-center justify-center flex-col`}
-                        onClick={() => setConnectionVisible(true)}
-                    >
-                        <FontAwesomeIcon icon={faEye} className={`px-5`} size='lg' />
-                        Details
-                    </button>
-                    <Can action={'database.delete'}>
-                        <button
-                            type={'button'}
-                            aria-label={'Delete database'}
-                            className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col`}
-                            onClick={() => setVisible(true)}
-                        >
-                            <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
-                            Delete
-                        </button>
-                    </Can>
-                </div>
-                {/* <Button onClick={() => setConnectionVisible(true)}>
-                        <FontAwesomeIcon icon={faEye} fixedWidth />
-                    </Button>
-                    <Can action={'database.delete'}>
-                        <Button color={'red'} onClick={() => setVisible(true)}>
-                            <FontAwesomeIcon icon={faTrashAlt} fixedWidth />
-                        </Button>
-                    </Can> */}
-            </div>
+            </PageListItem>
         </>
     );
 };
+
+export default DatabaseRow;

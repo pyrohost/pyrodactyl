@@ -42,4 +42,16 @@ class BackupRepository extends EloquentRepository
                 ->orWhere('is_successful', true);
         });
     }
+
+    /**
+     * Returns backups that are currently in progress for a specific server.
+     */
+    public function getBackupsInProgress(int $serverId): Collection
+    {
+        return $this->getBuilder()
+            ->where('server_id', $serverId)
+            ->whereNull('completed_at')
+            ->get()
+            ->toBase();
+    }
 }

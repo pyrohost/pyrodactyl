@@ -1,20 +1,17 @@
-import { faFile, faLock } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
-import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
 import Spinner from '@/components/elements/Spinner';
+import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
+import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
 import { bytesToString } from '@/lib/formatters';
 
 import { ServerBackup } from '@/api/server/types';
-// import BackupContextMenu from '@/components/server/backups/BackupContextMenu';
 import getServerBackups from '@/api/swr/getServerBackups';
 
-// import Can from '@/components/elements/Can';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import BackupContextMenu from './BackupContextMenu';
@@ -23,94 +20,83 @@ interface Props {
     backup: ServerBackup;
 }
 
-export default ({ backup }: Props) => {
+const BackupRow = ({ backup }: Props) => {
     const { mutate } = getServerBackups();
 
-    useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {
+    useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async () => {
         try {
-            const parsed = JSON.parse(data);
-
-            await mutate(
-                (data) => ({
-                    ...data!,
-                    items: data!.items.map((b) =>
-                        b.uuid !== backup.uuid
-                            ? b
-                            : {
-                                  ...b,
-                                  isSuccessful: parsed.is_successful || true,
-                                  checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
-                                  bytes: parsed.file_size || 0,
-                                  completedAt: new Date(),
-                              },
-                    ),
-                }),
-                false,
-            );
+            // When backup completes, refresh the backup list from API to get accurate completion time
+            // This ensures we get the exact completion timestamp from the database, not the websocket receive time
+            await mutate();
         } catch (e) {
             console.warn(e);
         }
     });
 
     return (
-        <ContextMenu>
-            <ContextMenuTrigger>
-                <PageListItem>
-                    <div className={`flex-auto max-w-full box-border`}>
-                        <div className='flex flex-row align-middle items-center gap-6 truncate'>
-                            <div className='flex-none'>
-                                {backup.completedAt === null ? (
-                                    <Spinner size={'small'} />
-                                ) : backup.isLocked ? (
-                                    <FontAwesomeIcon icon={faLock} className='text-red-500' />
-                                ) : (
-                                    <FontAwesomeIcon icon={faFile} />
-                                )}
-                            </div>
-                            <div className={`flex items-center w-full md:flex-1`}>
-                                <div className={`flex flex-col`}>
-                                    <div className={`flex items-center text-sm mb-1`}>
-                                        {backup.completedAt !== null && !backup.isSuccessful && (
-                                            <span
-                                                className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
-                                            >
-                                                Failed
-                                            </span>
-                                        )}
-                                        <div className={`flex gap-2 items-center justify-center`}>
-                                            <p className='break-words truncate text-lg'>{backup.name}</p>
-                                        </div>
-                                    </div>
-                                    {backup.checksum && (
-                                        <p className={`mt-1 md:mt-0 text-xs text-zinc-400 font-mono truncate`}>
-                                            {backup.checksum}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <PageListItem>
+            <div className='flex items-center gap-4 w-full py-1'>
+                {/* Status Icon */}
+                <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                    {backup.completedAt === null ? (
+                        <Spinner size={'small'} />
+                    ) : backup.isLocked ? (
+                        <HugeIconsSquareLock className='text-red-400 w-4 h-4' fill='currentColor' />
+                    ) : backup.isSuccessful ? (
+                        <HugeIconsStorage className='text-green-400 w-4 h-4' fill='currentColor' />
+                    ) : (
+                        <HugeIconsStorage className='text-red-400 w-4 h-4' fill='currentColor' />
+                    )}
+                </div>
 
-                    <div className='flex flex-row justify-center font-medium sm:justify-between min-w-full lg:w-96 sm:min-w-40'>
-                        {backup.completedAt !== null && backup.isSuccessful && (
-                            <>
-                                <span className={`text-xs sm:flex-initial sm:ml-0`}>{bytesToString(backup.bytes)}</span>
-                                <p className={`text-xs inline sm:hidden`}>,&nbsp;</p>
-                            </>
+                {/* Main Content */}
+                <div className='flex-1 min-w-0'>
+                    <div className='flex items-center gap-2 mb-1'>
+                        {backup.completedAt !== null && !backup.isSuccessful && (
+                            <span className='bg-red-500/20 border border-red-500/30 py-0.5 px-2 rounded text-red-300 text-xs font-medium'>
+                                Failed
+                            </span>
                         )}
-                        <p
-                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
-                            className={`text-xs sm:flex-initial`}
+                        <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
+                        <span
+                            className={`text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded transition-opacity ${
+                                backup.isLocked ? 'opacity-100' : 'opacity-0'
+                            }`}
                         >
-                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
-                        </p>
+                            Locked
+                        </span>
                     </div>
+                    {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
+                </div>
 
+                {/* Size Info */}
+                {backup.completedAt !== null && backup.isSuccessful && (
+                    <div className='hidden sm:block flex-shrink-0 text-right'>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide'>Size</p>
+                        <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                    </div>
+                )}
+
+                {/* Date Info */}
+                <div className='hidden sm:block flex-shrink-0 text-right min-w-[120px]'>
+                    <p className='text-xs text-zinc-500 uppercase tracking-wide'>Created</p>
+                    <p
+                        className='text-sm text-zinc-300 font-medium'
+                        title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
+                    >
+                        {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
+                    </p>
+                </div>
+
+                {/* Actions Menu */}
+                <div className='flex-shrink-0'>
                     <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
-                        {!backup.completedAt ? <></> : <BackupContextMenu backup={backup} />}
+                        {backup.completedAt ? <BackupContextMenu backup={backup} /> : null}
                     </Can>
-                </PageListItem>
-            </ContextMenuTrigger>
-        </ContextMenu>
+                </div>
+            </div>
+        </PageListItem>
     );
 };
+
+export default BackupRow;

@@ -23,7 +23,45 @@ class LocationRepository extends EloquentRepository implements LocationRepositor
      */
     public function getAllWithDetails(): Collection
     {
-        return $this->getBuilder()->withCount('nodes', 'servers')->get($this->getColumns());
+        $locations = $this->getBuilder()->withCount('nodes', 'servers')->get($this->getColumns());
+
+        foreach ($locations as $location) {
+            $nodes = $location->nodes()->with('servers')->get();
+
+            $totalMemory = 0;
+            $allocatedMemory = 0;
+            $totalDisk = 0;
+            $allocatedDisk = 0;
+
+            foreach ($nodes as $node) {
+                $baseMemoryLimit = $node->memory;
+                $baseDiskLimit = $node->disk;
+                $memoryLimit = $baseMemoryLimit * (1 + ($node->memory_overallocate / 100));
+                $diskLimit = $baseDiskLimit * (1 + ($node->disk_overallocate / 100));
+    
+                $totalMemory += $memoryLimit;
+                $totalDisk += $diskLimit;
+    
+                $nodeAllocatedMemory = $node->servers->where('exclude_from_resource_calculation', false)->sum('memory');
+                $nodeAllocatedDisk = $node->servers->where('exclude_from_resource_calculation', false)->sum('disk');
+    
+                $allocatedMemory += $nodeAllocatedMemory;
+                $allocatedDisk += $nodeAllocatedDisk;
+            }
+    
+            $totalBaseMemory = $nodes->sum('memory');
+            $totalBaseDisk = $nodes->sum('disk');
+            
+            $location->memory_percent = $totalBaseMemory > 0 ? ($allocatedMemory / $totalBaseMemory) * 100 : 0;
+            $location->disk_percent = $totalBaseDisk > 0 ? ($allocatedDisk / $totalBaseDisk) * 100 : 0;
+    
+            $location->total_memory = $totalMemory;
+            $location->allocated_memory = $allocatedMemory;
+            $location->total_disk = $totalDisk;
+            $location->allocated_disk = $allocatedDisk;
+        }
+
+        return $locations;
     }
 
     /**

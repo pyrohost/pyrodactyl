@@ -4,10 +4,9 @@ import { Dialog, DialogProps, DialogWrapperContext, WrapperProps } from '@/compo
 
 function asDialog(
     initialProps?: WrapperProps,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-): <P extends {}>(C: React.ComponentType<P>) => React.FunctionComponent<P & DialogProps> {
+): <P extends object>(C: React.ComponentType<P>) => React.FunctionComponent<P & DialogProps> {
     return function (Component) {
-        return function ({ open, onClose, ...rest }) {
+        const WrappedComponent = function ({ open, onClose, ...rest }) {
             const [props, setProps] = useState<WrapperProps>(initialProps || {});
 
             return (
@@ -18,6 +17,10 @@ function asDialog(
                 </DialogWrapperContext.Provider>
             );
         };
+
+        WrappedComponent.displayName = `asDialog(${Component.displayName || Component.name || 'Component'})`;
+
+        return WrappedComponent;
     };
 }
 

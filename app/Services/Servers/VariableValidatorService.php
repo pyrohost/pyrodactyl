@@ -2,6 +2,7 @@
 
 namespace Pterodactyl\Services\Servers;
 
+use Illuminate\Support\Arr;
 use Pterodactyl\Models\User;
 use Illuminate\Support\Collection;
 use Pterodactyl\Models\EggVariable;
@@ -39,8 +40,15 @@ class VariableValidatorService
 
         $data = $rules = $customAttributes = [];
         foreach ($variables as $variable) {
-            $data['environment'][$variable->env_variable] = array_get($fields, $variable->env_variable);
-            $rules['environment.' . $variable->env_variable] = $variable->rules;
+            $value = Arr::get($fields, $variable->env_variable);
+            $data['environment'][$variable->env_variable] = $value;
+            
+            // Make rules nullable to handle empty environment variables, but don't duplicate if already nullable
+            $rules_string = $variable->rules;
+            if (!str_starts_with($rules_string, 'nullable')) {
+                $rules_string = 'nullable|' . $rules_string;
+            }
+            $rules['environment.' . $variable->env_variable] = $rules_string;
             $customAttributes['environment.' . $variable->env_variable] = trans('validation.internal.variable_value', ['env' => $variable->name]);
         }
 

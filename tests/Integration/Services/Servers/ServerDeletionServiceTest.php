@@ -5,11 +5,13 @@ namespace Pterodactyl\Tests\Integration\Services\Servers;
 use Mockery\MockInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Pterodactyl\Models\Backup;
 use Pterodactyl\Models\Database;
 use Pterodactyl\Models\DatabaseHost;
 use GuzzleHttp\Exception\BadResponseException;
 use Pterodactyl\Tests\Integration\IntegrationTestCase;
 use Pterodactyl\Services\Servers\ServerDeletionService;
+use Pterodactyl\Services\Backups\DeleteBackupService;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 use Pterodactyl\Services\Databases\DatabaseManagementService;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
@@ -19,6 +21,8 @@ class ServerDeletionServiceTest extends IntegrationTestCase
     private MockInterface $daemonServerRepository;
 
     private MockInterface $databaseManagementService;
+
+    private MockInterface $deleteBackupService;
 
     private static ?string $defaultLogger;
 
@@ -35,9 +39,11 @@ class ServerDeletionServiceTest extends IntegrationTestCase
 
         $this->daemonServerRepository = \Mockery::mock(DaemonServerRepository::class);
         $this->databaseManagementService = \Mockery::mock(DatabaseManagementService::class);
+        $this->deleteBackupService = \Mockery::mock(DeleteBackupService::class);
 
         $this->app->instance(DaemonServerRepository::class, $this->daemonServerRepository);
         $this->app->instance(DatabaseManagementService::class, $this->databaseManagementService);
+        $this->app->instance(DeleteBackupService::class, $this->deleteBackupService);
     }
 
     /**
@@ -151,6 +157,86 @@ class ServerDeletionServiceTest extends IntegrationTestCase
 
         $this->assertDatabaseMissing('servers', ['id' => $server->id]);
         $this->assertDatabaseMissing('databases', ['id' => $db->id]);
+    }
+
+    /**
+     * Test that server backups are deleted when a server is deleted.
+     */
+    public function testServerBackupsAreDeletedDuringServerDeletion()
+    {
+        $server = $this->createServerModel();
+        
+        /** @var Backup $backup1 */
+        $backup1 = Backup::factory()->create(['server_id' => $server->id]);
+        /** @var Backup $backup2 */
+        $backup2 = Backup::factory()->create(['server_id' => $server->id]);
+
+        $server->refresh();
+
+        $this->daemonServerRepository->expects('setServer->delete')->withNoArgs()->andReturnUndefined();
+        
+        $this->deleteBackupService->expects('handle')->with(\Mockery::on(function ($value) use ($backup1) {
+            return $value instanceof Backup && $value->id === $backup1->id;
+        }))->andReturnUndefined();
+        
+        $this->deleteBackupService->expects('handle')->with(\Mockery::on(function ($value) use ($backup2) {
+            return $value instanceof Backup && $value->id === $backup2->id;
+        }))->andReturnUndefined();
+
+        $this->getService()->handle($server);
+
+        $this->assertDatabaseMissing('servers', ['id' => $server->id]);
+    }
+
+    /**
+     * Test that server deletion continues even if backup deletion fails when force is enabled.
+     */
+    public function testServerDeletionContinuesWhenBackupDeletionFailsWithForce()
+    {
+        $server = $this->createServerModel();
+        
+        /** @var Backup $backup */
+        $backup = Backup::factory()->create(['server_id' => $server->id]);
+
+        $server->refresh();
+
+        $this->daemonServerRepository->expects('setServer->delete')->withNoArgs()->andReturnUndefined();
+        
+        $this->deleteBackupService->expects('handle')->with(\Mockery::on(function ($value) use ($backup) {
+            return $value instanceof Backup && $value->id === $backup->id;
+        }))->andThrows(new \Exception('Backup deletion failed'));
+
+        $this->getService()->withForce(true)->handle($server);
+
+        $this->assertDatabaseMissing('servers', ['id' => $server->id]);
+        $this->assertDatabaseMissing('backups', ['id' => $backup->id]);
+    }
+
+    /**
+     * Test that server deletion fails if backup deletion fails and force is not enabled.
+     */
+    public function testServerDeletionFailsWhenBackupDeletionFailsWithoutForce()
+    {
+        $server = $this->createServerModel();
+        
+        /** @var Backup $backup */
+        $backup = Backup::factory()->create(['server_id' => $server->id]);
+
+        $server->refresh();
+
+        $this->daemonServerRepository->expects('setServer->delete')->withNoArgs()->andReturnUndefined();
+        
+        $this->deleteBackupService->expects('handle')->with(\Mockery::on(function ($value) use ($backup) {
+            return $value instanceof Backup && $value->id === $backup->id;
+        }))->andThrows(new \Exception('Backup deletion failed'));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Backup deletion failed');
+
+        $this->getService()->handle($server);
+
+        $this->assertDatabaseHas('servers', ['id' => $server->id]);
+        $this->assertDatabaseHas('backups', ['id' => $backup->id]);
     }
 
     private function getService(): ServerDeletionService

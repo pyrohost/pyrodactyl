@@ -65,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
     $this->app->singleton('extensions.themes', function () {
       return new Theme();
     });
+
   }
 
   /**

@@ -3,13 +3,13 @@ import isEqual from 'react-fast-compare';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Label from '@/components/elements/Label';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
 
 import { ip } from '@/lib/formatters';
@@ -18,7 +18,7 @@ import { ServerContext } from '@/state/server';
 
 import RenameServerBox from './RenameServerBox';
 
-export default () => {
+const SettingsContainer = () => {
     const username = useStoreState((state) => state.user.data!.username);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -29,7 +29,9 @@ export default () => {
     return (
         <ServerContentBlock title={t('server.settings.header')}>
             <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader title={t('server.settings.header')} />
+            <MainPageHeader direction='column' title={t('server.settings.header')}>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{t('server.settings.configure_settings')}</p>
+            </MainPageHeader>
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
                     <RenameServerBox />
@@ -43,12 +45,12 @@ export default () => {
                 <TitledGreyBox title={t('server.settings.debug_information')}>
                     <div className={`flex items-center justify-between text-sm`}>
                         <p>{t('server.settings.node')}</p>
-                        <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{node}</code>
+                        <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>{node}</code>
                     </div>
                     <CopyOnClick text={uuid}>
                         <div className={`flex items-center justify-between mt-2 text-sm`}>
                             <p>{t('server.settings.server_id')}</p>
-                            <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{uuid}</code>
+                            <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>{uuid}</code>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
@@ -58,14 +60,16 @@ export default () => {
                             <Label>{t('server.settings.server_address')}</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
                                 <code
-                                    className={`font-mono bg-zinc-900 rounded py-1 px-2`}
+                                    className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}
                                 >{`sftp://${ip(sftp.ip)}:${sftp.port}`}</code>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-2 flex items-center justify-between text-sm`}>
                             <Label>{t('server.settings.username')}</Label>
                             <CopyOnClick text={`${username}.${id}`}>
-                                <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`${username}.${id}`}</code>
+                                <code
+                                    className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}
+                                >{`${username}.${id}`}</code>
                             </CopyOnClick>
                         </div>
                         <div className={`mt-6 flex items-center`}>
@@ -76,9 +80,7 @@ export default () => {
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <Button.Text variant={Button.Variants.Secondary}>
-                                        {t('server.settings.launch_sftp')}
-                                    </Button.Text>
+                                    <ActionButton variant='secondary'>{t('server.settings.launch_sftp')}</ActionButton>
                                 </a>
                             </div>
                         </div>
@@ -88,3 +90,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default SettingsContainer;

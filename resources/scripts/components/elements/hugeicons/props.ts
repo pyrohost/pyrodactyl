@@ -1,4 +1,4 @@
 export interface HugeIconProps {
-    fill: string;
+    fill?: string;
     className?: string;
 }

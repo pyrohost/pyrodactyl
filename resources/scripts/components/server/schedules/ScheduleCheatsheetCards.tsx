@@ -1,4 +1,4 @@
-export default () => {
+const ScheduleCheatsheetCards = () => {
     return (
         <>
             <div className={`md:w-1/2 h-full bg-zinc-600`}>
@@ -50,3 +50,5 @@ export default () => {
         </>
     );
 };
+
+export default ScheduleCheatsheetCards;

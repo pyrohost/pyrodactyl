@@ -29,16 +29,13 @@ type Props = OwnProps & {
     clearAndAddHttpError: ActionCreator<FlashStore['clearAndAddHttpError']['payload']>;
 };
 
-/**
- * Component hiển thị form xác thực hai yếu tố khi đăng nhập
- */
-function LoginCheckpointContainer() {
+function LoginCheckpointForm() {
     const { t } = useTranslation();
     const { isSubmitting, setFieldValue } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-sm rounded-xl'>
+        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl'>
             <LoginFormContainer className={`w-full flex`}>
                 <Link to='/'>
                     <div className='flex h-12 mb-4 items-center w-full'>
@@ -51,7 +48,7 @@ function LoginCheckpointContainer() {
 
                 <div className={`mt-6`}>
                     <Field
-                        name={isMissingDevice ? 'recoveryCode' : 'code'}
+                        name={isMissingDevice ? t('auth.recovery_code') : t('auth.authentication_code')}
                         title={isMissingDevice ? t('auth.recovery_code') : t('auth.authentication_code')}
                         placeholder='000000'
                         description={
@@ -66,7 +63,7 @@ function LoginCheckpointContainer() {
                 </div>
                 <div className={`mt-6`}>
                     <Button
-                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-none capitalize font-bold text-sm py-2'
+                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
                         size={'xlarge'}
                         type={'submit'}
                         disabled={isSubmitting}
@@ -78,7 +75,7 @@ function LoginCheckpointContainer() {
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
                 <div
-                    className={`mt-6 text-center w-full rounded-t-lg bg-[#ffffff33] border-0 ring-0 outline-none capitalize font-bold text-sm py-2 mb-2 `}
+                    className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}
                 >
                     <span
                         onClick={() => {
@@ -86,17 +83,22 @@ function LoginCheckpointContainer() {
                             setFieldValue('recoveryCode', '');
                             setIsMissingDevice((s) => !s);
                         }}
-                        className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
+                        // className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
+                        className={
+                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
+                        }
                     >
                         {!isMissingDevice ? t('auth.lost_device') : t('auth.have_device')}
                     </span>
                 </div>
                 <div
-                    className={`text-center w-full rounded-b-lg bg-[#ffffff33] border-0 ring-0 outline-none capitalize font-bold text-sm py-2 `}
+                    className={`text-center w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
                 >
                     <Link
                         to={'/auth/login'}
-                        className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33]`}
+                        className={
+                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
+                        }
                     >
                         {t('auth.return_to_login')}
                     </Link>
@@ -111,7 +113,6 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
         loginCheckpoint(location.state?.token || '', code, recoveryCode)
             .then((response) => {
                 if (response.complete) {
-                    // @ts-expect-error this is valid
                     window.location = response.intended || '/';
                     return;
                 }
@@ -129,9 +130,9 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
         code: '',
         recoveryCode: '',
     }),
-})(LoginCheckpointContainer);
+})(LoginCheckpointForm);
 
-export default ({ ...props }: OwnProps) => {
+const LoginCheckpointContainer = ({ ...props }: OwnProps) => {
     const { clearAndAddHttpError } = useFlash();
 
     const location = useLocation();
@@ -145,3 +146,5 @@ export default ({ ...props }: OwnProps) => {
 
     return <EnhancedForm clearAndAddHttpError={clearAndAddHttpError} location={location} {...props} />;
 };
+
+export default LoginCheckpointContainer;

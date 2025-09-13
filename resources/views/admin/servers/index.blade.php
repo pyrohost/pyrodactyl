@@ -46,7 +46,7 @@
                             <tr data-server="{{ $server->uuidShort }}">
                                 <td><a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a></td>
                                 <td><code title="{{ $server->uuid }}">{{ $server->uuid }}</code></td>
-                                <td><a href="{{ route('admin.users.view', $server->user->id) }}">{{ $server->user->username }}</a></td>
+                                <td><a href="{{ route('admin.users.view', $server->user->id) }}">{{ $server->user->username }} ({{ $server->user->email }})</a></td>
                                 <td><a href="{{ route('admin.nodes.view', $server->node->id) }}">{{ $server->node->name }}</a></td>
                                 <td>
                                     <code>{{ $server->allocation->alias }}:{{ $server->allocation->port }}</code>
@@ -58,6 +58,10 @@
                                         <span class="label label-warning">Installing</span>
                                     @else
                                         <span class="label label-success">Active</span>
+                                    @endif
+                                    
+                                    @if($server->exclude_from_resource_calculation)
+                                        <br><small><span class="label label-info" title="Excluded from resource calculations">Excluded</span></small>
                                     @endif
                                 </td>
                                 <td class="text-center">

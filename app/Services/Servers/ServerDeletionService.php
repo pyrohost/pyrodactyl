@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 use Pterodactyl\Services\Databases\DatabaseManagementService;
+use Pterodactyl\Services\Backups\DeleteBackupService;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
+use Pterodactyl\Exceptions\Service\Backup\BackupLockedException;
 
 class ServerDeletionService
 {
@@ -21,6 +23,7 @@ class ServerDeletionService
         private ConnectionInterface $connection,
         private DaemonServerRepository $daemonServerRepository,
         private DatabaseManagementService $databaseManagementService,
+        private DeleteBackupService $deleteBackupService,
     ) {
     }
 
@@ -57,6 +60,50 @@ class ServerDeletionService
         }
 
         $this->connection->transaction(function () use ($server) {
+            // Delete all backups associated with this server
+            foreach ($server->backups as $backup) {
+                try {
+                    $this->deleteBackupService->handle($backup);
+                } catch (BackupLockedException $exception) {
+                    // If the backup is locked, unlock it and try again since we're deleting the entire server
+                    $backup->update(['is_locked' => false]);
+                    
+                    try {
+                        $this->deleteBackupService->handle($backup);
+                    } catch (\Exception $retryException) {
+                        if (!$this->force) {
+                            throw $retryException;
+                        }
+
+                        // If we still can't delete the backup from storage, at least remove the database record
+                        // to prevent orphaned backup entries
+                        $backup->delete();
+
+                        Log::warning('Failed to delete unlocked backup during server deletion', [
+                            'backup_id' => $backup->id,
+                            'backup_uuid' => $backup->uuid,
+                            'server_id' => $server->id,
+                            'exception' => $retryException->getMessage(),
+                        ]);
+                    }
+                } catch (\Exception $exception) {
+                    if (!$this->force) {
+                        throw $exception;
+                    }
+
+                    // If we can't delete the backup from storage, at least remove the database record
+                    // to prevent orphaned backup entries
+                    $backup->delete();
+
+                    Log::warning('Failed to delete backup during server deletion', [
+                        'backup_id' => $backup->id,
+                        'backup_uuid' => $backup->uuid,
+                        'server_id' => $server->id,
+                        'exception' => $exception->getMessage(),
+                    ]);
+                }
+            }
+
             foreach ($server->databases as $database) {
                 try {
                     $this->databaseManagementService->delete($database);

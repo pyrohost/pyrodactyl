@@ -21,6 +21,9 @@
 > [!WARNING]
 > Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
 
+> [!NOTE]
+> Please read our documentation at [https://pyrodactyl.dev](https://pyrodactyl.dev) before installing.
+
 > [!IMPORTANT]
 > For Pyrodactyl-specific issues, please use [Pyrodactyl GitHub Discussions](https://github.com/pyrohost/pyrodactyl/discussions) or the [Pyrodactyl Discord](https://discord.gg/UhuYKKK2uM?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH) instead of Pterodactyl or Pelican support channels.
 
@@ -30,30 +33,25 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ## Changes from vanilla Pterodactyl
 
--   **Smaller bundle sizes:** Pyrodactyl is built using Vite, and significant re-architecting of the application means Pyrodactyl's initial download size is over **[170 times smaller than leading Pterodactyl forks, and Pelican](https://i.imgur.com/tKWLHhR.png)**
--   **Faster build times:** Pyrodactyl completes builds in milliseconds with the power of Turbo. Cold builds with zero cache finish in **under 7 seconds**.
--   **Faster loading times:** Pyrodactyl's load times are, on average, **[over 16 times faster](https://i.imgur.com/28XxmMi.png)** than other closed-source Pterodactyl forks and Pelican. Smarter code splitting and chunking means that pages you visit in the panel only load necessary resources on demand. Better caching means that everything is simply _snappy_.
--   **More secure:** Pyrodactyl's modern architecture means **most severe and easily exploitable CVEs simply do not exist**. We have also implemented SRI and integrity checks for production builds.
--   **More accessible:** Pyro believes that gaming should be easily available for everyone. Pyrodactyl builds with the latest Web accessibility guidelines in mind. Pyrodactyl is **entirely keyboard-navigable, even context menus.**, and screen-readers are easily compatible.
--   **More approachable:** Pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server.
+- **Smaller bundle sizes:** Pyrodactyl is built using Vite, and significant design changes mean Pyrodactyl's initial download size is over **[170 times smaller than leading Pterodactyl forks, including Pelican](https://i.imgur.com/tKWLHhR.png)**.
+- **Faster build times:** Pyrodactyl completes builds in milliseconds with the power of Turbo. Cold builds with zero cache finish in **under 7 seconds**.
+- **Faster loading times:** Pyrodactyl's load times are, on average, **[over 16 times faster](https://i.imgur.com/28XxmMi.png)** than other closed-source Pterodactyl forks and Pelican. Smarter code splitting and chunking means that pages you visit in the panel only load necessary resources on demand. Better caching means that everything is simply _snappy_.
+- **More secure:** Pyrodactyl's modern architecture means **most severe and easily exploitable CVEs simply do not exist**. We have also implemented SRI and integrity checks for production builds.
+- **More accessible:** Pyro believes that gaming should be easily available for everyone. Pyrodactyl builds with the latest Web accessibility guidelines in mind. Pyrodactyl is **entirely keyboard-navigable, even context menus**, and screen-readers are easily compatible.
+- **More approachable:** Pyrodactyl's friendly, approachable interface means that anyone can confidently run a game server.
 
-[![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)]
+![Dashboard Image](https://i.imgur.com/kHHOW6P.jpeg)
 
 ## Installing Pyrodactyl
 
-See our [Installation](https://pyrodactyl.dev/docs/installation) wiki page on how to get started.
+See our [Installation](https://pyrodactyl.dev/docs/installation) docs page on how to get started.
 
 > [!NOTE]
 > Windows is currently only supported for development purposes.
 
 ## Local Development
 
-See our development pages on how to get started:
-
--   [Local Dev on Windows (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Windows-(Vagrant)>)
--   [Local Dev on Linux (Vagrant)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Vagrant)>)
--   [Local Dev on Linux (Nix)](<https://github.com/pyrohost/pyrodactyl/wiki/Local-Dev-on-Linux-(Nix)>)
-    -   Nix is recommended if you can't get Vagrant working
+Pyrodactyl has various effortless ways of starting up a ready-to-use, fully-featured development environment. See our [Local Development](https://pyrodactyl.dev/docs/local-development) documentation for more information.
 
 ## Star History
 

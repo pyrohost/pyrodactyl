@@ -3,10 +3,7 @@ import { Action, action } from 'easy-peasy';
 export interface SiteSettings {
     name: string;
     locale: string;
-    recaptcha: {
-        enabled: boolean;
-        siteKey: string;
-    };
+    timezone: string;
 }
 
 export interface SettingsStore {
@@ -16,7 +13,6 @@ export interface SettingsStore {
 
 const settings: SettingsStore = {
     data: undefined,
-
     setSettings: action((state, payload) => {
         state.data = payload;
     }),

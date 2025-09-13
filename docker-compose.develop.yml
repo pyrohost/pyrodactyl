@@ -1,0 +1,191 @@
+x-common:
+    database: &db-environment
+        # Do not remove the "&db-password" from the end of the line below, it is important
+        # for Panel functionality.
+        MYSQL_PASSWORD: &db-password 'password'
+        MYSQL_ROOT_PASSWORD: &db-root-password 'rootpassword'
+    panel: &panel-environment
+        APP_URL: 'http://panel'
+        # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+        APP_TIMEZONE: 'UTC'
+        APP_SERVICE_AUTHOR: 'noreply@example.com'
+        DB_USERNAME: 'pterodactyl'
+        # DB_PASSWORD: "Uncomment this to user your own password"
+
+        # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
+        # to generate an SSL certificate for the Panel.
+        # LE_EMAIL: ""
+
+    mail: &mail-environment
+        MAIL_FROM: 'noreply@example.com'
+        MAIL_DRIVER: 'smtp'
+        MAIL_HOST: 'mailpit'
+        MAIL_PORT: '1025'
+        MAIL_USERNAME: ''
+        MAIL_PASSWORD: ''
+        MAIL_ENCRYPTION: 'true'
+
+#
+# ------------------------------------------------------------------------------------------
+# DANGER ZONE BELOW
+#
+# The remainder of this file likely does not need to be changed. Please only make modifications
+# below if you understand what you are doing.
+#
+services:
+    database:
+        image: mariadb:10.5
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - './srv/database:/var/lib/mysql'
+        environment:
+            <<: *db-environment
+            MYSQL_DATABASE: 'panel'
+            MYSQL_USER: 'pterodactyl'
+        ports:
+            - '3306:3306'
+    cache:
+        image: redis:alpine
+        restart: always
+    panel:
+        image: pyrodactyl:develop
+        restart: always
+        ports:
+            - '3000:80'
+            # - '443:443'
+        links:
+            - database
+            - cache
+        volumes:
+            - '.:/app'
+            - './srv/var:/app/var'
+            - './srv/nginx/:/etc/nginx/http.d/'
+            - './srv/certs:/etc/letsencrypt'
+            - './srv/logs/:/app/storage/logs'
+            - './srv/pterodactyl/config/:/etc/pterodactyl'
+            # anonymous volumes below, meaning it'll use the image's directory instead of the host
+            - '/app/vendor'
+            # needed for linux permissions
+            # - '/app/storage'
+            # - '/app/storage/app/private'
+            - '/app/storage/framework/views'
+            - '/app/bootstrap/cache'
+        environment:
+            <<: [*panel-environment, *mail-environment]
+            DB_PASSWORD: *db-password
+            DB_ROOT_PASSWORD: *db-root-password
+            APP_ENV: 'local'
+            APP_DEBUG: 'true'
+            LOG_CHANNEL: 'stack'
+            LOG_LEVEL: 'debug'
+            APP_ENVIRONMENT_ONLY: 'false'
+            CACHE_DRIVER: 'redis'
+            SESSION_DRIVER: 'redis'
+            QUEUE_DRIVER: 'redis'
+            REDIS_HOST: 'cache'
+            DB_CONNECTION: 'mariadb'
+            DB_HOST: 'database'
+            DB_PORT: '3306'
+            HASHIDS_LENGTH: 8
+            WINGS_INTERNAL_IP: 'wings'
+            WINGS_DIR: '${PWD}/srv/'
+            PYRODACTYL_DOCKER_DEV: 'true'
+            MAIL_HOST: 'mailhog'
+            MAIL_PORT: 1025
+            MAIL_DRIVER: 'smtp'
+            APP_BACKUP_DRIVER: 's3'
+            AWS_DEFAULT_REGION: 'us-west-2'
+            AWS_ACCESS_KEY_ID: 'minioadmin'
+            AWS_SECRET_ACCESS_KEY: 'minioadmin'
+            AWS_BACKUPS_BUCKET: 'pyrodactyl'
+            AWS_ENDPOINT: 'http://minio:9000'
+            AWS_USE_PATH_STYLE_ENDPOINT: 'true'
+
+    minio:
+        image: quay.io/minio/minio:latest
+        hostname: minio
+        expose:
+            - '9000'
+            - '9001'
+        volumes:
+            - ./srv/data1-1:/data1
+            - ./srv/data1-2:/data2
+        command: server --console-address ":9001" http://minio/data{1...2}
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+
+    createbuckets:
+        image: quay.io/minio/mc:latest
+        depends_on:
+            - minio
+        entrypoint: >
+            /bin/sh -c "
+              until mc alias set local http://minio:9000 minioadmin minioadmin; do
+                echo 'Waiting for MinIO to be ready...'
+                sleep 2
+              done &&
+              mc mb --ignore-existing local/pyrodactyl &&
+              echo 'Bucket created.'
+            "
+
+    wings:
+        # The default Wings image doesn't work on macOS Docker
+        # This fork simply removes the incompatible `io.priority` cgroup v2 flag
+        # For Linux users, you can use the default image by uncommenting the line below
+        # image: ghcr.io/pterodactyl/wings:latest
+        image: ghcr.io/he3als/wings-mac:latest
+        restart: always
+        ports:
+            - '8080:8080'
+            - '2022:2022'
+        tty: true
+        environment:
+            TZ: 'UTC'
+            WINGS_UID: 988
+            WINGS_GID: 988
+            WINGS_USERNAME: pterodactyl
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            - '/etc/ssl/certs:/etc/ssl/certs:ro'
+            - './srv/pterodactyl/config/:/etc/pterodactyl/'
+
+            # The volumes below need to be the exact same path in the container as on the host.
+            #
+            # The paths are currently hardcoded in the container on first run, meaning if you move
+            # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
+            #
+            # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
+            # Do not change anything but the $PWD part as this is also hardcoded in the container.
+
+            - './srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - './srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - './srv/wings/:${PWD}/srv/wings/'
+            - './wings/logs/:${PWD}/srv/wings/logs/'
+
+
+    mailpit:
+        image: axllent/mailpit
+        volumes:
+            - ./data/mailpit/:/data
+        ports:
+            - '1025:1025'
+            - '8025:8025'
+        environment:
+          MP_MAX_MESSAGES: ${MP_MAX_MESSAGES:-5000}
+          MP_DATABASE: ${MP_DATABASE:-/data/mailpit.db}
+          MP_SMTP_AUTH_ACCEPT_ANY: ${MP_SMTP_AUTH_ACCEPT_ANY:-1}
+          MP_SMTP_AUTH_ALLOW_INSECURE: ${MP_SMTP_AUTH_ALLOW_INSECURE:-1}
+
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+
+volumes:
+    panel_vendor:
+    panel_storage:
+    panel_bootstrap_cache:
+    mailpit_data:

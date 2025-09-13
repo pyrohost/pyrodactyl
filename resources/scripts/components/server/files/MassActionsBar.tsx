@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
+import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
@@ -74,6 +75,7 @@ const MassActionsBar = () => {
                     confirm={'Delete'}
                     onClose={() => setShowConfirm(false)}
                     onConfirmed={onClickConfirmDeletion}
+                    loading={loading}
                 >
                     <p className={'mb-2'}>
                         Are you sure you want to delete&nbsp;
@@ -100,12 +102,19 @@ const MassActionsBar = () => {
                             'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
                         }
                     >
-                        <div className={`flex items-center space-x-4 pointer-events-auto rounded p-4 bg-black/50`}>
-                            <Button onClick={() => setShowMove(true)}>Move</Button>
-                            <Button onClick={onClickCompress}>Archive</Button>
-                            <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
+                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
+                            <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
+                                {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
+                                Move
+                            </ActionButton>
+                            <ActionButton onClick={onClickCompress} disabled={loading}>
+                                {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
+                                Archive
+                            </ActionButton>
+                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
+                                {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
                                 Delete
-                            </Button.Danger>
+                            </ActionButton>
                         </div>
                     </div>
                 </FadeTransition>

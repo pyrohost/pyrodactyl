@@ -3,12 +3,22 @@
         "language": "Language",
         "save_changes": "Save Changes",
         "loading": "Loading...",
+        "updating": "Updating...",
         "error": "Error",
         "creating": "Creating...",
-        "success": "Success"
+        "success": "Success",
+        "email": "Email",
+        "event": "Event",
+        "events": "Events",
+        "enter_value": "Enter value...",
+        "deleting": "Deleting...",
+        "not_set": "Not set",
+        "rules": "Rules",
+        "confirmation_modal": "ConfirmationModal"
     },
     "settings": {
         "your_settings": "Your Settings",
+        "account_email": "Account Email",
         "account_info": "Account Information",
         "password_auth": "Password and Authentication",
         "app": "App",
@@ -16,6 +26,9 @@
         "email_address": "Email Address",
         "language": "Language",
         "multi_factor_auth": "Multi-Factor Authentication",
+        "version": "Version",
+        "commit": "Commit",
+        "filter": "Filter",
         "panel_version": "Panel Version",
         "panel_version_desc": "This is useful to provide Pyro staff if you run into an unexpected issue.",
         "two_factor_required": "2-Factor Required",
@@ -74,22 +87,46 @@
     },
     "api": {
         "account_api": "Account API",
-        "create_api_key": "Create API Key",
+        "·": "Create API Key",
+        "key": "Key",
         "api_keys": "API Keys",
         "delete_api_key_title": "Delete API Key",
+        "create_key": "Create Key",
+        "create_api_key": "Create Api Key",
         "delete_key": "Delete Key",
-        "delete_api_key_desc": "All requests using the {{key}} key will be invalidated.",
-        "no_api_keys": "No API keys exist for this account.",
+        "all_using": "All requests using the",
+        "key_invalidated": "key will be invalidated",
+        "no_api_keys": "No API keys",
         "last_used": "Last used:",
         "never": "Never",
         "key_description": "Description",
         "key_description_description": "A description of this API key.",
         "allowed_ips": "Allowed IPs",
-        "allowed_ips_description": "Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line."
+        "allowed_ips_description": "Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.",
+        "load_keys": "Loading your API keys...",
+        "no_keys_created": "You haven't created any API keys yet. Create one to get started with the API."
     },
     "activity_log": {
+        "log": "Activity Log",
         "title": "Account Activity Log",
-        "clear_filters": "Clear Filters"
+        "clear_filters": "Clear All Filters",
+        "adjust_filters": "Adjust Filters",
+        "toggle_filters": "Toggle Filters (Ctrl+F)",
+        "events": "Activity Events",
+        "auto_refresh": "Auto Refresh (Ctrl+R)",
+        "export_csv": "Export CSV (Ctrl+E)",
+        "export": "Export",
+        "live": "Live",
+        "refresh": "Refresh",
+        "filters": "Filters",
+        "all_events": "All Events",
+        "all_time": "All Time",
+        "last_hour": "Last Hour",
+        "last_24": "Last 24 Hours",
+        "last_7": "Last 7 Days",
+        "last_30": "Last 30 Days",
+        "try_adjust": "Try adjusting your filters or search terms to find the activity you're looking for.",
+        "no_logs": "Activity logs will appear here as you use your account. Check back later or perform some actions to see them here."
     },
     "ssh_key": {
         "name": "SSH Key Name",
@@ -104,7 +141,114 @@
         "delete_confirm": "Delete Key",
         "delete_message": "Removing the {name} SSH key will invalidate its usage across the Panel."
     },
+    "home": {
+        "show_personal": "Show personal servers",
+        "show_others": "Show other servers",
+        "view_list": "View servers in a list layout.",
+        "view_grid": "View servers in a grid layout.",
+        "no_servers_found": "No servers found",
+        "no_others_found": "No other servers found",
+        "no_display_servers": "There are no other servers to display.",
+        "no_associated_servers": "There are no servers associated with your account.",
+        "servers": {
+            "sit_tight": "Sit tight!",
+            "cpu": "CPU",
+            "ram": "RAM",
+            "storage": "Storage"
+        }
+    },
     "server": {
+        "shell": {
+            "current_software": "Current Software",
+            "software_management": "Software Management",
+            "no_software_selected": "No software selected",
+            "manage_server_software": "Manage your server's game or software configuration",
+            "error_in_software_click": "Error in change software click:",
+            "change_software": "Change Software",
+            "type_of_software": "Choose the type of game or software you want to run",
+            "software_version": "Choose the specific software version for your server",
+            "load_software": "Loading software options...",
+            "back_to_games": "Back to Games",
+            "software_config": "Software Configuration",
+            "custom_startup": "Enter custom startup command...",
+            "use_var_like": "Use variables like",
+            "docker_image": "Docker Image",
+            "runtime_env": "Container runtime environment for your server",
+            "env_variables": "Environment Variables",
+            "create_backup": "Create Backup",
+            "safety_options": "Safety Options",
+            "wipe_files": "Wipe Files",
+            "wipe_description": "Delete all files before installing new software",
+            "back_to_software": "Back to Software",
+            "review_changes": "Review Changes",
+            "no_software": "No software",
+            "startup_config": "Startup Configuration",
+            "startup_command": "Startup Command",
+            "variable_config": "Variable Configuration",
+            "subdomain_incompatible": "Subdomain Will Be Deleted",
+            "important_warning": "Important Warning",
+            "warning_1": "Your server will be stopped and reinstalled",
+            "warning_2": "This process may take several minutes to complete",
+            "warning_3": "Some files may be modified or removed during installation",
+            "warning_4": "Make sure you have backups of important data",
+            "back_to_overview": "Back to Overview",
+            "back_to_configure": "Back to Configure",
+            "apply_changes": "Apply Changes",
+            "loading_server_info": "Loading server information...",
+            "change_server_software_memo": "Change your server's game or software with our guided configuration wizard,",
+            "step_1": "overview",
+            "step_2": "select-game",
+            "step_3": "select-software",
+            "step_4": "configure",
+            "step_5": "review",
+            "no_backup_selected": "DANGER: No Backup Selected",
+            "wipe_no_backup": "You have chosen to wipe all files <strong>without creating a backup</strong>. This action will <strong>permanently delete ALL files</strong> on your server and cannot be undone.",
+            "last_warn_1": "All server files will be permanently deleted",
+            "last_warn_2": "Your server will be stopped and reinstalled",
+            "last_warn_3": "Any custom configurations or data will be lost",
+            "last_warn_4": "This action cannot be reversed",
+            "last_chance": "Are you absolutely sure you want to proceed without a backup?",
+            "of_four": "of 4",
+            "select_category": "Select Category"
+        },
+        "users": {
+            "new_user": "New User",
+            "description": "Manage user access to your server. Grant specific permissions to other users to help you manage and maintain your server.",
+            "users": "users",
+            "no_additional_users": "Your server does not have any additional users. Add others to help you manage your server.",
+            "no_users_found": "No users found",
+            "zero_users": "0 users"
+        },
+        "network": {
+            "subdomain": {
+                "edit": "Edit Subdomain",
+                "required": "A subdomain name is required.",
+                "min_name": "Subdomain must be at least 1 character.",
+                "max_name": "Subdomain cannot exceed 63 characters.",
+                "invalid": "Subdomain can only contain lowercase letters, numbers, and hyphens. It must start and end with a letter or number.",
+                "domain_required": "A domain must be selected.",
+                "failed_ability_check": "Failed to check availability. Please try again.",
+                "final_delete_check": "Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.",
+                "load_subdomain_config": "Loading subdomain configuration...",
+                "no_domains_configured": "No domains configured",
+                "subdomain_management": "Subdomain Management",
+                "contact_admin": "Contact your administrator to configure subdomain support for this server.",
+                "current_subdomain": "Current Subdomain",
+                "delete_subdomain": "Delete Subdomain",
+                "check_availability": "Checking availability",
+                "description": "Choose a unique name for your subdomain. Only lowercase letters, numbers, and hyphens are allowed.",
+                "confirm_delete": "Are you sure you want to delete this allocation?"
+            },
+            "allocation": {
+                "notes": "Notes",
+                "notes_placeholder": "Add notes for this allocation...",
+                "add_notes": "Click to add notes...",
+                "already_primary": "This is already the primary allocation",
+                "make_primary": "Make this the primary allocation",
+                "connot_delete_primary": "Cannot delete the primary allocation",
+                "delete_allocation": "Delete this allocation"
+            }
+        },
         "settings": {
             "header": "Settings",
             "debug_information": "Debug Information",
@@ -113,6 +257,7 @@
             "sftp_details": "SFTP Details",
             "server_address": "Server Address",
             "username": "Username",
+            "configure_settings": "Configure your server settings, manage SFTP access, and access debug information. Make changes to server name and reinstall when needed.",
             "sftp_password_note": "Your SFTP password is the same as the password you use to access this panel.",
             "launch_sftp": "Launch SFTP",
             "rename": {
@@ -137,6 +282,11 @@
                     "reinstall_started": "Your server has begun the reinstallation process."
                 }
             }
+        },
+        "schedules": {
+            "no_schedules_found": "No schedules found",
+            "no_scheduled_tasks": "Your server does not have any scheduled tasks. Create one to automate server management.",
+            "automate_tasks": "Automate server tasks with scheduled commands. Create recurring tasks to manage your server, run backups, or execute custom commands."
         }
     },
     "auth": {
@@ -151,6 +301,7 @@
         "return_to_login": "Return to Login",
         "email": "Email",
         "send_email": "Send Email",
+        "email_sent": "Email Sent",
         "reset_email_info": "We'll send you an email with a link to reset your password.",
         "two_factor_authentication": "Two Factor Authentication",
         "check_device_for_code": "Check device linked with your account for code.",
@@ -167,7 +318,16 @@
             "password_min_length": "Your new password should be at least 8 characters in length.",
             "password_confirmation_required": "Your new password does not match.",
             "password_confirmation_mismatch": "Your new password does not match.",
-            "email_required_reset": "Please enter your email address to reset your password."
+            "email_required_reset": "Please enter your email address to reset your password.",
+            "invalid_username_password": "Invalid username or password. Please try again."
+
+        },
+        "catpcha": {
+            "captcha_error": "Captcha Error",
+            "verification_failed": "Captcha verification failed. Please try again.",
+            "please_complete": "Please complete the captcha verification",
+            "no_response": "Captcha enabled but no response available"
+
         }
     },
     "errors": {
@@ -203,5 +363,14 @@
     "build": "Build",
     "commit": "Commit",
     "close": "Close",
-    "error": "Error"
+    "error": "Error",
+    "read_only": "Read-only",
+    "required": "Required",
+    "optional": "Optional",
+    "to": "to",
+    "category": "Category",
+    "yes": "Yes",
+    "no": "No",
+    "warning": "Warning",
+    "delete": "delete"
 }

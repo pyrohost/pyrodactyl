@@ -1,10 +1,10 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
 
 import renameFiles from '@/api/server/files/renameFiles';
 
@@ -71,7 +71,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                         <div className='w-full'>
                             <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
                             {useMoveTerminology && (
-                                <p className={`mt-2 !text-xs break-all`}>
+                                <p className={`mt-2 text-xs! break-all`}>
                                     <strong className={`text-sm text-zinc-200`}>New location: </strong>
                                     <Code>
                                         /root/
@@ -82,7 +82,9 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                                 </p>
                             )}
                             <div className={`flex justify-end w-full my-6`}>
-                                <Button>{useMoveTerminology ? 'Move' : 'Rename'}</Button>
+                                <ActionButton variant='primary' type='submit'>
+                                    {useMoveTerminology ? 'Move' : 'Rename'}
+                                </ActionButton>
                             </div>
                         </div>
                     </Form>

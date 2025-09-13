@@ -35,7 +35,7 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
     return sortedFiles.filter((file, index) => index === 0 || file.name !== sortedFiles[index - 1]?.name);
 };
 
-export default () => {
+const FileManagerContainer = () => {
     const parentRef = useRef<HTMLDivElement | null>(null);
 
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
@@ -86,10 +86,6 @@ export default () => {
         }
     }, [hash, pathname, directory]);
 
-    if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
-    }
-
     const rowVirtualizer = useVirtualizer({
         // count: 10000,
         count: filesArray.length,
@@ -98,19 +94,32 @@ export default () => {
         // scrollMargin: 54,
     });
 
+    if (error) {
+        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+    }
+
     return (
-        <ServerContentBlock className='!p-0' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
                 <ErrorBoundary>
-                    <MainPageHeader title={'Files'}>
-                        <Can action={'file.create'}>
-                            <div className='flex flex-row gap-1'>
-                                <FileManagerStatus />
-                                <NewDirectoryButton />
-                                <NewFileButton id={id} />
-                                <UploadButton />
-                            </div>
-                        </Can>
+                    <MainPageHeader
+                        direction='column'
+                        title={'Files'}
+                        titleChildren={
+                            <Can action={'file.create'}>
+                                <div className='flex flex-row gap-1'>
+                                    <FileManagerStatus />
+                                    <NewDirectoryButton />
+                                    <NewFileButton id={id} />
+                                    <UploadButton />
+                                </div>
+                            </Can>
+                        }
+                    >
+                        <p className='text-sm text-neutral-400 leading-relaxed'>
+                            Manage your server files and directories. Upload, download, edit, and organize your
+                            server&apos;s file system with our integrated file manager.
+                        </p>
                     </MainPageHeader>
                     <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
                         <FileManagerBreadcrumbs
@@ -192,7 +201,7 @@ export default () => {
                                                         }}
                                                     >
                                                         <FileObjectRow
-                                                            // @ts-ignore
+                                                            // @ts-expect-error - Legacy type suppression
                                                             file={filesArray[virtualItem.index]}
                                                             key={filesArray[virtualItem.index]?.name}
                                                         />
@@ -212,3 +221,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default FileManagerContainer;

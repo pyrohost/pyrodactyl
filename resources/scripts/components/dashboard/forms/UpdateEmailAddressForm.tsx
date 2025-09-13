@@ -4,9 +4,9 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -17,8 +17,11 @@ interface Values {
     password: string;
 }
 
-export default () => {
+
+
+const UpdateEmailAddressForm = () => {
     const { t } = useTranslation();
+
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
@@ -62,15 +65,12 @@ export default () => {
                     <Form className={`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={t('auth.email')} />
                         <div className={`mt-6`}>
-                            <Field
-                                id={'confirm_password'}
-                                type={'password'}
-                                name={'password'}
-                                label={t('settings.password.confirm_password')}
-                            />
+                            <Field id={'confirm_password'} type={'password'} name={'password'} label={t('settings.password.confirm_password')} />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>{t('settings.email.update_email')}</Button>
+                            <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                {t('settings.email.update_email')}
+                            </ActionButton>
                         </div>
                     </Form>
                 </Fragment>
@@ -78,3 +78,5 @@ export default () => {
         </Formik>
     );
 };
+
+export default UpdateEmailAddressForm;

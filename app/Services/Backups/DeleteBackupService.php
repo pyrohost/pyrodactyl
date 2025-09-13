@@ -68,15 +68,29 @@ class DeleteBackupService
     protected function deleteFromS3(Backup $backup): void
     {
         $this->connection->transaction(function () use ($backup) {
-            $backup->delete();
-
             /** @var \Pterodactyl\Extensions\Filesystem\S3Filesystem $adapter */
             $adapter = $this->manager->adapter(Backup::ADAPTER_AWS_S3);
 
-            $adapter->getClient()->deleteObject([
-                'Bucket' => $adapter->getBucket(),
-                'Key' => sprintf('%s/%s.tar.gz', $backup->server->uuid, $backup->uuid),
-            ]);
+            $s3Key = sprintf('%s/%s.tar.gz', $backup->server->uuid, $backup->uuid);
+            
+            // First delete from S3, then from database to prevent orphaned records
+            try {
+                $adapter->getClient()->deleteObject([
+                    'Bucket' => $adapter->getBucket(),
+                    'Key' => $s3Key,
+                ]);
+            } catch (\Exception $e) {
+                // Log S3 deletion failure but continue with database cleanup
+                \Log::warning('Failed to delete backup from S3, continuing with database cleanup', [
+                    'backup_uuid' => $backup->uuid,
+                    'server_uuid' => $backup->server->uuid,
+                    's3_key' => $s3Key,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
+            // Delete from database after S3 cleanup
+            $backup->delete();
         });
     }
 }

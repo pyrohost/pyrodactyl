@@ -58,6 +58,7 @@ class Permission extends Model
 
   public const ACTION_STARTUP_READ = 'startup.read';
   public const ACTION_STARTUP_UPDATE = 'startup.update';
+  public const ACTION_STARTUP_COMMAND = 'startup.command';
   public const ACTION_STARTUP_DOCKER_IMAGE = 'startup.docker-image';
 
   public const ACTION_STARTUP_SOFTWARE = 'startup.software';
@@ -172,6 +173,7 @@ class Permission extends Model
       'keys' => [
         'read' => 'Allows a user to view the startup variables for a server.',
         'update' => 'Allows a user to modify the startup variables for the server.',
+        'command' => 'Allows a user to modify the startup command for the server.',
         'docker-image' => 'Allows a user to modify the Docker image used when running the server.',
         'software' => 'Allows a user to modify the game / software used for the server.',
       ],

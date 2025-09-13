@@ -48,6 +48,14 @@
                         <p class="text-muted small">The maximum amount of memory allowed for this container. Setting this to <code>0</code> will allow unlimited memory in a container.</p>
                     </div>
                     <div class="form-group">
+                        <label for="overhead_memory" class="control-label">Overhead Memory</label>
+                        <div class="input-group">
+                            <input type="text" name="overhead_memory" data-multiplicator="true" class="form-control" value="{{ old('overhead_memory', $server->overhead_memory) }}"/>
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+                        <p class="text-muted small">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                    </div>
+                    <div class="form-group">
                         <label for="swap" class="control-label">Allocated Swap</label>
                         <div class="input-group">
                             <input type="text" name="swap" data-multiplicator="true" class="form-control" value="{{ old('swap', $server->swap) }}"/>
@@ -83,6 +91,22 @@
                             </div>
                             <p class="text-muted small">
                                 Enabling OOM killer may cause server processes to exit unexpectedly.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exclude_from_resource_calculation" class="control-label">Resource Calculation</label>
+                        <div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="pResourceCalcIncluded" value="0" name="exclude_from_resource_calculation" @if(!$server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcIncluded">Included</label>
+                            </div>
+                            <div class="radio radio-warning radio-inline">
+                                <input type="radio" id="pResourceCalcExcluded" value="1" name="exclude_from_resource_calculation" @if($server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcExcluded">Excluded</label>
+                            </div>
+                            <p class="text-muted small">
+                                When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.
                             </p>
                         </div>
                     </div>

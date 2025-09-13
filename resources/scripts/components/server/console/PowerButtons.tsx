@@ -11,7 +11,7 @@ interface PowerButtonProps {
     className?: string;
 }
 
-export default ({ className }: PowerButtonProps) => {
+const PowerButtons = ({ className }: PowerButtonProps) => {
     const [open, setOpen] = useState(false);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
@@ -82,7 +82,7 @@ export default ({ className }: PowerButtonProps) => {
                                   opacity: 0.5,
                               }
                     }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md'
+                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
@@ -95,7 +95,7 @@ export default ({ className }: PowerButtonProps) => {
                         background:
                             'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
                     }}
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-none text-sm font-bold shadow-md'
+                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-none text-sm font-bold shadow-md cursor-pointer'
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
                 >
@@ -117,7 +117,7 @@ export default ({ className }: PowerButtonProps) => {
                                   opacity: 1,
                               }
                     }
-                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all'
+                    className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all cursor-pointer'
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >
@@ -127,3 +127,5 @@ export default ({ className }: PowerButtonProps) => {
         </div>
     );
 };
+
+export default PowerButtons;
