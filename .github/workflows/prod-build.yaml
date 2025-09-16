@@ -1,6 +1,8 @@
-name: Build prod Docker
+name: Build and Push Release Docker Image
 on:
   push:
+    branches:
+      - 'releases/*'
     tags:
       - 'releases/*'
 
@@ -13,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Login to GHCR
         uses: docker/login-action@v3
