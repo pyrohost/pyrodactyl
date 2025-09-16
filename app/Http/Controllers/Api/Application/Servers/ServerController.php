@@ -14,6 +14,7 @@ use Pterodactyl\Http\Requests\Api\Application\Servers\GetServersRequest;
 use Pterodactyl\Http\Requests\Api\Application\Servers\ServerWriteRequest;
 use Pterodactyl\Http\Requests\Api\Application\Servers\StoreServerRequest;
 use Pterodactyl\Http\Controllers\Api\Application\ApplicationApiController;
+use Illuminate\Support\Facades\Log;
 
 class ServerController extends ApplicationApiController
 {
