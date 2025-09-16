@@ -45,6 +45,62 @@ jobs:
           build-args: |
             BUILDKIT_INLINE_CACHE=1
 
+  create-release-branch:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Bump Version')) ||
+      github.event_name == 'workflow_dispatch'
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from commit message or generate
+        id: extract-version
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            # Extract version from commit message like "Bump Version v1.2.3"
+            VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+')
+          else
+            # Generate timestamp-based version for workflow_dispatch
+            VERSION="v$(date +%Y.%m.%d.%H%M)"
+          fi
+
+          if [ -z "$VERSION" ]; then
+            VERSION="v$(date +%Y.%m.%d.%H%M)"
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using version: $VERSION"
+
+      - name: Create release branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b releases/${{ steps.extract-version.outputs.version }}
+
+      - name: Update version in config/app.php
+        run: sed -i "s/'version' => '.*'/'version' => '${{ steps.extract-version.outputs.version }}'/g" config/app.php
+
+      - name: Commit version update
+        run: |
+          git add config/app.php
+          git commit -m "Update version to ${{ steps.extract-version.outputs.version }}"
+
+      - name: Push release branch
+        run: git push origin releases/${{ steps.extract-version.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.extract-version.outputs.version }}
+          target_commitish: releases/${{ steps.extract-version.outputs.version }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
 
   build-release:
     runs-on: ubuntu-latest
@@ -77,25 +133,4 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILDKIT_INLINE_CACHE=1
-
-  update-version:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
-    steps:
-      - name: Checkout main branch at release commit
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.target_commitish }}
-
-      - name: Update version in config/app.php
-        run: sed -i "s/'version' => 'canary'/'version' => '${{ github.event.release.tag_name }}'/g" config/app.php
-
-      - name: Commit and push to release branch
-        run: |
-          git config user.name "pyrodactyl-ci"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B release
-          git add config/app.php
-          git commit -m "Update version to ${{ github.event.release.tag_name }} in config/app.php"
-          git push origin release --force
 
