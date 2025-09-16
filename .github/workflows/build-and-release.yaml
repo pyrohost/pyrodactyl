@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
   release:
     types:
       - published
@@ -61,17 +63,7 @@ jobs:
       - name: Extract version from commit message or generate
         id: extract-version
         run: |
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            # Extract version from commit message like "Bump Version v1.2.3"
-            VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+')
-          else
-            # Generate timestamp-based version for workflow_dispatch
-            VERSION="v$(date +%Y.%m.%d.%H%M)"
-          fi
-
-          if [ -z "$VERSION" ]; then
-            VERSION="v$(date +%Y.%m.%d.%H%M)"
-          fi
+          VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+')
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Using version: $VERSION"
