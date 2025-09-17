@@ -7,7 +7,10 @@ mkdir -p /var/log/panel/logs/ /var/log/supervisord/ /var/log/nginx/ /var/log/php
 
 # Ensure proper permissions for Laravel storage directories
 mkdir -p /app/storage/logs /app/storage/framework/cache /app/storage/framework/sessions /app/storage/framework/views \
-  && chmod -R 777 /app/storage/
+  && chmod -R 777 /app/storage/ \
+
+chmod g+s /app/storage/logs/
+chown nginx:nginx /app/storage/logs/
 
 # Check that user has mounted the /app/var directory
 if [ ! -d /app/var ]; then
