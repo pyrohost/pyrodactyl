@@ -25,7 +25,10 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 // Helper function to format storage values
-const formatStorage = (mb: number): string => {
+const formatStorage = (mb: number | undefined | null): string => {
+    if (mb === null || mb === undefined) {
+        return '0MB';
+    }
     if (mb >= 1024) {
         return `${(mb / 1024).toFixed(1)}GB`;
     }
@@ -199,7 +202,7 @@ const BackupContainer = () => {
                                         {backupStorageLimit === null ? (
                                             <p
                                                 className='text-sm text-zinc-300 cursor-help'
-                                                title={`${backups.storage.used_mb.toFixed(2)}MB of backup storage used (unlimited storage allowed)`}
+                                                title={`${backups.storage.used_mb?.toFixed(2) || 0}MB of backup storage used (unlimited storage allowed)`}
                                             >
                                                 <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> storage used
                                             </p>
@@ -207,12 +210,12 @@ const BackupContainer = () => {
                                             <>
                                                 <p
                                                     className='text-sm text-zinc-300 cursor-help'
-                                                    title={`${backups.storage.used_mb.toFixed(2)}MB used of ${backupStorageLimit}MB storage limit (${backups.storage.available_mb?.toFixed(2)}MB available)`}
+                                                    title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB storage limit (${backups.storage.available_mb?.toFixed(2) || 0}MB available)`}
                                                 >
                                                     <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> of{' '}
                                                     <span className='font-medium'>{formatStorage(backupStorageLimit)}</span> storage
                                                 </p>
-                                                {backups.storage.usage_percentage !== null && (
+                                                {backups.storage.usage_percentage !== null && backups.storage.usage_percentage !== undefined && (
                                                     <div
                                                         className='flex items-center gap-2 mt-1 cursor-help'
                                                         title={`Storage usage: ${backups.storage.usage_percentage.toFixed(1)}% (${formatStorage(backups.storage.used_mb)} used, ${formatStorage(backups.storage.available_mb || 0)} available)`}
