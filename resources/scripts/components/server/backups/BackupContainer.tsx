@@ -199,44 +199,44 @@ const BackupContainer = () => {
                                         {backupStorageLimit === null ? (
                                             <p
                                                 className='text-sm text-zinc-300 cursor-help'
-                                                title={`${backups.storage.usedMb.toFixed(2)}MB of backup storage used (unlimited storage allowed)`}
+                                                title={`${backups.storage.used_mb.toFixed(2)}MB of backup storage used (unlimited storage allowed)`}
                                             >
-                                                <span className='font-medium'>{formatStorage(backups.storage.usedMb)}</span> storage used
+                                                <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> storage used
                                             </p>
                                         ) : (
                                             <>
                                                 <p
                                                     className='text-sm text-zinc-300 cursor-help'
-                                                    title={`${backups.storage.usedMb.toFixed(2)}MB used of ${backupStorageLimit}MB storage limit (${backups.storage.availableMb?.toFixed(2)}MB available)`}
+                                                    title={`${backups.storage.used_mb.toFixed(2)}MB used of ${backupStorageLimit}MB storage limit (${backups.storage.available_mb?.toFixed(2)}MB available)`}
                                                 >
-                                                    <span className='font-medium'>{formatStorage(backups.storage.usedMb)}</span> of{' '}
+                                                    <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> of{' '}
                                                     <span className='font-medium'>{formatStorage(backupStorageLimit)}</span> storage
                                                 </p>
-                                                {backups.storage.usagePercentage !== null && (
+                                                {backups.storage.usage_percentage !== null && (
                                                     <div
                                                         className='flex items-center gap-2 mt-1 cursor-help'
-                                                        title={`Storage usage: ${backups.storage.usagePercentage.toFixed(1)}% (${formatStorage(backups.storage.usedMb)} used, ${formatStorage(backups.storage.availableMb || 0)} available)`}
+                                                        title={`Storage usage: ${backups.storage.usage_percentage.toFixed(1)}% (${formatStorage(backups.storage.used_mb)} used, ${formatStorage(backups.storage.available_mb || 0)} available)`}
                                                     >
                                                         <div className='flex-1 bg-zinc-800 rounded-full h-2 overflow-hidden shadow-inner'>
                                                             <div
                                                                 className={`h-full transition-all duration-500 ease-out rounded-full ${
-                                                                    backups.storage.isOverLimit
+                                                                    backups.storage.is_over_limit
                                                                         ? 'bg-gradient-to-r from-red-500 to-red-600'
-                                                                        : backups.storage.usagePercentage > 80
+                                                                        : backups.storage.usage_percentage > 80
                                                                         ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
                                                                         : 'bg-gradient-to-r from-green-500 to-emerald-500'
                                                                 }`}
-                                                                style={{ width: `${Math.min(backups.storage.usagePercentage, 100)}%` }}
+                                                                style={{ width: `${Math.min(backups.storage.usage_percentage, 100)}%` }}
                                                             />
                                                         </div>
                                                         <span className={`text-xs font-semibold min-w-[2.5rem] text-right ${
-                                                            backups.storage.isOverLimit
+                                                            backups.storage.is_over_limit
                                                                 ? 'text-red-400'
-                                                                : backups.storage.usagePercentage > 80
+                                                                : backups.storage.usage_percentage > 80
                                                                 ? 'text-yellow-400'
                                                                 : 'text-emerald-400'
                                                         }`}>
-                                                            {backups.storage.usagePercentage.toFixed(1)}%
+                                                            {backups.storage.usage_percentage.toFixed(1)}%
                                                         </span>
                                                     </div>
                                                 )}
@@ -246,7 +246,7 @@ const BackupContainer = () => {
                                 )}
                             </div>
                             {(backupLimit === null || backupLimit > backups.backupCount) &&
-                             (!backupStorageLimit || !backups.storage?.isOverLimit) && (
+                             (!backupStorageLimit || !backups.storage?.is_over_limit) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
                                     New Backup
                                 </ActionButton>

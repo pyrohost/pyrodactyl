@@ -18,18 +18,18 @@ export const Context = createContext<ctx>({ page: 1, setPage: () => 1 });
 type BackupResponse = PaginatedResult<ServerBackup> & {
     backupCount: number;
     storage: {
-        usedMb: number;
-        limitMb: number | null;
-        hasLimit: boolean;
-        usagePercentage: number | null;
-        availableMb: number | null;
-        isOverLimit: boolean;
+        used_mb: number;
+        limit_mb: number | null;
+        has_limit: boolean;
+        usage_percentage: number | null;
+        available_mb: number | null;
+        is_over_limit: boolean;
     };
     limits: {
-        countLimit: number | null;
-        hasCountLimit: boolean;
-        storageLimitMb: number | null;
-        hasStorageLimit: boolean;
+        count_limit: number | null;
+        has_count_limit: boolean;
+        storage_limit_mb: number | null;
+        has_storage_limit: boolean;
     };
 };
 
