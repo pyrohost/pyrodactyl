@@ -76,9 +76,13 @@ class DatabaseManagementService
         }
 
         if ($this->validateDatabaseLimit) {
+            if (!$server->allowsDatabases()) {
+                throw new TooManyDatabasesException();
+            }
+
             // If the server has a limit assigned and we've already reached that limit, throw back
             // an exception and kill the process.
-            if (!is_null($server->database_limit) && $server->databases()->count() >= $server->database_limit) {
+            if ($server->hasDatabaseCountLimit() && $server->databases()->count() >= $server->database_limit) {
                 throw new TooManyDatabasesException();
             }
         }
