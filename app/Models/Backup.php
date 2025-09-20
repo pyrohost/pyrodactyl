@@ -112,7 +112,6 @@ class Backup extends Model
         'disk' => 'required|string|in:wings,s3,rustic_local,rustic_s3',
         'checksum' => 'nullable|string',
         'snapshot_id' => 'nullable|string|max:64',
-        'repository_type' => 'nullable|string|in:local,s3',
         'bytes' => 'numeric',
         'upload_id' => 'nullable|string',
     ];

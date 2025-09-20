@@ -128,7 +128,6 @@ class InitiateBackupService
                 'disk' => $adapter,
                 'is_locked' => $this->isLocked,
                 'server_state' => $serverState,
-                'repository_type' => $this->getRepositoryType($adapter),
             ], true, true);
 
             try {
@@ -167,15 +166,4 @@ class InitiateBackupService
         }
     }
 
-    /**
-     * Get the repository type for the given adapter.
-     */
-    private function getRepositoryType(string $adapter): ?string
-    {
-        return match($adapter) {
-            Backup::ADAPTER_RUSTIC_LOCAL => 'local',
-            Backup::ADAPTER_RUSTIC_S3 => 's3',
-            default => null,
-        };
-    }
 }
