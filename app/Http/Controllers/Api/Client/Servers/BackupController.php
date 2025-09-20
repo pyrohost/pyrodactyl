@@ -88,7 +88,11 @@ class BackupController extends ClientApiController
 
     Activity::event('server:backup.start')
       ->subject($backup)
-      ->property(['name' => $backup->name, 'locked' => (bool) $request->input('is_locked')])
+      ->property([
+        'name' => $backup->name,
+        'locked' => (bool) $request->input('is_locked'),
+        'adapter' => $backup->disk
+      ])
       ->log();
 
     return $this->fractal->item($backup)
@@ -212,7 +216,14 @@ class BackupController extends ClientApiController
       throw new AuthorizationException();
     }
 
-    if ($backup->disk !== Backup::ADAPTER_AWS_S3 && $backup->disk !== Backup::ADAPTER_WINGS) {
+    $allowedAdapters = [
+      Backup::ADAPTER_AWS_S3,
+      Backup::ADAPTER_WINGS,
+      Backup::ADAPTER_RUSTIC_LOCAL,
+      Backup::ADAPTER_RUSTIC_S3
+    ];
+
+    if (!in_array($backup->disk, $allowedAdapters)) {
       throw new BadRequestHttpException('The backup requested references an unknown disk driver type and cannot be downloaded.');
     }
 
@@ -277,10 +288,10 @@ class BackupController extends ClientApiController
         throw new BadRequestHttpException('Server state changed during restore initiation. Please try again.');
       }
 
-      // If the backup is for an S3 file we need to generate a unique Download link for
-      // it that will allow Wings to actually access the file.
+      // If the backup is for an S3 file (legacy or rustic) we need to generate a unique
+      // Download link for it that will allow Wings to actually access the file.
       $url = null;
-      if ($backup->disk === Backup::ADAPTER_AWS_S3) {
+      if (in_array($backup->disk, [Backup::ADAPTER_AWS_S3, Backup::ADAPTER_RUSTIC_S3])) {
         try {
           $url = $this->downloadLinkService->handle($backup, $request->user());
         } catch (\Exception $e) {

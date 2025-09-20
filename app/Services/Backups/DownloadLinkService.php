@@ -23,10 +23,13 @@ class DownloadLinkService
      */
     public function handle(Backup $backup, User $user): string
     {
+        // Legacy S3 backups use pre-signed URLs
         if ($backup->disk === Backup::ADAPTER_AWS_S3) {
             return $this->getS3BackupUrl($backup);
         }
 
+        // Wings local backups and Rustic backups (local & S3) use JWT tokens
+        // Wings handles rustic downloads internally by calling back to get rustic config
         $token = $this->jwtService
             ->setExpiresAt(CarbonImmutable::now()->addMinutes(15))
             ->setUser($user)

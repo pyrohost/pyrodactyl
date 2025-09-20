@@ -20,6 +20,7 @@ class InitiateBackupService
 
     private bool $isLocked = false;
 
+
     /**
      * InitiateBackupService constructor.
      */
@@ -43,6 +44,7 @@ class InitiateBackupService
 
         return $this;
     }
+
 
     /**
      * Sets the files to be ignored by this backup.
@@ -113,21 +115,25 @@ class InitiateBackupService
             $backupName = substr($backupName, 0, 191); // Limit to database field length
             
             $serverState = $this->serverStateService->captureServerState($server);
-            
+
+            // Use the configured default adapter
+            $adapter = $this->backupManager->getDefaultAdapter();
+
             /** @var Backup $backup */
             $backup = $this->repository->create([
                 'server_id' => $server->id,
                 'uuid' => Uuid::uuid4()->toString(),
                 'name' => $backupName,
                 'ignored_files' => array_values($this->ignoredFiles ?? []),
-                'disk' => $this->backupManager->getDefaultAdapter(),
+                'disk' => $adapter,
                 'is_locked' => $this->isLocked,
                 'server_state' => $serverState,
+                'repository_type' => $this->getRepositoryType($adapter),
             ], true, true);
 
             try {
                 $this->daemonBackupRepository->setServer($server)
-                    ->setBackupAdapter($this->backupManager->getDefaultAdapter())
+                    ->setBackupAdapter($adapter)
                     ->backup($backup);
             } catch (\Exception $e) {
                 // If daemon backup request fails, clean up the backup record
@@ -159,5 +165,17 @@ class InitiateBackupService
         if ($server->transfer) {
             throw new TooManyBackupsException(0, 'Cannot create backup while server is being transferred.');
         }
+    }
+
+    /**
+     * Get the repository type for the given adapter.
+     */
+    private function getRepositoryType(string $adapter): ?string
+    {
+        return match($adapter) {
+            Backup::ADAPTER_RUSTIC_LOCAL => 'local',
+            Backup::ADAPTER_RUSTIC_S3 => 's3',
+            default => null,
+        };
     }
 }

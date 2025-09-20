@@ -36,6 +36,8 @@ class Backup extends Model
 
     public const ADAPTER_WINGS = 'wings';
     public const ADAPTER_AWS_S3 = 's3';
+    public const ADAPTER_RUSTIC_LOCAL = 'rustic_local';
+    public const ADAPTER_RUSTIC_S3 = 'rustic_s3';
 
     protected $table = 'backups';
 
@@ -61,6 +63,42 @@ class Backup extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
+    /**
+     * Check if this backup uses the rustic backup system.
+     */
+    public function isRustic(): bool
+    {
+        return in_array($this->disk, [self::ADAPTER_RUSTIC_LOCAL, self::ADAPTER_RUSTIC_S3]);
+    }
+
+    /**
+     * Check if this backup is stored locally (not in cloud storage).
+     */
+    public function isLocal(): bool
+    {
+        return in_array($this->disk, [self::ADAPTER_WINGS, self::ADAPTER_RUSTIC_LOCAL]);
+    }
+
+    /**
+     * Get the repository type for rustic backups.
+     */
+    public function getRepositoryType(): ?string
+    {
+        return match($this->disk) {
+            self::ADAPTER_RUSTIC_LOCAL => 'local',
+            self::ADAPTER_RUSTIC_S3 => 's3',
+            default => null,
+        };
+    }
+
+    /**
+     * Check if this backup has a rustic snapshot ID.
+     */
+    public function hasSnapshotId(): bool
+    {
+        return !empty($this->snapshot_id);
+    }
+
     public static array $validationRules = [
         'server_id' => 'bail|required|numeric|exists:servers,id',
         'uuid' => 'required|uuid',
@@ -69,8 +107,10 @@ class Backup extends Model
         'name' => 'required|string',
         'ignored_files' => 'array',
         'server_state' => 'nullable|array',
-        'disk' => 'required|string',
+        'disk' => 'required|string|in:wings,s3,rustic_local,rustic_s3',
         'checksum' => 'nullable|string',
+        'snapshot_id' => 'nullable|string|max:64',
+        'repository_type' => 'nullable|string|in:local,s3',
         'bytes' => 'numeric',
         'upload_id' => 'nullable|string',
     ];

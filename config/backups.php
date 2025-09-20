@@ -6,7 +6,8 @@ return [
     // The backup driver to use for this Panel instance. All client generated server backups
     // will be stored in this location by default. It is possible to change this once backups
     // have been made, without losing data.
-    'default' => env('APP_BACKUP_DRIVER', Backup::ADAPTER_WINGS),
+    // Options: wings, s3, rustic_local, rustic_s3
+    'default' => env('APP_BACKUP_DRIVER', Backup::ADAPTER_RUSTIC_LOCAL),
 
     // This value is used to determine the lifespan of UploadPart presigned urls that wings
     // uses to upload backups to S3 storage.  Value is in minutes, so this would default to an hour.
@@ -51,6 +52,54 @@ return [
             'use_accelerate_endpoint' => env('AWS_BACKUPS_USE_ACCELERATE', false),
 
             'storage_class' => env('AWS_BACKUPS_STORAGE_CLASS'),
+        ],
+
+        // Configuration for Rustic local backups. Rustic provides deduplicated,
+        // encrypted backups with fast incremental snapshots.
+        'rustic_local' => [
+            'adapter' => Backup::ADAPTER_RUSTIC_LOCAL,
+
+            // Path to rustic binary
+            'binary_path' => env('RUSTIC_BINARY_PATH', 'rustic'),
+
+            // Path where the rustic repository will be stored
+            'repository_path' => env('RUSTIC_REPOSITORY_PATH', '/var/lib/pterodactyl/rustic-repos'),
+
+            // Repository version (optional, default handled by rustic)
+            'repository_version' => env('RUSTIC_REPOSITORY_VERSION', 2),
+
+            // Pack size configuration for performance tuning
+            'tree_pack_size_mb' => env('RUSTIC_TREE_PACK_SIZE_MB', 4),
+            'data_pack_size_mb' => env('RUSTIC_DATA_PACK_SIZE_MB', 32),
+
+            // Hot/cold storage setup option
+            'use_cold_storage' => env('RUSTIC_LOCAL_USE_COLD_STORAGE', false),
+            'hot_repository_path' => env('RUSTIC_LOCAL_HOT_REPOSITORY_PATH', ''),
+        ],
+
+        // Configuration for Rustic S3 backups. Combines Rustic's features with S3 storage.
+        'rustic_s3' => [
+            'adapter' => Backup::ADAPTER_RUSTIC_S3,
+
+            // S3 configuration
+            'endpoint' => env('RUSTIC_S3_ENDPOINT', env('AWS_ENDPOINT')),
+            'region' => env('RUSTIC_S3_REGION', env('AWS_DEFAULT_REGION', 'us-east-1')),
+            'bucket' => env('RUSTIC_S3_BUCKET'),
+            'prefix' => env('RUSTIC_S3_PREFIX', 'pterodactyl-backups/'),
+
+            // S3 credentials
+            'key' => env('RUSTIC_S3_ACCESS_KEY_ID', env('AWS_ACCESS_KEY_ID')),
+            'secret' => env('RUSTIC_S3_SECRET_ACCESS_KEY', env('AWS_SECRET_ACCESS_KEY')),
+
+            // Hot/cold storage configuration
+            'use_cold_storage' => env('RUSTIC_S3_USE_COLD_STORAGE', false),
+            'hot_bucket' => env('RUSTIC_S3_HOT_BUCKET', ''),
+            'cold_storage_class' => env('RUSTIC_S3_COLD_STORAGE_CLASS', 'GLACIER'),
+
+            // Connection options
+            'force_path_style' => env('RUSTIC_S3_FORCE_PATH_STYLE', false),
+            'disable_ssl' => env('RUSTIC_S3_DISABLE_SSL', false),
+            'ca_cert_path' => env('RUSTIC_S3_CA_CERT_PATH', ''),
         ],
     ],
 ];
