@@ -91,47 +91,18 @@ class InitiateBackupService
 
         $successful = $this->repository->getNonFailedBackups($server);
 
-        if ($server->hasBackupStorageLimit()) {
-            $estimatedSize = $server->disk * 1024 * 1024;
-
-            if ($this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
-                if (!$override) {
-                    $usage = $this->backupStorageService->getStorageUsageInfo($server);
-                    throw new TooManyBackupsException(0, sprintf(
-                        'Backup storage limit exceeded: %.2fMB used of %.2fMB limit',
-                        $usage['used_mb'],
-                        $usage['limit_mb']
-                    ));
-                }
-
-                $backupsToDelete = $this->backupStorageService->getBackupsForStorageCleanup($server);
-                $deletedCount = 0;
-
-                foreach ($backupsToDelete as $backup) {
-                    $this->deleteBackupService->handle($backup);
-                    $deletedCount++;
-
-                    if (!$this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
-                        break;
-                    }
-
-                    if ($deletedCount >= 5) {
-                        break;
-                    }
-                }
-
-                if ($this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
-                    $usage = $this->backupStorageService->getStorageUsageInfo($server);
-                    throw new TooManyBackupsException(0, sprintf(
-                        'Cannot free enough space. Current usage: %.2fMB of %.2fMB limit',
-                        $usage['used_mb'],
-                        $usage['limit_mb']
-                    ));
-                }
-            }
-        }
-        elseif (!$server->allowsBackups()) {
+        if (!$server->allowsBackups()) {
             throw new TooManyBackupsException(0, 'Backups are disabled for this server');
+        }
+
+        // Block backup creation if already over storage limit
+        if ($server->hasBackupStorageLimit() && $this->backupStorageService->isOverStorageLimit($server)) {
+            $usage = $this->backupStorageService->getStorageUsageInfo($server);
+            throw new TooManyBackupsException(0, sprintf(
+                'Cannot create backup: server is already over storage limit (%.2fMB used of %.2fMB limit). Please delete old backups first.',
+                $usage['used_mb'],
+                $usage['limit_mb']
+            ));
         }
         elseif ($server->hasBackupCountLimit() && $successful->count() >= $server->backup_limit) {
             if (!$override) {
