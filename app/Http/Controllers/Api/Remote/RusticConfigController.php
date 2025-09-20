@@ -62,18 +62,19 @@ class RusticConfigController extends Controller
             return rtrim($basePath, '/') . '/' . $server->uuid;
         }
 
-        // For S3, return base opendal:s3 format - Wings will add server UUID for uniqueness
-        return 'opendal:s3';
+        // For S3, return the actual S3 path that rustic will use
+        $s3Config = config('backups.disks.rustic_s3');
+        $bucket = $s3Config['bucket'] ?? '';
+        $prefix = rtrim($s3Config['prefix'] ?? 'pterodactyl-backups/', '/');
+
+        if (empty($bucket)) {
+            throw new \InvalidArgumentException('S3 bucket not configured for rustic backups');
+        }
+
+        // Return the full S3 path for this server's repository
+        return sprintf('%s/%s/%s', $bucket, $prefix, $server->uuid);
     }
 
-    /**
-     * Get server-specific S3 prefix.
-     */
-    private function getS3Prefix(Server $server): string
-    {
-        $basePrefix = config('backups.disks.rustic_s3.prefix', 'pterodactyl-backups/');
-        return rtrim($basePrefix, '/') . '/' . $server->uuid . '/';
-    }
 
     /**
      * Get S3 credentials for rustic S3 backups from global configuration.
@@ -92,7 +93,6 @@ class RusticConfigController extends Controller
             'session_token' => '', // Not typically used for rustic
             'region' => $config['region'] ?? 'us-east-1',
             'bucket' => $config['bucket'],
-            'key_prefix' => $this->getS3Prefix($server),
             'endpoint' => $config['endpoint'] ?? '',
             'force_path_style' => $config['force_path_style'] ?? false,
             'disable_ssl' => $config['disable_ssl'] ?? false,
