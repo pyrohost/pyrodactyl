@@ -168,6 +168,11 @@ const BackupContainer = () => {
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             <div className='flex flex-col gap-1 text-center sm:text-right'>
+                                {backupLimit === null && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.backupCount} backups (unlimited)
+                                    </p>
+                                )}
                                 {backupLimit > 0 && (
                                     <p className='text-sm text-zinc-300'>
                                         {backups.backupCount} of {backupLimit} backups
@@ -176,6 +181,11 @@ const BackupContainer = () => {
                                 {backupLimit === 0 && (
                                     <p className='text-sm text-red-400'>
                                         Backups disabled
+                                    </p>
+                                )}
+                                {backupStorageLimit === null && backups.storage && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.storage.usedMb.toFixed(2)}MB used (unlimited storage)
                                     </p>
                                 )}
                                 {backupStorageLimit && backups.storage && (
@@ -189,7 +199,7 @@ const BackupContainer = () => {
                                     </p>
                                 )}
                             </div>
-                            {(backupLimit === 0 || backupLimit > backups.backupCount) &&
+                            {(backupLimit === null || backupLimit > backups.backupCount) &&
                              (!backupStorageLimit || !backups.storage?.isOverLimit) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
                                     New Backup
@@ -234,12 +244,12 @@ const BackupContainer = () => {
                                     </svg>
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {backupLimit > 0 ? 'No backups found' : 'Backups unavailable'}
+                                    {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}
                                 </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
-                                    {backupLimit > 0
-                                        ? 'Your server does not have any backups. Create one to get started.'
-                                        : 'Backups cannot be created for this server.'}
+                                    {backupLimit === 0
+                                        ? 'Backups cannot be created for this server.'
+                                        : 'Your server does not have any backups. Create one to get started.'}
                                 </p>
                             </div>
                         </div>

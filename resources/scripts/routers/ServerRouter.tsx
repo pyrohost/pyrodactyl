@@ -51,9 +51,9 @@ const blank_egg_prefix = '@';
 // Sidebar item components that check both permissions and feature limits
 const DatabasesSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
     ({ id, onClick }, ref) => {
-        const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases ?? 0);
+        const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases);
 
-        // Hide if no database access (limit is 0)
+        // Hide if databases are disabled (limit is 0)
         if (databaseLimit === 0) return null;
 
         return (
@@ -76,9 +76,9 @@ DatabasesSidebarItem.displayName = 'DatabasesSidebarItem';
 
 const BackupsSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
     ({ id, onClick }, ref) => {
-        const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups ?? 0);
+        const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups);
 
-        // Hide if no backup access (limit is 0)
+        // Hide if backups are disabled (limit is 0)
         if (backupLimit === 0) return null;
 
         return (
@@ -165,9 +165,9 @@ const ServerRouter = () => {
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
-    const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases ?? 0);
-    const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups ?? 0);
-    const allocationLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.allocations ?? 0);
+    const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases);
+    const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups);
+    const allocationLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.allocations);
 
     // Mobile menu state
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);

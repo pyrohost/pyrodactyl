@@ -73,13 +73,25 @@ const NetworkContainer = () => {
                 <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm mt-8'>
                     <div className='flex items-center justify-between mb-6'>
                         <h3 className='text-xl font-extrabold tracking-tight'>Port Allocations</h3>
-                        {data && allocationLimit > 0 && (
+                        {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
-                                    <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                        {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}
-                                    </span>
-                                    {allocationLimit > data.filter((allocation) => !allocation.isDefault).length && (
+                                    {allocationLimit === null && (
+                                        <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                            {data.filter((allocation) => !allocation.isDefault).length} allocations (unlimited)
+                                        </span>
+                                    )}
+                                    {allocationLimit > 0 && (
+                                        <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                            {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}
+                                        </span>
+                                    )}
+                                    {allocationLimit === 0 && (
+                                        <span className='text-sm text-red-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                            Allocations disabled
+                                        </span>
+                                    )}
+                                    {(allocationLimit === null || (allocationLimit > 0 && allocationLimit > data.filter((allocation) => !allocation.isDefault).length)) && (
                                         <ActionButton variant='primary' onClick={onCreateAllocation} size='sm'>
                                             New Allocation
                                         </ActionButton>
@@ -120,12 +132,12 @@ const NetworkContainer = () => {
                                     </svg>
                                 </div>
                                 <h4 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {allocationLimit > 0 ? 'No allocations found' : 'Allocations unavailable'}
+                                    {allocationLimit === 0 ? 'Allocations unavailable' : 'No allocations found'}
                                 </h4>
                                 <p className='text-sm text-zinc-400 max-w-sm text-center'>
-                                    {allocationLimit > 0
-                                        ? 'Create your first allocation to get started.'
-                                        : 'Network allocations cannot be created for this server.'}
+                                    {allocationLimit === 0
+                                        ? 'Network allocations cannot be created for this server.'
+                                        : 'Create your first allocation to get started.'}
                                 </p>
                             </div>
                         </div>
