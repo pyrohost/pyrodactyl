@@ -14,6 +14,10 @@ export interface ServerBackup {
     ignoredFiles: string;
     checksum: string;
     bytes: number;
+    sizeGb: number;
+    adapter: string;
+    isRustic: boolean;
+    snapshotId: string | null;
     createdAt: Date;
     completedAt: Date | null;
 }

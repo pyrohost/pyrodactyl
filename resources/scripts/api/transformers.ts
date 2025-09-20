@@ -62,6 +62,10 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     ignoredFiles: attributes.ignored_files,
     checksum: attributes.checksum,
     bytes: attributes.bytes,
+    sizeGb: attributes.size_gb,
+    adapter: attributes.adapter,
+    isRustic: attributes.is_rustic,
+    snapshotId: attributes.snapshot_id,
     createdAt: new Date(attributes.created_at),
     completedAt: attributes.completed_at ? new Date(attributes.completed_at) : null,
 });

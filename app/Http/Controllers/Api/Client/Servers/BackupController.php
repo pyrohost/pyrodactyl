@@ -11,6 +11,7 @@ use Pterodactyl\Models\Permission;
 use Illuminate\Auth\Access\AuthorizationException;
 use Pterodactyl\Services\Backups\DeleteBackupService;
 use Pterodactyl\Services\Backups\DownloadLinkService;
+use Pterodactyl\Services\Backups\BackupStorageService;
 use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Services\Backups\InitiateBackupService;
 use Pterodactyl\Services\Backups\ServerStateService;
@@ -33,6 +34,7 @@ class BackupController extends ClientApiController
     private DownloadLinkService $downloadLinkService,
     private BackupRepository $repository,
     private ServerStateService $serverStateService,
+    private BackupStorageService $backupStorageService,
   ) {
     parent::__construct();
   }
@@ -56,10 +58,26 @@ class BackupController extends ClientApiController
       ->orderByRaw('is_locked DESC, created_at DESC')
       ->paginate($limit);
 
+    $storageInfo = $this->backupStorageService->getStorageUsageInfo($server);
+
     return $this->fractal->collection($backups)
       ->transformWith($this->getTransformer(BackupTransformer::class))
       ->addMeta([
         'backup_count' => $this->repository->getNonFailedBackups($server)->count(),
+        'storage' => [
+          'used_mb' => $storageInfo['used_mb'],
+          'limit_mb' => $storageInfo['limit_mb'],
+          'has_limit' => $storageInfo['has_limit'],
+          'usage_percentage' => $storageInfo['usage_percentage'] ?? null,
+          'available_mb' => $storageInfo['available_mb'] ?? null,
+          'is_over_limit' => $storageInfo['is_over_limit'] ?? false,
+        ],
+        'limits' => [
+          'count_limit' => $server->backup_limit,
+          'has_count_limit' => $server->hasBackupCountLimit(),
+          'storage_limit_mb' => $server->backup_storage_limit,
+          'has_storage_limit' => $server->hasBackupStorageLimit(),
+        ],
       ])
       ->toArray();
   }

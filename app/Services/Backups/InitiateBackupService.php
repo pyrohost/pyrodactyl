@@ -10,6 +10,7 @@ use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Extensions\Backups\BackupManager;
 use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Repositories\Wings\DaemonBackupRepository;
+use Pterodactyl\Services\Backups\BackupStorageService;
 use Pterodactyl\Exceptions\Service\Backup\TooManyBackupsException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Carbon\CarbonImmutable;
@@ -31,6 +32,7 @@ class InitiateBackupService
         private DeleteBackupService $deleteBackupService,
         private BackupManager $backupManager,
         private ServerStateService $serverStateService,
+        private BackupStorageService $backupStorageService,
     ) {
     }
 
@@ -87,19 +89,55 @@ class InitiateBackupService
             throw new TooManyRequestsHttpException(30, 'A backup is already in progress. Please wait for it to complete before starting another.');
         }
 
-        // Check if the server has reached or exceeded its backup limit.
-        // completed_at == null will cover any ongoing backups, while is_successful == true will cover any completed backups.
         $successful = $this->repository->getNonFailedBackups($server);
-        if (!$server->backup_limit || $successful->count() >= $server->backup_limit) {
-            // Do not allow the user to continue if this server is already at its limit and can't override.
-            if (!$override || $server->backup_limit <= 0) {
+
+        if ($server->hasBackupStorageLimit()) {
+            $estimatedSize = $server->disk * 1024 * 1024;
+
+            if ($this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
+                if (!$override) {
+                    $usage = $this->backupStorageService->getStorageUsageInfo($server);
+                    throw new TooManyBackupsException(0, sprintf(
+                        'Backup storage limit exceeded: %.2fMB used of %.2fMB limit',
+                        $usage['used_mb'],
+                        $usage['limit_mb']
+                    ));
+                }
+
+                $backupsToDelete = $this->backupStorageService->getBackupsForStorageCleanup($server);
+                $deletedCount = 0;
+
+                foreach ($backupsToDelete as $backup) {
+                    $this->deleteBackupService->handle($backup);
+                    $deletedCount++;
+
+                    if (!$this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
+                        break;
+                    }
+
+                    if ($deletedCount >= 5) {
+                        break;
+                    }
+                }
+
+                if ($this->backupStorageService->wouldExceedStorageLimit($server, $estimatedSize)) {
+                    $usage = $this->backupStorageService->getStorageUsageInfo($server);
+                    throw new TooManyBackupsException(0, sprintf(
+                        'Cannot free enough space. Current usage: %.2fMB of %.2fMB limit',
+                        $usage['used_mb'],
+                        $usage['limit_mb']
+                    ));
+                }
+            }
+        }
+        elseif (!$server->allowsBackups()) {
+            throw new TooManyBackupsException(0, 'Backups are disabled for this server');
+        }
+        elseif ($server->hasBackupCountLimit() && $successful->count() >= $server->backup_limit) {
+            if (!$override) {
                 throw new TooManyBackupsException($server->backup_limit);
             }
 
-            // Get the oldest backup the server has that is not "locked" (indicating a backup that should
-            // never be automatically purged). If we find a backup we will delete it and then continue with
-            // this process. If no backup is found that can be used an exception is thrown.
-            /** @var Backup $oldest */
             $oldest = $successful->where('is_locked', false)->orderBy('created_at')->first();
             if (!$oldest) {
                 throw new TooManyBackupsException($server->backup_limit);
@@ -109,7 +147,6 @@ class InitiateBackupService
         }
 
         return $this->connection->transaction(function () use ($server, $name) {
-            // Sanitize backup name to prevent injection
             $backupName = trim($name) ?: sprintf('Backup at %s', CarbonImmutable::now()->toDateTimeString());
             $backupName = preg_replace('/[^a-zA-Z0-9\s\-_\.]/', '', $backupName);
             $backupName = substr($backupName, 0, 191); // Limit to database field length

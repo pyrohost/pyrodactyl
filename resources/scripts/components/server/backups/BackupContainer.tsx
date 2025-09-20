@@ -90,6 +90,7 @@ const BackupContainer = () => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
+    const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
 
     const hasBackupsInProgress = backups?.items.some((backup) => backup.completedAt === null) || false;
 
@@ -166,12 +167,30 @@ const BackupContainer = () => {
                 titleChildren={
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            {backupLimit > 0 && (
-                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {backups.backupCount} of {backupLimit} backups
-                                </p>
-                            )}
-                            {backupLimit > 0 && backupLimit > backups.backupCount && (
+                            <div className='flex flex-col gap-1 text-center sm:text-right'>
+                                {backupLimit > 0 && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.backupCount} of {backupLimit} backups
+                                    </p>
+                                )}
+                                {backupLimit === 0 && (
+                                    <p className='text-sm text-red-400'>
+                                        Backups disabled
+                                    </p>
+                                )}
+                                {backupStorageLimit && backups.storage && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.storage.usedMb.toFixed(2)}MB of {backupStorageLimit}MB used
+                                        {backups.storage.usagePercentage && (
+                                            <span className={`ml-1 ${backups.storage.isOverLimit ? 'text-red-400' : backups.storage.usagePercentage > 80 ? 'text-yellow-400' : 'text-zinc-400'}`}>
+                                                ({backups.storage.usagePercentage.toFixed(1)}%)
+                                            </span>
+                                        )}
+                                    </p>
+                                )}
+                            </div>
+                            {(backupLimit === 0 || backupLimit > backups.backupCount) &&
+                             (!backupStorageLimit || !backups.storage?.isOverLimit) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
                                     New Backup
                                 </ActionButton>
