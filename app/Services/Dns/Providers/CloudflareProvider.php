@@ -222,8 +222,8 @@ class CloudflareProvider implements DnsProviderInterface
             ],
             'zone_id' => [
                 'type' => 'string',
-                'required' => false,
-                'description' => 'Cloudflare Zone ID (optional - will auto-discover if not provided)',
+                'required' => true,
+                'description' => 'Cloudflare Zone ID',
                 'sensitive' => false,
             ],
         ];
