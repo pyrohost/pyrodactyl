@@ -67,7 +67,6 @@ class BackupStatusController extends Controller
                 'checksum' => $successful ? ($request->input('checksum_type') . ':' . $request->input('checksum')) : null,
                 'bytes' => $successful ? $request->input('size') : 0,
                 'snapshot_id' => $successful ? $request->input('snapshot_id') : null,
-                'disk' => $request->input('adapter_type', $model->disk),
                 'completed_at' => CarbonImmutable::now(),
             ])->save();
 
