@@ -24,6 +24,14 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 
+// Helper function to format storage values
+const formatStorage = (mb: number): string => {
+    if (mb >= 1024) {
+        return `${(mb / 1024).toFixed(1)}GB`;
+    }
+    return `${mb.toFixed(1)}MB`;
+};
+
 interface BackupValues {
     name: string;
     ignored: string;
@@ -168,6 +176,7 @@ const BackupContainer = () => {
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             <div className='flex flex-col gap-1 text-center sm:text-right'>
+                                {/* Backup Count Display */}
                                 {backupLimit === null && (
                                     <p className='text-sm text-zinc-300'>
                                         {backups.backupCount} backups (unlimited)
@@ -183,20 +192,57 @@ const BackupContainer = () => {
                                         Backups disabled
                                     </p>
                                 )}
-                                {backupStorageLimit === null && backups.storage && (
-                                    <p className='text-sm text-zinc-300'>
-                                        {backups.storage.usedMb.toFixed(2)}MB used (unlimited storage)
-                                    </p>
-                                )}
-                                {backupStorageLimit && backups.storage && (
-                                    <p className='text-sm text-zinc-300'>
-                                        {backups.storage.usedMb.toFixed(2)}MB of {backupStorageLimit}MB used
-                                        {backups.storage.usagePercentage && (
-                                            <span className={`ml-1 ${backups.storage.isOverLimit ? 'text-red-400' : backups.storage.usagePercentage > 80 ? 'text-yellow-400' : 'text-zinc-400'}`}>
-                                                ({backups.storage.usagePercentage.toFixed(1)}%)
-                                            </span>
+
+                                {/* Storage Usage Display */}
+                                {backups.storage && (
+                                    <div className='flex flex-col gap-0.5'>
+                                        {backupStorageLimit === null ? (
+                                            <p
+                                                className='text-sm text-zinc-300 cursor-help'
+                                                title={`${backups.storage.usedMb.toFixed(2)}MB of backup storage used (unlimited storage allowed)`}
+                                            >
+                                                <span className='font-medium'>{formatStorage(backups.storage.usedMb)}</span> storage used
+                                            </p>
+                                        ) : (
+                                            <>
+                                                <p
+                                                    className='text-sm text-zinc-300 cursor-help'
+                                                    title={`${backups.storage.usedMb.toFixed(2)}MB used of ${backupStorageLimit}MB storage limit (${backups.storage.availableMb?.toFixed(2)}MB available)`}
+                                                >
+                                                    <span className='font-medium'>{formatStorage(backups.storage.usedMb)}</span> of{' '}
+                                                    <span className='font-medium'>{formatStorage(backupStorageLimit)}</span> storage
+                                                </p>
+                                                {backups.storage.usagePercentage !== null && (
+                                                    <div
+                                                        className='flex items-center gap-2 mt-1 cursor-help'
+                                                        title={`Storage usage: ${backups.storage.usagePercentage.toFixed(1)}% (${formatStorage(backups.storage.usedMb)} used, ${formatStorage(backups.storage.availableMb || 0)} available)`}
+                                                    >
+                                                        <div className='flex-1 bg-zinc-800 rounded-full h-2 overflow-hidden shadow-inner'>
+                                                            <div
+                                                                className={`h-full transition-all duration-500 ease-out rounded-full ${
+                                                                    backups.storage.isOverLimit
+                                                                        ? 'bg-gradient-to-r from-red-500 to-red-600'
+                                                                        : backups.storage.usagePercentage > 80
+                                                                        ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
+                                                                        : 'bg-gradient-to-r from-green-500 to-emerald-500'
+                                                                }`}
+                                                                style={{ width: `${Math.min(backups.storage.usagePercentage, 100)}%` }}
+                                                            />
+                                                        </div>
+                                                        <span className={`text-xs font-semibold min-w-[2.5rem] text-right ${
+                                                            backups.storage.isOverLimit
+                                                                ? 'text-red-400'
+                                                                : backups.storage.usagePercentage > 80
+                                                                ? 'text-yellow-400'
+                                                                : 'text-emerald-400'
+                                                        }`}>
+                                                            {backups.storage.usagePercentage.toFixed(1)}%
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
-                                    </p>
+                                    </div>
                                 )}
                             </div>
                             {(backupLimit === null || backupLimit > backups.backupCount) &&
