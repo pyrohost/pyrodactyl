@@ -62,8 +62,8 @@ return [
             // Path to rustic binary
             'binary_path' => env('RUSTIC_BINARY_PATH', 'rustic'),
 
-            // Path where the rustic repository will be stored
-            'repository_path' => env('RUSTIC_REPOSITORY_PATH', '/var/lib/pterodactyl/rustic-repos'),
+            // Base path where rustic repositories will be stored (one per server)
+            'repository_base_path' => env('RUSTIC_REPOSITORY_BASE_PATH', '/var/lib/pterodactyl/rustic-repos'),
 
             // Repository version (optional, default handled by rustic)
             'repository_version' => env('RUSTIC_REPOSITORY_VERSION', 2),

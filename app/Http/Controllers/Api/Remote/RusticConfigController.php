@@ -27,6 +27,7 @@ class RusticConfigController extends Controller
         $config = [
             'backup_type' => $type,
             'repository_password' => $this->getRepositoryPassword($server),
+            'repository_path' => $this->getRepositoryPath($server, $type),
         ];
 
         if ($type === 's3') {
@@ -52,6 +53,30 @@ class RusticConfigController extends Controller
     }
 
     /**
+     * Get server-specific repository path.
+     */
+    private function getRepositoryPath(Server $server, string $type): string
+    {
+        if ($type === 'local') {
+            $basePath = config('backups.disks.rustic_local.repository_base_path', '/var/lib/pterodactyl/rustic-repos');
+            return rtrim($basePath, '/') . '/' . $server->uuid;
+        }
+
+        // For S3, return the bucket name since the actual path is handled by key_prefix
+        $config = config('backups.disks.rustic_s3');
+        return $config['bucket'] ?? '';
+    }
+
+    /**
+     * Get server-specific S3 prefix.
+     */
+    private function getS3Prefix(Server $server): string
+    {
+        $basePrefix = config('backups.disks.rustic_s3.prefix', 'pterodactyl-backups/');
+        return rtrim($basePrefix, '/') . '/' . $server->uuid . '/';
+    }
+
+    /**
      * Get S3 credentials for rustic S3 backups from global configuration.
      */
     private function getS3Credentials(Server $server): ?array
@@ -68,7 +93,7 @@ class RusticConfigController extends Controller
             'session_token' => '', // Not typically used for rustic
             'region' => $config['region'] ?? 'us-east-1',
             'bucket' => $config['bucket'],
-            'key_prefix' => $config['prefix'] ?? "backups/{$server->uuid}/",
+            'key_prefix' => $this->getS3Prefix($server),
             'endpoint' => $config['endpoint'] ?? '',
             'force_path_style' => $config['force_path_style'] ?? false,
             'disable_ssl' => $config['disable_ssl'] ?? false,
