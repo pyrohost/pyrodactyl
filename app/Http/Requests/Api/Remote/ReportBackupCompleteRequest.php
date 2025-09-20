@@ -17,6 +17,7 @@ class ReportBackupCompleteRequest extends FormRequest
             'parts.*.etag' => 'required|string',
             'parts.*.part_number' => 'required|numeric',
             'snapshot_id' => 'nullable|string|max:64',
+            'adapter_type' => 'nullable|string|in:wings,s3,rustic_local,rustic_s3',
         ];
     }
 }

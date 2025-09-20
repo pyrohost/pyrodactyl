@@ -17,7 +17,6 @@ return new class extends Migration
 
             // Add rustic-specific columns
             $table->string('snapshot_id', 64)->nullable()->after('checksum')->comment('Rustic snapshot ID for rustic backups');
-            $table->enum('repository_type', ['local', 's3'])->nullable()->after('snapshot_id')->comment('Repository type for rustic backups');
         });
 
     }
@@ -32,7 +31,7 @@ return new class extends Migration
             $table->enum('disk', ['wings', 's3'])->default('wings')->change();
 
             // Drop rustic-specific columns
-            $table->dropColumn(['snapshot_id', 'repository_type']);
+            $table->dropColumn('snapshot_id');
         });
 
     }
