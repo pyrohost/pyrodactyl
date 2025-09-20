@@ -62,9 +62,8 @@ class RusticConfigController extends Controller
             return rtrim($basePath, '/') . '/' . $server->uuid;
         }
 
-        // For S3, return the bucket name since the actual path is handled by key_prefix
-        $config = config('backups.disks.rustic_s3');
-        return $config['bucket'] ?? '';
+        // For S3, return opendal:s3 format with server UUID for unique repositories per server
+        return 'opendal:s3:' . $server->uuid;
     }
 
     /**
