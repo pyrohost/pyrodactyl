@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $checksum
  * @property int $bytes
  * @property string|null $upload_id
+ * @property string|null $snapshot_id
  * @property \Carbon\CarbonImmutable|null $completed_at
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
@@ -59,6 +60,7 @@ class Backup extends Model
         'checksum' => null,
         'bytes' => 0,
         'upload_id' => null,
+        'snapshot_id' => null,
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
