@@ -62,8 +62,8 @@ class RusticConfigController extends Controller
             return rtrim($basePath, '/') . '/' . $server->uuid;
         }
 
-        // For S3, return opendal:s3 format with server UUID for unique repositories per server
-        return 'opendal:s3:' . $server->uuid;
+        // For S3, return base opendal:s3 format - Wings will add server UUID for uniqueness
+        return 'opendal:s3';
     }
 
     /**
