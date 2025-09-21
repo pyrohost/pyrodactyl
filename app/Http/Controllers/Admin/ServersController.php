@@ -145,7 +145,7 @@ class ServersController extends Controller
             $this->buildModificationService->handle($server, $request->only([
                 'allocation_id', 'add_allocations', 'remove_allocations',
                 'memory', 'overhead_memory', 'swap', 'io', 'cpu', 'threads', 'disk',
-                'database_limit', 'allocation_limit', 'backup_limit', 'oom_disabled',
+                'database_limit', 'allocation_limit', 'backup_limit', 'backup_storage_limit', 'oom_disabled',
                 'exclude_from_resource_calculation',
             ]));
         } catch (DataValidationException $exception) {

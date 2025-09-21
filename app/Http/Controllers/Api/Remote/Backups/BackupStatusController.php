@@ -66,6 +66,7 @@ class BackupStatusController extends Controller
                 'is_locked' => $successful ? $model->is_locked : false,
                 'checksum' => $successful ? ($request->input('checksum_type') . ':' . $request->input('checksum')) : null,
                 'bytes' => $successful ? $request->input('size') : 0,
+                'snapshot_id' => $successful ? $request->input('snapshot_id') : null,
                 'completed_at' => CarbonImmutable::now(),
             ])->save();
 
@@ -209,4 +210,5 @@ class BackupStatusController extends Controller
             throw $e;
         }
     }
+
 }

@@ -44,8 +44,8 @@ class ScheduleTaskController extends ClientApiController
             throw new ServiceLimitExceededException("Schedules may not have more than $limit tasks associated with them. Creating this task would put this schedule over the limit.");
         }
 
-        if ($server->backup_limit === 0 && $request->action === 'backup') {
-            throw new HttpForbiddenException("A backup task cannot be created when the server's backup limit is set to 0.");
+        if (!$server->allowsBackups() && $request->action === 'backup') {
+            throw new HttpForbiddenException("A backup task cannot be created when backups are disabled for this server.");
         }
 
         /** @var Task|null $lastTask */
@@ -104,8 +104,8 @@ class ScheduleTaskController extends ClientApiController
             throw new NotFoundHttpException();
         }
 
-        if ($server->backup_limit === 0 && $request->action === 'backup') {
-            throw new HttpForbiddenException("A backup task cannot be created when the server's backup limit is set to 0.");
+        if (!$server->allowsBackups() && $request->action === 'backup') {
+            throw new HttpForbiddenException("A backup task cannot be created when backups are disabled for this server.");
         }
 
         $this->connection->transaction(function () use ($request, $schedule, $task) {

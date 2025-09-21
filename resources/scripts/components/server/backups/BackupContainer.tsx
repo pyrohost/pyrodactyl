@@ -24,6 +24,17 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 
+// Helper function to format storage values
+const formatStorage = (mb: number | undefined | null): string => {
+    if (mb === null || mb === undefined) {
+        return '0MB';
+    }
+    if (mb >= 1024) {
+        return `${(mb / 1024).toFixed(1)}GB`;
+    }
+    return `${mb.toFixed(1)}MB`;
+};
+
 interface BackupValues {
     name: string;
     ignored: string;
@@ -90,6 +101,8 @@ const BackupContainer = () => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
+    const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
+
 
     const hasBackupsInProgress = backups?.items.some((backup) => backup.completedAt === null) || false;
 
@@ -166,16 +179,57 @@ const BackupContainer = () => {
                 titleChildren={
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            {backupLimit > 0 && (
-                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {backups.backupCount} of {backupLimit} backups
-                                </p>
-                            )}
-                            {backupLimit > 0 && backupLimit > backups.backupCount && (
-                                <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                    New Backup
-                                </ActionButton>
-                            )}
+                            <div className='flex flex-col gap-1 text-center sm:text-right'>
+                                {/* Backup Count Display */}
+                                {backupLimit === null && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.backupCount} backups
+                                    </p>
+                                )}
+                                {backupLimit > 0 && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {backups.backupCount} of {backupLimit} backups
+                                    </p>
+                                )}
+                                {backupLimit === 0 && (
+                                    <p className='text-sm text-red-400'>
+                                        Backups disabled
+                                    </p>
+                                )}
+
+                                {/* Storage Usage Display */}
+                                {backups.storage && (
+                                    <div className='flex flex-col gap-0.5'>
+                                        {backupStorageLimit === null ? (
+                                            <p
+                                                className='text-sm text-zinc-300 cursor-help'
+                                                title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used(No Limit)`}
+                                            >
+                                                <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> storage used
+                                            </p>
+                                        ) : (
+                                            <>
+                                                <p
+                                                    className='text-sm text-zinc-300 cursor-help'
+                                                    title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB (${backups.storage.available_mb?.toFixed(2) || 0}MB Available)`}
+                                                >
+                                                    <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> {' '}
+                                                    {backupStorageLimit === null ?
+                                                        "used" :
+                                                        (<span className='font-medium'>of {formatStorage(backupStorageLimit)} used</span>)}
+                                                </p>
+
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            {(backupLimit === null || backupLimit > backups.backupCount) &&
+                                (!backupStorageLimit || !backups.storage?.is_over_limit) && (
+                                    <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
+                                        New Backup
+                                    </ActionButton>
+                                )}
                         </div>
                     </Can>
                 }
@@ -215,12 +269,12 @@ const BackupContainer = () => {
                                     </svg>
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {backupLimit > 0 ? 'No backups found' : 'Backups unavailable'}
+                                    {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}
                                 </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
-                                    {backupLimit > 0
-                                        ? 'Your server does not have any backups. Create one to get started.'
-                                        : 'Backups cannot be created for this server.'}
+                                    {backupLimit === 0
+                                        ? 'Backups cannot be created for this server.'
+                                        : 'Your server does not have any backups. Create one to get started.'}
                                 </p>
                             </div>
                         </div>

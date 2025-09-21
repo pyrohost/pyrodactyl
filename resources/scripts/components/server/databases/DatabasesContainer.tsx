@@ -92,12 +92,22 @@ const DatabasesContainer = () => {
                 titleChildren={
                     <Can action={'database.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                            {databaseLimit === null && (
+                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                    {databases.length} databases (unlimited)
+                                </p>
+                            )}
                             {databaseLimit > 0 && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
                                     {databases.length} of {databaseLimit} databases
                                 </p>
                             )}
-                            {databaseLimit > 0 && databaseLimit !== databases.length && (
+                            {databaseLimit === 0 && (
+                                <p className='text-sm text-red-400 text-center sm:text-right'>
+                                    Databases disabled
+                                </p>
+                            )}
+                            {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
                                     New Database
                                 </ActionButton>
@@ -177,12 +187,12 @@ const DatabasesContainer = () => {
                             <HugeIconsDatabase className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                            {databaseLimit > 0 ? 'No databases found' : 'Databases unavailable'}
+                            {databaseLimit === 0 ? 'Databases unavailable' : 'No databases found'}
                         </h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
-                            {databaseLimit > 0
-                                ? 'Your server does not have any databases. Create one to get started.'
-                                : 'Databases cannot be created for this server.'}
+                            {databaseLimit === 0
+                                ? 'Databases cannot be created for this server.'
+                                : 'Your server does not have any databases. Create one to get started.'}
                         </p>
                     </div>
                 </div>

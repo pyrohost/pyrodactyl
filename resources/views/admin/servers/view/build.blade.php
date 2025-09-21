@@ -127,21 +127,29 @@
                                     <div>
                                         <input type="text" name="database_limit" class="form-control" value="{{ old('database_limit', $server->database_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of databases a user is allowed to create for this server.</p>
+                                    <p class="text-muted small">The total number of databases a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="allocation_limit" class="control-label">Allocation Limit</label>
                                     <div>
                                         <input type="text" name="allocation_limit" class="form-control" value="{{ old('allocation_limit', $server->allocation_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of allocations a user is allowed to create for this server.</p>
+                                    <p class="text-muted small">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="backup_limit" class="control-label">Backup Limit</label>
                                     <div>
                                         <input type="text" name="backup_limit" class="form-control" value="{{ old('backup_limit', $server->backup_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of backups that can be created for this server.</p>
+                                    <p class="text-muted small">The total number of backups that can be created for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label for="backup_storage_limit" class="control-label">Backup Storage Limit</label>
+                                    <div class="input-group">
+                                        <input type="text" name="backup_storage_limit" data-multiplicator="true" class="form-control" value="{{ old('backup_storage_limit', $server->backup_storage_limit) }}"/>
+                                        <span class="input-group-addon">MiB</span>
+                                    </div>
+                                    <p class="text-muted small">The total storage space that can be used for backups. Leave blank for unlimited storage.</p>
                                 </div>
                             </div>
                         </div>

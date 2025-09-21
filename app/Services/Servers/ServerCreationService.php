@@ -161,9 +161,10 @@ class ServerCreationService
             'egg_id' => Arr::get($data, 'egg_id'),
             'startup' => Arr::get($data, 'startup'),
             'image' => Arr::get($data, 'image'),
-            'database_limit' => Arr::get($data, 'database_limit') ?? 0,
-            'allocation_limit' => Arr::get($data, 'allocation_limit') ?? 0,
-            'backup_limit' => Arr::get($data, 'backup_limit') ?? 0,
+            'database_limit' => Arr::get($data, 'database_limit'),
+            'allocation_limit' => Arr::get($data, 'allocation_limit'),
+            'backup_limit' => Arr::get($data, 'backup_limit'),
+            'backup_storage_limit' => Arr::get($data, 'backup_storage_limit'),
         ]);
 
         return $model;

@@ -203,9 +203,57 @@ class Node extends Model
                 'sftp' => [
                     'bind_port' => $this->daemonSFTP,
                 ],
+                'backups' => [
+                    'rustic' => $this->getRusticBackupConfiguration(),
+                ],
             ],
             'allowed_mounts' => $this->mounts->pluck('source')->toArray(),
             'remote' => route('index'),
+        ];
+    }
+
+    /**
+     * Get rustic backup configuration for Wings.
+     * Matches the exact structure expected by elytra rustic implementation.
+     */
+    private function getRusticBackupConfiguration(): array
+    {
+        $localConfig = config('backups.disks.rustic_local', []);
+        $s3Config = config('backups.disks.rustic_s3', []);
+
+        return [
+            // Path to rustic binary
+            'binary_path' => $localConfig['binary_path'] ?? 'rustic',
+
+            // Repository version (optional, default handled by rustic)
+            'repository_version' => $localConfig['repository_version'] ?? 2,
+
+            // Pack size configuration for performance tuning
+            'tree_pack_size_mb' => $localConfig['tree_pack_size_mb'] ?? 4,
+            'data_pack_size_mb' => $localConfig['data_pack_size_mb'] ?? 32,
+
+            // Local repository configuration
+            'local' => [
+                'enabled' => !empty($localConfig),
+                'repository_path' => $localConfig['repository_path'] ?? '/var/lib/pterodactyl/rustic-repos',
+                'use_cold_storage' => $localConfig['use_cold_storage'] ?? false,
+                'hot_repository_path' => $localConfig['hot_repository_path'] ?? '',
+            ],
+
+            // S3 repository configuration
+            's3' => [
+                'enabled' => !empty($s3Config['bucket']),
+                'endpoint' => $s3Config['endpoint'] ?? '',
+                'region' => $s3Config['region'] ?? 'us-east-1',
+                'bucket' => $s3Config['bucket'] ?? '',
+                'key_prefix' => $s3Config['prefix'] ?? 'pterodactyl-backups/',
+                'use_cold_storage' => $s3Config['use_cold_storage'] ?? false,
+                'hot_bucket' => $s3Config['hot_bucket'] ?? '',
+                'cold_storage_class' => $s3Config['cold_storage_class'] ?? 'GLACIER',
+                'force_path_style' => $s3Config['force_path_style'] ?? false,
+                'disable_ssl' => $s3Config['disable_ssl'] ?? false,
+                'ca_cert_path' => $s3Config['ca_cert_path'] ?? '',
+            ],
         ];
     }
 

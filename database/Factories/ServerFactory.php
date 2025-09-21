@@ -42,7 +42,8 @@ class ServerFactory extends Factory
       'image' => 'foo/bar:latest',
       'allocation_limit' => null,
       'database_limit' => null,
-      'backup_limit' => 0,
+      'backup_limit' => null,
+      'backup_storage_limit' => null,
       'created_at' => Carbon::now(),
       'updated_at' => Carbon::now(),
     ];

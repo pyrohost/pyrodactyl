@@ -25,8 +25,6 @@ const BackupRow = ({ backup }: Props) => {
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async () => {
         try {
-            // When backup completes, refresh the backup list from API to get accurate completion time
-            // This ensures we get the exact completion timestamp from the database, not the websocket receive time
             await mutate();
         } catch (e) {
             console.warn(e);
@@ -36,7 +34,6 @@ const BackupRow = ({ backup }: Props) => {
     return (
         <PageListItem>
             <div className='flex items-center gap-4 w-full py-1'>
-                {/* Status Icon */}
                 <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                     {backup.completedAt === null ? (
                         <Spinner size={'small'} />
@@ -49,7 +46,6 @@ const BackupRow = ({ backup }: Props) => {
                     )}
                 </div>
 
-                {/* Main Content */}
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-2 mb-1'>
                         {backup.completedAt !== null && !backup.isSuccessful && (
@@ -69,7 +65,6 @@ const BackupRow = ({ backup }: Props) => {
                     {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
                 </div>
 
-                {/* Size Info */}
                 {backup.completedAt !== null && backup.isSuccessful && (
                     <div className='hidden sm:block flex-shrink-0 text-right'>
                         <p className='text-xs text-zinc-500 uppercase tracking-wide'>Size</p>
@@ -77,7 +72,6 @@ const BackupRow = ({ backup }: Props) => {
                     </div>
                 )}
 
-                {/* Date Info */}
                 <div className='hidden sm:block flex-shrink-0 text-right min-w-[120px]'>
                     <p className='text-xs text-zinc-500 uppercase tracking-wide'>Created</p>
                     <p
@@ -88,7 +82,6 @@ const BackupRow = ({ backup }: Props) => {
                     </p>
                 </div>
 
-                {/* Actions Menu */}
                 <div className='flex-shrink-0'>
                     <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                         {backup.completedAt ? <BackupContextMenu backup={backup} /> : null}

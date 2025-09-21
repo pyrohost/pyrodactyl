@@ -15,7 +15,23 @@ interface ctx {
 
 export const Context = createContext<ctx>({ page: 1, setPage: () => 1 });
 
-type BackupResponse = PaginatedResult<ServerBackup> & { backupCount: number };
+type BackupResponse = PaginatedResult<ServerBackup> & {
+    backupCount: number;
+    storage: {
+        used_mb: number;
+        limit_mb: number | null;
+        has_limit: boolean;
+        usage_percentage: number | null;
+        available_mb: number | null;
+        is_over_limit: boolean;
+    };
+    limits: {
+        count_limit: number | null;
+        has_count_limit: boolean;
+        storage_limit_mb: number | null;
+        has_storage_limit: boolean;
+    };
+};
 
 export default () => {
     const { page } = useContext(Context);
@@ -28,6 +44,8 @@ export default () => {
             items: (data.data || []).map(rawDataToServerBackup),
             pagination: getPaginationSet(data.meta.pagination),
             backupCount: data.meta.backup_count,
+            storage: data.meta.storage,
+            limits: data.meta.limits,
         };
     });
 };

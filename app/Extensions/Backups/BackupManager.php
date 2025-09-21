@@ -123,6 +123,26 @@ class BackupManager
     }
 
     /**
+     * Creates a new Rustic Local adapter.
+     * Rustic adapters don't use traditional filesystem operations - they are handled by Wings directly.
+     */
+    public function createRusticLocalAdapter(array $config): FilesystemAdapter
+    {
+        // Return a minimal adapter since rustic operations are handled by Wings
+        return new InMemoryFilesystemAdapter();
+    }
+
+    /**
+     * Creates a new Rustic S3 adapter.
+     * Rustic adapters don't use traditional filesystem operations - they are handled by Wings directly.
+     */
+    public function createRusticS3Adapter(array $config): FilesystemAdapter
+    {
+        // Return a minimal adapter since rustic operations are handled by Wings
+        return new InMemoryFilesystemAdapter();
+    }
+
+    /**
      * Returns the configuration associated with a given backup type.
      */
     protected function getConfig(string $name): array

@@ -10,6 +10,7 @@ use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Extensions\Backups\BackupManager;
 use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Repositories\Wings\DaemonBackupRepository;
+use Pterodactyl\Services\Backups\BackupStorageService;
 use Pterodactyl\Exceptions\Service\Backup\TooManyBackupsException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Carbon\CarbonImmutable;
@@ -19,6 +20,7 @@ class InitiateBackupService
     private ?array $ignoredFiles;
 
     private bool $isLocked = false;
+
 
     /**
      * InitiateBackupService constructor.
@@ -30,6 +32,7 @@ class InitiateBackupService
         private DeleteBackupService $deleteBackupService,
         private BackupManager $backupManager,
         private ServerStateService $serverStateService,
+        private BackupStorageService $backupStorageService,
     ) {
     }
 
@@ -43,6 +46,7 @@ class InitiateBackupService
 
         return $this;
     }
+
 
     /**
      * Sets the files to be ignored by this backup.
@@ -85,19 +89,26 @@ class InitiateBackupService
             throw new TooManyRequestsHttpException(30, 'A backup is already in progress. Please wait for it to complete before starting another.');
         }
 
-        // Check if the server has reached or exceeded its backup limit.
-        // completed_at == null will cover any ongoing backups, while is_successful == true will cover any completed backups.
         $successful = $this->repository->getNonFailedBackups($server);
-        if (!$server->backup_limit || $successful->count() >= $server->backup_limit) {
-            // Do not allow the user to continue if this server is already at its limit and can't override.
-            if (!$override || $server->backup_limit <= 0) {
+
+        if (!$server->allowsBackups()) {
+            throw new TooManyBackupsException(0, 'Backups are disabled for this server');
+        }
+
+        // Block backup creation if already over storage limit
+        if ($server->hasBackupStorageLimit() && $this->backupStorageService->isOverStorageLimit($server)) {
+            $usage = $this->backupStorageService->getStorageUsageInfo($server);
+            throw new TooManyBackupsException(0, sprintf(
+                'Cannot create backup: server is already over storage limit (%.2fMB used of %.2fMB limit). Please delete old backups first.',
+                $usage['used_mb'],
+                $usage['limit_mb']
+            ));
+        }
+        elseif ($server->hasBackupCountLimit() && $successful->count() >= $server->backup_limit) {
+            if (!$override) {
                 throw new TooManyBackupsException($server->backup_limit);
             }
 
-            // Get the oldest backup the server has that is not "locked" (indicating a backup that should
-            // never be automatically purged). If we find a backup we will delete it and then continue with
-            // this process. If no backup is found that can be used an exception is thrown.
-            /** @var Backup $oldest */
             $oldest = $successful->where('is_locked', false)->orderBy('created_at')->first();
             if (!$oldest) {
                 throw new TooManyBackupsException($server->backup_limit);
@@ -107,27 +118,29 @@ class InitiateBackupService
         }
 
         return $this->connection->transaction(function () use ($server, $name) {
-            // Sanitize backup name to prevent injection
             $backupName = trim($name) ?: sprintf('Backup at %s', CarbonImmutable::now()->toDateTimeString());
             $backupName = preg_replace('/[^a-zA-Z0-9\s\-_\.]/', '', $backupName);
             $backupName = substr($backupName, 0, 191); // Limit to database field length
             
             $serverState = $this->serverStateService->captureServerState($server);
-            
+
+            // Use the configured default adapter
+            $adapter = $this->backupManager->getDefaultAdapter();
+
             /** @var Backup $backup */
             $backup = $this->repository->create([
                 'server_id' => $server->id,
                 'uuid' => Uuid::uuid4()->toString(),
                 'name' => $backupName,
                 'ignored_files' => array_values($this->ignoredFiles ?? []),
-                'disk' => $this->backupManager->getDefaultAdapter(),
+                'disk' => $adapter,
                 'is_locked' => $this->isLocked,
                 'server_state' => $serverState,
             ], true, true);
 
             try {
                 $this->daemonBackupRepository->setServer($server)
-                    ->setBackupAdapter($this->backupManager->getDefaultAdapter())
+                    ->setBackupAdapter($adapter)
                     ->backup($backup);
             } catch (\Exception $e) {
                 // If daemon backup request fails, clean up the backup record
@@ -160,4 +173,5 @@ class InitiateBackupService
             throw new TooManyBackupsException(0, 'Cannot create backup while server is being transferred.');
         }
     }
+
 }
