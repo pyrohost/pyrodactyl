@@ -213,7 +213,7 @@ const BackupContainer = () => {
                                                     className='text-sm text-zinc-300 cursor-help'
                                                     title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB (${backups.storage.available_mb?.toFixed(2) || 0}MB Available)`}
                                                 >
-                                                    <span className='font-medium'>{formatStorage(backups.storage.used_mb)}({backups.storage.usage_percentage}%)</span> {' '}
+                                                    <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> {' '}
                                                     {backupStorageLimit === null ?
                                                         "used" :
                                                         (<span className='font-medium'>of {formatStorage(backupStorageLimit)} used</span>)}
