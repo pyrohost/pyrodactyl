@@ -69,7 +69,9 @@ class EggShareController extends Controller
     public function importFromUrl(EggImportUrlFormRequest $request): RedirectResponse
     {
         try {
-            $allowed_hosts = explode(',', env('ALLOWED_EGG_HOSTS', 'raw.githubusercontent.com'));
+            $allowed_hosts = array_map(function ($item) {
+                return trim($item);
+            }, explode(',', env('ALLOWED_EGG_HOSTS', 'raw.githubusercontent.com')));
             $parsed_url = parse_url($request->input('import_file_url'));
 
             if (!is_array($parsed_url) || !isset($parsed_url['host']) || !in_array($parsed_url['host'], $allowed_hosts)) {
