@@ -70,7 +70,7 @@
           <div class="box-footer">
             {!! csrf_field() !!}
             <button type="submit" name="_method" value="PATCH"
-              class="btn btn-sm btn-outline-primary pull-right">Save</button>
+              class="btn btn-primary btn-sm btn-outline-primary pull-right">Save</button>
           </div>
         </form>
       </div>
