@@ -71,7 +71,7 @@ class EggShareController extends Controller
         try {
             $allowed_hosts = array_map(function ($item) {
                 return trim($item);
-            }, explode(',', env('ALLOWED_EGG_HOSTS', 'raw.githubusercontent.com')));
+            }, explode(',', env('ALLOWED_EGG_HOSTS', '')));
             $parsed_url = parse_url($request->input('import_file_url'));
 
             if (!is_array($parsed_url) || !isset($parsed_url['host']) || !in_array($parsed_url['host'], $allowed_hosts)) {
