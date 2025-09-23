@@ -472,7 +472,7 @@ echo 'phpmyadmin phpmyadmin/mysql/admin-pass password ptero' | debconf-set-selec
 echo 'phpmyadmin phpmyadmin/mysql/app-pass password ptero' | debconf-set-selections
 echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect' | debconf-set-selections
 
-apt install -y phpmyadmin php8.4-mbstring php8.4-zip php8.4-gd php8.4-json php8.4-curl
+apt install -y phpmyadmin php8.4-mbstring php8.4-zip php8.4-gd php8.4-curl
 
 mysql -u pterodactyl -ppassword -D panel -e "
 CREATE USER IF NOT EXISTS 'phpmyadmin'@'localhost' IDENTIFIED BY 'phpmyadmin';
