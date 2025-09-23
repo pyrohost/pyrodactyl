@@ -11,6 +11,7 @@ use Pterodactyl\Exceptions\Dns\DnsProviderException;
 use Pterodactyl\Services\Subdomain\Features\FactorioSubdomainFeature;
 use Pterodactyl\Services\Subdomain\Features\MinecraftSubdomainFeature;
 use Pterodactyl\Services\Subdomain\Features\RustSubdomainFeature;
+use Pterodactyl\Services\Subdomain\Features\ScpSlSubdomainFeature;
 use Pterodactyl\Services\Subdomain\Features\TeamSpeakSubdomainFeature;
 use Pterodactyl\Services\Dns\Providers\CloudflareProvider;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,7 @@ class SubdomainManagementService
             'subdomain_factorio' => FactorioSubdomainFeature::class,
             'subdomain_minecraft' => MinecraftSubdomainFeature::class,
             'subdomain_rust' => RustSubdomainFeature::class,
+            'subdomain_scpsl' => ScpSlSubdomainFeature::class,
             'subdomain_teamspeak' => TeamSpeakSubdomainFeature::class,
         ];
     }
