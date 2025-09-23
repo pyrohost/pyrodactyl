@@ -59,7 +59,7 @@ const DatabasesSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; o
         return (
             <Can action={'database.*'} matchAny>
                 <NavLink
-                    className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                    className='flex flex-row items-center transition-colors duration-200 hover:bg-white/10 rounded-md'
                     ref={ref}
                     to={`/server/${id}/databases`}
                     onClick={onClick}

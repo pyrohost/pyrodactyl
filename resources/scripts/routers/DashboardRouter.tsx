@@ -128,7 +128,7 @@ const DashboardRouter = () => {
                         </NavLink>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 cursor-pointer'>
+                                <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-white/10 p-2 cursor-pointer'>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='16'
