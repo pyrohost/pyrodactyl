@@ -407,47 +407,59 @@ EOF
     /usr/local/bin/mc mb local/pterodactyl-backups --ignore-existing
   ' || true
   
-  # Configure MinIO in .env for S3 backups
+  # Configure MinIO in .env for rustic_s3 backups
   pushd /var/www/pterodactyl >/dev/null
   if [ -f .env ]; then
-    # Set S3 backup configuration for MinIO
-    sed -i '/^APP_BACKUP_DRIVER=/c\APP_BACKUP_DRIVER=s3' .env
-    
-    # Configure AWS/S3 settings for MinIO
-    if grep -q "^AWS_ACCESS_KEY_ID=" .env; then
-      sed -i '/^AWS_ACCESS_KEY_ID=/c\AWS_ACCESS_KEY_ID=minioadmin' .env
+    # Set rustic_s3 backup configuration for MinIO
+    sed -i '/^APP_BACKUP_DRIVER=/c\APP_BACKUP_DRIVER=rustic_s3' .env
+
+    # Configure rustic_s3 settings for MinIO
+    if grep -q "^RUSTIC_S3_ENDPOINT=" .env; then
+      sed -i '/^RUSTIC_S3_ENDPOINT=/c\RUSTIC_S3_ENDPOINT=http://localhost:9000' .env
     else
-      echo 'AWS_ACCESS_KEY_ID=minioadmin' >> .env
+      echo 'RUSTIC_S3_ENDPOINT=http://localhost:9000' >> .env
     fi
-    
-    if grep -q "^AWS_SECRET_ACCESS_KEY=" .env; then
-      sed -i '/^AWS_SECRET_ACCESS_KEY=/c\AWS_SECRET_ACCESS_KEY=minioadmin' .env
+
+    if grep -q "^RUSTIC_S3_REGION=" .env; then
+      sed -i '/^RUSTIC_S3_REGION=/c\RUSTIC_S3_REGION=us-east-1' .env
     else
-      echo 'AWS_SECRET_ACCESS_KEY=minioadmin' >> .env
+      echo 'RUSTIC_S3_REGION=us-east-1' >> .env
     fi
-    
-    if grep -q "^AWS_DEFAULT_REGION=" .env; then
-      sed -i '/^AWS_DEFAULT_REGION=/c\AWS_DEFAULT_REGION=us-east-1' .env
+
+    if grep -q "^RUSTIC_S3_BUCKET=" .env; then
+      sed -i '/^RUSTIC_S3_BUCKET=/c\RUSTIC_S3_BUCKET=pterodactyl-backups' .env
     else
-      echo 'AWS_DEFAULT_REGION=us-east-1' >> .env
+      echo 'RUSTIC_S3_BUCKET=pterodactyl-backups' >> .env
     fi
-    
-    if grep -q "^AWS_BACKUPS_BUCKET=" .env; then
-      sed -i '/^AWS_BACKUPS_BUCKET=/c\AWS_BACKUPS_BUCKET=pterodactyl-backups' .env
+
+    if grep -q "^RUSTIC_S3_PREFIX=" .env; then
+      sed -i '/^RUSTIC_S3_PREFIX=/c\RUSTIC_S3_PREFIX=pterodactyl-backups/' .env
     else
-      echo 'AWS_BACKUPS_BUCKET=pterodactyl-backups' >> .env
+      echo 'RUSTIC_S3_PREFIX=pterodactyl-backups/' >> .env
     fi
-    
-    if grep -q "^AWS_ENDPOINT=" .env; then
-      sed -i '/^AWS_ENDPOINT=/c\AWS_ENDPOINT=http://localhost:9000' .env
+
+    if grep -q "^RUSTIC_S3_ACCESS_KEY_ID=" .env; then
+      sed -i '/^RUSTIC_S3_ACCESS_KEY_ID=/c\RUSTIC_S3_ACCESS_KEY_ID=minioadmin' .env
     else
-      echo 'AWS_ENDPOINT=http://localhost:9000' >> .env
+      echo 'RUSTIC_S3_ACCESS_KEY_ID=minioadmin' >> .env
     fi
-    
-    if grep -q "^AWS_USE_PATH_STYLE_ENDPOINT=" .env; then
-      sed -i '/^AWS_USE_PATH_STYLE_ENDPOINT=/c\AWS_USE_PATH_STYLE_ENDPOINT=true' .env
+
+    if grep -q "^RUSTIC_S3_SECRET_ACCESS_KEY=" .env; then
+      sed -i '/^RUSTIC_S3_SECRET_ACCESS_KEY=/c\RUSTIC_S3_SECRET_ACCESS_KEY=minioadmin' .env
     else
-      echo 'AWS_USE_PATH_STYLE_ENDPOINT=true' >> .env
+      echo 'RUSTIC_S3_SECRET_ACCESS_KEY=minioadmin' >> .env
+    fi
+
+    if grep -q "^RUSTIC_S3_FORCE_PATH_STYLE=" .env; then
+      sed -i '/^RUSTIC_S3_FORCE_PATH_STYLE=/c\RUSTIC_S3_FORCE_PATH_STYLE=true' .env
+    else
+      echo 'RUSTIC_S3_FORCE_PATH_STYLE=true' >> .env
+    fi
+
+    if grep -q "^RUSTIC_S3_DISABLE_SSL=" .env; then
+      sed -i '/^RUSTIC_S3_DISABLE_SSL=/c\RUSTIC_S3_DISABLE_SSL=true' .env
+    else
+      echo 'RUSTIC_S3_DISABLE_SSL=true' >> .env
     fi
   fi
   popd >/dev/null

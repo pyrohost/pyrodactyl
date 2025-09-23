@@ -121,11 +121,12 @@ class InitiateBackupService
             $backupName = trim($name) ?: sprintf('Backup at %s', CarbonImmutable::now()->toDateTimeString());
             $backupName = preg_replace('/[^a-zA-Z0-9\s\-_\.]/', '', $backupName);
             $backupName = substr($backupName, 0, 191); // Limit to database field length
-            
+
             $serverState = $this->serverStateService->captureServerState($server);
 
             // Use the configured default adapter
             $adapter = $this->backupManager->getDefaultAdapter();
+
 
             /** @var Backup $backup */
             $backup = $this->repository->create([

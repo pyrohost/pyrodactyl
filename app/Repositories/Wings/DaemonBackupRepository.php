@@ -37,11 +37,13 @@ class DaemonBackupRepository extends DaemonRepository
         Assert::isInstanceOf($this->server, Server::class);
 
         try {
+            $adapterToSend = $this->adapter ?? config('backups.default');
+
             return $this->getHttpClient()->post(
                 sprintf('/api/servers/%s/backup', $this->server->uuid),
                 [
                     'json' => [
-                        'adapter' => $this->adapter ?? config('backups.default'),
+                        'adapter' => $adapterToSend,
                         'uuid' => $backup->uuid,
                         'ignore' => implode("\n", $backup->ignored_files),
                     ],

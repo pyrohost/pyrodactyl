@@ -116,7 +116,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
     private function createBackup(InitiateBackupService $backupService, ServerOperation $operation): Backup
     {
         $operation->updateProgress('Creating backup before proceeding...');
-        
+
         // Get current and target egg names for better backup naming
         $currentEgg = $this->server->egg;
         $targetEgg = Egg::find($this->eggId);

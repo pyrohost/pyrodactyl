@@ -270,7 +270,7 @@ const SoftwareContainer = () => {
         return foundNest?.attributes?.relationships?.eggs?.data?.find((egg) => egg?.attributes?.uuid === currentEgg)
             ?.attributes?.name;
     }, [nests, currentEgg]);
-    const backupLimit = serverData?.featureLimits.backups ?? 0;
+    const backupLimit = serverData?.featureLimits.backups;
     const { data: backups } = getServerBackups();
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
@@ -334,7 +334,8 @@ const SoftwareContainer = () => {
     // Initialize backup setting based on limits
     useEffect(() => {
         if (backups) {
-            setShouldBackup(backupLimit > 0 && backups.backupCount < backupLimit);
+            // null = unlimited, 0 = disabled, positive number = cap
+            setShouldBackup(backupLimit !== 0 && (backupLimit === null || backups.backupCount < backupLimit));
         }
     }, [backups, backupLimit]);
 
@@ -384,7 +385,7 @@ const SoftwareContainer = () => {
         setEggPreview(null);
         setPendingVariables({});
         setVariableErrors({});
-        setShouldBackup(backupLimit > 0 && (backups?.backupCount || 0) < backupLimit);
+        setShouldBackup(backupLimit !== 0 && (backupLimit === null || (backups?.backupCount || 0) < backupLimit));
         setShouldWipe(false);
         setCustomStartup('');
         setSelectedDockerImage('');
@@ -927,16 +928,18 @@ const SoftwareContainer = () => {
                                             Create Backup
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            {backupLimit > 0 && (backups?.backupCount || 0) < backupLimit
+                                            {backupLimit !== 0 && (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
                                                 ? 'Automatically create a backup before applying changes'
-                                                : 'Backup limit reached or not available'}
+                                                : backupLimit === 0
+                                                    ? 'Backups are disabled for this server'
+                                                    : 'Backup limit reached'}
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
                                         <Switch
                                             checked={shouldBackup}
                                             onCheckedChange={setShouldBackup}
-                                            disabled={backupLimit <= 0 || (backups?.backupCount || 0) >= backupLimit}
+                                            disabled={backupLimit === 0 || (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)}
                                         />
                                     </div>
                                 </div>
