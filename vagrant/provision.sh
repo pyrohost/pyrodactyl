@@ -29,6 +29,7 @@ ufw allow ssh
 ufw allow 3306/tcp
 ufw allow 3000/tcp
 ufw allow 8080/tcp
+ufw allow 8081/tcp
 ufw allow 9000/tcp # MinIO API
 ufw allow 9001/tcp # MinIO Console
 ufw allow 8025/tcp # Mailpit Web UI
@@ -40,7 +41,7 @@ log Installing Redis
 apt-get install -y redis-server
 systemctl enable --now redis-server
 
-log Adding PHP 8.3 repository
+log Adding PHP 8.4 repository
 if [ ! -f /var/lib/pterodactyl-provision/php-repo-added ]; then
   add-apt-repository -y ppa:ondrej/php
   apt-get update -y
@@ -49,19 +50,21 @@ else
   log "PHP repository already added, skipping"
 fi
 
-log Installing PHP 8.3 + extensions
+log Installing PHP 8.4 + extensions
 apt-get install -y \
-  php8.3 php8.3-cli php8.3-fpm php8.3-gd php8.3-mysql php8.3-mbstring \
-  php8.3-bcmath php8.3-xml php8.3-curl php8.3-zip php8.3-readline php8.3-redis
+  php8.4 php8.4-cli php8.4-fpm php8.4-gd php8.4-mysql php8.4-mbstring \
+  php8.4-bcmath php8.4-xml php8.4-curl php8.4-zip php8.4-readline php8.4-redis \
+  php8.4-simplexml php8.4-dom
 
 log Configuring PHP-FPM pool
-cat >/etc/php/8.3/fpm/pool.d/pterodactyl.conf <<EOF
+cat >/etc/php/8.4/fpm/pool.d/pterodactyl.conf <<EOF
 [pterodactyl]
 user = vagrant
 group = vagrant
 listen = /run/php/pterodactyl.sock
-listen.owner = vagrant
-listen.group = vagrant
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0660
 pm = ondemand
 pm.max_children = 50
 pm.process_idle_timeout = 10s
@@ -69,7 +72,10 @@ pm.max_requests = 500
 chdir = /
 EOF
 
-systemctl enable --now php8.3-fpm
+phpenmod -v 8.4 dom xml simplexml
+usermod -a -G www-data vagrant
+
+systemctl enable --now php8.4-fpm
 
 log Installing and configuring Nginx
 apt-get install -y nginx
@@ -163,6 +169,12 @@ chmod -R u=rwX,g=rX,o=rX /var/www/pterodactyl
 
 pushd /var/www/pterodactyl >/dev/null
 [ -f .env ] || cp .env.example .env
+
+sudo -u vagrant mkdir -p storage/framework/cache
+sudo -u vagrant mkdir -p storage/framework/sessions
+sudo -u vagrant mkdir -p storage/framework/views
+sudo -u vagrant mkdir -p storage/logs
+sudo -u vagrant mkdir -p bootstrap/cache
 
 log Composer install
 sudo -u vagrant -H bash -lc 'cd /var/www/pterodactyl && composer install --no-dev --optimize-autoloader'
@@ -268,31 +280,48 @@ else
   log "Docker already installed, skipping"
 fi
 
-log Installing Wings
+log Installing Elytra
 install -d -m 0755 /etc/pterodactyl
-if [ ! -f /usr/local/bin/wings ]; then
+install -d -m 0755 /etc/elytra
+if [ ! -f /usr/local/bin/elytra ]; then
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=amd64 || ARCH=arm64
-  curl -fsSL -o /usr/local/bin/wings "https://github.com/pterodactyl/wings/releases/latest/download/wings_linux_${ARCH}"
-  chmod u+x /usr/local/bin/wings
+  curl -fsSL -o /usr/local/bin/elytra "https://github.com/pyrohost/elytra/releases/latest/download/elytra_linux_${ARCH}"
+  chmod u+x /usr/local/bin/elytra
 else
-  log "Wings already installed, skipping download"
+  log "Elytra already installed, skipping download"
 fi
+
+log Installing rustic for Elytra backups
+if [ ! -f /usr/local/bin/rustic ]; then
+  apt-get install -y libfuse2
+  ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=x86_64 || ARCH=aarch64
+  curl -fsSL -o /tmp/rustic.tar.gz "https://github.com/rustic-rs/rustic/releases/latest/download/rustic-v0.10.0-${ARCH}-unknown-linux-musl.tar.gz"
+  tar -xf /tmp/rustic.tar.gz -C /tmp rustic
+  mv /tmp/rustic /usr/local/bin/
+  chmod +x /usr/local/bin/rustic
+  rm -f /tmp/rustic.tar.gz
+else
+  log "Rustic already installed, skipping download"
+fi
+
 if [ ! -f /etc/pterodactyl/config.yml ]; then
   sudo -u vagrant -H bash -lc 'cd /var/www/pterodactyl && php artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
 else
-  log "Wings config already exists, skipping"
+  log "Elytra config already exists, skipping"
 fi
 
-cat >/etc/systemd/system/wings.service <<EOF
+cp /etc/pterodactyl/config.yml /etc/elytra/config.yml
+
+cat >/etc/systemd/system/elytra.service <<EOF
 [Unit]
-Description=Pterodactyl Wings Daemon
+Description=Pyrodactyl Elytra Daemon
 After=docker.service
 Requires=docker.service
 [Service]
 User=root
-WorkingDirectory=/etc/pterodactyl
+WorkingDirectory=/etc/elytra
 LimitNOFILE=4096
-ExecStart=/usr/local/bin/wings
+ExecStart=/usr/local/bin/elytra
 Restart=on-failure
 StartLimitBurst=30
 RestartSec=5s
@@ -303,7 +332,7 @@ EOF
 log Reloading systemd and starting services
 systemctl daemon-reload
 systemctl enable --now pteroq
-systemctl enable --now wings
+systemctl enable --now elytra
 
 log Installing MinIO
 if ! command -v minio >/dev/null 2>&1; then
@@ -423,6 +452,60 @@ EOF
   fi
   popd >/dev/null
   
+log Installing phpMyAdmin
+export DEBIAN_FRONTEND=noninteractive
+echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections
+echo 'phpmyadmin phpmyadmin/app-password-confirm password ptero' | debconf-set-selections
+echo 'phpmyadmin phpmyadmin/mysql/admin-pass password ptero' | debconf-set-selections
+echo 'phpmyadmin phpmyadmin/mysql/app-pass password ptero' | debconf-set-selections
+echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect' | debconf-set-selections
+
+apt install -y phpmyadmin php8.4-mbstring php8.4-zip php8.4-gd php8.4-json php8.4-curl
+
+mysql -u pterodactyl -ppassword -D panel -e "
+CREATE USER IF NOT EXISTS 'phpmyadmin'@'localhost' IDENTIFIED BY 'phpmyadmin';
+GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+" 2>/dev/null || true
+
+mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('rootpassword');" 2>/dev/null || true
+mysql -e "CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin';" 2>/dev/null || true
+mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;" 2>/dev/null || true
+mysql -e "FLUSH PRIVILEGES;" 2>/dev/null || true
+
+cat > /etc/phpmyadmin/conf.d/99-custom.php << 'PHPEOF'
+<?php
+# Custom phpMyAdmin configuration for development
+$cfg['Servers'][$i]['AllowNoPassword'] = true;
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['LoginCookieValidity'] = 3600;
+$cfg['LoginCookieStore'] = 0;
+PHPEOF
+
+cat > /etc/nginx/sites-available/phpmyadmin.conf <<'EOF'
+server {
+    listen 8081;
+    server_name localhost;
+    root /usr/share/phpmyadmin;
+    index index.php index.html;
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        fastcgi_read_timeout 300;
+    }
+
+    location ~ /\.ht { deny all; }
+}
+EOF
+
+ln -sf /etc/nginx/sites-available/phpmyadmin.conf /etc/nginx/sites-enabled/phpmyadmin.conf
   log "MinIO installed and configured successfully"
   log "MinIO Console: http://localhost:9001 (minioadmin/minioadmin)"
 else
@@ -516,6 +599,9 @@ else
   log "Mailpit already installed, skipping"
 fi
 
+systemctl restart php8.4-fpm
+systemctl reload nginx || systemctl restart nginx || true
+
 log Generating Application API Key
 pushd /var/www/pterodactyl >/dev/null
 API_KEY_RESULT=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
@@ -524,7 +610,7 @@ use Pterodactyl\Models\User;
 use Pterodactyl\Services\Api\KeyCreationService;
 \$user = User::find(1);
 if (!\$user) { exit; }
-if (ApiKey::query()->where(\"user_id\", \$user->id)->where(\"memo\", \"Development API Key\")->exists()) { echo \"\"; exit; }
+ApiKey::query()->where(\"user_id\", \$user->id)->where(\"memo\", \"Development API Key\")->delete();
 \$service = app(KeyCreationService::class);
 \$apiKey = \$service->setKeyType(2)->handle(
   [\"user_id\" => \$user->id, \"memo\" => \"Development API Key\"],
@@ -550,11 +636,10 @@ if [ -n "${API_KEY:-}" ]; then
     # Create a temporary server config with dynamic values in /tmp
     cat >/tmp/server_create.json <<EOF
 {
-    "external_id": null,
     "name": "Minecraft Vanilla Dev Server",
     "description": "Development Minecraft Vanilla Server with 4GB RAM, 32GB storage, 4 cores",
     "user": 1,
-    "egg": 7,
+    "egg": 3,
     "docker_image": "ghcr.io/pterodactyl/yolks:java_17",
     "startup": "java -Xms128M -Xmx4096M -jar {{SERVER_JARFILE}}",
     "environment": {
@@ -590,26 +675,52 @@ if [ -n "${API_KEY:-}" ]; then
 }
 EOF
     
-    # Check if a Minecraft server already exists
-    EXISTING_SERVER=$(mysql -u root -D panel -N -B -e "SELECT id FROM servers WHERE name='Minecraft Vanilla Dev Server' LIMIT 1;" 2>/dev/null || echo "")
-    
-    if [ -n "$EXISTING_SERVER" ]; then
+    # Check if a Minecraft server already exists using Laravel
+    pushd /var/www/pterodactyl >/dev/null
+    EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
+use Pterodactyl\Models\Server;
+\$server = Server::where(\"name\", \"Minecraft Vanilla Dev Server\")->first();
+if (\$server) {
+  echo \$server->id . \"|\" . \$server->uuid;
+} else {
+  echo \"none\";
+}
+"') 2>/dev/null || echo "none"
+    popd >/dev/null
+
+    if [ "$EXISTING_SERVER_CHECK" != "none" ]; then
+      EXISTING_SERVER=$(echo "$EXISTING_SERVER_CHECK" | cut -d'|' -f1)
+      EXISTING_UUID=$(echo "$EXISTING_SERVER_CHECK" | cut -d'|' -f2)
       log "Minecraft server already exists with ID: $EXISTING_SERVER, skipping creation"
       if ! grep -q "SERVER_ID=" /home/vagrant/.bashrc 2>/dev/null; then
         echo SERVER_ID=$EXISTING_SERVER >> /home/vagrant/.bashrc
-        SERVER_UUID=$(mysql -u root -D panel -N -B -e "SELECT uuid FROM servers WHERE id=$EXISTING_SERVER;" 2>/dev/null || echo "")
-        if [ -n "$SERVER_UUID" ]; then
-          echo SERVER_UUID=$SERVER_UUID >> /home/vagrant/.bashrc
+        if [ -n "$EXISTING_UUID" ]; then
+          echo SERVER_UUID=$EXISTING_UUID >> /home/vagrant/.bashrc
         fi
       fi
     else
+      log "Waiting for API to be ready..."
+      # Wait for API to be accessible and test authentication
+      for i in {1..30}; do
+        API_TEST=$(curl -s -H "Authorization: Bearer $API_KEY" -H "Accept: Application/vnd.pterodactyl.v1+json" http://localhost:3000/api/application/users 2>/dev/null || echo "failed")
+        if echo "$API_TEST" | grep -q '"object":"list"'; then
+          log "API is ready"
+          break
+        fi
+        if [ $i -eq 30 ]; then
+          warn "API failed to become ready after 30 attempts, skipping server creation"
+          break
+        fi
+        sleep 2
+      done
+
+      log "Attempting to create server with allocation ID: $ALLOCATION_ID, location ID: $LOCATION_ID"
       SERVER_RESPONSE=$(curl -s -X POST http://localhost:3000/api/application/servers \
         -H "Authorization: Bearer $API_KEY" \
         -H "Content-Type: application/json" \
         -H "Accept: Application/vnd.pterodactyl.v1+json" \
         -d @/tmp/server_create.json 2>/dev/null || echo '{"error":"curl_failed"}')
-      rm -f /tmp/server_create.json
-      
+
       if echo "$SERVER_RESPONSE" | grep -q '"object":"server"'; then
         SERVER_ID=$(echo "$SERVER_RESPONSE" | jq -r '.attributes.id' 2>/dev/null || echo "")
         SERVER_UUID=$(echo "$SERVER_RESPONSE" | jq -r '.attributes.uuid' 2>/dev/null || echo "")
@@ -624,9 +735,12 @@ EOF
           warn "Server creation succeeded but failed to extract server ID"
         fi
       else
-        warn "Server creation failed or returned unexpected response"
-        # Don't show the full response as it might contain sensitive info, just log the attempt
+        warn "Server creation failed. Response saved to /tmp/server_response.json"
+        if [ -f /tmp/server_response.json ]; then
+          log "Error details: $(head -3 /tmp/server_response.json)"
+        fi
       fi
+      rm -f /tmp/server_create.json
     fi
     rm -f /tmp/server_create.json
   fi
@@ -634,8 +748,7 @@ else
   log API key already exists, skipping creation
 fi
 
-systemctl restart php8.3-fpm
-systemctl reload nginx || systemctl restart nginx || true
+
 
 echo "======================================="
 echo "        Provisioning Complete"
@@ -645,6 +758,8 @@ echo "=== Development Services ==="
 echo "Mailpit Web UI:    http://localhost:8025"
 echo "MinIO Console:     http://localhost:9001"
 echo "MinIO Credentials: minioadmin / minioadmin"
+echo "phpMyAdmin:        http://localhost:8081"
+echo "phpMyAdmin Logins: root/rootpassword, admin/admin, pterodactyl/password"
 echo
 echo "Panel:             http://localhost:3000"
 echo "Login:             dev / dev"
