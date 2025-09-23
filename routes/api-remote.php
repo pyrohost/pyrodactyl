@@ -6,6 +6,7 @@ use Pterodactyl\Http\Controllers\Api\Remote\RusticConfigController;
 use Pterodactyl\Http\Controllers\Api\Remote\SftpAuthenticationController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupDeleteController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupRemoteUploadController;
+use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupSizeController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupStatusController;
 use Pterodactyl\Http\Controllers\Api\Remote\Servers\ServerDetailsController;
 use Pterodactyl\Http\Controllers\Api\Remote\Servers\ServerInstallController;
@@ -24,6 +25,7 @@ Route::group(['prefix' => '/servers/{uuid}'], function () {
   Route::post('/install', [ServerInstallController::class, 'store']);
 
   Route::get('/rustic-config', [RusticConfigController::class, 'show']);
+  Route::post('/backup-sizes', [BackupSizeController::class, 'update']);
 
   Route::get('/transfer/failure', [ServerTransferController::class, 'failure']);
   Route::get('/transfer/success', [ServerTransferController::class, 'success']);
