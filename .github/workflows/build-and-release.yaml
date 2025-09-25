@@ -48,7 +48,7 @@ jobs:
   create-release-branch:
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Bump Version')) ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'bump version')) ||
       github.event_name == 'workflow_dispatch'
     outputs:
       version: ${{ steps.extract-version.outputs.version }}
