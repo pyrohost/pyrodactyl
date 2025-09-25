@@ -65,7 +65,7 @@ class RusticConfigController extends Controller
         // For S3, return the actual S3 path that rustic will use
         $s3Config = config('backups.disks.rustic_s3');
         $bucket = $s3Config['bucket'] ?? '';
-        $prefix = rtrim($s3Config['prefix'] ?? 'pterodactyl-backups/', '/');
+        $prefix = rtrim($s3Config['prefix'] ?? 'rustic-repos/', '/');
 
         if (empty($bucket)) {
             throw new \InvalidArgumentException('S3 bucket not configured for rustic backups');

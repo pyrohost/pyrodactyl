@@ -85,7 +85,7 @@ return [
             'endpoint' => env('RUSTIC_S3_ENDPOINT', env('AWS_ENDPOINT')),
             'region' => env('RUSTIC_S3_REGION', env('AWS_DEFAULT_REGION', 'us-east-1')),
             'bucket' => env('RUSTIC_S3_BUCKET'),
-            'prefix' => env('RUSTIC_S3_PREFIX', 'pterodactyl-backups/'),
+            'prefix' => env('RUSTIC_S3_PREFIX', 'rustic-repos/'),
 
             // S3 credentials
             'key' => env('RUSTIC_S3_ACCESS_KEY_ID', env('AWS_ACCESS_KEY_ID')),
