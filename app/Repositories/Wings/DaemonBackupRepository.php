@@ -39,7 +39,7 @@ class DaemonBackupRepository extends DaemonRepository
         try {
             $adapterToSend = $this->adapter ?? config('backups.default');
 
-            return $this->getHttpClient()->post(
+            return $this->getHttpClient(['timeout' => 5])->post(
                 sprintf('/api/servers/%s/backup', $this->server->uuid),
                 [
                     'json' => [
@@ -65,7 +65,7 @@ class DaemonBackupRepository extends DaemonRepository
         Assert::isInstanceOf($this->server, Server::class);
 
         try {
-            return $this->getHttpClient()->post(
+            return $this->getHttpClient(['timeout' => 5])->post(
                 sprintf('/api/servers/%s/backup/%s/restore', $this->server->uuid, $backup->uuid),
                 [
                     'json' => [
@@ -90,7 +90,7 @@ class DaemonBackupRepository extends DaemonRepository
         Assert::isInstanceOf($this->server, Server::class);
 
         try {
-            return $this->getHttpClient()->delete(
+            return $this->getHttpClient(['timeout' => 5])->delete(
                 sprintf('/api/servers/%s/backup/%s', $this->server->uuid, $backup->uuid)
             );
         } catch (TransferException $exception) {
