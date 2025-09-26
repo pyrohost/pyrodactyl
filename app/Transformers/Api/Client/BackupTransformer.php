@@ -33,6 +33,17 @@ class BackupTransformer extends BaseClientTransformer
             'snapshot_id' => $backup->snapshot_id,
             'created_at' => $backup->created_at->toAtomString(),
             'completed_at' => $backup->completed_at ? $backup->completed_at->toAtomString() : null,
+            // Async job fields
+            'job_id' => $backup->job_id,
+            'job_status' => $backup->job_status,
+            'job_progress' => $backup->job_progress,
+            'job_message' => $backup->job_message,
+            'job_error' => $backup->job_error,
+            'job_started_at' => $backup->job_started_at ? $backup->job_started_at->toAtomString() : null,
+            'job_last_updated_at' => $backup->job_last_updated_at ? $backup->job_last_updated_at->toAtomString() : null,
+            'can_cancel' => $backup->canCancel(),
+            'can_retry' => $backup->canRetry(),
+            'is_in_progress' => $backup->isInProgress(),
         ];
 
         // Add server state information if available

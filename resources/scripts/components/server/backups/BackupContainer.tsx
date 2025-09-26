@@ -95,7 +95,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
 
 const BackupContainer = () => {
     const { page, setPage } = useContext(ServerBackupContext);
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
+    const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
     const { data: backups, error, isValidating, mutate } = getServerBackups();
     const [createModalVisible, setCreateModalVisible] = useState(false);
 
@@ -104,7 +104,7 @@ const BackupContainer = () => {
     const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
 
 
-    const hasBackupsInProgress = backups?.items.some((backup) => backup.completedAt === null) || false;
+    const hasBackupsInProgress = backups?.items.some((backup) => backup.isInProgress) || false;
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -129,11 +129,25 @@ const BackupContainer = () => {
     const submitBackup = (values: BackupValues, { setSubmitting }: FormikHelpers<BackupValues>) => {
         clearFlashes('backups:create');
         createServerBackup(uuid, values)
-            .then(async (backup) => {
+            .then(async (result) => {
+                // Add the new backup to the list immediately
                 await mutate(
-                    (data) => ({ ...data!, items: data!.items.concat(backup), backupCount: data!.backupCount + 1 }),
+                    (data) => ({
+                        ...data!,
+                        items: data!.items.concat(result.backup),
+                        backupCount: data!.backupCount + 1
+                    }),
                     false,
                 );
+
+                // Show success message
+                clearFlashes('backups');
+                addFlash({
+                    type: 'success',
+                    key: 'backups',
+                    message: `Backup "${result.backup.name}" has been started successfully.`,
+                });
+
                 setSubmitting(false);
                 setCreateModalVisible(false);
             })

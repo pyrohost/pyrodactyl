@@ -20,6 +20,17 @@ export interface ServerBackup {
     snapshotId: string | null;
     createdAt: Date;
     completedAt: Date | null;
+    // Async job fields
+    jobId: string | null;
+    jobStatus: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+    jobProgress: number;
+    jobMessage: string | null;
+    jobError: string | null;
+    jobStartedAt: Date | null;
+    jobLastUpdatedAt: Date | null;
+    canCancel: boolean;
+    canRetry: boolean;
+    isInProgress: boolean;
 }
 
 export interface ServerEggVariable {

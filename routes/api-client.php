@@ -142,9 +142,13 @@ Route::group([
         Route::post('/', [Client\Servers\BackupController::class, 'store'])
             ->middleware('server.operation.rate-limit');
         Route::get('/{backup}', [Client\Servers\BackupController::class, 'view']);
+        Route::get('/{backup}/status', [Client\Servers\BackupController::class, 'status']);
         Route::get('/{backup}/download', [Client\Servers\BackupController::class, 'download']);
         Route::post('/{backup}/lock', [Client\Servers\BackupController::class, 'toggleLock']);
         Route::post('/{backup}/rename', [Client\Servers\BackupController::class, 'rename']);
+        Route::post('/{backup}/cancel', [Client\Servers\BackupController::class, 'cancel']);
+        Route::post('/{backup}/retry', [Client\Servers\BackupController::class, 'retry'])
+            ->middleware('server.operation.rate-limit');
         Route::post('/{backup}/restore', [Client\Servers\BackupController::class, 'restore'])
             ->middleware('server.operation.rate-limit');
         Route::delete('/{backup}', [Client\Servers\BackupController::class, 'delete']);

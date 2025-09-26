@@ -14,7 +14,9 @@ use Pterodactyl\Services\Backups\DownloadLinkService;
 use Pterodactyl\Services\Backups\BackupStorageService;
 use Pterodactyl\Repositories\Eloquent\BackupRepository;
 use Pterodactyl\Services\Backups\InitiateBackupService;
+use Pterodactyl\Services\Backups\AsyncBackupService;
 use Pterodactyl\Services\Backups\ServerStateService;
+use Pterodactyl\Services\Backups\BackupJobPollingService;
 use Pterodactyl\Repositories\Wings\DaemonBackupRepository;
 use Pterodactyl\Transformers\Api\Client\BackupTransformer;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
@@ -31,6 +33,8 @@ class BackupController extends ClientApiController
     private DaemonBackupRepository $daemonRepository,
     private DeleteBackupService $deleteBackupService,
     private InitiateBackupService $initiateBackupService,
+    private AsyncBackupService $asyncBackupService,
+    private BackupJobPollingService $pollingService,
     private DownloadLinkService $downloadLinkService,
     private BackupRepository $repository,
     private ServerStateService $serverStateService,
@@ -83,7 +87,7 @@ class BackupController extends ClientApiController
   }
 
   /**
-   * Starts the backup process for a server.
+   * Starts the async backup process for a server.
    *
    * @throws \Spatie\Fractalistic\Exceptions\InvalidTransformation
    * @throws \Spatie\Fractalistic\Exceptions\NoTransformerSpecified
@@ -91,7 +95,7 @@ class BackupController extends ClientApiController
    */
   public function store(StoreBackupRequest $request, Server $server): array
   {
-    $action = $this->initiateBackupService
+    $action = $this->asyncBackupService
       ->setIgnoredFiles(explode(PHP_EOL, $request->input('ignored') ?? ''));
 
     // Only set the lock status if the user even has permission to delete backups,
@@ -102,19 +106,27 @@ class BackupController extends ClientApiController
       $action->setIsLocked((bool) $request->input('is_locked'));
     }
 
-    $backup = $action->handle($server, $request->input('name'));
+    $backup = $action->initiate($server, $request->input('name'));
 
     Activity::event('server:backup.start')
       ->subject($backup)
       ->property([
         'name' => $backup->name,
         'locked' => (bool) $request->input('is_locked'),
-        'adapter' => $backup->disk
+        'adapter' => $backup->disk,
+        'async' => true,
+        'job_id' => $backup->job_id,
       ])
       ->log();
 
     return $this->fractal->item($backup)
       ->transformWith($this->getTransformer(BackupTransformer::class))
+      ->addMeta([
+        'job_id' => $backup->job_id,
+        'status' => $backup->job_status,
+        'progress' => $backup->job_progress,
+        'message' => $backup->job_message,
+      ])
       ->toArray();
   }
 
@@ -180,6 +192,107 @@ class BackupController extends ClientApiController
     return $this->fractal->item($backup)
       ->transformWith($this->getTransformer(BackupTransformer::class))
       ->toArray();
+  }
+
+  /**
+   * Cancel a running backup job
+   *
+   * @throws AuthorizationException
+   */
+  public function cancel(Request $request, Server $server, Backup $backup): JsonResponse
+  {
+    if (!$request->user()->can(Permission::ACTION_BACKUP_DELETE, $server)) {
+      throw new AuthorizationException();
+    }
+
+    if (!$backup->canCancel()) {
+      throw new BadRequestHttpException('This backup cannot be cancelled.');
+    }
+
+    $success = $this->asyncBackupService->cancel($backup);
+
+    if ($success) {
+      Activity::event('server:backup.cancel')
+        ->subject($backup)
+        ->property(['name' => $backup->name, 'job_id' => $backup->job_id])
+        ->log();
+
+      return new JsonResponse([
+        'message' => 'Backup cancelled successfully',
+        'status' => $backup->job_status,
+      ]);
+    }
+
+    throw new BadRequestHttpException('Failed to cancel backup.');
+  }
+
+  /**
+   * Retry a failed backup
+   *
+   * @throws AuthorizationException
+   */
+  public function retry(Request $request, Server $server, Backup $backup): JsonResponse
+  {
+    if (!$request->user()->can(Permission::ACTION_BACKUP_CREATE, $server)) {
+      throw new AuthorizationException();
+    }
+
+    if (!$backup->canRetry()) {
+      throw new BadRequestHttpException('This backup cannot be retried.');
+    }
+
+    $success = $this->asyncBackupService->retry($backup);
+
+    if ($success) {
+      Activity::event('server:backup.retry')
+        ->subject($backup)
+        ->property(['name' => $backup->name, 'old_job_id' => $backup->job_id])
+        ->log();
+
+      // Refresh backup to get updated job_id
+      $backup->refresh();
+
+      return new JsonResponse([
+        'message' => 'Backup retry initiated successfully',
+        'job_id' => $backup->job_id,
+        'status' => $backup->job_status,
+        'progress' => $backup->job_progress,
+      ]);
+    }
+
+    throw new BadRequestHttpException('Failed to retry backup.');
+  }
+
+  /**
+   * Get real-time status of a backup job
+   *
+   * @throws AuthorizationException
+   */
+  public function status(Request $request, Server $server, Backup $backup): JsonResponse
+  {
+    if (!$request->user()->can(Permission::ACTION_BACKUP_READ, $server)) {
+      throw new AuthorizationException();
+    }
+
+    // Poll latest status from Elytra if job is still active
+    if ($backup->isInProgress() && $backup->job_id) {
+      $this->pollingService->pollBackupStatus($backup);
+      $backup->refresh();
+    }
+
+    return new JsonResponse([
+      'job_id' => $backup->job_id,
+      'status' => $backup->job_status,
+      'progress' => $backup->job_progress,
+      'message' => $backup->job_message,
+      'error' => $backup->job_error,
+      'is_successful' => $backup->is_successful,
+      'can_cancel' => $backup->canCancel(),
+      'can_retry' => $backup->canRetry(),
+      'started_at' => $backup->job_started_at?->toISOString(),
+      'last_updated_at' => $backup->job_last_updated_at?->toISOString(),
+      'completed_at' => $backup->completed_at?->toISOString(),
+    ]);
   }
 
   /**

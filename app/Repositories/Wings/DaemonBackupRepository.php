@@ -28,7 +28,8 @@ class DaemonBackupRepository extends DaemonRepository
     }
 
     /**
-     * Tells the remote Daemon to begin generating a backup for the server.
+     * Tells the remote Daemon to begin generating a backup for the server (async).
+     * Returns the response which should contain a job_id for tracking.
      *
      * @throws DaemonConnectionException
      */
@@ -39,7 +40,7 @@ class DaemonBackupRepository extends DaemonRepository
         try {
             $adapterToSend = $this->adapter ?? config('backups.default');
 
-            return $this->getHttpClient(['timeout' => 5])->post(
+            return $this->getHttpClient(['timeout' => 10])->post(
                 sprintf('/api/servers/%s/backup', $this->server->uuid),
                 [
                     'json' => [
@@ -81,7 +82,8 @@ class DaemonBackupRepository extends DaemonRepository
     }
 
     /**
-     * Deletes a backup from the daemon.
+     * Deletes a backup from the daemon (async).
+     * Returns the response which should contain a job_id for tracking.
      *
      * @throws DaemonConnectionException
      */
@@ -90,9 +92,75 @@ class DaemonBackupRepository extends DaemonRepository
         Assert::isInstanceOf($this->server, Server::class);
 
         try {
-            return $this->getHttpClient(['timeout' => 5])->delete(
-                sprintf('/api/servers/%s/backup/%s', $this->server->uuid, $backup->uuid)
+            return $this->getHttpClient(['timeout' => 10])->delete(
+                sprintf('/api/servers/%s/backup/%s', $this->server->uuid, $backup->uuid),
+                [
+                    'json' => [
+                        'adapter_type' => $backup->getElytraAdapterType(),
+                    ],
+                ]
             );
+        } catch (TransferException $exception) {
+            throw new DaemonConnectionException($exception);
+        }
+    }
+
+    /**
+     * Gets the current status of a job from Elytra
+     *
+     * @throws DaemonConnectionException
+     */
+    public function getJobStatus(string $jobId): ResponseInterface
+    {
+        Assert::isInstanceOf($this->server, Server::class);
+
+        try {
+            return $this->getHttpClient(['timeout' => 5])->get(
+                sprintf('/api/servers/%s/jobs/%s', $this->server->uuid, $jobId)
+            );
+        } catch (TransferException $exception) {
+            throw new DaemonConnectionException($exception);
+        }
+    }
+
+    /**
+     * Cancels a running job on Elytra
+     *
+     * @throws DaemonConnectionException
+     */
+    public function cancelJob(string $jobId): ResponseInterface
+    {
+        Assert::isInstanceOf($this->server, Server::class);
+
+        try {
+            return $this->getHttpClient(['timeout' => 5])->delete(
+                sprintf('/api/servers/%s/jobs/%s', $this->server->uuid, $jobId)
+            );
+        } catch (TransferException $exception) {
+            throw new DaemonConnectionException($exception);
+        }
+    }
+
+    /**
+     * Lists all jobs for a server on Elytra
+     *
+     * @throws DaemonConnectionException
+     */
+    public function listJobs(?string $status = null, ?string $type = null): ResponseInterface
+    {
+        Assert::isInstanceOf($this->server, Server::class);
+
+        try {
+            $query = [];
+            if ($status) $query['status'] = $status;
+            if ($type) $query['type'] = $type;
+
+            $url = sprintf('/api/servers/%s/jobs', $this->server->uuid);
+            if (!empty($query)) {
+                $url .= '?' . http_build_query($query);
+            }
+
+            return $this->getHttpClient(['timeout' => 5])->get($url);
         } catch (TransferException $exception) {
             throw new DaemonConnectionException($exception);
         }
