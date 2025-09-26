@@ -96,7 +96,7 @@ class NetworkAllocationController extends ClientApiController
             throw new DisplayException('Cannot assign allocations to this server: allocations are disabled.');
         }
 
-        if ($server->hasAllocationCountLimit() && $server->allocations()->count() >= $server->allocation_limit) {
+        if ($server->hasAllocationLimit() && $server->allocations()->count() >= $server->allocation_limit) {
             throw new DisplayException('Cannot assign additional allocations to this server: limit has been reached.');
         }
 
