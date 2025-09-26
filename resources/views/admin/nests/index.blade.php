@@ -27,6 +27,7 @@
                 <h3 class="box-title">Configured Nests</h3>
                 <div class="box-tools">
                     <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#importServiceOptionModal" role="button"><i class="fa fa-upload"></i> Import Egg</a>
+                    <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#importServiceOptionFromUrlModal" role="button"><i class="fa fa-upload"></i> Import Egg from URL</a>
                     <a href="{{ route('admin.nests.new') }}" class="btn btn-primary btn-sm">Create New</a>
                 </div>
             </div>
@@ -67,6 +68,43 @@
                         <div>
                             <input id="pImportFile" type="file" name="import_file" class="form-control" accept="application/json" />
                             <p class="small text-muted">Select the <code>.json</code> file for the new egg that you wish to import.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="pImportToNest">Associated Nest <span class="field-required"></span></label>
+                        <div>
+                            <select id="pImportToNest" name="import_to_nest">
+                                @foreach($nests as $nest)
+                                   <option value="{{ $nest->id }}">{{ $nest->name }} &lt;{{ $nest->author }}&gt;</option>
+                                @endforeach
+                            </select>
+                            <p class="small text-muted">Select the nest that this egg will be associated with from the dropdown. If you wish to associate it with a new nest you will need to create that nest before continuing.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ csrf_field() }}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="importServiceOptionFromUrlModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import an Egg</h4>
+            </div>
+            <form action="{{ route('admin.nests.egg.import_url') }}" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label" for="pImportFile">Egg URL <span class="field-required"></span></label>
+                        <div>
+                            <input id="pImportFile" type="url" name="import_file_url" class="form-control" accept="application/json" />
+                            <p class="small text-muted">Type the URL of the file for the new egg that you wish to import.</p>
                         </div>
                     </div>
                     <div class="form-group">

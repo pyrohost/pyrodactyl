@@ -60,7 +60,7 @@ class EggParserService
      * the "docker_images" field potentially not being present, and not being in the
      * expected "key => value" format.
      */
-    protected function convertToV2(array $parsed): array
+    public function convertToV2(array $parsed): array
     {
         if (Arr::get($parsed, 'meta.version') === Egg::EXPORT_VERSION) {
             return $parsed;
