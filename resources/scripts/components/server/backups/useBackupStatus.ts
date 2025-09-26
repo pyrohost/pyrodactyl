@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ServerBackup } from '@/api/server/types';
-import { getBackupStatus, BackupJobStatus } from '@/api/server/backups/getBackupStatus';
-import { useWebsocketEvent } from '@/api/swr/getServerWebsocketData';
+import getBackupStatus, { BackupJobStatus } from '@/api/server/backups/getBackupStatus';
+import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 interface UseBackupStatusReturn {
     status: BackupJobStatus | null;
