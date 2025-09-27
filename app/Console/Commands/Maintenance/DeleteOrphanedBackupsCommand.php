@@ -4,7 +4,6 @@ namespace Pterodactyl\Console\Commands\Maintenance;
 
 use Illuminate\Console\Command;
 use Pterodactyl\Models\Backup;
-use Pterodactyl\Services\Backups\DeleteBackupService;
 use Illuminate\Database\Eloquent\Builder;
 
 class DeleteOrphanedBackupsCommand extends Command
@@ -16,7 +15,7 @@ class DeleteOrphanedBackupsCommand extends Command
     /**
      * DeleteOrphanedBackupsCommand constructor.
      */
-    public function __construct(private DeleteBackupService $deleteBackupService)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -80,8 +79,8 @@ class DeleteOrphanedBackupsCommand extends Command
                     $deletedCount++;
                     $this->info("Force deleted soft-deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
                 } else {
-                    // Use the service to properly delete from storage and database
-                    $this->deleteBackupService->handle($backup);
+                    // Delete the orphaned backup from the database
+                    $backup->forceDelete();
                     $deletedCount++;
                     $this->info("Deleted backup: {$backup->uuid} ({$backup->name}) - {$this->formatBytes($backup->bytes)}");
                 }

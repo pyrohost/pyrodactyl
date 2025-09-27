@@ -7,7 +7,7 @@ use Pterodactyl\Http\Controllers\Api\Remote\SftpAuthenticationController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupDeleteController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupRemoteUploadController;
 use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupSizeController;
-use Pterodactyl\Http\Controllers\Api\Remote\Backups\BackupStatusController;
+use Pterodactyl\Http\Controllers\Api\Remote\ElytraJobCompletionController;
 use Pterodactyl\Http\Controllers\Api\Remote\Servers\ServerDetailsController;
 use Pterodactyl\Http\Controllers\Api\Remote\Servers\ServerInstallController;
 use Pterodactyl\Http\Controllers\Api\Remote\Servers\ServerTransferController;
@@ -35,7 +35,9 @@ Route::group(['prefix' => '/servers/{uuid}'], function () {
 
 Route::group(['prefix' => '/backups'], function () {
   Route::get('/{backup}', BackupRemoteUploadController::class);
-  Route::post('/{backup}', [BackupStatusController::class, 'index']);
-  Route::post('/{backup}/restore', [BackupStatusController::class, 'restore']);
   Route::delete('/{backup}', BackupDeleteController::class);
+});
+
+Route::group(['prefix' => '/elytra-jobs'], function () {
+  Route::put('/{jobId}', [ElytraJobCompletionController::class, 'update']);
 });

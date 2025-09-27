@@ -7,19 +7,12 @@ use Pterodactyl\Models\Backup;
 use Illuminate\Http\JsonResponse;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Http\Controllers\Controller;
-use Pterodactyl\Services\Backups\DeleteBackupService;
 use Pterodactyl\Exceptions\Http\HttpForbiddenException;
 use Pterodactyl\Exceptions\Service\Backup\BackupLockedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BackupDeleteController extends Controller
 {
-    /**
-     * BackupDeleteController constructor.
-     */
-    public function __construct(private DeleteBackupService $deleteBackupService)
-    {
-    }
 
     /**
      * Handles the deletion of a backup from the remote daemon.
@@ -52,7 +45,8 @@ class BackupDeleteController extends Controller
                 ->property('name', $model->name);
 
             $log->transaction(function () use ($model) {
-                $this->deleteBackupService->handle($model);
+                // Simply mark the backup as deleted
+                $model->delete();
             });
 
             return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);

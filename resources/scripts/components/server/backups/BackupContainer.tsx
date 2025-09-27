@@ -15,14 +15,14 @@ import Pagination from '@/components/elements/Pagination';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { PageListContainer } from '@/components/elements/pages/PageList';
-import BackupRow from '@/components/server/backups/BackupRow';
 
-import createServerBackup from '@/api/server/backups/createServerBackup';
-import getServerBackups, { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
+import { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
 
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+import { useUnifiedBackups } from './useUnifiedBackups';
+import BackupItem from './BackupItem';
 
 // Helper function to format storage values
 const formatStorage = (mb: number | undefined | null): string => {
@@ -96,71 +96,45 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
 const BackupContainer = () => {
     const { page, setPage } = useContext(ServerBackupContext);
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
-    const { data: backups, error, isValidating, mutate } = getServerBackups();
     const [createModalVisible, setCreateModalVisible] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const {
+        backups,
+        backupCount,
+        storage,
+        error,
+        isValidating,
+        createBackup
+    } = useUnifiedBackups();
+
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
-
-
-    const hasBackupsInProgress = backups?.items.some((backup) => backup.isInProgress) || false;
-
-    useEffect(() => {
-        let interval: NodeJS.Timeout;
-
-        if (hasBackupsInProgress) {
-            interval = setInterval(() => {
-                mutate();
-            }, 2000);
-        }
-
-        return () => {
-            if (interval) {
-                clearInterval(interval);
-            }
-        };
-    }, [hasBackupsInProgress, mutate]);
 
     useEffect(() => {
         clearFlashes('backups:create');
     }, [createModalVisible]);
 
-    const submitBackup = (values: BackupValues, { setSubmitting }: FormikHelpers<BackupValues>) => {
+    const submitBackup = async (values: BackupValues, { setSubmitting }: FormikHelpers<BackupValues>) => {
         clearFlashes('backups:create');
-        createServerBackup(uuid, values)
-            .then(async (result) => {
-                // Add the new backup to the list immediately
-                await mutate(
-                    (data) => ({
-                        ...data!,
-                        items: data!.items.concat(result.backup),
-                        backupCount: data!.backupCount + 1
-                    }),
-                    false,
-                );
 
-                // Show success message
-                clearFlashes('backups');
-                addFlash({
-                    type: 'success',
-                    key: 'backups',
-                    message: `Backup "${result.backup.name}" has been started successfully.`,
-                });
+        try {
+            await createBackup(values.name, values.ignored, values.isLocked);
 
-                setSubmitting(false);
-                setCreateModalVisible(false);
-            })
-            .catch((error) => {
-                clearAndAddHttpError({ key: 'backups:create', error });
-                setSubmitting(false);
-            });
+            // Clear any existing flash messages
+            clearFlashes('backups');
+            clearFlashes('backups:create');
+
+            setSubmitting(false);
+            setCreateModalVisible(false);
+        } catch (error) {
+            clearAndAddHttpError({ key: 'backups:create', error });
+            setSubmitting(false);
+        }
     };
 
     useEffect(() => {
         if (!error) {
             clearFlashes('backups');
-
             return;
         }
 
@@ -197,12 +171,12 @@ const BackupContainer = () => {
                                 {/* Backup Count Display */}
                                 {backupLimit === null && (
                                     <p className='text-sm text-zinc-300'>
-                                        {backups.backupCount} backups
+                                        {backupCount} backups
                                     </p>
                                 )}
                                 {backupLimit > 0 && (
                                     <p className='text-sm text-zinc-300'>
-                                        {backups.backupCount} of {backupLimit} backups
+                                        {backupCount} of {backupLimit} backups
                                     </p>
                                 )}
                                 {backupLimit === 0 && (
@@ -212,22 +186,22 @@ const BackupContainer = () => {
                                 )}
 
                                 {/* Storage Usage Display */}
-                                {backups.storage && (
+                                {storage && (
                                     <div className='flex flex-col gap-0.5'>
                                         {backupStorageLimit === null ? (
                                             <p
                                                 className='text-sm text-zinc-300 cursor-help'
-                                                title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used(No Limit)`}
+                                                title={`${storage.used_mb?.toFixed(2) || 0}MB used(No Limit)`}
                                             >
-                                                <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> storage used
+                                                <span className='font-medium'>{formatStorage(storage.used_mb)}</span> storage used
                                             </p>
                                         ) : (
                                             <>
                                                 <p
                                                     className='text-sm text-zinc-300 cursor-help'
-                                                    title={`${backups.storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB (${backups.storage.available_mb?.toFixed(2) || 0}MB Available)`}
+                                                    title={`${storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB (${storage.available_mb?.toFixed(2) || 0}MB Available)`}
                                                 >
-                                                    <span className='font-medium'>{formatStorage(backups.storage.used_mb)}</span> {' '}
+                                                    <span className='font-medium'>{formatStorage(storage.used_mb)}</span> {' '}
                                                     {backupStorageLimit === null ?
                                                         "used" :
                                                         (<span className='font-medium'>of {formatStorage(backupStorageLimit)} used</span>)}
@@ -238,8 +212,8 @@ const BackupContainer = () => {
                                     </div>
                                 )}
                             </div>
-                            {(backupLimit === null || backupLimit > backups.backupCount) &&
-                                (!backupStorageLimit || !backups.storage?.is_over_limit) && (
+                            {(backupLimit === null || backupLimit > backupCount) &&
+                                (!backupStorageLimit || !storage?.is_over_limit) && (
                                     <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
                                         New Backup
                                     </ActionButton>
@@ -268,39 +242,35 @@ const BackupContainer = () => {
                 </Formik>
             )}
 
-            <Pagination data={backups} onPageSelect={setPage}>
-                {({ items }) =>
-                    !items.length ? (
-                        <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
-                            <div className='text-center'>
-                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
-                                        <path
-                                            fillRule='evenodd'
-                                            d='M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z'
-                                            clipRule='evenodd'
-                                        />
-                                    </svg>
-                                </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}
-                                </h3>
-                                <p className='text-sm text-zinc-400 max-w-sm'>
-                                    {backupLimit === 0
-                                        ? 'Backups cannot be created for this server.'
-                                        : 'Your server does not have any backups. Create one to get started.'}
-                                </p>
-                            </div>
+            {backups.length === 0 ? (
+                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
+                    <div className='text-center'>
+                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
+                            <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                                <path
+                                    fillRule='evenodd'
+                                    d='M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z'
+                                    clipRule='evenodd'
+                                />
+                            </svg>
                         </div>
-                    ) : (
-                        <PageListContainer>
-                            {items.map((backup) => (
-                                <BackupRow key={backup.uuid} backup={backup} />
-                            ))}
-                        </PageListContainer>
-                    )
-                }
-            </Pagination>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                            {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}
+                        </h3>
+                        <p className='text-sm text-zinc-400 max-w-sm'>
+                            {backupLimit === 0
+                                ? 'Backups cannot be created for this server.'
+                                : 'Your server does not have any backups. Create one to get started.'}
+                        </p>
+                    </div>
+                </div>
+            ) : (
+                <PageListContainer>
+                    {backups.map((backup) => (
+                        <BackupItem key={backup.uuid} backup={backup} />
+                    ))}
+                </PageListContainer>
+            )}
         </ServerContentBlock>
     );
 };

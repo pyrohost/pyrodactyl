@@ -76,7 +76,6 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     jobError: attributes.job_error || null,
     jobStartedAt: attributes.job_started_at ? new Date(attributes.job_started_at) : null,
     jobLastUpdatedAt: attributes.job_last_updated_at ? new Date(attributes.job_last_updated_at) : null,
-    canCancel: attributes.can_cancel || false,
     canRetry: attributes.can_retry || false,
     isInProgress: ['pending', 'running'].includes(attributes.job_status || ''),
 });

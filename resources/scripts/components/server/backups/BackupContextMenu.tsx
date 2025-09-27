@@ -21,17 +21,14 @@ import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http, { httpErrorToHuman } from '@/api/http';
 import {
-    deleteServerBackup,
     getServerBackupDownloadUrl,
-    renameServerBackup,
-    restoreServerBackup,
 } from '@/api/server/backups';
 import { ServerBackup } from '@/api/server/types';
-import getServerBackups from '@/api/swr/getServerBackups';
 
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+import { useUnifiedBackups } from './useUnifiedBackups';
 
 interface Props {
     backup: ServerBackup;
@@ -45,7 +42,7 @@ const BackupContextMenu = ({ backup }: Props) => {
     const [countdown, setCountdown] = useState(5);
     const [newName, setNewName] = useState(backup.name);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { mutate } = getServerBackups();
+    const { deleteBackup, restoreBackup, renameBackup, toggleBackupLock, refresh } = useUnifiedBackups();
 
     const doDownload = () => {
         setLoading(true);
@@ -56,111 +53,75 @@ const BackupContextMenu = ({ backup }: Props) => {
                 window.location = url;
             })
             .catch((error) => {
-                console.error(error);
                 clearAndAddHttpError({ key: 'backups', error });
             })
             .then(() => setLoading(false));
     };
 
-    const doDeletion = () => {
+    const doDeletion = async () => {
         setLoading(true);
         clearFlashes('backups');
-        deleteServerBackup(uuid, backup.uuid)
-            .then(
-                async () =>
-                    await mutate(
-                        (data) => ({
-                            ...data!,
-                            items: data!.items.filter((b) => b.uuid !== backup.uuid),
-                            backupCount: data!.backupCount - 1,
-                        }),
-                        false,
-                    ),
-            )
-            .catch((error) => {
-                console.error(error);
-                clearAndAddHttpError({ key: 'backups', error });
-                setLoading(false);
-                setModal('');
-            });
+
+        try {
+            await deleteBackup(backup.uuid);
+            setLoading(false);
+            setModal('');
+        } catch (error) {
+            clearAndAddHttpError({ key: 'backups', error });
+            setLoading(false);
+            setModal('');
+        }
     };
-    const doRestorationAction = () => {
+    const doRestorationAction = async () => {
         setLoading(true);
         clearFlashes('backups');
-        restoreServerBackup(uuid, backup.uuid)
-            .then(() =>
-                setServerFromState((s) => ({
-                    ...s,
-                    status: 'restoring_backup',
-                })),
-            )
-            .catch((error) => {
-                console.error(error);
-                clearAndAddHttpError({ key: 'backups', error });
-            })
-            .then(() => setLoading(false))
-            .then(() => setModal(''));
+
+        try {
+            await restoreBackup(backup.uuid);
+
+            // Set server status to restoring
+            setServerFromState((s) => ({
+                ...s,
+                status: 'restoring_backup',
+            }));
+
+            setLoading(false);
+            setModal('');
+        } catch (error) {
+            clearAndAddHttpError({ key: 'backups', error });
+            setLoading(false);
+            setModal('');
+        }
     };
 
-    const onLockToggle = () => {
+    const onLockToggle = async () => {
         if (backup.isLocked && modal !== 'unlock') {
             return setModal('unlock');
         }
 
-        http.post(`/api/client/servers/${uuid}/backups/${backup.uuid}/lock`)
-            .then(
-                async () =>
-                    await mutate(
-                        (data) => ({
-                            ...data!,
-                            items: data!.items.map((b) =>
-                                b.uuid !== backup.uuid
-                                    ? b
-                                    : {
-                                          ...b,
-                                          isLocked: !b.isLocked,
-                                      },
-                            ),
-                        }),
-                        false,
-                    ),
-            )
-            .catch((error) => alert(httpErrorToHuman(error)))
-            .then(() => setModal(''));
+        try {
+            await toggleBackupLock(backup.uuid);
+            setModal('');
+        } catch (error) {
+            alert(httpErrorToHuman(error));
+        }
     };
 
-    const doRename = () => {
+    const doRename = async () => {
         setLoading(true);
         clearFlashes('backups');
-        renameServerBackup(uuid, backup.uuid, newName.trim())
-            .then(
-                async () =>
-                    await mutate(
-                        (data) => ({
-                            ...data!,
-                            items: data!.items.map((b) =>
-                                b.uuid !== backup.uuid
-                                    ? b
-                                    : {
-                                          ...b,
-                                          name: newName.trim(),
-                                      },
-                            ),
-                        }),
-                        false,
-                    ),
-            )
-            .catch((error) => {
-                console.error(error);
-                clearAndAddHttpError({ key: 'backups', error });
-            })
-            .then(() => {
-                setLoading(false);
-                setModal('');
-            });
+
+        try {
+            await renameBackup(backup.uuid, newName.trim());
+            setLoading(false);
+            setModal('');
+        } catch (error) {
+            clearAndAddHttpError({ key: 'backups', error });
+            setLoading(false);
+            setModal('');
+        }
     };
 
-    // Countdown effect for restore modal
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if (modal === 'restore' && countdown > 0) {
@@ -173,14 +134,12 @@ const BackupContextMenu = ({ backup }: Props) => {
         };
     }, [modal, countdown]);
 
-    // Reset countdown when modal opens
     useEffect(() => {
         if (modal === 'restore') {
             setCountdown(5);
         }
     }, [modal]);
 
-    // Reset name when modal opens
     useEffect(() => {
         if (modal === 'rename') {
             setNewName(backup.name);

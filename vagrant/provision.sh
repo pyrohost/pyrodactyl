@@ -89,7 +89,7 @@ cat >/etc/nginx/sites-available/pterodactyl.conf <<'EOF'
 server {
     listen 3000;
     server_name localhost;
-    root /var/www/pterodactyl/public;
+    root /home/vagrant/pyrodactyl/public;
     index index.php index.html;
     charset utf-8;
     location / {
@@ -163,11 +163,7 @@ if ! command -v composer >/dev/null 2>&1; then
   rm -f /tmp/composer-setup.php
 fi
 
-log Preparing /var/www/pterodactyl
-chown -R vagrant:vagrant /var/www/pterodactyl
-chmod -R u=rwX,g=rX,o=rX /var/www/pterodactyl
-
-pushd /var/www/pterodactyl >/dev/null
+pushd /home/vagrant/pyrodactyl >/dev/null
 [ -f .env ] || cp .env.example .env
 
 sudo -u vagrant mkdir -p storage/framework/cache
@@ -177,13 +173,13 @@ sudo -u vagrant mkdir -p storage/logs
 sudo -u vagrant mkdir -p bootstrap/cache
 
 log Composer install
-sudo -u vagrant -H bash -lc 'cd /var/www/pterodactyl && composer install --no-dev --optimize-autoloader'
+sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && composer install --no-dev --optimize-autoloader'
 chmod -R 755 storage bootstrap/cache
 setfacl -Rm u:vagrant:rwX storage bootstrap/cache >/dev/null 2>&1 || true
 chown -R vagrant:vagrant storage bootstrap/cache
 
 # helper (append --no-interaction automatically; avoid quoted, spaced values)
-artisan() { sudo -u vagrant -H bash -lc "cd /var/www/pterodactyl && php artisan $* --no-interaction"; }
+artisan() { sudo -u vagrant -H bash -lc "cd /home/vagrant/pyrodactyl && php artisan $* --no-interaction"; }
 
 # generate key only if empty/missing
 if ! grep -qE '^APP_KEY=base64:.+' .env; then
@@ -246,7 +242,7 @@ popd >/dev/null
 
 log Installing Laravel scheduler cron
 ( crontab -l 2>/dev/null | grep -v 'pterodactyl/artisan schedule:run' || true
-  echo '* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1'
+  echo '* * * * * php /home/vagrant/pyrodactyl/artisan schedule:run >> /dev/null 2>&1'
 ) | crontab -
 
 log Creating pteroq.service
@@ -258,9 +254,9 @@ Requires=redis-server.service
 [Service]
 User=vagrant
 Group=vagrant
-WorkingDirectory=/var/www/pterodactyl
+WorkingDirectory=/home/vagrant/pyrodactyl
 Restart=always
-ExecStart=/usr/bin/php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+ExecStart=/usr/bin/php /home/vagrant/pyrodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
 StartLimitBurst=30
 RestartSec=5s
 [Install]
@@ -305,7 +301,7 @@ else
 fi
 
 if [ ! -f /etc/pterodactyl/config.yml ]; then
-  sudo -u vagrant -H bash -lc 'cd /var/www/pterodactyl && php artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
+  sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && php artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
 else
   log "Elytra config already exists, skipping"
 fi
@@ -408,7 +404,7 @@ EOF
   ' || true
   
   # Configure MinIO in .env for rustic_s3 backups
-  pushd /var/www/pterodactyl >/dev/null
+  pushd /home/vagrant/pyrodactyl >/dev/null
   if [ -f .env ]; then
     # Set rustic_s3 backup configuration for MinIO
     sed -i '/^APP_BACKUP_DRIVER=/c\APP_BACKUP_DRIVER=rustic_s3' .env
@@ -558,7 +554,7 @@ EOF
   systemctl enable --now mailpit
   
   # Configure Mailpit in .env for mail testing
-  pushd /var/www/pterodactyl >/dev/null
+  pushd /home/vagrant/pyrodactyl >/dev/null
   if [ -f .env ]; then
     # Set mail configuration for Mailpit
     if grep -q "^MAIL_MAILER=" .env; then
@@ -615,7 +611,7 @@ systemctl restart php8.4-fpm
 systemctl reload nginx || systemctl restart nginx || true
 
 log Generating Application API Key
-pushd /var/www/pterodactyl >/dev/null
+pushd /home/vagrant/pyrodactyl >/dev/null
 API_KEY_RESULT=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
 use Pterodactyl\Models\ApiKey;
 use Pterodactyl\Models\User;
@@ -688,7 +684,7 @@ if [ -n "${API_KEY:-}" ]; then
 EOF
     
     # Check if a Minecraft server already exists using Laravel
-    pushd /var/www/pterodactyl >/dev/null
+    pushd /home/vagrant/pyrodactyl >/dev/null
     EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
 use Pterodactyl\Models\Server;
 \$server = Server::where(\"name\", \"Minecraft Vanilla Dev Server\")->first();

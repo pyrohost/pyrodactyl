@@ -4,7 +4,7 @@ namespace Pterodactyl\Console\Commands\Maintenance;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
-use Pterodactyl\Repositories\Eloquent\BackupRepository;
+use Pterodactyl\Models\Backup;
 
 class PruneOrphanedBackupsCommand extends Command
 {
@@ -15,7 +15,7 @@ class PruneOrphanedBackupsCommand extends Command
     /**
      * PruneOrphanedBackupsCommand constructor.
      */
-    public function __construct(private BackupRepository $backupRepository)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -27,7 +27,7 @@ class PruneOrphanedBackupsCommand extends Command
             throw new \InvalidArgumentException('The "--prune-age" argument must be a value greater than 0.');
         }
 
-        $query = $this->backupRepository->getBuilder()
+        $query = Backup::query()
             ->whereNull('completed_at')
             ->where('created_at', '<=', CarbonImmutable::now()->subMinutes($since)->toDateTimeString());
 

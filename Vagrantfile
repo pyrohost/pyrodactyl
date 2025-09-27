@@ -64,12 +64,13 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant::Util::Platform.windows?
-    config.vm.synced_folder ".", "/var/www/pterodactyl",
-      type: "rsync",
-      rsync__exclude: [".git/", "node_modules/", "vendor/**", ".vagrant/", "storage/logs/", "storage/framework/cache/", "storage/framework/sessions/", "storage/framework/views/"],
-      rsync__args: ["--verbose", "--archive", "--delete", "-z", "--copy-links"]
+    config.vm.synced_folder ".", "/home/vagrant/pyrodactyl",
+      type: "virtualbox",
+      owner: "vagrant",
+      group: "vagrant",
+      mount_options: ["dmode=775", "fmode=664"]
   else
-    config.vm.synced_folder ".", "/var/www/pterodactyl",
+    config.vm.synced_folder ".", "/home/vagrant/pyrodactyl",
       type: "nfs",
       nfs_version: 4,
       nfs_udp: false,
@@ -84,6 +85,6 @@ Vagrant.configure("2") do |config|
     Pyrodactyl is up and running at http://localhost:3000
     Login with:
       username: dev@pyro.host
-      password: password
+      password: dev
   MSG
 end

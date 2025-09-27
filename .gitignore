@@ -1,4 +1,9 @@
 /vendor
+
+# Elytra binary
+elytra
+!elytra/
+
 *.DS_Store*
 !.env.ci
 !.env.example

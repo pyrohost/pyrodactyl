@@ -6,7 +6,7 @@ return [
     // The backup driver to use for this Panel instance. All client generated server backups
     // will be stored in this location by default. It is possible to change this once backups
     // have been made, without losing data.
-    // Options: wings, s3, rustic_local, rustic_s3
+    // Options: elytra, wings (legacy), s3, rustic_local, rustic_s3
     'default' => env('APP_BACKUP_DRIVER', Backup::ADAPTER_RUSTIC_LOCAL),
 
     // This value is used to determine the lifespan of UploadPart presigned urls that wings
@@ -27,6 +27,11 @@ return [
         // is determined by the Daemon configuration, and not the Panel.
         'wings' => [
             'adapter' => Backup::ADAPTER_WINGS,
+        ],
+
+        // Elytra local backups (preferred over wings)
+        'elytra' => [
+            'adapter' => Backup::ADAPTER_ELYTRA,
         ],
 
         // Configuration for storing backups in Amazon S3. This uses the same credentials

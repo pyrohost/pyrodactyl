@@ -22,13 +22,12 @@ export interface ServerBackup {
     completedAt: Date | null;
     // Async job fields
     jobId: string | null;
-    jobStatus: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+    jobStatus: 'pending' | 'running' | 'completed' | 'failed';
     jobProgress: number;
     jobMessage: string | null;
     jobError: string | null;
     jobStartedAt: Date | null;
     jobLastUpdatedAt: Date | null;
-    canCancel: boolean;
     canRetry: boolean;
     isInProgress: boolean;
 }
