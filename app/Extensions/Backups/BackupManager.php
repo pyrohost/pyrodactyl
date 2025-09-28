@@ -107,6 +107,14 @@ class BackupManager
     }
 
     /**
+     * Creates a new Elytra adapter.
+     */
+    public function createElytraAdapter(array $config): FilesystemAdapter
+    {
+        return new InMemoryFilesystemAdapter();
+    }
+
+    /**
      * Creates a new S3 adapter.
      */
     public function createS3Adapter(array $config): FilesystemAdapter

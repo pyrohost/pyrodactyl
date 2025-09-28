@@ -68,6 +68,16 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     snapshotId: attributes.snapshot_id,
     createdAt: new Date(attributes.created_at),
     completedAt: attributes.completed_at ? new Date(attributes.completed_at) : null,
+    // Async job fields
+    jobId: attributes.job_id || null,
+    jobStatus: attributes.job_status || 'completed',
+    jobProgress: attributes.job_progress || (attributes.is_successful ? 100 : 0),
+    jobMessage: attributes.job_message || null,
+    jobError: attributes.job_error || null,
+    jobStartedAt: attributes.job_started_at ? new Date(attributes.job_started_at) : null,
+    jobLastUpdatedAt: attributes.job_last_updated_at ? new Date(attributes.job_last_updated_at) : null,
+    canRetry: attributes.can_retry || false,
+    isInProgress: ['pending', 'running'].includes(attributes.job_status || ''),
 });
 
 export const rawDataToServerEggVariable = ({ attributes }: FractalResponseData): ServerEggVariable => ({

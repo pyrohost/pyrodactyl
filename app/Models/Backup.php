@@ -4,9 +4,12 @@ namespace Pterodactyl\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
+ * Backup model
+ *
  * @property int $id
  * @property int $server_id
  * @property string $uuid
@@ -25,6 +28,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \Carbon\CarbonImmutable $updated_at
  * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property Server $server
+ * @property \Pterodactyl\Models\ElytraJob[] $elytraJobs
  * @property \Pterodactyl\Models\AuditLog[] $audits
  */
 class Backup extends Model
@@ -35,7 +39,9 @@ class Backup extends Model
 
     public const RESOURCE_NAME = 'backup';
 
+    // Backup adapters
     public const ADAPTER_WINGS = 'wings';
+    public const ADAPTER_ELYTRA = 'elytra'; // Preferred name for local backups
     public const ADAPTER_AWS_S3 = 's3';
     public const ADAPTER_RUSTIC_LOCAL = 'rustic_local';
     public const ADAPTER_RUSTIC_S3 = 'rustic_s3';
@@ -78,7 +84,7 @@ class Backup extends Model
      */
     public function isLocal(): bool
     {
-        return in_array($this->disk, [self::ADAPTER_WINGS, self::ADAPTER_RUSTIC_LOCAL]);
+        return in_array($this->disk, [self::ADAPTER_WINGS, self::ADAPTER_ELYTRA, self::ADAPTER_RUSTIC_LOCAL]);
     }
 
     /**
@@ -101,6 +107,14 @@ class Backup extends Model
         return !empty($this->snapshot_id);
     }
 
+    /**
+     * Get the size in gigabytes for display
+     */
+    public function getSizeGbAttribute(): float
+    {
+        return round($this->bytes / 1024 / 1024 / 1024, 3);
+    }
+
     public static array $validationRules = [
         'server_id' => 'bail|required|numeric|exists:servers,id',
         'uuid' => 'required|uuid',
@@ -109,7 +123,7 @@ class Backup extends Model
         'name' => 'required|string',
         'ignored_files' => 'array',
         'server_state' => 'nullable|array',
-        'disk' => 'required|string|in:wings,s3,rustic_local,rustic_s3',
+        'disk' => 'required|string|in:wings,elytra,s3,rustic_local,rustic_s3',
         'checksum' => 'nullable|string',
         'snapshot_id' => 'nullable|string|max:64',
         'bytes' => 'numeric',
@@ -119,5 +133,78 @@ class Backup extends Model
     public function server(): BelongsTo
     {
         return $this->belongsTo(Server::class);
+    }
+
+    /**
+     * Get all Elytra jobs related to this backup
+     */
+    public function elytraJobs(): HasMany
+    {
+        return $this->hasMany(ElytraJob::class, 'server_id', 'server_id')
+            ->where('job_data->backup_uuid', $this->uuid);
+    }
+
+    /**
+     * Get the latest Elytra job for this backup
+     */
+    public function latestElytraJob()
+    {
+        return $this->elytraJobs()->latest('created_at')->first();
+    }
+
+    /**
+     * Get the adapter type formatted for Elytra API
+     */
+    public function getElytraAdapterType(): string
+    {
+        return match($this->disk) {
+            self::ADAPTER_WINGS => 'elytra',  // Legacy support: wings -> elytra
+            self::ADAPTER_ELYTRA => 'elytra', // Direct mapping for new backups
+            self::ADAPTER_AWS_S3 => 's3',
+            self::ADAPTER_RUSTIC_LOCAL => 'rustic_local',
+            self::ADAPTER_RUSTIC_S3 => 'rustic_s3',
+            default => $this->disk,
+        };
+    }
+
+    /**
+     * Scope to get successful backups
+     */
+    public function scopeSuccessful($query)
+    {
+        return $query->where('is_successful', true);
+    }
+
+    /**
+     * Scope to get failed backups
+     */
+    public function scopeFailed($query)
+    {
+        return $query->where('is_successful', false);
+    }
+
+    /**
+     * Scope to get locked backups
+     */
+    public function scopeLocked($query)
+    {
+        return $query->where('is_locked', true);
+    }
+
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+    /**
+     * Resolve the route binding by UUID instead of ID.
+     */
+    public function resolveRouteBinding($value, $field = null): ?\Illuminate\Database\Eloquent\Model
+    {
+        return $this->query()->where($field ?? $this->getRouteKeyName(), $value)->firstOrFail();
     }
 }

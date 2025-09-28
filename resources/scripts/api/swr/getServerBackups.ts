@@ -47,5 +47,8 @@ export default () => {
             storage: data.meta.storage,
             limits: data.meta.limits,
         };
+    }, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: true,
     });
 };

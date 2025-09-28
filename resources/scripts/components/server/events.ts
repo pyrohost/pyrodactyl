@@ -10,6 +10,7 @@ export enum SocketEvent {
     TRANSFER_LOGS = 'transfer logs',
     TRANSFER_STATUS = 'transfer status',
     BACKUP_COMPLETED = 'backup completed',
+    BACKUP_STATUS = 'backup.status',
     BACKUP_RESTORE_COMPLETED = 'backup restore completed',
 }
 

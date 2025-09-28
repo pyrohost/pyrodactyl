@@ -137,17 +137,27 @@ Route::group([
         Route::delete('/{user}', [Client\Servers\SubuserController::class, 'delete']);
     });
 
+    // Elytra Jobs API
+    Route::group(['prefix' => '/jobs'], function () {
+        Route::get('/', [Client\Servers\ElytraJobsController::class, 'index']);
+        Route::post('/', [Client\Servers\ElytraJobsController::class, 'create'])
+            ->middleware('server.operation.rate-limit');
+        Route::get('/{jobId}', [Client\Servers\ElytraJobsController::class, 'show']);
+        Route::delete('/{jobId}', [Client\Servers\ElytraJobsController::class, 'cancel']);
+    });
+
+    //  Backups API
     Route::group(['prefix' => '/backups'], function () {
-        Route::get('/', [Client\Servers\BackupController::class, 'index']);
-        Route::post('/', [Client\Servers\BackupController::class, 'store'])
+        Route::get('/', [Client\Servers\BackupsController::class, 'index']);
+        Route::post('/', [Client\Servers\BackupsController::class, 'store'])
             ->middleware('server.operation.rate-limit');
-        Route::get('/{backup}', [Client\Servers\BackupController::class, 'view']);
-        Route::get('/{backup}/download', [Client\Servers\BackupController::class, 'download']);
-        Route::post('/{backup}/lock', [Client\Servers\BackupController::class, 'toggleLock']);
-        Route::post('/{backup}/rename', [Client\Servers\BackupController::class, 'rename']);
-        Route::post('/{backup}/restore', [Client\Servers\BackupController::class, 'restore'])
+        Route::get('/{backup}', [Client\Servers\BackupsController::class, 'show']);
+        Route::get('/{backup}/download', [Client\Servers\BackupsController::class, 'download']);
+        Route::post('/{backup}/restore', [Client\Servers\BackupsController::class, 'restore'])
             ->middleware('server.operation.rate-limit');
-        Route::delete('/{backup}', [Client\Servers\BackupController::class, 'delete']);
+        Route::post('/{backup}/rename', [Client\Servers\BackupsController::class, 'rename']);
+        Route::post('/{backup}/lock', [Client\Servers\BackupsController::class, 'toggleLock']);
+        Route::delete('/{backup}', [Client\Servers\BackupsController::class, 'destroy']);
     });
 
     Route::group(['prefix' => '/startup'], function () {
