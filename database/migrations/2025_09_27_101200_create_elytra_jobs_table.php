@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('elytra_jobs', function (Blueprint $table) {
             $table->id();
-            $table->uuid()->unique();
+            $table->char('uuid', 36)->unique();
             $table->unsignedInteger('server_id');
             $table->unsignedInteger('user_id');
 
