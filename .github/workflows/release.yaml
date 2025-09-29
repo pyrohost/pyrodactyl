@@ -49,7 +49,7 @@ jobs:
       - name: Create release archive
         run: |
           rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
-          tar -czf panel.tar.gz * .editorconfig .env.example .js .gitignore .prettierrc.json
+          tar -czf panel.tar.gz * .editorconfig .env.example .gitignore .prettierrc.json
 
       - name: Create checksum and add to changelog
         run: |
