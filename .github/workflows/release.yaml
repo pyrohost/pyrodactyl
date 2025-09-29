@@ -1,7 +1,7 @@
 name: Create release
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
     inputs:
       version:
         description: 'Version to create (e.g., 1.0.0)'
