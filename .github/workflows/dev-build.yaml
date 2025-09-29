@@ -1,15 +1,16 @@
-name: Build and Push release docker image
+name: Docker Build
+
 on:
   push:
     branches:
-      - 'releases/*'
+      - main
 
 permissions:
     packages: write
-    content: read
+    contents: read
 
 jobs:
-  build-release:
+  build-dev:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,20 +28,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push release image
+      - name: Build and push canary image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.extract_version.outputs.version }}
-            ghcr.io/${{ github.repository }}:latest
-          platforms: linux/amd64,linux/arm64
+            ghcr.io/${{ github.repository }}:canary
+            ghcr.io/${{ github.repository }}:canary-${{ github.sha }}
+          platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-        run: |
-          if ! docker buildx build ...; then
-            echo "Docker build failed"
-            exit 1
-          fi
 

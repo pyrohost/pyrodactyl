@@ -1,0 +1,67 @@
+name: Create release
+
+on:
+  workflow-dispatch:
+    inputs:
+      version:
+        description: 'Version to create (e.g., 1.0.0)'
+        required: true
+        type: string
+      release_type:
+        description: 'Type of release'
+        required: true
+        type: choice
+        options:
+          - stable
+          - prerelease
+        default: stable
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create release branch
+        run: |
+          git config user.name "github-actions[ci]"
+          git config user.email "ci@pyrodactyl.dev"
+          git checkout -b releases/v${{ inputs.version }}
+
+      - name: Update version in config/app.php
+        run: sed -i "s/'version' => '.*'/'version' => 'v${{ inputs.version }}'/g" config/app.php
+
+      - name: Commit version update
+        run: |
+          git add config/app.php
+          git commit -m "ci: bump v${{ inputs.version }}"
+
+      - name: Push release branch
+        run: git push origin releases/v${{ inputs.version }}
+
+      - name: Create release archive
+        run: |
+          rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md flake.lock flake.nix phpunit.xml shell.nix
+          tar -czf panel.tar.gz * .editorconfig .env.example .eslintignore .eslintrc.js .gitignore .prettierrc.json
+
+      - name: Create checksum and add to changelog
+        run: |
+          SUM=`sha256sum panel.tar.gz`
+          echo "$SUM" > checksum.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ inputs.version }}
+          target_commitish: releases/v${{ inputs.version }}
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ inputs.release_type == 'prerelease' }}
+          files: panel.tar.gz
