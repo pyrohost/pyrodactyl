@@ -1,6 +1,8 @@
 name: Build & Push Version
 on:
   push:
+    tags:
+      - "v*"
     branches:
       - 'releases/*'
 
