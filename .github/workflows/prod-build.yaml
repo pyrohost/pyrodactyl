@@ -38,9 +38,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-        run: |
-          if ! docker buildx build ...; then
-            echo "Docker build failed"
-            exit 1
-          fi
-
