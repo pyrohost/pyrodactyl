@@ -65,10 +65,3 @@ jobs:
           draft: false
           prerelease: ${{ inputs.release_type == 'prerelease' }}
           files: panel.tar.gz
-
-  build-docker:
-    name: Build and Push release docker image
-    needs: create-release
-    uses: ./.github/workflows/prod-build.yaml
-    permissions:
-      packages: write
