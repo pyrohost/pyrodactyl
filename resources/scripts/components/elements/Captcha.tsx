@@ -8,7 +8,7 @@ interface CaptchaProps {
     onExpired?: () => void;
     className?: string;
     theme?: 'light' | 'dark' | 'auto';
-    size?: 'normal' | 'compact' | 'invisible';
+    size?: 'normal' | 'compact' | 'invisible' | 'flexible';
 }
 
 export default function Captcha({
@@ -16,8 +16,8 @@ export default function Captcha({
     onError,
     onExpired,
     className,
-    theme = 'auto',
-    size = 'normal',
+    theme = 'dark',
+    size = 'flexible',
 }: CaptchaProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [widgetId, setWidgetId] = useState<string | null>(null);
