@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property int $id
  * @property string $uuid
  * @property bool $public
+ * @property bool $trust_alias
  * @property string $name
  * @property string|null $description
  * @property int $location_id
@@ -78,6 +79,7 @@ class Node extends Model
         'daemonSFTP' => 'integer',
         'behind_proxy' => 'boolean',
         'public' => 'boolean',
+        'trust_alias' => 'boolean',
         'maintenance_mode' => 'boolean',
         'use_separate_fqdns' => 'boolean',
     ];
@@ -88,6 +90,7 @@ class Node extends Model
     protected $fillable = [
         'uuid',
         'public',
+        'trust_alias',
         'name',
         'location_id',
         'fqdn',
@@ -114,6 +117,7 @@ class Node extends Model
         'description' => 'string|nullable',
         'location_id' => 'required|exists:locations,id',
         'public' => 'boolean',
+        'trust_alias' => 'boolean',
         'fqdn' => 'required|string',
         'internal_fqdn' => 'nullable|string',
         'use_separate_fqdns' => 'sometimes|boolean',
@@ -135,6 +139,7 @@ class Node extends Model
      */
     protected $attributes = [
         'public' => true,
+        'trust_alias' => false,
         'behind_proxy' => false,
         'memory_overallocate' => 0,
         'disk_overallocate' => 0,
