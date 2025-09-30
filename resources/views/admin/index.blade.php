@@ -72,7 +72,7 @@
         class="fa fa-fw fa-support"></i> Get Help <small>(via Discord)</small></button></a>
     </div>
     <div class="col-xs-6 col-sm-3 text-center">
-    <a href="https://github.com/pyrohost/pyrodactyl/wiki"><button class="btn btn-primary" style="width:100%;"><i
+    <a href="https://pyrodactyl.dev"><button class="btn btn-primary" style="width:100%;"><i
         class="fa fa-fw fa-link"></i> Documentation</button></a>
     </div>
     <div class="clearfix visible-xs-block">&nbsp;</div>
