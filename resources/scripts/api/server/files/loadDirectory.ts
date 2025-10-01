@@ -21,5 +21,11 @@ export default async (uuid: string, directory?: string): Promise<FileObject[]> =
         params: { directory: directory ?? '/' },
     });
 
-    return (data.data || []).map(rawDataToFileObject);
+    const files = (data.data || []).map(rawDataToFileObject);
+
+    if (files.length > 500) {
+        files.length = 500;
+    }
+
+    return files;
 };
