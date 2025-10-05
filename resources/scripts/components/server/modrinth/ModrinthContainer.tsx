@@ -1,109 +1,130 @@
-import axios from 'axios';
 import debounce from 'debounce';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useCallback, useEffect, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import ContentBox from '@/components/elements/ContentBox';
 import { ModBox } from '@/components/elements/ModBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
-import { ServerContext } from '@/state/server';
-
-import ProjectSelector from './DisplayMods';
-import EnvironmentSelector from './EnvironmentSelector';
-import GameVersionSelector from './GameVersionSelector';
 import LoaderSelector from './LoaderSelector';
-import { fetchNewProjects } from './config';
-import { settings as localSettings } from './config';
+import { ModList } from './ModList';
+import GameVersionSelector from './VersionSelector';
+import { GlobalStateProvider, ModrinthService, appVersion, useGlobalStateContext } from './config';
 
-const ModrinthContainer = () => {
-    const [appVersion, setAppVersion] = useState<string | null>(null);
+const ModrinthContainerInner = () => {
+    const {
+        mods,
+        loaders,
+        gameVersions,
+        selectedLoaders,
+        selectedVersions,
+        searchQuery,
+        setMods,
+        setLoaders,
+        setGameVersions,
+        setSelectedLoaders,
+        setSelectedVersions,
+        setSearchQuery,
+        updateGameVersions,
+        updateLoaders,
+    } = useGlobalStateContext();
 
-    const [settings, setSettings] = useState({
-        loaders: [],
-        versions: [],
-        environments: [],
-    });
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchTerm, setSearchTerm] = useState(searchQuery);
+    const [isLoadingLoader, setLoaderLoading] = useState(true);
+    const [isLoadingVersion, setVersionLoading] = useState(true);
+    const [isInitialized, setIsInitialized] = useState(false);
 
-    const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSetSearchTerm = useCallback(
+        debounce((value: string) => {
+            setSearchQuery(value);
+        }, 500),
+        [setSearchQuery],
+    );
 
-    const updateSearchTerms = () => {
-        localSettings.searchTerms = searchTerm;
-        fetchNewProjects();
-        return debounce(setSearchTerm, 50);
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+        debouncedSetSearchTerm(value);
     };
-    const debouncedSearchTerm = updateSearchTerms();
 
-    const environment = ['Client', 'Server'];
-    const url = 'https://api.modrinth.com/v2';
-    const nonApiUrl = 'https://modrinth.com';
-
-    // Fetch app version
+    // Initialize and load loaders/versions - ONLY ONCE
     useEffect(() => {
-        async function getAppVersion() {
-            try {
-                const response = await axios.get('/api/client/version');
-                setAppVersion(response.data.version);
-            } catch (error) {
-                toast.error('Failed to fetch app version.');
+        const initialize = async () => {
+            if (isInitialized) return;
+
+            const initialized = await ModrinthService.init(appVersion);
+            if (!initialized) {
+                toast.error('Failed to initialize Modrinth API');
+                return;
             }
-        }
-        getAppVersion();
-    }, []);
 
+            try {
+                const [loaderResponse, versionResponse] = await Promise.all([
+                    ModrinthService.fetchLoaders(),
+                    ModrinthService.fetchGameVersions(),
+                ]);
+
+                // Use the context updaters instead of direct setters
+                updateLoaders(loaderResponse.data);
+                updateGameVersions(versionResponse.data);
+
+                // console.log('Game versions set:', versionResponse.data);
+                // console.log('Loaders set:', loaderResponse.data);
+
+                setLoaderLoading(false);
+                setVersionLoading(false);
+                setIsInitialized(true);
+            } catch (error) {
+                console.error('Initial fetch error:', error);
+                toast.error(error instanceof Error ? error.message : 'Failed to fetch initial data');
+                setLoaderLoading(false);
+                setVersionLoading(false);
+            }
+        };
+
+        initialize();
+    }, [isInitialized, updateLoaders, updateGameVersions]);
+
+    // Sync searchTerm with global searchQuery
     useEffect(() => {
-        setSearchTerm('');
-    }, [location]);
+        setSearchTerm(searchQuery);
+    }, [searchQuery]);
 
-    if (!appVersion) {
-        return <div>Loading...</div>;
-    }
+    // console.log('Current state:', {
+    //     loaders: loaders.length,
+    //     gameVersions: gameVersions.length,
+    //     selectedLoaders,
+    //     selectedVersions,
+    //     searchQuery,
+    //     mods: mods.length,
+    // });
 
     return (
         <PageContentBlock title={'Mods/Plugins'}>
+            <Toaster />
             <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl mb-5'>
-                {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver*/}
+                {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver */}
             </ContentBox>
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl md:w-1/6'
+                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-1/6'
                     title='Settings'
                 >
                     <Can action={'modrinth.loader'}>
                         <ModBox>
                             <ContentBox title='Loader' className=''>
-                                <LoaderSelector
-                                    appVersion={appVersion}
-                                    baseUrl={url}
-                                    // onSelectionChange={(selectedLoaders) => updateSettings('loaders', selectedLoaders)}
-                                />
+                                {isLoadingLoader ? <p>Loading loaders...</p> : <LoaderSelector />}
                             </ContentBox>
                         </ModBox>
                     </Can>
                     <Can action={'modrinth.version'}>
                         <ModBox>
                             <ContentBox title='Version' className='scrollbar-thumb-red-700'>
-                                <GameVersionSelector
-                                    appVersion={appVersion}
-                                    baseUrl={url}
-                                    // onSelectionChange={(selectedVersions) => updateSettings('versions', selectedVersions)}
-                                />
+                                {isLoadingVersion ? <p>Loading versions...</p> : <GameVersionSelector />}
                             </ContentBox>
                         </ModBox>
                     </Can>
-                    {/* TODO: Add this field that lets you choose between client and server side mods */}
-                    {/* <ModBox>
-                        <ContentBox title='Environment' className=''>
-                            <EnvironmentSelector
-                                items={environment}
-                                onSelectionChange={(selectedEnvironments) =>
-                                    updateSettings('environments', selectedEnvironments)
-                                }
-                            />
-                        </ContentBox>
-                    </ModBox> */}
                 </ContentBox>
 
                 <ContentBox
@@ -126,18 +147,25 @@ const ModrinthContainer = () => {
                             />
                         </svg>
                         <input
-                            className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
+                            className='pl-14 pr-4 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                             type='text'
                             placeholder='Search'
-                            onChange={(event) => debouncedSearchTerm(event.target.value)}
-                            // onChange={(event) => console.log(event.target.value)}
+                            value={searchTerm}
+                            onChange={handleInputChange}
                         />
                     </div>
-
-                    <ProjectSelector appVersion={appVersion} baseUrl={url} nonApiUrl={nonApiUrl} />
+                    <ModList />
                 </ContentBox>
             </div>
         </PageContentBlock>
+    );
+};
+
+const ModrinthContainer = () => {
+    return (
+        <GlobalStateProvider>
+            <ModrinthContainerInner />
+        </GlobalStateProvider>
     );
 };
 
