@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import Input from '@/components/elements/Input';
 
+import { ServerContext } from '@/state/server';
+
 import { useGlobalStateContext } from './config';
+import { getAvailableLoaders, getLoaderType } from './eggfeatures.ts';
 
 const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt'];
 
@@ -12,10 +15,23 @@ interface LoaderSelectorProps {
     featuredLoaders?: string[];
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADERS }: LoaderSelectorProps) => {
     const { loaders, selectedLoaders, setSelectedLoaders } = useGlobalStateContext();
     const [searchQuery, setSearchQuery] = useState('');
     const [showAll, setShowAll] = useState(false);
+    const eggFeatures = ServerContext.useStoreState((state) => state.server.data?.eggFeatures || []);
+    const availableLoaders = getAvailableLoaders(eggFeatures);
+    const loaderType = getLoaderType(eggFeatures);
+
+    // selectedLoaders.push(...availableLoaders);
+    // setSelectedLoaders([...new Set([...selectedLoaders, ...availableLoaders])]);
+    useEffect(() => {
+        selectedLoaders.push(...availableLoaders);
+    }, []);
 
     const { featured, other, filtered } = useMemo(() => {
         if (!loaders.length) return { featured: [], other: [], filtered: [] };
@@ -103,7 +119,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
                     loadersToShow.map((loader) => (
                         <Checkbox
                             key={loader.id}
-                            label={loader.name}
+                            label={capitalizeFirstLetter(loader.name)}
                             checked={selectedLoaders.includes(loader.id)}
                             onChange={(isChecked) => {
                                 const newSelected = isChecked

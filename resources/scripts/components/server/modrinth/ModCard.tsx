@@ -2,6 +2,9 @@
 
 import { Link } from 'react-router-dom';
 
+import Button from '@/components/elements/ButtonV2';
+import DownloadIcon from '@/components/elements/hugeicons/downloadIcon';
+
 import { ServerContext } from '@/state/server';
 
 import { Mod } from './config';
@@ -11,15 +14,18 @@ interface ModCardProps {
 }
 
 export const ModCard = ({ mod }: ModCardProps) => {
-    const id = ServerContext.useStoreState((state) => state.server.data?.id);
+    // const id = ServerContext.useStoreState((state) => state.server.data?.id);
+    const eggFeatures = ServerContext.useStoreState((state) => state.server.data?.eggFeatures);
+    // console.log(eggFeatures);
     const formatDownloads = (num: number) => {
         if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
         if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
         return num.toString();
     };
+    //if eggFeatures.map((v) -> v.toLowerCase()).includes(''){ }
 
     return (
-        <div className='group bg-gradient-to-br from-[#090909] via-[#0f0f0f] to-[#131313] rounded-xl overflow-hidden border border-gray-800/70 hover:border-brand/60 transition-all duration-300 hover:shadow-2xl hover:shadow-brand/15 backdrop-blur-sm'>
+        <div className='group bg-gradient-to-br from-[#090909] via-[#0f0f0f] to-[#131313] transition delay-50 duration-325  rounded-xl overflow-hidden border border-gray-800/70 hover:border-brand/60 transition-all duration-300 hover:shadow-2xl hover:shadow-brand/15 backdrop-blur-sm'>
             <div className='p-6 flex items-start space-x-5'>
                 {/* Icon Container */}
                 <div className='flex-shrink-0 relative'>
@@ -83,11 +89,12 @@ export const ModCard = ({ mod }: ModCardProps) => {
                     </div>
                 </div>
 
-                {/* Install Button */}
-                <div className='flex-shrink-0'>
-                    <button className='px-6 py-3 bg-gradient-to-r from-brand to-brand/80 hover:from-brand/90 hover:to-brand/70 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-200 border border-brand/20'>
+                <div className='flex-shrink-0 self-center align-text-left'>
+                    {/* <Button className='border-red-700/70 border-2 rounded-md hover:border-red-800 hover:text-gray-200 '> */}
+                    <Button className='border-gray-500/70 border-2 rounded-md transition delay-50 duration-325 hover:border-brand/50 hover:text-gray-200 '>
+                        <DownloadIcon className='px-1' />
                         Install
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

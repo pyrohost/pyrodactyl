@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import Button from '@/components/elements/ButtonV2';
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import Input from '@/components/elements/Input';
 
@@ -52,7 +51,7 @@ export const VersionSelector = () => {
                     placeholder='Search versions...'
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-                    className='w-full pl-3 pr-8 py-2 text-sm'
+                    className='w-full pl-3 pr-8 py-1 text-sm'
                 />
                 {searchQuery && (
                     <button
@@ -67,14 +66,16 @@ export const VersionSelector = () => {
             {gameVersions.length === 0 ? (
                 <p className='text-sm text-gray-500'>No versions available</p>
             ) : !hasSearchResults ? (
-                <p className='text-sm text-gray-500 text-center py-2'>No versions found matching "{searchQuery}"</p>
+                <p className='text-sm text-gray-500 text-center py-2'>
+                    No versions found matching &quot;{searchQuery}&quot;
+                </p>
             ) : (
                 <>
-                    <div className='space-y-2 max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-100'>
+                    <div className='space-y-1 max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-100'>
                         {/* Show releases first */}
                         {hasReleases && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-2'>Releases</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium'>Releases</p>}
                                 {releases.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -94,7 +95,7 @@ export const VersionSelector = () => {
                         {/* Show snapshots if enabled or searching */}
                         {(showSnapshots || searchQuery) && hasSnapshots && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-2'>Snapshots</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Snapshots</p>}
                                 {snapshots.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -114,7 +115,7 @@ export const VersionSelector = () => {
                         {/* Show betas */}
                         {hasBetas && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-2'>Betas</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Betas</p>}
                                 {betas.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -132,7 +133,7 @@ export const VersionSelector = () => {
                         )}
                     </div>
 
-                    <div className='flex justify-between items-center pt-2 border-t border-gray-200'>
+                    <div className='flex justify-between items-center pt-1 border-t border-gray-200'>
                         <span className='text-xs text-gray-500'>{selectedVersions.length} selected</span>
 
                         {searchQuery && (
@@ -146,12 +147,12 @@ export const VersionSelector = () => {
                     </div>
 
                     {!searchQuery && (
-                        <div className='pt-2 border-t border-gray-200'>
+                        <div className='pt-1 border-t border-gray-200'>
                             <button
                                 onClick={() => setShowSnapshots((prev) => !prev)}
                                 className='w-full text-xs text-white-600 hover:text-gray-300 font-medium py-1 flex items-center justify-center gap-1'
                             >
-                                <span>{showSnapshots ? '▾' : '▸'}</span>
+                                <span>{showSnapshots ? '-' : '+'}</span>
                                 {showSnapshots ? 'Hide Snapshots' : 'Show Snapshots'}
                             </button>
                         </div>

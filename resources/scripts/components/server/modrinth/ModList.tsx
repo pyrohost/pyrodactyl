@@ -110,6 +110,8 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
                         for &quot;<span className='text-blue-400'>{searchQuery}</span>&quot;
                     </span>
                 )}
+                {/* TODO: Make this have a tooltip with selected Filters  */}
+                {/* TODO: Add a filter reset button */}
                 {(selectedLoaders.length > 0 || selectedVersions.length > 0) && (
                     <span className='text-gray-300'>{' with filters'}</span>
                 )}
@@ -125,11 +127,10 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
                 <ActionButton
                     onClick={handleLoadMore}
                     disabled={isLoading}
-                    className={`${
-                        isLoading
+                    className={`${isLoading
                             ? 'bg-gray-700 cursor-not-allowed'
                             : 'bg-blue-600 hover:bg-blue-500 shadow-lg hover:shadow-blue-500/20'
-                    } text-white font-medium`}
+                        } text-white font-medium`}
                 >
                     {isLoading ? (
                         <span className='inline-flex items-center'>
