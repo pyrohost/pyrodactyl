@@ -1,5 +1,5 @@
 // million-ignore
-const Logo = () => {
+const ModrinthLogo = () => {
     return (
         <svg viewBox='0 0 24 24' version='1.1' id='svg1' width='24' height='24'>
             <defs id='defs1' />
@@ -12,4 +12,4 @@ const Logo = () => {
     );
 };
 
-export default Logo;
+export default ModrinthLogo;
