@@ -71,6 +71,14 @@
           <input type="radio" name="public" value="0" {{ (old('public', $node->public)) ? '' : 'checked' }}
           id="public_0"> <label for="public_0" style="padding-left:5px;">No</label>
         </div>
+        <label for="public" class="control-label">Domain by Allocation Alias <sup><a data-toggle="tooltip"
+            data-placement="top" title="Allow Ip Aliases to be used instead of allocation ip for domain management">?</a></sup></label>
+        <div>
+          <input type="radio" name="trust_alias" value="1" {{ (old('trustalias', $node->trust_alias)) ? 'checked' : '' }}
+          id="trust_alias_1" checked> <label for="public_1" style="padding-left:5px;">Yes</label><br />
+          <input type="radio" name="trust_alias" value="0" {{ (old('trustalias', $node->trust_alias)) ? '' : 'checked' }}
+          id="trust_alias_0"> <label for="trustalias_0" style="padding-left:5px;">No</label>
+        </div>
         </div>
         <div class="form-group col-xs-12">
         <label for="fqdn" class="control-label">Public Fully Qualified Domain Name</label>
