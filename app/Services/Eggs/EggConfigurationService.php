@@ -93,11 +93,15 @@ class EggConfigurationService
 
             $append = array_merge((array) $data, ['file' => $file, 'replace' => []]);
 
+            // Check if this is using the properties parser which needs exact key matching
+            $isPropertiesParser = isset($data->parser) && $data->parser === 'properties';
+
             foreach ($this->iterate($data->find, $structure) as $find => $replace) {
                 if (is_object($replace)) {
                     foreach ($replace as $match => $replaceWith) {
+                        $matchPattern = $isPropertiesParser ? "^{$find}$" : $find;
                         $append['replace'][] = [
-                            'match' => $find,
+                            'match' => $matchPattern,
                             'if_value' => $match,
                             'replace_with' => $replaceWith,
                         ];
@@ -106,8 +110,11 @@ class EggConfigurationService
                     continue;
                 }
 
+                // For properties parser, use exact matching with regex anchors to prevent
+                // matching similar keys (e.g., "server-port" shouldn't match "management-server-port")
+                $matchPattern = $isPropertiesParser ? "^{$find}$" : $find;
                 $append['replace'][] = [
-                    'match' => $find,
+                    'match' => $matchPattern,
                     'replace_with' => $replace,
                 ];
             }
