@@ -1,7 +1,6 @@
 'use client';
 
 import { useStoreState } from 'easy-peasy';
-import { on } from 'events';
 import React, { Fragment, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
@@ -20,6 +19,7 @@ import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
 import { ServerMobileMenu } from '@/components/elements/MobileFullScreenMenu';
 import MobileTopBar from '@/components/elements/MobileTopBar';
+// import ModrinthLogo from '@/components/elements/ModrinthLogo';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
@@ -40,14 +40,13 @@ import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import InstallListener from '@/components/server/InstallListener';
 import TransferListener from '@/components/server/TransferListener';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
+import StatBlock from '@/components/server/console/StatBlock';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
 import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
 
 import { ServerContext } from '@/state/server';
-
-const blank_egg_prefix = '@';
 
 // Sidebar item components that check both permissions and feature limits
 const DatabasesSidebarItem = React.forwardRef<HTMLAnchorElement, { id: string; onClick: () => void }>(
@@ -163,6 +162,7 @@ const ServerRouter = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const inConflictState = ServerContext.useStoreState((state) => state.server.inConflictState);
     const serverId = ServerContext.useStoreState((state) => state.server.data?.internalId);
+    const serverName = ServerContext.useStoreState((state) => state.server.data?.name);
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
     const egg_id = ServerContext.useStoreState((state) => state.server.data?.egg);
@@ -339,7 +339,7 @@ const ServerRouter = () => {
 
                     <div className='flex flex-row w-full lg:pt-0 pt-16'>
                         {/* Desktop Sidebar */}
-                        <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]'>
+                        <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a] flex flex-col h-screen'>
                             <div
                                 className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
                                 style={{
@@ -392,7 +392,10 @@ const ServerRouter = () => {
                                 </DropdownMenu>
                             </div>
                             <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                            <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
+                            <ul
+                                data-pyro-subnav-routes-wrapper=''
+                                className='pyro-subnav-routes-wrapper flex-grow overflow-y-auto'
+                            >
                                 {/* lord forgive me for hardcoding this */}
                                 <NavLink
                                     className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -414,9 +417,9 @@ const ServerRouter = () => {
                                             <p>Files</p>
                                         </NavLink>
                                     </Can>
-                                    <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => {}} />
-                                    <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => {}} />
-                                    <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => {}} />
+                                    <DatabasesSidebarItem id={id} ref={NavigationDatabases} onClick={() => { }} />
+                                    <BackupsSidebarItem id={id} ref={NavigationBackups} onClick={() => { }} />
+                                    <NetworkingSidebarItem id={id} ref={NavigationNetworking} onClick={() => { }} />
                                     <Can action={'user.*'} matchAny>
                                         <NavLink
                                             className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
@@ -479,18 +482,18 @@ const ServerRouter = () => {
                                             <p>Activity</p>
                                         </NavLink>
                                     </Can>
-                                    {/* TODO: finish modrinth support *\}
-                    {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny>
-                        <NavLink
-                            className='flex flex-row items-center sm:hidden md:show'
-                            ref={NavigationMod}
-                            to={`/server/${id}/mods`}
-                            end
-                        >
-                            <ModrinthLogo />
-                            <p>Mods/Plugins</p>
-                        </NavLink>
-                    </Can> */}
+                                    {/* {/* TODO: finish modrinth support *\} */}
+                                    {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny> */}
+                                    {/*     <NavLink */}
+                                    {/*         className='flex flex-row items-center sm:hidden md:show' */}
+                                    {/*         ref={NavigationMod} */}
+                                    {/*         to={`/server/${id}/mods`} */}
+                                    {/*         end */}
+                                    {/*     > */}
+                                    {/*         <ModrinthLogo /> */}
+                                    {/*         <p>Mods/Plugins</p> */}
+                                    {/*     </NavLink> */}
+                                    {/* </Can> */}
                                 </>
                                 <Can action={'startup.software'}>
                                     <NavLink
@@ -504,6 +507,15 @@ const ServerRouter = () => {
                                     </NavLink>
                                 </Can>
                             </ul>
+                            <div className='shrink-0'>
+                                <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-full'></div>
+                                <StatBlock
+                                    title='server'
+                                    className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-default'
+                                >
+                                    {serverName}
+                                </StatBlock>
+                            </div>
                         </MainSidebar>
 
                         <MainWrapper className='w-full'>
@@ -517,7 +529,7 @@ const ServerRouter = () => {
                                 className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
-                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>
