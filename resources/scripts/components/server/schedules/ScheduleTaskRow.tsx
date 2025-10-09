@@ -31,13 +31,13 @@ interface Props {
 const getActionDetails = (action: string): [string, ComponentType<HugeIconProps>, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command', HugeIconsTerminal, true];
+            return ['Ejecutar comando', HugeIconsTerminal, true];
         case 'power':
-            return ['Send Power Action', HugeIconsPower];
+            return ['Cambiar estado', HugeIconsPower];
         case 'backup':
-            return ['Create Backup', HugeIconsCopy];
+            return ['Crear copia de seguridad', HugeIconsCopy];
         default:
-            return ['Unknown Action', HugeIconsQuestion];
+            return ['Acción desconocida', HugeIconsQuestion];
     }
 };
 
@@ -85,13 +85,13 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 onModalDismissed={() => setIsEditing(false)}
             />
             <ConfirmationModal
-                title={'Confirm task deletion'}
-                buttonText={'Delete Task'}
+                title={'Confirmar la eliminación'}
+                buttonText={'Eliminar tarea'}
                 onConfirmed={onConfirmDeletion}
                 visible={visible}
                 onModalDismissed={() => setVisible(false)}
             >
-                Are you sure you want to delete this task? This action cannot be undone.
+                ¿Quieres eliminar esta tarea? Esta acción es irreversible.
             </ConfirmationModal>
             {/* <FontAwesomeIcon icon={icon} className={`text-lg text-white hidden md:block`} /> */}
             {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
@@ -113,7 +113,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
-                            Continues on Failure
+                            Continuar al fallar
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
@@ -126,10 +126,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
-                        aria-label='Edit scheduled task'
+                        aria-label='Editar tarea programada'
                     >
                         <HugeIconsPencil fill='currentColor' />
-                        Edit
+                        Editar
                     </ActionButton>
                 </Can>
                 <Can action={'schedule.update'}>
@@ -141,7 +141,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         aria-label='Delete scheduled task'
                     >
                         <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
-                        <span className='hidden sm:inline'>Delete</span>
+                        <span className='hidden sm:inline'>Eliminar</span>
                     </ActionButton>
                 </Can>
             </div>

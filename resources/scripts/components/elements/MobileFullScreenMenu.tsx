@@ -32,7 +32,7 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
             <button
                 onClick={onClose}
                 className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
-                aria-label='Close menu'
+                aria-label='Cerrar menú'
             >
                 <HugeIconsX fill='currentColor' />
             </button>
@@ -85,16 +85,16 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to='/' icon={HugeIconsHome} end>
-                Servers
+                Servidores
             </NavigationItem>
             <NavigationItem to='/account/api' icon={HugeIconsApi} end>
-                API Keys
+                Claves API
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={HugeIconsSsh} end>
-                SSH Keys
+                Claves SSH
             </NavigationItem>
             <NavigationItem to='/account' icon={HugeIconsDashboardSettings} end>
-                Settings
+                Ajustes
             </NavigationItem>
         </MobileFullScreenMenu>
     );
@@ -152,20 +152,20 @@ export const ServerMobileMenu = ({
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to={`/server/${serverId}`} icon={HugeIconsHome} end>
-                Home
+                Inicio
             </NavigationItem>
 
             <>
                 <Can action={'file.*'} matchAny>
                     <NavigationItem to={`/server/${serverId}/files`} icon={HugeIconsFolder}>
-                        Files
+                        Archivos
                     </NavigationItem>
                 </Can>
 
                 {databaseLimit !== 0 && (
                     <Can action={'database.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/databases`} icon={HugeIconsDatabase} end>
-                            Databases
+                            Bases de datos
                         </NavigationItem>
                     </Can>
                 )}
@@ -173,7 +173,7 @@ export const ServerMobileMenu = ({
                 {backupLimit !== 0 && (
                     <Can action={'backup.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/backups`} icon={HugeIconsCloudUp} end>
-                            Backups
+                            Copias de seguridad
                         </NavigationItem>
                     </Can>
                 )}
@@ -181,47 +181,49 @@ export const ServerMobileMenu = ({
                 {(allocationLimit > 0 || subdomainSupported) && (
                     <Can action={'allocation.*'} matchAny>
                         <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
-                            Networking
+                            Red
                         </NavigationItem>
                     </Can>
                 )}
 
                 <Can action={'user.*'} matchAny>
                     <NavigationItem to={`/server/${serverId}/users`} icon={HugeIconsPeople} end>
-                        Users
+                        Usuarios
                     </NavigationItem>
                 </Can>
 
                 <Can action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']} matchAny>
                     <NavigationItem to={`/server/${serverId}/startup`} icon={HugeIconsConsole} end>
-                        Startup
+                        Inicio
                     </NavigationItem>
                 </Can>
 
                 <Can action={'schedule.*'} matchAny>
                     <NavigationItem to={`/server/${serverId}/schedules`} icon={HugeIconsClock}>
-                        Schedules
+                        Programas
                     </NavigationItem>
                 </Can>
 
                 <Can action={['settings.*', 'file.sftp']} matchAny>
                     <NavigationItem to={`/server/${serverId}/settings`} icon={HugeIconsDashboardSettings} end>
-                        Settings
+                        Ajustes
                     </NavigationItem>
                 </Can>
 
                 <Can action={['activity.*', 'activity.read']} matchAny>
                     <NavigationItem to={`/server/${serverId}/activity`} icon={HugeIconsPencil} end>
-                        Activity
+                        Actividad
                     </NavigationItem>
                 </Can>
             </>
 
+            {/*
             <Can action={'startup.software'}>
                 <NavigationItem to={`/server/${serverId}/shell`} icon={HugeIconsController} end>
                     Software
                 </NavigationItem>
             </Can>
+            */}
         </MobileFullScreenMenu>
     );
 };

@@ -61,7 +61,7 @@ const UploadButton = () => {
         clearAndAddHttpError();
         const list = Array.from(files);
         if (list.some((file) => !file.size || (!file.type && file.size === 4096))) {
-            return addError('Folder uploads are not supported at this time.', 'Error');
+            return addError('No se pueden subir carpetas enteras ahora mismo.', 'Error');
         }
 
         const uploads = list.map((file) => {
@@ -147,7 +147,7 @@ const UploadButton = () => {
                                     'flex-1 text-lg font-bold tracking-tight text-center truncate w-full relative px-4'
                                 }
                             >
-                                Upload to {name}
+                                Subir a {name}
                             </h1>
                         </div>
                     </div>
@@ -171,7 +171,7 @@ const UploadButton = () => {
                 variant='secondary'
                 onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
             >
-                Upload
+                Subir
             </ActionButton>
         </>
     );

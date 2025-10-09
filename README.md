@@ -2,7 +2,7 @@
   <a href="https://pyro.host">
     <img src="https://i.imgur.com/R10ivg9.png" alt="Banner with Pyrodactyl Logo">
   </a>
-
+ 
 </p>
 
 <p align="center">

@@ -97,11 +97,11 @@ function ResetPasswordContainer() {
                 }}
                 validationSchema={object().shape({
                     password: string()
-                        .required('A new password is required.')
-                        .min(8, 'Your new password should be at least 8 characters in length.'),
+                        .required('Debes introducir una nueva contraseña.')
+                        .min(8, 'Tu nueva contraseña debe contener al menos 8 caracteres.'),
                     password_confirmation: string()
-                        .required('Your new password does not match.')
-                        .oneOf([ref('password')], 'Your new password does not match.'),
+                        .required('Tu nueva contraseña no coincide.')
+                        .oneOf([ref('password')], 'Tu nueva contraseña no coincide.'),
                 })}
             >
                 {({ isSubmitting }) => (
@@ -118,14 +118,14 @@ function ResetPasswordContainer() {
                         </div>
                         <div className={`mt-6`}>
                             <Field
-                                label={'New Password'}
+                                label={'Nueva contraseña'}
                                 name={'password'}
                                 type={'password'}
-                                description={'Passwords must be at least 8 characters in length.'}
+                                description={'Tu nueva contraseña debe contener al menos 8 caracteres.'}
                             />
                         </div>
                         <div className={`mt-6`}>
-                            <Field label={'Confirm New Password'} name={'password_confirmation'} type={'password'} />
+                            <Field label={'Confirma la nueva contraseña'} name={'password_confirmation'} type={'password'} />
                         </div>
                         <Captcha
                             className='mt-6'
@@ -145,7 +145,7 @@ function ResetPasswordContainer() {
                                 disabled={isSubmitting}
                                 isLoading={isSubmitting}
                             >
-                                Reset Password
+                                Restablecer contraseña
                             </Button>
                         </div>
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
@@ -157,7 +157,7 @@ function ResetPasswordContainer() {
                                 to={'/auth/login'}
                                 className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
                             >
-                                Return to Login
+                                Volver al inicio de sesión
                             </Link>
                         </div>
                     </LoginFormContainer>

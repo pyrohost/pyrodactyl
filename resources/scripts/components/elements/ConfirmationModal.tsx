@@ -23,7 +23,7 @@ const ConfirmationModal: React.FC<Props> = ({ children, buttonText, onConfirmed,
                 <div className={`text-zinc-300`}>{children}</div>
                 <div className={`flex gap-4 items-center justify-end my-6`}>
                     <ActionButton variant='secondary' onClick={() => dismiss()}>
-                        Cancel
+                        Cancelar
                     </ActionButton>
                     <ActionButton onClick={() => onConfirmed()} disabled={disabled}>
                         {buttonText}

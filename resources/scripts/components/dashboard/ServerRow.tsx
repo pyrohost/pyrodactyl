@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { bytesToString, ip } from '@/lib/formatters';
+import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
@@ -92,9 +92,9 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
         alarms.disk = server.limits.disk === 0 ? false : isAlarmState(stats.diskUsageInBytes, server.limits.disk);
     }
 
-    // const diskLimit = server.limits.disk !== 0 ? bytesToString(mbToBytes(server.limits.disk)) : 'Unlimited';
-    // const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Unlimited';
-    // const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + ' %' : 'Unlimited';
+    const diskLimit = server.limits.disk !== 0 ? bytesToString(mbToBytes(server.limits.disk)) : 'Sin límite';
+    const memoryLimit = server.limits.memory !== 0 ? bytesToString(mbToBytes(server.limits.memory)) : 'Sin límite';
+    const cpuLimit = server.limits.cpu !== 0 ? server.limits.cpu + '%' : 'Sin límite';
 
     return (
         <StatusIndicatorBox as={Link} to={`/server/${server.id}`} className={className} $status={stats?.status}>
@@ -131,25 +131,25 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     isSuspended ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
+                                {server.status === 'suspended' ? 'Suspendido' : 'Error de conexión'}
                             </span>
                         </div>
                     ) : server.isTransferring || server.status ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-zinc-100 text-xs`}>
                                 {server.isTransferring
-                                    ? 'Transferring'
+                                    ? 'Transfiriendo'
                                     : server.status === 'installing'
-                                      ? 'Installing'
+                                      ? 'Instalando'
                                       : server.status === 'restoring_backup'
-                                        ? 'Restoring Backup'
-                                        : 'Unavailable'}
+                                        ? 'Restaurando'
+                                        : 'No disponible'}
                             </span>
                         </div>
                     ) : (
                         // <Spinner size={'small'} />
                         // <></>
-                        <div className='text-xs opacity-25'>Sit tight!</div>
+                        <div className='text-xs opacity-25'>¡Siéntate y relájate!</div>
                     )
                 ) : (
                     <Fragment>
@@ -157,7 +157,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>CPU</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {stats.cpuUsagePercent.toFixed(2)}%
+                                    {stats.cpuUsagePercent.toFixed(2)}% de {cpuLimit}
                                 </p>
                             </div>
                         </div>
@@ -165,17 +165,18 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>RAM</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.memoryUsageInBytes, 0)}
+                                    {bytesToString(stats.memoryUsageInBytes, 0)} de {memoryLimit}
                                 </p>
                             </div>
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Storage</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Almacenamiento</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.diskUsageInBytes, 0)}
+                                    {bytesToString(stats.diskUsageInBytes, 0)} de {diskLimit}
                                 </p>
                             </div>
+                            {/*<p className={`text-xs text-zinc-600 text-center mt-1`}>de {diskLimit}</p>*/}
                         </div>
                     </Fragment>
                 )}

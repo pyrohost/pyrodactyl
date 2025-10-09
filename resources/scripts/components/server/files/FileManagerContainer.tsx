@@ -95,16 +95,16 @@ const FileManagerContainer = () => {
     });
 
     if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+        return <ServerError title={'Parece que algo ha fallado.'} message={httpErrorToHuman(error)} />;
     }
 
     return (
-        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={'Administrador de archivos'} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
                 <ErrorBoundary>
                     <MainPageHeader
                         direction='column'
-                        title={'Files'}
+                        title={'Administrador de archivos'}
                         titleChildren={
                             <Can action={'file.create'}>
                                 <div className='flex flex-row gap-1'>
@@ -117,8 +117,8 @@ const FileManagerContainer = () => {
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server files and directories. Upload, download, edit, and organize your
-                            server&apos;s file system with our integrated file manager.
+                            Gestiona los archivos y carpetas de tu servidor. Sube, descarga, edita y organiza el
+                            sistema de archivos de tu servidor con nuestro administrador de archivos integrado.
                         </p>
                     </MainPageHeader>
                     <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
@@ -137,7 +137,7 @@ const FileManagerContainer = () => {
             {!files ? null : (
                 <>
                     {!files.length ? (
-                        <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
+                        <p className={`text-sm text-zinc-400 text-center`}>Esta carpeta está vacía.</p>
                     ) : (
                         <>
                             <div ref={parentRef}>
@@ -165,7 +165,7 @@ const FileManagerContainer = () => {
                                             ref={searchInputRef}
                                             className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                                             type='text'
-                                            placeholder='Search...'
+                                            placeholder='Buscar...'
                                             onChange={(event) => debouncedSearchTerm(event.target.value)}
                                         />
                                     </div>

@@ -19,9 +19,9 @@ const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProp
         <Dialog
             open={open}
             onClose={onClose}
-            title={'Authenticator App Enabled'}
+            title={'Autenticación 2-FA habilitada'}
             description={
-                'Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.'
+                'Guarda los siguientes códigos en un sitio seguro. Si pierdes el acceso a tu aplicación de autenticación, podrás usar estos códigos para iniciar sesión sin ella.'
             }
             hideCloseIcon
             preventExternalClose
@@ -40,11 +40,11 @@ const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProp
                 </pre>
             </CopyOnClick>
             <Alert type={'danger'} className={'mt-3'}>
-                These codes will not be shown again.
+                Estos códigos no se volverán a mostrar.
             </Alert>
             <Dialog.Footer>
                 <ActionButton variant='primary' onClick={onClose}>
-                    Done
+                    Hecho
                 </ActionButton>
             </Dialog.Footer>
         </Dialog>

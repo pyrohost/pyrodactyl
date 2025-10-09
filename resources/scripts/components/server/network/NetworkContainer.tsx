@@ -57,13 +57,13 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock title={'Network'}>
+        <ServerContentBlock title={'Red'}>
             <FlashMessageRender byKey={'server:network'} />
 
-            <MainPageHeader direction='column' title={'Networking'}>
+            <MainPageHeader direction='column' title={'Red'}>
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure network settings for your server. Manage subdomains, IP addresses and ports that your
-                    server can bind to for incoming connections.
+                    Configura las asignaciones de tu servidor. Gestiona las direcciones IP y puertos que tu servidor puede
+                    usar para las conexiones entrantes.
                 </p>
             </MainPageHeader>
 
@@ -72,28 +72,28 @@ const NetworkContainer = () => {
 
                 <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm mt-8'>
                     <div className='flex items-center justify-between mb-6'>
-                        <h3 className='text-xl font-extrabold tracking-tight'>Port Allocations</h3>
+                        <h3 className='text-xl font-extrabold tracking-tight'>Puertos</h3>
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
                                     {allocationLimit === null && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.filter((allocation) => !allocation.isDefault).length} allocations (unlimited)
+                                            {data.filter((allocation) => !allocation.isDefault).length} puertos (ilimitados)
                                         </span>
                                     )}
                                     {allocationLimit > 0 && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}
+                                            {data.filter((allocation) => !allocation.isDefault).length} de {allocationLimit}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
                                         <span className='text-sm text-red-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            Allocations disabled
+                                            Asignaciones desactivadas
                                         </span>
                                     )}
                                     {(allocationLimit === null || (allocationLimit > 0 && allocationLimit > data.filter((allocation) => !allocation.isDefault).length)) && (
                                         <ActionButton variant='primary' onClick={onCreateAllocation} size='sm'>
-                                            New Allocation
+                                            Nueva asignación
                                         </ActionButton>
                                     )}
                                 </div>
@@ -105,7 +105,7 @@ const NetworkContainer = () => {
                         <div className='flex items-center justify-center py-12'>
                             <div className='flex flex-col items-center gap-3'>
                                 <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-brand'></div>
-                                <p className='text-sm text-neutral-400'>Loading allocations...</p>
+                                <p className='text-sm text-neutral-400'>Cargando asignaciones...</p>
                             </div>
                         </div>
                     ) : data.length > 0 ? (
@@ -132,12 +132,12 @@ const NetworkContainer = () => {
                                     </svg>
                                 </div>
                                 <h4 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {allocationLimit === 0 ? 'Allocations unavailable' : 'No allocations found'}
+                                    {allocationLimit === 0 ? 'No disponible' : 'No hay asignaciones'}
                                 </h4>
                                 <p className='text-sm text-zinc-400 max-w-sm text-center'>
                                     {allocationLimit === 0
-                                        ? 'Network allocations cannot be created for this server.'
-                                        : 'Create your first allocation to get started.'}
+                                        ? 'No se pueden crear asignaciones en este servidor.'
+                                        : 'Crea tu primera asignación para empezar.'}
                                 </p>
                             </div>
                         </div>

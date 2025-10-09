@@ -31,14 +31,14 @@ const NotFound = () => {
         <>
             <div className='w-full h-full flex gap-12 items-center p-8 max-w-3xl mx-auto'>
                 <div className='flex flex-col gap-8 max-w-sm text-left'>
-                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>Page Not Found</h1>
+                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>Página no encontrada</h1>
                     <p className=''>
-                        We couldn&apos;t find the page you&apos;re looking for. You may have lost access, or the page
-                        may have been removed. Here are some helpful links instead:
+                        No hemos podido encontrar la página que buscabas. Puede ser que hayas perdido el acceso o que la
+                        dirección se haya movido. Aquí hay algunos enlaces que te podrían servir:
                     </p>
                     <div className='flex flex-col gap-2'>
                         <Link to={'/'} className='text-brand'>
-                            Your Servers
+                            Tus servidores
                         </Link>
                     </div>
                 </div>

@@ -58,13 +58,13 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
 
                 <Dialog.Footer>
                     <ActionButton variant='secondary' onClick={() => setOpen(false)}>
-                        Close
+                        Cerrar
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>
 
             <button
-                aria-label='View additional event metadata'
+                aria-label='Ver información adicional'
                 className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >

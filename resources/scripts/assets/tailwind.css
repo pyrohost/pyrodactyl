@@ -275,8 +275,8 @@
     --color-rose-900: #881337;
     --color-rose-950: #4c0519;
 
-    --color-brand-grad: radial-gradient(109.26% 109.26% at 49.83% 13.37%, #ff343c 0%, #f06f53 100%);
-    --color-brand: #fa4e49;
+    --color-brand-grad: radial-gradient(109.26% 109.26% at 49.83% 13.37%, #8ae3bb 0%, #78bb9d 100%);
+    --color-brand: #78bb9d;
 
     --transition-duration-250: 250ms;
 }

@@ -30,7 +30,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
             {/* Compact Avatar */}
             <div className='flex-shrink-0 w-8 h-8 rounded-full bg-zinc-600 overflow-hidden mr-3'>
                 {actor?.image ? (
-                    <img src={actor.image} alt={actor.username || 'System'} className='w-full h-full object-cover' />
+                    <img src={actor.image} alt={actor.username || 'Sistema'} className='w-full h-full object-cover' />
                 ) : (
                     <div className='w-full h-full flex items-center justify-center text-zinc-300 text-xs font-semibold'>
                         {(actor?.username || 'S').charAt(0).toUpperCase()}
@@ -41,7 +41,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
             {/* Main Content - Compact Layout */}
             <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 text-sm'>
-                    <span className='font-medium text-zinc-100 truncate'>{actor?.username || 'System'}</span>
+                    <span className='font-medium text-zinc-100 truncate'>{actor?.username || 'Sistema'}</span>
                     <span className='text-zinc-500'>•</span>
                     <Link
                         to={`#${pathTo({ event: activity.event })}`}

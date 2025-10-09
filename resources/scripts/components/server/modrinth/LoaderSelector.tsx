@@ -34,9 +34,9 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                 setLoaders(data);
             } catch (error: any) {
                 if (error.response) {
-                    toast(`HTTP Error! Status: ${error.response.status}`);
+                    toast(`Error de HTTP: ${error.response.status}`);
                 } else {
-                    toast.error('Failed to fetch game loaders.');
+                    toast.error('No se han podido obtener los cargadores.');
                 }
                 console.error(error);
             }
@@ -64,7 +64,7 @@ const LoaderSelector: React.FC<Props> = ({ appVersion, baseUrl }) => {
                     onSelectionChange={handleSelectionChange}
                 />
             ) : (
-                <p>No Loaders available...</p>
+                <p>No hay cargadores disponibles...</p>
             )}
         </div>
     );

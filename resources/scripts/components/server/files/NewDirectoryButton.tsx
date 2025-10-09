@@ -24,7 +24,7 @@ interface Values {
 }
 
 const schema = object().shape({
-    directoryName: string().required('A valid directory name must be provided.'),
+    directoryName: string().required('Debes indicar un nombre de carpeta válido.'),
 });
 
 // removed to prevent linting issues, you're welcome.
@@ -45,7 +45,7 @@ const schema = object().shape({
 // });
 
 const NewDirectoryDialog = asDialog({
-    title: 'New Folder',
+    title: 'Nueva carpeta',
 })(() => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -79,7 +79,7 @@ const NewDirectoryDialog = asDialog({
                     <Form className={`m-0`}>
                         <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
                         <p className={`mt-2 text-xs! break-all`}>
-                            <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
+                            <span className={`text-zinc-200`}>Esta carpeta se guardará como&nbsp;</span>
                             <Code>
                                 /root/
                                 <span className={`text-blue-200`}>
@@ -90,10 +90,10 @@ const NewDirectoryDialog = asDialog({
                     </Form>
                     <Dialog.Footer>
                         <ActionButton variant='secondary' className={'w-full sm:w-auto'} onClick={close}>
-                            Cancel
+                            Cancelar
                         </ActionButton>
                         <ActionButton variant='primary' className={'w-full sm:w-auto'} onClick={submitForm}>
-                            Create
+                            Crear
                         </ActionButton>
                     </Dialog.Footer>
                 </>
@@ -109,7 +109,7 @@ const NewDirectoryButton = () => {
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
             <ActionButton variant='secondary' onClick={setOpen.bind(this, true)}>
-                New Folder
+                Nueva carpeta
             </ActionButton>
         </>
     );

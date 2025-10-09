@@ -39,24 +39,24 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     return (
         <>
             <ConfirmationModal
-                title={`Remove ${subuser.username}?`}
-                buttonText={`Remove ${subuser.username}`}
+                title={`Eliminar a ${subuser.username}?`}
+                buttonText={`Eliminar a ${subuser.username}`}
                 visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
-                All access to the server will be removed immediately.
+                El acceso al servidor se revocará inmediatamente.
             </ConfirmationModal>
             <ActionButton
                 variant='danger'
                 size='sm'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label='Delete subuser'
+                aria-label='Eliminar usuario'
             >
                 <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
-                Delete
+                Eliminar
             </ActionButton>
         </>
     );

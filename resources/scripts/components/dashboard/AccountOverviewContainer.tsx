@@ -13,7 +13,7 @@ const AccountOverviewContainer = () => {
     const { state } = useLocation();
 
     return (
-        <PageContentBlock title={'Your Settings'}>
+        <PageContentBlock title={'Ajustes'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 {state?.twoFactorRedirect && (
                     <div
@@ -24,8 +24,8 @@ const AccountOverviewContainer = () => {
                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                         }}
                     >
-                        <MessageBox title={'2-Factor Required'} type={'error'}>
-                            Your account must have two-factor authentication enabled in order to continue.
+                        <MessageBox title={'Autenticación 2-FA requerida'} type={'error'}>
+                            Tu cuenta debe tener la autenticación de dos factores habilitada para continuar.
                         </MessageBox>
                     </div>
                 )}
@@ -39,7 +39,7 @@ const AccountOverviewContainer = () => {
                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                         }}
                     >
-                        <ContentBox title={'Account Email'} showFlashes={'account:email'}>
+                        <ContentBox title={'Dirección de correo electrónico'} showFlashes={'account:email'}>
                             <UpdateEmailAddressForm />
                         </ContentBox>
                     </div>
@@ -53,10 +53,10 @@ const AccountOverviewContainer = () => {
                         }}
                     >
                         <div className='space-y-4'>
-                            <ContentBox title={'Account Password'} showFlashes={'account:password'}>
+                            <ContentBox title={'Contraseña'} showFlashes={'account:password'}>
                                 <UpdatePasswordForm />
                             </ContentBox>
-                            <ContentBox title={'Multi-Factor Authentication'}>
+                            <ContentBox title={'Autenticación de dos factores'}>
                                 <ConfigureTwoFactorForm />
                             </ContentBox>
                         </div>
@@ -70,13 +70,13 @@ const AccountOverviewContainer = () => {
                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                         }}
                     >
-                        <ContentBox title={'Panel Version'}>
+                        <ContentBox title={'Versión del panel'}>
                             <p className='text-sm mb-4 text-zinc-300'>
-                                This is useful to provide Pyro staff if you run into an unexpected issue.
+                                Esta información es útil a la hora de diagnosticar problemas.
                             </p>
                             <div className='flex flex-col gap-4'>
                                 <Code>
-                                    Version: {import.meta.env.VITE_PYRODACTYL_VERSION} -{' '}
+                                    Versión: {import.meta.env.VITE_PYRODACTYL_VERSION} -{' '}
                                     {import.meta.env.VITE_BRANCH_NAME}
                                 </Code>
                                 <Code>Commit : {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>

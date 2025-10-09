@@ -160,7 +160,7 @@ const ActivityLogContainer = () => {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Account Activity Log'}>
+        <PageContentBlock title={'Registro de actividad'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'account'} />
 
@@ -172,40 +172,40 @@ const ActivityLogContainer = () => {
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <MainPageHeader title={'Activity Log'}>
+                    <MainPageHeader title={'Registro de actividad'}>
                         <div className='flex gap-2 items-center flex-wrap'>
                             <ActionButton
                                 variant='secondary'
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
-                                title='Toggle Filters (Ctrl+F)'
+                                title='Alternar filtros (Ctrl+F)'
                             >
                                 <HugeIconsFilter className='w-4 h-4' fill='currentColor' />
-                                Filters
+                                Filtros
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
                             </ActionButton>
                             <ActionButton
                                 variant={autoRefresh ? 'primary' : 'secondary'}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
                                 className='flex items-center gap-2'
-                                title='Auto Refresh (Ctrl+R)'
+                                title='Auto-refrescar (Ctrl+R)'
                             >
                                 {autoRefresh ? (
                                     <HugeIconsX className='w-4 h-4' fill='currentColor' />
                                 ) : (
                                     <HugeIconsSearch className='w-4 h-4' fill='currentColor' />
                                 )}
-                                {autoRefresh ? 'Live' : 'Refresh'}
+                                {autoRefresh ? 'Directo' : 'Recargar'}
                             </ActionButton>
                             <ActionButton
                                 variant='secondary'
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
-                                title='Export CSV (Ctrl+E)'
+                                title='Exportar CSV (Ctrl+E)'
                             >
                                 <HugeIconsDownload className='w-4 h-4' fill='currentColor' />
-                                Export
+                                Exportar
                             </ActionButton>
                         </div>
                     </MainPageHeader>
@@ -225,12 +225,12 @@ const ActivityLogContainer = () => {
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                     <HugeIconsFilter className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                <h3 className='text-base font-semibold text-zinc-100'>Filtros</h3>
                             </div>
 
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Buscar</label>
                                     <div className='relative'>
                                         <HugeIconsSearch
                                             className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
@@ -238,7 +238,7 @@ const ActivityLogContainer = () => {
                                         />
                                         <Input.Text
                                             type='text'
-                                            placeholder='Search events, IPs, users...'
+                                            placeholder='Buscar eventos, IPs, usuarios...'
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             style={{ paddingLeft: '2.5rem' }}
@@ -247,14 +247,14 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Tipo de evento</label>
                                     <Select
                                         value={selectedEventType}
                                         onChange={(e) => setSelectedEventType(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Events
+                                            Todos
                                         </option>
                                         {eventTypes.map((type) => (
                                             <option
@@ -269,26 +269,26 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Time Range</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Rango de tiempo</label>
                                     <Select
                                         value={dateRange}
                                         onChange={(e) => setDateRange(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Time
+                                            Siempre
                                         </option>
                                         <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last Hour
+                                            Última hora
                                         </option>
                                         <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 24 Hours
+                                            Últimas 24 días
                                         </option>
                                         <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 7 Days
+                                            Últimos 7 días
                                         </option>
                                         <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 30 Days
+                                            Últimos 30 días
                                         </option>
                                     </Select>
                                 </div>
@@ -301,7 +301,7 @@ const ActivityLogContainer = () => {
                                             className='flex items-center gap-2 w-full'
                                         >
                                             <HugeIconsX className='w-4 h-4' fill='currentColor' />
-                                            Clear All Filters
+                                            Limpiar filtros
                                         </ActionButton>
                                     )}
                                 </div>
@@ -323,7 +323,7 @@ const ActivityLogContainer = () => {
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                 <HugeIconsHistory className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Activity Events</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>Eventos</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
                                     ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
@@ -337,20 +337,20 @@ const ActivityLogContainer = () => {
                             <div className='text-center py-12'>
                                 <HugeIconsHistory className='w-16 h-16 text-zinc-600 mb-4' fill='currentColor' />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
+                                    {hasActiveFilters ? 'No se ha encontrado actividad' : 'No hay actividad aún'}
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
-                                        : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'}
+                                        ? "Intenta ajustar los filtros para encontrar lo que buscas."
+                                        : 'Aquí aparecerá la actividad relacionada con tu cuenta.'}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
                                         <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            Clear All Filters
+                                            Limpiar filtros
                                         </ActionButton>
                                         <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
-                                            Adjust Filters
+                                            Ajustar filtros
                                         </ActionButton>
                                     </div>
                                 )}

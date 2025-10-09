@@ -34,17 +34,17 @@ const ConfigureTwoFactorForm = () => {
             <DisableTOTPDialog open={visible === 'disable'} onClose={() => setVisible(null)} />
             <p className={`text-sm`}>
                 {isEnabled
-                    ? 'Your account is protected by an authenticator app.'
-                    : 'You have not configured an authenticator app.'}
+                    ? 'Tu cuenta está protegida con autenticación de dos factores.'
+                    : 'Tu cuenta no cuenta con autenticación de dos factores.'}
             </p>
             <div className={`mt-6`}>
                 {isEnabled ? (
                     <ActionButton variant='danger' onClick={() => setVisible('disable')}>
-                        Remove Authenticator App
+                        Eliminar autenticación 2-FA
                     </ActionButton>
                 ) : (
                     <ActionButton variant='primary' onClick={() => setVisible('enable')}>
-                        Enable Authenticator App
+                        Habilitar autenticación 2-FA
                     </ActionButton>
                 )}
             </div>

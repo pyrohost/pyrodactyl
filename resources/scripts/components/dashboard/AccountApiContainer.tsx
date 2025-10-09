@@ -89,7 +89,7 @@ const AccountApiContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'API Keys'}>
+        <PageContentBlock title={'Claves API'}>
             <FlashMessageRender byKey='account:api-keys' />
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
@@ -98,8 +98,8 @@ const AccountApiContainer = () => {
                 <Dialog.Confirm
                     open={showCreateModal}
                     onClose={() => setShowCreateModal(false)}
-                    title='Create API Key'
-                    confirm='Create Key'
+                    title='Crear clave API'
+                    confirm='Crear clave'
                     onConfirmed={() => {
                         const form = document.getElementById('create-api-form') as HTMLFormElement;
                         if (form) {
@@ -121,17 +121,17 @@ const AccountApiContainer = () => {
                                 <SpinnerOverlay visible={isSubmitting} />
 
                                 <FormikFieldWrapper
-                                    label='Description'
+                                    label='Descripción'
                                     name='description'
-                                    description='A description of this API key.'
+                                    description='Una descripción breve sobre esta clave API.'
                                 >
                                     <Field name='description' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
                                 <FormikFieldWrapper
-                                    label='Allowed IPs'
+                                    label='Direcciones IP permitidas'
                                     name='allowedIps'
-                                    description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line. Note: You can also use CIDR ranges here.'
+                                    description='Deja este campo vacío para permitir cualquier dirección o especifica cada IP en una línea nueva.'
                                 >
                                     <Field name='allowedIps' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
@@ -153,7 +153,7 @@ const AccountApiContainer = () => {
                     }}
                 >
                     <MainPageHeader
-                        title='API Keys'
+                        title='Claves API'
                         titleChildren={
                             <ActionButton
                                 variant='primary'
@@ -161,7 +161,7 @@ const AccountApiContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
-                                Create API Key
+                                Crear clave API
                             </ActionButton>
                         }
                     />
@@ -178,13 +178,13 @@ const AccountApiContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={loading} />
                         <Dialog.Confirm
-                            title={'Delete API Key'}
-                            confirm={'Delete Key'}
+                            title={'Eliminar clave API'}
+                            confirm={'Eliminar clave'}
                             open={!!deleteIdentifier}
                             onClose={() => setDeleteIdentifier('')}
                             onConfirmed={() => doDeletion(deleteIdentifier)}
                         >
-                            All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
+                            Todas las peticiones que usen la calve <Code>{deleteIdentifier}</Code> quedarán invalidadas.
                         </Dialog.Confirm>
 
                         {keys.length === 0 ? (
@@ -192,11 +192,11 @@ const AccountApiContainer = () => {
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                                     <HugeIconsKey className='w-8 h-8 text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No API Keys</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No hay claves API</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
                                     {loading
-                                        ? 'Loading your API keys...'
-                                        : "You haven't created any API keys yet. Create one to get started with the API."}
+                                        ? 'Cargando tus claves API...'
+                                        : "Aún no tienes ninguna clave API. Crea una para empezar."}
                                 </p>
                             </div>
                         ) : (
@@ -221,13 +221,13 @@ const AccountApiContainer = () => {
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
                                                         <span>
-                                                            Last used:{' '}
+                                                            Último uso:{' '}
                                                             {key.lastUsedAt
-                                                                ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
-                                                                : 'Never'}
+                                                                ? format(key.lastUsedAt, 'd MMM, yyyy HH:mm')
+                                                                : 'Nunca'}
                                                         </span>
                                                         <div className='flex items-center gap-2'>
-                                                            <span>Key:</span>
+                                                            <span>Clave:</span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
                                                                 {showKeys[key.identifier]
                                                                     ? key.identifier

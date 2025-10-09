@@ -148,16 +148,16 @@ const BackupContextMenu = ({ backup }: Props) => {
 
     return (
         <>
-            <Dialog open={modal === 'rename'} onClose={() => setModal('')} title='Rename Backup'>
+            <Dialog open={modal === 'rename'} onClose={() => setModal('')} title='Renombrar copia'>
                 <div className='space-y-4'>
                     <div>
-                        <label className='block text-sm font-medium text-zinc-200 mb-2'>Backup Name</label>
+                        <label className='block text-sm font-medium text-zinc-200 mb-2'>Nombre de la copia</label>
                         <input
                             type='text'
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                             className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
-                            placeholder='Enter backup name...'
+                            placeholder='Introduce el nombre de la copia...'
                             maxLength={191}
                         />
                     </div>
@@ -165,32 +165,32 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                 <Dialog.Footer>
                     <ActionButton onClick={() => setModal('')} variant='secondary'>
-                        Cancel
+                        Cancelar
                     </ActionButton>
                     <ActionButton
                         onClick={doRename}
                         variant='primary'
                         disabled={!newName.trim() || newName.trim() === backup.name}
                     >
-                        Rename Backup
+                        Renombrar copia
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>
             <Dialog.Confirm
                 open={modal === 'unlock'}
                 onClose={() => setModal('')}
-                title={`Unlock "${backup.name}"`}
+                title={`Desbloquear "${backup.name}"`}
                 onConfirmed={onLockToggle}
             >
-                This backup will no longer be protected from automated or accidental deletions.
+                Esta copia ya no estará protegida de eliminaciones automáticas o accidentales.
             </Dialog.Confirm>
-            <Dialog open={modal === 'restore'} onClose={() => setModal('')} title='Restore Backup'>
+            <Dialog open={modal === 'restore'} onClose={() => setModal('')} title='Restaurar desde copia'>
                 <div className='space-y-4'>
                     <div className='space-y-2'>
                         <p className='text-sm font-medium text-zinc-200'>&quot;{backup.name}&quot;</p>
                         <p className='text-sm text-zinc-400'>
-                            Your server will be stopped during the restoration process. You will not be able to control
-                            the power state, access the file manager, or create additional backups until completed.
+                            Tu servidor se detendrá. No podrás controlar el estado, acceder al administrador de archivos o
+                            crear nuevas copias hasta que se complete el proceso.
                         </p>
                     </div>
 
@@ -199,11 +199,12 @@ const BackupContextMenu = ({ backup }: Props) => {
                             <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
                             <div className='space-y-1'>
                                 <h4 className='text-sm text-red-200 font-medium'>
+                                    Acción destructiva - Restauración completa
                                     Destructive Action - Complete Server Restore
                                 </h4>
                                 <p className='text-xs text-red-300'>
-                                    All current files and server configuration will be deleted and replaced with the
-                                    backup data. This action cannot be undone.
+                                    Todos los archivos y configuraciones actuales se eliminarán y remplazarán con
+                                    los datos de la copia. Esta acción no se puede deshacer.
                                 </p>
                             </div>
                         </div>
@@ -212,21 +213,21 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                 <Dialog.Footer>
                     <ActionButton onClick={() => setModal('')} variant='secondary'>
-                        Cancel
+                        Cancelar
                     </ActionButton>
                     <ActionButton onClick={() => doRestorationAction()} variant='danger' disabled={countdown > 0}>
-                        {countdown > 0 ? `Delete All & Restore (${countdown}s)` : 'Delete All & Restore Backup'}
+                        {countdown > 0 ? `Borrar todo y restaurar (${countdown}s)` : 'Borrar todo y restaurar'}
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>
             <Dialog.Confirm
-                title={`Delete "${backup.name}"`}
-                confirm={'Continue'}
+                title={`Eliminar "${backup.name}"`}
+                confirm={'Continuar'}
                 open={modal === 'delete'}
                 onClose={() => setModal('')}
                 onConfirmed={doDeletion}
             >
-                This is a permanent operation. The backup cannot be recovered once deleted.
+                Esto es una operación irreversible. La copia no se podrá recuperar nunca más una vez se elimine.
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
@@ -245,24 +246,24 @@ const BackupContextMenu = ({ backup }: Props) => {
                         <Can action={'backup.download'}>
                             <DropdownMenuItem onClick={doDownload} className='cursor-pointer'>
                                 <HugeIconsFileDownload className='h-4 w-4 mr-2' fill='currentColor' />
-                                Download
+                                Descargar
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.restore'}>
                             <DropdownMenuItem onClick={() => setModal('restore')} className='cursor-pointer'>
                                 <HugeIconsCloudUp className='h-4 w-4 mr-2' fill='currentColor' />
-                                Restore
+                                Restaurar
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.delete'}>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setModal('rename')} className='cursor-pointer'>
                                 <HugeIconsPencil className='h-4 w-4 mr-2' fill='currentColor' />
-                                Rename
+                                Renombrar
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={onLockToggle} className='cursor-pointer'>
                                 <HugeIconsFileSecurity className='h-4 w-4 mr-2' fill='currentColor' />
-                                {backup.isLocked ? 'Unlock' : 'Lock'}
+                                {backup.isLocked ? 'Desbloquear' : 'Bloquear'}
                             </DropdownMenuItem>
                             {!backup.isLocked && (
                                 <>
@@ -272,7 +273,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                                         className='cursor-pointer text-red-400 focus:text-red-300'
                                     >
                                         <HugeIconsDelete className='h-4 w-4 mr-2' fill='currentColor' />
-                                        Delete
+                                        Eliminar
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -288,7 +289,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     className='flex items-center gap-2'
                 >
                     <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
-                    <span className='hidden sm:inline'>Delete</span>
+                    <span className='hidden sm:inline'>Eliminar</span>
                 </ActionButton>
             )}
         </>

@@ -47,7 +47,7 @@ const DisableTOTPDialog = () => {
         <form id={'disable-totp-form'} className={'mt-6'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
             <label className={'block pb-1'} htmlFor={'totp-password'}>
-                Password
+                Contraseña
             </label>
             <Input.Text
                 id={'totp-password'}
@@ -58,7 +58,7 @@ const DisableTOTPDialog = () => {
             />
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={close}>
-                    Cancel
+                    Cancelar
                 </ActionButton>
                 {/* <Tooltip
                     delay={100}
@@ -71,7 +71,7 @@ const DisableTOTPDialog = () => {
                     form={'disable-totp-form'}
                     disabled={submitting || !password.length}
                 >
-                    Disable
+                    Deshabilitar
                 </ActionButton>
                 {/* </Tooltip> */}
             </Dialog.Footer>
@@ -80,6 +80,6 @@ const DisableTOTPDialog = () => {
 };
 
 export default asDialog({
-    title: 'Remove Authenticator App',
-    description: 'Removing your authenticator app will make your account less secure.',
+    title: 'Deshabilitar 2-FA',
+    description: 'Desactivar la autenticación de dos factores hará tu cuenta mucho menos segura.',
 })(DisableTOTPDialog);

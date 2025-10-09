@@ -52,18 +52,18 @@ const DownloadModModal = ({ modid, modName }: Props) => {
 
             <FlashMessageRender byKey={`mod-download-${modid}`} />
             {loading ? (
-                <p className='text-white'>Loading versions...</p>
+                <p className='text-white'>Cargando versiones...</p>
             ) : versions.length === 0 ? (
-                <p className='text-white'>No versions available for this mod. 😔</p>
+                <p className='text-white'>No hay versiones disponibles para este proyecto. 😔</p>
             ) : (
                 <div className='flex flex-col gap-4'>
                     <div className='w-full max-w-sm space-y-8'>
                         <h1 className='text-2xl font-bold text-center text-custom-light-gray'>
-                            <span className='text-custom-red'>Selection</span> Box
+                            <span className='text-custom-red'>Selección</span>
                         </h1>
 
                         <ExpandableScrollBox
-                            placeholder='Select an option'
+                            placeholder='Selecciona una opción'
                             items={versions}
                             maxHeight='250px'
                             onSelect={handleSelect}
@@ -71,11 +71,11 @@ const DownloadModModal = ({ modid, modName }: Props) => {
 
                         {/* Display selected item */}
                         <div className='p-4 bg-custom-dark-gray rounded-md text-custom-light-gray text-center'>
-                            {selectedItem ? `You selected: ${selectedItem.label}` : 'No option selected yet'}
+                            {selectedItem ? `Has seleccionado: ${selectedItem.label}` : 'No has seleccionado ninguna opción'}
                         </div>
 
                         <div className='text-sm text-custom-light-gray text-center mt-4 opacity-70'>
-                            The selected item appears in the button after selection
+                            El ítem seleccionado aparece en el botón después de la selección
                         </div>
                     </div>
                 </div>

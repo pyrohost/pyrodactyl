@@ -55,7 +55,7 @@ const PIDLimitModalFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title={isAdmin ? 'Memory or process limit reached' : 'Possible resource limit reached'}
+            title={isAdmin ? 'Se ha alcanzado el límite del proceso o el tope de la memoria' : 'Se ha alcanzado el límite de recursos'}
         >
             <FlashMessageRender key={'feature:pidLimit'} />
             <div className={`flex-col`}>
@@ -74,8 +74,8 @@ const PIDLimitModalFeature = () => {
                 ) : (
                     <>
                         <p>
-                            This server is attempting to use more resources than allocated. Please contact the
-                            administrator and give them the error below.
+                            Este servidor está intentando usar más recursos de los que tiene disponibles. Por favor,
+                            contacta con el soporte técnico indicando el siguiente código:
                         </p>
                         <p className='mt-3'>
                             <code className={`font-mono bg-zinc-900`}>
