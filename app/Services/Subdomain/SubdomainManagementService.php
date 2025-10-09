@@ -53,7 +53,7 @@ class SubdomainManagementService
         // Check if server supports subdomains
         $feature = $this->getServerSubdomainFeature($server);
         if (!$feature) {
-            throw new \Exception('Server does not support subdomains.');
+            throw new \Exception('El servidor no cuenta con soporte para subdominios.');
         }
 
         // Validate subdomain
@@ -63,7 +63,7 @@ class SubdomainManagementService
         try {
             $dnsProvider = $this->getDnsProvider($domain);
         } catch (\Exception $e) {
-            throw new \Exception('DNS service temporarily unavailable.');
+            throw new \Exception('El proveedor de DNS no está disponible ahora mismo.');
         }
 
         // Get DNS records to create
@@ -81,7 +81,7 @@ class SubdomainManagementService
                 ->first();
 
             if ($existingServerSubdomain) {
-                throw new \Exception('Server already has an active subdomain. Please delete it first.');
+                throw new \Exception('El servidor ya tiene un subdominio activo. Por favor, elimínalo antes.');
             }
 
             // Double-check subdomain availability within transaction
@@ -91,7 +91,7 @@ class SubdomainManagementService
                 ->first();
 
             if ($existing) {
-                throw new \Exception('Subdomain is not available.');
+                throw new \Exception('El subdomino no está disponible.');
             }
 
             // Create DNS records first
@@ -147,13 +147,13 @@ class SubdomainManagementService
 
         $feature = $this->getServerSubdomainFeature($server);
         if (!$feature) {
-            throw new \Exception('Server no longer supports subdomains.');
+            throw new \Exception('El servidor ya no puede usar subdominios.');
         }
 
         try {
             $dnsProvider = $this->getDnsProvider($domain);
         } catch (\Exception $e) {
-            throw new \Exception('DNS service temporarily unavailable.');
+            throw new \Exception('El proveedor DNS no está disponible ahora mismo.');
         }
 
         $newDnsRecords = $feature->getDnsRecords($server, $serverSubdomain->subdomain, $domain->name);
@@ -174,7 +174,7 @@ class SubdomainManagementService
                             $rollbackData[$recordIds[$index]] = $originalRecord;
                         } catch (\Exception $e) {
                             // If we can't get original record, we can't rollback safely
-                            Log::warning("Cannot retrieve original DNS record for rollback: {$recordIds[$index]}");
+                            Log::warning("No se puede obtener el registro DNS original: {$recordIds[$index]}");
                         }
 
                         // Update existing record
@@ -211,7 +211,7 @@ class SubdomainManagementService
             } catch (\Exception $e) {
                 // Attempt rollback of DNS changes
                 $this->rollbackDnsChanges($dnsProvider, $domain->name, $rollbackData, $updatedRecordIds);
-                throw new \Exception('Failed to update subdomain DNS records.');
+                throw new \Exception('No se ha podido actualizar el registro DNS.');
             }
         });
     }
@@ -257,7 +257,7 @@ class SubdomainManagementService
                 $serverSubdomain->delete();
             } catch (\Exception $e) {
                 Log::error("Failed to delete subdomain {$serverSubdomain->full_domain}: {$e->getMessage()}");
-                throw new \Exception('Failed to delete subdomain completely.');
+                throw new \Exception('No se ha podido eliminar el subdominio.');
             }
         });
     }
@@ -299,35 +299,35 @@ class SubdomainManagementService
         if (in_array($subdomain, $this->getReservedSubdomains())) {
             return [
                 'available' => false,
-                'message' => 'This subdomain is reserved and cannot be used.',
+                'message' => 'Este subdominio está reservado y no puede ser usado.',
             ];
         }
 
         if (empty($subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain cannot be empty.',
+                'message' => 'El subdominio no puede estar vacío.',
             ];
         }
 
         if (strlen($subdomain) > 63) {
             return [
                 'available' => false,
-                'message' => 'Subdomain cannot be longer than 63 characters.',
+                'message' => 'El subdominio no puede tener más de 63 caracteres.',
             ];
         }
 
         if (!preg_match('/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/', $subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain contains invalid characters.',
+                'message' => 'El subdominio contiene caracteres inválidos.',
             ];
         }
 
         if (preg_match('/[<>"\']/', $subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain contains invalid characters.',
+                'message' => 'El subdominio contiene caracteres inválidos.',
             ];
         }
 
@@ -343,7 +343,7 @@ class SubdomainManagementService
 
         return [
             'available' => !$existing,
-            'message' => $existing ? 'Subdomain is not available.' : 'Subdomain is available.',
+            'message' => $existing ? 'Este subdominio no está disponible.' : 'El subdominio está disponible.',
         ];
     }
 

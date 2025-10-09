@@ -22,7 +22,7 @@ class CreateSubdomainRequest extends ClientApiRequest
                 'regex:/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/',
                 function ($attribute, $value, $fail) {
                     if (preg_match('/[<>"\']/', $value)) {
-                        $fail('Subdomain contains invalid characters.');
+                        $fail('El subdominio contiene caracteres inválidos.');
                         return;
                     }
                     
@@ -30,7 +30,7 @@ class CreateSubdomainRequest extends ClientApiRequest
                                 'localhost', 'wildcard', 'ns1', 'ns2', 'dns', 'smtp', 'pop', 
                                 'imap', 'webmail', 'cpanel', 'whm', 'autodiscover', 'autoconfig'];
                     if (in_array(strtolower($value), $reserved)) {
-                        $fail('This subdomain is reserved and cannot be used.');
+                        $fail('Este subdominio está reservado y no puede usarse.');
                         return;
                     }
 
@@ -42,7 +42,7 @@ class CreateSubdomainRequest extends ClientApiRequest
                             ->exists();
                         
                         if ($exists) {
-                            $fail('This subdomain is already taken.');
+                            $fail('Este subdominio ya está en uso.');
                         }
                     }
                 },
@@ -57,7 +57,7 @@ class CreateSubdomainRequest extends ClientApiRequest
                         ->where('is_active', true)
                         ->first();
                     if (!$domain) {
-                        $fail('The selected domain is not available.');
+                        $fail('El dominio seleccionado no se encuentra disponible.');
                     }
                 },
             ],

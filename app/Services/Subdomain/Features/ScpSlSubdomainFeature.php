@@ -20,7 +20,7 @@ class ScpSlSubdomainFeature implements SubdomainFeatureInterface
      */
     public function getDnsRecords(Server $server, string $subdomain, string $domain): array
     {
-        $ip = $server->allocation->ip;
+        $ip = $server->allocation->ip_alias;
         $port = $server->allocation->port;
         $fullDomain = $subdomain . '.' . $domain;
 
