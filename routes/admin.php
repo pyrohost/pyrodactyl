@@ -74,11 +74,11 @@ Route::group(['prefix' => 'settings'], function () {
     Route::get('/', [Admin\Settings\DomainsController::class, 'index'])->name('admin.settings.domains.index');
     Route::get('/create', [Admin\Settings\DomainsController::class, 'create'])->name('admin.settings.domains.create');
     Route::get('/{domain}/edit', [Admin\Settings\DomainsController::class, 'edit'])->name('admin.settings.domains.edit');
-    
+
     Route::post('/', [Admin\Settings\DomainsController::class, 'store'])->name('admin.settings.domains.store');
     Route::patch('/{domain}', [Admin\Settings\DomainsController::class, 'update'])->name('admin.settings.domains.update');
     Route::delete('/{domain}', [Admin\Settings\DomainsController::class, 'destroy'])->name('admin.settings.domains.destroy');
-    
+
     Route::post('/test-connection', [Admin\Settings\DomainsController::class, 'testConnection'])->name('admin.settings.domains.test-connection');
     Route::get('/provider-schema/{provider}', [Admin\Settings\DomainsController::class, 'getProviderSchema'])->name('admin.settings.domains.provider-schema');
   });
@@ -227,6 +227,7 @@ Route::group(['prefix' => 'nests'], function () {
 
   Route::post('/new', [Admin\Nests\NestController::class, 'store']);
   Route::post('/import', [Admin\Nests\EggShareController::class, 'import'])->name('admin.nests.egg.import');
+  Route::post('/importFromUrl', [Admin\Nests\EggShareController::class, 'importFromUrl'])->name('admin.nests.egg.import_url');
   Route::post('/egg/new', [Admin\Nests\EggController::class, 'store']);
   Route::post('/egg/{egg:id}/variables', [Admin\Nests\EggVariableController::class, 'store']);
 
