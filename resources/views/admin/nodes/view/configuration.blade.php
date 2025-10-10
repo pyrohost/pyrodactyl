@@ -50,7 +50,7 @@
             <div class="box-body">
                 <p class="text-muted small">
                     Use the button below to generate a custom deployment command that can be used to configure
-                    wings on the target server with a single command.
+                    elytra on the target server with a single command.
                 </p>
             </div>
             <div class="box-footer">
@@ -73,7 +73,7 @@
             swal({
                 type: 'success',
                 title: 'Token created.',
-                text: '<p>To auto-configure your node run the following command:<br /><small><pre>cd /etc/elytra && sudo wings configure --panel-url {{ config('app.url') }} --token ' + data.token + ' --node ' + data.node + '{{ config('app.debug') ? ' --allow-insecure' : '' }}</pre></small></p>',
+                text: '<p>To auto-configure your node run the following command:<br /><small><pre>cd /etc/elytra && sudo elytra configure --panel-url {{ config('app.url') }} --token ' + data.token + ' --node ' + data.node + '{{ config('app.debug') ? ' --allow-insecure' : '' }}</pre></small></p>',
                 html: true
             })
         }).fail(function () {
