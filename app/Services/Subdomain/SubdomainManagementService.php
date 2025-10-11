@@ -14,6 +14,7 @@ use Pterodactyl\Services\Subdomain\Features\RustSubdomainFeature;
 use Pterodactyl\Services\Subdomain\Features\ScpSlSubdomainFeature;
 use Pterodactyl\Services\Subdomain\Features\TeamSpeakSubdomainFeature;
 use Pterodactyl\Services\Dns\Providers\CloudflareProvider;
+use Pterodactyl\Services\Dns\Providers\HetznerProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +28,7 @@ class SubdomainManagementService
         // Register DNS providers
         $this->dnsProviders = [
             'cloudflare' => CloudflareProvider::class,
+            'hetzner' => HetznerProvider::class,
         ];
 
         // Register subdomain features
