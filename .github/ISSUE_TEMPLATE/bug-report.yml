@@ -36,6 +36,7 @@ body:
     placeholder: 1.4.0
   validations:
     required: true
+
 - type: checkboxes
   attributes:
     label: Installation Type
@@ -50,7 +51,7 @@ body:
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
-    required: true
+    required: false
 
 - type: input
   id: wings-version
@@ -60,6 +61,7 @@ body:
     placeholder: 1.4.2
   validations:
     required: true
+
 - type: checkboxes
   attributes:
     label: Installation Type
@@ -74,7 +76,7 @@ body:
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
-    required: true
+    required: false
 
 - type: input
   id: egg-details
@@ -103,20 +105,6 @@ body:
     render: bash
   validations:
     required: false
-
-- type: checkboxes
-  attributes:
-    label: Wings or Elytra
-    description: Is this issue related to Wings or Elytra?
-    options:
-    - label: Wings
-      required: false
-    - label: Elytra
-      required: false
-    - label: Neither
-      required: false
-  validations:
-    required: true
 
 - type: checkboxes
   attributes:
