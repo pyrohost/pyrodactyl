@@ -36,6 +36,21 @@ body:
     placeholder: 1.4.0
   validations:
     required: true
+- type: checkboxes
+  attributes:
+    label: Installation Type
+    description: How did you install Panel?
+    options:
+    - label: Official Panel Docker image.
+      required: false
+    - label: native install for Panel.
+      required: false
+    # - label: Official Automated Installscript.
+    #   required: false
+    - label: I used a third party installation script or Docker image.
+      required: false
+  validations:
+    required: true
 
 - type: input
   id: wings-version
@@ -43,6 +58,21 @@ body:
     label: Wings Version
     description: Version number of your Wings (latest is not a version)
     placeholder: 1.4.2
+  validations:
+    required: true
+- type: checkboxes
+  attributes:
+    label: Installation Type
+    description: How did you install Wings?
+    options:
+    - label: official Elytra/Wings Docker image.
+      required: false
+    - label: native install for Elytra/Wings.
+      required: false
+    # - label: Official Automated Installscript.
+    #   required: false
+    - label: I used a third party installation script or Docker image.
+      required: false
   validations:
     required: true
 
@@ -73,6 +103,20 @@ body:
     render: bash
   validations:
     required: false
+
+- type: checkboxes
+  attributes:
+    label: Wings or Elytra
+    description: Is this issue related to Wings or Elytra?
+    options:
+    - label: Wings
+      required: false
+    - label: Elytra
+      required: false
+    - label: Neither
+      required: false
+  validations:
+    required: true
 
 - type: checkboxes
   attributes:
