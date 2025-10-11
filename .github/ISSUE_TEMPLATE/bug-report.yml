@@ -39,7 +39,7 @@ body:
 
 - type: checkboxes
   attributes:
-    label: Installation Type
+    label: Panel nstallation Type
     description: How did you install Panel?
     options:
     - label: Official Panel Docker image.
@@ -62,7 +62,7 @@ body:
 
 - type: checkboxes
   attributes:
-    label: Installation Type
+    label: Wings Installation Type
     description: How did you install Wings?
     options:
     - label: official Elytra/Wings Docker image.
