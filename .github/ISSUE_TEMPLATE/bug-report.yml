@@ -46,12 +46,10 @@ body:
       required: false
     - label: native install for Panel.
       required: false
-    # - label: Official Automated Installscript.
-    #   required: false
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
-    required: false
+    required: true
 
 - type: input
   id: wings-version
@@ -71,12 +69,10 @@ body:
       required: false
     - label: native install for Elytra/Wings.
       required: false
-    # - label: Official Automated Installscript.
-    #   required: false
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
-    required: false
+    required: true
 
 - type: input
   id: egg-details
@@ -117,3 +113,5 @@ body:
       required: true
     - label: I have checked in the Discord server and believe this is a bug with the software, and not a configuration issue with my specific system.
       required: true
+
+# rawr
