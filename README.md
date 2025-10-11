@@ -22,7 +22,7 @@
 > Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
 
 > [!NOTE]
-> Please read our documentation at [https://pyrodactyl.dev](https://pyrodactyl.dev) before installing.
+> Please read our documentation at [https://pyrodactyl.dev](https://pyrodactyl.dev/docs) before installing.
 
 > [!IMPORTANT]
 > For Pyrodactyl-specific issues, please use [Pyrodactyl GitHub Discussions](https://github.com/pyrohost/pyrodactyl/discussions) or the [Pyrodactyl Discord](https://discord.gg/UhuYKKK2uM?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH) instead of Pterodactyl or Pelican support channels.

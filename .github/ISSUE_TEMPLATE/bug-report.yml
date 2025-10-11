@@ -37,12 +37,44 @@ body:
   validations:
     required: true
 
+- type: checkboxes
+  attributes:
+    label: Panel Installation Type
+    description: How did you install Panel?
+    options:
+    - label: Official Panel Docker image.
+      required: false
+    - label: native install for Panel.
+      required: false
+    # - label: I used official installation script.
+    #   required: false
+    - label: I used a third party installation script or Docker image.
+      required: false
+  validations:
+    required: true
+
 - type: input
   id: wings-version
   attributes:
     label: Wings Version
     description: Version number of your Wings (latest is not a version)
     placeholder: 1.4.2
+  validations:
+    required: true
+
+- type: checkboxes
+  attributes:
+    label: Wings Installation Type
+    description: How did you install Wings?
+    options:
+    - label: official Elytra/Wings Docker image.
+      required: false
+    - label: Native install for Elytra/Wings.
+      required: false
+    # - label: I used official installation script.
+    #   required: false
+    - label: I used a third party installation script or Docker image.
+      required: false
   validations:
     required: true
 
@@ -85,3 +117,5 @@ body:
       required: true
     - label: I have checked in the Discord server and believe this is a bug with the software, and not a configuration issue with my specific system.
       required: true
+
+# rawr

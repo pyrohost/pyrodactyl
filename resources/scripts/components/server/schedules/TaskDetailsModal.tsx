@@ -215,7 +215,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                     <FormikFieldWrapper
                                         name={'payload'}
                                         description={
-                                            'Include the files and folders to be excluded in this backup. By default, the contents of your .pteroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
+                                            'Include the files and folders to be excluded in this backup. By default, the contents of your .pyroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
                                         }
                                     >
                                         <FormikField
