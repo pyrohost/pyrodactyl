@@ -39,13 +39,15 @@ body:
 
 - type: checkboxes
   attributes:
-    label: Panel nstallation Type
+    label: Panel Installation Type
     description: How did you install Panel?
     options:
     - label: Official Panel Docker image.
       required: false
     - label: native install for Panel.
       required: false
+    # - label: I used official installation script.
+    #   required: false
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
@@ -67,8 +69,10 @@ body:
     options:
     - label: official Elytra/Wings Docker image.
       required: false
-    - label: native install for Elytra/Wings.
+    - label: Native install for Elytra/Wings.
       required: false
+    # - label: I used official installation script.
+    #   required: false
     - label: I used a third party installation script or Docker image.
       required: false
   validations:
