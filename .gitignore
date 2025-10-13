@@ -1,4 +1,8 @@
 /vendor
+.git/
+.vscode/
+.env
+
 
 # Elytra binary
 elytra
