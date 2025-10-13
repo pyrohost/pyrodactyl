@@ -226,6 +226,10 @@ class DomainsController extends Controller
                 'name' => 'Cloudflare',
                 'description' => 'Cloudflare DNS service',
             ],
+            'hetzner' => [
+                'name' => 'Hetzner',
+                'description' => 'Hetzner DNS Console',
+            ],
         ];
     }
 
@@ -236,6 +240,7 @@ class DomainsController extends Controller
     {
         $providers = [
             'cloudflare' => \Pterodactyl\Services\Dns\Providers\CloudflareProvider::class,
+            'hetzner' => \Pterodactyl\Services\Dns\Providers\HetznerProvider::class,
         ];
 
         if (!isset($providers[$provider])) {
