@@ -71,7 +71,9 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
     return (
         <ItemContainer
             title={title}
-            description={task.payload}
+            description={
+                task.payload && task.payload.length > 100 ? `${task.payload.substring(0, 100)}...` : task.payload
+            }
             icon={icon}
             divClasses={`mb-2 gap-6`}
             copyDescription={copyOnClick}
@@ -104,7 +106,9 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         <div
                             className={`font-mono bg-zinc-800 rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
                         >
-                            {task.payload}
+                            {task.payload && task.payload.length > 100
+                                ? `${task.payload.substring(0, 100)}...`
+                                : task.payload}
                         </div>
                     </div>
                 )}
