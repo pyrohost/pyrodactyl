@@ -67,10 +67,14 @@ body:
     label: Wings Installation Type
     description: How did you install Wings?
     options:
-    - label: official Elytra/Wings Docker image.
+    - label: Offical Docker image.
       required: false
-    - label: Native install for Elytra/Wings.
+    - label: Native install.
       required: false
+    - label: Pyrodactyl Elytra
+      required: true
+    - label: Pterodacty Wings
+      required: true
     # - label: I used official installation script.
     #   required: false
     - label: I used a third party installation script or Docker image.
