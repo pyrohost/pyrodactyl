@@ -28,6 +28,7 @@ class ElytraJobCompleteRequest extends FormRequest
             'size' => 'nullable|integer|min:0',
             'snapshot_id' => 'nullable|string',
             'adapter' => 'nullable|string',
+            'repository_size' => 'nullable|integer|min:0',
             'result_data' => 'nullable|array',
         ];
     }

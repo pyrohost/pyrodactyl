@@ -19,6 +19,12 @@ type BackupResponse = PaginatedResult<ServerBackup> & {
     backupCount: number;
     storage: {
         used_mb: number;
+        legacy_usage_mb: number;
+        repository_usage_mb: number;
+        rustic_backup_sum_mb: number;
+        overhead_mb: number;
+        overhead_percent: number;
+        needs_pruning: boolean;
         limit_mb: number | null;
         has_limit: boolean;
         usage_percentage: number | null;

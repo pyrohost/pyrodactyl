@@ -1,6 +1,7 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
+import { Checkbox } from '@/components/elements/CheckboxNew';
 import Spinner from '@/components/elements/Spinner';
 import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
@@ -10,7 +11,6 @@ import { PageListItem } from '@/components/elements/pages/PageList';
 import { bytesToString } from '@/lib/formatters';
 
 import useFlash from '@/plugins/useFlash';
-import { useUnifiedBackups } from './useUnifiedBackups';
 
 import BackupContextMenu from './BackupContextMenu';
 
@@ -22,6 +22,7 @@ export interface UnifiedBackup {
     message: string;
     isSuccessful?: boolean;
     isLocked: boolean;
+    isAutomatic: boolean;
     checksum?: string;
     bytes?: number;
     createdAt: Date;
@@ -36,11 +37,14 @@ export interface UnifiedBackup {
 
 interface Props {
     backup: UnifiedBackup;
+    isSelected?: boolean;
+    onToggleSelect?: () => void;
+    isSelectable?: boolean;
+    retryBackup: (backupUuid: string) => Promise<void>;
 }
 
-const BackupItem = ({ backup }: Props) => {
+const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable = false, retryBackup }: Props) => {
     const { addFlash, clearFlashes } = useFlash();
-    const { retryBackup } = useUnifiedBackups();
 
 
     const handleRetry = async () => {
@@ -125,34 +129,50 @@ const BackupItem = ({ backup }: Props) => {
 
     return (
         <PageListItem>
-            <div className='flex items-center gap-4 w-full py-1'>
-                <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+            <div className='flex items-center gap-3 w-full'>
+                {/* Selection checkbox - always reserve space to prevent layout shift */}
+                <div className='flex-shrink-0 w-5'>
+                    {isSelectable && onToggleSelect ? (
+                        <Checkbox
+                            checked={isSelected}
+                            onCheckedChange={onToggleSelect}
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        />
+                    ) : (
+                        <div className='w-5 h-5' />
+                    )}
+                </div>
+
+                <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                     {getStatusIcon()}
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                    <div className='flex items-center gap-2 mb-1'>
+                    <div className='flex items-center gap-2 mb-1.5'>
                         {getStatusBadge()}
                         <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
-                        <span
-                            className={`text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded transition-opacity ${
-                                backup.isLocked ? 'opacity-100' : 'opacity-0'
-                            }`}
-                        >
-                            Locked
-                        </span>
+                        {backup.isAutomatic && (
+                            <span className='text-xs text-blue-400 font-medium bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded'>
+                                Automatic
+                            </span>
+                        )}
+                        {backup.isLocked && (
+                            <span className='text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded'>
+                                Locked
+                            </span>
+                        )}
                     </div>
 
                     {/* Progress bar for active backups */}
                     {showProgressBar && (
                         <div className='mb-2'>
-                            <div className='flex justify-between text-xs text-zinc-400 mb-1'>
+                            <div className='flex justify-between text-xs text-zinc-400 mb-1.5'>
                                 <span>{backup.message || 'Processing...'}</span>
                                 <span>{backup.progress}%</span>
                             </div>
-                            <div className='w-full bg-zinc-700 rounded-full h-1.5'>
+                            <div className='w-full bg-zinc-700 rounded-full h-2'>
                                 <div
-                                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                                    className={`h-2 rounded-full transition-all duration-300 ${
                                         backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
                                     }`}
                                     style={{ width: `${backup.progress || 0}%` }}
@@ -163,7 +183,7 @@ const BackupItem = ({ backup }: Props) => {
 
                     {/* Error message for failed backups */}
                     {backup.status === 'failed' && backup.message && (
-                        <p className='text-xs text-red-400 truncate mb-1'>{backup.message}</p>
+                        <p className='text-xs text-red-400 truncate mb-1.5'>{backup.message}</p>
                     )}
 
                     {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
@@ -171,23 +191,23 @@ const BackupItem = ({ backup }: Props) => {
                 </div>
 
                 {/* Size info for completed backups */}
-                <div className='hidden sm:block flex-shrink-0 text-right min-w-[80px]'>
+                <div className='hidden sm:block flex-shrink-0 text-right min-w-[90px]'>
                     {backup.completedAt && backup.isSuccessful && backup.bytes ? (
                         <>
-                            <p className='text-xs text-zinc-500 uppercase tracking-wide'>Size</p>
+                            <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
                             <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
                         </>
                     ) : (
                         <>
-                            <p className='text-xs text-transparent uppercase tracking-wide'>Size</p>
+                            <p className='text-xs text-transparent uppercase tracking-wide mb-1'>Size</p>
                             <p className='text-sm text-transparent font-medium'>-</p>
                         </>
                     )}
                 </div>
 
                 {/* Created time */}
-                <div className='hidden sm:block flex-shrink-0 text-right min-w-[120px]'>
-                    <p className='text-xs text-zinc-500 uppercase tracking-wide'>Created</p>
+                <div className='hidden sm:block flex-shrink-0 text-right min-w-[130px]'>
+                    <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
                     <p
                         className='text-sm text-zinc-300 font-medium'
                         title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
@@ -196,14 +216,14 @@ const BackupItem = ({ backup }: Props) => {
                     </p>
                 </div>
 
-                {/* Actions */}
-                <div className='flex-shrink-0 flex items-center gap-2'>
+                {/* Actions - fixed width to prevent layout shifts */}
+                <div className='flex-shrink-0 flex items-center gap-2 min-w-[68px] justify-end'>
                     {/* Retry button for failed backups */}
                     {backup.status === 'failed' && backup.canRetry && (
                         <Can action='backup.create'>
                             <button
                                 onClick={handleRetry}
-                                className='p-1.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
+                                className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
                                 title='Retry backup'
                             >
                                 <HugeIconsRefresh className='w-4 h-4' />

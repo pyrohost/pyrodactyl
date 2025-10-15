@@ -58,6 +58,7 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     uuid: attributes.uuid,
     isSuccessful: attributes.is_successful,
     isLocked: attributes.is_locked,
+    isAutomatic: attributes.is_automatic || false,
     name: attributes.name,
     ignoredFiles: attributes.ignored_files,
     checksum: attributes.checksum,

@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Pterodactyl\Services\Backups\InitiateBackupService;
+use Pterodactyl\Services\Elytra\ElytraJobService;
 use Pterodactyl\Repositories\Wings\DaemonPowerRepository;
 use Pterodactyl\Repositories\Wings\DaemonCommandRepository;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
@@ -21,9 +21,6 @@ class RunTaskJob extends Job implements ShouldQueue
     use InteractsWithQueue;
     use SerializesModels;
 
-    /**
-     * RunTaskJob constructor.
-     */
     public function __construct(public Task $task, public bool $manualRun = false)
     {
         $this->queue = 'standard';
@@ -36,7 +33,7 @@ class RunTaskJob extends Job implements ShouldQueue
      */
     public function handle(
         DaemonCommandRepository $commandRepository,
-        InitiateBackupService $backupService,
+        ElytraJobService $elytraJobService,
         DaemonPowerRepository $powerRepository,
     ) {
         // Do not process a task that is not set to active, unless it's been manually triggered.
@@ -70,7 +67,22 @@ class RunTaskJob extends Job implements ShouldQueue
                 case Task::ACTION_BACKUP:
                     // Mark the task as running before initiating the backup to prevent duplicate runs
                     $this->task->update(['is_processing' => true]);
-                    $backupService->setIgnoredFiles(explode(PHP_EOL, $this->task->payload))->handle($server, null, true);
+
+                    $ignoredFiles = !empty($this->task->payload) ? explode(PHP_EOL, $this->task->payload) : [];
+
+                    $elytraJobService->submitJob(
+                        $server,
+                        'backup_create',
+                        [
+                            'operation' => 'create',
+                            'adapter' => config('backups.default', 'elytra'),
+                            'ignored' => implode("\n", $ignoredFiles),
+                            'name' => 'Scheduled Backup - ' . now()->format('Y-m-d H:i'),
+                            'is_automatic' => true,
+                        ],
+                        auth()->user() ?? $server->user
+                    );
+
                     $this->task->update(['is_processing' => false]);
                     break;
                 default:

@@ -214,6 +214,9 @@ class Node extends Model
             ],
             'allowed_mounts' => $this->mounts->pluck('source')->toArray(),
             'remote' => route('index'),
+            'allowed_origins' => [
+                config('app.url'), // note: I have no idea why this wasn't included by Pterodactyl upstream, this might need to be configurable later - ellie
+            ],
         ];
     }
 
@@ -251,7 +254,6 @@ class Node extends Model
                 'endpoint' => $s3Config['endpoint'] ?? '',
                 'region' => $s3Config['region'] ?? 'us-east-1',
                 'bucket' => $s3Config['bucket'] ?? '',
-                'key_prefix' => $s3Config['prefix'] ?? 'pterodactyl-backups/',
                 'use_cold_storage' => $s3Config['use_cold_storage'] ?? false,
                 'hot_bucket' => $s3Config['hot_bucket'] ?? '',
                 'cold_storage_class' => $s3Config['cold_storage_class'] ?? 'GLACIER',

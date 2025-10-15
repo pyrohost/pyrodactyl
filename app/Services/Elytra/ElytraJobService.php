@@ -205,11 +205,17 @@ class ElytraJobService
         $server = $job->server;
         $currentStatus = $job->status;
         $newStatus = $statusData['status'] ?? 'unknown';
+
+        $errorMessage = $statusData['error_message'] ?? null;
+        if ($errorMessage && str_starts_with($job->job_type, 'backup_')) {
+            $errorMessage = 'Backup operation failed. Please contact an administrator for details.';
+        }
+
         $job->update([
             'status' => $newStatus,
             'progress' => $statusData['progress'] ?? $job->progress,
             'status_message' => $statusData['message'] ?? null,
-            'error_message' => $statusData['error_message'] ?? null,
+            'error_message' => $errorMessage,
         ]);
 
         if ($newStatus === 'completed' || $newStatus === 'failed') {

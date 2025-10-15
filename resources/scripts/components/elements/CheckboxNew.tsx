@@ -17,7 +17,7 @@ const Checkbox = React.forwardRef<
         )}
         {...props}
     >
-        <CheckboxPrimitive.Indicator className={cn('flex items-center justify-center text-current')}>
+        <CheckboxPrimitive.Indicator className={cn('flex h-full w-full items-center justify-center text-current')}>
             <HugeIconsCheck fill='currentColor' className='h-4 w-4' />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>

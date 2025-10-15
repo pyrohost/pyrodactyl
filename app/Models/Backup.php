@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $uuid
  * @property bool $is_successful
  * @property bool $is_locked
+ * @property bool $is_automatic
  * @property string $name
  * @property string[] $ignored_files
  * @property array|null $server_state
@@ -54,6 +55,7 @@ class Backup extends Model
         'id' => 'int',
         'is_successful' => 'bool',
         'is_locked' => 'bool',
+        'is_automatic' => 'bool',
         'ignored_files' => 'array',
         'server_state' => 'array',
         'bytes' => 'int',
@@ -63,6 +65,7 @@ class Backup extends Model
     protected $attributes = [
         'is_successful' => false,
         'is_locked' => false,
+        'is_automatic' => false,
         'checksum' => null,
         'bytes' => 0,
         'upload_id' => null,
@@ -120,6 +123,7 @@ class Backup extends Model
         'uuid' => 'required|uuid',
         'is_successful' => 'boolean',
         'is_locked' => 'boolean',
+        'is_automatic' => 'boolean',
         'name' => 'required|string',
         'ignored_files' => 'array',
         'server_state' => 'nullable|array',
@@ -189,6 +193,14 @@ class Backup extends Model
     public function scopeLocked($query)
     {
         return $query->where('is_locked', true);
+    }
+
+    /**
+     * Scope to get automatic backups
+     */
+    public function scopeAutomatic($query)
+    {
+        return $query->where('is_automatic', true);
     }
 
 

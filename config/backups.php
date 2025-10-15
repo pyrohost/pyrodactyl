@@ -22,6 +22,12 @@ return [
     // to 6 hours.  To disable this feature, set the value to `0`.
     'prune_age' => env('BACKUP_PRUNE_AGE', 360),
 
+    // The maximum number of unlocked automatic backups to keep per server. When this limit is
+    // exceeded, the oldest unlocked automatic backups will be automatically deleted. Locked
+    // automatic backups do not count toward this limit and are preserved indefinitely.
+    // Set to 0 to disable automatic pruning. Defaults to 32.
+    'automatic_backup_limit' => env('BACKUP_AUTOMATIC_LIMIT', 32),
+
     'disks' => [
         // There is no configuration for the local disk for Wings. That configuration
         // is determined by the Daemon configuration, and not the Panel.

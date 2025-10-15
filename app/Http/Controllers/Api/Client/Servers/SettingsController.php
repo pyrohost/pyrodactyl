@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Repositories\Eloquent\ServerRepository;
 use Pterodactyl\Services\Servers\ReinstallServerService;
-use Pterodactyl\Services\Backups\InitiateBackupService;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
 use Pterodactyl\Services\ServerOperations\ServerOperationService;
 use Pterodactyl\Services\ServerOperations\ServerStateValidationService;
@@ -32,7 +31,6 @@ class SettingsController extends ClientApiController
         private ServerRepository $repository,
         private ReinstallServerService $reinstallServerService,
         private StartupModificationService $startupModificationService,
-        private InitiateBackupService $backupService,
         private DaemonFileRepository $fileRepository,
         private ServerOperationService $operationService,
         private ServerStateValidationService $validationService,

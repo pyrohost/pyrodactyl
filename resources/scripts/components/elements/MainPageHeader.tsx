@@ -18,7 +18,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
     direction = 'row',
 }) => {
     return (
-        <HeaderWrapper className={clsx('flex flex-col', 'mb-4 gap-4 md:gap-8 mt-8 md:mt-0 select-none')}>
+        <HeaderWrapper className={clsx('flex flex-col', 'mb-8 gap-4 md:gap-8 mt-8 md:mt-0 select-none')}>
             <div
                 className={clsx(
                     'flex',

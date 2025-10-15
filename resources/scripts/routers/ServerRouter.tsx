@@ -35,6 +35,7 @@ import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import HugeIconsPeople from '@/components/elements/hugeicons/People';
+import HugeIconsZap from '@/components/elements/hugeicons/Zap';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import InstallListener from '@/components/server/InstallListener';
 import TransferListener from '@/components/server/TransferListener';

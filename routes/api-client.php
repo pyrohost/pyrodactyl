@@ -151,6 +151,10 @@ Route::group([
         Route::get('/', [Client\Servers\BackupsController::class, 'index']);
         Route::post('/', [Client\Servers\BackupsController::class, 'store'])
             ->middleware('server.operation.rate-limit');
+        Route::delete('/delete-all', [Client\Servers\BackupsController::class, 'deleteAll'])
+            ->middleware('throttle:2,60');
+        Route::post('/bulk-delete', [Client\Servers\BackupsController::class, 'bulkDelete'])
+            ->middleware('throttle:10,60');
         Route::get('/{backup}', [Client\Servers\BackupsController::class, 'show']);
         Route::get('/{backup}/download', [Client\Servers\BackupsController::class, 'download']);
         Route::post('/{backup}/restore', [Client\Servers\BackupsController::class, 'restore'])
