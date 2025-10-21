@@ -20,7 +20,16 @@ class StoreTaskRequest extends ViewScheduleRequest
     {
         return [
             'action' => 'required|in:command,power,backup',
-            'payload' => 'required_unless:action,backup|string|nullable',
+            'payload' => [
+                'required_unless:action,backup',
+                'string',
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    if ($this->input('action') === 'power' && !in_array($value, ['start', 'stop', 'restart', 'kill'])) {
+                        $fail('The power action must be one of: start, stop, restart, kill.');
+                    }
+                },
+            ],
             'time_offset' => 'required|numeric|min:0|max:900',
             'sequence_id' => 'sometimes|required|numeric|min:1',
             'continue_on_failure' => 'sometimes|required|boolean',

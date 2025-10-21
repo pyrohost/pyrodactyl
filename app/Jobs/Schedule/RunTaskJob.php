@@ -65,35 +65,37 @@ class RunTaskJob extends Job implements ShouldQueue
                     $commandRepository->setServer($server)->send($this->task->payload);
                     break;
                 case Task::ACTION_BACKUP:
-                    // Mark the task as running before initiating the backup to prevent duplicate runs
-                    $this->task->update(['is_processing' => true]);
+                    $affectedRows = Task::where('id', $this->task->id)
+                        ->where('is_processing', false)
+                        ->update(['is_processing' => true]);
 
-                    $ignoredFiles = !empty($this->task->payload) ? explode(PHP_EOL, $this->task->payload) : [];
+                    if ($affectedRows === 0) {
+                        return;
+                    }
 
-                    $elytraJobService->submitJob(
-                        $server,
-                        'backup_create',
-                        [
-                            'operation' => 'create',
-                            'adapter' => config('backups.default', 'elytra'),
-                            'ignored' => implode("\n", $ignoredFiles),
-                            'name' => 'Scheduled Backup - ' . now()->format('Y-m-d H:i'),
-                            'is_automatic' => true,
-                        ],
-                        auth()->user() ?? $server->user
-                    );
+                    try {
+                        $ignoredFiles = !empty($this->task->payload) ? explode(PHP_EOL, $this->task->payload) : [];
 
-                    $this->task->update(['is_processing' => false]);
+                        $elytraJobService->submitJob(
+                            $server,
+                            'backup_create',
+                            [
+                                'operation' => 'create',
+                                'adapter' => config('backups.default', 'elytra'),
+                                'ignored' => implode("\n", $ignoredFiles),
+                                'name' => 'Scheduled Backup - ' . now()->format('Y-m-d H:i'),
+                                'is_automatic' => true,
+                            ],
+                            auth()->user() ?? $server->user
+                        );
+                    } finally {
+                        $this->task->update(['is_processing' => false]);
+                    }
                     break;
                 default:
                     throw new \InvalidArgumentException('Invalid task action provided: ' . $this->task->action);
             }
         } catch (\Exception $exception) {
-            // Reset the processing flag if there was an error
-            if ($this->task->action === Task::ACTION_BACKUP) {
-                $this->task->update(['is_processing' => false]);
-            }
-            
             // If this isn't a DaemonConnectionException on a task that allows for failures
             // throw the exception back up the chain so that the task is stopped.
             if (!($this->task->continue_on_failure && $exception instanceof DaemonConnectionException)) {
@@ -110,6 +112,10 @@ class RunTaskJob extends Job implements ShouldQueue
      */
     public function failed(?\Exception $exception = null)
     {
+        if ($this->task->action === Task::ACTION_BACKUP) {
+            $this->task->update(['is_processing' => false]);
+        }
+
         $this->markTaskNotQueued();
         $this->markScheduleComplete();
     }

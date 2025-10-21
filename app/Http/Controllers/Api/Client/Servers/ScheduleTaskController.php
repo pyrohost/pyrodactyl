@@ -84,7 +84,7 @@ class ScheduleTaskController extends ClientApiController
 
         Activity::event('server:task.create')
             ->subject($schedule, $task)
-            ->property(['name' => $schedule->name, 'action' => $task->action, 'payload' => $task->payload])
+            ->property(['name' => $schedule->name, 'action' => $task->action])
             ->log();
 
         return $this->fractal->item($task)
@@ -139,7 +139,7 @@ class ScheduleTaskController extends ClientApiController
 
         Activity::event('server:task.update')
             ->subject($schedule, $task)
-            ->property(['name' => $schedule->name, 'action' => $task->action, 'payload' => $task->payload])
+            ->property(['name' => $schedule->name, 'action' => $task->action])
             ->log();
 
         return $this->fractal->item($task->refresh())
@@ -161,6 +161,10 @@ class ScheduleTaskController extends ClientApiController
 
         if (!$request->user()->can(Permission::ACTION_SCHEDULE_UPDATE, $server)) {
             throw new HttpForbiddenException('You do not have permission to perform this action.');
+        }
+
+        if ($task->is_queued || $task->is_processing) {
+            throw new HttpForbiddenException('Cannot delete a task that is currently queued or processing.');
         }
 
         $schedule->tasks()

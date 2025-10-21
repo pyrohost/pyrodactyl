@@ -143,6 +143,10 @@ class ScheduleController extends ClientApiController
      */
     public function execute(TriggerScheduleRequest $request, Server $server, Schedule $schedule): JsonResponse
     {
+        if ($schedule->server_id !== $server->id) {
+            throw new NotFoundHttpException();
+        }
+
         $this->service->handle($schedule, true);
 
         Activity::event('server:schedule.execute')->subject($schedule)->property('name', $schedule->name)->log();

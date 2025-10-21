@@ -20,6 +20,8 @@ class ProcessRunnableCommand extends Command
      */
     public function handle(): int
     {
+        $this->cleanupStuckSchedules();
+
         $schedules = Schedule::query()
             ->with('tasks')
             ->whereRelation('server', fn (Builder $builder) => $builder->whereNull('status'))
@@ -71,6 +73,34 @@ class ProcessRunnableCommand extends Command
             Log::error($exception, ['schedule_id' => $schedule->id]);
 
             $this->error("An error was encountered while processing Schedule #$schedule->id: " . $exception->getMessage());
+        }
+    }
+
+    protected function cleanupStuckSchedules(): void
+    {
+        $timeout = 600;
+
+        $stuck = Schedule::query()
+            ->where('is_processing', true)
+            ->where('updated_at', '<', now()->subSeconds($timeout))
+            ->get();
+
+        if ($stuck->count() > 0) {
+            $this->warn("Found {$stuck->count()} stuck schedule(s), resetting...");
+
+            foreach ($stuck as $schedule) {
+                $schedule->update(['is_processing' => false]);
+                $schedule->tasks()->update([
+                    'is_queued' => false,
+                    'is_processing' => false,
+                ]);
+
+                Log::warning('Reset stuck schedule', [
+                    'schedule_id' => $schedule->id,
+                    'schedule_name' => $schedule->name,
+                    'last_updated' => $schedule->updated_at,
+                ]);
+            }
         }
     }
 }

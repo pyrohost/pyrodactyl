@@ -16,6 +16,7 @@ use Pterodactyl\Contracts\Extensions\HashidsInterface;
  * @property string $payload
  * @property int $time_offset
  * @property bool $is_queued
+ * @property bool $is_processing
  * @property bool $continue_on_failure
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -62,6 +63,7 @@ class Task extends Model
         'payload',
         'time_offset',
         'is_queued',
+        'is_processing',
         'continue_on_failure',
     ];
 
@@ -74,6 +76,7 @@ class Task extends Model
         'sequence_id' => 'integer',
         'time_offset' => 'integer',
         'is_queued' => 'boolean',
+        'is_processing' => 'boolean',
         'continue_on_failure' => 'boolean',
     ];
 
@@ -83,6 +86,7 @@ class Task extends Model
     protected $attributes = [
         'time_offset' => 0,
         'is_queued' => false,
+        'is_processing' => false,
         'continue_on_failure' => false,
     ];
 
@@ -93,6 +97,7 @@ class Task extends Model
         'payload' => 'required_unless:action,backup|string',
         'time_offset' => 'required|numeric|between:0,900',
         'is_queued' => 'boolean',
+        'is_processing' => 'boolean',
         'continue_on_failure' => 'boolean',
     ];
 
