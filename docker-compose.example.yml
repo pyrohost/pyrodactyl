@@ -10,7 +10,7 @@ x-common:
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
         DB_USERNAME: "pterodactyl"
-        # DB_PASSWORD: "Uncomment this to user your own password"
+        # DB_PASSWORD: "Uncomment this to use your own password"
         
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
         # to generate an SSL certificate for the Panel.
