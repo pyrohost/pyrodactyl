@@ -19,7 +19,6 @@ class NewUserFormRequest extends AdminFormRequest
             'email',
             'username',
             'name_first',
-            'name_last',
             'password',
             'language',
             'root_admin',
