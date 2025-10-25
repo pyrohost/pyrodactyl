@@ -57,36 +57,39 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="newHostModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.databases') }}" method="POST">
+            <form action="{{ route('admin.databases') }}" method="POST" id="databaseHostForm">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Create New Database Host</h4>
                 </div>
                 <div class="modal-body">
+                    <div id="testResult" style="display: none;"></div>
+
                     <div class="form-group">
                         <label for="pName" class="form-label">Name</label>
-                        <input type="text" name="name" id="pName" class="form-control" />
+                        <input type="text" name="name" id="pName" class="form-control" value="{{ old('name') }}" />
                         <p class="text-muted small">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters, for example, <code>us.nyc.lvl3</code>.</p>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="pHost" class="form-label">Host</label>
-                            <input type="text" name="host" id="pHost" class="form-control" />
+                            <input type="text" name="host" id="pHost" class="form-control" value="{{ old('host') }}" />
                             <p class="text-muted small">The IP address or FQDN that should be used when attempting to connect to this MySQL host <em>from the panel</em> to add new databases.</p>
                         </div>
                         <div class="col-md-6">
                             <label for="pPort" class="form-label">Port</label>
-                            <input type="text" name="port" id="pPort" class="form-control" value="3306"/>
+                            <input type="text" name="port" id="pPort" class="form-control" value="{{ old('port', '3306') }}"/>
                             <p class="text-muted small">The port that MySQL is running on for this host.</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label for="pUsername" class="form-label">Username</label>
-                            <input type="text" name="username" id="pUsername" class="form-control" />
+                            <input type="text" name="username" id="pUsername" class="form-control" value="{{ old('username') }}" />
                             <p class="text-muted small">The username of an account that has enough permissions to create new users and databases on the system.</p>
                         </div>
                         <div class="col-md-6">
@@ -102,7 +105,7 @@
                             @foreach($locations as $location)
                                 <optgroup label="{{ $location->short }}">
                                     @foreach($location->nodes as $node)
-                                        <option value="{{ $node->id }}">{{ $node->name }}</option>
+                                        <option value="{{ $node->id }}" {{ old('node_id') == $node->id ? 'selected' : '' }}>{{ $node->name }}</option>
                                     @endforeach
                                 </optgroup>
                             @endforeach
@@ -114,6 +117,7 @@
                     <p class="text-danger small text-left">The account defined for this database host <strong>must</strong> have the <code>WITH GRANT OPTION</code> permission. If the defined account does not have this permission requests to create databases <em>will</em> fail. <strong>Do not use the same account details for MySQL that you have defined for this panel.</strong></p>
                     {!! csrf_field() !!}
                     <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="testDatabaseBtn" class="btn btn-primary btn-sm">Test Database</button>
                     <button type="submit" class="btn btn-success btn-sm">Create</button>
                 </div>
             </form>
@@ -126,5 +130,70 @@
     @parent
     <script>
         $('#pNodeId').select2();
+
+        // Test database connection
+        $('#testDatabaseBtn').on('click', function() {
+            const button = $(this);
+            const originalText = button.text();
+            const resultDiv = $('#testResult');
+
+            // Show loading state
+            button.prop('disabled', true).text('Testing...');
+            resultDiv.hide().removeClass('alert alert-danger alert-success').html('');
+
+            // Get form data
+            const formData = {
+                host: $('#pHost').val(),
+                port: $('#pPort').val(),
+                username: $('#pUsername').val(),
+                password: $('#pPassword').val(),
+                _token: '{{ csrf_token() }}'
+            };
+
+            // Validate required fields
+            if (!formData.host || !formData.port || !formData.username || !formData.password) {
+                resultDiv.html('<strong>Error:</strong> Please fill in all required database connection fields.').addClass('alert alert-danger').show();
+                button.prop('disabled', false).text(originalText);
+                return;
+            }
+
+            // Simple AJAX request
+            $.ajax({
+                url: '{{ route('admin.databases.test') }}',
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        resultDiv.html('<strong>Success:</strong> ' + response.message).addClass('alert alert-success').show();
+                    } else {
+                        resultDiv.html('<strong>Error:</strong> ' + response.message).addClass('alert alert-danger').show();
+                    }
+                },
+                error: function(xhr) {
+                    let message = 'An unexpected error occurred.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    } else if (xhr.statusText) {
+                        message = xhr.statusText;
+                    }
+                    resultDiv.html('<strong>Error:</strong> ' + message).addClass('alert alert-danger').show();
+                },
+                complete: function() {
+                    button.prop('disabled', false).text(originalText);
+                }
+            });
+        });
+
+        // Clear test results when modal is opened
+        $('#newHostModal').on('show.bs.modal', function() {
+            $('#testResult').hide().empty();
+        });
+
+        // Re-open modal if there are old inputs (form was submitted but had errors)
+        @if($errors->any())
+            $(document).ready(function() {
+                $('#newHostModal').modal('show');
+            });
+        @endif
     </script>
 @endsection
