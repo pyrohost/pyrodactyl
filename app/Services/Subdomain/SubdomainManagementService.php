@@ -75,17 +75,7 @@ class SubdomainManagementService
 
         // Normalize IP addresses in DNS records
         $dnsRecords = $this->normalizeIpAddresses($dnsRecords, $server);
-        log::error("Dns Stuff", [
-            "subdomain" => $subdomain,
-            "domain" => $domain->name,
-            "dnsRecords" => $dnsRecords,
-            "provider" => get_class($dnsProvider),
-        ]);
 
-
-        log::error("Test Server", [
-            "DNS Record" => $newDomain
-        ]);
 
         // Use database transaction for consistency
         return DB::transaction(function () use ($server, $domain, $subdomain, $feature, $dnsProvider, $dnsRecords) {
@@ -484,6 +474,7 @@ class SubdomainManagementService
             'github',
             'gitlab',
             'gitea',
+            'forgejo',
             'bitbucket',
             'hg',
             'svn',
