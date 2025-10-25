@@ -14,7 +14,7 @@ class MinecraftSubdomainFeature implements SubdomainFeatureInterface
     {
         return 'subdomain_minecraft';
     }
-    
+
     /**
      * Get the DNS records that need to be created for Minecraft.
      */
@@ -22,7 +22,8 @@ class MinecraftSubdomainFeature implements SubdomainFeatureInterface
     {
         $ip = $server->allocation->ip;
         $port = $server->allocation->port;
-        $fullDomain = $subdomain . '.' . $domain;
+        $subdomain_split = explode(".", $subdomain);
+        $fullDomain = $subdomain_split[0] . '.' . $domain;
 
         $records = [];
 
@@ -55,5 +56,5 @@ class MinecraftSubdomainFeature implements SubdomainFeatureInterface
 
         return $records;
     }
-
 }
+

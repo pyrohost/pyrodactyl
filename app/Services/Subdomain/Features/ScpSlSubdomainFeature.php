@@ -22,7 +22,8 @@ class ScpSlSubdomainFeature implements SubdomainFeatureInterface
     {
         $ip = $server->allocation->ip;
         $port = $server->allocation->port;
-        $fullDomain = $subdomain . '.' . $domain;
+        $subdomain_split = explode(".", $subdomain);
+        $fullDomain = $subdomain_split[0] . '.' . $domain;
 
         $records = [];
 
@@ -56,3 +57,4 @@ class ScpSlSubdomainFeature implements SubdomainFeatureInterface
         return $records;
     }
 }
+

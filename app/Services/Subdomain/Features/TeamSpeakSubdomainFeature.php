@@ -22,7 +22,8 @@ class TeamSpeakSubdomainFeature implements SubdomainFeatureInterface
     {
         $ip = $server->allocation->ip;
         $port = $server->allocation->port;
-        $fullDomain = $subdomain . '.' . $domain;
+        $subdomain_split = explode(".", $subdomain);
+        $fullDomain = $subdomain_split[0] . '.' . $domain;
 
         $records = [];
 
@@ -82,7 +83,7 @@ class TeamSpeakSubdomainFeature implements SubdomainFeatureInterface
     {
         // Common TSDNS ports
         $tsdnsPorts = [41144, 41145, 41146, 41147, 41148];
-        
+
         // Create TSDNS record for common TSDNS ports or if the port looks like it might be TSDNS
         return in_array($port, $tsdnsPorts) || ($port >= 41144 && $port <= 41200);
     }
