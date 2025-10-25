@@ -1,5 +1,9 @@
 name: Build & Push Version
 on:
+  workflow_run:
+    workflows: ["Create release"]
+    types:
+      - completed
   push:
     tags:
       - "v*"
