@@ -56,15 +56,15 @@ body:
 - type: input
   id: wings-version
   attributes:
-    label: Wings Version
-    description: Version number of your Wings (latest is not a version)
+    label: Daemon Version
+    description: Version number of your Elytra(Or Wings) (latest is not a version)
     placeholder: 1.4.2
   validations:
     required: true
 
 - type: checkboxes
   attributes:
-    label: Wings Installation Type
+    label: Daemon Installation Type
     description: How did you install Wings?
     options:
     - label: Offical Docker image.
@@ -72,12 +72,14 @@ body:
     - label: Native install.
       required: false
     - label: Pyrodactyl Elytra
-      required: true
+      required: false
     - label: Pterodacty Wings
-      required: true
+      required: false
     # - label: I used official installation script.
     #   required: false
     - label: I used a third party installation script or Docker image.
+      required: false
+    - label: Daemon Version does not apply to this Bug
       required: false
   validations:
     required: true
