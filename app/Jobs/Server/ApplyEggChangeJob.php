@@ -361,7 +361,16 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
      */
     public function failed(\Throwable $exception): void
     {
-        $this->handleJobFailure($exception, null);
+        try {
+            $operation = ServerOperation::where('operation_id', $this->operationId)->first();
+            $this->handleJobFailure($exception, $operation);
+        } catch (\Exception $e) {
+            Log::error('Failed to handle job failure cleanup', [
+                'operation_id' => $this->operationId,
+                'error' => $e->getMessage(),
+            ]);
+            $this->handleJobFailure($exception, null);
+        }
     }
 
     /**

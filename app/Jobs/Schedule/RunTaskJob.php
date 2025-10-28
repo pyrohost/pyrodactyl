@@ -6,6 +6,7 @@ use Exception;
 use Pterodactyl\Jobs\Job;
 use Carbon\CarbonImmutable;
 use Pterodactyl\Models\Task;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -70,6 +71,11 @@ class RunTaskJob extends Job implements ShouldQueue
                         ->update(['is_processing' => true]);
 
                     if ($affectedRows === 0) {
+                        Log::warning('Backup task already processing, skipping', [
+                            'task_id' => $this->task->id,
+                            'schedule_id' => $this->task->schedule_id,
+                            'server_id' => $server->id,
+                        ]);
                         return;
                     }
 
@@ -90,6 +96,7 @@ class RunTaskJob extends Job implements ShouldQueue
                         );
                     } finally {
                         $this->task->update(['is_processing' => false]);
+                        $this->task->schedule->touch();
                     }
                     break;
                 default:
@@ -104,6 +111,7 @@ class RunTaskJob extends Job implements ShouldQueue
         }
 
         $this->markTaskNotQueued();
+        $this->task->schedule->touch();
         $this->queueNextTask();
     }
 
@@ -117,6 +125,7 @@ class RunTaskJob extends Job implements ShouldQueue
         }
 
         $this->markTaskNotQueued();
+        $this->task->schedule->touch();
         $this->markScheduleComplete();
     }
 
