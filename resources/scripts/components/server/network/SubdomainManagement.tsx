@@ -1,3 +1,4 @@
+import { Link } from '@gravity-ui/icons';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
@@ -251,7 +252,7 @@ const SubdomainManagement = () => {
     return (
         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
             <div className='flex items-center gap-3 mb-6'>
-                <HugeIconsLink className='w-6 h-6 text-zinc-400' fill='currentColor' />
+                <Link className='w-6 h-6 text-zinc-400' fill='currentColor' />
                 <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
                 {subdomainInfo?.current_subdomain && (
                     <div className='flex items-center gap-2 text-sm ml-auto'>
