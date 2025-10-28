@@ -23,7 +23,7 @@ permissions:
 jobs:
   release:
     name: Create Release
-    uses: ./.github/workflows/release-action.yml
+    uses: ./.github/workflows/release-action.yaml
     with:
       version: ${{ inputs.version }}
       release_type: ${{ inputs.release_type }}
