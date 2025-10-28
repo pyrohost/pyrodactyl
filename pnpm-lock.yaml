@@ -45,8 +45,8 @@ importers:
         specifier: ^2.16.0
         version: 2.16.0(react@19.1.1)
       '@hcaptcha/react-hcaptcha':
-        specifier: ^1.12.0
-        version: 1.12.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: ^1.14.0
+        version: 1.14.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@headlessui/react':
         specifier: ^2.2.7
         version: 2.2.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -352,6 +352,10 @@ packages:
 
   '@babel/runtime@7.27.6':
     resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.28.4':
+    resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -715,11 +719,11 @@ packages:
       react:
         optional: true
 
-  '@hcaptcha/loader@2.0.0':
-    resolution: {integrity: sha512-fFQH6ApU/zCCl6Y1bnbsxsp1Er/lKX+qlgljrpWDeFcenpEtoP68hExlKSXECospzKLeSWcr06cbTjlR/x3IJA==}
+  '@hcaptcha/loader@2.2.0':
+    resolution: {integrity: sha512-LAd0XRt1Mu0hLpUpWAx5OS9FS0d6V+V0aCSYUKFAz0a6tTDHeAuwm5iO81mp2HIEhXFOSSB8AwCCOU9zq695lg==}
 
-  '@hcaptcha/react-hcaptcha@1.12.0':
-    resolution: {integrity: sha512-QiHnQQ52k8SJJSHkc3cq4TlYzag7oPd4f5ZqnjVSe4fJDSlZaOQFtu5F5AYisVslwaitdDELPVLRsRJxiiI0Aw==}
+  '@hcaptcha/react-hcaptcha@1.14.0':
+    resolution: {integrity: sha512-XHFhmRjw4L6spgRfTEUj/uW4cN4iWTp7BxLHyheF5zEle6g65fIHUCmqKMrIA/6OKLzBSElUKyc1IuDU+V8RaQ==}
     peerDependencies:
       react: '>= 16.3.0'
       react-dom: '>= 16.3.0'
@@ -3803,6 +3807,8 @@ snapshots:
 
   '@babel/runtime@7.27.6': {}
 
+  '@babel/runtime@7.28.4': {}
+
   '@babel/template@7.27.2':
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -4251,12 +4257,12 @@ snapshots:
     optionalDependencies:
       react: 19.1.1
 
-  '@hcaptcha/loader@2.0.0': {}
+  '@hcaptcha/loader@2.2.0': {}
 
-  '@hcaptcha/react-hcaptcha@1.12.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@hcaptcha/react-hcaptcha@1.14.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@babel/runtime': 7.27.6
-      '@hcaptcha/loader': 2.0.0
+      '@babel/runtime': 7.28.4
+      '@hcaptcha/loader': 2.2.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
