@@ -37,8 +37,7 @@ class DatabaseManagementService
         protected DynamicDatabaseConnection $dynamic,
         protected Encrypter $encrypter,
         protected DatabaseRepository $repository,
-    ) {
-    }
+    ) {}
 
     /**
      * Generates a unique database name for the given server. This name should be passed through when
@@ -82,7 +81,7 @@ class DatabaseManagementService
 
             // If the server has a limit assigned and we've already reached that limit, throw back
             // an exception and kill the process.
-            if ($server->hasDatabaseCountLimit() && $server->databases()->count() >= $server->database_limit) {
+            if ($server->hasDatabaseLimit() && $server->databases()->count() >= $server->database_limit) {
                 throw new TooManyDatabasesException();
             }
         }
