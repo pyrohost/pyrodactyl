@@ -22,7 +22,7 @@
 > Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
 
 > [!NOTE]
-> Please read our documentation at [https://pyrodactyl.dev](https://pyrodactyl.dev/docs) before installing.
+> Please read our documentation at [https://pyrodactyl.dev](https://pyrodactyl.dev/docs/pyrodactyl) before installing.
 
 > [!IMPORTANT]
 > For Pyrodactyl-specific issues, please use [Pyrodactyl GitHub Discussions](https://github.com/pyrohost/pyrodactyl/discussions) or the [Pyrodactyl Discord](https://discord.gg/UhuYKKK2uM?utm_source=githubreadme&utm_medium=readme&utm_campaign=OSSLAUNCH&utm_id=OSSLAUNCH) instead of Pterodactyl or Pelican support channels.
@@ -44,14 +44,14 @@ Pyrodactyl is the Pterodactyl-based game server management panel that focuses on
 
 ## Installing Pyrodactyl
 
-See our [Installation](https://pyrodactyl.dev/docs/installation) docs page on how to get started.
+See our [Installation](https://pyrodactyl.dev/docs/pyrodactyl/installation) docs page on how to get started.
 
 > [!NOTE]
 > Windows is currently only supported for development purposes.
 
 ## Local Development
 
-Pyrodactyl has various effortless ways of starting up a ready-to-use, fully-featured development environment. See our [Local Development](https://pyrodactyl.dev/docs/local-development) documentation for more information.
+Pyrodactyl has various effortless ways of starting up a ready-to-use, fully-featured development environment. See our [Local Development](https://pyrodactyl.dev/docs/pyrodactyl/local-development) documentation for more information.
 
 ## Star History
 
