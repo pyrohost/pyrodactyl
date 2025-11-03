@@ -80,8 +80,8 @@ class Mount extends Model
      * Blacklisted source paths.
      */
     public static $invalidSourcePaths = [
-        '/etc/pterodactyl',
-        '/var/lib/pterodactyl/volumes',
+        '/etc/elytra',
+        '/var/lib/elytra/volumes',
         '/srv/daemon-data',
     ];
 
