@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp, Lock } from '@gravity-ui/icons';
 import debounce from 'debounce';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
@@ -13,9 +14,6 @@ import {
 import InputSpinner from '@/components/elements/InputSpinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import { Input } from '@/components/elements/TextInput';
-import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
-import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -77,7 +75,9 @@ const VariableBox = ({ variable }: Props) => {
                 <div className='flex flex-col items-baseline sm:flex-row sm:justify-between gap-2 sm:gap-3'>
                     <div className='flex items-center gap-2 min-w-0'>
                         {!variable.isEditable && (
-                            <HugeIconsSquareLock
+                            <Lock
+                                width={22}
+                                height={22}
                                 fill={'currentColor'}
                                 className='text-neutral-500 w-4 h-4 flex-shrink-0'
                             />
@@ -101,8 +101,8 @@ const VariableBox = ({ variable }: Props) => {
                                     ? 'Enabled'
                                     : 'Disabled'
                                 : variable.serverValue === '1'
-                                  ? 'On'
-                                  : 'Off'}
+                                    ? 'On'
+                                    : 'Off'}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
@@ -134,12 +134,16 @@ const VariableBox = ({ variable }: Props) => {
                                             {variable.serverValue}
                                         </span>
                                         {dropDownOpen ? (
-                                            <HugeIconsArrowUp
+                                            <ChevronUp
+                                                width={22}
+                                                height={22}
                                                 fill={'currentColor'}
                                                 className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
                                             />
                                         ) : (
-                                            <HugeIconsArrowDown
+                                            <ChevronDown
+                                                width={22}
+                                                height={22}
                                                 fill={'currentColor'}
                                                 className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
                                             />

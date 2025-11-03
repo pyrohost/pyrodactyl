@@ -1,3 +1,4 @@
+import { AntennaSignal, Calendar, Copy, Database, FolderOpen, Gear, Person, Server, Shield } from '@gravity-ui/icons';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -7,15 +8,6 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
-import HugeIconsCalendar from '@/components/elements/hugeicons/Calendar';
-import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
-import HugeIconsFile from '@/components/elements/hugeicons/File';
-import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
-import HugeIconsServer from '@/components/elements/hugeicons/Server';
-import HugeIconsSettings from '@/components/elements/hugeicons/Settings';
-import HugeIconsShield from '@/components/elements/hugeicons/Shield';
-import HugeIconsUser from '@/components/elements/hugeicons/User';
 import PermissionRow from '@/components/server/users/PermissionRow';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
@@ -94,23 +86,23 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
     const getPermissionIcon = (key: string) => {
         switch (key) {
             case 'control':
-                return HugeIconsServer;
+                return Server;
             case 'user':
-                return HugeIconsUser;
+                return Person;
             case 'file':
-                return HugeIconsFile;
+                return FolderOpen;
             case 'backup':
-                return HugeIconsCopy;
+                return Copy;
             case 'allocation':
-                return HugeIconsNetworkAntenna;
+                return AntennaSignal;
             case 'startup':
-                return HugeIconsSettings;
+                return Gear;
             case 'database':
-                return HugeIconsDatabase;
+                return Database;
             case 'schedule':
-                return HugeIconsCalendar;
+                return Calendar;
             default:
-                return HugeIconsShield;
+                return Shield;
         }
     };
 
@@ -141,7 +133,12 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff12] rounded-xl p-6'>
                                 <div className='flex items-center gap-3 mb-6'>
                                     <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <HugeIconsUser fill='currentColor' className='w-5 h-5 text-brand' />
+                                        <Person
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='w-5 h-5 text-brand'
+                                        />
                                     </div>
                                     <h3 className='text-xl font-semibold text-zinc-100'>User Information</h3>
                                 </div>
@@ -160,7 +157,12 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             <div className='flex items-center justify-between mb-6'>
                                 <div className='flex items-center gap-3'>
                                     <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <HugeIconsSettings fill='currentColor' className='w-5 h-5 text-brand' />
+                                        <Gear
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='w-5 h-5 text-brand'
+                                        />
                                     </div>
                                     <h3 className='text-xl font-semibold text-zinc-100'>Detailed Permissions</h3>
                                 </div>
@@ -190,7 +192,12 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             {!isRootAdmin && loggedInPermissions[0] !== '*' && (
                                 <div className='mb-6 p-4 bg-brand/10 border border-brand/20 rounded-lg'>
                                     <div className='flex items-center gap-3 mb-2'>
-                                        <HugeIconsShield fill='currentColor' className='w-5 h-5 text-brand' />
+                                        <Shield
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='w-5 h-5 text-brand'
+                                        />
                                         <span className='text-sm font-semibold text-brand'>Permission Restriction</span>
                                     </div>
                                     <p className='text-sm text-zinc-300 leading-relaxed'>
@@ -210,8 +217,10 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                         const Icon = getPermissionIcon(key);
                                                         return (
                                                             <Icon
+                                                                width={22}
+                                                                height={22}
                                                                 fill='currentColor'
-                                                                className='w-4 h-4 text-brand flex-shrink-0 mt-0.5'
+                                                                className=' text-brand flex-shrink-0 mt-0.5'
                                                             />
                                                         );
                                                     })()}

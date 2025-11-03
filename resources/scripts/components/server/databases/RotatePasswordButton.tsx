@@ -1,9 +1,9 @@
+import { ArrowsRotateRight } from '@gravity-ui/icons';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
-import HugeIconsRefresh from '@/components/elements/hugeicons/Refresh';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
@@ -51,8 +51,8 @@ const RotatePasswordButton = ({
 
     return (
         <ActionButton onClick={rotate} className='flex-none'>
-            <div className='flex justify-center items-center h-4 w-4'>
-                {!loading && <HugeIconsRefresh className='h-4 w-4' />}
+            <div className='flex justify-center items-center'>
+                {!loading && <ArrowsRotateRight width={22} height={22} />}
                 {loading && <Spinner size={'small'} />}
             </div>
         </ActionButton>

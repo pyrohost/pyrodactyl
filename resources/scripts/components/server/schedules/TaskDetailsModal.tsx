@@ -25,7 +25,6 @@ import useFlash from '@/plugins/useFlash';
 // TODO: Port modern dropdowns to Formik and integrate them
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/elements/DropdownMenu';
 // import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-// import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 
 const Label = styled.label`
     display: inline-block;

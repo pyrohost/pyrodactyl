@@ -1,10 +1,10 @@
+import { ChevronLeft } from '@gravity-ui/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import HugeIconsArrowLeft from '@/components/elements/hugeicons/ArrowLeft';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import { ServerContext } from '@/state/server';
@@ -32,7 +32,7 @@ const CreateUserContainer = () => {
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <HugeIconsArrowLeft className='w-4 h-4' fill='currentColor' />
+                    <ChevronLeft width={22} height={22} fill='currentColor' />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>

@@ -1,9 +1,9 @@
+import { TriangleExclamation } from '@gravity-ui/icons';
 import React, { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
 
 import {
     UI_CONFIG,
@@ -111,7 +111,9 @@ const OperationProgressModal: React.FC<Props> = ({
                     </div>
                 );
             case 'error':
-                return <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400' />;
+                return (
+                    <TriangleExclamation width={22} height={22} fill='currentColor' className='w-5 h-5 text-red-400' />
+                );
             default:
                 return <Spinner size={'small'} />;
         }
@@ -131,7 +133,7 @@ const OperationProgressModal: React.FC<Props> = ({
     return (
         <Dialog
             open={visible}
-            onClose={canClose ? handleClose : () => {}}
+            onClose={canClose ? handleClose : () => { }}
             preventExternalClose={!canClose}
             hideCloseIcon={!canClose}
             title={operationType}
@@ -150,7 +152,12 @@ const OperationProgressModal: React.FC<Props> = ({
                 {error ? (
                     <div className='space-y-4'>
                         <div className='flex items-center justify-center space-x-3'>
-                            <HugeIconsAlert fill='currentColor' className='w-6 h-6 text-red-400' />
+                            <TriangleExclamation
+                                width={22}
+                                height={22}
+                                fill='currentColor'
+                                className='w-6 h-6 text-red-400'
+                            />
                             <span className='text-red-400 font-semibold text-lg'>Error</span>
                         </div>
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -213,7 +220,12 @@ const OperationProgressModal: React.FC<Props> = ({
                         {isFailedStatus(operation.status) && (
                             <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                                 <div className='flex items-center justify-center space-x-2 mb-2'>
-                                    <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400' />
+                                    <TriangleExclamation
+                                        width={22}
+                                        height={22}
+                                        fill='currentColor'
+                                        className='w-5 h-5 text-red-400'
+                                    />
                                     <p className='text-sm text-red-300 font-medium'>Operation failed</p>
                                 </div>
                                 {operation.message && (

@@ -1,9 +1,9 @@
+import { TrashBin } from '@gravity-ui/icons';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
-import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
@@ -55,7 +55,7 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 onClick={() => setShowConfirmation(true)}
                 aria-label='Delete subuser'
             >
-                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
+                <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
                 Delete
             </ActionButton>
         </>

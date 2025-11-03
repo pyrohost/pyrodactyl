@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -12,8 +13,6 @@ import {
 } from '@/components/elements/DropdownMenu';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
-import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
@@ -112,12 +111,9 @@ const JavaVersionModalFeature = () => {
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                                         .join(' ') || 'Select a version'}
                                     {dropDownOpen ? (
-                                        <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     ) : (
-                                        <HugeIconsArrowDown
-                                            fill={'currentColor'}
-                                            className={`ml-2 w-[16px] h-[16px]`}
-                                        />
+                                        <ChevronDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     )}
                                 </button>
                             </DropdownMenuTrigger>

@@ -1,9 +1,9 @@
+import { Pencil } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { useNavigate } from 'react-router-dom';
 
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
-import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 
@@ -53,7 +53,7 @@ const UserRow = ({ subuser }: Props) => {
                                     onClick={handleEditClick}
                                     aria-label='Edit subuser'
                                 >
-                                    <HugeIconsPencil className='w-4 h-4' fill='currentColor' />
+                                    <Pencil width={22} height={22} fill='currentColor' />
                                     Edit
                                 </ActionButton>
                             </Can>

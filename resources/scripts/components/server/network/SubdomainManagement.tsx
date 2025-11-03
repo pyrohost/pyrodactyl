@@ -6,9 +6,6 @@ import * as yup from 'yup';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import Input from '@/components/elements/Input';
-import Select from '@/components/elements/Select';
-import HugeIconsLink from '@/components/elements/hugeicons/Link';
 
 import {
     SubdomainInfo,

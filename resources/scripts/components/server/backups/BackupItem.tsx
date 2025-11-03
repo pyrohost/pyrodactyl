@@ -1,11 +1,9 @@
+import { Cloud, CloudArrowUpIn, Lock } from '@gravity-ui/icons';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import Spinner from '@/components/elements/Spinner';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
-import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
-import HugeIconsRefresh from '@/components/elements/hugeicons/Refresh';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { bytesToString } from '@/lib/formatters';
@@ -46,7 +44,6 @@ interface Props {
 const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable = false, retryBackup }: Props) => {
     const { addFlash, clearFlashes } = useFlash();
 
-
     const handleRetry = async () => {
         if (!backup.canRetry) return;
 
@@ -75,11 +72,11 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
         if (isActive) {
             return <Spinner size={'small'} />;
         } else if (backup.isLocked) {
-            return <HugeIconsSquareLock className='text-red-400 w-4 h-4' fill='currentColor' />;
+            return <Lock width={22} height={22} className='text-red-400 ' fill='currentColor' />;
         } else if (backup.status === 'completed' || backup.isSuccessful) {
-            return <HugeIconsStorage className='text-green-400 w-4 h-4' fill='currentColor' />;
+            return <Cloud width={22} height={22} className='text-green-400 ' fill='currentColor' />;
         } else {
-            return <HugeIconsStorage className='text-red-400 w-4 h-4' fill='currentColor' />;
+            return <Cloud width={22} height={22} className='text-red-400 ' fill='currentColor' />;
         }
     };
 
@@ -172,9 +169,8 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                             </div>
                             <div className='w-full bg-zinc-700 rounded-full h-2'>
                                 <div
-                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                        backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
-                                    }`}
+                                    className={`h-2 rounded-full transition-all duration-300 ${backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                                        }`}
                                     style={{ width: `${backup.progress || 0}%` }}
                                 />
                             </div>
@@ -187,7 +183,6 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     )}
 
                     {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
-
                 </div>
 
                 {/* Size info for completed backups */}
@@ -226,7 +221,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                                 className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
                                 title='Retry backup'
                             >
-                                <HugeIconsRefresh className='w-4 h-4' />
+                                <CloudArrowUpIn width={22} height={22} />
                             </button>
                         </Can>
                     )}
@@ -250,7 +245,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                                     jobMessage: backup.message,
                                     jobId: '',
                                     jobError: null,
-                                    object: 'backup' as const
+                                    object: 'backup' as const,
                                 }}
                             />
                         )}
@@ -262,3 +257,4 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 };
 
 export default BackupItem;
+

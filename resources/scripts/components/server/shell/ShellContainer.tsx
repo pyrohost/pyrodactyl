@@ -1,3 +1,4 @@
+import { Box, TriangleExclamation } from '@gravity-ui/icons';
 import { useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
@@ -16,8 +17,6 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import OperationProgressModal from '@/components/server/operations/OperationProgressModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -508,8 +507,8 @@ const SoftwareContainer = () => {
                 selectedDockerImage && eggPreview.docker_images
                     ? eggPreview.docker_images[selectedDockerImage]
                     : eggPreview.default_docker_image && eggPreview.docker_images
-                      ? eggPreview.docker_images[eggPreview.default_docker_image]
-                      : '';
+                        ? eggPreview.docker_images[eggPreview.default_docker_image]
+                        : '';
 
             // Filter out empty environment variables to prevent validation issues
             const filteredEnvironment: Record<string, string> = {};
@@ -617,7 +616,12 @@ const SoftwareContainer = () => {
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
                 <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
                     <div className='w-10 h-10 sm:w-12 sm:h-12 bg-[#ffffff11] rounded-lg flex items-center justify-center flex-shrink-0'>
-                        <HugeIconsEggs fill='currentColor' className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300' />
+                        <Box
+                            width={22}
+                            height={22}
+                            fill='currentColor'
+                            className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300'
+                        />
                     </div>
                     <div className='min-w-0 flex-1'>
                         {currentEggName ? (
@@ -884,11 +888,10 @@ const SoftwareContainer = () => {
                                                             handleVariableChange(variable.env_variable, e.target.value)
                                                         }
                                                         placeholder={variable.default_value || 'Enter value...'}
-                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${
-                                                            variableErrors[variable.env_variable]
+                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${variableErrors[variable.env_variable]
                                                                 ? 'border-red-500 focus:border-red-500'
                                                                 : 'border-[#ffffff12] focus:border-brand'
-                                                        }`}
+                                                            }`}
                                                     />
                                                     {variableErrors[variable.env_variable] && (
                                                         <p className='text-xs text-red-400 mt-1'>
@@ -928,7 +931,8 @@ const SoftwareContainer = () => {
                                             Create Backup
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            {backupLimit !== 0 && (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
+                                            {backupLimit !== 0 &&
+                                                (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
                                                 ? 'Automatically create a backup before applying changes'
                                                 : backupLimit === 0
                                                     ? 'Backups are disabled for this server'
@@ -939,7 +943,10 @@ const SoftwareContainer = () => {
                                         <Switch
                                             checked={shouldBackup}
                                             onCheckedChange={setShouldBackup}
-                                            disabled={backupLimit === 0 || (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)}
+                                            disabled={
+                                                backupLimit === 0 ||
+                                                (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -1087,24 +1094,23 @@ const SoftwareContainer = () => {
                                 {eggPreview.warnings.map((warning, index) => (
                                     <div
                                         key={index}
-                                        className={`p-4 border rounded-lg ${
-                                            warning.severity === 'error'
+                                        className={`p-4 border rounded-lg ${warning.severity === 'error'
                                                 ? 'bg-red-500/10 border-red-500/20'
                                                 : 'bg-amber-500/10 border-amber-500/20'
-                                        }`}
+                                            }`}
                                     >
                                         <div className='flex items-start gap-3'>
-                                            <HugeIconsAlert
+                                            <TriangleExclamation
+                                                width={22}
+                                                height={22}
                                                 fill='currentColor'
-                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
-                                                    warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                }`}
+                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                    }`}
                                             />
                                             <div>
                                                 <h4
-                                                    className={`font-semibold mb-2 ${
-                                                        warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                    }`}
+                                                    className={`font-semibold mb-2 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                        }`}
                                                 >
                                                     {warning.type === 'subdomain_incompatible'
                                                         ? 'Subdomain Will Be Deleted'
@@ -1121,7 +1127,9 @@ const SoftwareContainer = () => {
                         {/* General Warning */}
                         <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
                             <div className='flex items-start gap-3'>
-                                <HugeIconsAlert
+                                <TriangleExclamation
+                                    width={22}
+                                    height={22}
                                     fill='currentColor'
                                     className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
                                 />
@@ -1232,7 +1240,12 @@ const SoftwareContainer = () => {
             >
                 <div className='space-y-4'>
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
-                        <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
+                        <TriangleExclamation
+                            width={22}
+                            height={22}
+                            fill='currentColor'
+                            className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
+                        />
                         <div>
                             <h4 className='text-red-400 font-semibold mb-2'>DANGER: No Backup Selected</h4>
                             <p className='text-sm text-neutral-300'>

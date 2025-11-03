@@ -1,3 +1,4 @@
+import { Check, Link, TriangleExclamation } from '@gravity-ui/icons';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -5,9 +6,6 @@ import ActionButton from '@/components/elements/ActionButton';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
-import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import HugeIconsCheck from '@/components/elements/hugeicons/Check';
-import HugeIconsLink from '@/components/elements/hugeicons/Link';
 import { SocketEvent } from '@/components/server/events';
 
 import { debounce, isCrashLine } from '@/lib/mclogsUtils';
@@ -286,7 +284,12 @@ const AnalysisModal = ({
         <div className='space-y-6'>
             <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
                 <div className='flex items-start gap-3'>
-                    <HugeIconsAlert className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                    <TriangleExclamation
+                        width={22}
+                        height={22}
+                        className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5'
+                        fill='currentColor'
+                    />
                     <div className='flex-1'>
                         <h3 className='font-semibold text-red-400 text-lg'>Analysis Failed</h3>
                         <p className='text-neutral-300 mt-2'>{error}</p>
@@ -320,7 +323,7 @@ const AnalysisModal = ({
                         rel='noopener noreferrer'
                         className='text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors'
                     >
-                        <HugeIconsLink className='w-4 h-4' />
+                        <Link width={22} height={22} className='w-4 h-4' />
                         Powered by mclo.gs
                     </a>
                 </div>
@@ -370,7 +373,12 @@ const AnalysisModal = ({
             return (
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
                     <div className='flex items-start gap-3'>
-                        <HugeIconsCheck className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5' fill='currentColor' />
+                        <Check
+                            width={22}
+                            height={22}
+                            className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5'
+                            fill='currentColor'
+                        />
                         <div>
                             <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
                             <p className='text-neutral-300 mt-2'>
@@ -392,7 +400,9 @@ const AnalysisModal = ({
                         <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
                             <div className='p-4'>
                                 <div className='flex items-start gap-3'>
-                                    <HugeIconsAlert
+                                    <TriangleExclamation
+                                        width={22}
+                                        height={22}
                                         className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
                                         fill='currentColor'
                                     />
@@ -444,7 +454,12 @@ const AnalysisModal = ({
                         {allSolutions.map((solution, idx) => (
                             <div key={idx} className='flex items-start gap-3'>
                                 <div className='bg-green-500/20 rounded-full p-1 flex-shrink-0 mt-0.5'>
-                                    <HugeIconsCheck className='w-4 h-4 text-green-400' fill='currentColor' />
+                                    <Check
+                                        width={22}
+                                        height={22}
+                                        className='w-4 h-4 text-green-400'
+                                        fill='currentColor'
+                                    />
                                 </div>
                                 <div className='flex-1'>
                                     <p className='text-neutral-200 leading-relaxed'>{solution.message}</p>
