@@ -169,8 +169,9 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                             </div>
                             <div className='w-full bg-zinc-700 rounded-full h-2'>
                                 <div
-                                    className={`h-2 rounded-full transition-all duration-300 ${backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
-                                        }`}
+                                    className={`h-2 rounded-full transition-all duration-300 ${
+                                        backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                                    }`}
                                     style={{ width: `${backup.progress || 0}%` }}
                                 />
                             </div>
@@ -257,4 +258,3 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 };
 
 export default BackupItem;
-

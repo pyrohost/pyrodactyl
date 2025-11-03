@@ -1,3 +1,4 @@
+import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
 import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -13,11 +14,6 @@ import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsEye from '@/components/elements/hugeicons/Eye';
-import HugeIconsEyeSlash from '@/components/elements/hugeicons/EyeSlash';
-import HugeIconsKey from '@/components/elements/hugeicons/Key';
-import HugeIconsPlus from '@/components/elements/hugeicons/Plus';
-import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
@@ -158,7 +154,7 @@ const AccountSSHContainer = () => {
                                 onClick={() => setShowCreateModal(true)}
                                 className='flex items-center gap-2'
                             >
-                                <HugeIconsPlus className='w-4 h-4' fill='currentColor' />
+                                <Plus width={22} height={22} fill='currentColor' />
                                 Add SSH Key
                             </ActionButton>
                         }
@@ -189,7 +185,7 @@ const AccountSSHContainer = () => {
                         {!data || data.length === 0 ? (
                             <div className='text-center py-12'>
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <HugeIconsKey className='w-8 h-8 text-zinc-400' fill='currentColor' />
+                                    <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>No SSH Keys</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
@@ -234,15 +230,13 @@ const AccountSSHContainer = () => {
                                                                 className='p-1 text-zinc-400 hover:text-zinc-300'
                                                             >
                                                                 {showKeys[key.fingerprint] ? (
-                                                                    <HugeIconsEyeSlash
-                                                                        className='w-3 h-3'
+                                                                    <EyeSlash
+                                                                        width={18}
+                                                                        height={18}
                                                                         fill='currentColor'
                                                                     />
                                                                 ) : (
-                                                                    <HugeIconsEye
-                                                                        className='w-3 h-3'
-                                                                        fill='currentColor'
-                                                                    />
+                                                                    <Eye width={18} height={18} fill='currentColor' />
                                                                 )}
                                                             </ActionButton>
                                                         </div>
@@ -256,7 +250,7 @@ const AccountSSHContainer = () => {
                                                         setDeleteKey({ name: key.name, fingerprint: key.fingerprint })
                                                     }
                                                 >
-                                                    <HugeIconsTrash className='w-4 h-4' fill='currentColor' />
+                                                    <TrashBin width={20} height={20} fill='currentColor' />
                                                 </ActionButton>
                                             </div>
                                         </div>

@@ -6,11 +6,14 @@ interface RestoreBackupResponse {
     message: string;
 }
 
-export const restoreServerBackup = async (uuid: string, backup: string): Promise<{ jobId: string; status: string; message: string }> => {
+export const restoreServerBackup = async (
+    uuid: string,
+    backup: string,
+): Promise<{ jobId: string; status: string; message: string }> => {
     const response = await http.post<RestoreBackupResponse>(`/api/client/servers/${uuid}/backups/${backup}/restore`, {
         adapter: 'rustic_s3',
         truncate_directory: true,
-        download_url: ''
+        download_url: '',
     });
 
     return {

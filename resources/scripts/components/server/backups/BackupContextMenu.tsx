@@ -341,8 +341,8 @@ const BackupContextMenu = ({ backup }: Props) => {
                         {loading
                             ? 'Restoring...'
                             : countdown > 0
-                                ? `Delete All & Restore (${countdown}s)`
-                                : 'Delete All & Restore Backup'}
+                              ? `Delete All & Restore (${countdown}s)`
+                              : 'Delete All & Restore Backup'}
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>

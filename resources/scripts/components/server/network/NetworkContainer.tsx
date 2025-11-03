@@ -78,12 +78,14 @@ const NetworkContainer = () => {
                                 <div className='flex items-center gap-4'>
                                     {allocationLimit === null && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.filter((allocation) => !allocation.isDefault).length} allocations (unlimited)
+                                            {data.filter((allocation) => !allocation.isDefault).length} allocations
+                                            (unlimited)
                                         </span>
                                     )}
                                     {allocationLimit > 0 && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.filter((allocation) => !allocation.isDefault).length} of {allocationLimit}
+                                            {data.filter((allocation) => !allocation.isDefault).length} of{' '}
+                                            {allocationLimit}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
@@ -91,7 +93,10 @@ const NetworkContainer = () => {
                                             Allocations disabled
                                         </span>
                                     )}
-                                    {(allocationLimit === null || (allocationLimit > 0 && allocationLimit > data.filter((allocation) => !allocation.isDefault).length)) && (
+                                    {(allocationLimit === null ||
+                                        (allocationLimit > 0 &&
+                                            allocationLimit >
+                                                data.filter((allocation) => !allocation.isDefault).length)) && (
                                         <ActionButton variant='primary' onClick={onCreateAllocation} size='sm'>
                                             New Allocation
                                         </ActionButton>

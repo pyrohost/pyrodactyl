@@ -73,9 +73,10 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
             to={to}
             end={end}
             className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${isActive
-                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
+                    isActive
+                        ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
+                        : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
                 }`
             }
             onClick={onClose}
@@ -139,9 +140,10 @@ export const ServerMobileMenu = ({
             to={to}
             end={end}
             className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${isActive
-                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
+                    isActive
+                        ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
+                        : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
                 }`
             }
             onClick={onClose}

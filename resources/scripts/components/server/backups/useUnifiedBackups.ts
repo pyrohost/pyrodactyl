@@ -1,8 +1,11 @@
 import { useCallback, useContext } from 'react';
-import { ServerContext } from '@/state/server';
+
 import getServerBackups from '@/api/swr/getServerBackups';
-import { UnifiedBackup } from './BackupItem';
+
+import { ServerContext } from '@/state/server';
+
 import { LiveProgressContext } from './BackupContainer';
+import { UnifiedBackup } from './BackupItem';
 
 export const useUnifiedBackups = () => {
     const { data: backups, error, isValidating, mutate } = getServerBackups();
@@ -10,44 +13,62 @@ export const useUnifiedBackups = () => {
 
     const liveProgress = useContext(LiveProgressContext);
 
-    const createBackup = useCallback(async (name: string, ignored: string, isLocked: boolean) => {
-        const { default: createServerBackup } = await import('@/api/server/backups/createServerBackup');
-        const result = await createServerBackup(uuid, { name, ignored, isLocked });
-        mutate();
-        return result;
-    }, [uuid, mutate]);
+    const createBackup = useCallback(
+        async (name: string, ignored: string, isLocked: boolean) => {
+            const { default: createServerBackup } = await import('@/api/server/backups/createServerBackup');
+            const result = await createServerBackup(uuid, { name, ignored, isLocked });
+            mutate();
+            return result;
+        },
+        [uuid, mutate],
+    );
 
-    const deleteBackup = useCallback(async (backupUuid: string) => {
-        const { deleteServerBackup } = await import('@/api/server/backups');
-        const result = await deleteServerBackup(uuid, backupUuid);
-        mutate();
-        return result;
-    }, [uuid, mutate]);
+    const deleteBackup = useCallback(
+        async (backupUuid: string) => {
+            const { deleteServerBackup } = await import('@/api/server/backups');
+            const result = await deleteServerBackup(uuid, backupUuid);
+            mutate();
+            return result;
+        },
+        [uuid, mutate],
+    );
 
-    const retryBackup = useCallback(async (backupUuid: string) => {
-        const { retryBackup: retryBackupApi } = await import('@/api/server/backups');
-        await retryBackupApi(uuid, backupUuid);
-        mutate();
-    }, [uuid, mutate]);
+    const retryBackup = useCallback(
+        async (backupUuid: string) => {
+            const { retryBackup: retryBackupApi } = await import('@/api/server/backups');
+            await retryBackupApi(uuid, backupUuid);
+            mutate();
+        },
+        [uuid, mutate],
+    );
 
-    const restoreBackup = useCallback(async (backupUuid: string) => {
-        const { restoreServerBackup } = await import('@/api/server/backups');
-        const result = await restoreServerBackup(uuid, backupUuid);
-        mutate();
-        return result;
-    }, [uuid, mutate]);
+    const restoreBackup = useCallback(
+        async (backupUuid: string) => {
+            const { restoreServerBackup } = await import('@/api/server/backups');
+            const result = await restoreServerBackup(uuid, backupUuid);
+            mutate();
+            return result;
+        },
+        [uuid, mutate],
+    );
 
-    const renameBackup = useCallback(async (backupUuid: string, newName: string) => {
-        const http = (await import('@/api/http')).default;
-        await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/rename`, { name: newName });
-        mutate();
-    }, [uuid, mutate]);
+    const renameBackup = useCallback(
+        async (backupUuid: string, newName: string) => {
+            const http = (await import('@/api/http')).default;
+            await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/rename`, { name: newName });
+            mutate();
+        },
+        [uuid, mutate],
+    );
 
-    const toggleBackupLock = useCallback(async (backupUuid: string) => {
-        const http = (await import('@/api/http')).default;
-        await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/lock`);
-        mutate();
-    }, [uuid, mutate]);
+    const toggleBackupLock = useCallback(
+        async (backupUuid: string) => {
+            const http = (await import('@/api/http')).default;
+            await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/lock`);
+            mutate();
+        },
+        [uuid, mutate],
+    );
 
     const unifiedBackups: UnifiedBackup[] = [];
 
@@ -58,9 +79,9 @@ export const useUnifiedBackups = () => {
             unifiedBackups.push({
                 uuid: backup.uuid,
                 name: live?.backupName || backup.name,
-                status: live ? live.status as any : (backup.isSuccessful ? 'completed' : 'failed'),
-                progress: live ? live.progress : (backup.isSuccessful ? 100 : 0),
-                message: live ? live.message : (backup.isSuccessful ? 'Completed' : 'Failed'),
+                status: live ? (live.status as any) : backup.isSuccessful ? 'completed' : 'failed',
+                progress: live ? live.progress : backup.isSuccessful ? 100 : 0,
+                message: live ? live.message : backup.isSuccessful ? 'Completed' : 'Failed',
                 isSuccessful: backup.isSuccessful,
                 isLocked: backup.isLocked,
                 isAutomatic: backup.isAutomatic,
@@ -80,7 +101,7 @@ export const useUnifiedBackups = () => {
 
     // Add live-only backups (new operations not yet in SWR)
     for (const [backupUuid, live] of Object.entries(liveProgress)) {
-        const existsInSwr = unifiedBackups.some(b => b.uuid === backupUuid);
+        const existsInSwr = unifiedBackups.some((b) => b.uuid === backupUuid);
 
         if (!existsInSwr && !live.isDeletion) {
             unifiedBackups.push({

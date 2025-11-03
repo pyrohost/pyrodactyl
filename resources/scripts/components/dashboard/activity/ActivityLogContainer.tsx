@@ -1,3 +1,4 @@
+import { ArrowDownToLine, ArrowRotateLeft, Funnel, Magnifier, Xmark } from '@gravity-ui/icons';
 import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -7,11 +8,6 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import HugeIconsDownload from '@/components/elements/hugeicons/Download';
-import HugeIconsFilter from '@/components/elements/hugeicons/Filter';
-import HugeIconsHistory from '@/components/elements/hugeicons/History';
-import HugeIconsSearch from '@/components/elements/hugeicons/Search';
-import HugeIconsX from '@/components/elements/hugeicons/X';
 import { Input } from '@/components/elements/inputs';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
 
@@ -180,7 +176,7 @@ const ActivityLogContainer = () => {
                                 className='flex items-center gap-2'
                                 title='Toggle Filters (Ctrl+F)'
                             >
-                                <HugeIconsFilter className='w-4 h-4' fill='currentColor' />
+                                <Funnel width={22} height={22} fill='currentColor' />
                                 Filters
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
                             </ActionButton>
@@ -191,9 +187,9 @@ const ActivityLogContainer = () => {
                                 title='Auto Refresh (Ctrl+R)'
                             >
                                 {autoRefresh ? (
-                                    <HugeIconsX className='w-4 h-4' fill='currentColor' />
+                                    <Xmark width={22} height={22} fill='currentColor' />
                                 ) : (
-                                    <HugeIconsSearch className='w-4 h-4' fill='currentColor' />
+                                    <Magnifier width={22} height={22} fill='currentColor' />
                                 )}
                                 {autoRefresh ? 'Live' : 'Refresh'}
                             </ActionButton>
@@ -204,7 +200,7 @@ const ActivityLogContainer = () => {
                                 className='flex items-center gap-2'
                                 title='Export CSV (Ctrl+E)'
                             >
-                                <HugeIconsDownload className='w-4 h-4' fill='currentColor' />
+                                <ArrowDownToLine width={22} height={22} fill='currentColor' />
                                 Export
                             </ActionButton>
                         </div>
@@ -223,7 +219,7 @@ const ActivityLogContainer = () => {
                         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                             <div className='flex items-center gap-2 mb-4'>
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                    <HugeIconsFilter className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
+                                    <Funnel width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
                                 <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
                             </div>
@@ -232,7 +228,9 @@ const ActivityLogContainer = () => {
                                 <div>
                                     <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
                                     <div className='relative'>
-                                        <HugeIconsSearch
+                                        <Magnifier
+                                            width={22}
+                                            height={22}
                                             className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
                                             fill='currentColor'
                                         />
@@ -300,7 +298,7 @@ const ActivityLogContainer = () => {
                                             onClick={clearAllFilters}
                                             className='flex items-center gap-2 w-full'
                                         >
-                                            <HugeIconsX className='w-4 h-4' fill='currentColor' />
+                                            <Xmark width={22} height={22} fill='currentColor' />
                                             Clear All Filters
                                         </ActionButton>
                                     )}
@@ -321,7 +319,7 @@ const ActivityLogContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                         <div className='flex items-center gap-2 mb-4'>
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <HugeIconsHistory className='w-2.5 h-2.5 text-zinc-400' fill='currentColor' />
+                                <Magnifier width={22} height={22} className=' text-zinc-400' fill='currentColor' />
                             </div>
                             <h3 className='text-base font-semibold text-zinc-100'>Activity Events</h3>
                             {filteredData?.items && (
@@ -335,7 +333,12 @@ const ActivityLogContainer = () => {
                             <Spinner centered />
                         ) : !filteredData?.items?.length ? (
                             <div className='text-center py-12'>
-                                <HugeIconsHistory className='w-16 h-16 text-zinc-600 mb-4' fill='currentColor' />
+                                <ArrowRotateLeft
+                                    width={22}
+                                    height={22}
+                                    className=' text-zinc-600 mb-4'
+                                    fill='currentColor'
+                                />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
                                     {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
                                 </h3>
