@@ -1,3 +1,4 @@
+import { AntennaSignal, Check, Copy, CrownDiamond, TrashBin, Xmark } from '@gravity-ui/icons';
 import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
@@ -10,12 +11,6 @@ import { Textarea } from '@/components/elements/Input';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsCheck from '@/components/elements/hugeicons/Check';
-import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
-import HugeIconsCrown from '@/components/elements/hugeicons/Crown';
-import HugeIconsNetworkAntenna from '@/components/elements/hugeicons/NetworkAntenna';
-import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
-import HugeIconsX from '@/components/elements/hugeicons/X';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { ip } from '@/lib/formatters';
@@ -114,7 +109,7 @@ const AllocationRow = ({ allocation }: Props) => {
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-3 mb-3'>
                         <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                            <HugeIconsNetworkAntenna fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                            <AntennaSignal width={22} height={22} fill='currentColor' className='text-zinc-400' />
                         </div>
                         <div className='min-w-0 flex-1'>
                             <div className='flex items-center flex-wrap gap-2'>
@@ -123,15 +118,17 @@ const AllocationRow = ({ allocation }: Props) => {
                                         <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>
                                             {allocation.alias ? allocation.alias : ip(allocation.ip)}:{allocation.port}
                                         </h3>
-                                        <HugeIconsCopy
+                                        <Copy
                                             fill='currentColor'
-                                            className='w-3 h-3 text-zinc-500 group-hover:text-zinc-400 transition-colors'
+                                            width={22}
+                                            height={22}
+                                            className='text-zinc-500 group-hover:text-zinc-400 transition-colors'
                                         />
                                     </div>
                                 </CopyOnClick>
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
-                                        <HugeIconsCrown fill='currentColor' className='w-3 h-3' />
+                                        <CrownDiamond width={22} height={22} fill='currentColor' className='' />
                                         Primary
                                     </span>
                                 )}
@@ -160,12 +157,12 @@ const AllocationRow = ({ allocation }: Props) => {
                                         {loading ? (
                                             <Spinner size='small' />
                                         ) : (
-                                            <HugeIconsCheck fill='currentColor' className='w-3 h-3 mr-1' />
+                                            <Check fill='currentColor' className='w-3 h-3 mr-1' />
                                         )}
                                         Save
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
-                                        <HugeIconsX fill='currentColor' className='w-3 h-3 mr-1' />
+                                        <Xmark width={22} height={22} fill='currentColor' className='mr-1' />
                                         Cancel
                                     </ActionButton>
                                 </div>
@@ -173,9 +170,7 @@ const AllocationRow = ({ allocation }: Props) => {
                         ) : (
                             <Can action={'allocation.update'}>
                                 <div
-                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${
-                                        allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'
-                                    }`}
+                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'}`}
                                     onClick={startEdit}
                                 >
                                     {allocation.notes || 'Click to add notes...'}
@@ -198,7 +193,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     : 'Make this the primary allocation'
                             }
                         >
-                            <HugeIconsCrown fill='currentColor' className='w-3 h-3 mr-1' />
+                            <CrownDiamond width={22} height={22} fill='currentColor' className='mr-1' />
                             <span className='hidden sm:inline'>Make Primary</span>
                             <span className='sm:hidden'>Primary</span>
                         </ActionButton>
@@ -216,7 +211,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             {deleteLoading ? (
                                 <Spinner size='small' />
                             ) : (
-                                <HugeIconsTrash fill='currentColor' className='w-3 h-3 mr-1' />
+                                <TrashBin width={22} height={22} fill='currentColor' className='mr-1' />
                             )}
                             <span className='hidden sm:inline'>Delete</span>
                         </ActionButton>
