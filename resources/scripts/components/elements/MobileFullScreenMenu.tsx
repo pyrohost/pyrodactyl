@@ -1,21 +1,25 @@
+import {
+    AbbrApi,
+    Box,
+    BranchesDown,
+    Clock,
+    ClockArrowRotateLeft,
+    CloudArrowUpIn,
+    Database,
+    Ellipsis,
+    FolderOpen,
+    Gear,
+    House,
+    Key,
+    PencilToLine,
+    Persons,
+    Terminal,
+    Xmark,
+} from '@gravity-ui/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import Can from '@/components/elements/Can';
-import HugeIconsApi from '@/components/elements/hugeicons/Api';
-import HugeIconsClock from '@/components/elements/hugeicons/Clock';
-import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
-import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
-import HugeIconsConsole from '@/components/elements/hugeicons/Console';
-import HugeIconsController from '@/components/elements/hugeicons/Controller';
-import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
-import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
-import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
-import HugeIconsPeople from '@/components/elements/hugeicons/People';
-import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
-import HugeIconsX from '@/components/elements/hugeicons/X';
 
 interface MobileFullScreenMenuProps {
     isVisible: boolean;
@@ -34,7 +38,7 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
                 className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
                 aria-label='Close menu'
             >
-                <HugeIconsX fill='currentColor' />
+                <Xmark width={22} height={22} fill='currentColor' />
             </button>
 
             {/* Full screen navigation menu */}
@@ -61,7 +65,7 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
         end = false,
     }: {
         to: string;
-        icon: React.ComponentType<{ fill: string }>;
+        icon: React.ComponentType<{ width: number; height: number; fill: string }>;
         children: React.ReactNode;
         end?: boolean;
     }) => (
@@ -69,31 +73,32 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
             to={to}
             end={end}
             className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
-                    isActive
-                        ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                        : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${isActive
+                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
+                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
                 }`
             }
             onClick={onClose}
         >
-            <Icon fill='currentColor' />
+            <div>
+                <Icon width={22} height={22} fill='currentColor' />
+            </div>
             <span className='text-lg font-medium'>{children}</span>
         </NavLink>
     );
 
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
-            <NavigationItem to='/' icon={HugeIconsHome} end>
+            <NavigationItem to='/' icon={House} end>
                 Servers
             </NavigationItem>
-            <NavigationItem to='/account/api' icon={HugeIconsApi} end>
+            <NavigationItem to='/account/api' icon={AbbrApi} end>
                 API Keys
             </NavigationItem>
-            <NavigationItem to='/account/ssh' icon={HugeIconsSsh} end>
+            <NavigationItem to='/account/ssh' icon={Key} end>
                 SSH Keys
             </NavigationItem>
-            <NavigationItem to='/account' icon={HugeIconsDashboardSettings} end>
+            <NavigationItem to='/account' icon={Gear} end>
                 Settings
             </NavigationItem>
         </MobileFullScreenMenu>
@@ -126,7 +131,7 @@ export const ServerMobileMenu = ({
         end = false,
     }: {
         to: string;
-        icon: React.ComponentType<{ fill: string }>;
+        icon: React.ComponentType<{ width: number; height: number; fill: string }>;
         children: React.ReactNode;
         end?: boolean;
     }) => (
@@ -134,15 +139,14 @@ export const ServerMobileMenu = ({
             to={to}
             end={end}
             className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
-                    isActive
-                        ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                        : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${isActive
+                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
+                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
                 }`
             }
             onClick={onClose}
         >
-            <Icon fill='currentColor' />
+            <Icon width={22} height={22} fill='currentColor' />
             <span className='text-lg font-medium'>{children}</span>
         </NavLink>
     );
@@ -151,20 +155,20 @@ export const ServerMobileMenu = ({
 
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
-            <NavigationItem to={`/server/${serverId}`} icon={HugeIconsHome} end>
+            <NavigationItem to={`/server/${serverId}`} icon={House} end>
                 Home
             </NavigationItem>
 
             <>
                 <Can action={'file.*'} matchAny>
-                    <NavigationItem to={`/server/${serverId}/files`} icon={HugeIconsFolder}>
+                    <NavigationItem to={`/server/${serverId}/files`} icon={FolderOpen}>
                         Files
                     </NavigationItem>
                 </Can>
 
                 {databaseLimit !== 0 && (
                     <Can action={'database.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/databases`} icon={HugeIconsDatabase} end>
+                        <NavigationItem to={`/server/${serverId}/databases`} icon={Database} end>
                             Databases
                         </NavigationItem>
                     </Can>
@@ -172,7 +176,7 @@ export const ServerMobileMenu = ({
 
                 {backupLimit !== 0 && (
                     <Can action={'backup.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/backups`} icon={HugeIconsCloudUp} end>
+                        <NavigationItem to={`/server/${serverId}/backups`} icon={CloudArrowUpIn} end>
                             Backups
                         </NavigationItem>
                     </Can>
@@ -180,45 +184,45 @@ export const ServerMobileMenu = ({
 
                 {(allocationLimit > 0 || subdomainSupported) && (
                     <Can action={'allocation.*'} matchAny>
-                        <NavigationItem to={`/server/${serverId}/network`} icon={HugeIconsConnections} end>
+                        <NavigationItem to={`/server/${serverId}/network`} icon={BranchesDown} end>
                             Networking
                         </NavigationItem>
                     </Can>
                 )}
 
                 <Can action={'user.*'} matchAny>
-                    <NavigationItem to={`/server/${serverId}/users`} icon={HugeIconsPeople} end>
+                    <NavigationItem to={`/server/${serverId}/users`} icon={Persons} end>
                         Users
                     </NavigationItem>
                 </Can>
 
                 <Can action={['startup.read', 'startup.update', 'startup.command', 'startup.docker-image']} matchAny>
-                    <NavigationItem to={`/server/${serverId}/startup`} icon={HugeIconsConsole} end>
+                    <NavigationItem to={`/server/${serverId}/startup`} icon={Terminal} end>
                         Startup
                     </NavigationItem>
                 </Can>
 
                 <Can action={'schedule.*'} matchAny>
-                    <NavigationItem to={`/server/${serverId}/schedules`} icon={HugeIconsClock}>
+                    <NavigationItem to={`/server/${serverId}/schedules`} icon={Clock}>
                         Schedules
                     </NavigationItem>
                 </Can>
 
                 <Can action={['settings.*', 'file.sftp']} matchAny>
-                    <NavigationItem to={`/server/${serverId}/settings`} icon={HugeIconsDashboardSettings} end>
+                    <NavigationItem to={`/server/${serverId}/settings`} icon={Gear} end>
                         Settings
                     </NavigationItem>
                 </Can>
 
                 <Can action={['activity.*', 'activity.read']} matchAny>
-                    <NavigationItem to={`/server/${serverId}/activity`} icon={HugeIconsPencil} end>
+                    <NavigationItem to={`/server/${serverId}/activity`} icon={PencilToLine} end>
                         Activity
                     </NavigationItem>
                 </Can>
             </>
 
             <Can action={'startup.software'}>
-                <NavigationItem to={`/server/${serverId}/shell`} icon={HugeIconsController} end>
+                <NavigationItem to={`/server/${serverId}/shell`} icon={Box} end>
                     Software
                 </NavigationItem>
             </Can>

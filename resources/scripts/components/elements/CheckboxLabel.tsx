@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 const Checkbox = React.forwardRef<
@@ -14,22 +15,13 @@ const Checkbox = React.forwardRef<
     };
 
     return (
-        <div
-            className={cn(
-                'flex items-center gap-2 select-none',
-                className
-            )}
-            {...props}
-            ref={ref}
-        >
+        <div className={cn('flex items-center gap-2 select-none', className)} {...props} ref={ref}>
             {label && (
                 <span
                     onClick={handleClick}
                     className={cn(
                         'inline-block rounded-lg w-full px-2 py-1 cursor-pointer transition-colors duration-200 mb-2',
-                        checked
-                            ? 'bg-green-800 text-white'
-                            : 'border-transparent hover:bg-gray-700'
+                        checked ? 'bg-brand/40 text-white' : 'border-transparent hover:bg-gray-700/30',
                     )}
                 >
                     {label}

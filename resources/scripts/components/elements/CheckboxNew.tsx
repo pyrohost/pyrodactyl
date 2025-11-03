@@ -1,7 +1,6 @@
+import { Check } from '@gravity-ui/icons';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import * as React from 'react';
-
-import HugeIconsCheck from '@/components/elements/hugeicons/Check';
 
 import { cn } from '@/lib/utils';
 
@@ -18,7 +17,7 @@ const Checkbox = React.forwardRef<
         {...props}
     >
         <CheckboxPrimitive.Indicator className={cn('flex h-full w-full items-center justify-center text-current')}>
-            <HugeIconsCheck fill='currentColor' className='h-4 w-4' />
+            <Check width={22} height={22} fill='currentColor' />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
 ));

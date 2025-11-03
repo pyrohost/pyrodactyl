@@ -1,8 +1,8 @@
+import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
 
-import HugeIconsX from '../hugeicons/X';
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
 
 const variants = {
@@ -117,7 +117,7 @@ const Dialog = ({
                                     {!hideCloseIcon && (
                                         <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
                                             <button onClick={onClose} className='cursor-pointer'>
-                                                <HugeIconsX fill='currentColor' />
+                                                <Xmark width={22} height={22} fill='currentColor' />
                                             </button>
                                         </div>
                                     )}

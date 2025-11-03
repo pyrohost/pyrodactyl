@@ -1,9 +1,8 @@
+import { Code, Copy } from '@gravity-ui/icons';
 import { useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsCode from '@/components/elements/hugeicons/Code';
-import HugeIconsCopy from '@/components/elements/hugeicons/Copy';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 
@@ -35,7 +34,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                             onClick={copyToClipboard}
                             className='flex items-center gap-2 text-xs'
                         >
-                            <HugeIconsCopy className='w-3 h-3' />
+                            <Copy width={22} height={22} />
                             {copied ? 'Copied!' : 'Copy JSON'}
                         </ActionButton>
                     </div>
@@ -68,7 +67,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >
-                <HugeIconsCode className='w-3 h-3' />
+                <Code width={22} height={22} />
             </button>
         </>
     );

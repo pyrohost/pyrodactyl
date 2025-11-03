@@ -1,4 +1,5 @@
 import { ActivityLog } from '@definitions/user';
+import { TerminalLine } from '@gravity-ui/icons';
 // FIXME: add icons back
 import clsx from 'clsx';
 // FIXME: replace with radix tooltip
@@ -7,8 +8,6 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
-import FolderIcon from '@/components/elements/hugeicons/Folder';
-import TerminalIcon from '@/components/elements/hugeicons/Terminal';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 
@@ -54,7 +53,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                     <div className='flex items-center gap-1 ml-auto'>
                         {activity.isApi && (
                             <span className='text-xs bg-blue-900/30 text-blue-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
-                                <TerminalIcon fill='currentColor' className='w-3 h-3' />
+                                <TerminalLine width={22} height={22} fill='currentColor' />
                                 API
                             </span>
                         )}

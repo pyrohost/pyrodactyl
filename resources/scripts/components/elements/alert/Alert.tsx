@@ -1,6 +1,5 @@
+import { TriangleExclamation } from '@gravity-ui/icons';
 import clsx from 'clsx';
-
-import HugeIconsAlert from '../hugeicons/Alert';
 
 interface AlertProps {
     type: 'warning' | 'danger';
@@ -21,10 +20,14 @@ const Alert = ({ type, className, children }: AlertProps) => {
             )}
         >
             {type === 'danger' ? (
-                <HugeIconsAlert fill='currentColor' className={'w-6 h-6 text-red-400 mr-2'} />
+                <TriangleExclamation
+                    width={22}
+                    height={22}
+                    fill='currentColor'
+                    className={'w-6 h-6 text-red-400 mr-2'}
+                />
             ) : (
-                // <HugeIconsAlert fill='currentColor'></HugeIconsAlert>
-                <HugeIconsAlert fill='currentColor' className='pl-2 mr-3 text-yellow-500' />
+                <TriangleExclamation width={22} height={22} fill='currentColor' className='pl-2 mr-3 text-yellow-500' />
             )}
             {children}
         </div>

@@ -1,3 +1,4 @@
+import { BarsPlay } from '@gravity-ui/icons';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -8,7 +9,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import Logo from '@/components/elements/PyroLogo';
-import HugeIconsMenu from '@/components/elements/hugeicons/Menu';
 
 interface MobileTopBarProps {
     onMenuToggle: () => void;
@@ -92,7 +92,7 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                     className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 cursor-pointer'
                     aria-label='Toggle navigation menu'
                 >
-                    <HugeIconsMenu fill='currentColor' />
+                    <BarsPlay width={22} height={22} fill='currentColor' />
                 </button>
             </div>
         </div>
