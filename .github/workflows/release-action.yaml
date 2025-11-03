@@ -64,7 +64,7 @@ jobs:
           target_commitish: releases/v${{ inputs.version }}
           name: Release v${{ inputs.version }}
           generate_release_notes: true
-          draft: false
+          draft: true
           prerelease: ${{ inputs.release_type == 'prerelease' }}
           files: |
             panel.tar.gz
