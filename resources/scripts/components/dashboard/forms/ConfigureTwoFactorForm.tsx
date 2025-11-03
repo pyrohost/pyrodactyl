@@ -8,17 +8,17 @@ import ActionButton from '@/components/elements/ActionButton';
 
 import { ApplicationStore } from '@/state';
 
-import { useFlashKey } from '@/plugins/useFlash';
+import useFlash from '@/plugins/useFlash';
 
 const ConfigureTwoFactorForm = () => {
     const [tokens, setTokens] = useState<string[]>([]);
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
     const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
-    const { clearAndAddHttpError } = useFlashKey('account:two-step');
+    const { clearFlashes } = useFlash();
 
     useEffect(() => {
         return () => {
-            clearAndAddHttpError();
+            clearFlashes('account:two-step');
         };
     }, [visible]);
 
