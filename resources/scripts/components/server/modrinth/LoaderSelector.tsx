@@ -6,9 +6,9 @@ import Input from '@/components/elements/Input';
 import { ServerContext } from '@/state/server';
 
 import { useGlobalStateContext } from './config';
-import { getAvailableLoaders, getLoaderType } from './eggfeatures.ts';
+import { getAvailableLoaders, getLoaderType } from './eggfeatures';
 
-const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt'];
+const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt', 'bungeecord'];
 
 interface LoaderSelectorProps {
     maxVisible?: number;

@@ -268,6 +268,7 @@ export const ModrinthService = {
                 // Modrinth API expects facets as a JSON string
                 processedParams.facets = JSON.stringify(params.facets);
             }
+            console.log(processedParams);
 
             // Add offset if provided
             if (params.offset) {

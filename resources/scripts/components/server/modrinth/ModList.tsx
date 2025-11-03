@@ -16,7 +16,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
     const { mods, setMods, selectedLoaders, selectedVersions, searchQuery } = useGlobalStateContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
     const fetchMods = async (resetPagination = false) => {
@@ -26,24 +26,22 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
             setIsLoading(true);
             setError(null);
 
-            const currentPage = resetPagination ? 1 : page;
+            const currentPage = resetPagination ? 0 : page;
 
-            // APPROACH 1: Array of arrays (most common format)
             const facets: string[][] = [['project_type:mod']];
 
-            // Add loaders as individual facet arrays
             if (selectedLoaders.length > 0) {
                 selectedLoaders.forEach((loader) => {
                     facets.push([`categories:${loader}`]);
                 });
             }
 
-            // Add versions as individual facet arrays
             if (selectedVersions.length > 0) {
                 selectedVersions.forEach((version) => {
                     facets.push([`versions:${version}`]);
                 });
             }
+            facets.push(['server_side:required', 'server_side:optional']);
 
             // console.log('Fetching mods with parameters:', {
             //     query: searchQuery,
@@ -57,7 +55,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
                 query: searchQuery || undefined,
                 facets: facets,
                 limit: 20,
-                offset: (currentPage - 1) * 20,
+                offset: currentPage,
                 index: 'relevance',
             });
 
@@ -65,7 +63,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 
             if (resetPagination) {
                 setMods(data);
-                setPage(1);
+                setPage(0);
             } else {
                 setMods((prev) => [...prev, ...data]);
             }
@@ -91,7 +89,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 
     const handleLoadMore = () => {
         if (!isLoading && hasMore) {
-            setPage((prev) => prev + 1);
+            setPage((prev) => prev + 20);
             fetchMods(false);
         }
     };
@@ -123,44 +121,44 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
                 ))}
             </div>
 
-            {hasMore && (
-                <ActionButton
-                    onClick={handleLoadMore}
-                    disabled={isLoading}
-                    className={`${isLoading
-                            ? 'bg-gray-700 cursor-not-allowed'
-                            : 'bg-blue-600 hover:bg-blue-500 shadow-lg hover:shadow-blue-500/20'
-                        } text-white font-medium`}
-                >
-                    {isLoading ? (
-                        <span className='inline-flex items-center'>
-                            <svg
-                                className='animate-spin -ml-1 mr-2 h-4 w-4 text-white'
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                            >
-                                <circle
-                                    className='opacity-25'
-                                    cx='12'
-                                    cy='12'
-                                    r='10'
-                                    stroke='currentColor'
-                                    strokeWidth='4'
-                                ></circle>
-                                <path
-                                    className='opacity-75'
-                                    fill='currentColor'
-                                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                                ></path>
-                            </svg>
-                            Loading...
-                        </span>
-                    ) : (
-                        'Load More'
-                    )}
-                </ActionButton>
-            )}
+            {/* {hasMore && ( */}
+            {/*     <ActionButton */}
+            {/*         onClick={handleLoadMore} */}
+            {/*         disabled={isLoading} */}
+            {/*         className={`${isLoading */}
+            {/*                 ? 'bg-gray-700 cursor-not-allowed' */}
+            {/*                 : 'bg-blue-600 hover:bg-blue-500 shadow-lg hover:shadow-blue-500/20' */}
+            {/*             } text-white font-medium`} */}
+            {/*     > */}
+            {/*         {isLoading ? ( */}
+            {/*             <span className='inline-flex items-center'> */}
+            {/*                 <svg */}
+            {/*                     className='animate-spin -ml-1 mr-2 h-4 w-4 text-white' */}
+            {/*                     xmlns='http://www.w3.org/2000/svg' */}
+            {/*                     fill='none' */}
+            {/*                     viewBox='0 0 24 24' */}
+            {/*                 > */}
+            {/*                     <circle */}
+            {/*                         className='opacity-25' */}
+            {/*                         cx='12' */}
+            {/*                         cy='12' */}
+            {/*                         r='10' */}
+            {/*                         stroke='currentColor' */}
+            {/*                         strokeWidth='4' */}
+            {/*                     ></circle> */}
+            {/*                     <path */}
+            {/*                         className='opacity-75' */}
+            {/*                         fill='currentColor' */}
+            {/*                         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' */}
+            {/*                     ></path> */}
+            {/*                 </svg> */}
+            {/*                 Loading... */}
+            {/*             </span> */}
+            {/*         ) : ( */}
+            {/*             'Load More' */}
+            {/*         )} */}
+            {/*     </ActionButton> */}
+            {/* )} */}
         </div>
     );
 };

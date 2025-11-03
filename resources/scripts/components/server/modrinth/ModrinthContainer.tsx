@@ -129,7 +129,7 @@ const ModrinthContainerInner = () => {
 
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-4/5'
-                    title='Modrinth'
+                    title='Downloader'
                 >
                     <div className='relative w-full h-full mb-4'>
                         <svg
