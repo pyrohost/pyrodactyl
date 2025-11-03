@@ -88,7 +88,7 @@ services:
             DB_HOST: 'database'
             DB_PORT: '3306'
             HASHIDS_LENGTH: 8
-            WINGS_INTERNAL_IP: 'wings'
+            WINGS_INTERNAL_IP: 'elytra'
             WINGS_DIR: '${PWD}/srv/'
             PYRODACTYL_DOCKER_DEV: 'true'
             MAIL_HOST: 'mailhog'
@@ -130,12 +130,12 @@ services:
               echo 'Bucket created.'
             "
 
-    wings:
+    elytra:
         # The default Wings image doesn't work on macOS Docker
         # This fork simply removes the incompatible `io.priority` cgroup v2 flag
         # For Linux users, you can use the default image by uncommenting the line below
         # image: ghcr.io/pterodactyl/wings:latest
-        image: ghcr.io/he3als/wings-mac:latest
+        image: ghcr.io/pyrohost/elytra:dev
         restart: always
         ports:
             - '8080:8080'
@@ -143,13 +143,13 @@ services:
         tty: true
         environment:
             TZ: 'UTC'
-            WINGS_UID: 988
-            WINGS_GID: 988
-            WINGS_USERNAME: pterodactyl
+            ELYTRA_UID: 988
+            ELYTRA_GID: 988
+            ELYTRA_USERNAME: elytra
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - '/etc/ssl/certs:/etc/ssl/certs:ro'
-            - './srv/pterodactyl/config/:/etc/pterodactyl/'
+            - './srv/pterodactyl/config/:/etc/elytra/'
 
             # The volumes below need to be the exact same path in the container as on the host.
             #
@@ -159,10 +159,10 @@ services:
             # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
             # Do not change anything but the $PWD part as this is also hardcoded in the container.
 
-            - './srv/wings/tmp/:${PWD}/srv/wings/tmp/'
-            - './srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
-            - './srv/wings/:${PWD}/srv/wings/'
-            - './wings/logs/:${PWD}/srv/wings/logs/'
+            - './srv/elytra/tmp/:${PWD}/srv/elytra/tmp/'
+            - './srv/elytra/docker/containers/:${PWD}/srv/elytra/docker/containers/'
+            - './srv/elytra/:${PWD}/srv/elytra/'
+            - './srv/elytra/logs/:${PWD}/srv/elytra/logs/'
 
 
     mailpit:
