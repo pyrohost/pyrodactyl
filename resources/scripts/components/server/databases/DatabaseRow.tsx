@@ -1,3 +1,4 @@
+import { Database, Eye, TrashBin } from '@gravity-ui/icons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -11,9 +12,6 @@ import Field from '@/components/elements/Field';
 import Input from '@/components/elements/Input';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
-import HugeIconsEye from '@/components/elements/hugeicons/Eye';
-import HugeIconsTrash from '@/components/elements/hugeicons/Trash';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
@@ -45,9 +43,7 @@ const DatabaseRow = ({ database }: Props) => {
     const appendDatabase = ServerContext.useStoreActions((actions) => actions.databases.appendDatabase);
     const removeDatabase = ServerContext.useStoreActions((actions) => actions.databases.removeDatabase);
 
-    const jdbcConnectionString = `jdbc:mysql://${database.username}${
-        database.password ? `:${encodeURIComponent(database.password)}` : ''
-    }@${database.connectionString}/${database.name}`;
+    const jdbcConnectionString = `jdbc:mysql://${database.username}${database.password ? `:${encodeURIComponent(database.password)}` : ''}@${database.connectionString}/${database.name}`;
 
     const schema = object().shape({
         confirm: string()
@@ -180,7 +176,7 @@ const DatabaseRow = ({ database }: Props) => {
                     <div className='flex-1 min-w-0'>
                         <div className='flex items-center gap-3 mb-2'>
                             <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <HugeIconsDatabase fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                                <Database fill='currentColor' className='text-zinc-400 w-4 h-4' />
                             </div>
                             <div className='min-w-0 flex-1'>
                                 <CopyOnClick text={database.name}>
@@ -218,7 +214,7 @@ const DatabaseRow = ({ database }: Props) => {
                             onClick={() => setConnectionVisible(true)}
                             className='flex items-center gap-2'
                         >
-                            <HugeIconsEye fill='currentColor' className='w-4 h-4' />
+                            <Eye fill='currentColor' className='w-4 h-4' />
                             <span className='hidden sm:inline'>Details</span>
                         </ActionButton>
                         <Can action={'database.delete'}>
@@ -228,7 +224,7 @@ const DatabaseRow = ({ database }: Props) => {
                                 onClick={() => setVisible(true)}
                                 className='flex items-center gap-2'
                             >
-                                <HugeIconsTrash fill='currentColor' className='w-4 h-4' />
+                                <TrashBin fill='currentColor' className='w-4 h-4' />
                                 <span className='hidden sm:inline'>Delete</span>
                             </ActionButton>
                         </Can>

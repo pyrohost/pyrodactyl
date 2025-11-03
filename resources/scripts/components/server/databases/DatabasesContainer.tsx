@@ -1,3 +1,4 @@
+import { Database } from '@gravity-ui/icons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,6 @@ import Field from '@/components/elements/Field';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal from '@/components/elements/Modal';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 
@@ -103,9 +103,7 @@ const DatabasesContainer = () => {
                                 </p>
                             )}
                             {databaseLimit === 0 && (
-                                <p className='text-sm text-red-400 text-center sm:text-right'>
-                                    Databases disabled
-                                </p>
+                                <p className='text-sm text-red-400 text-center sm:text-right'>Databases disabled</p>
                             )}
                             {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
@@ -184,7 +182,7 @@ const DatabasesContainer = () => {
                 <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <HugeIconsDatabase className='w-8 h-8 text-zinc-400' fill='currentColor' />
+                            <Database className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                             {databaseLimit === 0 ? 'Databases unavailable' : 'No databases found'}
