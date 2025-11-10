@@ -98,4 +98,32 @@ class NodeViewController extends Controller
             'servers' => $this->serverRepository->loadAllServersForNode($node->id, 25),
         ]);
     }
+
+    /**
+     * Return a listing of server transfers for this node.
+     */
+    public function transfers(Request $request, Node $node): View
+    {
+        $outgoing = $node->outgoingTransfers()
+            ->whereNull('successful')
+            ->with(['server', 'newNode'])
+            ->orderByRaw("FIELD(queue_status, 'active', 'queued', 'failed')")
+            ->orderByDesc('last_heartbeat_at')
+            ->orderByDesc('activated_at')
+            ->paginate(15, ['*'], 'outgoing');
+
+        $incoming = $node->incomingTransfers()
+            ->whereNull('successful')
+            ->with(['server', 'oldNode'])
+            ->orderByRaw("FIELD(queue_status, 'active', 'queued', 'failed')")
+            ->orderByDesc('last_heartbeat_at')
+            ->orderByDesc('activated_at')
+            ->paginate(15, ['*'], 'incoming');
+
+        return $this->view->make('admin.nodes.view.transfers', [
+            'node' => $node,
+            'outgoing' => $outgoing,
+            'incoming' => $incoming,
+        ]);
+    }
 }

@@ -16,14 +16,16 @@ class DaemonTransferRepository extends DaemonRepository
     /**
      * @throws DaemonConnectionException
      */
-    public function notify(Node $targetNode, Plain $token): void
+    public function notify(Node $targetNode, Plain|string $token): void
     {
+        $tokenString = $token instanceof Plain ? $token->toString() : $token;
+
         try {
             $this->getHttpClient()->post(sprintf('/api/servers/%s/transfer', $this->server->uuid), [
                 'json' => [
                     'server_id' => $this->server->uuid,
                     'url' => $targetNode->getConnectionAddress() . '/api/transfers',
-                    'token' => 'Bearer ' . $token->toString(),
+                    'token' => 'Bearer ' . $tokenString,
                     'server' => [
                         'uuid' => $this->server->uuid,
                         'start_on_completion' => false,

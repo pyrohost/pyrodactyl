@@ -171,6 +171,7 @@ Route::group(['prefix' => 'nodes'], function () {
     Route::get('/view/{node:id}/configuration', [Admin\Nodes\NodeViewController::class, 'configuration'])->name('admin.nodes.view.configuration');
     Route::get('/view/{node:id}/allocation', [Admin\Nodes\NodeViewController::class, 'allocations'])->name('admin.nodes.view.allocation');
     Route::get('/view/{node:id}/servers', [Admin\Nodes\NodeViewController::class, 'servers'])->name('admin.nodes.view.servers');
+    Route::get('/view/{node:id}/transfers', [Admin\Nodes\NodeViewController::class, 'transfers'])->name('admin.nodes.view.transfers');
     Route::get('/view/{node:id}/system-information', Admin\Nodes\SystemInformationController::class);
 
     Route::post('/new', [Admin\NodesController::class, 'store']);

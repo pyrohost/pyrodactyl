@@ -13,6 +13,7 @@ use Pterodactyl\Repositories\Eloquent\ServerRepository;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
+use Pterodactyl\Services\Servers\TransferCleanupService;
 
 class ServerTransferController extends Controller
 {
@@ -23,7 +24,22 @@ class ServerTransferController extends Controller
         private ConnectionInterface $connection,
         private ServerRepository $repository,
         private DaemonServerRepository $daemonServerRepository,
+        private TransferCleanupService $transferCleanupService,
     ) {
+    }
+
+    public function heartbeat(string $uuid): JsonResponse
+    {
+        $server = $this->repository->getByUuid($uuid);
+        $transfer = $server->transfer;
+
+        if (is_null($transfer)) {
+            throw new ConflictHttpException('Server is not being transferred.');
+        }
+
+        $transfer->update(['last_heartbeat_at' => now()]);
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -68,21 +84,17 @@ class ServerTransferController extends Controller
             ]);
 
             $server = $server->fresh();
-            $server->transfer->update(['successful' => true]);
+            $server->transfer->update([
+                'successful' => true,
+                'queue_status' => 'completed',
+            ]);
 
             return $server;
         });
 
         // Delete the server from the old node making sure to point it to the old node so
         // that we do not delete it from the new node the server was transferred to.
-        try {
-            $this->daemonServerRepository
-                ->setServer($server)
-                ->setNode($transfer->oldNode)
-                ->delete();
-        } catch (DaemonConnectionException $exception) {
-            Log::warning($exception, ['transfer_id' => $server->transfer->id]);
-        }
+        $this->transferCleanupService->cleanupSourceNode($transfer);
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
@@ -96,7 +108,10 @@ class ServerTransferController extends Controller
     protected function processFailedTransfer(ServerTransfer $transfer): JsonResponse
     {
         $this->connection->transaction(function () use (&$transfer) {
-            $transfer->forceFill(['successful' => false])->saveOrFail();
+            $transfer->forceFill([
+                'successful' => false,
+                'queue_status' => 'failed',
+            ])->saveOrFail();
 
             $allocations = array_merge([$transfer->new_allocation], $transfer->new_additional_allocations);
             Allocation::query()->whereIn('id', $allocations)->update(['server_id' => null]);

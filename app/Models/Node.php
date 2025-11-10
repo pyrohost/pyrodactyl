@@ -110,6 +110,8 @@ class Node extends Model
         'daemon_token',
         'description',
         'maintenance_mode',
+        'max_concurrent_outgoing_transfers',
+        'max_concurrent_incoming_transfers',
     ];
 
     public static array $validationRules = [
@@ -322,6 +324,22 @@ class Node extends Model
     public function allocations(): HasMany
     {
         return $this->hasMany(Allocation::class);
+    }
+
+    /**
+     * Gets the outgoing transfers from this node.
+     */
+    public function outgoingTransfers(): HasMany
+    {
+        return $this->hasMany(ServerTransfer::class, 'old_node');
+    }
+
+    /**
+     * Gets the incoming transfers to this node.
+     */
+    public function incomingTransfers(): HasMany
+    {
+        return $this->hasMany(ServerTransfer::class, 'new_node');
     }
 
     /**

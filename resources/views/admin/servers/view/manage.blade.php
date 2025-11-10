@@ -123,8 +123,22 @@
                     </div>
                     <div class="box-body">
                         <p>
-                            This server is currently being transferred to another node.
+                            @if($server->transfer->queue_status === 'queued')
+                                This server transfer is <strong class="text-info">queued</strong> and will begin when node capacity is available.
+                            @elseif($server->transfer->queue_status === 'active')
+                                This server is <strong class="text-warning">actively being transferred</strong> to another node.
+                            @elseif($server->transfer->queue_status === 'failed')
+                                This server transfer <strong class="text-danger">failed</strong>.
+                            @else
+                                This server is currently being transferred to another node.
+                            @endif
+                            <br>
                             Transfer was initiated at <strong>{{ $server->transfer->created_at }}</strong>
+                            @if($server->transfer->queue_status === 'queued')
+                                <br>Queued at <strong>{{ $server->transfer->queued_at }}</strong>
+                            @elseif($server->transfer->queue_status === 'active' && $server->transfer->activated_at)
+                                <br>Started at <strong>{{ $server->transfer->activated_at }}</strong>
+                            @endif
                         </p>
                     </div>
 

@@ -11,6 +11,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Pterodactyl\Console\Commands\Schedule\ProcessRunnableCommand;
 use Pterodactyl\Console\Commands\Maintenance\PruneOrphanedBackupsCommand;
 use Pterodactyl\Console\Commands\Maintenance\CleanServiceBackupFilesCommand;
+use Pterodactyl\Console\Commands\CleanupStaleTransfersCommand;
+use Pterodactyl\Console\Commands\ProcessTransferQueueCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -32,6 +34,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(ProcessRunnableCommand::class)->everyMinute()->withoutOverlapping();
         $schedule->command(CleanServiceBackupFilesCommand::class)->daily();
+        $schedule->command(CleanupStaleTransfersCommand::class)->everyFiveMinutes()->withoutOverlapping();
+        $schedule->command(ProcessTransferQueueCommand::class)->everyMinute()->withoutOverlapping();
 
         if (config('backups.prune_age')) {
             $schedule->command(PruneOrphanedBackupsCommand::class)->everyThirtyMinutes();

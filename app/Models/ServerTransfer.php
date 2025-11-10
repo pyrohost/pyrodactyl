@@ -53,6 +53,10 @@ class ServerTransfer extends Model
         'new_additional_allocations' => 'array',
         'successful' => 'bool',
         'archived' => 'bool',
+        'queued_at' => 'datetime',
+        'activated_at' => 'datetime',
+        'started_at' => 'datetime',
+        'last_heartbeat_at' => 'datetime',
     ];
 
     public static array $validationRules = [
