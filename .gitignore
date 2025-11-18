@@ -62,6 +62,3 @@ mariadb_data/
 
 # Ignore 
 ignored-markdown-notes/
-vagrant/
-.vagrant/
-vagrantfile
