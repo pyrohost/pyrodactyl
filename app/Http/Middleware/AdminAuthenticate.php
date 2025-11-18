@@ -14,8 +14,15 @@ class AdminAuthenticate
      */
     public function handle(Request $request, \Closure $next): mixed
     {
-        if (!$request->user() || !$request->user()->root_admin) {
-            throw new AccessDeniedHttpException();
+        $user = $request->user();
+        
+        if (!$user) {
+            throw new AccessDeniedHttpException('Authentication required.');
+        }
+
+        // Check if user is either a root admin or has any admin permissions
+        if (!$user->root_admin && !$user->isAdmin()) {
+            throw new AccessDeniedHttpException('Admin access required.');
         }
 
         return $next($request);

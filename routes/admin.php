@@ -104,10 +104,13 @@ Route::group(['prefix' => 'users'], function () {
   Route::get('/accounts.json', [Admin\UserController::class, 'json'])->name('admin.users.json');
   Route::get('/new', [Admin\UserController::class, 'create'])->name('admin.users.new');
   Route::get('/view/{user:id}', [Admin\UserController::class, 'view'])->name('admin.users.view');
+  Route::get('/view/{user:id}/permissions', [Admin\AdminPermissionController::class, 'view'])->name('admin.users.permissions');
+  Route::get('/view/{user:id}/permissions/json', [Admin\AdminPermissionController::class, 'json'])->name('admin.users.permissions.json');
 
   Route::post('/new', [Admin\UserController::class, 'store']);
 
   Route::patch('/view/{user:id}', [Admin\UserController::class, 'update']);
+  Route::patch('/view/{user:id}/permissions', [Admin\AdminPermissionController::class, 'update'])->name('admin.users.permissions.update');
   Route::delete('/view/{user:id}', [Admin\UserController::class, 'delete']);
 });
 

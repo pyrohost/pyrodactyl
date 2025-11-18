@@ -7,5 +7,6 @@ return [
     'notices' => [
         'account_created' => 'Account has been created successfully.',
         'account_updated' => 'Account has been successfully updated.',
+        'permissions_updated' => 'Admin permissions have been successfully updated.',
     ],
 ];

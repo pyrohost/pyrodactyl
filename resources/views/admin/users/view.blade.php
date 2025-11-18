@@ -98,6 +98,18 @@
                             <p class="text-muted"><small>Setting this to 'Yes' gives a user full administrative access.</small></p>
                         </div>
                     </div>
+                    @if($user->root_admin || $user->isAdmin())
+                    <div class="form-group">
+                        <a href="{{ route('admin.users.permissions', $user->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-key"></i> Manage Admin Permissions
+                        </a>
+                        @if(!$user->root_admin && $user->adminPermissions->count() > 0)
+                        <p class="text-muted" style="margin-top: 10px;">
+                            <small>This user has {{ $user->adminPermissions->count() }} specific admin permission(s).</small>
+                        </p>
+                        @endif
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

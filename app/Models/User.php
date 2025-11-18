@@ -43,6 +43,8 @@ use Pterodactyl\Notifications\SendPasswordReset as ResetPasswordNotification;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\ApiKey[] $apiKeys
  * @property int|null $api_keys_count
+ * @property \Illuminate\Database\Eloquent\Collection|\Pterodactyl\Models\AdminPermission[] $adminPermissions
+ * @property int|null $admin_permissions_count
  * @property string $name
  * @property \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property int|null $notifications_count
@@ -248,6 +250,75 @@ class User extends Model implements
   public function sshKeys(): HasMany
   {
     return $this->hasMany(UserSSHKey::class);
+  }
+
+  /**
+   * Returns all admin permissions for this user.
+   */
+  public function adminPermissions(): HasMany
+  {
+    return $this->hasMany(AdminPermission::class);
+  }
+
+  /**
+   * Check if the user has a specific admin permission.
+   */
+  public function hasAdminPermission(string $permission): bool
+  {
+    // Root admins have all permissions
+    if ($this->root_admin) {
+      return true;
+    }
+
+    return $this->adminPermissions()->where('permission', $permission)->exists();
+  }
+
+  /**
+   * Check if the user has any of the given admin permissions.
+   */
+  public function hasAnyAdminPermission(array $permissions): bool
+  {
+    // Root admins have all permissions
+    if ($this->root_admin) {
+      return true;
+    }
+
+    return $this->adminPermissions()->whereIn('permission', $permissions)->exists();
+  }
+
+  /**
+   * Check if the user has all of the given admin permissions.
+   */
+  public function hasAllAdminPermissions(array $permissions): bool
+  {
+    // Root admins have all permissions
+    if ($this->root_admin) {
+      return true;
+    }
+
+    $userPermissions = $this->adminPermissions()->pluck('permission')->toArray();
+    return count(array_intersect($permissions, $userPermissions)) === count($permissions);
+  }
+
+  /**
+   * Get all admin permission keys for this user.
+   */
+  public function getAdminPermissions(): array
+  {
+    // Root admins have all permissions
+    if ($this->root_admin) {
+      return AdminPermission::allPermissions();
+    }
+
+    return $this->adminPermissions()->pluck('permission')->toArray();
+  }
+
+  /**
+   * Check if user is an admin (either root admin or has any admin permissions).
+   */
+  public function isAdmin(): bool
+  {
+    return $this->root_admin || $this->adminPermissions()->exists();
   }
 
   /**

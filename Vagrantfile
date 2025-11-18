@@ -22,6 +22,10 @@ FORWARDED_PORTS = SPECIAL_PORTS + TEST_PORTS.to_a
 Vagrant.configure("2") do |config|
   config.vm.box      = BOX_DEFAULT
   config.vm.hostname = "pyrodactyl-dev"
+  
+  # Add private network for NFS (required on macOS)
+  config.vm.network "private_network", type: "dhcp"
+  
   FORWARDED_PORTS.each do |p|
     config.vm.network "forwarded_port",
       guest: p,
@@ -63,19 +67,12 @@ Vagrant.configure("2") do |config|
     lv.cpus   = CPUS
   end
 
-  if Vagrant::Util::Platform.windows?
-    config.vm.synced_folder ".", "/home/vagrant/pyrodactyl",
-      type: "virtualbox",
-      owner: "vagrant",
-      group: "vagrant",
-      mount_options: ["dmode=775", "fmode=664"]
-  else
-    config.vm.synced_folder ".", "/home/vagrant/pyrodactyl",
-      type: "nfs",
-      nfs_version: 4,
-      nfs_udp: false,
-      mount_options: ["rw", "vers=4", "tcp", "fsc", "rsize=1048576", "wsize=1048576"]
-  end
+  # Use VirtualBox shared folders for maximum compatibility
+  config.vm.synced_folder ".", "/home/vagrant/pyrodactyl",
+    type: "virtualbox",
+    owner: "vagrant",
+    group: "vagrant",
+    mount_options: ["dmode=775", "fmode=664"]
 
   config.vm.provision "shell",
     path: "vagrant/provision.sh",
