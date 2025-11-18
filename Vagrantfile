@@ -1,4 +1,3 @@
-
 BOX_DEFAULT = "bento/ubuntu-24.04"
 BOX_LIBVIRT = "generic/ubuntu2404"
 
@@ -84,4 +83,9 @@ Vagrant.configure("2") do |config|
       username: dev@pyro.host
       password: dev
   MSG
+
+  # Increase boot timeout to 10 minutes for slow boots or first-time setup
+  # in seconds 300 = 5 minutes
+  config.vm.boot_timeout = 600
+  
 end
