@@ -133,7 +133,7 @@ const OperationProgressModal: React.FC<Props> = ({
     return (
         <Dialog
             open={visible}
-            onClose={canClose ? handleClose : () => { }}
+            onClose={canClose ? handleClose : () => {}}
             preventExternalClose={!canClose}
             hideCloseIcon={!canClose}
             title={operationType}
