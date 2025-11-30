@@ -128,6 +128,14 @@ class SubdomainController extends ClientApiController
                 ]
             ], 201);
         } catch (\Exception $e) {
+            Log::error('Subdomain creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'server_id' => $server->id,
+                'domain_id' => $data['domain_id'] ?? null,
+                'subdomain' => $data['subdomain'] ?? null,
+                'existing_subdomains_count' => $existingSubdomains->count()
+            ]);
             return response()->json([
                 'error' => $existingSubdomains->isNotEmpty() ? 'Failed to replace subdomain.' : 'Failed to create subdomain.'
             ], 422);
@@ -160,9 +168,18 @@ class SubdomainController extends ClientApiController
                 'message' => 'Subdomain(s) deleted successfully.'
             ]);
         } catch (\Exception $e) {
+            Log::error('Subdomain creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'server_id' => $server->id,
+                'domain_id' => $data['domain_id'] ?? null,
+                'subdomain' => $data['subdomain'] ?? null,
+                'existing_subdomains_count' => $existingSubdomains->count()
+            ]);
             return response()->json([
                 'error' => 'Failed to delete subdomain(s).'
             ], 422);
+
         }
     }
 
