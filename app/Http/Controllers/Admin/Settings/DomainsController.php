@@ -17,8 +17,7 @@ class DomainsController extends Controller
     public function __construct(
         private ViewFactory $view,
         private SubdomainManagementService $subdomainService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display the domains management page.
@@ -230,6 +229,10 @@ class DomainsController extends Controller
                 'name' => 'Hetzner',
                 'description' => 'Hetzner DNS Console',
             ],
+            'route53' => [
+                'name' => 'Route53',
+                'description' => 'AWS Route53 Dns Service',
+            ],
         ];
     }
 
@@ -241,6 +244,7 @@ class DomainsController extends Controller
         $providers = [
             'cloudflare' => \Pterodactyl\Services\Dns\Providers\CloudflareProvider::class,
             'hetzner' => \Pterodactyl\Services\Dns\Providers\HetznerProvider::class,
+            'route53' => \Pterodactyl\Services\Dns\Providers\Route53Provider::class,
         ];
 
         if (!isset($providers[$provider])) {
@@ -250,3 +254,4 @@ class DomainsController extends Controller
         return $providers[$provider];
     }
 }
+

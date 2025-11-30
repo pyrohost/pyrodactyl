@@ -17,6 +17,7 @@ use Pterodactyl\Services\Dns\Providers\CloudflareProvider;
 use Pterodactyl\Services\Dns\Providers\HetznerProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Pterodactyl\Services\Dns\Providers\Route53Provider;
 
 class SubdomainManagementService
 {
@@ -28,7 +29,8 @@ class SubdomainManagementService
         // Register DNS providers
         $this->dnsProviders = [
             'cloudflare' => CloudflareProvider::class,
-            'hetzner' => HetznerProvider::class
+            'hetzner' => HetznerProvider::class,
+            'route53' => Route53Provider::class
         ];
 
         // Register subdomain features

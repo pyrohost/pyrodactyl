@@ -36,7 +36,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:canary
             ghcr.io/${{ github.repository }}:canary-${{ github.sha }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
