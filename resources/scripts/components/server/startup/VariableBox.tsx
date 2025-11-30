@@ -101,8 +101,8 @@ const VariableBox = ({ variable }: Props) => {
                                     ? 'Enabled'
                                     : 'Disabled'
                                 : variable.serverValue === '1'
-                                    ? 'On'
-                                    : 'Off'}
+                                  ? 'On'
+                                  : 'Off'}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
