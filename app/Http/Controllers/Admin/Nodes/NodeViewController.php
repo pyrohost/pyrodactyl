@@ -15,6 +15,7 @@ use Pterodactyl\Traits\Controllers\JavascriptInjection;
 use Pterodactyl\Services\Helpers\SoftwareVersionService;
 use Pterodactyl\Repositories\Eloquent\LocationRepository;
 use Pterodactyl\Repositories\Eloquent\AllocationRepository;
+use Illuminate\Support\Facades\DB;
 
 class NodeViewController extends Controller
 {
@@ -74,13 +75,24 @@ class NodeViewController extends Controller
 
         $this->plainInject(['node' => Collection::wrap($node)->only(['id'])]);
 
-        return $this->view->make('admin.nodes.view.allocation', [
-            'node' => $node,
-            'allocations' => Allocation::query()->where('node_id', $node->id)
-                ->groupBy('ip')
-                ->orderByRaw('INET_ATON(ip) ASC')
-                ->get(['ip']),
-        ]);
+        switch (DB::getPdo()->getAttribute(DB::getPdo()::ATTR_DRIVER_NAME)) {
+            case 'mysql':
+                return $this->view->make('admin.nodes.view.allocation', [
+                    'node' => $node,
+                    'allocations' => Allocation::query()->where('node_id', $node->id)
+                        ->groupBy('ip')
+                        ->orderByRaw('INET_ATON(ip) ASC')
+                        ->get(['ip']),
+                ]);
+            case 'pgsql':
+                return $this->view->make('admin.nodes.view.allocation', [
+                    'node' => $node,
+                    'allocations' => Allocation::query()->where('node_id', $node->id)
+                        ->groupBy('ip')
+                        ->orderByRaw('ip::inet ASC')
+                        ->get(['ip']),
+                ]);
+        }
     }
 
     /**
