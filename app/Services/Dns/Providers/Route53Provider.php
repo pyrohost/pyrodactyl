@@ -52,17 +52,19 @@ class Route53Provider implements DnsProviderInterface
     public function createRecord(string $domain, string $name, string $type, $content, int $ttl = 300): string
     {
         $zoneId = $this->getZoneId($domain);
+        $name = explode(".", $name)[0];
 
         try {
-            Log::info('Creating Route53 record\n', [
-                'domain\n' => $domain,
-                'name\n' => $name,
-                'type\n' => $type,
-                'content\n' => $content,
-                'zone_id\n' => $zoneId
-            ]);
+            /* Log::info('Creating Route53 record\n', [ */
+            /*     'domain\n' => $domain, */
+            /*     'name\n' => $name, */
+            /*     'type\n' => $type, */
+            /*     'content\n' => $content, */
+            /*     'zone_id\n' => $zoneId */
+            /* ]); */
 
             if (strtoupper($type) === 'SRV' && is_array($content)) {
+                $name = $name . "." . $content['proto'] . "." . explode(".", $content['name'])[0];
                 $recordValue = sprintf(
                     '%d %d %d %s',
                     $content['priority'] ?? 0,
@@ -94,12 +96,12 @@ class Route53Provider implements DnsProviderInterface
                 ]
             ];
 
-            Log::debug('Route53 API request params', $params);
+            /* Log::debug('Route53 API request params', $params); */
 
             $result = $this->client->changeResourceRecordSets($params);
 
             $changeId = $result->get('ChangeInfo')['Id'];
-            Log::info('Route53 record created successfully', ['change_id' => $changeId]);
+            /* Log::info('Route53 record created successfully', ['change_id' => $changeId]); */
 
             /* return $changeId; */
             return $name . "." . $domain;
@@ -174,7 +176,12 @@ class Route53Provider implements DnsProviderInterface
             return;
         }
 
+
         $rrset = ['Name' => $record['Name'], 'Type' => $record['Type']];
+        if (strtoupper($record['Type']) === 'SRV') {
+            $rrset = ['Name' => $record['Name'], 'Type' => $record['Type']];
+        };
+
 
         if (isset($record['ResourceRecords'])) {
             $rrset['TTL'] = $record['TTL'];
@@ -195,7 +202,7 @@ class Route53Provider implements DnsProviderInterface
             ],
         ]);
 
-        Log::info("Successfully deleted DNS record: {$recordName}");
+        /* Log::info("Successfully deleted DNS record: {$recordName}"); */
     }
 
 
