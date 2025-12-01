@@ -28,7 +28,6 @@ fi
 rm -f /app/.env
 ln -s /app/var/.env /app/
 
-
 # Use a subshell to avoid polluting the global environment
 (
     # Load in any existing environment variables in the .env file
@@ -56,6 +55,21 @@ ln -s /app/var/.env /app/
     fi
 )
 
+if [ -f /etc/nginx/http.d/panel.conf ]; then
+  nginx -t
+  if [[ $? -ne 0 ]]; then
+    echo "nginx config test failed, regenerating"
+    rm /etc/nginx/http.d/panel.conf
+  fi
+
+  if [[ $LE_EMAIL ]]; then
+    grep "server_name $APP_URL" /etc/nginx/http.d/panel.conf
+    if [[ $? -ne 0 ]]; then
+      echo "APP_URL not found in nginx config, regenerating"
+      rm /etc/nginx/http.d/panel.conf
+    fi
+  fi
+fi
 
 echo "Checking if https is required."
 if [ -f /etc/nginx/http.d/panel.conf ]; then
