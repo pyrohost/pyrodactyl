@@ -4,7 +4,6 @@ cd /app
 mkdir -p /var/log/panel/logs/ /var/log/supervisord/ /var/log/nginx/ /var/log/php7/ \
   && chmod 777 /var/log/panel/logs/ \
   && ln -s /app/storage/logs/ /var/log/panel/
-
 # Ensure proper permissions for Laravel storage directories
 mkdir -p /app/storage/logs /app/storage/framework/cache /app/storage/framework/sessions /app/storage/framework/views \
   && chmod -R 777 /app/storage/ \
@@ -111,37 +110,55 @@ fi
 # Setup development environment if specified
 (
   source /app/.env
+
   if [ "$PYRODACTYL_DOCKER_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
     echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
+    export POSTGRES_PASSWORD=$(grep "POSTGRES_PASSWORD" docker-compose.yml | awk '{print $2}')
+    export POSTGRES_USER=$(grep "POSTGRES_USER" docker-compose.yml | awk '{print $2}')
 
+    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password dev
     # Create a developer user
-    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
-
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"UPDATE users SET root_admin = 1;"
+    fi
     # Make a location and node for the panel
     php artisan p:location:make -n --short local --long Local
-    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --internal-fqdn $WINGS_INTERNAL_IP --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
+    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --internal-fqdn $ELYTRA_INTERNAL_IP --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
 
     echo "Adding dummy allocations..."
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+
+    fi
 
     echo "Creating database user..."
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'somepassword'; GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;"
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'somepassword'; GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"CREATE USER pterodactyluser WITH PASSWORD 'somepassword' SUPERUSER;"
+    fi
 
     # Configure node
-    export WINGS_CONFIG=/etc/pterodactyl/config.yml
-    mkdir -p $(dirname $WINGS_CONFIG)
-    echo "Fetching and modifying Wings configuration file..."
+    export ELYTRA_CONFIG=/etc/pterodactyl/config.yml
+    mkdir -p $(dirname $ELYTRA_CONFIG)
+    echo "Fetching and modifying Elytra configuration file..."
     CONFIG=$(php artisan p:node:configuration 1)
 
     # Allow all origins for CORS
     CONFIG=$(printf "%s\nallowed_origins: ['*']" "$CONFIG")
 
-    # Update Wings configuration paths if WINGS_DIR is set
-    if [ -z "$WINGS_DIR" ]; then
-      echo "WINGS_DIR is not set, using default paths."
+    # Update Elytra configuration paths if ELYTRA_DIR is set
+    if [ -z "$ELYTRA_DIR" ]; then
+      echo "ELYTRA_DIR is not set, using default paths."
     else
-      echo "Updating Wings configuration paths to '$WINGS_DIR'..."
+      echo "Updating ELYTRA configuration paths to '$ELYTRA_DIR'..."
 
       # add system section if it doesn't exist
       if ! echo "$CONFIG" | grep -q "^system:"; then
@@ -160,16 +177,16 @@ fi
         fi
       }
 
-      update_config "root_directory" "$WINGS_DIR/srv/wings/"
-      update_config "log_directory" "$WINGS_DIR/srv/wings/logs/"
-      update_config "data" "$WINGS_DIR/srv/wings/volumes"
-      update_config "archive_directory" "$WINGS_DIR/srv/wings/archives"
-      update_config "backup_directory" "$WINGS_DIR/srv/wings/backups"
-      update_config "tmp_directory" "$WINGS_DIR/srv/wings/tmp/"
+      update_config "root_directory" "$ELYTRA_DIR/srv/elytra/"
+      update_config "log_directory" "$ELYTRA_DIR/srv/elytra/logs/"
+      update_config "data" "$ELYTRA_DIR/srv/elytra/volumes"
+      update_config "archive_directory" "$ELYTRA_DIR/srv/elytra/archives"
+      update_config "backup_directory" "$ELYTRA_DIR/srv/elytra/backups"
+      update_config "tmp_directory" "$ELYTRA_DIR/srv/elytra/tmp/"
     fi
 
-    echo "Saving Wings configuration file to '$WINGS_CONFIG'..."
-    echo "$CONFIG" > $WINGS_CONFIG
+    echo "Saving Elytra configuration file to '$ELYTRA_CONFIG'..."
+    echo "$CONFIG" > $ELYTRA_CONFIG
 
     # Mark setup as complete
     echo "DEV_SETUP=true" >> /app/.env

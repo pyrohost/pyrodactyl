@@ -40,7 +40,7 @@ RUN apk add --no-cache --virtual .build-deps \
 # Runtime packages
 RUN apk add --no-cache \
     ca-certificates curl git supervisor nginx dcron \
-    tar unzip certbot certbot-nginx mysql-client \
+    tar unzip certbot certbot-nginx mysql-client postgresql17-client \
     && ln -s /bin/ash /bin/bash
 
 # Copy frontend build
