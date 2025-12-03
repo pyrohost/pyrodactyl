@@ -88,7 +88,7 @@ const ServerConsoleContainer = () => {
                     <MainPageHeader
                         title={name}
                         headChildren={
-                            <p className='hidden bg-color ms:block md:inline-flex md:block absolute left-0 mb-4 mt-8 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-al283824000000l duration-150 shadow-sm '>
+                            <p className='hidden bg-color ms:block ms:inline-flex md:inline-flex md:block absolute left-0 mb-4 mt-8 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-al283824000000l duration-150 shadow-sm '>
                                 Uptime: {UptimeDuration(uptime)}
                             </p>
                         }
@@ -111,7 +111,7 @@ const ServerConsoleContainer = () => {
                 </div>
                 {description && (
                     <div
-                        className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                        className='transform-gpu skeleton-anim-2 mb-3 mt-3 sm:mb-4'
                         style={{
                             animationDelay: '100ms',
                             animationTimingFunction:
