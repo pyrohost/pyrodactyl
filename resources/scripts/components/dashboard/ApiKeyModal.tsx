@@ -2,10 +2,11 @@ import ModalContext from '@/context/ModalContext';
 import { useContext } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import Button from '@/components/elements/Button';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 
 import asModal from '@/hoc/asModal';
+
+import ActionButton from '../elements/ActionButton';
 
 interface Props {
     apiKey: string;
@@ -39,13 +40,9 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 
             {/* Action Buttons */}
             <div className='flex justify-end space-x-4'>
-                <Button
-                    type='button'
-                    onClick={() => dismiss()}
-                    className='bg-red-600 text-white hover:bg-red-700 px-6 py-2 rounded-md focus:outline-hidden focus:ring-2 focus:ring-gray-500 cursor-pointer'
-                >
+                <ActionButton type='button' onClick={() => dismiss()} variant='danger' className='flex items-center'>
                     Close
-                </Button>
+                </ActionButton>
             </div>
         </div>
     );
