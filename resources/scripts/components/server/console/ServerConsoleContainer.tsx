@@ -1,201 +1,81 @@
-import { memo, useEffect, useState } from 'react';
+import { useHeader } from '@/contexts/HeaderContext';
+import { memo, useEffect, useMemo } from 'react';
 import isEqual from 'react-fast-compare';
 
+import HeaderCentered from '@/components/dashboard/header/HeaderCentered';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import PageContentBlock from '@/components/elements/PageContentBlock';
 // import Can from '@/components/elements/Can';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import Console from '@/components/server/console/Console';
 import PowerButtons from '@/components/server/console/PowerButtons';
-import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import StatGraphs from '@/components/server/console/StatGraphs';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
-import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
 import { ServerContext } from '@/state/server';
 
-import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-
 import Features from '@feature/Features';
 
-import UptimeDuration from '../UptimeDuration';
+import ServerDetailsHeader from './ServerDetailsHeader';
+import { StatusPillHeader } from './StatusPillHeader';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
-type UptimeStat = Record<'uptime', number>;
 
 const ServerConsoleContainer = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
-    const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
-    const connected = ServerContext.useStoreState((state) => state.socket.connected);
-    const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
-    const [uptime, setUptime] = useState<UptimeStat>({ uptime: 0 });
+    const { setHeaderActions, clearHeaderActions } = useHeader();
+
+    const statusSection = useMemo(
+        () => (
+            <HeaderCentered className='flex items-center gap-6'>
+                <div className='flex items-center gap-3'>
+                    <StatusPillHeader />
+                    <span className='xl:max-w-[20vw] min-w-0 truncate'>{name}</span>
+                </div>
+                <div className='border-l border-gray-200 h-6' />
+                <ServerDetailsHeader />
+            </HeaderCentered>
+        ),
+        [name],
+    );
+
+    const buttonsSection = useMemo(() => <PowerButtons className='flex gap-2 items-center justify-center' />, []);
 
     useEffect(() => {
-        if (!connected || !instance) {
-            return;
-        }
-
-        instance.send(SocketRequest.SEND_STATS);
-    }, [instance, connected]);
-
-    useWebsocketEvent(SocketEvent.STATS, (data) => {
-        let stats: any = {};
-        try {
-            stats = JSON.parse(data);
-        } catch (e) {
-            return;
-        }
-        setUptime({
-            uptime: stats.uptime || 0,
-        });
-    });
+        setHeaderActions([statusSection, buttonsSection]);
+        return () => clearHeaderActions();
+    }, [setHeaderActions, clearHeaderActions, statusSection, buttonsSection]);
 
     return (
-        <ServerContentBlock title={'Home'}>
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+        <PageContentBlock title={'Console'} background={false} className='overflow-y-visible'>
+            <div className='w-full h-full flex gap-4'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
-                    <div
-                        className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
-                        style={{
-                            animationDelay: '50ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <Alert type={'warning'}>
-                            {isNodeUnderMaintenance
-                                ? 'The node of this server is currently under maintenance and all actions are unavailable.'
-                                : isInstalling
-                                    ? 'This server is currently running its installation process and most actions are unavailable.'
-                                    : 'This server is currently being transferred to another node and all actions are unavailable.'}
-                        </Alert>
-                    </div>
+                    <Alert type={'warning'} className={'mb-4'}>
+                        {isNodeUnderMaintenance
+                            ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                            : isInstalling
+                                ? 'This server is currently running its installation process and most actions are unavailable.'
+                                : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                    </Alert>
                 )}
-                <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
-                    style={{
-                        animationDelay: '75ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <MainPageHeader
-                        title={name}
-                        headChildren={
-                            <p className='hidden bg-color ms:block ms:inline-flex md:inline-flex md:block absolute left-0 mb-4 mt-8 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-al283824000000l duration-150 shadow-sm '>
-                                Uptime: {UptimeDuration(uptime)}
-                            </p>
-                        }
-                        titleChildren={
-                            <div
-                                className='transform-gpu skeleton-anim-2'
-                                style={{
-                                    animationDelay: '100ms',
-                                    animationTimingFunction:
-                                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                                }}
-                            >
-                                <p className='inline-flex relative max-w-50 min-w-35 block ms:hidden md:hidden justify-left left-0 mb-4 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all duration-150 shadow-sm '>
-                                    Uptime: {UptimeDuration(uptime)}
-                                </p>
-                                <PowerButtons className='flex gap-1 items-center justify-center' />
-                            </div>
-                        }
-                    />
-                </div>
-                {description && (
-                    <div
-                        className='transform-gpu skeleton-anim-2 mb-3 mt-3 sm:mb-4'
-                        style={{
-                            animationDelay: '100ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                            <p className='text-sm text-zinc-300 leading-relaxed'>{description}</p>
-                        </div>
-                    </div>
-                )}
-                <div className='flex flex-col gap-3 sm:gap-4'>
-                    <div
-                        className='transform-gpu skeleton-anim-2'
-                        style={{
-                            animationDelay: '125ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                            <ServerDetailsBlock />
-                        </div>
-                    </div>
-
-                    {/* Crash Analysis Card - only shows if mclogs feature is enabled */}
-                    {eggFeatures.map((v) => v.toLowerCase()).includes('mclogs') && (
-                        <div
-                            className='transform-gpu skeleton-anim-2'
-                            style={{
-                                animationDelay: '150ms',
-                                animationTimingFunction:
-                                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                            }}
-                        >
-                            <CrashAnalysisCard />
-                        </div>
-                    )}
-
-                    <div
-                        className='transform-gpu skeleton-anim-2'
-                        style={{
-                            animationDelay: '175ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                            <Console />
-                        </div>
-                    </div>
-
-                    <div
-                        className='transform-gpu skeleton-anim-2'
-                        style={{
-                            animationDelay: '225ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                            <div className={'grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4'}>
-                                <Spinner.Suspense>
-                                    <StatGraphs />
-                                </Spinner.Suspense>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        className='transform-gpu skeleton-anim-2'
-                        style={{
-                            animationDelay: '275ms',
-                            animationTimingFunction:
-                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                        }}
-                    >
-                        <ErrorBoundary>
-                            <Features enabled={eggFeatures} />
-                        </ErrorBoundary>
+                <Console />
+                <div className='relative w-(--sidebar-full-width) overflow-y-auto overflow-x-visible flex-none -mb-(--main-wrapper-spacing) pb-(--main-wrapper-spacing)'>
+                    <div className='flex flex-col gap-4'>
+                        <Spinner.Suspense>
+                            <StatGraphs />
+                        </Spinner.Suspense>
                     </div>
                 </div>
+
+                <ErrorBoundary>
+                    <Features enabled={eggFeatures} />
+                </ErrorBoundary>
             </div>
-        </ServerContentBlock>
+        </PageContentBlock>
     );
 };
 

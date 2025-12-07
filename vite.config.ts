@@ -129,9 +129,8 @@ export default defineConfig({
         warmup: {
             clientFiles: [
                 'resources/scripts/index.tsx',
-                'resources/scripts/routers/DashboardRouter.tsx',
+                'resources/scripts/routers/UnifiedRouter.tsx',
                 'resources/scripts/components/dashboard/DashboardContainer.tsx',
-                'resources/scripts/routers/ServerRouter.tsx',
             ],
         },
     },

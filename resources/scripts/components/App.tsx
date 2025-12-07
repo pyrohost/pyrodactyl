@@ -20,8 +20,9 @@ import { SiteSettings } from '@/state/settings';
 
 import PyrodactylProvider from './PyrodactylProvider';
 
-const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
-const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
+// const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
+// const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
+const UnifiedRouter = lazy(() => import('@/routers/UnifiedRouter'));
 const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 
 interface ExtendedWindow extends Window {
@@ -88,28 +89,28 @@ const App = () => {
                                 />
 
                                 <Route
-                                    path='/server/:id/*'
+                                    path='/*'
                                     element={
                                         <AuthenticatedRoute>
                                             <Spinner.Suspense>
                                                 <ServerContext.Provider>
-                                                    <ServerRouter />
+                                                    <UnifiedRouter />
                                                 </ServerContext.Provider>
                                             </Spinner.Suspense>
                                         </AuthenticatedRoute>
                                     }
                                 />
 
-                                <Route
-                                    path='/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <DashboardRouter />
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
+                                {/* <Route */}
+                                {/*     path='/*' */}
+                                {/*     element={ */}
+                                {/*         <AuthenticatedRoute> */}
+                                {/*             <Spinner.Suspense> */}
+                                {/*                 <DashboardRouter /> */}
+                                {/*             </Spinner.Suspense> */}
+                                {/*         </AuthenticatedRoute> */}
+                                {/*     } */}
+                                {/* /> */}
 
                                 <Route path='*' element={<NotFound />} />
                             </Routes>
