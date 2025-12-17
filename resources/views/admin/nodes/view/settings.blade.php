@@ -234,7 +234,7 @@
           <span class="input-group-addon">MiB</span>
         </div>
         <p class="text-muted"><small>Enter the maximum size of files that can be uploaded through the web-based file (1-1024)
-          manager.</small></p>
+          manager. Cloudflare only supports 100mib on free plan if behind cloudflare tunnels</small></p>
         </div>
         <div class="col-xs-12">
         <div class="row">
