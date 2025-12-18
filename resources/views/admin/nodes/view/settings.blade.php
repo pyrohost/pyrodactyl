@@ -233,8 +233,8 @@
           value="{{ old('upload_size', $node->upload_size) }}" />
           <span class="input-group-addon">MiB</span>
         </div>
-        <p class="text-muted"><small>Enter the maximum size of files that can be uploaded through the web-based file
-          manager.</small></p>
+        <p class="text-muted"><small>Enter the maximum size of files that can be uploaded through the web-based file (1-1024)
+          manager. Cloudflare only supports 100mib on free plan if behind cloudflare tunnels</small></p>
         </div>
         <div class="col-xs-12">
         <div class="row">
