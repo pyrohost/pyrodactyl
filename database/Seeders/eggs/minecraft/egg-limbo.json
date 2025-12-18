@@ -17,7 +17,8 @@
         "subdomain_minecraft"
     ],
   "docker_images": {
-    "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17"
+    "Java 25": "ghcr.io/itzg/minecraft-server:java25-graalvm",
+    "Java 17": "ghcr.io/pterodactyl/yolks:java_17"
   },
   "file_denylist": [],
   "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
