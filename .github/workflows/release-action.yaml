@@ -23,12 +23,6 @@ jobs:
         with:
           ref: main
 
-      - name: Create release branch
-        run: |
-          git config user.name "github-actions[ci]"
-          git config user.email "ci@pyrodactyl.dev"
-          git checkout -B releases/v${{ inputs.version }}
-
       - name: Update version in config/app.php
         run: |
           sed -i "s/'version' => '[^']*'/'version' => 'v${{ inputs.version }}'/" config/app.php
@@ -38,8 +32,6 @@ jobs:
           git add config/app.php
           git commit -m "ci: bump v${{ inputs.version }}" || echo "No changes to commit"
 
-      - name: Push release branch
-        run: git push origin releases/v${{ inputs.version }}
 
       # ---- Build tarball -------------------------------------------------
       - name: Create release archive
@@ -69,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}
-          target_commitish: releases/v${{ inputs.version }}
+          target_commitish: main
           name: Release v${{ inputs.version }}
           generate_release_notes: true
           draft: true
