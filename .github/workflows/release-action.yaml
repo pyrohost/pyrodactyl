@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Create release branch
         run: |
@@ -58,7 +58,7 @@ jobs:
 
       # ---- GitHub Release ------------------------------------------------
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2   # v2 is the current stable
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}
           target_commitish: releases/v${{ inputs.version }}
