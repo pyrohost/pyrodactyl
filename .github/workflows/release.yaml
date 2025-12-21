@@ -11,7 +11,7 @@ on:
         required: true
         type: choice
         options:
-          - stable
+          - release
           - prerelease
         default: stable
 
