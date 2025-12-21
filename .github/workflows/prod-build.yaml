@@ -1,9 +1,8 @@
 name: Build & Push Version (reusable)
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [published]
 
 permissions:
   packages: write
