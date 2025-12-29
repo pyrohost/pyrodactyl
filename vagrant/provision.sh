@@ -291,7 +291,7 @@ log Installing rustic for Elytra backups
 if [ ! -f /usr/local/bin/rustic ]; then
   apt-get install -y libfuse2
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=x86_64 || ARCH=aarch64
-  curl -fsSL -o /tmp/rustic.tar.gz "https://github.com/rustic-rs/rustic/releases/latest/download/rustic-v0.10.0-${ARCH}-unknown-linux-musl.tar.gz"
+  curl -fsSL -o /tmp/rustic.tar.gz "https://github.com/rustic-rs/rustic/releases/download/v0.10.0/rustic-v0.10.0-${ARCH}-unknown-linux-musl.tar.gz"
   tar -xf /tmp/rustic.tar.gz -C /tmp rustic
   mv /tmp/rustic /usr/local/bin/
   chmod +x /usr/local/bin/rustic

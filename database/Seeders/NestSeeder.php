@@ -44,6 +44,7 @@ class NestSeeder extends Seeder
         $this->createSourceEngineNest(array_get($items, 'Source Engine'));
         $this->createVoiceServersNest(array_get($items, 'Voice Servers'));
         $this->createRustNest(array_get($items, 'Rust'));
+        $this->createVintageStoryNest(array_get($items, 'Vintage Story'));
     }
 
     /**
@@ -105,4 +106,20 @@ class NestSeeder extends Seeder
             ], 'support@pterodactyl.io');
         }
     }
+
+     /**
+     * Create the Vintage Story nest to be used later on.
+     *
+     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+     */
+    private function createVintageStoryNest(?array $nest = null)
+    {
+        if (is_null($nest)) {
+            $this->creationService->handle([
+                'name' => 'Vintage Story',
+                'description' => 'Vintage Story - An uncompromising wilderness survival sandbox game.',
+            ], 'support@pterodactyl.io');
+        }
+    }
+
 }
