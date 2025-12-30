@@ -306,9 +306,10 @@ install -d -m 0755 /etc/pterodactyl
 install -d -m 0755 /etc/elytra
 if [ ! -f /usr/local/bin/elytra ]; then
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=amd64 || ARCH=arm64
-  # TODO: CHANGE THIS BACK TO https://github.com/pyrohost/elytra WHEN YOU MERGE https://github.com/BoredHF/elytra (which is where I built the binary from)
-  # THIS IS A TEMPORARY FIX FOR THE BINARY. REMOVE THIS ONCE IT IS NO LONGER NEEDED. - Tyr
-  curl -fsSL -o /usr/local/bin/elytra "https://github.com/Tyrthurey/elytra/releases/latest/download/elytra_linux_${ARCH}"
+  # TODO: MAKE SURE TO MERGE https://github.com/BoredHF/elytra IT HAS THE FIXES FOR THE ELYTRA BINARY.
+  # Without it, the elytra binary won't work properly. You would need to jump through a few hoops
+  # post install by creating a pterodactyl user using "sudo useradd -M -s /sbin/nologin pyrodactyl" - Tyr
+  curl -fsSL -o /usr/local/bin/elytra "https://github.com/pyrohost/elytra/releases/latest/download/elytra_linux_${ARCH}"
   chmod u+x /usr/local/bin/elytra
 else
   log "Elytra already installed, skipping download"
@@ -362,13 +363,13 @@ if ! command -v minio >/dev/null 2>&1; then
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=amd64 || ARCH=arm64
   curl -fsSL -o /usr/local/bin/minio "https://dl.min.io/server/minio/release/linux-${ARCH}/minio"
   chmod +x /usr/local/bin/minio
-  
+
   # Create minio user and directories
   useradd -r minio-user || true
   mkdir -p /opt/minio/data
   mkdir -p /etc/minio
   chown minio-user:minio-user /opt/minio/data
-  
+
   # Create MinIO environment file
   cat >/etc/minio/minio.conf <<EOF
 MINIO_ROOT_USER=minioadmin
@@ -376,7 +377,7 @@ MINIO_ROOT_PASSWORD=minioadmin
 MINIO_VOLUMES=/opt/minio/data
 MINIO_OPTS="--console-address :9001"
 EOF
-  
+
   # Create systemd service
   cat >/etc/systemd/system/minio.service <<EOF
 [Unit]
@@ -413,23 +414,23 @@ SendSIGKILL=no
 [Install]
 WantedBy=multi-user.target
 EOF
-  
+
   systemctl daemon-reload
   systemctl enable --now minio
-  
+
   # Wait for MinIO to start
   sleep 5
-  
+
   # Create default buckets using mc (MinIO Client)
   curl -fsSL -o /usr/local/bin/mc "https://dl.min.io/client/mc/release/linux-${ARCH}/mc"
   chmod +x /usr/local/bin/mc
-  
+
   # Configure mc alias and create buckets
   sudo -u vagrant -H bash -c '
     /usr/local/bin/mc alias set local http://localhost:9000 minioadmin minioadmin
     /usr/local/bin/mc mb local/pterodactyl-backups --ignore-existing
   ' || true
-  
+
   # Configure MinIO in .env for rustic_s3 backups
   pushd /home/vagrant/pyrodactyl >/dev/null
 
@@ -492,7 +493,7 @@ EOF
     fi
   fi
   popd >/dev/null
-  
+
 log Installing phpMyAdmin
 export DEBIAN_FRONTEND=noninteractive
 echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections
@@ -562,10 +563,10 @@ if ! command -v mailpit >/dev/null 2>&1; then
   mv /tmp/mailpit /usr/local/bin/
   chmod +x /usr/local/bin/mailpit
   rm -f /tmp/mailpit.tar.gz
-  
+
   # Create mailpit user
   useradd -r mailpit-user || true
-  
+
   # Create systemd service
   cat >/etc/systemd/system/mailpit.service <<EOF
 [Unit]
@@ -582,10 +583,10 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
-  
+
   systemctl daemon-reload
   systemctl enable --now mailpit
-  
+
   # Configure Mailpit in .env for mail testing
   pushd /home/vagrant/pyrodactyl >/dev/null
   if [ -f .env ]; then
@@ -595,37 +596,37 @@ EOF
     else
       echo 'MAIL_MAILER=smtp' >> .env
     fi
-    
+
     if grep -q "^MAIL_HOST=" .env; then
       sed -i '/^MAIL_HOST=/c\MAIL_HOST=localhost' .env
     else
       echo 'MAIL_HOST=localhost' >> .env
     fi
-    
+
     if grep -q "^MAIL_PORT=" .env; then
       sed -i '/^MAIL_PORT=/c\MAIL_PORT=1025' .env
     else
       echo 'MAIL_PORT=1025' >> .env
     fi
-    
+
     if grep -q "^MAIL_USERNAME=" .env; then
       sed -i '/^MAIL_USERNAME=/c\MAIL_USERNAME=' .env
     else
       echo 'MAIL_USERNAME=' >> .env
     fi
-    
+
     if grep -q "^MAIL_PASSWORD=" .env; then
       sed -i '/^MAIL_PASSWORD=/c\MAIL_PASSWORD=' .env
     else
       echo 'MAIL_PASSWORD=' >> .env
     fi
-    
+
     if grep -q "^MAIL_ENCRYPTION=" .env; then
       sed -i '/^MAIL_ENCRYPTION=/c\MAIL_ENCRYPTION=' .env
     else
       echo 'MAIL_ENCRYPTION=' >> .env
     fi
-    
+
     if grep -q "^MAIL_FROM_ADDRESS=" .env; then
       sed -i '/^MAIL_FROM_ADDRESS=/c\MAIL_FROM_ADDRESS=no-reply@localhost' .env
     else
@@ -633,7 +634,7 @@ EOF
     fi
   fi
   popd >/dev/null
-  
+
   log "Mailpit installed and configured successfully"
   log "Mailpit Web UI: http://localhost:8025"
 else
@@ -676,7 +677,7 @@ if [ -n "${API_KEY:-}" ]; then
   log Creating Minecraft server
   # Get the first allocation ID for this node
   ALLOCATION_ID=$(mysql -u root -D panel -N -B -e "SELECT id FROM allocations WHERE node_id=$NODE_ID LIMIT 1;" 2>/dev/null || echo "")
-  
+
   if [ -z "$ALLOCATION_ID" ]; then
     warn "No allocations found for node $NODE_ID, skipping server creation"
   else
@@ -721,7 +722,7 @@ if [ -n "${API_KEY:-}" ]; then
     "oom_disabled": false
 }
 EOF
-    
+
     # Check if a Minecraft server already exists using Laravel
     pushd /home/vagrant/pyrodactyl >/dev/null
     EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.4 artisan tinker --execute="
