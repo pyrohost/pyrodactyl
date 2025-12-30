@@ -1,6 +1,7 @@
 import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
 import { Link, TriangleExclamation } from '@gravity-ui/icons';
+import { toString } from 'cronstrue';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -101,6 +102,35 @@ const formatTimezoneDisplay = (timezone: string, offset: string) => {
     return `${timezone} (${offset})`;
 };
 
+const getCronDescription = (
+    minute: string,
+    hour: string,
+    dayOfMonth: string,
+    month: string,
+    dayOfWeek: string,
+): string => {
+    try {
+        // Build cron expression: minute hour dayOfMonth month dayOfWeek
+        const cronExpression = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+        const description = toString(cronExpression, {
+            throwExceptionOnParseError: false,
+            verbose: true,
+        });
+
+        // Check if cronstrue returned an error message
+        if (
+            description ===
+            'An error occurred when generating the expression description. Check the cron expression syntax.'
+        ) {
+            return 'Invalid cron expression';
+        }
+
+        return description;
+    } catch {
+        return 'Invalid cron expression.';
+    }
+};
+
 const EditScheduleModal = ({ schedule }: Props) => {
     const { addError, clearFlashes } = useFlash();
     const { dismiss, setPropOverrides } = useContext(ModalContext);
@@ -167,116 +197,130 @@ const EditScheduleModal = ({ schedule }: Props) => {
                 } as Values
             }
         >
-            {({ isSubmitting }) => (
-                <Form>
-                    <FlashMessageRender byKey={'schedule:edit'} />
-                    <Field
-                        name={'name'}
-                        label={'Schedule name'}
-                        description={'A human readable identifier for this schedule.'}
-                    />
-                    <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
-                        <Field name={'minute'} label={'Minute'} />
-                        <Field name={'hour'} label={'Hour'} />
-                        <Field name={'dayOfWeek'} label={'Day of week'} />
-                        <Field name={'dayOfMonth'} label={'Day of month'} />
-                        <Field name={'month'} label={'Month'} />
-                    </div>
+            {({ isSubmitting, values }) => {
+                const cronDescription = getCronDescription(
+                    values.minute,
+                    values.hour,
+                    values.dayOfMonth,
+                    values.month,
+                    values.dayOfWeek,
+                );
 
-                    <p className={`text-zinc-400 text-xs mt-2`}>
-                        The schedule system uses Cronjob syntax when defining when tasks should begin running. Use the
-                        fields above to specify when these tasks should begin running.
-                    </p>
+                return (
+                    <Form>
+                        <FlashMessageRender byKey={'schedule:edit'} />
+                        <Field
+                            name={'name'}
+                            label={'Schedule name'}
+                            description={'A human readable identifier for this schedule.'}
+                        />
+                        <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
+                            <Field name={'minute'} label={'Minute'} />
+                            <Field name={'hour'} label={'Hour'} />
+                            <Field name={'dayOfWeek'} label={'Day of week'} />
+                            <Field name={'dayOfMonth'} label={'Day of month'} />
+                            <Field name={'month'} label={'Month'} />
+                        </div>
 
-                    {timezoneInfo.isDifferent && (
-                        <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
-                            <div className={'flex items-start gap-3'}>
-                                <TriangleExclamation
-                                    width={22}
-                                    height={22}
-                                    fill='currentColor'
-                                    className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
-                                />
-                                <div className={'text-sm'}>
-                                    <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
-                                    <p className={'text-blue-200/80 text-xs mb-2'}>
-                                        Times shown here are configured for the server timezone.
-                                        {timezoneInfo.difference !== 'same time' && (
-                                            <span className={'text-blue-100 font-medium'}>
-                                                {' '}
-                                                The server is {timezoneInfo.difference} your timezone.
-                                            </span>
-                                        )}
-                                    </p>
-                                    <div className={'mt-2 text-xs space-y-1'}>
-                                        <div className={'text-blue-200/60'}>
-                                            Your timezone:
-                                            <span className={'font-mono'}>
-                                                {' '}
-                                                {formatTimezoneDisplay(
-                                                    timezoneInfo.user.timezone,
-                                                    timezoneInfo.user.offset,
-                                                )}
-                                            </span>
-                                        </div>
-                                        <div className={'text-blue-200/60'}>
-                                            Server timezone:
-                                            <span className={'font-mono'}>
-                                                {' '}
-                                                {formatTimezoneDisplay(
-                                                    timezoneInfo.server.timezone,
-                                                    timezoneInfo.server.offset,
-                                                )}
-                                            </span>
+                        <div className={`mt-3 p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50`}>
+                            <p className={`text-sm text-zinc-200 font-medium`}>{cronDescription}</p>
+                        </div>
+
+                        <p className={`text-zinc-400 text-xs mt-2`}>
+                            The schedule system uses Cronjob syntax when defining when tasks should begin running. Use
+                            the fields above to specify when these tasks should begin running.
+                        </p>
+
+                        {timezoneInfo.isDifferent && (
+                            <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
+                                <div className={'flex items-start gap-3'}>
+                                    <TriangleExclamation
+                                        width={22}
+                                        height={22}
+                                        fill='currentColor'
+                                        className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
+                                    />
+                                    <div className={'text-sm'}>
+                                        <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
+                                        <p className={'text-blue-200/80 text-xs mb-2'}>
+                                            Times shown here are configured for the server timezone.
+                                            {timezoneInfo.difference !== 'same time' && (
+                                                <span className={'text-blue-100 font-medium'}>
+                                                    {' '}
+                                                    The server is {timezoneInfo.difference} your timezone.
+                                                </span>
+                                            )}
+                                        </p>
+                                        <div className={'mt-2 text-xs space-y-1'}>
+                                            <div className={'text-blue-200/60'}>
+                                                Your timezone:
+                                                <span className={'font-mono'}>
+                                                    {' '}
+                                                    {formatTimezoneDisplay(
+                                                        timezoneInfo.user.timezone,
+                                                        timezoneInfo.user.offset,
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className={'text-blue-200/60'}>
+                                                Server timezone:
+                                                <span className={'font-mono'}>
+                                                    {' '}
+                                                    {formatTimezoneDisplay(
+                                                        timezoneInfo.server.timezone,
+                                                        timezoneInfo.server.offset,
+                                                    )}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    <div className='gap-3 my-6 flex flex-col'>
-                        <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
-                            <ItemContainer
-                                description={'Online editor for cron schedule experessions.'}
-                                title={'Crontab Guru'}
-                                // defaultChecked={showCheatsheet}
-                                // onChange={() => setShowCheetsheet((s) => !s)}
-                                labelClasses='cursor-pointer'
-                            >
-                                <Link width={22} height={22} fill='currentColor' className={`px-5 h-5 w-5`} />
-                            </ItemContainer>
-                        </a>
-                        {/* This table would be pretty awkward to make look nice
+                        <div className='gap-3 my-6 flex flex-col'>
+                            <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
+                                <ItemContainer
+                                    description={'Online editor for cron schedule experessions.'}
+                                    title={'Crontab Guru'}
+                                    // defaultChecked={showCheatsheet}
+                                    // onChange={() => setShowCheetsheet((s) => !s)}
+                                    labelClasses='cursor-pointer'
+                                >
+                                    <Link width={22} height={22} fill='currentColor' className={`px-5 h-5 w-5`} />
+                                </ItemContainer>
+                            </a>
+                            {/* This table would be pretty awkward to make look nice
                             Maybe there could be an element for a dropdown later? */}
-                        {/* {showCheatsheet && (
+                            {/* {showCheatsheet && (
                             <div className={`block md:flex w-full`}>
                                 <ScheduleCheatsheetCards />
                             </div>
                         )} */}
-                        <FormikSwitchV2
-                            name={'onlyWhenOnline'}
-                            description={'Only execute this schedule when the server is running.'}
-                            label={'Only When Server Is Online'}
-                        />
-                        <FormikSwitchV2
-                            name={'enabled'}
-                            description={'This schedule will be executed automatically if enabled.'}
-                            label={'Schedule Enabled'}
-                        />
-                    </div>
-                    <div className={`mb-6 text-right`}>
-                        <ActionButton
-                            variant='primary'
-                            className={'w-full sm:w-auto'}
-                            type={'submit'}
-                            disabled={isSubmitting}
-                        >
-                            {schedule ? 'Save changes' : 'Create schedule'}
-                        </ActionButton>
-                    </div>
-                </Form>
-            )}
+                            <FormikSwitchV2
+                                name={'onlyWhenOnline'}
+                                description={'Only execute this schedule when the server is running.'}
+                                label={'Only When Server Is Online'}
+                            />
+                            <FormikSwitchV2
+                                name={'enabled'}
+                                description={'This schedule will be executed automatically if enabled.'}
+                                label={'Schedule Enabled'}
+                            />
+                        </div>
+                        <div className={`mb-6 text-right`}>
+                            <ActionButton
+                                variant='primary'
+                                className={'w-full sm:w-auto'}
+                                type={'submit'}
+                                disabled={isSubmitting}
+                            >
+                                {schedule ? 'Save changes' : 'Create schedule'}
+                            </ActionButton>
+                        </div>
+                    </Form>
+                );
+            }}
         </Formik>
     );
 };
