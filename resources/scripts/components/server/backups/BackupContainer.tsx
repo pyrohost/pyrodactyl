@@ -1,7 +1,7 @@
 import { ArrowDownToLine } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, Field as FormikField, FormikHelpers, useFormikContext } from 'formik';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, lazy, useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { boolean, object, string } from 'yup';
 
@@ -22,6 +22,8 @@ import { PageListContainer } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
 import { httpErrorToHuman } from '@/api/http';
+import deleteAllServerBackups from '@/api/server/backups/deleteAllServerBackups';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -31,8 +33,11 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
-import BackupItem from './BackupItem';
 import { useUnifiedBackups } from './useUnifiedBackups';
+
+const BackupItemElytra = lazy(() => import('./elytra/BackupItem'));
+const BackupItemWings = lazy(() => import('./wings/BackupItem'));
+
 
 // Context to share live backup progress across components
 export const LiveProgressContext = createContext<
@@ -135,6 +140,7 @@ const BackupContainer = () => {
     const [isBulkDeleting, setIsBulkDeleting] = useState(false);
     const [bulkDeletePassword, setBulkDeletePassword] = useState('');
     const [bulkDeleteTotpCode, setBulkDeleteTotpCode] = useState('');
+    const daemonType = getGlobalDaemonType();
 
     const hasTwoFactor = useStoreState((state: ApplicationStore) => state.user.data?.useTotp || false);
 
@@ -181,14 +187,7 @@ const BackupContainer = () => {
         setIsDeleting(true);
 
         try {
-            const http = (await import('@/api/http')).default;
-            await http.delete(`/api/client/servers/${uuid}/backups/delete-all`, {
-                data: {
-                    password: deleteAllPassword,
-                    ...(hasTwoFactor ? { totp_code: deleteAllTotpCode } : {}),
-                },
-            });
-
+            await deleteAllServerBackups(uuid, deleteAllPassword, hasTwoFactor, deleteAllTotpCode);
             toast.success('All backups and repositories are being deleted. This may take a few minutes.');
 
             setDeleteAllModalVisible(false);
@@ -286,7 +285,6 @@ const BackupContainer = () => {
             clearFlashes('backups');
             return;
         }
-
         clearAndAddHttpError({ error, key: 'backups' });
     }, [error]);
 
@@ -707,16 +705,20 @@ const BackupContainer = () => {
                     )}
 
                     <PageListContainer>
-                        {backups.map((backup) => (
-                            <BackupItem
-                                key={backup.uuid}
-                                backup={backup}
-                                isSelected={selectedBackups.has(backup.uuid)}
-                                onToggleSelect={() => toggleBackupSelection(backup.uuid)}
-                                isSelectable={selectableBackups.some((b) => b.uuid === backup.uuid)}
-                                retryBackup={retryBackup}
-                            />
-                        ))}
+                        {backups.map((backup) =>
+                            daemonType === 'elytra' ? (
+                                <BackupItemElytra
+                                    key={backup.uuid}
+                                    backup={backup}
+                                    isSelected={selectedBackups.has(backup.uuid)}
+                                    onToggleSelect={() => toggleBackupSelection(backup.uuid)}
+                                    isSelectable={selectableBackups.some((b) => b.uuid === backup.uuid)}
+                                    retryBackup={retryBackup}
+                                />
+                            ) : (
+                                <BackupItemWings key={backup.uuid} backup={backup} />
+                            ),
+                        )}
                     </PageListContainer>
 
                     {pagination && pagination.currentPage && pagination.totalPages && pagination.totalPages > 1 && (

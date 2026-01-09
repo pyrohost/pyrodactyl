@@ -11,7 +11,7 @@ import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/ser
 // than the more faded default style.
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
-const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>`
+const StatusIndicatorBox = styled.div<{ $status: ServerPowerState }>`
     background: #ffffff11;
     border: 1px solid #ffffff12;
     transition: all 250ms ease-in-out;
@@ -39,19 +39,30 @@ const StatusIndicatorBox = styled.div<{ $status: ServerPowerState | undefined }>
         border-radius: 9999px;
         transition: all 250ms ease-in-out;
 
-        box-shadow: ${({ $status }) =>
-            !$status || $status === 'offline'
-                ? '0 0 12px 1px #C74343'
-                : $status === 'running'
-                  ? '0 0 12px 1px #43C760'
-                  : '0 0 12px 1px #c7aa43'};
+    box-shadow: ${({ $status }) => {
+        console.log($status);
+        if (!$status || $status === 'offline') {
+            return '0 0 12px 1px #C74343';
+        } else if ($status === 'running') {
+            return '0 0 12px 1px #43C760';
+        } else if ($status === 'installing') {
+            return '0 0 12px 1px #4381c7'; // Blue color for installing
+        } else {
+            return '0 0 12px 1px #c7aa43'; // Default for other statuses
+        }
+    }};
 
-        background: ${({ $status }) =>
-            !$status || $status === 'offline'
-                ? `linear-gradient(180deg, #C74343 0%, #C74343 100%)`
-                : $status === 'running'
-                  ? `linear-gradient(180deg, #91FFA9 0%, #43C760 100%)`
-                  : `linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)`};
+    background: ${({ $status }) => {
+        if (!$status || $status === 'offline') {
+            return 'linear-gradient(180deg, #C74343 0%, #C74343 100%)';
+        } else if ($status === 'running') {
+            return 'linear-gradient(180deg, #91FFA9 0%, #43C760 100%)';
+        } else if ($status === 'installing') {
+            return 'linear-gradient(180deg, #91c7ff 0%, #4381c7 100%)';
+        } else {
+            return 'linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)'; // Default for other statuses
+        }
+    }}
     }
 `;
 
@@ -60,6 +71,7 @@ type Timer = ReturnType<typeof setInterval>;
 const ServerRow = ({ server, className }: { server: Server; className?: string }) => {
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
+    const [isInstalling, setIsInstalling] = useState(server.status === 'installing');
     const [stats, setStats] = useState<ServerStats | null>(null);
 
     const getStats = () =>
@@ -70,6 +82,10 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     useEffect(() => {
         setIsSuspended(stats?.isSuspended || server.status === 'suspended');
     }, [stats?.isSuspended, server.status]);
+
+    useEffect(() => {
+        setIsInstalling(stats?.isInstalling || server.status === 'installing');
+    }, [stats?.isInstalling, server.status]);
 
     useEffect(() => {
         // Don't waste a HTTP request if there is nothing important to show to the user because
@@ -99,9 +115,6 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     return (
         <StatusIndicatorBox as={Link} to={`/server/${server.id}`} className={className} $status={stats?.status}>
             <div className={`flex items-center`}>
-                {/* <div className={'icon mr-4'}>
-                    <FontAwesomeIcon icon={faServer} />
-                </div> */}
                 <div className='flex flex-col'>
                     <div className='flex items-center gap-2'>
                         <p className={`text-xl tracking-tight font-bold break-words`}>{server.name}</p>{' '}
@@ -116,8 +129,6 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                                 </Fragment>
                             ))}
                     </p>
-                    {/* I don't think servers will ever have descriptions normall so I'll vaporize it */}
-                    {/* {!!server.description && <p className={`text-sm text-zinc-300 break-words `}>{server.description}</p>} */}
                 </div>
             </div>
             <div
@@ -127,7 +138,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 }}
                 className={`h-full hidden sm:flex items-center justify-center border-[1px] border-[#ffffff12] shadow-md rounded-lg w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
-                {!stats || isSuspended ? (
+                {!stats || isSuspended || isInstalling ? (
                     isSuspended ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-red-100 text-xs`}>
@@ -140,15 +151,13 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                                 {server.isTransferring
                                     ? 'Transferring'
                                     : server.status === 'installing'
-                                      ? 'Installing'
-                                      : server.status === 'restoring_backup'
-                                        ? 'Restoring Backup'
-                                        : 'Unavailable'}
+                                        ? 'Installing'
+                                        : server.status === 'restoring_backup'
+                                            ? 'Restoring Backup'
+                                            : 'Unavailable'}
                             </span>
                         </div>
                     ) : (
-                        // <Spinner size={'small'} />
-                        // <></>
                         <div className='text-xs opacity-25'>Sit tight!</div>
                     )
                 ) : (

@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import { ServerBackup } from '@/api/server/types';
 import { rawDataToServerBackup } from '@/api/transformers';
 
@@ -22,7 +23,8 @@ export default async (
     uuid: string,
     params: RequestParameters,
 ): Promise<{ backup: ServerBackup; jobId: string; status: string; progress: number; message?: string }> => {
-    const response = await http.post<CreateBackupResponse>(`/api/client/servers/${uuid}/backups`, {
+    const daemonType = getGlobalDaemonType();
+    const response = await http.post<CreateBackupResponse>(`/api/client/servers/${daemonType}/${uuid}/backups`, {
         name: params.name,
         ignored: params.ignored,
         is_locked: params.isLocked,

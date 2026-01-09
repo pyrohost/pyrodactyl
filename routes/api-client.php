@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckDaemonType;
 use Pterodactyl\Http\Controllers\Api\Client;
 use Pterodactyl\Http\Middleware\Activity\ServerSubject;
 use Pterodactyl\Http\Middleware\Activity\AccountSubject;
+use Pterodactyl\Http\Controllers\Api\Client\Servers\Elytra;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
@@ -16,6 +18,7 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 | Endpoint: /api/client
 |
 */
+
 Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 Route::get('/version', function () {
@@ -59,6 +62,7 @@ Route::prefix('/account')->middleware(AccountSubject::class)->group(function () 
 | Endpoint: /api/client/servers/{server}
 |
 */
+
 Route::group([
     'prefix' => '/servers/{server}',
     'middleware' => [
@@ -67,126 +71,48 @@ Route::group([
         ResourceBelongsToServer::class,
     ],
 ], function () {
-    Route::get('/', [Client\Servers\ServerController::class, 'index'])->name('api:client:server.view');
-    Route::get('/websocket', Client\Servers\WebsocketController::class)->name('api:client:server.ws');
-    Route::get('/resources', Client\Servers\ResourceUtilizationController::class)->name('api:client:server.resources');
-    Route::get('/activity', Client\Servers\ActivityLogController::class)->name('api:client:server.activity');
-
-    Route::post('/command', [Client\Servers\CommandController::class, 'index']);
-    Route::post('/power', [Client\Servers\PowerController::class, 'index']);
-
-    Route::group(['prefix' => '/databases'], function () {
-        Route::get('/', [Client\Servers\DatabaseController::class, 'index']);
-        Route::post('/', [Client\Servers\DatabaseController::class, 'store']);
-        Route::post('/{database}/rotate-password', [Client\Servers\DatabaseController::class, 'rotatePassword']);
-        Route::delete('/{database}', [Client\Servers\DatabaseController::class, 'delete']);
-    });
-
-    Route::group(['prefix' => '/files'], function () {
-        Route::get('/list', [Client\Servers\FileController::class, 'directory']);
-        Route::get('/contents', [Client\Servers\FileController::class, 'contents']);
-        Route::get('/download', [Client\Servers\FileController::class, 'download']);
-        Route::put('/rename', [Client\Servers\FileController::class, 'rename']);
-        Route::post('/copy', [Client\Servers\FileController::class, 'copy']);
-        Route::post('/write', [Client\Servers\FileController::class, 'write']);
-        Route::post('/compress', [Client\Servers\FileController::class, 'compress']);
-        Route::post('/decompress', [Client\Servers\FileController::class, 'decompress']);
-        Route::post('/delete', [Client\Servers\FileController::class, 'delete']);
-        Route::post('/create-folder', [Client\Servers\FileController::class, 'create']);
-        Route::post('/chmod', [Client\Servers\FileController::class, 'chmod']);
-        Route::post('/pull', [Client\Servers\FileController::class, 'pull'])->middleware(['throttle:10,5']);
-        Route::get('/upload', Client\Servers\FileUploadController::class);
-    });
-
-    Route::group(['prefix' => '/schedules'], function () {
-        Route::get('/', [Client\Servers\ScheduleController::class, 'index']);
-        Route::post('/', [Client\Servers\ScheduleController::class, 'store']);
-        Route::get('/{schedule}', [Client\Servers\ScheduleController::class, 'view']);
-        Route::post('/{schedule}', [Client\Servers\ScheduleController::class, 'update']);
-        Route::post('/{schedule}/execute', [Client\Servers\ScheduleController::class, 'execute']);
-        Route::delete('/{schedule}', [Client\Servers\ScheduleController::class, 'delete']);
-
-        Route::post('/{schedule}/tasks', [Client\Servers\ScheduleTaskController::class, 'store']);
-        Route::post('/{schedule}/tasks/{task}', [Client\Servers\ScheduleTaskController::class, 'update']);
-        Route::delete('/{schedule}/tasks/{task}', [Client\Servers\ScheduleTaskController::class, 'delete']);
-    });
-
-    Route::group(['prefix' => '/network'], function () {
-        Route::get('/allocations', [Client\Servers\NetworkAllocationController::class, 'index']);
-        Route::post('/allocations', [Client\Servers\NetworkAllocationController::class, 'store']);
-        Route::post('/allocations/{allocation}', [Client\Servers\NetworkAllocationController::class, 'update']);
-        Route::post('/allocations/{allocation}/primary', [Client\Servers\NetworkAllocationController::class, 'setPrimary']);
-        Route::delete('/allocations/{allocation}', [Client\Servers\NetworkAllocationController::class, 'delete']);
-    });
+    Route::get('/', [Client\ServerController::class, 'index'])->name('api.client.servers.daemonType');
+    Route::get('/resources', [Client\ServerController::class, 'resources'])->name('api.client.servers.resources');
 
     Route::group(['prefix' => '/subdomain'], function () {
-        Route::get('/', [Client\Servers\SubdomainController::class, 'index']);
-        Route::post('/', [Client\Servers\SubdomainController::class, 'store'])
+        Route::get('/', [Elytra\SubdomainController::class, 'index']);
+        Route::post('/', [Elytra\SubdomainController::class, 'store'])
             ->middleware('throttle:5,1'); // Max 5 creates/replaces per minute
-        Route::delete('/', [Client\Servers\SubdomainController::class, 'destroy'])
+        Route::delete('/', [Elytra\SubdomainController::class, 'destroy'])
             ->middleware('throttle:5,1'); // Max 5 deletes per minute
-        Route::post('/check-availability', [Client\Servers\SubdomainController::class, 'checkAvailability'])
+        Route::post('/check-availability', [Elytra\SubdomainController::class, 'checkAvailability'])
             ->middleware('throttle:20,1'); // Max 20 availability checks per minute
     });
+});
 
-    Route::group(['prefix' => '/users'], function () {
-        Route::get('/', [Client\Servers\SubuserController::class, 'index']);
-        Route::post('/', [Client\Servers\SubuserController::class, 'store']);
-        Route::get('/{user}', [Client\Servers\SubuserController::class, 'view']);
-        Route::post('/{user}', [Client\Servers\SubuserController::class, 'update']);
-        Route::delete('/{user}', [Client\Servers\SubuserController::class, 'delete']);
-    });
 
-    // Elytra Jobs API
-    Route::group(['prefix' => '/jobs'], function () {
-        Route::get('/', [Client\Servers\ElytraJobsController::class, 'index']);
-        Route::post('/', [Client\Servers\ElytraJobsController::class, 'create'])
-            ->middleware('server.operation.rate-limit');
-        Route::get('/{jobId}', [Client\Servers\ElytraJobsController::class, 'show']);
-        Route::delete('/{jobId}', [Client\Servers\ElytraJobsController::class, 'cancel']);
-    });
 
-    //  Backups API
-    Route::group(['prefix' => '/backups'], function () {
-        Route::get('/', [Client\Servers\BackupsController::class, 'index']);
-        Route::post('/', [Client\Servers\BackupsController::class, 'store'])
-            ->middleware('server.operation.rate-limit');
-        Route::delete('/delete-all', [Client\Servers\BackupsController::class, 'deleteAll'])
-            ->middleware('throttle:2,60');
-        Route::post('/bulk-delete', [Client\Servers\BackupsController::class, 'bulkDelete'])
-            ->middleware('throttle:10,60');
-        Route::get('/{backup}', [Client\Servers\BackupsController::class, 'show']);
-        Route::get('/{backup}/download', [Client\Servers\BackupsController::class, 'download']);
-        Route::post('/{backup}/restore', [Client\Servers\BackupsController::class, 'restore'])
-            ->middleware('server.operation.rate-limit');
-        Route::post('/{backup}/rename', [Client\Servers\BackupsController::class, 'rename']);
-        Route::post('/{backup}/lock', [Client\Servers\BackupsController::class, 'toggleLock']);
-        Route::delete('/{backup}', [Client\Servers\BackupsController::class, 'destroy']);
-    });
+/*
+|--------------------------------------------------------------------------
+| Client Control API(Wings)
+|--------------------------------------------------------------------------
+|
+| Endpoint: /api/client/servers/wings/{server}
+|
+*/
 
-    Route::group(['prefix' => '/startup'], function () {
-        Route::get('/', [Client\Servers\StartupController::class, 'index']);
-        Route::put('/variable', [Client\Servers\StartupController::class, 'update']);
-        Route::put('/command', [Client\Servers\StartupController::class, 'updateCommand']);
-        Route::get('/command/default', [Client\Servers\StartupController::class, 'getDefaultCommand']);
-        Route::post('/command/process', [Client\Servers\StartupController::class, 'processCommand']);
-    });
+Route::group([
+    'prefix' => 'servers/wings/',
+], function () {
+    require __DIR__ . '/servers/wings.php';
+});
 
-    Route::group(['prefix' => '/settings'], function () {
-        Route::post('/rename', [Client\Servers\SettingsController::class, 'rename']);
-        Route::post('/reinstall', [Client\Servers\SettingsController::class, 'reinstall'])
-            ->middleware('server.operation.rate-limit');
-        Route::put('/docker-image', [Client\Servers\SettingsController::class, 'dockerImage']);
-        Route::post('/docker-image/revert', [Client\Servers\SettingsController::class, 'revertDockerImage']);
-        Route::put('/egg', [Client\Servers\SettingsController::class, 'changeEgg']);
-        Route::post('/egg/preview', [Client\Servers\SettingsController::class, 'previewEggChange'])
-            ->middleware('server.operation.rate-limit');
-        Route::post('/egg/apply', [Client\Servers\SettingsController::class, 'applyEggChange'])
-            ->middleware('server.operation.rate-limit');
-    });
 
-    Route::group(['prefix' => '/operations'], function () {
-        Route::get('/', [Client\Servers\SettingsController::class, 'getServerOperations']);
-        Route::get('/{operationId}', [Client\Servers\SettingsController::class, 'getOperationStatus']);
-    });
+/*
+|--------------------------------------------------------------------------
+| Client Control API(Elytra)
+|--------------------------------------------------------------------------
+|
+| Endpoint: /api/client/servers/elytra/{server}
+|
+*/
+Route::group([
+    'prefix' => 'servers/elytra/',
+], function () {
+    require __DIR__ . '/servers/elytra.php';
 });

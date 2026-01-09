@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface SubdomainInfo {
     supported: boolean;

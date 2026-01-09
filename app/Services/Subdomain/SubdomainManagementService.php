@@ -8,16 +8,10 @@ use Pterodactyl\Models\ServerSubdomain;
 use Pterodactyl\Contracts\Dns\DnsProviderInterface;
 use Pterodactyl\Contracts\Subdomain\SubdomainFeatureInterface;
 use Pterodactyl\Exceptions\Dns\DnsProviderException;
-use Pterodactyl\Services\Subdomain\Features\FactorioSubdomainFeature;
-use Pterodactyl\Services\Subdomain\Features\MinecraftSubdomainFeature;
-use Pterodactyl\Services\Subdomain\Features\RustSubdomainFeature;
-use Pterodactyl\Services\Subdomain\Features\ScpSlSubdomainFeature;
-use Pterodactyl\Services\Subdomain\Features\TeamSpeakSubdomainFeature;
-use Pterodactyl\Services\Dns\Providers\CloudflareProvider;
-use Pterodactyl\Services\Dns\Providers\HetznerProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Pterodactyl\Services\Dns\Providers\Route53Provider;
+use Pterodactyl\Enums\Subdomain\Providers;
+use Pterodactyl\Enums\Subdomain\Features;
 
 class SubdomainManagementService
 {
@@ -27,20 +21,10 @@ class SubdomainManagementService
     public function __construct()
     {
         // Register DNS providers
-        $this->dnsProviders = [
-            'cloudflare' => CloudflareProvider::class,
-            'hetzner' => HetznerProvider::class,
-            'route53' => Route53Provider::class
-        ];
+        $this->dnsProviders = Providers::all();
 
         // Register subdomain features
-        $this->subdomainFeatures = [
-            'subdomain_factorio' => FactorioSubdomainFeature::class,
-            'subdomain_minecraft' => MinecraftSubdomainFeature::class,
-            'subdomain_rust' => RustSubdomainFeature::class,
-            'subdomain_scpsl' => ScpSlSubdomainFeature::class,
-            'subdomain_teamspeak' => TeamSpeakSubdomainFeature::class,
-        ];
+        $this->subdomainFeatures = Features::all();
     }
 
     /**

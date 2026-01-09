@@ -37,7 +37,7 @@ class DaemonFileRepository extends DaemonRepository
                     'query' => ['file' => $path],
                 ]
             );
-        } catch (ClientException|TransferException $exception) {
+        } catch (ClientException | TransferException $exception) {
             throw new DaemonConnectionException($exception);
         }
 
@@ -291,7 +291,7 @@ class DaemonFileRepository extends DaemonRepository
             return $this->getHttpClient()->post(
                 sprintf('/api/servers/%s/files/pull', $this->server->uuid),
                 [
-                    'json' => array_filter($attributes, fn ($value) => !is_null($value)),
+                    'json' => array_filter($attributes, fn($value) => !is_null($value)),
                 ]
             );
         } catch (TransferException $exception) {

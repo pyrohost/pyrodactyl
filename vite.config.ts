@@ -83,28 +83,27 @@ export default defineConfig({
     plugins: [
         laravel('resources/scripts/index.tsx'),
         manifestSRI(),
-        [
-            million.vite({
-                auto: {
-                    threshold: 0.01,
-                },
-                telemetry: false,
-            }),
-            react({
-                plugins: [
-                    [
-                        '@swc/plugin-styled-components',
-                        {
-                            pure: true,
-                            namespace: 'pyrodactyl',
-                        },
-                    ],
+        million.vite({
+            auto: {
+                threshold: 0.01,
+            },
+            telemetry: false,
+        }),
+        react({
+            plugins: [
+                [
+                    '@swc/plugin-styled-components',
+                    {
+                        pure: true,
+                        namespace: 'pyrodactyl',
+                    },
                 ],
-            }),
-        ],
+            ],
+        }),
     ],
 
     resolve: {
+        dedupe: ['react', 'react-dom', 'react/jsx-runtime'],
         alias: {
             '@': resolve(dirname(fileURLToPath(import.meta.url)), 'resources', 'scripts'),
             '@definitions': resolve(

@@ -72,13 +72,15 @@
         ],
         "psr-4": {
             "Pterodactyl\\": "app/",
+            "Pyrodactyl\\": "app/",
             "Database\\Factories\\": "database/Factories/",
             "Database\\Seeders\\": "database/Seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Pterodactyl\\Tests\\": "tests/"
+            "Pterodactyl\\Tests\\": "tests/",
+            "Pyrodactyl\\Tests\\": "tests/"
         }
     },
     "scripts": {

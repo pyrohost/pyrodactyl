@@ -17,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 $(document).ready(function() {
     $('#pNestId').select2({
         placeholder: 'Select a Nest',
@@ -44,7 +45,7 @@ $(document).ready(function() {
 });
 
 let lastActiveBox = null;
-$(document).on('click', function (event) {
+$(document).on('click', function(event) {
     if (lastActiveBox !== null) {
         lastActiveBox.removeClass('box-primary');
     }
@@ -52,10 +53,10 @@ $(document).on('click', function (event) {
     lastActiveBox = $(event.target).closest('.box');
     lastActiveBox.addClass('box-primary');
 });
-
-$('#pNodeId').on('change', function () {
+$('#pNodeId').on('change', function() {
     currentNode = $(this).val();
-    $.each(Pterodactyl.nodeData, function (i, v) {
+
+    $.each(Pyrodactyl.nodeData, function(i, v) {
         if (v.id == currentNode) {
             $('#pAllocation').html('').select2({
                 data: v.allocations,
@@ -67,9 +68,10 @@ $('#pNodeId').on('change', function () {
     });
 });
 
-$('#pNestId').on('change', function (event) {
+$('#pNestId').on('change', function(event) {
+    const nestId = $(this).val();
     $('#pEggId').html('').select2({
-        data: $.map(_.get(Pterodactyl.nests, $(this).val() + '.eggs', []), function (item) {
+        data: $.map(_.get(Pyrodactyl.nests, $(this).val() + '.eggs', []), function(item) {
             return {
                 id: item.id,
                 text: item.name,
@@ -78,8 +80,8 @@ $('#pNestId').on('change', function (event) {
     }).change();
 });
 
-$('#pEggId').on('change', function (event) {
-    let parentChain = _.get(Pterodactyl.nests, $('#pNestId').val(), null);
+$('#pEggId').on('change', function(event) {
+    let parentChain = _.get(Pyrodactyl.nests, $('#pNestId').val(), null);
     let objectChain = _.get(parentChain, 'eggs.' + $(this).val(), null);
 
     const images = _.get(objectChain, 'docker_images', {})
@@ -100,7 +102,7 @@ $('#pEggId').on('change', function (event) {
 
     $('#pPackId').html('').select2({
         data: [{ id: 0, text: 'No Service Pack' }].concat(
-            $.map(_.get(objectChain, 'packs', []), function (item, i) {
+            $.map(_.get(objectChain, 'packs', []), function(item, i) {
                 return {
                     id: item.id,
                     text: item.name + ' (' + item.version + ')',
@@ -117,7 +119,7 @@ $('#pEggId').on('change', function (event) {
 
     const variableIds = {};
     $('#appendVariablesTo').html('');
-    $.each(_.get(objectChain, 'variables', []), function (i, item) {
+    $.each(_.get(objectChain, 'variables', []), function(i, item) {
         variableIds[item.env_variable] = 'var_ref_' + item.id;
 
         let isRequired = (item.required === 1) ? '<span class="label label-danger">Required</span> ' : '';
@@ -138,7 +140,7 @@ $('#pEggId').on('change', function (event) {
     serviceVariablesUpdated($('#pEggId').val(), variableIds);
 });
 
-$('#pAllocation').on('change', function () {
+$('#pAllocation').on('change', function() {
     updateAdditionalAllocations();
 });
 
@@ -146,7 +148,7 @@ function updateAdditionalAllocations() {
     let currentAllocation = $('#pAllocation').val();
     let currentNode = $('#pNodeId').val();
 
-    $.each(Pterodactyl.nodeData, function (i, v) {
+    $.each(Pyrodactyl.nodeData, function(i, v) {
         if (v.id == currentNode) {
             let allocations = [];
 
@@ -179,14 +181,14 @@ function initUserIdSelect(data) {
             dataType: 'json',
             delay: 250,
 
-            data: function (params) {
+            data: function(params) {
                 return {
                     filter: { email: params.term },
                     page: params.page,
                 };
             },
 
-            processResults: function (data, params) {
+            processResults: function(data, params) {
                 return { results: data };
             },
 
@@ -194,20 +196,20 @@ function initUserIdSelect(data) {
         },
 
         data: data,
-        escapeMarkup: function (markup) { return markup; },
+        escapeMarkup: function(markup) { return markup; },
         minimumInputLength: 2,
-        templateResult: function (data) {
+        templateResult: function(data) {
             if (data.loading) return escapeHtml(data.text);
 
             return '<div class="user-block"> \
                 <img class="img-circle img-bordered-xs" src="https://www.gravatar.com/avatar/' + escapeHtml(data.md5) + '?s=120" alt="User Image"> \
                 <span class="username"> \
-                    <a href="#">' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) +'</a> \
+                    <a href="#">' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) + '</a> \
                 </span> \
                 <span class="description"><strong>' + escapeHtml(data.email) + '</strong> - ' + escapeHtml(data.username) + '</span> \
             </div>';
         },
-        templateSelection: function (data) {
+        templateSelection: function(data) {
             return '<div> \
                 <span> \
                     <img class="img-rounded img-bordered-xs" src="https://www.gravatar.com/avatar/' + escapeHtml(data.md5) + '?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \

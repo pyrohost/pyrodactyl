@@ -7,7 +7,7 @@ return [
     // will be stored in this location by default. It is possible to change this once backups
     // have been made, without losing data.
     // Options: elytra, wings (legacy), s3, rustic_local, rustic_s3
-    'default' => env('APP_BACKUP_DRIVER', Backup::ADAPTER_RUSTIC_LOCAL),
+    'default' => env('APP_BACKUP_DRIVER', Backup::ADAPTER_WINGS),
 
     // This value is used to determine the lifespan of UploadPart presigned urls that wings
     // uses to upload backups to S3 storage.  Value is in minutes, so this would default to an hour.

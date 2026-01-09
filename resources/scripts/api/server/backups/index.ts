@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 interface RestoreBackupResponse {
     job_id: string;
@@ -10,11 +11,15 @@ export const restoreServerBackup = async (
     uuid: string,
     backup: string,
 ): Promise<{ jobId: string; status: string; message: string }> => {
-    const response = await http.post<RestoreBackupResponse>(`/api/client/servers/${uuid}/backups/${backup}/restore`, {
-        adapter: 'rustic_s3',
-        truncate_directory: true,
-        download_url: '',
-    });
+    const daemonType = getGlobalDaemonType();
+    const response = await http.post<RestoreBackupResponse>(
+        `/api/client/servers/${daemonType}/${uuid}/backups/${backup}/restore`,
+        {
+            adapter: 'rustic_s3',
+            truncate_directory: true,
+            download_url: '',
+        },
+    );
 
     return {
         jobId: response.data.job_id,

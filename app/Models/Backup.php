@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Pterodactyl\Enums\Daemon\Adapters;
 
 /**
  * Backup model
@@ -41,9 +42,13 @@ class Backup extends Model
     public const RESOURCE_NAME = 'backup';
 
     // Backup adapters
-    public const ADAPTER_WINGS = 'wings';
-    public const ADAPTER_ELYTRA = 'elytra'; // Preferred name for local backups
     public const ADAPTER_AWS_S3 = 's3';
+
+    // Wings Adapters
+    public const ADAPTER_WINGS = 'wings';
+
+    // Elytra Backups
+    public const ADAPTER_ELYTRA = 'elytra';
     public const ADAPTER_RUSTIC_LOCAL = 'rustic_local';
     public const ADAPTER_RUSTIC_S3 = 'rustic_s3';
 
@@ -82,6 +87,7 @@ class Backup extends Model
         return in_array($this->disk, [self::ADAPTER_RUSTIC_LOCAL, self::ADAPTER_RUSTIC_S3]);
     }
 
+
     /**
      * Check if this backup is stored locally (not in cloud storage).
      */
@@ -95,7 +101,7 @@ class Backup extends Model
      */
     public function getRepositoryType(): ?string
     {
-        return match($this->disk) {
+        return match ($this->disk) {
             self::ADAPTER_RUSTIC_LOCAL => 'local',
             self::ADAPTER_RUSTIC_S3 => 's3',
             default => null,
@@ -161,9 +167,8 @@ class Backup extends Model
      */
     public function getElytraAdapterType(): string
     {
-        return match($this->disk) {
-            self::ADAPTER_WINGS => 'elytra',  // Legacy support: wings -> elytra
-            self::ADAPTER_ELYTRA => 'elytra', // Direct mapping for new backups
+        return match ($this->disk) {
+            self::ADAPTER_ELYTRA => 'elytra',
             self::ADAPTER_AWS_S3 => 's3',
             self::ADAPTER_RUSTIC_LOCAL => 'rustic_local',
             self::ADAPTER_RUSTIC_S3 => 'rustic_s3',

@@ -68,11 +68,11 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         SubdomainManagementService $subdomainService
     ): void {
         $operation = null;
-        
+
         try {
             $operation = ServerOperation::where('operation_id', $this->operationId)->firstOrFail();
             $operation->markAsStarted();
-            
+
             Activity::actor($this->user)->event('server:software.change-started')
                 ->property([
                     'operation_id' => $this->operationId,
@@ -105,7 +105,6 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             $this->logSuccessfulChange();
 
             $operation->markAsCompleted('Software configuration applied successfully. Server installation completed.');
-
         } catch (Exception $e) {
             $this->handleJobFailure($e, $operation);
             throw $e;
@@ -121,18 +120,18 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
         $currentEgg = $this->server->egg;
         $targetEgg = Egg::find($this->eggId);
-        
+
         $backupName = sprintf(
             'Software Change: %s → %s (%s)',
             $currentEgg->name ?? 'Unknown',
             $targetEgg->name ?? 'Unknown',
             now()->format('M j, g:i A')
         );
-        
+
         if (strlen($backupName) > 190) {
             $backupName = substr($backupName, 0, 187) . '...';
         }
-        
+
         try {
             $result = $elytraJobService->submitJob(
                 $this->server,
@@ -159,7 +158,6 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             $operation->updateProgress('Backup job submitted successfully');
 
             return $result['job_id'];
-
         } catch (\Exception $e) {
             throw new BackupFailedException('Failed to create backup before egg change: ' . $e->getMessage());
         }
@@ -211,12 +209,12 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
     private function wipeServerFiles(DaemonFileRepository $fileRepository, ServerOperation $operation): void
     {
         $operation->updateProgress('Wiping server files...');
-        
+
         try {
             $contents = $fileRepository->setServer($this->server)->getDirectory('/');
 
             if (!empty($contents)) {
-                $filesToDelete = array_map(function($item) {
+                $filesToDelete = array_map(function ($item) {
                     return $item['name'];
                 }, $contents);
 
@@ -273,7 +271,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         SubdomainManagementService $subdomainService
     ): void {
         $operation->updateProgress('Applying software configuration...');
-        
+
         DB::transaction(function () use ($egg, $startupModificationService, $reinstallServerService, $operation, $subdomainService) {
             // Check if we need to remove subdomain before changing egg
             $activeSubdomain = $this->server->activeSubdomain;
@@ -282,14 +280,14 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                 $tempServer = clone $this->server;
                 $tempServer->egg = $egg;
                 $tempServer->egg_id = $egg->id;
-                
+
                 // If new egg doesn't support subdomains, delete the existing subdomain
                 if (!$tempServer->supportsSubdomains()) {
                     $operation->updateProgress('Removing incompatible subdomain...');
-                    
+
                     try {
                         $subdomainService->deleteSubdomain($activeSubdomain);
-                        
+
                         Activity::actor($this->user)->event('server:subdomain.deleted-egg-change')
                             ->property([
                                 'operation_id' => $this->operationId,
@@ -305,13 +303,13 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                             'subdomain' => $activeSubdomain->full_domain,
                             'error' => $e->getMessage(),
                         ]);
-                        
+
                         // Continue with egg change even if subdomain deletion fails
                         $operation->updateProgress('Warning: Could not fully remove subdomain, continuing with egg change...');
                     }
                 }
             }
-            
+
             if ($this->server->egg_id !== $this->eggId || $this->server->nest_id !== $this->nestId) {
                 $this->server->update([
                     'egg_id' => $this->eggId,
@@ -331,7 +329,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             $operation->updateProgress('Reinstalling server...');
             $reinstallServerService->handle($updatedServer);
-            
+
             $operation->updateProgress('Finalizing installation...');
         });
     }

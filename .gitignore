@@ -2,6 +2,7 @@
 .git/
 .vscode/
 .env
+.github/workflows/ci.yaml
 
 
 # Elytra binary

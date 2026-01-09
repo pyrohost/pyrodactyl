@@ -25,8 +25,7 @@ class CreateServerController extends Controller
         private NodeRepository $nodeRepository,
         private ServerCreationService $creationService,
         private ViewFactory $view,
-    ) {
-    }
+    ) {}
 
     /**
      * Displays the create server page.
