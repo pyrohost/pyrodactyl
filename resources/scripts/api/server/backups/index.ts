@@ -15,6 +15,7 @@ export const restoreServerBackup = async (
     const response = await http.post<RestoreBackupResponse>(
         `/api/client/servers/${daemonType}/${uuid}/backups/${backup}/restore`,
         {
+            // FIXME: This can't be right
             adapter: 'rustic_s3',
             truncate_directory: true,
             download_url: '',
