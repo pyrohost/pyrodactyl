@@ -19,6 +19,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Backups\StoreBackupRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Backups\RestoreBackupRequest;
 
+use Pterodactyl\Enums\Daemon\Adapters;
+
 class BackupsController extends ClientApiController
 {
     public function __construct(
@@ -44,14 +46,14 @@ class BackupsController extends ClientApiController
 
         $rusticBackupSum = $server->backups()
             ->where('is_successful', true)
-            ->whereIn('disk', [Backup::ADAPTER_RUSTIC_LOCAL, Backup::ADAPTER_RUSTIC_S3])
+            ->whereIn('disk', Adapters::all_elytra())
             ->sum('bytes');
 
         $rusticSumMb = round($rusticBackupSum / 1024 / 1024, 2);
 
         $legacyBackupSum = $server->backups()
             ->where('is_successful', true)
-            ->whereNotIn('disk', [Backup::ADAPTER_RUSTIC_LOCAL, Backup::ADAPTER_RUSTIC_S3])
+            ->whereNotIn('disk', Adapters::all_elytra())
             ->sum('bytes');
 
         $legacyUsageMb = round($legacyBackupSum / 1024 / 1024, 2);
@@ -101,7 +103,7 @@ class BackupsController extends ClientApiController
             'backup_create',
             [
                 'operation' => 'create',
-                'adapter' => $request->input('adapter', config('backups.default')),
+                'adapter' => $request->input('adapter', $server->node->backupDisk),
                 'ignored' => $request->input('ignored', ''),
                 'name' => $request->input('name'),
             ],
@@ -407,7 +409,7 @@ class BackupsController extends ClientApiController
                     [
                         'operation' => 'delete',
                         'backup_uuid' => $backup->uuid,
-                        'adapter_type' => $backup->getElytraAdapterType(),
+                        'adapter_type' => $backup->disk,
                         'snapshot_id' => $backup->snapshot_id,
                         'checksum' => $backup->checksum,
                     ],

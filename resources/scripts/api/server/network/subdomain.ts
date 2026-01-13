@@ -25,6 +25,7 @@ export interface AvailabilityResponse {
     available: boolean;
     message: string;
 }
+const daemonType = getGlobalDaemonType();
 
 export const getSubdomainInfo = (uuid: string): Promise<SubdomainInfo> => {
     return new Promise((resolve, reject) => {
