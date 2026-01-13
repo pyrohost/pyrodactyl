@@ -47,9 +47,9 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
     ];
 
-    protected $middlewarePriority = [
-        SubstituteClientBindings::class,
-    ];
+    /* protected $middlewarePriority = [ */
+    /*     SubstituteClientBindings::class, */
+    /* ]; */
 
     /**
      * The application's route middleware groups.
@@ -67,8 +67,8 @@ class Kernel extends HttpKernel
         'api' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
-            StartSession::class,
-            EnsureStatefulRequests::class,
+            /* StartSession::class, */
+            /* EnsureStatefulRequests::class, */
             'auth:sanctum',
             IsValidJson::class,
             TrackAPIKey::class,
