@@ -5,7 +5,7 @@ namespace Pterodactyl\Services\Subdomain\Features;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Contracts\Subdomain\SubdomainFeatureInterface;
 
-class MinecraftSubdomainFeature implements SubdomainFeatureInterface
+class HytaleSubdomainFeature implements SubdomainFeatureInterface
 {
     /**
      * Get the feature name.
@@ -16,7 +16,7 @@ class MinecraftSubdomainFeature implements SubdomainFeatureInterface
     }
 
     /**
-     * Get the DNS records that need to be created for Minecraft.
+     * Get the DNS records that need to be created for Hytale.
      */
     public function getDnsRecords(Server $server, string $subdomain, string $domain): array
     {
