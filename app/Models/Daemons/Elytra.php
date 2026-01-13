@@ -88,6 +88,6 @@ class Elytra implements Daemon
     {
         $debugFlag = config('app.debug') ? ' --allow-insecure' : '';
 
-        return "cd /etc/elytra && sudo elytra configure --panel-url " . config('app.url') . " --token " . $token . " --node " . $node->id . $debugFlag . "";
+        return "cd /etc/elytra && sudo elytra configure --panel-url " . escapeshellarg(config('app.url')) . " --token " . escapeshellarg($token) . " --node " . escapeshellarg((string) $node->id) . $debugFlag . "";
     }
 }

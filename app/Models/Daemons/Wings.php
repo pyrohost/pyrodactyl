@@ -45,6 +45,6 @@ class Wings implements Daemon
     {
         $debugFlag = config('app.debug') ? ' --allow-insecure' : '';
 
-        return "cd /etc/pterodactyl && sudo wings configure --panel-url " . config('app.url') . " --token " . $token . " --node " . $node->id . $debugFlag . "";
+        return "cd /etc/pterodactyl && sudo wings configure --panel-url " . escapeshellarg(config('app.url')) . " --token " . escapeshellarg($token) . " --node " . escapeshellarg((string) $node->id) . $debugFlag . "";
     }
 }
