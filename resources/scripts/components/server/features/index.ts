@@ -10,10 +10,9 @@ const features: Record<string, ComponentType> = {
     eula: lazy(() => import('@feature/eula/EulaModalFeature')),
     java_version: lazy(() => import('@feature/JavaVersionModalFeature')),
     gsl_token: lazy(() => import('@feature/GSLTokenModalFeature')),
-    // Why are you broken?
-    // Not anymore, there's a fix!
     pid_limit: lazy(() => import('@feature/PIDLimitModalFeature')),
     steam_disk_space: lazy(() => import('@feature/SteamDiskSpaceFeature')),
+    hytale_oauth: lazy(() => import('@feature/HytaleOauthRequireFeature')),
 };
 
 export default features;
