@@ -9,8 +9,7 @@
     "author": "hello@pterodactyl.io",
     "description": "Set out on an adventure built for both creation and play. Hytale blends the freedom of a sandbox with the momentum of an RPG: explore a procedurally generated world full of dungeons, secrets, and a variety of creatures, then shape it block by block.",
     "features": [
-        "java_version",
-        "subdomain_hytale"
+        "java_version"
     ],
     "docker_images": {
         "ghcr.io/pterodactyl/games:hytale": "ghcr.io/pterodactyl/games:hytale"
