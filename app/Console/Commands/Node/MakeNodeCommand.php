@@ -24,7 +24,9 @@ class MakeNodeCommand extends Command
                             {--uploadSize= : Enter the maximum upload filesize.}
                             {--daemonListeningPort= : Enter the wings listening port.}
                             {--daemonSFTPPort= : Enter the wings SFTP listening port.}
-                            {--daemonBase= : Enter the base folder.}';
+                            {--daemonBase= : Enter the base folder.}
+                            {--daemonType= : Enter the daemon Backend.}
+                            {--backupDisk= : Enter the Backup type}';
 
     protected $description = 'Creates a new node on the system via the CLI.';
 
@@ -64,6 +66,8 @@ class MakeNodeCommand extends Command
         $data['daemonListen'] = $this->option('daemonListeningPort') ?? $this->ask('Enter the wings listening port', '8080');
         $data['daemonSFTP'] = $this->option('daemonSFTPPort') ?? $this->ask('Enter the wings SFTP listening port', '2022');
         $data['daemonBase'] = $this->option('daemonBase') ?? $this->ask('Enter the base folder', '/var/lib/pterodactyl/volumes');
+        $data['daemonType'] = $this->option('daemonType') ?? $this->ask('Enter the daemon backend', 'elytra');
+        $data['backupDisk'] = $this->option('backupDisk') ?? $this->ask('Enter the Backup Disk', 'rustic_local');
 
         $node = $this->creationService->handle($data);
         $this->line('Successfully created a new node on the location ' . $data['location_id'] . ' with the name ' . $data['name'] . ' and has an id of ' . $node->id . '.');

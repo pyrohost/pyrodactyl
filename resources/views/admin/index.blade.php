@@ -23,6 +23,7 @@
       <div class="box-body">
       You are running Pyrodactyl panel version <code>{{ config('app.version') }}</code>.
       </div>
+
       <!-- <div aria-hidden="true"
       style="background-color: #ffffff33; position: absolute; height: 1px; width: 100%; margin-top: 20px;"></div>
       <div class="row" style="margin-top: 20px;">
@@ -127,10 +128,10 @@
     }
 
     // Initial update
-    updateSystemMetrics();
+    // updateSystemMetrics();
 
     // Update every 60 seconds
-    setInterval(updateSystemMetrics, 60000);
+    // setInterval(updateSystemMetrics, 60000);
     });
   </script>
 

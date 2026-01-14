@@ -1,10 +1,11 @@
 import http from '@/api/http';
 
-export type ServerPowerState = 'offline' | 'starting' | 'running' | 'stopping';
+export type ServerPowerState = 'offline' | 'starting' | 'running' | 'stopping' | 'installing';
 
 export interface ServerStats {
     status: ServerPowerState;
     isSuspended: boolean;
+    isInstalling: boolean;
     memoryUsageInBytes: number;
     cpuUsagePercent: number;
     diskUsageInBytes: number;
@@ -20,6 +21,7 @@ export default (server: string): Promise<ServerStats> => {
                 resolve({
                     status: attributes.current_state,
                     isSuspended: attributes.is_suspended,
+                    isInstalling: attributes.is_installing,
                     memoryUsageInBytes: attributes.resources.memory_bytes,
                     cpuUsagePercent: attributes.resources.cpu_absolute,
                     diskUsageInBytes: attributes.resources.disk_bytes,

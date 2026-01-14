@@ -3,6 +3,7 @@ import useSWR from 'swr';
 
 import type { PaginatedResult } from '@/api/http';
 import http, { getPaginationSet } from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import type { ServerBackup } from '@/api/server/types';
 import { rawDataToServerBackup } from '@/api/transformers';
 
@@ -42,11 +43,12 @@ type BackupResponse = PaginatedResult<ServerBackup> & {
 export default () => {
     const { page } = useContext(Context);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const daemonType = getGlobalDaemonType();
 
     return useSWR<BackupResponse>(
         ['server:backups', uuid, page],
         async () => {
-            const { data } = await http.get(`/api/client/servers/${uuid}/backups`, { params: { page } });
+            const { data } = await http.get(`/api/client/servers/${daemonType}/${uuid}/backups`, { params: { page } });
 
             return {
                 items: (data.data || []).map(rawDataToServerBackup),

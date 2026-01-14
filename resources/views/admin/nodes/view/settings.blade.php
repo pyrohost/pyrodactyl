@@ -57,12 +57,18 @@
         <div>
           <select name="location_id" class="form-control">
           @foreach($locations as $location)
-        <option value="{{ $location->id }}" {{ (old('location_id', $node->location_id) === $location->id) ? 'selected' : '' }}>{{ $location->long }} ({{ $location->short }})</option>
-      @endforeach
+                <option value="{{ $location->id }}" {{ (old('location_id', $node->location_id) === $location->id) ? 'selected' : '' }}>{{ $location->long }} ({{ $location->short }})</option>
+          @endforeach
           </select>
         </div>
+        <label for="pDaemonType" class="form-label">Daemon</label>
+        <div>
+        <select name="daemonType" id="pDaemonType" class="form-control">
+            @foreach($daemonTypes as $daemon)
+                <option value="{{ $daemon }}" {{ $daemon == old('daemon_type', $node->daemonType) ? 'selected' : '' }}>{{ $daemon }}</option>
+            @endforeach
+        </select>
         </div>
-        <div class="form-group col-xs-12">
         <label for="public" class="control-label">Allow Automatic Allocation <sup><a data-toggle="tooltip"
             data-placement="top" title="Allow automatic allocation to this Node?">?</a></sup></label>
         <div>
@@ -88,7 +94,7 @@
         </div>
         <p class="text-muted">
           <small>
-          Domain name that browsers will use to connect to Wings (e.g <code>wings.example.com</code>).
+          Domain name that browsers will use to connect to {{ $node->daemonType }} (e.g <code>{{ $node->daemonType }}.example.com</code>).
           An IP address may be used <em>only</em> if you are not using SSL for this node.
           <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Why do I need a FQDN?"
             data-content="In order to secure communications between your server and this node we use SSL. We cannot generate a SSL certificate for IP Addresses, and as such you will need to provide a FQDN.">Why?</a>
@@ -107,10 +113,10 @@
         <p class="text-muted">
           <small>
           <strong>Optional:</strong>
-          Leave blank to use the Public FQDN for panel-to-Wings communication.
-          If specified, this internal domain name will be used for panel-to-Wings communication instead
-          (e.g <code>wings-internal.example.com</code> or <code>10.0.0.5</code>).
-          Useful for internal networks where the panel needs to communicate with Wings using a
+          Leave blank to use the Public FQDN for panel-to-{{ $node->daemonType }} communication.
+          If specified, this internal domain name will be used for panel-to-{{ $node->daemonType }} communication instead
+          (e.g <code>{{ $node->daemonType }}-internal.example.com</code> or <code>10.0.0.5</code>).
+          Useful for internal networks where the panel needs to communicate with {{ $node->daemonType }} using a
           different address than what browsers use.
           </small>
         </p>
@@ -266,6 +272,25 @@
       </div>
       </div>
     </div>
+
+    <div class="col-sm-6">
+      <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Backup Config</h3>
+      </div>
+      <div class="box-body row">
+        <div class="form-group col-xs-12">
+        <label for="pBackupDisk" class="form-label">Backup Disk</label>
+        <div>
+        <select name="backupDisk" id="pBackupDisk" class="form-control">
+            <!-- Populated via Script-->
+        </select>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
     <div class="col-xs-12">
       <div class="box box-primary">
       <div class="box-header with-border">
@@ -294,11 +319,40 @@
 @endsection
 
 @section('footer-scripts')
-  @parent
-  <script>
-    $('[data-toggle="popover"]').popover({
-    placement: 'auto'
-    });
-    $('select[name="location_id"]').select2();
-  </script>
+    @parent
+    <script>
+        $(document).ready(function() {
+            const daemonSelect = document.getElementById('pDaemonType');
+            const backupDiskSelect = document.getElementById('pBackupDisk');
+
+            function updateBackupDisks() {
+                const daemonValue = daemonSelect.value;
+                const disks = {!! json_encode($backupDisks ?? []) !!}[daemonValue] || [];
+
+                backupDiskSelect.innerHTML = '';
+
+                disks.forEach(disk => {
+                    const option = document.createElement('option');
+                    option.value = disk;
+                    option.textContent = disk;
+
+                    if (disk === '{{ old("backupDisk", $node->backupDisk) }}') {
+                        option.selected = true;
+                    }
+
+                    backupDiskSelect.appendChild(option);
+                });
+            }
+
+            updateBackupDisks();
+
+            daemonSelect.addEventListener('change', updateBackupDisks);
+
+            $('[data-toggle="popover"]').popover({
+                placement: 'auto'
+            });
+
+            $('select[name="location_id"]').select2();
+        });
+    </script>
 @endsection

@@ -21,9 +21,7 @@ abstract class DaemonRepository
     /**
      * DaemonRepository constructor.
      */
-    public function __construct(protected Application $app)
-    {
-    }
+    public function __construct(protected Application $app) {}
 
     /**
      * Set the server model this request is stemming from.

@@ -70,11 +70,14 @@
             url: '{{ route('admin.nodes.view.configuration.token', $node->id) }}',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         }).done(function (data) {
+
+            var commandTemplate = "{!! addslashes($node->getAutoDeploy("PLACEHOLDER_TOKEN")) !!}";
+            var command = commandTemplate.replace('PLACEHOLDER_TOKEN', data.token);
             swal({
                 type: 'success',
                 title: 'Token created.',
-                text: '<p>To auto-configure your node run the following command:<br /><small><pre>cd /etc/elytra && sudo elytra configure --panel-url {{ config('app.url') }} --token ' + data.token + ' --node ' + data.node + '{{ config('app.debug') ? ' --allow-insecure' : '' }}</pre></small></p>',
-                html: true
+                text: "<p>To auto-configure your node run the following command:<br /><small><pre>" + command + "</pre></small></p>",
+                html: true,
             })
         }).fail(function () {
             swal({

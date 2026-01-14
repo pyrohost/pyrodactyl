@@ -372,13 +372,9 @@ class BackupJob implements Job
         }
     }
 
-    private function handleRestoreCompletion(ElytraJob $job, array $statusData): void
-    {
-    }
+    private function handleRestoreCompletion(ElytraJob $job, array $statusData): void {}
 
-    private function handleDownloadCompletion(ElytraJob $job, array $statusData): void
-    {
-    }
+    private function handleDownloadCompletion(ElytraJob $job, array $statusData): void {}
 
     private function submitDeleteAllJob(Server $server, ElytraJob $job, ElytraRepository $elytraRepository): string
     {
@@ -577,3 +573,4 @@ class BackupJob implements Job
         return 'Backup operation failed. Please contact an administrator for details.'; // todo: better sanitization - elllie
     }
 }
+

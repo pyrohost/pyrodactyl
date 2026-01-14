@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class RecaptchaProvider implements CaptchaProviderInterface
 {
-    private const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+    /* private const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'; */
 
     protected string $siteKey;
     protected string $secretKey;
+    protected string $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
     public function __construct(array $config)
     {
@@ -29,7 +30,7 @@ class RecaptchaProvider implements CaptchaProviderInterface
         try {
             $httpResponse = Http::timeout(10)
                 ->asForm()
-                ->post(self::VERIFY_URL, [
+                ->post($this->verifyUrl, [
                     'secret' => $this->secretKey,
                     'response' => $response,
                     'remoteip' => $remoteIp,
@@ -107,3 +108,4 @@ class RecaptchaProvider implements CaptchaProviderInterface
         return !empty($this->siteKey) && !empty($this->secretKey);
     }
 }
+

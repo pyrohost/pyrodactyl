@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface RetryBackupResponse {
     message: string;
@@ -8,7 +9,8 @@ export interface RetryBackupResponse {
 }
 
 export default async (uuid: string, backupUuid: string): Promise<RetryBackupResponse> => {
-    const { data } = await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/retry`);
+    const daemonType = getGlobalDaemonType();
+    const { data } = await http.post(`/api/client/servers/${daemonType}/${uuid}/backups/${backupUuid}/retry`);
 
     return data;
 };

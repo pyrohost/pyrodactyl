@@ -2,15 +2,18 @@
 
 namespace Pterodactyl\Models;
 
-use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Log;
+use Pterodactyl\Enums\Daemon\DaemonType;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Pterodactyl\Contracts\Daemon\Daemon as DaemonInterface;
+use Pterodactyl\Http\Controllers\Admin\NodeAutoDeployController;
 
 /**
  * @property int $id
@@ -36,6 +39,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property int $daemonListen
  * @property int $daemonSFTP
  * @property string $daemonBase
+ * @property string $daemonType
+ * @property string $backupDisk
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property Location $location
@@ -43,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property \Pterodactyl\Models\Server[]|\Illuminate\Database\Eloquent\Collection $servers
  * @property \Pterodactyl\Models\Allocation[]|\Illuminate\Database\Eloquent\Collection $allocations
  */
+
 class Node extends Model
 {
     /** @use HasFactory<\Database\Factories\NodeFactory> */
@@ -110,6 +116,8 @@ class Node extends Model
         'daemon_token',
         'description',
         'maintenance_mode',
+        'daemonType',
+        'backupDisk'
     ];
 
     public static array $validationRules = [
@@ -132,6 +140,8 @@ class Node extends Model
         'daemonListen' => 'required|numeric|between:1,65535',
         'maintenance_mode' => 'boolean',
         'upload_size' => 'int|between:1,1024',
+        'daemonType' => 'required|string',
+        'backupDisk' => 'required|string'
     ];
 
     /**
@@ -149,6 +159,23 @@ class Node extends Model
         'maintenance_mode' => false,
         'use_separate_fqdns' => false,
     ];
+
+
+    private function getDaemonImplementation(): DaemonInterface
+    {
+        $implementations = DaemonType::allClass();
+
+        $daemonType = strtolower($this->daemonType);
+
+        if (!isset($implementations[$daemonType])) {
+
+            return new \Pterodactyl\Models\Daemons\Elytra();
+        }
+
+        $implementationClass = $implementations[$daemonType];
+        return new $implementationClass();
+    }
+
 
     /**
      * Get the connection address to use when making calls to this node.
@@ -188,80 +215,17 @@ class Node extends Model
      */
     public function getConfiguration(): array
     {
-        return [
-            'debug' => false,
-            'uuid' => $this->uuid,
-            'token_id' => $this->daemon_token_id,
-            'token' => Container::getInstance()->make(Encrypter::class)->decrypt($this->daemon_token),
-            'api' => [
-                'host' => '0.0.0.0',
-                'port' => $this->daemonListen,
-                'ssl' => [
-                    'enabled' => (!$this->behind_proxy && $this->scheme === 'https'),
-                    'cert' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/fullchain.pem',
-                    'key' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/privkey.pem',
-                ],
-                'upload_limit' => $this->upload_size,
-            ],
-            'system' => [
-                'data' => $this->daemonBase,
-                'sftp' => [
-                    'bind_port' => $this->daemonSFTP,
-                ],
-                'backups' => [
-                    'rustic' => $this->getRusticBackupConfiguration(),
-                ],
-            ],
-            'allowed_mounts' => $this->mounts->pluck('source')->toArray(),
-            'remote' => route('index'),
-            'allowed_origins' => [
-                config('app.url'), // note: I have no idea why this wasn't included by Pterodactyl upstream, this might need to be configurable later - ellie
-            ],
-        ];
+        $daemon = $this->getDaemonImplementation();
+        return $daemon->getConfiguration($this);
     }
 
     /**
-     * Get rustic backup configuration for Wings.
-     * Matches the exact structure expected by elytra rustic implementation.
+     * Returns the auto deploy command as a string.
      */
-    private function getRusticBackupConfiguration(): array
+    public function getAutoDeploy(string $token): string
     {
-        $localConfig = config('backups.disks.rustic_local', []);
-        $s3Config = config('backups.disks.rustic_s3', []);
-
-        return [
-            // Path to rustic binary
-            'binary_path' => $localConfig['binary_path'] ?? 'rustic',
-
-            // Repository version (optional, default handled by rustic)
-            'repository_version' => $localConfig['repository_version'] ?? 2,
-
-            // Pack size configuration for performance tuning
-            'tree_pack_size_mb' => $localConfig['tree_pack_size_mb'] ?? 4,
-            'data_pack_size_mb' => $localConfig['data_pack_size_mb'] ?? 32,
-
-            // Local repository configuration
-            'local' => [
-                'enabled' => !empty($localConfig),
-                'repository_path' => $localConfig['repository_path'] ?? '/var/lib/pterodactyl/rustic-repos',
-                'use_cold_storage' => $localConfig['use_cold_storage'] ?? false,
-                'hot_repository_path' => $localConfig['hot_repository_path'] ?? '',
-            ],
-
-            // S3 repository configuration
-            's3' => [
-                'enabled' => !empty($s3Config['bucket']),
-                'endpoint' => $s3Config['endpoint'] ?? '',
-                'region' => $s3Config['region'] ?? 'us-east-1',
-                'bucket' => $s3Config['bucket'] ?? '',
-                'use_cold_storage' => $s3Config['use_cold_storage'] ?? false,
-                'hot_bucket' => $s3Config['hot_bucket'] ?? '',
-                'cold_storage_class' => $s3Config['cold_storage_class'] ?? 'GLACIER',
-                'force_path_style' => $s3Config['force_path_style'] ?? false,
-                'disable_ssl' => $s3Config['disable_ssl'] ?? false,
-                'ca_cert_path' => $s3Config['ca_cert_path'] ?? '',
-            ],
-        ];
+        $daemon = $this->getDaemonImplementation();
+        return $daemon->getAutoDeploy($this, $token);
     }
 
     /**

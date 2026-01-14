@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface EggPreview {
     egg: {
@@ -31,7 +32,8 @@ export interface EggPreview {
  * Returns egg details, variables, and available Docker images.
  */
 export default async (uuid: string, eggId: number, nestId: number): Promise<EggPreview> => {
-    const { data } = await http.post(`/api/client/servers/${uuid}/settings/egg/preview`, {
+    const daemonType = getGlobalDaemonType();
+    const { data } = await http.post(`/api/client/servers/${daemonType}/${uuid}/settings/egg/preview`, {
         egg_id: eggId,
         nest_id: nestId,
     });

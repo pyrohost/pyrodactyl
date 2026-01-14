@@ -1,0 +1,94 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-01-13T05:17:28+00:00",
+    "name": "Hytale",
+    "author": "hello@pterodactyl.io",
+    "description": "Set out on an adventure built for both creation and play. Hytale blends the freedom of a sandbox with the momentum of an RPG: explore a procedurally generated world full of dungeons, secrets, and a variety of creatures, then shape it block by block.",
+    "features": [
+        "java_version"
+    ],
+    "docker_images": {
+        "ghcr.io/pterodactyl/games:hytale": "ghcr.io/pterodactyl/games:hytale"
+    },
+    "file_denylist": [],
+    "startup": "java -XX:AOTCache=Server\/HytaleServer.aot -Xms128M $( ((SERVER_MEMORY)) && printf %s \"-Xmx${SERVER_MEMORY}M\" ) -jar Server\/HytaleServer.jar $( ((HYTALE_ALLOW_OP)) && printf %s \"--allow-op\" ) --assets Assets.zip --bind 0.0.0.0:${SERVER_PORT}",
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"Hytale Server Booted\"\n}",
+        "logs": "{}",
+        "stop": "/stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\nset -e\n\nmkdir -p \/mnt\/server\ncd \/mnt\/server\n\necho -e \"Downloading Hytale Downloader CLI...\"\n\nDOWNLOAD_URL=\"https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\n\nrm -f hytale-downloader.zip\ncurl -o hytale-downloader.zip $DOWNLOAD_URL\nunzip -o hytale-downloader.zip -d hytale-downloader\nmv hytale-downloader\/hytale-downloader-linux-amd64 hytale-downloader\/hytale-downloader-linux\nchmod 555 hytale-downloader\/hytale-downloader-linux\n\necho -e \"Verifying Hytale Downloader installation...\"\n\necho -e \"Hytale Downloader version: `.\/hytale-downloader\/hytale-downloader-linux -version`\"\n\necho -e \"Hytale Downloader installed successfully.\"",
+            "container": "ghcr.io/pterodactyl/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Accept Early Plugins",
+            "description": "Hytale warns that loading early plugins is unsupported and may cause stability issues.",
+            "env_variable": "HYTALE_ACCEPT_EARLY_PLUGINS",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Auth Mode",
+            "description": "Authentication mode.",
+            "env_variable": "HYTALE_AUTH_MODE",
+            "default_value": "authenticated",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:authenticated,offline",
+            "field_type": "text"
+        },
+        {
+            "name": "Patchline",
+            "description": "The branch of Hytale to install.",
+            "env_variable": "HYTALE_PATCHLINE",
+            "default_value": "release",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:release,pre-release",
+            "field_type": "text"
+        },
+        {
+            "name": "Disable Sentry",
+            "description": "Hytale uses Sentry to track crashes. Disable Sentry during active plugin development.",
+            "env_variable": "DISABLE_SENTRY",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Use Ahead-of-Time Cache",
+            "description": "Hytale provides a pre-trained AOT Java cache which can significantly improve boot times.",
+            "env_variable": "USE_AOT_CACHE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Allow operators",
+            "description": "Allow operators",
+            "env_variable": "HYTALE_ALLOW_OP",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        }
+    ]
+}

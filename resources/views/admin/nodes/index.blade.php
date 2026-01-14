@@ -50,6 +50,7 @@
                             <th>Allocated Disk</th>
                             <th>Total Disk</th>
                             <th class="text-center">Servers</th>
+                            <th class="text-center">Daemon Type</th>
                             <th class="text-center">Public</th>
                         </tr>
                         @foreach ($nodes as $node)
@@ -57,27 +58,14 @@
                                 <td class="text-center text-muted left-icon" data-action="ping" data-secret="{{ $node->getDecryptedKey() }}" data-location="{{ $node->scheme }}://{{ $node->fqdn }}:{{ $node->daemonListen }}/api/system"><i class="fa fa-fw fa-refresh fa-spin"></i></td>
                                 <td>{!! $node->maintenance_mode ? '<span class="label label-warning"><i class="fa fa-wrench"></i></span> ' : '' !!}<a href="{{ route('admin.nodes.view', $node->id) }}">{{ $node->name }}</a></td>
                                 <td>{{ $node->location->short }}</td>
-                                <!-- there's probably a better way to implement this, but that's why we have Naterfute! -->
-                                @php
-                                    $stats = app('Pterodactyl\Repositories\Eloquent\NodeRepository')->getUsageStatsRaw($node);
-                                    $memoryPercent = ($stats['memory']['value'] / $stats['memory']['base_limit']) * 100;
-                                    $diskPercent = ($stats['disk']['value'] / $stats['disk']['base_limit']) * 100;
-
-                                    $memoryColor = $memoryPercent < 50 ? '#50af51' : ($memoryPercent < 70 ? '#e0a800' : '#d9534f');
-                                    $diskColor = $diskPercent < 50 ? '#50af51' : ($diskPercent < 70 ? '#e0a800' : '#d9534f');
-
-                                    $allocatedMemory = humanizeSize($stats['memory']['value'] * 1024 * 1024);
-                                    $totalMemory = humanizeSize($stats['memory']['max'] * 1024 * 1024);
-                                    $allocatedDisk = humanizeSize($stats['disk']['value'] * 1024 * 1024);
-                                    $totalDisk = humanizeSize($stats['disk']['max'] * 1024 * 1024);
-                                @endphp
-                                <td style="color: {{ $memoryColor }}">{{ round($memoryPercent) }}%</td>
-                                <td>{{ $allocatedMemory }}</td>
-                                <td>{{ $totalMemory }}</td>
-                                <td style="color: {{ $diskColor }}">{{ round($diskPercent) }}%</td>
-                                <td>{{ $allocatedDisk }}</td>
-                                <td>{{ $totalDisk }}</td>
+                                <td style="color: {{ $node->memory_color }}">{{ $node->memory_percent }}%</td>
+                                <td>{{ $node->allocated_memory }}</td>
+                                <td>{{ $node->total_memory }}</td>
+                                <td style="color: {{ $node->disk_color }}">{{ $node->disk_percent }}%</td>
+                                <td>{{ $node->allocated_disk }}</td>
+                                <td>{{ $node->total_disk }}</td>
                                 <td class="text-center">{{ $node->servers_count }}</td>
+                                <td class="text-center">{{ $node->daemonType }}</td>
                                 <td class="text-center"><i class="fa fa-{{ ($node->public) ? 'eye' : 'eye-slash' }}"></i></td>
                             </tr>
                         @endforeach

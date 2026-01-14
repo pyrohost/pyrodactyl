@@ -39,6 +39,7 @@
                             <th>Owner</th>
                             <th>Node</th>
                             <th>Connection</th>
+                            <!-- <th>Domain</th> -->
                             <th></th>
                             <th></th>
                         </tr>
@@ -51,6 +52,7 @@
                                 <td>
                                     <code>{{ $server->allocation->alias }}:{{ $server->allocation->port }}</code>
                                 </td>
+                                <!-- <td>{{ $server->domain }}</td> -->
                                 <td class="text-center">
                                     @if($server->isSuspended())
                                         <span class="label bg-maroon">Suspended</span>
@@ -59,7 +61,7 @@
                                     @else
                                         <span class="label label-success">Active</span>
                                     @endif
-                                    
+
                                     @if($server->exclude_from_resource_calculation)
                                         <br><small><span class="label label-info" title="Excluded from resource calculations">Excluded</span></small>
                                     @endif

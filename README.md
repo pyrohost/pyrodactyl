@@ -66,4 +66,4 @@ Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
 
 Pyrodactyl™ Copyright © 2023-Present Pyro Inc. and contributors.
 
-AGPL-3.0-or-later
+Apache-2.0
