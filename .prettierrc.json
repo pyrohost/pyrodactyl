@@ -1,23 +1,26 @@
 {
-    "printWidth": 120,
-    "tabWidth": 4,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": true,
-    "jsxSingleQuote": true,
-    "importOrder": [
-        "^@/routers/(.*)$",
-        "^@/components/(.*)$",
-        "^@/hoc/(.*)$",
-        "^@/lib/(.*)$",
-        "^@/api/(.*)$",
-        "^@/state(.*)$",
-        "^@/state/(.*)$",
-        "^@/plugins/(.*)$",
-        "^@feature/(.*)$",
-        "^[./]"
-    ],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": true,
-    "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"]
+	"printWidth": 120,
+	"tabWidth": 4,
+	"useTabs": false,
+	"semi": true,
+	"singleQuote": true,
+	"jsxSingleQuote": true,
+	"importOrder": [
+		"^@/routers/(.*)$",
+		"^@/components/(.*)$",
+		"^@/hoc/(.*)$",
+		"^@/lib/(.*)$",
+		"^@/api/(.*)$",
+		"^@/state(.*)$",
+		"^@/state/(.*)$",
+		"^@/plugins/(.*)$",
+		"^@feature/(.*)$",
+		"^[./]"
+	],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true,
+	"plugins": [
+		"prettier-plugin-tailwindcss",
+		"@trivago/prettier-plugin-sort-imports"
+	]
 }
