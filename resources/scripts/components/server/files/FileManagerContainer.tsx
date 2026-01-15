@@ -84,7 +84,6 @@ const FileManagerContainer = () => {
             searchInputRef.current.value = '';
         }
     }, [hash, pathname, directory]);
-    console.log(filesArray);
     const rowVirtualizer = useVirtualizer({
         // count: 10000,
         count: filesArray.length,
