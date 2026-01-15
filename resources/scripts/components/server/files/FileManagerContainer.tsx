@@ -98,7 +98,7 @@ const FileManagerContainer = () => {
 
     return (
         <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
-            <div className='px-2 sm:px-14 pt-2 sm:pt-14'>
+            <div className='px-2 sm:px-14 pt-2 h-full sm:pt-14'>
                 <ErrorBoundary>
                     <MainPageHeader
                         direction='column'
@@ -164,7 +164,7 @@ const FileManagerContainer = () => {
                                     onChange={(event) => debouncedSearchTerm(event.target.value)}
                                 />
                             </div>
-                            <div ref={parentRef} className='max-h-[60vh] overflow-auto'>
+                            <div ref={parentRef} className='max-h-[vh] overflow-auto'>
                                 <div
                                     data-pyro-file-manager-files
                                     className='p-1 border-[1px] border-[#ffffff12] rounded-xl sm:ml-12 sm:mr-12 mx-2 bg-[radial-gradient(124.75%_124.75%_at_50.01%_-10.55%,_rgb(16,16,16)_0%,rgb(4,4,4)_100%)]'
