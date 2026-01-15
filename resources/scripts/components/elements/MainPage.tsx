@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const MainPage = styled.div`
     display: flex;
@@ -9,6 +9,6 @@ const MainPage = styled.div`
     position: relative;
     width: 100%;
 `;
-MainPage.displayName = 'MainPage';
+MainPage.displayName = "MainPage";
 
 export default MainPage;

@@ -18,207 +18,253 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-$(document).ready(function() {
-    $('#pNestId').select2({
-        placeholder: 'Select a Nest',
-    }).change();
+$(document).ready(() => {
+	$("#pNestId")
+		.select2({
+			placeholder: "Select a Nest",
+		})
+		.change();
 
-    $('#pEggId').select2({
-        placeholder: 'Select a Nest Egg',
-    });
+	$("#pEggId").select2({
+		placeholder: "Select a Nest Egg",
+	});
 
-    $('#pPackId').select2({
-        placeholder: 'Select a Service Pack',
-    });
+	$("#pPackId").select2({
+		placeholder: "Select a Service Pack",
+	});
 
-    $('#pNodeId').select2({
-        placeholder: 'Select a Node',
-    }).change();
+	$("#pNodeId")
+		.select2({
+			placeholder: "Select a Node",
+		})
+		.change();
 
-    $('#pAllocation').select2({
-        placeholder: 'Select a Default Allocation',
-    });
+	$("#pAllocation").select2({
+		placeholder: "Select a Default Allocation",
+	});
 
-    $('#pAllocationAdditional').select2({
-        placeholder: 'Select Additional Allocations',
-    });
+	$("#pAllocationAdditional").select2({
+		placeholder: "Select Additional Allocations",
+	});
 });
 
 let lastActiveBox = null;
-$(document).on('click', function(event) {
-    if (lastActiveBox !== null) {
-        lastActiveBox.removeClass('box-primary');
-    }
+$(document).on("click", (event) => {
+	if (lastActiveBox !== null) {
+		lastActiveBox.removeClass("box-primary");
+	}
 
-    lastActiveBox = $(event.target).closest('.box');
-    lastActiveBox.addClass('box-primary');
+	lastActiveBox = $(event.target).closest(".box");
+	lastActiveBox.addClass("box-primary");
 });
-$('#pNodeId').on('change', function() {
-    currentNode = $(this).val();
+$("#pNodeId").on("change", function () {
+	currentNode = $(this).val();
 
-    $.each(Pyrodactyl.nodeData, function(i, v) {
-        if (v.id == currentNode) {
-            $('#pAllocation').html('').select2({
-                data: v.allocations,
-                placeholder: 'Select a Default Allocation',
-            });
+	$.each(Pyrodactyl.nodeData, (i, v) => {
+		if (v.id == currentNode) {
+			$("#pAllocation").html("").select2({
+				data: v.allocations,
+				placeholder: "Select a Default Allocation",
+			});
 
-            updateAdditionalAllocations();
-        }
-    });
-});
-
-$('#pNestId').on('change', function(event) {
-    const nestId = $(this).val();
-    $('#pEggId').html('').select2({
-        data: $.map(_.get(Pyrodactyl.nests, $(this).val() + '.eggs', []), function(item) {
-            return {
-                id: item.id,
-                text: item.name,
-            };
-        }),
-    }).change();
+			updateAdditionalAllocations();
+		}
+	});
 });
 
-$('#pEggId').on('change', function(event) {
-    let parentChain = _.get(Pyrodactyl.nests, $('#pNestId').val(), null);
-    let objectChain = _.get(parentChain, 'eggs.' + $(this).val(), null);
+$("#pNestId").on("change", function (event) {
+	const nestId = $(this).val();
+	$("#pEggId")
+		.html("")
+		.select2({
+			data: $.map(
+				_.get(Pyrodactyl.nests, $(this).val() + ".eggs", []),
+				(item) => ({
+						id: item.id,
+						text: item.name,
+					}),
+			),
+		})
+		.change();
+});
 
-    const images = _.get(objectChain, 'docker_images', {})
-    $('#pDefaultContainer').html('');
-    const keys = Object.keys(images);
-    for (let i = 0; i < keys.length; i++) {
-        let opt = document.createElement('option');
-        opt.value = images[keys[i]];
-        opt.innerText = keys[i] + " (" + images[keys[i]] + ")";
-        $('#pDefaultContainer').append(opt);
-    }
+$("#pEggId").on("change", function (event) {
+	const parentChain = _.get(Pyrodactyl.nests, $("#pNestId").val(), null);
+	const objectChain = _.get(parentChain, "eggs." + $(this).val(), null);
 
-    if (!_.get(objectChain, 'startup', false)) {
-        $('#pStartup').val(_.get(parentChain, 'startup', 'ERROR: Startup Not Defined!'));
-    } else {
-        $('#pStartup').val(_.get(objectChain, 'startup'));
-    }
+	const images = _.get(objectChain, "docker_images", {});
+	$("#pDefaultContainer").html("");
+	const keys = Object.keys(images);
+	for (let i = 0; i < keys.length; i++) {
+		const opt = document.createElement("option");
+		opt.value = images[keys[i]];
+		opt.innerText = keys[i] + " (" + images[keys[i]] + ")";
+		$("#pDefaultContainer").append(opt);
+	}
 
-    $('#pPackId').html('').select2({
-        data: [{ id: 0, text: 'No Service Pack' }].concat(
-            $.map(_.get(objectChain, 'packs', []), function(item, i) {
-                return {
-                    id: item.id,
-                    text: item.name + ' (' + item.version + ')',
-                };
-            })
-        ),
-    });
+	if (!_.get(objectChain, "startup", false)) {
+		$("#pStartup").val(
+			_.get(parentChain, "startup", "ERROR: Startup Not Defined!"),
+		);
+	} else {
+		$("#pStartup").val(_.get(objectChain, "startup"));
+	}
 
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
+	$("#pPackId")
+		.html("")
+		.select2({
+			data: [{ id: 0, text: "No Service Pack" }].concat(
+				$.map(_.get(objectChain, "packs", []), (item, i) => ({
+						id: item.id,
+						text: item.name + " (" + item.version + ")",
+					})),
+			),
+		});
 
-    const variableIds = {};
-    $('#appendVariablesTo').html('');
-    $.each(_.get(objectChain, 'variables', []), function(i, item) {
-        variableIds[item.env_variable] = 'var_ref_' + item.id;
+	function escapeHtml(str) {
+		var div = document.createElement("div");
+		div.appendChild(document.createTextNode(str));
+		return div.innerHTML;
+	}
 
-        let isRequired = (item.required === 1) ? '<span class="label label-danger">Required</span> ' : '';
-        let dataAppend = ' \
+	const variableIds = {};
+	$("#appendVariablesTo").html("");
+	$.each(_.get(objectChain, "variables", []), (i, item) => {
+		variableIds[item.env_variable] = "var_ref_" + item.id;
+
+		const isRequired =
+			item.required === 1
+				? '<span class="label label-danger">Required</span> '
+				: "";
+		const dataAppend =
+			' \
             <div class="form-group col-sm-6"> \
-                <label for="var_ref_' + escapeHtml(item.id) + '" class="control-label">' + isRequired + escapeHtml(item.name) + '</label> \
-                <input type="text" id="var_ref_' + escapeHtml(item.id) + '" autocomplete="off" name="environment[' + escapeHtml(item.env_variable) + ']" class="form-control" value="' + escapeHtml(item.default_value) + '" /> \
-                <p class="text-muted small">' + escapeHtml(item.description) + '<br /> \
-                <strong>Access in Startup:</strong> <code>{{' + escapeHtml(item.env_variable) + '}}</code><br /> \
-                <strong>Validation Rules:</strong> <code>' + escapeHtml(item.rules) + '</code></small></p> \
+                <label for="var_ref_' +
+			escapeHtml(item.id) +
+			'" class="control-label">' +
+			isRequired +
+			escapeHtml(item.name) +
+			'</label> \
+                <input type="text" id="var_ref_' +
+			escapeHtml(item.id) +
+			'" autocomplete="off" name="environment[' +
+			escapeHtml(item.env_variable) +
+			']" class="form-control" value="' +
+			escapeHtml(item.default_value) +
+			'" /> \
+                <p class="text-muted small">' +
+			escapeHtml(item.description) +
+			"<br /> \
+                <strong>Access in Startup:</strong> <code>{{" +
+			escapeHtml(item.env_variable) +
+			"}}</code><br /> \
+                <strong>Validation Rules:</strong> <code>" +
+			escapeHtml(item.rules) +
+			"</code></small></p> \
             </div> \
-        ';
-        $('#appendVariablesTo').append(dataAppend);
-    });
+        ";
+		$("#appendVariablesTo").append(dataAppend);
+	});
 
-    // If you receive a warning on this line, it should be fine to ignore. this function is
-    // defined in "resources/views/admin/servers/new.blade.php" near the bottom of the file.
-    serviceVariablesUpdated($('#pEggId').val(), variableIds);
+	// If you receive a warning on this line, it should be fine to ignore. this function is
+	// defined in "resources/views/admin/servers/new.blade.php" near the bottom of the file.
+	serviceVariablesUpdated($("#pEggId").val(), variableIds);
 });
 
-$('#pAllocation').on('change', function() {
-    updateAdditionalAllocations();
+$("#pAllocation").on("change", () => {
+	updateAdditionalAllocations();
 });
 
 function updateAdditionalAllocations() {
-    let currentAllocation = $('#pAllocation').val();
-    let currentNode = $('#pNodeId').val();
+	const currentAllocation = $("#pAllocation").val();
+	const currentNode = $("#pNodeId").val();
 
-    $.each(Pyrodactyl.nodeData, function(i, v) {
-        if (v.id == currentNode) {
-            let allocations = [];
+	$.each(Pyrodactyl.nodeData, (i, v) => {
+		if (v.id == currentNode) {
+			const allocations = [];
 
-            for (let i = 0; i < v.allocations.length; i++) {
-                const allocation = v.allocations[i];
+			for (let i = 0; i < v.allocations.length; i++) {
+				const allocation = v.allocations[i];
 
-                if (allocation.id != currentAllocation) {
-                    allocations.push(allocation);
-                }
-            }
+				if (allocation.id != currentAllocation) {
+					allocations.push(allocation);
+				}
+			}
 
-            $('#pAllocationAdditional').html('').select2({
-                data: allocations,
-                placeholder: 'Select Additional Allocations',
-            });
-        }
-    });
+			$("#pAllocationAdditional").html("").select2({
+				data: allocations,
+				placeholder: "Select Additional Allocations",
+			});
+		}
+	});
 }
 
 function initUserIdSelect(data) {
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
+	function escapeHtml(str) {
+		var div = document.createElement("div");
+		div.appendChild(document.createTextNode(str));
+		return div.innerHTML;
+	}
 
-    $('#pUserId').select2({
-        ajax: {
-            url: '/admin/users/accounts.json',
-            dataType: 'json',
-            delay: 250,
+	$("#pUserId").select2({
+		ajax: {
+			url: "/admin/users/accounts.json",
+			dataType: "json",
+			delay: 250,
 
-            data: function(params) {
-                return {
-                    filter: { email: params.term },
-                    page: params.page,
-                };
-            },
+			data: (params) => ({
+					filter: { email: params.term },
+					page: params.page,
+				}),
 
-            processResults: function(data, params) {
-                return { results: data };
-            },
+			processResults: (data, params) => ({ results: data }),
 
-            cache: true,
-        },
+			cache: true,
+		},
 
-        data: data,
-        escapeMarkup: function(markup) { return markup; },
-        minimumInputLength: 2,
-        templateResult: function(data) {
-            if (data.loading) return escapeHtml(data.text);
+		data: data,
+		escapeMarkup: (markup) => markup,
+		minimumInputLength: 2,
+		templateResult: (data) => {
+			if (data.loading) return escapeHtml(data.text);
 
-            return '<div class="user-block"> \
-                <img class="img-circle img-bordered-xs" src="https://www.gravatar.com/avatar/' + escapeHtml(data.md5) + '?s=120" alt="User Image"> \
+			return (
+				'<div class="user-block"> \
+                <img class="img-circle img-bordered-xs" src="https://www.gravatar.com/avatar/' +
+				escapeHtml(data.md5) +
+				'?s=120" alt="User Image"> \
                 <span class="username"> \
-                    <a href="#">' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) + '</a> \
+                    <a href="#">' +
+				escapeHtml(data.name_first) +
+				" " +
+				escapeHtml(data.name_last) +
+				'</a> \
                 </span> \
-                <span class="description"><strong>' + escapeHtml(data.email) + '</strong> - ' + escapeHtml(data.username) + '</span> \
-            </div>';
-        },
-        templateSelection: function(data) {
-            return '<div> \
+                <span class="description"><strong>' +
+				escapeHtml(data.email) +
+				"</strong> - " +
+				escapeHtml(data.username) +
+				"</span> \
+            </div>"
+			);
+		},
+		templateSelection: (data) => (
+				'<div> \
                 <span> \
-                    <img class="img-rounded img-bordered-xs" src="https://www.gravatar.com/avatar/' + escapeHtml(data.md5) + '?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \
+                    <img class="img-rounded img-bordered-xs" src="https://www.gravatar.com/avatar/' +
+				escapeHtml(data.md5) +
+				'?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \
                 </span> \
                 <span style="padding-left:5px;"> \
-                    ' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) + ' (<strong>' + escapeHtml(data.email) + '</strong>) \
+                    ' +
+				escapeHtml(data.name_first) +
+				" " +
+				escapeHtml(data.name_last) +
+				" (<strong>" +
+				escapeHtml(data.email) +
+				"</strong>) \
                 </span> \
-            </div>';
-        }
-
-    });
+            </div>"
+			),
+	});
 }

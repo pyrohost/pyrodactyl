@@ -1,21 +1,21 @@
-import { Suspense } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import { Suspense } from "react";
+import styled, { css, keyframes } from "styled-components";
 
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import ErrorBoundary from "@/components/elements/ErrorBoundary";
 
-export type SpinnerSize = 'small' | 'base' | 'large';
+export type SpinnerSize = "small" | "base" | "large";
 
 interface Props {
-    size?: SpinnerSize;
-    visible?: boolean;
-    centered?: boolean;
-    isBlue?: boolean;
-    children?: React.ReactNode;
+	size?: SpinnerSize;
+	visible?: boolean;
+	centered?: boolean;
+	isBlue?: boolean;
+	children?: React.ReactNode;
 }
 
 interface Spinner extends React.FC<Props> {
-    Size: Record<'SMALL' | 'BASE' | 'LARGE', SpinnerSize>;
-    Suspense: React.FC<{ children: React.ReactNode }>; // ✅ Correct
+	Size: Record<"SMALL" | "BASE" | "LARGE", SpinnerSize>;
+	Suspense: React.FC<{ children: React.ReactNode }>; // ✅ Correct
 }
 
 const spin = keyframes`
@@ -31,48 +31,48 @@ const SpinnerComponent = styled.div<Props>`
     aspect-ratio: 1 / 1;
 
     ${(props) =>
-        props.size === 'small'
-            ? `width: 16px; height: 16px; border-width: 2px;`
-            : props.size === 'large'
-              ? css`
+			props.size === "small"
+				? `width: 16px; height: 16px; border-width: 2px;`
+				: props.size === "large"
+					? css`
                     width: 64px;
                     height: 64px;
                     border-width: 6px;
                 `
-              : null};
+					: null};
 
-    border-color: ${(props) => (!props.isBlue ? 'rgba(255, 255, 255, 0.2)' : 'hsla(212, 92%, 43%, 0.2)')};
-    border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
+    border-color: ${(props) => (!props.isBlue ? "rgba(255, 255, 255, 0.2)" : "hsla(212, 92%, 43%, 0.2)")};
+    border-top-color: ${(props) => (!props.isBlue ? "rgb(255, 255, 255)" : "hsl(212, 92%, 43%)")};
 `;
 
 const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
-    visible &&
-    (centered ? (
-        <div
-            className={`
+	visible &&
+	(centered ? (
+		<div
+			className={`
               flex justify-center items-center w-full
               sm:absolute sm:inset-0 sm:z-50
           `}
-        >
-            <SpinnerComponent {...props} />
-        </div>
-    ) : (
-        <SpinnerComponent {...props} />
-    ));
+		>
+			<SpinnerComponent {...props} />
+		</div>
+	) : (
+		<SpinnerComponent {...props} />
+	));
 
-Spinner.displayName = 'Spinner';
+Spinner.displayName = "Spinner";
 
 Spinner.Size = {
-    SMALL: 'small',
-    BASE: 'base',
-    LARGE: 'large',
+	SMALL: "small",
+	BASE: "base",
+	LARGE: "large",
 };
 
 Spinner.Suspense = ({ children }) => (
-    <Suspense fallback={<Spinner centered size={Spinner.Size.LARGE} />}>
-        <ErrorBoundary>{children}</ErrorBoundary>
-    </Suspense>
+	<Suspense fallback={<Spinner centered size={Spinner.Size.LARGE} />}>
+		<ErrorBoundary>{children}</ErrorBoundary>
+	</Suspense>
 );
-Spinner.Suspense.displayName = 'Spinner.Suspense';
+Spinner.Suspense.displayName = "Spinner.Suspense";
 
 export default Spinner;

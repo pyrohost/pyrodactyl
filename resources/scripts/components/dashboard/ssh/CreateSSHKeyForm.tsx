@@ -1,5 +1,5 @@
-import { Actions, useStoreActions } from "easy-peasy";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { type Actions, useStoreActions } from "easy-peasy";
+import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { useState } from "react";
 import { object, string } from "yup";
 
@@ -14,7 +14,7 @@ import { createSSHKey } from "@/api/account/ssh-keys";
 import { useSSHKeys } from "@/api/account/ssh-keys";
 import { httpErrorToHuman } from "@/api/http";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 interface Values {
 	name: string;

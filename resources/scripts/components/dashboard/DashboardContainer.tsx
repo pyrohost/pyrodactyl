@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import getServers from "@/api/getServers";
-import { PaginatedResult } from "@/api/http";
-import { Server } from "@/api/server/getServer";
+import type { PaginatedResult } from "@/api/http";
+import type { Server } from "@/api/server/getServer";
 
 import useFlash from "@/plugins/useFlash";
 import { usePersistedState } from "@/plugins/usePersistedState";

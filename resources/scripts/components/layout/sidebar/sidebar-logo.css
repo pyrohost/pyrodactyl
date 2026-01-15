@@ -1,18 +1,23 @@
 .pyro-logo {
-    mask-image: linear-gradient(60deg, black 25%, rgba(0, 0, 0, 0.2) 50%, black 75%);
-    mask-size: 400%;
-    mask-position: 0%;
+	mask-image: linear-gradient(
+		60deg,
+		black 25%,
+		rgba(0, 0, 0, 0.2) 50%,
+		black 75%
+	);
+	mask-size: 400%;
+	mask-position: 0%;
 }
 
 .pyro-logo:hover {
-    animation: shine 0.6s ease forwards;
+	animation: shine 0.6s ease forwards;
 }
 
 @keyframes shine {
-    from {
-        mask-position: 0%;
-    }
-    to {
-        mask-position: 100%;
-    }
+	from {
+		mask-position: 0%;
+	}
+	to {
+		mask-position: 100%;
+	}
 }

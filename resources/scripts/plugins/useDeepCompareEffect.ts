@@ -1,6 +1,8 @@
-import { DependencyList, EffectCallback, useEffect } from 'react';
+import { type DependencyList, type EffectCallback, useEffect } from "react";
 
-import { useDeepMemoize } from './useDeepMemoize';
+import { useDeepMemoize } from "./useDeepMemoize";
 
-export const useDeepCompareEffect = (callback: EffectCallback, dependencies: DependencyList) =>
-    useEffect(callback, useDeepMemoize(dependencies));
+export const useDeepCompareEffect = (
+	callback: EffectCallback,
+	dependencies: DependencyList,
+) => useEffect(callback, useDeepMemoize(dependencies));

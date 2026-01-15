@@ -1,6 +1,6 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
-import { Actions, useStoreActions } from "easy-peasy";
+import { type Actions, useStoreActions } from "easy-peasy";
 import { QRCodeSVG } from "qrcode.react";
 import { useContext, useEffect, useState } from "react";
 
@@ -15,10 +15,10 @@ import asDialog from "@/hoc/asDialog";
 
 import enableAccountTwoFactor from "@/api/account/enableAccountTwoFactor";
 import getTwoFactorTokenData, {
-	TwoFactorTokenData,
+	type TwoFactorTokenData,
 } from "@/api/account/getTwoFactorTokenData";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 import { useFlashKey } from "@/plugins/useFlash";
 

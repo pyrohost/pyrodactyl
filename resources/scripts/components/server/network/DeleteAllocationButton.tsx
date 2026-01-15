@@ -1,65 +1,70 @@
-import { TrashBin } from '@gravity-ui/icons';
-import { useState } from 'react';
+import { TrashBin } from "@gravity-ui/icons";
+import { useState } from "react";
 
-import ActionButton from '@/components/elements/ActionButton';
-import { Dialog } from '@/components/elements/dialog';
+import ActionButton from "@/components/elements/ActionButton";
+import { Dialog } from "@/components/elements/dialog";
 
-import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
-import getServerAllocations from '@/api/swr/getServerAllocations';
+import deleteServerAllocation from "@/api/server/network/deleteServerAllocation";
+import getServerAllocations from "@/api/swr/getServerAllocations";
 
-import { ServerContext } from '@/state/server';
+import { ServerContext } from "@/state/server";
 
-import { useFlashKey } from '@/plugins/useFlash';
+import { useFlashKey } from "@/plugins/useFlash";
 
 interface Props {
-    allocation: number;
+	allocation: number;
 }
 
 const DeleteAllocationButton = ({ allocation }: Props) => {
-    const [confirm, setConfirm] = useState(false);
+	const [confirm, setConfirm] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
+	const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+	const setServerFromState = ServerContext.useStoreActions(
+		(actions) => actions.server.setServerFromState,
+	);
 
-    const { mutate } = getServerAllocations();
-    const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
+	const { mutate } = getServerAllocations();
+	const { clearFlashes, clearAndAddHttpError } = useFlashKey("server:network");
 
-    const deleteAllocation = () => {
-        clearFlashes();
+	const deleteAllocation = () => {
+		clearFlashes();
 
-        setConfirm(false);
+		setConfirm(false);
 
-        mutate((data) => data?.filter((a) => a.id !== allocation), false);
-        setServerFromState((s) => ({ ...s, allocations: s.allocations.filter((a) => a.id !== allocation) }));
+		mutate((data) => data?.filter((a) => a.id !== allocation), false);
+		setServerFromState((s) => ({
+			...s,
+			allocations: s.allocations.filter((a) => a.id !== allocation),
+		}));
 
-        deleteServerAllocation(uuid, allocation).catch((error) => {
-            clearAndAddHttpError(error);
-            mutate();
-        });
-    };
+		deleteServerAllocation(uuid, allocation).catch((error) => {
+			clearAndAddHttpError(error);
+			mutate();
+		});
+	};
 
-    return (
-        <>
-            <Dialog.Confirm
-                open={confirm}
-                onClose={() => setConfirm(false)}
-                title={'Remove Allocation'}
-                confirm={'Delete'}
-                onConfirmed={deleteAllocation}
-            >
-                This allocation will be immediately removed from your server.
-            </Dialog.Confirm>
-            <ActionButton
-                variant='danger'
-                size='sm'
-                onClick={() => setConfirm(true)}
-                className='flex items-center gap-2'
-            >
-                <TrashBin width={22} height={22} fill='currentColor' />
-                <span className='hidden sm:inline'>Delete</span>
-            </ActionButton>
-        </>
-    );
+	return (
+		<>
+			<Dialog.Confirm
+				open={confirm}
+				onClose={() => setConfirm(false)}
+				title={"Remove Allocation"}
+				confirm={"Delete"}
+				onConfirmed={deleteAllocation}
+			>
+				This allocation will be immediately removed from your server.
+			</Dialog.Confirm>
+			<ActionButton
+				variant="danger"
+				size="sm"
+				onClick={() => setConfirm(true)}
+				className="flex items-center gap-2"
+			>
+				<TrashBin width={22} height={22} fill="currentColor" />
+				<span className="hidden sm:inline">Delete</span>
+			</ActionButton>
+		</>
+	);
 };
 
 export default DeleteAllocationButton;

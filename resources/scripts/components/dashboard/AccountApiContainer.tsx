@@ -1,7 +1,7 @@
 import { Eye, EyeSlash, Key, Plus, TrashBin } from "@gravity-ui/icons";
 import { format } from "date-fns";
-import { Actions, useStoreActions } from "easy-peasy";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { type Actions, useStoreActions } from "easy-peasy";
+import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { lazy, useEffect, useState } from "react";
 import { object, string } from "yup";
 
@@ -18,10 +18,10 @@ import { Dialog } from "@/components/elements/dialog";
 
 import createApiKey from "@/api/account/createApiKey";
 import deleteApiKey from "@/api/account/deleteApiKey";
-import getApiKeys, { ApiKey } from "@/api/account/getApiKeys";
+import getApiKeys, { type ApiKey } from "@/api/account/getApiKeys";
 import { httpErrorToHuman } from "@/api/http";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 import { useFlashKey } from "@/plugins/useFlash";
 

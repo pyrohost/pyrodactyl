@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import { bytesToString, ip } from "@/lib/formatters";
 
-import { Server, getGlobalDaemonType } from "@/api/server/getServer";
+import { type Server, getGlobalDaemonType } from "@/api/server/getServer";
 import getServerResourceUsage, {
-	ServerPowerState,
-	ServerStats,
+	type ServerPowerState,
+	type ServerStats,
 } from "@/api/server/getServerResourceUsage";
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather

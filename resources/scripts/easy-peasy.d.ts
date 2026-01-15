@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection ES6UnusedImports
-import EasyPeasy, { Actions, State } from 'easy-peasy';
+import EasyPeasy, { Actions, State } from "easy-peasy";
 
-import { ApplicationStore } from '@/state';
+import { ApplicationStore } from "@/state";
 
-declare module 'easy-peasy' {
-    export function useStoreState<Result>(mapState: (state: State<ApplicationStore>) => Result): Result;
+declare module "easy-peasy" {
+	export function useStoreState<Result>(
+		mapState: (state: State<ApplicationStore>) => Result,
+	): Result;
 
-    export function useStoreActions<Result>(mapActions: (actions: Actions<ApplicationStore>) => Result): Result;
+	export function useStoreActions<Result>(
+		mapActions: (actions: Actions<ApplicationStore>) => Result,
+	): Result;
 }

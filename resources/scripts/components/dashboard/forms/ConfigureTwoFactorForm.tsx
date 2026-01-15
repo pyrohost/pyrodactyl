@@ -6,7 +6,7 @@ import RecoveryTokensDialog from "@/components/dashboard/forms/RecoveryTokensDia
 import SetupTOTPDialog from "@/components/dashboard/forms/SetupTOTPDialog";
 import ActionButton from "@/components/elements/ActionButton";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 import useFlash from "@/plugins/useFlash";
 

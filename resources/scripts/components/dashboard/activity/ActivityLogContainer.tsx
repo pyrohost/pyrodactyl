@@ -17,7 +17,7 @@ import ActivityLogEntry from "@/components/elements/activity/ActivityLogEntry";
 import { Input } from "@/components/elements/inputs";
 import PaginationFooter from "@/components/elements/table/PaginationFooter";
 
-import { ActivityLogFilters, useActivityLogs } from "@/api/account/activity";
+import { type ActivityLogFilters, useActivityLogs } from "@/api/account/activity";
 
 import { useFlashKey } from "@/plugins/useFlash";
 import useLocationHash from "@/plugins/useLocationHash";

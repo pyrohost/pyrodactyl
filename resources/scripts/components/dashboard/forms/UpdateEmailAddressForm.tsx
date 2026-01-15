@@ -1,5 +1,5 @@
-import { Actions, State, useStoreActions, useStoreState } from "easy-peasy";
-import { Form, Formik, FormikHelpers } from "formik";
+import { type Actions, type State, useStoreActions, useStoreState } from "easy-peasy";
+import { Form, Formik, type FormikHelpers } from "formik";
 import { Fragment } from "react";
 import * as Yup from "yup";
 
@@ -9,7 +9,7 @@ import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
 
 import { httpErrorToHuman } from "@/api/http";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 interface Values {
 	email: string;

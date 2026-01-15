@@ -1,6 +1,6 @@
 import { Activity02Icon } from "@hugeicons/core-free-icons";
-import { Actions, useStoreActions } from "easy-peasy";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { type Actions, useStoreActions } from "easy-peasy";
+import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { useState } from "react";
 import { Fragment } from "react";
 import { object, string } from "yup";
@@ -15,10 +15,10 @@ import PageContentBlock from "@/components/elements/PageContentBlock";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
 
 import createApiKey from "@/api/account/createApiKey";
-import { ApiKey } from "@/api/account/getApiKeys";
+import type { ApiKey } from "@/api/account/getApiKeys";
 import { httpErrorToHuman } from "@/api/http";
 
-import { ApplicationStore } from "@/state";
+import type { ApplicationStore } from "@/state";
 
 interface Values {
 	description: string;
