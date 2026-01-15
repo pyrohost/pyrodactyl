@@ -36,6 +36,7 @@ const ServerConsoleContainer = () => {
                     <StatusPillHeader />
                     <span className='xl:max-w-[20vw] min-w-0 truncate'>{name}</span>
                 </div>
+
                 <div className='border-l border-gray-200 h-6' />
                 <ServerDetailsHeader />
             </HeaderCentered>

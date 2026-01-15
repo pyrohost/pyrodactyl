@@ -3,6 +3,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';
 import { PowerAction } from '@/components/server/console/ServerConsoleContainer';
@@ -71,9 +72,9 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                 Forcibly stopping a server can lead to data corruption.
             </Dialog.Confirm>
             <Can action={'control.start'}>
-                <Button
+                <ActionButton
                     variant={'secondary'}
-                    size={'sm'}
+                    size={'start'}
                     className='px-3 gap-1 rounded-full'
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
@@ -83,31 +84,31 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                         <HugeiconsIcon size={16} strokeWidth={2} icon={PlayIcon} className='size-4' />
                         Start
                     </div>
-                </Button>
+                </ActionButton>
             </Can>
             <Can action={'control.restart'}>
-                <Button
+                <ActionButton
                     variant={'secondary'}
-                    size={'sm'}
+                    size={'start'}
                     className='p-1 gap-1 rounded-full size-8'
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
                     aria-label='Restart server'
                 >
                     <HugeiconsIcon size={16} icon={Rotate01FreeIcons} />
-                </Button>
+                </ActionButton>
             </Can>
             <Can action={'control.stop'}>
-                <Button
+                <ActionButton
                     variant={'secondary'}
-                    size={'sm'}
+                    size={'start'}
                     className='p-1 gap-1 rounded-full size-8'
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                     aria-label={`${killable ? 'Kill' : 'Stop'} server`}
                 >
                     <HugeiconsIcon size={16} icon={StopIcon} />
-                </Button>
+                </ActionButton>
             </Can>
         </div>
     );

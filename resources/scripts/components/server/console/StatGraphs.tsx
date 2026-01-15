@@ -1,5 +1,5 @@
 import { CloudDownload, CloudUpload } from '@carbon/icons-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import ChartBlock from '@/components/server/console/ChartBlock';
@@ -14,9 +14,12 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
+import formatUptime from '../UptimeDuration';
+
 interface StatsData {
     cpu_absolute: number;
     memory_bytes: number;
+    uptime: number;
     network: {
         tx_bytes: number;
         rx_bytes: number;
@@ -29,6 +32,7 @@ const StatGraphs = () => {
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
 
     const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
+    const [uptime, setUptime] = useState(0);
     const memory = useChartTickLabel('Memory', limits.memory, 'MiB');
     const network = useChart('Network', {
         sets: 2,
@@ -58,6 +62,7 @@ const StatGraphs = () => {
             cpu.clear();
             memory.clear();
             network.clear();
+            setUptime(0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
@@ -69,8 +74,10 @@ const StatGraphs = () => {
         } catch {
             return;
         }
+        setUptime(values.uptime);
         cpu.push(values.cpu_absolute);
         memory.push(Math.floor(values.memory_bytes / 1024 / 1024));
+
         network.push([
             previous.current.tx < 0 ? 0 : Math.max(0, values.network.tx_bytes - previous.current.tx),
             previous.current.rx < 0 ? 0 : Math.max(0, values.network.rx_bytes - previous.current.rx),
@@ -94,6 +101,12 @@ const StatGraphs = () => {
                     <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] bg-[#110f0d] flex gap-4 text-sm'>
                         <h3 className='font-extrabold'>IP Address</h3>
                         <div className='font-medium'>{allocation}</div>
+                    </div>
+                </div>
+                <div>
+                    <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] bg-[#110f0d] flex gap-4 text-sm'>
+                        <h3 className='font-extrabold'>Uptime</h3>
+                        <div className='font-medium'>{formatUptime(uptime)}</div>
                     </div>
                 </div>
                 <div>
