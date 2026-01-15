@@ -3,6 +3,7 @@ import type { SWRConfiguration } from 'swr';
 import useSWR from 'swr';
 
 import http, { FractalResponseList } from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import type { ServerEggVariable } from '@/api/server/types';
 import { rawDataToServerEggVariable } from '@/api/transformers';
 
@@ -17,7 +18,7 @@ export default (uuid: string, fallbackData?: Response, config?: SWRConfiguration
     useSWR(
         [uuid, '/startup'],
         async (): Promise<Response> => {
-            const { data } = await http.get(`/api/client/servers/${uuid}/startup`);
+            const { data } = await http.get(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/startup`);
 
             const variables = ((data as FractalResponseList).data || []).map(rawDataToServerEggVariable);
 

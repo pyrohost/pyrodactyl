@@ -72,10 +72,31 @@ pm.max_requests = 500
 chdir = /
 EOF
 
-phpenmod -v 8.4 dom xml simplexml
+phpenmod -v 8.4 dom xml simplexml mbstring
 usermod -a -G www-data vagrant
 
 systemctl enable --now php8.4-fpm
+
+# ensure CLI sees correct php version
+if ! php -v | grep -q "PHP 8.4"; then
+  warn "CLI PHP is not 8.4 — forcing PHP 8.4 as system default"
+
+  update-alternatives --set php /usr/bin/php8.4
+  update-alternatives --set phar /usr/bin/phar8.4
+  update-alternatives --set phar.phar /usr/bin/phar.phar8.4
+
+  # re-check
+  if ! php -v | grep -q "PHP 8.4"; then
+    err "Failed to force PHP 8.4 as CLI default"
+    php -v
+    exit 1
+  fi
+
+  log "PHP CLI successfully set to 8.4"
+else
+  log "PHP CLI using 8.4"
+fi
+
 
 log Installing and configuring Nginx
 apt-get install -y nginx
@@ -179,7 +200,11 @@ setfacl -Rm u:vagrant:rwX storage bootstrap/cache >/dev/null 2>&1 || true
 chown -R vagrant:vagrant storage bootstrap/cache
 
 # helper (append --no-interaction automatically; avoid quoted, spaced values)
-artisan() { sudo -u vagrant -H bash -lc "cd /home/vagrant/pyrodactyl && php artisan $* --no-interaction"; }
+artisan() {
+  sudo -u vagrant -H bash -lc \
+    "cd /home/vagrant/pyrodactyl && /usr/bin/php8.4 artisan $* --no-interaction"
+}
+
 
 # generate key only if empty/missing
 if ! grep -qE '^APP_KEY=base64:.+' .env; then
@@ -227,7 +252,7 @@ NODE_ID=$(mysql -u root -D panel -N -B -e "SELECT id FROM nodes WHERE name='loca
 log Adding dummy allocations
 for i in $(seq 25500 25600); do
   mysql -u root -e "INSERT IGNORE INTO panel.allocations (node_id, ip, port)
-                    VALUES ($NODE_ID, 'localhost', $i)"
+                    VALUES ($NODE_ID, '0.0.0.0', $i)"
 done
 
 log Registering database host
@@ -281,6 +306,9 @@ install -d -m 0755 /etc/pterodactyl
 install -d -m 0755 /etc/elytra
 if [ ! -f /usr/local/bin/elytra ]; then
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=amd64 || ARCH=arm64
+  # TODO: MAKE SURE TO MERGE https://github.com/BoredHF/elytra IT HAS THE FIXES FOR THE ELYTRA BINARY.
+  # Without it, the elytra binary won't work properly. You would need to jump through a few hoops
+  # post install by creating a pterodactyl user using "sudo useradd -M -s /sbin/nologin pyrodactyl" - Tyr
   curl -fsSL -o /usr/local/bin/elytra "https://github.com/pyrohost/elytra/releases/latest/download/elytra_linux_${ARCH}"
   chmod u+x /usr/local/bin/elytra
 else
@@ -291,7 +319,7 @@ log Installing rustic for Elytra backups
 if [ ! -f /usr/local/bin/rustic ]; then
   apt-get install -y libfuse2
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=x86_64 || ARCH=aarch64
-  curl -fsSL -o /tmp/rustic.tar.gz "https://github.com/rustic-rs/rustic/releases/latest/download/rustic-v0.10.0-${ARCH}-unknown-linux-musl.tar.gz"
+  curl -fsSL -o /tmp/rustic.tar.gz "https://github.com/rustic-rs/rustic/releases/download/v0.10.0/rustic-v0.10.0-${ARCH}-unknown-linux-musl.tar.gz"
   tar -xf /tmp/rustic.tar.gz -C /tmp rustic
   mv /tmp/rustic /usr/local/bin/
   chmod +x /usr/local/bin/rustic
@@ -301,7 +329,7 @@ else
 fi
 
 if [ ! -f /etc/pterodactyl/config.yml ]; then
-  sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && php artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
+  sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && /usr/bin/php8.4 artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
 else
   log "Elytra config already exists, skipping"
 fi
@@ -335,13 +363,13 @@ if ! command -v minio >/dev/null 2>&1; then
   ARCH=$(uname -m); [[ $ARCH == x86_64 ]] && ARCH=amd64 || ARCH=arm64
   curl -fsSL -o /usr/local/bin/minio "https://dl.min.io/server/minio/release/linux-${ARCH}/minio"
   chmod +x /usr/local/bin/minio
-  
+
   # Create minio user and directories
   useradd -r minio-user || true
   mkdir -p /opt/minio/data
   mkdir -p /etc/minio
   chown minio-user:minio-user /opt/minio/data
-  
+
   # Create MinIO environment file
   cat >/etc/minio/minio.conf <<EOF
 MINIO_ROOT_USER=minioadmin
@@ -349,7 +377,7 @@ MINIO_ROOT_PASSWORD=minioadmin
 MINIO_VOLUMES=/opt/minio/data
 MINIO_OPTS="--console-address :9001"
 EOF
-  
+
   # Create systemd service
   cat >/etc/systemd/system/minio.service <<EOF
 [Unit]
@@ -386,80 +414,86 @@ SendSIGKILL=no
 [Install]
 WantedBy=multi-user.target
 EOF
-  
+
   systemctl daemon-reload
   systemctl enable --now minio
-  
+
   # Wait for MinIO to start
   sleep 5
-  
+
   # Create default buckets using mc (MinIO Client)
   curl -fsSL -o /usr/local/bin/mc "https://dl.min.io/client/mc/release/linux-${ARCH}/mc"
   chmod +x /usr/local/bin/mc
-  
+
   # Configure mc alias and create buckets
   sudo -u vagrant -H bash -c '
     /usr/local/bin/mc alias set local http://localhost:9000 minioadmin minioadmin
     /usr/local/bin/mc mb local/pterodactyl-backups --ignore-existing
   ' || true
-  
+
   # Configure MinIO in .env for rustic_s3 backups
   pushd /home/vagrant/pyrodactyl >/dev/null
-  if [ -f .env ]; then
-    # Set rustic_s3 backup configuration for MinIO
-    sed -i '/^APP_BACKUP_DRIVER=/c\APP_BACKUP_DRIVER=rustic_s3' .env
 
-    # Configure rustic_s3 settings for MinIO
-    if grep -q "^RUSTIC_S3_ENDPOINT=" .env; then
-      sed -i '/^RUSTIC_S3_ENDPOINT=/c\RUSTIC_S3_ENDPOINT=http://localhost:9000' .env
-    else
-      echo 'RUSTIC_S3_ENDPOINT=http://localhost:9000' >> .env
+  ENV_FILE=".env"
+
+  if [ ! -f "$ENV_FILE" ]; then
+    warn "No $ENV_FILE found in /home/vagrant/pyrodactyl — skipping MinIO .env configuration"
+  else
+    log "Configuring $ENV_FILE for MinIO (rustic_s3)"
+
+    # Ensure file ends with a newline to prevent concatenation when appending
+    if [ -s "$ENV_FILE" ] && [ "$(tail -c1 "$ENV_FILE")" != $'\n' ]; then
+      log "Adding missing trailing newline to $ENV_FILE"
+      printf '\n' >> "$ENV_FILE"
     fi
 
-    if grep -q "^RUSTIC_S3_REGION=" .env; then
-      sed -i '/^RUSTIC_S3_REGION=/c\RUSTIC_S3_REGION=us-east-1' .env
-    else
-      echo 'RUSTIC_S3_REGION=us-east-1' >> .env
+    # If APP_SERVICE_AUTHOR was written without a trailing newline and RUSTIC_S3 variables
+    # were appended immediately (e.g. ...\"dev@...\"RUSTIC_S3_...), insert a newline before RUSTIC_S3.
+    if grep -q 'APP_SERVICE_AUTHOR=.*RUSTIC_S3' "$ENV_FILE" 2>/dev/null; then
+      log "Fixing concatenated APP_SERVICE_AUTHOR + RUSTIC_S3 entries"
+      sed -E -i 's/(APP_SERVICE_AUTHOR=.*)RUSTIC_S3/\1\nRUSTIC_S3/g' "$ENV_FILE"
     fi
 
-    if grep -q "^RUSTIC_S3_BUCKET=" .env; then
-      sed -i '/^RUSTIC_S3_BUCKET=/c\RUSTIC_S3_BUCKET=pterodactyl-backups' .env
-    else
-      echo 'RUSTIC_S3_BUCKET=pterodactyl-backups' >> .env
-    fi
+    # Helper: replace key if present, otherwise append key=value
+    set_env_key() {
+      local file="$1"; shift
+      local key="$1"; local val="$2"
 
-    if grep -q "^RUSTIC_S3_PREFIX=" .env; then
-      sed -i '/^RUSTIC_S3_PREFIX=/c\RUSTIC_S3_PREFIX=pterodactyl-backups/' .env
-    else
-      echo 'RUSTIC_S3_PREFIX=pterodactyl-backups/' >> .env
-    fi
+      # Ensure trailing newline before appending
+      if [ -s "$file" ] && [ "$(tail -c1 "$file")" != $'\n' ]; then
+        printf '\n' >> "$file"
+      fi
 
-    if grep -q "^RUSTIC_S3_ACCESS_KEY_ID=" .env; then
-      sed -i '/^RUSTIC_S3_ACCESS_KEY_ID=/c\RUSTIC_S3_ACCESS_KEY_ID=minioadmin' .env
-    else
-      echo 'RUSTIC_S3_ACCESS_KEY_ID=minioadmin' >> .env
-    fi
+      if grep -qE "^${key}=" "$file"; then
+        # Replace existing line (preserve other lines)
+        awk -v K="$key" -v V="$val" 'BEGIN{FS=OFS="="}
+          $1==K { print K"="V; next }
+          { print }
+        ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+      else
+        printf '%s=%s\n' "$key" "$val" >> "$file"
+      fi
+    }
 
-    if grep -q "^RUSTIC_S3_SECRET_ACCESS_KEY=" .env; then
-      sed -i '/^RUSTIC_S3_SECRET_ACCESS_KEY=/c\RUSTIC_S3_SECRET_ACCESS_KEY=minioadmin' .env
-    else
-      echo 'RUSTIC_S3_SECRET_ACCESS_KEY=minioadmin' >> .env
-    fi
+    # Set APP_BACKUP_DRIVER and all RUSTIC_S3_* keys idempotently
+    set_env_key "$ENV_FILE" "APP_BACKUP_DRIVER" "rustic_s3"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_ENDPOINT" "http://localhost:9000"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_REGION" "us-east-1"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_BUCKET" "pterodactyl-backups"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_PREFIX" "pterodactyl-backups/"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_ACCESS_KEY_ID" "minioadmin"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_SECRET_ACCESS_KEY" "minioadmin"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_FORCE_PATH_STYLE" "true"
+    set_env_key "$ENV_FILE" "RUSTIC_S3_DISABLE_SSL" "true"
 
-    if grep -q "^RUSTIC_S3_FORCE_PATH_STYLE=" .env; then
-      sed -i '/^RUSTIC_S3_FORCE_PATH_STYLE=/c\RUSTIC_S3_FORCE_PATH_STYLE=true' .env
-    else
-      echo 'RUSTIC_S3_FORCE_PATH_STYLE=true' >> .env
-    fi
+    log "Finished configuring $ENV_FILE for MinIO (rustic_s3)"
 
-    if grep -q "^RUSTIC_S3_DISABLE_SSL=" .env; then
-      sed -i '/^RUSTIC_S3_DISABLE_SSL=/c\RUSTIC_S3_DISABLE_SSL=true' .env
-    else
-      echo 'RUSTIC_S3_DISABLE_SSL=true' >> .env
+    if ! grep -qE '^APP_BACKUP_DRIVER=|^RUSTIC_S3_' "$ENV_FILE"; then
+      warn "Expected MinIO keys not found in $ENV_FILE"
     fi
   fi
   popd >/dev/null
-  
+
 log Installing phpMyAdmin
 export DEBIAN_FRONTEND=noninteractive
 echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections
@@ -529,10 +563,10 @@ if ! command -v mailpit >/dev/null 2>&1; then
   mv /tmp/mailpit /usr/local/bin/
   chmod +x /usr/local/bin/mailpit
   rm -f /tmp/mailpit.tar.gz
-  
+
   # Create mailpit user
   useradd -r mailpit-user || true
-  
+
   # Create systemd service
   cat >/etc/systemd/system/mailpit.service <<EOF
 [Unit]
@@ -549,10 +583,10 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
-  
+
   systemctl daemon-reload
   systemctl enable --now mailpit
-  
+
   # Configure Mailpit in .env for mail testing
   pushd /home/vagrant/pyrodactyl >/dev/null
   if [ -f .env ]; then
@@ -562,37 +596,37 @@ EOF
     else
       echo 'MAIL_MAILER=smtp' >> .env
     fi
-    
+
     if grep -q "^MAIL_HOST=" .env; then
       sed -i '/^MAIL_HOST=/c\MAIL_HOST=localhost' .env
     else
       echo 'MAIL_HOST=localhost' >> .env
     fi
-    
+
     if grep -q "^MAIL_PORT=" .env; then
       sed -i '/^MAIL_PORT=/c\MAIL_PORT=1025' .env
     else
       echo 'MAIL_PORT=1025' >> .env
     fi
-    
+
     if grep -q "^MAIL_USERNAME=" .env; then
       sed -i '/^MAIL_USERNAME=/c\MAIL_USERNAME=' .env
     else
       echo 'MAIL_USERNAME=' >> .env
     fi
-    
+
     if grep -q "^MAIL_PASSWORD=" .env; then
       sed -i '/^MAIL_PASSWORD=/c\MAIL_PASSWORD=' .env
     else
       echo 'MAIL_PASSWORD=' >> .env
     fi
-    
+
     if grep -q "^MAIL_ENCRYPTION=" .env; then
       sed -i '/^MAIL_ENCRYPTION=/c\MAIL_ENCRYPTION=' .env
     else
       echo 'MAIL_ENCRYPTION=' >> .env
     fi
-    
+
     if grep -q "^MAIL_FROM_ADDRESS=" .env; then
       sed -i '/^MAIL_FROM_ADDRESS=/c\MAIL_FROM_ADDRESS=no-reply@localhost' .env
     else
@@ -600,19 +634,25 @@ EOF
     fi
   fi
   popd >/dev/null
-  
+
   log "Mailpit installed and configured successfully"
   log "Mailpit Web UI: http://localhost:8025"
 else
   log "Mailpit already installed, skipping"
 fi
 
+log "Forcing PHP 8.4 as system default"
+
+update-alternatives --set php /usr/bin/php8.4
+update-alternatives --set phar /usr/bin/phar8.4
+update-alternatives --set phar.phar /usr/bin/phar.phar8.4
+
 systemctl restart php8.4-fpm
 systemctl reload nginx || systemctl restart nginx || true
 
 log Generating Application API Key
 pushd /home/vagrant/pyrodactyl >/dev/null
-API_KEY_RESULT=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
+API_KEY_RESULT=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.4 artisan tinker --execute="
 use Pterodactyl\Models\ApiKey;
 use Pterodactyl\Models\User;
 use Pterodactyl\Services\Api\KeyCreationService;
@@ -637,7 +677,7 @@ if [ -n "${API_KEY:-}" ]; then
   log Creating Minecraft server
   # Get the first allocation ID for this node
   ALLOCATION_ID=$(mysql -u root -D panel -N -B -e "SELECT id FROM allocations WHERE node_id=$NODE_ID LIMIT 1;" 2>/dev/null || echo "")
-  
+
   if [ -z "$ALLOCATION_ID" ]; then
     warn "No allocations found for node $NODE_ID, skipping server creation"
   else
@@ -647,7 +687,7 @@ if [ -n "${API_KEY:-}" ]; then
     "name": "Minecraft Vanilla Dev Server",
     "description": "Development Minecraft Vanilla Server with 4GB RAM, 32GB storage, 4 cores",
     "user": 1,
-    "egg": 3,
+    "egg": 8,
     "docker_image": "ghcr.io/pterodactyl/yolks:java_17",
     "startup": "java -Xms128M -Xmx4096M -jar {{SERVER_JARFILE}}",
     "environment": {
@@ -682,10 +722,10 @@ if [ -n "${API_KEY:-}" ]; then
     "oom_disabled": false
 }
 EOF
-    
+
     # Check if a Minecraft server already exists using Laravel
     pushd /home/vagrant/pyrodactyl >/dev/null
-    EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc 'php artisan tinker --execute="
+    EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.4 artisan tinker --execute="
 use Pterodactyl\Models\Server;
 \$server = Server::where(\"name\", \"Minecraft Vanilla Dev Server\")->first();
 if (\$server) {
@@ -743,10 +783,13 @@ if (\$server) {
           warn "Server creation succeeded but failed to extract server ID"
         fi
       else
-        warn "Server creation failed. Response saved to /tmp/server_response.json"
-        if [ -f /tmp/server_response.json ]; then
-          log "Error details: $(head -3 /tmp/server_response.json)"
-        fi
+        warn "Server creation failed. API response below:"
+
+        echo
+        echo "---------------- API RESPONSE ----------------"
+        echo "$SERVER_RESPONSE" | jq . 2>/dev/null || echo "$SERVER_RESPONSE"
+        echo "----------------------------------------------"
+        echo
       fi
       rm -f /tmp/server_create.json
     fi

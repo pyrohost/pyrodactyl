@@ -16,9 +16,7 @@ class ServerController extends Controller
     /**
      * ServerController constructor.
      */
-    public function __construct(private ViewFactory $view)
-    {
-    }
+    public function __construct(private ViewFactory $view) {}
 
     /**
      * Returns all the servers that exist on the system using a paginated result set. If

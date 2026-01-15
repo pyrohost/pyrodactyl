@@ -1,12 +1,8 @@
 name: Build & Push Version (reusable)
 
 on:
-  workflow_call:
-    inputs:
-      tag:
-        description: 'Tag to build (e.g. v1.0.0)'
-        required: true
-        type: string
+  release:
+    types: [published]
 
 permissions:
   packages: write
@@ -15,11 +11,11 @@ jobs:
   build-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code (shallow – we only need the tag)
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag }}
-          fetch-depth: 1
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -41,7 +37,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}:${{ inputs.tag }}
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -11,7 +11,7 @@ on:
         required: true
         type: choice
         options:
-          - stable
+          - release
           - prerelease
         default: stable
 
@@ -28,9 +28,3 @@ jobs:
       version: ${{ inputs.version }}
       release_type: ${{ inputs.release_type }}
 
-  build:
-    needs: release
-    name: Build Production Docker Images
-    uses: ./.github/workflows/prod-build.yaml
-    with:
-      tag: v${{ inputs.version }}

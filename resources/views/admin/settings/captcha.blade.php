@@ -180,12 +180,12 @@
 
       function toggleSettings() {
         const provider = providerSelect.value;
-        
+
         // Hide all provider-specific settings first
         turnstileSettings.style.display = 'none';
         hcaptchaSettings.style.display = 'none';
         recaptchaSettings.style.display = 'none';
-        
+
         if (provider === 'turnstile') {
           turnstileSettings.style.display = 'block';
         } else if (provider === 'hcaptcha') {
@@ -196,7 +196,7 @@
       }
 
       providerSelect.addEventListener('change', toggleSettings);
-      
+
       // Initialize on page load with a small delay to ensure DOM is ready
       setTimeout(toggleSettings, 100);
     });

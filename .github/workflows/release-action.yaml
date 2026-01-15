@@ -1,4 +1,4 @@
-name: Create release (reusable)
+name: Create release (automated)
 
 on:
   workflow_call:
@@ -21,33 +21,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Create release branch
-        run: |
-          git config user.name "github-actions[ci]"
-          git config user.email "ci@pyrodactyl.dev"
-          git checkout -b releases/v${{ inputs.version }}
+          ref: main
 
       - name: Update version in config/app.php
         run: |
-          sed -i "s/'version' => '.*'/'version' => 'v${{ inputs.version }}'/g" config/app.php
+          sed -i "s/'version' => '[^']*'/'version' => 'v${{ inputs.version }}'/" config/app.php
 
       - name: Commit version bump
         run: |
           git add config/app.php
-          git commit -m "ci: bump v${{ inputs.version }}"
+          git commit -m "ci: bump v${{ inputs.version }}" || echo "No changes to commit"
 
-      - name: Push release branch
-        run: git push origin releases/v${{ inputs.version }}
 
       # ---- Build tarball -------------------------------------------------
       - name: Create release archive
         run: |
-          rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md \
-                 flake.lock flake.nix phpunit.xml shell.nix
+          rm -rf node_modules tests CODE_OF_CONDUCT.md CONTRIBUTING.md
+
           tar -czf panel.tar.gz \
-              --exclude='.*' * .editorconfig .env.example .gitignore .prettierrc.json
+            --exclude='.*' \
+            * .env.example
 
       - name: Generate checksum
         id: checksum
@@ -57,11 +50,18 @@ jobs:
           echo "checksum=$(echo $SUM | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
       # ---- GitHub Release ------------------------------------------------
+      - name: Validate release type
+        run: |
+          case "${{ inputs.release_type }}" in
+            release|prerelease) ;;
+            *) echo "Invalid release_type"; exit 1 ;;
+          esac
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2   # v2 is the current stable
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}
-          target_commitish: releases/v${{ inputs.version }}
+          target_commitish: main
           name: Release v${{ inputs.version }}
           generate_release_notes: true
           draft: true
@@ -71,3 +71,4 @@ jobs:
             checksum.txt
           body: |
             **SHA256 checksum:**
+            `${{ steps.checksum.outputs.checksum }}`

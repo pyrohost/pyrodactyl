@@ -17,6 +17,7 @@
         "subdomain_minecraft"
     ],
     "docker_images": {
+        "Java 25": "ghcr.io/pyrodactyl-oss/images:java_25",
         "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",
         "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
         "Java 17": "ghcr.io/pterodactyl/yolks:java_17",

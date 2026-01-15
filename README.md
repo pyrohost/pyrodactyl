@@ -54,9 +54,9 @@ Pyrodactyl has various effortless ways of starting up a ready-to-use, fully-feat
 
 <a href="https://star-history.com/#pyrodactyl-oss/pyrodactyl&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrodactyl-oss/pyrodactyl&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrodactyl-oss/pyrodactyl&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrodactyl-oss/pyrodactyl&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=pyrohost/pyrodactyl&type=Date" />
   </picture>
 </a>
 
@@ -66,4 +66,4 @@ Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
 
 Pyrodactyl™ Copyright © 2023-Present Pyro Inc. and contributors.
 
-AGPL-3.0-or-later
+Apache-2.0

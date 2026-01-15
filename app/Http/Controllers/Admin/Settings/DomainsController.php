@@ -11,6 +11,7 @@ use Pterodactyl\Services\Subdomain\SubdomainManagementService;
 use Pterodactyl\Exceptions\Dns\DnsProviderException;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Pterodactyl\Http\Requests\Admin\Settings\DomainFormRequest;
+use Pterodactyl\Enums\Subdomain\Providers;
 
 class DomainsController extends Controller
 {
@@ -220,20 +221,7 @@ class DomainsController extends Controller
      */
     private function getAvailableProviders(): array
     {
-        return [
-            'cloudflare' => [
-                'name' => 'Cloudflare',
-                'description' => 'Cloudflare DNS service',
-            ],
-            'hetzner' => [
-                'name' => 'Hetzner',
-                'description' => 'Hetzner DNS Console',
-            ],
-            'route53' => [
-                'name' => 'Route53',
-                'description' => 'AWS Route53 Dns Service',
-            ],
-        ];
+        return Providers::allWithDescriptions();
     }
 
     /**
@@ -241,11 +229,7 @@ class DomainsController extends Controller
      */
     private function getProviderClass(string $provider): string
     {
-        $providers = [
-            'cloudflare' => \Pterodactyl\Services\Dns\Providers\CloudflareProvider::class,
-            'hetzner' => \Pterodactyl\Services\Dns\Providers\HetznerProvider::class,
-            'route53' => \Pterodactyl\Services\Dns\Providers\Route53Provider::class,
-        ];
+        $providers = Providers::all();
 
         if (!isset($providers[$provider])) {
             throw new \Exception("Unsupported DNS provider: {$provider}");
@@ -254,4 +238,3 @@ class DomainsController extends Controller
         return $providers[$provider];
     }
 }
-

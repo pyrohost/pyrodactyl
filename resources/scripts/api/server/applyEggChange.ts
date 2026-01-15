@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface ApplyEggChangeRequest {
     egg_id: number;
@@ -21,6 +22,8 @@ export interface ApplyEggChangeResponse {
  * This initiates a background operation to change the server's egg configuration.
  */
 export default async (uuid: string, data: ApplyEggChangeRequest): Promise<ApplyEggChangeResponse> => {
-    const { data: response } = await http.post(`/api/client/servers/${uuid}/settings/egg/apply`, data);
+    const daemonType = getGlobalDaemonType();
+
+    const { data: response } = await http.post(`/api/client/servers/${daemonType}/${uuid}/settings/egg/apply`, data);
     return response;
 };

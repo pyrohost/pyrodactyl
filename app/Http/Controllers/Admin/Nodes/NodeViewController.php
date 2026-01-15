@@ -16,6 +16,8 @@ use Pterodactyl\Services\Helpers\SoftwareVersionService;
 use Pterodactyl\Repositories\Eloquent\LocationRepository;
 use Pterodactyl\Repositories\Eloquent\AllocationRepository;
 use Illuminate\Support\Facades\DB;
+use Pterodactyl\Enums\Daemon\DaemonType;
+use Pterodactyl\Enums\Daemon\Adapters;
 
 class NodeViewController extends Controller
 {
@@ -39,10 +41,11 @@ class NodeViewController extends Controller
     public function index(Request $request, Node $node): View
     {
         $node = $this->repository->loadLocationAndServerCount($node);
+        $stats = $this->repository->getUsageStats($node);
 
         return $this->view->make('admin.nodes.view.index', [
             'node' => $node,
-            'stats' => $this->repository->getUsageStats($node),
+            'stats' => $stats,
             'version' => $this->versionService,
         ]);
     }
@@ -55,6 +58,8 @@ class NodeViewController extends Controller
         return $this->view->make('admin.nodes.view.settings', [
             'node' => $node,
             'locations' => $this->locationRepository->all(),
+            'daemonTypes' => DaemonType::all(),
+            'backupDisks' => Adapters::all_sorted(),
         ]);
     }
 
@@ -76,7 +81,7 @@ class NodeViewController extends Controller
         $this->plainInject(['node' => Collection::wrap($node)->only(['id'])]);
 
         switch (DB::getPdo()->getAttribute(DB::getPdo()::ATTR_DRIVER_NAME)) {
-            case 'mysql':
+            default:
                 return $this->view->make('admin.nodes.view.allocation', [
                     'node' => $node,
                     'allocations' => Allocation::query()->where('node_id', $node->id)

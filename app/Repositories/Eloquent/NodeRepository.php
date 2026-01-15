@@ -176,4 +176,16 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
 
         return $instance->first();
     }
+
+    /**
+     * Returns a node with the given id with the Node's resource usage.
+     */
+    public function getDaemonType(int $node_id): Node
+    {
+        $instance = $this->getBuilder()
+            ->select(['nodes.daemonType'])
+            ->where('nodes.id', $node_id);
+
+        return $instance->first();
+    }
 }

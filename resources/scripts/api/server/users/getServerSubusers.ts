@@ -1,4 +1,5 @@
 import http, { FractalResponseData } from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 import { Subuser } from '@/state/server/subusers';
 
@@ -15,7 +16,7 @@ export const rawDataToServerSubuser = (data: FractalResponseData): Subuser => ({
 
 export default (uuid: string): Promise<Subuser[]> => {
     return new Promise((resolve, reject) => {
-        http.get(`/api/client/servers/${uuid}/users`)
+        http.get(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/users`)
             .then(({ data }) => resolve((data.data || []).map(rawDataToServerSubuser)))
             .catch(reject);
     });

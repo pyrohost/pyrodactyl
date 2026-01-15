@@ -1,7 +1,7 @@
 import { ArrowDownToLine } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, Field as FormikField, FormikHelpers, useFormikContext } from 'formik';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, lazy, useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { boolean, object, string } from 'yup';
 
@@ -22,6 +22,8 @@ import { PageListContainer } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
 import { httpErrorToHuman } from '@/api/http';
+import deleteAllServerBackups from '@/api/server/backups/deleteAllServerBackups';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import { Context as ServerBackupContext } from '@/api/swr/getServerBackups';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -31,8 +33,11 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
-import BackupItem from './BackupItem';
 import { useUnifiedBackups } from './useUnifiedBackups';
+
+const BackupItemElytra = lazy(() => import('./elytra/BackupItem'));
+const BackupItemWings = lazy(() => import('./wings/BackupItem'));
+
 
 // Context to share live backup progress across components
 export const LiveProgressContext = createContext<
@@ -123,6 +128,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
 const BackupContainer = () => {
     const { page, setPage } = useContext(ServerBackupContext);
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
+    const liveProgress = useContext(LiveProgressContext);
     const [createModalVisible, setCreateModalVisible] = useState(false);
     const [deleteAllModalVisible, setDeleteAllModalVisible] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -135,6 +141,7 @@ const BackupContainer = () => {
     const [isBulkDeleting, setIsBulkDeleting] = useState(false);
     const [bulkDeletePassword, setBulkDeletePassword] = useState('');
     const [bulkDeleteTotpCode, setBulkDeleteTotpCode] = useState('');
+    const daemonType = getGlobalDaemonType();
 
     const hasTwoFactor = useStoreState((state: ApplicationStore) => state.user.data?.useTotp || false);
 
@@ -144,6 +151,9 @@ const BackupContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
     const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
+
+    // Check if any backup operation is in progress
+    const hasActiveOperation = Object.values(liveProgress).some((op) => !op.completed);
 
     useEffect(() => {
         clearFlashes('backups:create');
@@ -181,14 +191,7 @@ const BackupContainer = () => {
         setIsDeleting(true);
 
         try {
-            const http = (await import('@/api/http')).default;
-            await http.delete(`/api/client/servers/${uuid}/backups/delete-all`, {
-                data: {
-                    password: deleteAllPassword,
-                    ...(hasTwoFactor ? { totp_code: deleteAllTotpCode } : {}),
-                },
-            });
-
+            await deleteAllServerBackups(uuid, deleteAllPassword, hasTwoFactor, deleteAllTotpCode);
             toast.success('All backups and repositories are being deleted. This may take a few minutes.');
 
             setDeleteAllModalVisible(false);
@@ -286,7 +289,6 @@ const BackupContainer = () => {
             clearFlashes('backups');
             return;
         }
-
         clearAndAddHttpError({ error, key: 'backups' });
     }, [error]);
 
@@ -391,7 +393,11 @@ const BackupContainer = () => {
                             </div>
                             <div className='flex gap-2'>
                                 {backupCount > 0 && (
-                                    <ActionButton variant='danger' onClick={() => setDeleteAllModalVisible(true)}>
+                                    <ActionButton
+                                        variant='danger'
+                                        onClick={() => setDeleteAllModalVisible(true)}
+                                        disabled={hasActiveOperation}
+                                    >
                                         <svg
                                             className='w-4 h-4 mr-2'
                                             fill='none'
@@ -410,7 +416,11 @@ const BackupContainer = () => {
                                 )}
                                 {(backupLimit === null || backupLimit > backupCount) &&
                                     (!backupStorageLimit || !storage?.is_over_limit) && (
-                                        <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
+                                        <ActionButton
+                                            variant='primary'
+                                            onClick={() => setCreateModalVisible(true)}
+                                            disabled={hasActiveOperation}
+                                        >
                                             New Backup
                                         </ActionButton>
                                     )}
@@ -421,7 +431,8 @@ const BackupContainer = () => {
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
                     Create and manage server backups to protect your data. Schedule automated backups, download existing
-                    ones, and restore when needed.
+                    ones, and restore when needed. Backups are deduplicated, meaning unchanged files are only stored
+                    once across all backups
                 </p>
             </MainPageHeader>
 
@@ -707,16 +718,20 @@ const BackupContainer = () => {
                     )}
 
                     <PageListContainer>
-                        {backups.map((backup) => (
-                            <BackupItem
-                                key={backup.uuid}
-                                backup={backup}
-                                isSelected={selectedBackups.has(backup.uuid)}
-                                onToggleSelect={() => toggleBackupSelection(backup.uuid)}
-                                isSelectable={selectableBackups.some((b) => b.uuid === backup.uuid)}
-                                retryBackup={retryBackup}
-                            />
-                        ))}
+                        {backups.map((backup) =>
+                            daemonType === 'elytra' ? (
+                                <BackupItemElytra
+                                    key={backup.uuid}
+                                    backup={backup}
+                                    isSelected={selectedBackups.has(backup.uuid)}
+                                    onToggleSelect={() => toggleBackupSelection(backup.uuid)}
+                                    isSelectable={selectableBackups.some((b) => b.uuid === backup.uuid)}
+                                    retryBackup={retryBackup}
+                                />
+                            ) : (
+                                <BackupItemWings key={backup.uuid} backup={backup} />
+                            ),
+                        )}
                     </PageListContainer>
 
                     {pagination && pagination.currentPage && pagination.totalPages && pagination.totalPages > 1 && (
@@ -812,6 +827,7 @@ const BackupContainerWrapper = () => {
                 if (isDeletionOperation) {
                     // Optimistically remove the deleted backup from SWR cache immediately
                     // note: this is incredibly buggy sometimes, somebody please refactor how "live" backups work. - ellie
+                    // Changed this to use "revalidate: false" so the optimistic update persists - tyr
                     mutate(
                         (currentData) => {
                             if (!currentData) return currentData;
@@ -821,17 +837,15 @@ const BackupContainerWrapper = () => {
                                 backupCount: Math.max(0, (currentData.backupCount || 0) - 1),
                             };
                         },
-                        { revalidate: true },
+                        { revalidate: false },
                     );
 
-                    // Remove from live progress
-                    setTimeout(() => {
-                        setLiveProgress((prev) => {
-                            const updated = { ...prev };
-                            delete updated[backup_uuid];
-                            return updated;
-                        });
-                    }, 500);
+                    // Remove from live progress immediately
+                    setLiveProgress((prev) => {
+                        const updated = { ...prev };
+                        delete updated[backup_uuid];
+                        return updated;
+                    });
                 } else {
                     // For new backups, wait for them to appear in the API
                     mutate();

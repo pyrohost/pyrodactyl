@@ -1,7 +1,7 @@
 {
     "name": "pyrodactyl-oss/pyrodactyl",
     "description": "Pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
-    "license": "AGPL-3.0-or-later",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Pyrodactyl-Oss",
@@ -10,7 +10,7 @@
             "role": "Maintainer"
         },
         {
-            "name": "Pyro Host Inc.",
+            "name": "Pyro,  Inc.",
             "email": "team@pyro.host",
             "homepage": "https://pyro.host",
             "role": "Former Maintainer"
@@ -72,13 +72,15 @@
         ],
         "psr-4": {
             "Pterodactyl\\": "app/",
+            "Pyrodactyl\\": "app/",
             "Database\\Factories\\": "database/Factories/",
             "Database\\Seeders\\": "database/Seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Pterodactyl\\Tests\\": "tests/"
+            "Pterodactyl\\Tests\\": "tests/",
+            "Pyrodactyl\\Tests\\": "tests/"
         }
     },
     "scripts": {

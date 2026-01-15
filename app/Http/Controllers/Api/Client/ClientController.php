@@ -37,6 +37,7 @@ class ClientController extends ClientApiController
             'name',
             'description',
             'external_id',
+            'daemonType',
             AllowedFilter::custom('*', new MultiFieldServerFilter()),
         ]);
 

@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface BackupJobStatus {
     job_id: string | null;
@@ -15,7 +16,8 @@ export interface BackupJobStatus {
 }
 
 export default async (uuid: string, backupUuid: string): Promise<BackupJobStatus> => {
-    const { data } = await http.get(`/api/client/servers/${uuid}/backups/${backupUuid}/status`);
+    const daemonType = getGlobalDaemonType();
+    const { data } = await http.get(`/api/client/servers/${daemonType}/${uuid}/backups/${backupUuid}/status`);
 
     return data;
 };

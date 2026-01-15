@@ -11,11 +11,11 @@ x-common:
         APP_SERVICE_AUTHOR: 'noreply@example.com'
         DB_USERNAME: "pterodactyl"
         # DB_PASSWORD: "Uncomment this to use your own password"
-        
+
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
         # to generate an SSL certificate for the Panel.
         # LE_EMAIL: ""
-        
+
     mail: &mail-environment
         MAIL_FROM: 'noreply@example.com'
         MAIL_DRIVER: 'smtp'
@@ -47,7 +47,7 @@ services:
         image: redis:alpine
         restart: always
     panel:
-        image: ghcr.io/pyrohost/pyrodactyl:latest
+        image: ghcr.io/pyrodactyl-oss/pyrodactyl:latest
         restart: always
         ports:
             - '80:80'

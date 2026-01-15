@@ -1,4 +1,5 @@
 import http from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface SubdomainInfo {
     supported: boolean;
@@ -24,6 +25,7 @@ export interface AvailabilityResponse {
     available: boolean;
     message: string;
 }
+const daemonType = getGlobalDaemonType();
 
 export const getSubdomainInfo = (uuid: string): Promise<SubdomainInfo> => {
     return new Promise((resolve, reject) => {

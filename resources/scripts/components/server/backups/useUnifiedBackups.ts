@@ -6,10 +6,12 @@ import { ServerContext } from '@/state/server';
 
 import { LiveProgressContext } from './BackupContainer';
 import { UnifiedBackup } from './BackupItem';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export const useUnifiedBackups = () => {
     const { data: backups, error, isValidating, mutate } = getServerBackups();
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const daemonType = getGlobalDaemonType();
 
     const liveProgress = useContext(LiveProgressContext);
 
@@ -55,7 +57,7 @@ export const useUnifiedBackups = () => {
     const renameBackup = useCallback(
         async (backupUuid: string, newName: string) => {
             const http = (await import('@/api/http')).default;
-            await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/rename`, { name: newName });
+            await http.post(`/api/client/servers/${daemonType}/${uuid}/backups/${backupUuid}/rename`, { name: newName });
             mutate();
         },
         [uuid, mutate],
@@ -64,7 +66,7 @@ export const useUnifiedBackups = () => {
     const toggleBackupLock = useCallback(
         async (backupUuid: string) => {
             const http = (await import('@/api/http')).default;
-            await http.post(`/api/client/servers/${uuid}/backups/${backupUuid}/lock`);
+            await http.post(`/api/client/servers/${daemonType}/${uuid}/backups/${backupUuid}/lock`);
             mutate();
         },
         [uuid, mutate],

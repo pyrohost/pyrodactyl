@@ -1,30 +1,33 @@
 # TODO: Refactor Docker with stricter permissions & modernized tooling
 
-# Stage 0:
-# Build the frontend (only if not in dev mode)
-FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine AS frontend
+# Stage 0: Build the frontend (only if not in dev mode)
+FROM --platform=$TARGETOS/$TARGETARCH oven/bun:1 AS frontend
+
 ARG DEV=false
 WORKDIR /app
+
+# Optional: only install git if your build really needs it (e.g. for git-based dependencies)
+# RUN if [ "$DEV" = "false" ]; then apk add --no-cache git; fi
+
+# No need for corepack/turbo install — Bun is already the runtime + package manager
+
+COPY package.json bun.lockb* ./
+
 RUN if [ "$DEV" = "false" ]; then \
-    apk add --no-cache git \
-    && npm install -g corepack@latest turbo \
-    && corepack enable \
-    && echo "Building frontend"; \
-    fi
-COPY pnpm-lock.yaml package.json ./
-RUN if [ "$DEV" = "false" ]; then \
-    pnpm fetch \
-    && echo "Fetched dependencies"; \
-    fi
-COPY . .
-RUN if [ "$DEV" = "false" ]; then \
-    pnpm install --frozen-lockfile \
-    && pnpm run ship; \
+    bun install --frozen-lockfile && \
+    echo "Installed dependencies with Bun"; \
     fi
 
-# Stage 1:
-# Build the actual container with all of the needed PHP dependencies that will run the application
+COPY . .
+
+RUN if [ "$DEV" = "false" ]; then \
+    bun run ship && \
+    echo "Frontend build completed"; \
+    fi
+
+# Stage 1: Build the actual container with all of the needed PHP dependencies
 FROM --platform=$TARGETOS/$TARGETARCH php:8.4-fpm-alpine AS php
+
 ARG DEV=false
 WORKDIR /app
 
@@ -43,13 +46,14 @@ RUN apk add --no-cache \
     tar unzip certbot certbot-nginx mysql-client postgresql17-client \
     && ln -s /bin/ash /bin/bash
 
-# Copy frontend build
+# Copy frontend build artifacts
 COPY . ./
 RUN if [ "$DEV" = "false" ]; then \
     echo "Copying frontend build"; \
     else \
     mkdir -p public/assets public/build; \
     fi
+
 COPY --from=frontend /app/public/assets public/assets
 COPY --from=frontend /app/public/build public/build
 
@@ -59,10 +63,9 @@ RUN curl -sS https://getcomposer.org/installer \
     | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader
 
-# Clean up image for dev environment
-# This is because we share local files with the container
+# Clean up image for dev environment (shared local files)
 RUN if [ "$DEV" = "true" ]; then \
-    echo "Cleaning up"; \
+    echo "Cleaning up for dev mode"; \
     find . \
     -mindepth 1 \
     \( -path './vendor*' \) -prune \
@@ -90,12 +93,13 @@ RUN rm /usr/local/etc/php-fpm.conf \
 
 # Configs
 COPY --chown=nginx:nginx .github/docker/default.conf /etc/nginx/http.d/default.conf
-COPY --chown=nginx:nginx .github/docker/www.conf     /usr/local/etc/php-fpm.conf
+COPY --chown=nginx:nginx .github/docker/www.conf /usr/local/etc/php-fpm.conf
 COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
 
 RUN rm -rf bootstrap/cache/*.php \
     && rm -rf storage/framework/* || true
 
 EXPOSE 80 443
+
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]
