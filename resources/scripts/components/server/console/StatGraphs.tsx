@@ -110,12 +110,14 @@ const StatGraphs = () => {
                         <div className='font-medium'>{formatUptime(uptime)}</div>
                     </div>
                 </div>
-                <div>
-                    <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] flex-col bg-[#110f0d] flex gap-4 text-sm'>
-                        <h3 className='font-extrabold'>Description</h3>
-                        <div className='font-medium'>{description}</div>
+                {description && (
+                    <div>
+                        <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] flex-col bg-[#110f0d] flex gap-4 text-sm'>
+                            <h3 className='font-extrabold'>Description</h3>
+                            <div className='font-medium'>{description}</div>
+                        </div>
                     </div>
-                </div>
+                )}
                 <div>
                     <ChartBlock title={'CPU'}>
                         <Line aria-label='CPU Usage' role='img' {...cpu.props} />
