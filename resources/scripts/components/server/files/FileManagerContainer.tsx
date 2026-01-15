@@ -134,31 +134,32 @@ const FileManagerContainer = () => {
                         <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
                     ) : (
                         <>
-                            <div className='p-1 border-[1px] border-[#ffffff12] rounded-md sm:ml-12 sm:mr-12 mx-2'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    fill='none'
-                                    viewBox='0 0 24 24'
-                                    strokeWidth={1.5}
-                                    stroke='currentColor'
-                                    className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-5 opacity-40'
-                                >
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-                                    />
-                                </svg>
+                            <div className='relative p-1 border-[1px] border-[#ffffff12] rounded-md sm:ml-12 sm:mr-12 mx-2'>
+                                <div className='absolute left-4 top-1/2 pl-2 -translate-y-1/2 pointer-events-none'>
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        fill='none'
+                                        viewBox='0 0 24 24'
+                                        strokeWidth={1.5}
+                                        stroke='currentColor'
+                                        className='w-5 h-5 opacity-40'
+                                    >
+                                        <path
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+                                        />
+                                    </svg>
+                                </div>
 
                                 <input
                                     ref={searchInputRef}
-                                    className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
+                                    className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold outline-none'
                                     type='text'
                                     placeholder='Search...'
                                     onChange={(event) => debouncedSearchTerm(event.target.value)}
                                 />
                             </div>
-
                             <div ref={parentRef} className='max-h-[60vh] overflow-auto'>
                                 <div
                                     data-pyro-file-manager-files
