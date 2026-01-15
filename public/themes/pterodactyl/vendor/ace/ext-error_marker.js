@@ -1,3 +1,3 @@
 (() => {
-	window.require(["ace/ext/error_marker"], () => {});
+    window.require(['ace/ext/error_marker'], () => {});
 })();

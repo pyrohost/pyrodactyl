@@ -1,8 +1,6 @@
-import { type DependencyList, useMemo } from "react";
+import { type DependencyList, useMemo } from 'react';
 
-import { useDeepMemoize } from "@/plugins/useDeepMemoize";
+import { useDeepMemoize } from '@/plugins/useDeepMemoize';
 
-export const useDeepCompareMemo = <T>(
-	callback: () => T,
-	dependencies: DependencyList,
-) => useMemo(callback, useDeepMemoize(dependencies));
+export const useDeepCompareMemo = <T>(callback: () => T, dependencies: DependencyList) =>
+    useMemo(callback, useDeepMemoize(dependencies));

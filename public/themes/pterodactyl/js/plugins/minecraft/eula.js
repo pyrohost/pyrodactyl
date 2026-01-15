@@ -20,59 +20,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 $(document).ready(() => {
-	Socket.on("console", (data) => {
-		if (typeof data === "undefined" || typeof data.line === "undefined") {
-			return;
-		}
+    Socket.on('console', (data) => {
+        if (typeof data === 'undefined' || typeof data.line === 'undefined') {
+            return;
+        }
 
-		if (
-			~data.line.indexOf(
-				"You need to agree to the EULA in order to run the server",
-			)
-		) {
-			swal(
-				{
-					title: "EULA Acceptance",
-					text: 'By pressing \'I Accept\' below you are indicating your agreement to the <a href="https://aka.ms/MinecraftEULA" target="_blank">Mojang EULA</a>.',
-					type: "info",
-					html: true,
-					showCancelButton: true,
-					showConfirmButton: true,
-					cancelButtonText: "I do not Accept",
-					confirmButtonText: "I Accept",
-					closeOnConfirm: false,
-					showLoaderOnConfirm: true,
-				},
-				() => {
-					$.ajax({
-						type: "POST",
-						url: Pterodactyl.meta.saveFile,
-						headers: { "X-CSRF-Token": Pterodactyl.meta.csrfToken },
-						data: {
-							file: "eula.txt",
-							contents: "eula=true",
-						},
-					})
-						.done((data) => {
-							$('[data-attr="power"][data-action="start"]').trigger("click");
-							swal({
-								type: "success",
-								title: "",
-								text: "The EULA for this server has been accepted, restarting server now.",
-							});
-						})
-						.fail((jqXHR) => {
-							console.error(jqXHR);
-							swal({
-								title: "Whoops!",
-								text:
-									"An error occurred while attempting to set the EULA as accepted: " +
-									jqXHR.responseJSON.error,
-								type: "error",
-							});
-						});
-				},
-			);
-		}
-	});
+        if (~data.line.indexOf('You need to agree to the EULA in order to run the server')) {
+            swal(
+                {
+                    title: 'EULA Acceptance',
+                    text: 'By pressing \'I Accept\' below you are indicating your agreement to the <a href="https://aka.ms/MinecraftEULA" target="_blank">Mojang EULA</a>.',
+                    type: 'info',
+                    html: true,
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonText: 'I do not Accept',
+                    confirmButtonText: 'I Accept',
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true,
+                },
+                () => {
+                    $.ajax({
+                        type: 'POST',
+                        url: Pterodactyl.meta.saveFile,
+                        headers: { 'X-CSRF-Token': Pterodactyl.meta.csrfToken },
+                        data: {
+                            file: 'eula.txt',
+                            contents: 'eula=true',
+                        },
+                    })
+                        .done((data) => {
+                            $('[data-attr="power"][data-action="start"]').trigger('click');
+                            swal({
+                                type: 'success',
+                                title: '',
+                                text: 'The EULA for this server has been accepted, restarting server now.',
+                            });
+                        })
+                        .fail((jqXHR) => {
+                            console.error(jqXHR);
+                            swal({
+                                title: 'Whoops!',
+                                text:
+                                    'An error occurred while attempting to set the EULA as accepted: ' +
+                                    jqXHR.responseJSON.error,
+                                type: 'error',
+                            });
+                        });
+                },
+            );
+        }
+    });
 });

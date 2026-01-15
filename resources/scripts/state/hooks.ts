@@ -1,6 +1,6 @@
-import { createTypedHooks } from "easy-peasy";
+import { createTypedHooks } from 'easy-peasy';
 
-import type { ApplicationStore } from "@/state/index";
+import type { ApplicationStore } from '@/state/index';
 
 const hooks = createTypedHooks<ApplicationStore>();
 

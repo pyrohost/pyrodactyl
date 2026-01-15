@@ -3,7 +3,7 @@
  * is not null.
  */
 function isObject(val: unknown): val is Record<string, unknown> {
-	return typeof val === "object" && val !== null && !Array.isArray(val);
+    return typeof val === 'object' && val !== null && !Array.isArray(val);
 }
 
 /**
@@ -11,10 +11,7 @@ function isObject(val: unknown): val is Record<string, unknown> {
  * and the prototype value.
  */
 function isEmptyObject(val: object): boolean {
-	return (
-		Object.keys(val).length === 0 &&
-		Object.getPrototypeOf(val) === Object.prototype
-	);
+    return Object.keys(val).length === 0 && Object.getPrototypeOf(val) === Object.prototype;
 }
 
 /**
@@ -23,7 +20,7 @@ function isEmptyObject(val: object): boolean {
  * easier.
  */
 function getObjectKeys<T extends object>(o: T): (keyof T)[] {
-	return Object.keys(o) as (keyof typeof o)[];
+    return Object.keys(o) as (keyof typeof o)[];
 }
 
 /**
@@ -31,35 +28,30 @@ function getObjectKeys<T extends object>(o: T): (keyof T)[] {
  * @param object
  * @param indentLevel
  */
-function formatObjectToIdentString(
-	object: any,
-	indentLevel: number = 0,
-): string {
-	const indent = "  ".repeat(indentLevel);
+function formatObjectToIdentString(object: any, indentLevel: number = 0): string {
+    const indent = '  '.repeat(indentLevel);
 
-	if (typeof object === "string") {
-		return `${indent}${object}`;
-	}
+    if (typeof object === 'string') {
+        return `${indent}${object}`;
+    }
 
-	if (isObject(object)) {
-		return getObjectKeys(object)
-			.map((key) => {
-				const value = object[key];
-				return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
-			})
-			.join("\n");
-	}
+    if (isObject(object)) {
+        return getObjectKeys(object)
+            .map((key) => {
+                const value = object[key];
+                return `${indent}${key}: ${formatObjectToIdentString(value, indentLevel + 1)}`;
+            })
+            .join('\n');
+    }
 
-	if (Array.isArray(object)) {
-		return (
-			(indentLevel > 0 ? "\n" : "") +
-			object
-				.map((item) => formatObjectToIdentString(item, indentLevel))
-				.join("\n")
-		);
-	}
+    if (Array.isArray(object)) {
+        return (
+            (indentLevel > 0 ? '\n' : '') +
+            object.map((item) => formatObjectToIdentString(item, indentLevel)).join('\n')
+        );
+    }
 
-	return `${indent}${String(object)}`;
+    return `${indent}${String(object)}`;
 }
 
 export { isObject, isEmptyObject, getObjectKeys, formatObjectToIdentString };

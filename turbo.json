@@ -1,10 +1,10 @@
 {
-	"$schema": "https://turbo.build/schema.json",
-	"globalEnv": ["NODE_ENV"],
-	"tasks": {
-		"build": {
-			"outputs": ["public/build/**"]
-		},
-		"lint": {}
-	}
+    "$schema": "https://turbo.build/schema.json",
+    "globalEnv": ["NODE_ENV"],
+    "tasks": {
+        "build": {
+            "outputs": ["public/build/**"]
+        },
+        "lint": {}
+    }
 }

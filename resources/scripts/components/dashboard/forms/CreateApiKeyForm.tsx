@@ -1,115 +1,102 @@
-import { Activity02Icon } from "@hugeicons/core-free-icons";
-import { type Actions, useStoreActions } from "easy-peasy";
-import { Field, Form, Formik, type FormikHelpers } from "formik";
-import { Fragment, useState } from "react";
-import { object, string } from "yup";
-import createApiKey from "@/api/account/createApiKey";
-import type { ApiKey } from "@/api/account/getApiKeys";
-import { httpErrorToHuman } from "@/api/http";
-import ApiKeyModal from "@/components/dashboard/ApiKeyModal";
-import ActionButton from "@/components/elements/ActionButton";
-import ContentBox from "@/components/elements/ContentBox";
-import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
-import Input from "@/components/elements/Input";
-import PageContentBlock from "@/components/elements/PageContentBlock";
-import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { Activity02Icon } from '@hugeicons/core-free-icons';
+import { type Actions, useStoreActions } from 'easy-peasy';
+import { Field, Form, Formik, type FormikHelpers } from 'formik';
+import { Fragment, useState } from 'react';
+import { object, string } from 'yup';
+import createApiKey from '@/api/account/createApiKey';
+import type { ApiKey } from '@/api/account/getApiKeys';
+import { httpErrorToHuman } from '@/api/http';
+import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
+import ActionButton from '@/components/elements/ActionButton';
+import ContentBox from '@/components/elements/ContentBox';
+import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import Input from '@/components/elements/Input';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import FlashMessageRender from '@/components/FlashMessageRender';
 
-import type { ApplicationStore } from "@/state";
+import type { ApplicationStore } from '@/state';
 
 interface Values {
-	description: string;
-	allowedIps: string;
+    description: string;
+    allowedIps: string;
 }
 
-const CreateApiKeyForm = ({
-	onKeyCreated,
-}: {
-	onKeyCreated: (key: ApiKey) => void;
-}) => {
-	const [apiKey, setApiKey] = useState("");
-	const { addError, clearFlashes } = useStoreActions(
-		(actions: Actions<ApplicationStore>) => actions.flashes,
-	);
+const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
+    const [apiKey, setApiKey] = useState('');
+    const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
-	const submit = (
-		values: Values,
-		{ setSubmitting, resetForm }: FormikHelpers<Values>,
-	) => {
-		clearFlashes("account");
-		createApiKey(values.description, values.allowedIps)
-			.then(({ secretToken, ...key }) => {
-				resetForm();
-				setSubmitting(false);
-				setApiKey(`${key.identifier}${secretToken}`);
-				onKeyCreated(key);
-			})
-			.catch((error) => {
-				console.error(error);
+    const submit = (values: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
+        clearFlashes('account');
+        createApiKey(values.description, values.allowedIps)
+            .then(({ secretToken, ...key }) => {
+                resetForm();
+                setSubmitting(false);
+                setApiKey(`${key.identifier}${secretToken}`);
+                onKeyCreated(key);
+            })
+            .catch((error) => {
+                console.error(error);
 
-				addError({ key: "account", message: httpErrorToHuman(error) });
-				setSubmitting(false);
-			});
-	};
+                addError({ key: 'account', message: httpErrorToHuman(error) });
+                setSubmitting(false);
+            });
+    };
 
-	return (
-		<>
-			{/* Flash Messages */}
-			<FlashMessageRender byKey="account" />
+    return (
+        <>
+            {/* Flash Messages */}
+            <FlashMessageRender byKey='account' />
 
-			{/* Modal for API Key */}
-			<ApiKeyModal
-				visible={apiKey.length > 0}
-				onModalDismissed={() => setApiKey("")}
-				apiKey={apiKey}
-			/>
+            {/* Modal for API Key */}
+            <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
-			{/* Form for creating API key */}
-			<ContentBox>
-				<Formik
-					onSubmit={submit}
-					initialValues={{ description: "", allowedIps: "" }}
-					validationSchema={object().shape({
-						allowedIps: string(),
-						description: string().required().min(4),
-					})}
-				>
-					{({ isSubmitting }) => (
-						<Form className="space-y-6">
-							{/* Show spinner overlay when submitting */}
-							<SpinnerOverlay visible={isSubmitting} />
+            {/* Form for creating API key */}
+            <ContentBox>
+                <Formik
+                    onSubmit={submit}
+                    initialValues={{ description: '', allowedIps: '' }}
+                    validationSchema={object().shape({
+                        allowedIps: string(),
+                        description: string().required().min(4),
+                    })}
+                >
+                    {({ isSubmitting }) => (
+                        <Form className='space-y-6'>
+                            {/* Show spinner overlay when submitting */}
+                            <SpinnerOverlay visible={isSubmitting} />
 
-							{/* Description Field */}
-							<FormikFieldWrapper
-								label="Description"
-								name="description"
-								description="A description of this API key."
-							>
-								<Field name="description" as={Input} className="w-full" />
-							</FormikFieldWrapper>
+                            {/* Description Field */}
+                            <FormikFieldWrapper
+                                label='Description'
+                                name='description'
+                                description='A description of this API key.'
+                            >
+                                <Field name='description' as={Input} className='w-full' />
+                            </FormikFieldWrapper>
 
-							{/* Allowed IPs Field */}
-							<FormikFieldWrapper
-								label="Allowed IPs"
-								name="allowedIps"
-								description="Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line."
-							>
-								<Field name="allowedIps" as={Input} className="w-full" />
-							</FormikFieldWrapper>
+                            {/* Allowed IPs Field */}
+                            <FormikFieldWrapper
+                                label='Allowed IPs'
+                                name='allowedIps'
+                                description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.'
+                            >
+                                <Field name='allowedIps' as={Input} className='w-full' />
+                            </FormikFieldWrapper>
 
-							{/* Submit Button below form fields */}
-							<div className="flex justify-end mt-6">
-								<ActionButton type="submit" disabled={isSubmitting}>
-									{isSubmitting ? "Creating..." : "Create API Key"}
-								</ActionButton>
-							</div>
-						</Form>
-					)}
-				</Formik>
-			</ContentBox>
-		</>
-	);
+                            {/* Submit Button below form fields */}
+                            <div className='flex justify-end mt-6'>
+                                <ActionButton type='submit' disabled={isSubmitting}>
+                                    {isSubmitting ? 'Creating...' : 'Create API Key'}
+                                </ActionButton>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </ContentBox>
+        </>
+    );
 };
 
-CreateApiKeyForm.displayName = "CreateApiKeyForm";
+CreateApiKeyForm.displayName = 'CreateApiKeyForm';
 export default CreateApiKeyForm;

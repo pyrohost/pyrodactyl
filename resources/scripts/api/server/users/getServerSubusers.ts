@@ -1,27 +1,23 @@
-import http, { type FractalResponseData } from "@/api/http";
-import { getGlobalDaemonType } from "@/api/server/getServer";
+import http, { type FractalResponseData } from '@/api/http';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 
-import type { Subuser } from "@/state/server/subusers";
+import type { Subuser } from '@/state/server/subusers';
 
 export const rawDataToServerSubuser = (data: FractalResponseData): Subuser => ({
-	uuid: data.attributes.uuid,
-	username: data.attributes.username,
-	email: data.attributes.email,
-	image: data.attributes.image,
-	twoFactorEnabled: data.attributes["2fa_enabled"],
-	createdAt: new Date(data.attributes.created_at),
-	permissions: data.attributes.permissions || [],
-	can: (permission) =>
-		(data.attributes.permissions || []).indexOf(permission) >= 0,
+    uuid: data.attributes.uuid,
+    username: data.attributes.username,
+    email: data.attributes.email,
+    image: data.attributes.image,
+    twoFactorEnabled: data.attributes['2fa_enabled'],
+    createdAt: new Date(data.attributes.created_at),
+    permissions: data.attributes.permissions || [],
+    can: (permission) => (data.attributes.permissions || []).indexOf(permission) >= 0,
 });
 
 export default (uuid: string): Promise<Subuser[]> => {
-	return new Promise((resolve, reject) => {
-		http
-			.get(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/users`)
-			.then(({ data }) =>
-				resolve((data.data || []).map(rawDataToServerSubuser)),
-			)
-			.catch(reject);
-	});
+    return new Promise((resolve, reject) => {
+        http.get(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/users`)
+            .then(({ data }) => resolve((data.data || []).map(rawDataToServerSubuser)))
+            .catch(reject);
+    });
 };

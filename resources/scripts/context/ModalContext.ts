@@ -1,24 +1,22 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
-import type { SettableModalProps } from "@/hoc/asModal";
+import type { SettableModalProps } from '@/hoc/asModal';
 
 export interface ModalContextValues {
-	dismiss: () => void;
-	setPropOverrides: (
-		value:
-			| ((
-					current: Readonly<Partial<SettableModalProps>>,
-			  ) => Partial<SettableModalProps>)
-			| Partial<SettableModalProps>
-			| null,
-	) => void;
+    dismiss: () => void;
+    setPropOverrides: (
+        value:
+            | ((current: Readonly<Partial<SettableModalProps>>) => Partial<SettableModalProps>)
+            | Partial<SettableModalProps>
+            | null,
+    ) => void;
 }
 
 const ModalContext = createContext<ModalContextValues>({
-	dismiss: () => null,
-	setPropOverrides: () => null,
+    dismiss: () => null,
+    setPropOverrides: () => null,
 });
 
-ModalContext.displayName = "ModalContext";
+ModalContext.displayName = 'ModalContext';
 
 export default ModalContext;

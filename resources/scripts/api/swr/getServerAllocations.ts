@@ -1,25 +1,23 @@
-import useSWR from "swr";
+import useSWR from 'swr';
 
-import http from "@/api/http";
-import type { Allocation } from "@/api/server/getServer";
-import { getGlobalDaemonType } from "@/api/server/getServer";
-import { rawDataToServerAllocation } from "@/api/transformers";
+import http from '@/api/http';
+import type { Allocation } from '@/api/server/getServer';
+import { getGlobalDaemonType } from '@/api/server/getServer';
+import { rawDataToServerAllocation } from '@/api/transformers';
 
-import { ServerContext } from "@/state/server";
+import { ServerContext } from '@/state/server';
 
 export default () => {
-	const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-	const daemonType = getGlobalDaemonType();
+    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const daemonType = getGlobalDaemonType();
 
-	return useSWR<Allocation[]>(
-		["server:allocations", uuid],
-		async () => {
-			const { data } = await http.get(
-				`/api/client/servers/${daemonType}/${uuid}/network/allocations`,
-			);
+    return useSWR<Allocation[]>(
+        ['server:allocations', uuid],
+        async () => {
+            const { data } = await http.get(`/api/client/servers/${daemonType}/${uuid}/network/allocations`);
 
-			return (data.data || []).map(rawDataToServerAllocation);
-		},
-		{ revalidateOnFocus: false, revalidateOnMount: false },
-	);
+            return (data.data || []).map(rawDataToServerAllocation);
+        },
+        { revalidateOnFocus: false, revalidateOnMount: false },
+    );
 };

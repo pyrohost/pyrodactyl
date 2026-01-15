@@ -1,50 +1,50 @@
 {
-	"$schema": "https://json.schemastore.org/tsconfig",
-	"display": "Default",
-	"compilerOptions": {
-		"lib": ["DOM", "DOM.Iterable", "ESNext"],
-		"jsx": "react-jsx",
-		"module": "ESNext",
-		"target": "ES2015",
-		"paths": {
-			"@/*": ["./resources/scripts/*"],
-			"@definitions/*": ["./resources/scripts/api/definitions/*"],
-			"@feature/*": ["./resources/scripts/components/server/features/*"]
-		},
-		"plugins": [
-			{
-				"name": "typescript-plugin-tw-template"
-			}
-		],
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "jsx": "react-jsx",
+        "module": "ESNext",
+        "target": "ES2015",
+        "paths": {
+            "@/*": ["./resources/scripts/*"],
+            "@definitions/*": ["./resources/scripts/api/definitions/*"],
+            "@feature/*": ["./resources/scripts/components/server/features/*"]
+        },
+        "plugins": [
+            {
+                "name": "typescript-plugin-tw-template"
+            }
+        ],
 
-		"allowJs": false,
-		"allowSyntheticDefaultImports": true,
-		"composite": false,
-		"declaration": true,
-		"declarationMap": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"inlineSources": false,
-		"isolatedModules": true,
-		"moduleResolution": "Node",
-		"newLine": "lf",
-		"noEmit": true,
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitAny": false,
-		"noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noPropertyAccessFromIndexSignature": false,
-		"noUncheckedIndexedAccess": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"preserveWatchOutput": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"stripInternal": true,
-		"useDefineForClassFields": true
-	},
-	"include": ["./resources/scripts/**/*", "vite.config.ts", "./package.json"],
-	"exclude": ["node_modules"]
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "composite": false,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSources": false,
+        "isolatedModules": true,
+        "moduleResolution": "Node",
+        "newLine": "lf",
+        "noEmit": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": false,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "preserveWatchOutput": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "stripInternal": true,
+        "useDefineForClassFields": true
+    },
+    "include": ["./resources/scripts/**/*", "vite.config.ts", "./package.json"],
+    "exclude": ["node_modules"]
 }
