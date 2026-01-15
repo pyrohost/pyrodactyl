@@ -15,7 +15,6 @@ define("ace/keyboard/vim", [
 	"ace/mode/text",
 	"ace/multi_select",
 ], (e, t, n) => {
-	
 	function r() {
 		function t(e) {
 			return typeof e != "object"
@@ -25,9 +24,7 @@ define("ace/keyboard/vim", [
 					: "anchor" in e
 						? t(e.anchor) + "->" + t(e.head)
 						: Array.isArray(e)
-							? "[" +
-								e.map((e) => t(e)) +
-								"]"
+							? "[" + e.map((e) => t(e)) + "]"
 							: JSON.stringify(e);
 		}
 		var e = "";
@@ -1455,14 +1452,15 @@ define("ace/keyboard/vim", [
 			return (
 				t.length == 1 && (t = t.toUpperCase()),
 				(t =
-					f.getModifierString(e).replace(/(^|-)\w/g, (e) => e.toUpperCase()) + t),
+					f.getModifierString(e).replace(/(^|-)\w/g, (e) => e.toUpperCase()) +
+					t),
 				t
 			);
 		}),
 		(v.keyMap["default"] = (e) => (t) => {
-				var n = t.ace.commands.commandKeyBinding[e.toLowerCase()];
-				return n && t.ace.execCommand(n) !== !1;
-			}),
+			var n = t.ace.commands.commandKeyBinding[e.toLowerCase()];
+			return n && t.ace.execCommand(n) !== !1;
+		}),
 		(v.lookupKey = function fr(e, t, n) {
 			typeof t == "string" && (t = v.keyMap[t]);
 			var r = typeof t == "function" ? t(e) : t[e];
@@ -1480,7 +1478,8 @@ define("ace/keyboard/vim", [
 		(v.signal = (e, t, n) => e._signal(t, n)),
 		(v.on = f.addListener),
 		(v.off = f.removeListener),
-		(v.isWordChar = (e) => e < "" ? /^\w$/.test(e) : ((d.lastIndex = 0), d.test(e))),
+		(v.isWordChar = (e) =>
+			e < "" ? /^\w$/.test(e) : ((d.lastIndex = 0), d.test(e))),
 		function () {
 			u.implement(v.prototype, s),
 				(this.destroy = function () {
@@ -2019,7 +2018,7 @@ define("ace/keyboard/vim", [
 					? null
 					: (s && t !== !1 && (this.pos += s[0].length), s);
 			}
-			var r = (e) => n ? e.toLowerCase() : e,
+			var r = (e) => (n ? e.toLowerCase() : e),
 				i = this.string.substr(this.pos, e.length);
 			if (r(i) == r(e)) return t !== !1 && (this.pos += e.length), !0;
 		},
@@ -2886,13 +2885,8 @@ define("ace/keyboard/vim", [
 	var L = { Shift: "S", Ctrl: "C", Alt: "A", Cmd: "D", Mod: "A" },
 		A = { Enter: "CR", Backspace: "BS", Delete: "Del" },
 		_ = /[\d]/,
-		D = [
-			v.isWordChar,
-			(e) => e && !v.isWordChar(e) && !/\s/.test(e),
-		],
-		P = [
-			(e) => /\S/.test(e),
-		],
+		D = [v.isWordChar, (e) => e && !v.isWordChar(e) && !/\s/.test(e)],
+		P = [(e) => /\S/.test(e)],
 		B = H(65, 26),
 		j = H(97, 26),
 		F = H(48, 10),
@@ -2944,7 +2938,8 @@ define("ace/keyboard/vim", [
 				i = new Array(e);
 			return { cachedCursor: undefined, add: s, move: o };
 		},
-		Z = (e) => e
+		Z = (e) =>
+			e
 				? {
 						changes: e.changes,
 						expectCursorActivityForChange: e.expectCursorActivityForChange,
@@ -3078,8 +3073,8 @@ define("ace/keyboard/vim", [
 					f === !1
 						? undefined
 						: f === !0
-							? (() => !0)
-							: (() => {
+							? () => !0
+							: () => {
 									if ((f.operator || f.isEdit) && e.getOption("readOnly"))
 										return;
 									return e.operation(() => {
@@ -3098,7 +3093,7 @@ define("ace/keyboard/vim", [
 										}
 										return !0;
 									});
-								})
+								}
 				);
 			},
 			handleEx: (e, t) => {
@@ -3699,7 +3694,8 @@ define("ace/keyboard/vim", [
 				var a = e.charCoords(s, "local");
 				return e.scrollTo(null, i.top + a.top - u.top), s;
 			},
-			moveByWords: (e, t, n) => sn(e, t, n.repeat, !!n.forward, !!n.wordEnd, !!n.bigWord),
+			moveByWords: (e, t, n) =>
+				sn(e, t, n.repeat, !!n.forward, !!n.wordEnd, !!n.bigWord),
 			moveTillCharacter: (e, t, n) => {
 				var r = n.repeat,
 					i = on(e, r, n.forward, n.selectedCharacter),
@@ -4365,7 +4361,7 @@ define("ace/keyboard/vim", [
 					(e.symb = e.symb === "m" ? "{" : "}"),
 						(e.reverseSymb = e.symb === "{" ? "}" : "{");
 				},
-				isComplete: (e) => e.nextCh === e.symb ? !0 : !1,
+				isComplete: (e) => (e.nextCh === e.symb ? !0 : !1),
 			},
 			preprocess: {
 				init: (e) => {
@@ -5063,10 +5059,9 @@ define("ace/keyboard/vim", [
 		},
 	};
 	var ur = {
-		getText: (e, t) => (
-				(Math.abs(e.selection.lead.row - t) ||
-					t + 1 + (t < 9 ? "\u00b7" : "")) + ""
-			),
+		getText: (e, t) =>
+			(Math.abs(e.selection.lead.row - t) || t + 1 + (t < 9 ? "\u00b7" : "")) +
+			"",
 		getWidth: (e, t, n) => e.getLength().toString().length * n.characterWidth,
 		update: (e, t) => {
 			t.renderer.$loop.schedule(t.renderer.CHANGE_GUTTER);

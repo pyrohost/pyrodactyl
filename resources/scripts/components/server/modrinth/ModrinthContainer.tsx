@@ -6,16 +6,15 @@ import Can from "@/components/elements/Can";
 import ContentBox from "@/components/elements/ContentBox";
 import { ModBox } from "@/components/elements/ModBox";
 import PageContentBlock from "@/components/elements/PageContentBlock";
-
+import {
+	appVersion,
+	GlobalStateProvider,
+	ModrinthService,
+	useGlobalStateContext,
+} from "./config";
 import LoaderSelector from "./LoaderSelector";
 import { ModList } from "./ModList";
 import GameVersionSelector from "./VersionSelector";
-import {
-	GlobalStateProvider,
-	ModrinthService,
-	appVersion,
-	useGlobalStateContext,
-} from "./config";
 
 const ModrinthContainerInner = () => {
 	const {

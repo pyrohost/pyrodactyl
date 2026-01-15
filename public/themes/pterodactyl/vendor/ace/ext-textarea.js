@@ -2,7 +2,6 @@ define(
 	"ace/theme/textmate",
 	["require", "exports", "module", "ace/lib/dom"],
 	(e, t, n) => {
-		
 		(t.isDark = !1),
 			(t.cssClass = "ace-tm"),
 			(t.cssText =
@@ -24,7 +23,6 @@ define(
 			"ace/theme/textmate",
 		],
 		(e, t, n) => {
-			
 			function a(e, t) {
 				for (var n in t) e.style[n] = t[n];
 			}

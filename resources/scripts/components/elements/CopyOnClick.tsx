@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import copy from "copy-to-clipboard";
-import { useEffect, useState } from "react";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface CopyOnClickProps {

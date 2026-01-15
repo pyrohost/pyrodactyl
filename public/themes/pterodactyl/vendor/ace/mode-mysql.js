@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -22,11 +21,19 @@ define(
 			};
 		r.inherits(s, i),
 			(s.getTagRule = (e) => ({
-					token: "comment.doc.tag.storage.type",
-					regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
-				})),
-			(s.getStartRule = (e) => ({ token: "comment.doc", regex: "\\/\\*(?=\\*)", next: e })),
-			(s.getEndRule = (e) => ({ token: "comment.doc", regex: "\\*\\/", next: e })),
+				token: "comment.doc.tag.storage.type",
+				regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
+			})),
+			(s.getStartRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\/\\*(?=\\*)",
+				next: e,
+			})),
+			(s.getEndRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\*\\/",
+				next: e,
+			})),
 			(t.DocCommentHighlightRules = s);
 	},
 ),

@@ -1,8 +1,6 @@
 import { type Action, action } from "easy-peasy";
-
-import type { FlashMessageType } from "@/components/MessageBox";
-
 import { httpErrorToHuman } from "@/api/http";
+import type { FlashMessageType } from "@/components/MessageBox";
 
 export interface FlashStore {
 	items: FlashMessage[];

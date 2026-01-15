@@ -5,10 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { bytesToString, ip, mbToBytes } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-
-import { ServerContext } from "@/state/server";
-
 import useWebsocketEvent from "@/plugins/useWebsocketEvent";
+import { ServerContext } from "@/state/server";
 
 type Stats = Record<"memory" | "cpu" | "disk" | "uptime" | "rx" | "tx", number>;
 

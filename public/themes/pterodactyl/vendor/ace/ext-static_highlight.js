@@ -7,7 +7,6 @@ define("ace/ext/static_highlight", [
 	"ace/config",
 	"ace/lib/dom",
 ], (e, t, n) => {
-	
 	var r = e("../edit_session").EditSession,
 		i = e("../layer/text").Text,
 		s =

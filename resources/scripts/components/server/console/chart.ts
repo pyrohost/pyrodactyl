@@ -4,8 +4,8 @@ import {
 	Chart as ChartJS,
 	type ChartOptions,
 	Filler,
-	LineElement,
 	LinearScale,
+	LineElement,
 	PointElement,
 } from "chart.js";
 import { deepmerge, deepmergeCustom } from "deepmerge-ts";

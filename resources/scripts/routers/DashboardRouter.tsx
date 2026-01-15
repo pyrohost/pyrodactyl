@@ -2,8 +2,7 @@ import { Ellipsis, Gear, House, Key, Lock } from "@gravity-ui/icons";
 import { useStoreState } from "easy-peasy";
 import { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import { NavLink, Route, Routes, useLocation } from "react-router-dom";
-
-import routes from "@/routers/routes";
+import http from "@/api/http";
 
 import DashboardContainer from "@/components/dashboard/DashboardContainer";
 import {
@@ -19,8 +18,7 @@ import { DashboardMobileMenu } from "@/components/elements/MobileFullScreenMenu"
 import MobileTopBar from "@/components/elements/MobileTopBar";
 import Logo from "@/components/elements/PyroLogo";
 import { NotFound } from "@/components/elements/ScreenBlock";
-
-import http from "@/api/http";
+import routes from "@/routers/routes";
 
 const DashboardRouter = () => {
 	const location = useLocation();

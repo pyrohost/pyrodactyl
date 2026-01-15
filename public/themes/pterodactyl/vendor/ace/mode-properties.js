@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -43,7 +42,6 @@ define(
 			"ace/mode/properties_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./properties_highlight_rules").PropertiesHighlightRules,

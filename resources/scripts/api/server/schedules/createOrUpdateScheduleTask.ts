@@ -1,8 +1,8 @@
 import http from "@/api/http";
 import { getGlobalDaemonType } from "@/api/server/getServer";
 import {
-	type Task,
 	rawDataToServerTask,
+	type Task,
 } from "@/api/server/schedules/getServerSchedules";
 
 interface Data {

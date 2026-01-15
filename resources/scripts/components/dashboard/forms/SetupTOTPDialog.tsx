@@ -3,24 +3,19 @@
 import { type Actions, useStoreActions } from "easy-peasy";
 import { QRCodeSVG } from "qrcode.react";
 import { useContext, useEffect, useState } from "react";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
-import ActionButton from "@/components/elements/ActionButton";
-import CopyOnClick from "@/components/elements/CopyOnClick";
-import Spinner from "@/components/elements/Spinner";
-import { Dialog, DialogWrapperContext } from "@/components/elements/dialog";
-import { Input } from "@/components/elements/inputs";
-
-import asDialog from "@/hoc/asDialog";
-
 import enableAccountTwoFactor from "@/api/account/enableAccountTwoFactor";
 import getTwoFactorTokenData, {
 	type TwoFactorTokenData,
 } from "@/api/account/getTwoFactorTokenData";
-
-import type { ApplicationStore } from "@/state";
-
+import ActionButton from "@/components/elements/ActionButton";
+import CopyOnClick from "@/components/elements/CopyOnClick";
+import { Dialog, DialogWrapperContext } from "@/components/elements/dialog";
+import { Input } from "@/components/elements/inputs";
+import Spinner from "@/components/elements/Spinner";
+import FlashMessageRender from "@/components/FlashMessageRender";
+import asDialog from "@/hoc/asDialog";
 import { useFlashKey } from "@/plugins/useFlash";
+import type { ApplicationStore } from "@/state";
 
 interface Props {
 	onTokens: (tokens: string[]) => void;

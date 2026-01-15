@@ -1,20 +1,18 @@
-import { useHeader } from "@/contexts/HeaderContext";
+import Features from "@feature/Features";
 import { memo, useEffect, useMemo } from "react";
 import isEqual from "react-fast-compare";
 
 import HeaderCentered from "@/components/dashboard/header/HeaderCentered";
+import { Alert } from "@/components/elements/alert";
 import ErrorBoundary from "@/components/elements/ErrorBoundary";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 // import Can from '@/components/elements/Can';
 import Spinner from "@/components/elements/Spinner";
-import { Alert } from "@/components/elements/alert";
 import Console from "@/components/server/console/Console";
 import PowerButtons from "@/components/server/console/PowerButtons";
 import StatGraphs from "@/components/server/console/StatGraphs";
-
+import { useHeader } from "@/contexts/HeaderContext";
 import { ServerContext } from "@/state/server";
-
-import Features from "@feature/Features";
 
 import ServerDetailsHeader from "./ServerDetailsHeader";
 import { StatusPillHeader } from "./StatusPillHeader";

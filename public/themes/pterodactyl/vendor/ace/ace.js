@@ -78,545 +78,525 @@
 		};
 	o(ACE_NAMESPACE);
 })(),
-	define(
-		"ace/lib/regexp",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			function o(e) {
-				return (
-					(e.global ? "g" : "") +
-					(e.ignoreCase ? "i" : "") +
-					(e.multiline ? "m" : "") +
-					(e.extended ? "x" : "") +
-					(e.sticky ? "y" : "")
-				);
+	define("ace/lib/regexp", ["require", "exports", "module"], (e, t, n) => {
+		function o(e) {
+			return (
+				(e.global ? "g" : "") +
+				(e.ignoreCase ? "i" : "") +
+				(e.multiline ? "m" : "") +
+				(e.extended ? "x" : "") +
+				(e.sticky ? "y" : "")
+			);
+		}
+		function u(e, t, n) {
+			if (Array.prototype.indexOf) return e.indexOf(t, n);
+			for (var r = n || 0; r < e.length; r++) if (e[r] === t) return r;
+			return -1;
+		}
+		var r = {
+				exec: RegExp.prototype.exec,
+				test: RegExp.prototype.test,
+				match: String.prototype.match,
+				replace: String.prototype.replace,
+				split: String.prototype.split,
+			},
+			i = r.exec.call(/()??/, "")[1] === undefined,
+			s = (() => {
+				var e = /^/g;
+				return r.test.call(e, ""), !e.lastIndex;
+			})();
+		if (s && i) return;
+		(RegExp.prototype.exec = function (e) {
+			var t = r.exec.apply(this, arguments),
+				n,
+				a;
+			if (typeof e == "string" && t) {
+				!i &&
+					t.length > 1 &&
+					u(t, "") > -1 &&
+					((a = RegExp(this.source, r.replace.call(o(this), "g", ""))),
+					r.replace.call(e.slice(t.index), a, function () {
+						for (var e = 1; e < arguments.length - 2; e++)
+							arguments[e] === undefined && (t[e] = undefined);
+					}));
+				if (this._xregexp && this._xregexp.captureNames)
+					for (var f = 1; f < t.length; f++)
+						(n = this._xregexp.captureNames[f - 1]), n && (t[n] = t[f]);
+				!s &&
+					this.global &&
+					!t[0].length &&
+					this.lastIndex > t.index &&
+					this.lastIndex--;
 			}
-			function u(e, t, n) {
-				if (Array.prototype.indexOf) return e.indexOf(t, n);
-				for (var r = n || 0; r < e.length; r++) if (e[r] === t) return r;
-				return -1;
-			}
-			var r = {
-					exec: RegExp.prototype.exec,
-					test: RegExp.prototype.test,
-					match: String.prototype.match,
-					replace: String.prototype.replace,
-					split: String.prototype.split,
-				},
-				i = r.exec.call(/()??/, "")[1] === undefined,
-				s = (() => {
-					var e = /^/g;
-					return r.test.call(e, ""), !e.lastIndex;
-				})();
-			if (s && i) return;
-			(RegExp.prototype.exec = function (e) {
-				var t = r.exec.apply(this, arguments),
-					n,
-					a;
-				if (typeof e == "string" && t) {
-					!i &&
-						t.length > 1 &&
-						u(t, "") > -1 &&
-						((a = RegExp(this.source, r.replace.call(o(this), "g", ""))),
-						r.replace.call(e.slice(t.index), a, function () {
-							for (var e = 1; e < arguments.length - 2; e++)
-								arguments[e] === undefined && (t[e] = undefined);
-						}));
-					if (this._xregexp && this._xregexp.captureNames)
-						for (var f = 1; f < t.length; f++)
-							(n = this._xregexp.captureNames[f - 1]), n && (t[n] = t[f]);
-					!s &&
-						this.global &&
-						!t[0].length &&
-						this.lastIndex > t.index &&
-						this.lastIndex--;
-				}
-				return t;
-			}),
-				s ||
-					(RegExp.prototype.test = function (e) {
-						var t = r.exec.call(this, e);
-						return (
-							t &&
-								this.global &&
-								!t[0].length &&
-								this.lastIndex > t.index &&
-								this.lastIndex--,
-							!!t
-						);
-					});
-		},
-	),
-	define(
-		"ace/lib/es5-shim",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			function r() {}
-			function w(e) {
-				try {
-					return Object.defineProperty(e, "sentinel", {}), "sentinel" in e;
-				} catch (t) {}
-			}
-			function H(e) {
-				return (
-					(e = +e),
-					e !== e
-						? (e = 0)
-						: e !== 0 &&
-							e !== 1 / 0 &&
-							e !== -1 / 0 &&
-							(e = (e > 0 || -1) * Math.floor(Math.abs(e))),
-					e
-				);
-			}
-			function B(e) {
-				var t = typeof e;
-				return (
-					e === null ||
-					t === "undefined" ||
-					t === "boolean" ||
-					t === "number" ||
-					t === "string"
-				);
-			}
-			function j(e) {
-				var t, n, r;
-				if (B(e)) return e;
-				n = e.valueOf;
-				if (typeof n == "function") {
-					t = n.call(e);
-					if (B(t)) return t;
-				}
-				r = e.toString;
-				if (typeof r == "function") {
-					t = r.call(e);
-					if (B(t)) return t;
-				}
-				throw new TypeError();
-			}
-			Function.prototype.bind ||
-				(Function.prototype.bind = function (t) {
-					var n = this;
-					if (typeof n != "function")
-						throw new TypeError(
-							"Function.prototype.bind called on incompatible " + n,
-						);
-					var i = u.call(arguments, 1),
-						s = function () {
-							if (this instanceof s) {
-								var e = n.apply(this, i.concat(u.call(arguments)));
-								return Object(e) === e ? e : this;
-							}
-							return n.apply(t, i.concat(u.call(arguments)));
-						};
+			return t;
+		}),
+			s ||
+				(RegExp.prototype.test = function (e) {
+					var t = r.exec.call(this, e);
 					return (
-						n.prototype &&
-							((r.prototype = n.prototype),
-							(s.prototype = new r()),
-							(r.prototype = null)),
-						s
+						t &&
+							this.global &&
+							!t[0].length &&
+							this.lastIndex > t.index &&
+							this.lastIndex--,
+						!!t
 					);
 				});
-			var i = Function.prototype.call,
-				s = Array.prototype,
-				o = Object.prototype,
-				u = s.slice,
-				a = i.bind(o.toString),
-				f = i.bind(o.hasOwnProperty),
-				l,
-				c,
-				h,
-				p,
-				d;
-			if ((d = f(o, "__defineGetter__")))
-				(l = i.bind(o.__defineGetter__)),
-					(c = i.bind(o.__defineSetter__)),
-					(h = i.bind(o.__lookupGetter__)),
-					(p = i.bind(o.__lookupSetter__));
-			if ([1, 2].splice(0).length != 2)
-				if (
-					!(() => {
-						function e(e) {
-							var t = new Array(e + 2);
-							return (t[0] = t[1] = 0), t;
+	}),
+	define("ace/lib/es5-shim", ["require", "exports", "module"], (e, t, n) => {
+		function r() {}
+		function w(e) {
+			try {
+				return Object.defineProperty(e, "sentinel", {}), "sentinel" in e;
+			} catch (t) {}
+		}
+		function H(e) {
+			return (
+				(e = +e),
+				e !== e
+					? (e = 0)
+					: e !== 0 &&
+						e !== 1 / 0 &&
+						e !== -1 / 0 &&
+						(e = (e > 0 || -1) * Math.floor(Math.abs(e))),
+				e
+			);
+		}
+		function B(e) {
+			var t = typeof e;
+			return (
+				e === null ||
+				t === "undefined" ||
+				t === "boolean" ||
+				t === "number" ||
+				t === "string"
+			);
+		}
+		function j(e) {
+			var t, n, r;
+			if (B(e)) return e;
+			n = e.valueOf;
+			if (typeof n == "function") {
+				t = n.call(e);
+				if (B(t)) return t;
+			}
+			r = e.toString;
+			if (typeof r == "function") {
+				t = r.call(e);
+				if (B(t)) return t;
+			}
+			throw new TypeError();
+		}
+		Function.prototype.bind ||
+			(Function.prototype.bind = function (t) {
+				var n = this;
+				if (typeof n != "function")
+					throw new TypeError(
+						"Function.prototype.bind called on incompatible " + n,
+					);
+				var i = u.call(arguments, 1),
+					s = function () {
+						if (this instanceof s) {
+							var e = n.apply(this, i.concat(u.call(arguments)));
+							return Object(e) === e ? e : this;
 						}
-						var t = [],
-							n;
-						t.splice.apply(t, e(20)),
-							t.splice.apply(t, e(26)),
-							(n = t.length),
-							t.splice(5, 0, "XXX"),
-							n + 1 == t.length;
-						if (n + 1 == t.length) return !0;
-					})()
-				)
-					Array.prototype.splice = function (e, t) {
-						var n = this.length;
-						e > 0
-							? e > n && (e = n)
-							: e == void 0
-								? (e = 0)
-								: e < 0 && (e = Math.max(n + e, 0)),
-							e + t < n || (t = n - e);
-						var r = this.slice(e, e + t),
-							i = u.call(arguments, 2),
-							s = i.length;
-						if (e === n) s && this.push.apply(this, i);
+						return n.apply(t, i.concat(u.call(arguments)));
+					};
+				return (
+					n.prototype &&
+						((r.prototype = n.prototype),
+						(s.prototype = new r()),
+						(r.prototype = null)),
+					s
+				);
+			});
+		var i = Function.prototype.call,
+			s = Array.prototype,
+			o = Object.prototype,
+			u = s.slice,
+			a = i.bind(o.toString),
+			f = i.bind(o.hasOwnProperty),
+			l,
+			c,
+			h,
+			p,
+			d;
+		if ((d = f(o, "__defineGetter__")))
+			(l = i.bind(o.__defineGetter__)),
+				(c = i.bind(o.__defineSetter__)),
+				(h = i.bind(o.__lookupGetter__)),
+				(p = i.bind(o.__lookupSetter__));
+		if ([1, 2].splice(0).length != 2)
+			if (
+				!(() => {
+					function e(e) {
+						var t = new Array(e + 2);
+						return (t[0] = t[1] = 0), t;
+					}
+					var t = [],
+						n;
+					t.splice.apply(t, e(20)),
+						t.splice.apply(t, e(26)),
+						(n = t.length),
+						t.splice(5, 0, "XXX"),
+						n + 1 == t.length;
+					if (n + 1 == t.length) return !0;
+				})()
+			)
+				Array.prototype.splice = function (e, t) {
+					var n = this.length;
+					e > 0
+						? e > n && (e = n)
+						: e == void 0
+							? (e = 0)
+							: e < 0 && (e = Math.max(n + e, 0)),
+						e + t < n || (t = n - e);
+					var r = this.slice(e, e + t),
+						i = u.call(arguments, 2),
+						s = i.length;
+					if (e === n) s && this.push.apply(this, i);
+					else {
+						var o = Math.min(t, n - e),
+							a = e + o,
+							f = a + s - o,
+							l = n - a,
+							c = n - o;
+						if (f < a) for (var h = 0; h < l; ++h) this[f + h] = this[a + h];
+						else if (f > a) for (h = l; h--; ) this[f + h] = this[a + h];
+						if (s && e === c) (this.length = c), this.push.apply(this, i);
 						else {
-							var o = Math.min(t, n - e),
-								a = e + o,
-								f = a + s - o,
-								l = n - a,
-								c = n - o;
-							if (f < a) for (var h = 0; h < l; ++h) this[f + h] = this[a + h];
-							else if (f > a) for (h = l; h--; ) this[f + h] = this[a + h];
-							if (s && e === c) (this.length = c), this.push.apply(this, i);
-							else {
-								this.length = c + s;
-								for (h = 0; h < s; ++h) this[e + h] = i[h];
-							}
+							this.length = c + s;
+							for (h = 0; h < s; ++h) this[e + h] = i[h];
 						}
-						return r;
-					};
-				else {
-					var v = Array.prototype.splice;
-					Array.prototype.splice = function (e, t) {
-						return arguments.length
-							? v.apply(
-									this,
-									[
-										e === void 0 ? 0 : e,
-										t === void 0 ? this.length - e : t,
-									].concat(u.call(arguments, 2)),
-								)
-							: [];
-					};
-				}
-			Array.isArray ||
-				(Array.isArray = (t) => a(t) == "[object Array]");
-			var m = Object("a"),
-				g = m[0] != "a" || !(0 in m);
-			Array.prototype.forEach ||
-				(Array.prototype.forEach = function (t) {
+					}
+					return r;
+				};
+			else {
+				var v = Array.prototype.splice;
+				Array.prototype.splice = function (e, t) {
+					return arguments.length
+						? v.apply(
+								this,
+								[
+									e === void 0 ? 0 : e,
+									t === void 0 ? this.length - e : t,
+								].concat(u.call(arguments, 2)),
+							)
+						: [];
+				};
+			}
+		Array.isArray || (Array.isArray = (t) => a(t) == "[object Array]");
+		var m = Object("a"),
+			g = m[0] != "a" || !(0 in m);
+		Array.prototype.forEach ||
+			(Array.prototype.forEach = function (t) {
+				var n = F(this),
+					r = g && a(this) == "[object String]" ? this.split("") : n,
+					i = arguments[1],
+					s = -1,
+					o = r.length >>> 0;
+				if (a(t) != "[object Function]") throw new TypeError();
+				while (++s < o) s in r && t.call(i, r[s], s, n);
+			}),
+			Array.prototype.map ||
+				(Array.prototype.map = function (t) {
 					var n = F(this),
 						r = g && a(this) == "[object String]" ? this.split("") : n,
-						i = arguments[1],
-						s = -1,
-						o = r.length >>> 0;
-					if (a(t) != "[object Function]") throw new TypeError();
-					while (++s < o) s in r && t.call(i, r[s], s, n);
+						i = r.length >>> 0,
+						s = Array(i),
+						o = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var u = 0; u < i; u++) u in r && (s[u] = t.call(o, r[u], u, n));
+					return s;
 				}),
-				Array.prototype.map ||
-					(Array.prototype.map = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = Array(i),
-							o = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var u = 0; u < i; u++)
-							u in r && (s[u] = t.call(o, r[u], u, n));
-						return s;
-					}),
-				Array.prototype.filter ||
-					(Array.prototype.filter = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = [],
-							o,
-							u = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var f = 0; f < i; f++)
-							f in r && ((o = r[f]), t.call(u, o, f, n) && s.push(o));
-						return s;
-					}),
-				Array.prototype.every ||
-					(Array.prototype.every = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var o = 0; o < i; o++)
-							if (o in r && !t.call(s, r[o], o, n)) return !1;
-						return !0;
-					}),
-				Array.prototype.some ||
-					(Array.prototype.some = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var o = 0; o < i; o++)
-							if (o in r && t.call(s, r[o], o, n)) return !0;
-						return !1;
-					}),
-				Array.prototype.reduce ||
-					(Array.prototype.reduce = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0;
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						if (!i && arguments.length == 1)
-							throw new TypeError(
-								"reduce of empty array with no initial value",
-							);
-						var s = 0,
-							o;
-						if (arguments.length >= 2) o = arguments[1];
-						else
-							do {
-								if (s in r) {
-									o = r[s++];
-									break;
-								}
-								if (++s >= i)
-									throw new TypeError(
-										"reduce of empty array with no initial value",
-									);
-							} while (!0);
-						for (; s < i; s++) s in r && (o = t.call(void 0, o, r[s], s, n));
-						return o;
-					}),
-				Array.prototype.reduceRight ||
-					(Array.prototype.reduceRight = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0;
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						if (!i && arguments.length == 1)
-							throw new TypeError(
-								"reduceRight of empty array with no initial value",
-							);
-						var s,
-							o = i - 1;
-						if (arguments.length >= 2) s = arguments[1];
-						else
-							do {
-								if (o in r) {
-									s = r[o--];
-									break;
-								}
-								if (--o < 0)
-									throw new TypeError(
-										"reduceRight of empty array with no initial value",
-									);
-							} while (!0);
-						do o in this && (s = t.call(void 0, s, r[o], o, n));
-						while (o--);
-						return s;
-					});
-			if (!Array.prototype.indexOf || [0, 1].indexOf(1, 2) != -1)
-				Array.prototype.indexOf = function (t) {
-					var n = g && a(this) == "[object String]" ? this.split("") : F(this),
-						r = n.length >>> 0;
-					if (!r) return -1;
-					var i = 0;
-					arguments.length > 1 && (i = H(arguments[1])),
-						(i = i >= 0 ? i : Math.max(0, r + i));
-					for (; i < r; i++) if (i in n && n[i] === t) return i;
-					return -1;
-				};
-			if (!Array.prototype.lastIndexOf || [0, 1].lastIndexOf(0, -3) != -1)
-				Array.prototype.lastIndexOf = function (t) {
-					var n = g && a(this) == "[object String]" ? this.split("") : F(this),
-						r = n.length >>> 0;
-					if (!r) return -1;
-					var i = r - 1;
-					arguments.length > 1 && (i = Math.min(i, H(arguments[1]))),
-						(i = i >= 0 ? i : r - Math.abs(i));
-					for (; i >= 0; i--) if (i in n && t === n[i]) return i;
-					return -1;
-				};
-			Object.getPrototypeOf ||
-				(Object.getPrototypeOf = (t) => t.__proto__ || (t.constructor ? t.constructor.prototype : o));
-			if (!Object.getOwnPropertyDescriptor) {
-				var y = "Object.getOwnPropertyDescriptor called on a non-object: ";
-				Object.getOwnPropertyDescriptor = (t, n) => {
-					if ((typeof t != "object" && typeof t != "function") || t === null)
-						throw new TypeError(y + t);
-					if (!f(t, n)) return;
-					var r, i, s;
-					r = { enumerable: !0, configurable: !0 };
-					if (d) {
-						var u = t.__proto__;
-						t.__proto__ = o;
-						var i = h(t, n),
-							s = p(t, n);
-						t.__proto__ = u;
-						if (i || s) return i && (r.get = i), s && (r.set = s), r;
-					}
-					return (r.value = t[n]), r;
-				};
-			}
-			Object.getOwnPropertyNames ||
-				(Object.getOwnPropertyNames = (t) => Object.keys(t));
-			if (!Object.create) {
-				var b;
-				Object.prototype.__proto__ === null
-					? (b = () => ({ __proto__: null }))
-					: (b = () => {
-							var e = {};
-							for (var t in e) e[t] = null;
-							return (
-								(e.constructor =
-									e.hasOwnProperty =
-									e.propertyIsEnumerable =
-									e.isPrototypeOf =
-									e.toLocaleString =
-									e.toString =
-									e.valueOf =
-									e.__proto__ =
-										null),
-								e
-							);
-						}),
-					(Object.create = (t, n) => {
-						var r;
-						if (t === null) r = b();
-						else {
-							if (typeof t != "object")
+			Array.prototype.filter ||
+				(Array.prototype.filter = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = [],
+						o,
+						u = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var f = 0; f < i; f++)
+						f in r && ((o = r[f]), t.call(u, o, f, n) && s.push(o));
+					return s;
+				}),
+			Array.prototype.every ||
+				(Array.prototype.every = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var o = 0; o < i; o++)
+						if (o in r && !t.call(s, r[o], o, n)) return !1;
+					return !0;
+				}),
+			Array.prototype.some ||
+				(Array.prototype.some = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var o = 0; o < i; o++)
+						if (o in r && t.call(s, r[o], o, n)) return !0;
+					return !1;
+				}),
+			Array.prototype.reduce ||
+				(Array.prototype.reduce = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0;
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					if (!i && arguments.length == 1)
+						throw new TypeError("reduce of empty array with no initial value");
+					var s = 0,
+						o;
+					if (arguments.length >= 2) o = arguments[1];
+					else
+						do {
+							if (s in r) {
+								o = r[s++];
+								break;
+							}
+							if (++s >= i)
 								throw new TypeError(
-									"typeof prototype[" + typeof t + "] != 'object'",
+									"reduce of empty array with no initial value",
 								);
-							var i = () => {};
-							(i.prototype = t), (r = new i()), (r.__proto__ = t);
-						}
-						return n !== void 0 && Object.defineProperties(r, n), r;
-					});
-			}
-			if (Object.defineProperty) {
-				var E = w({}),
-					S =
-						typeof document == "undefined" || w(document.createElement("div"));
-				if (!E || !S) var x = Object.defineProperty;
-			}
-			if (!Object.defineProperty || x) {
-				var T = "Property description must be an object: ",
-					N = "Object.defineProperty called on non-object: ",
-					C = "getters & setters can not be defined on this javascript engine";
-				Object.defineProperty = (t, n, r) => {
-					if ((typeof t != "object" && typeof t != "function") || t === null)
-						throw new TypeError(N + t);
-					if ((typeof r != "object" && typeof r != "function") || r === null)
-						throw new TypeError(T + r);
-					if (x)
-						try {
-							return x.call(Object, t, n, r);
-						} catch (i) {}
-					if (f(r, "value"))
-						if (d && (h(t, n) || p(t, n))) {
-							var s = t.__proto__;
-							(t.__proto__ = o),
-								delete t[n],
-								(t[n] = r.value),
-								(t.__proto__ = s);
-						} else t[n] = r.value;
-					else {
-						if (!d) throw new TypeError(C);
-						f(r, "get") && l(t, n, r.get), f(r, "set") && c(t, n, r.set);
-					}
-					return t;
-				};
-			}
-			Object.defineProperties ||
-				(Object.defineProperties = (t, n) => {
-					for (var r in n) f(n, r) && Object.defineProperty(t, r, n[r]);
-					return t;
+						} while (!0);
+					for (; s < i; s++) s in r && (o = t.call(void 0, o, r[s], s, n));
+					return o;
 				}),
-				Object.seal ||
-					(Object.seal = (t) => t),
-				Object.freeze ||
-					(Object.freeze = (t) => t);
-			try {
-				Object.freeze(() => {});
-			} catch (k) {
-				Object.freeze = ((t) => (n) => typeof n == "function" ? n : t(n))(Object.freeze);
-			}
-			Object.preventExtensions ||
-				(Object.preventExtensions = (t) => t),
-				Object.isSealed ||
-					(Object.isSealed = (t) => !1),
-				Object.isFrozen ||
-					(Object.isFrozen = (t) => !1),
-				Object.isExtensible ||
-					(Object.isExtensible = (t) => {
-						if (Object(t) === t) throw new TypeError();
-						var n = "";
-						while (f(t, n)) n += "?";
-						t[n] = !0;
-						var r = f(t, n);
-						return delete t[n], r;
-					});
-			if (!Object.keys) {
-				var L = !0,
-					A = [
-						"toString",
-						"toLocaleString",
-						"valueOf",
-						"hasOwnProperty",
-						"isPrototypeOf",
-						"propertyIsEnumerable",
-						"constructor",
-					],
-					O = A.length;
-				for (var M in { toString: null }) L = !1;
-				Object.keys = function I(e) {
-					if ((typeof e != "object" && typeof e != "function") || e === null)
-						throw new TypeError("Object.keys called on a non-object");
-					var I = [];
-					for (var t in e) f(e, t) && I.push(t);
-					if (L)
-						for (var n = 0, r = O; n < r; n++) {
-							var i = A[n];
-							f(e, i) && I.push(i);
-						}
-					return I;
-				};
-			}
-			Date.now ||
-				(Date.now = () => new Date().getTime());
-			var _ =
-				"	\n\f\r \u00a0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\ufeff";
-			if (!String.prototype.trim || _.trim()) {
-				_ = "[" + _ + "]";
-				var D = new RegExp("^" + _ + _ + "*"),
-					P = new RegExp(_ + _ + "*$");
-				String.prototype.trim = function () {
-					return String(this).replace(D, "").replace(P, "");
-				};
-			}
-			var F = (e) => {
-				if (e == null) throw new TypeError("can't convert " + e + " to object");
-				return Object(e);
+			Array.prototype.reduceRight ||
+				(Array.prototype.reduceRight = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0;
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					if (!i && arguments.length == 1)
+						throw new TypeError(
+							"reduceRight of empty array with no initial value",
+						);
+					var s,
+						o = i - 1;
+					if (arguments.length >= 2) s = arguments[1];
+					else
+						do {
+							if (o in r) {
+								s = r[o--];
+								break;
+							}
+							if (--o < 0)
+								throw new TypeError(
+									"reduceRight of empty array with no initial value",
+								);
+						} while (!0);
+					do o in this && (s = t.call(void 0, s, r[o], o, n));
+					while (o--);
+					return s;
+				});
+		if (!Array.prototype.indexOf || [0, 1].indexOf(1, 2) != -1)
+			Array.prototype.indexOf = function (t) {
+				var n = g && a(this) == "[object String]" ? this.split("") : F(this),
+					r = n.length >>> 0;
+				if (!r) return -1;
+				var i = 0;
+				arguments.length > 1 && (i = H(arguments[1])),
+					(i = i >= 0 ? i : Math.max(0, r + i));
+				for (; i < r; i++) if (i in n && n[i] === t) return i;
+				return -1;
 			};
-		},
-	),
+		if (!Array.prototype.lastIndexOf || [0, 1].lastIndexOf(0, -3) != -1)
+			Array.prototype.lastIndexOf = function (t) {
+				var n = g && a(this) == "[object String]" ? this.split("") : F(this),
+					r = n.length >>> 0;
+				if (!r) return -1;
+				var i = r - 1;
+				arguments.length > 1 && (i = Math.min(i, H(arguments[1]))),
+					(i = i >= 0 ? i : r - Math.abs(i));
+				for (; i >= 0; i--) if (i in n && t === n[i]) return i;
+				return -1;
+			};
+		Object.getPrototypeOf ||
+			(Object.getPrototypeOf = (t) =>
+				t.__proto__ || (t.constructor ? t.constructor.prototype : o));
+		if (!Object.getOwnPropertyDescriptor) {
+			var y = "Object.getOwnPropertyDescriptor called on a non-object: ";
+			Object.getOwnPropertyDescriptor = (t, n) => {
+				if ((typeof t != "object" && typeof t != "function") || t === null)
+					throw new TypeError(y + t);
+				if (!f(t, n)) return;
+				var r, i, s;
+				r = { enumerable: !0, configurable: !0 };
+				if (d) {
+					var u = t.__proto__;
+					t.__proto__ = o;
+					var i = h(t, n),
+						s = p(t, n);
+					t.__proto__ = u;
+					if (i || s) return i && (r.get = i), s && (r.set = s), r;
+				}
+				return (r.value = t[n]), r;
+			};
+		}
+		Object.getOwnPropertyNames ||
+			(Object.getOwnPropertyNames = (t) => Object.keys(t));
+		if (!Object.create) {
+			var b;
+			Object.prototype.__proto__ === null
+				? (b = () => ({ __proto__: null }))
+				: (b = () => {
+						var e = {};
+						for (var t in e) e[t] = null;
+						return (
+							(e.constructor =
+								e.hasOwnProperty =
+								e.propertyIsEnumerable =
+								e.isPrototypeOf =
+								e.toLocaleString =
+								e.toString =
+								e.valueOf =
+								e.__proto__ =
+									null),
+							e
+						);
+					}),
+				(Object.create = (t, n) => {
+					var r;
+					if (t === null) r = b();
+					else {
+						if (typeof t != "object")
+							throw new TypeError(
+								"typeof prototype[" + typeof t + "] != 'object'",
+							);
+						var i = () => {};
+						(i.prototype = t), (r = new i()), (r.__proto__ = t);
+					}
+					return n !== void 0 && Object.defineProperties(r, n), r;
+				});
+		}
+		if (Object.defineProperty) {
+			var E = w({}),
+				S = typeof document == "undefined" || w(document.createElement("div"));
+			if (!E || !S) var x = Object.defineProperty;
+		}
+		if (!Object.defineProperty || x) {
+			var T = "Property description must be an object: ",
+				N = "Object.defineProperty called on non-object: ",
+				C = "getters & setters can not be defined on this javascript engine";
+			Object.defineProperty = (t, n, r) => {
+				if ((typeof t != "object" && typeof t != "function") || t === null)
+					throw new TypeError(N + t);
+				if ((typeof r != "object" && typeof r != "function") || r === null)
+					throw new TypeError(T + r);
+				if (x)
+					try {
+						return x.call(Object, t, n, r);
+					} catch (i) {}
+				if (f(r, "value"))
+					if (d && (h(t, n) || p(t, n))) {
+						var s = t.__proto__;
+						(t.__proto__ = o), delete t[n], (t[n] = r.value), (t.__proto__ = s);
+					} else t[n] = r.value;
+				else {
+					if (!d) throw new TypeError(C);
+					f(r, "get") && l(t, n, r.get), f(r, "set") && c(t, n, r.set);
+				}
+				return t;
+			};
+		}
+		Object.defineProperties ||
+			(Object.defineProperties = (t, n) => {
+				for (var r in n) f(n, r) && Object.defineProperty(t, r, n[r]);
+				return t;
+			}),
+			Object.seal || (Object.seal = (t) => t),
+			Object.freeze || (Object.freeze = (t) => t);
+		try {
+			Object.freeze(() => {});
+		} catch (k) {
+			Object.freeze = (
+				(t) => (n) =>
+					typeof n == "function" ? n : t(n)
+			)(Object.freeze);
+		}
+		Object.preventExtensions || (Object.preventExtensions = (t) => t),
+			Object.isSealed || (Object.isSealed = (t) => !1),
+			Object.isFrozen || (Object.isFrozen = (t) => !1),
+			Object.isExtensible ||
+				(Object.isExtensible = (t) => {
+					if (Object(t) === t) throw new TypeError();
+					var n = "";
+					while (f(t, n)) n += "?";
+					t[n] = !0;
+					var r = f(t, n);
+					return delete t[n], r;
+				});
+		if (!Object.keys) {
+			var L = !0,
+				A = [
+					"toString",
+					"toLocaleString",
+					"valueOf",
+					"hasOwnProperty",
+					"isPrototypeOf",
+					"propertyIsEnumerable",
+					"constructor",
+				],
+				O = A.length;
+			for (var M in { toString: null }) L = !1;
+			Object.keys = function I(e) {
+				if ((typeof e != "object" && typeof e != "function") || e === null)
+					throw new TypeError("Object.keys called on a non-object");
+				var I = [];
+				for (var t in e) f(e, t) && I.push(t);
+				if (L)
+					for (var n = 0, r = O; n < r; n++) {
+						var i = A[n];
+						f(e, i) && I.push(i);
+					}
+				return I;
+			};
+		}
+		Date.now || (Date.now = () => new Date().getTime());
+		var _ =
+			"	\n\f\r \u00a0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\ufeff";
+		if (!String.prototype.trim || _.trim()) {
+			_ = "[" + _ + "]";
+			var D = new RegExp("^" + _ + _ + "*"),
+				P = new RegExp(_ + _ + "*$");
+			String.prototype.trim = function () {
+				return String(this).replace(D, "").replace(P, "");
+			};
+		}
+		var F = (e) => {
+			if (e == null) throw new TypeError("can't convert " + e + " to object");
+			return Object(e);
+		};
+	}),
 	define(
 		"ace/lib/fixoldbrowsers",
 		["require", "exports", "module", "ace/lib/regexp", "ace/lib/es5-shim"],
 		(e, t, n) => {
-			
 			e("./regexp"), e("./es5-shim");
 		},
 	),
 	define("ace/lib/dom", ["require", "exports", "module"], (e, t, n) => {
-		
 		var r = "http://www.w3.org/1999/xhtml";
 		(t.getDocumentHead = (e) => (
-				e || (e = document),
-				e.head || e.getElementsByTagName("head")[0] || e.documentElement
-			)),
-			(t.createElement = (e, t) => document.createElementNS
+			e || (e = document),
+			e.head || e.getElementsByTagName("head")[0] || e.documentElement
+		)),
+			(t.createElement = (e, t) =>
+				document.createElementNS
 					? document.createElementNS(t || r, e)
 					: document.createElement(e)),
 			(t.hasCssClass = (e, t) => {
@@ -681,16 +661,14 @@
 						t.getDocumentHead(n).appendChild(r);
 				}
 			}),
-			(t.getInnerWidth = (e) => (
-					parseInt(t.computedStyle(e, "paddingLeft"), 10) +
-					parseInt(t.computedStyle(e, "paddingRight"), 10) +
-					e.clientWidth
-				)),
-			(t.getInnerHeight = (e) => (
-					parseInt(t.computedStyle(e, "paddingTop"), 10) +
-					parseInt(t.computedStyle(e, "paddingBottom"), 10) +
-					e.clientHeight
-				)),
+			(t.getInnerWidth = (e) =>
+				parseInt(t.computedStyle(e, "paddingLeft"), 10) +
+				parseInt(t.computedStyle(e, "paddingRight"), 10) +
+				e.clientWidth),
+			(t.getInnerHeight = (e) =>
+				parseInt(t.computedStyle(e, "paddingTop"), 10) +
+				parseInt(t.computedStyle(e, "paddingBottom"), 10) +
+				e.clientHeight),
 			(t.scrollbarWidth = (e) => {
 				var n = t.createElement("ace_inner");
 				(n.style.width = "100%"),
@@ -724,10 +702,12 @@
 			: ((t.getPageScrollTop = () => document.body.scrollTop),
 				(t.getPageScrollLeft = () => document.body.scrollLeft)),
 			window.getComputedStyle
-				? (t.computedStyle = (e, t) => t
+				? (t.computedStyle = (e, t) =>
+						t
 							? (window.getComputedStyle(e, "") || {})[t] || ""
 							: window.getComputedStyle(e, "") || {})
-				: (t.computedStyle = (e, t) => t ? e.currentStyle[t] : e.currentStyle),
+				: (t.computedStyle = (e, t) =>
+						t ? e.currentStyle[t] : e.currentStyle),
 			(t.setInnerHtml = (e, t) => {
 				var n = e.cloneNode(!1);
 				return (n.innerHTML = t), e.parentNode.replaceChild(n, e), n;
@@ -744,7 +724,6 @@
 			(t.getParentWindow = (e) => e.defaultView || e.parentWindow);
 	}),
 	define("ace/lib/oop", ["require", "exports", "module"], (e, t, n) => {
-		
 		(t.inherits = (e, t) => {
 			(e.super_ = t),
 				(e.prototype = Object.create(t.prototype, {
@@ -768,7 +747,6 @@
 		"ace/lib/keys",
 		["require", "exports", "module", "ace/lib/fixoldbrowsers", "ace/lib/oop"],
 		(e, t, n) => {
-			
 			e("./fixoldbrowsers");
 			var r = e("./oop"),
 				i = (() => {
@@ -909,9 +887,7 @@
 							var t = ["cmd", "ctrl", "alt", "shift"];
 							for (var n = 2 ** t.length; n--; )
 								e.KEY_MODS[n] =
-									t
-										.filter((t) => n & e.KEY_MODS[t])
-										.join("-") + "-";
+									t.filter((t) => n & e.KEY_MODS[t]).join("-") + "-";
 						})(),
 						(e.KEY_MODS[0] = ""),
 						(e.KEY_MODS[-1] = "input-"),
@@ -928,55 +904,50 @@
 				});
 		},
 	),
-	define(
-		"ace/lib/useragent",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			(t.OS = { LINUX: "LINUX", MAC: "MAC", WINDOWS: "WINDOWS" }),
-				(t.getOS = () => t.isMac ? t.OS.MAC : t.isLinux ? t.OS.LINUX : t.OS.WINDOWS);
-			if (typeof navigator != "object") return;
-			var r = (navigator.platform.match(/mac|win|linux/i) || [
-					"other",
-				])[0].toLowerCase(),
-				i = navigator.userAgent;
-			(t.isWin = r == "win"),
-				(t.isMac = r == "mac"),
-				(t.isLinux = r == "linux"),
-				(t.isIE =
-					navigator.appName == "Microsoft Internet Explorer" ||
-					navigator.appName.indexOf("MSAppHost") >= 0
-						? parseFloat(
-								(i.match(
-									/(?:MSIE |Trident\/[0-9]+[.0-9]+;.*rv:)([0-9]+[.0-9]+)/,
-								) || [])[1],
-							)
-						: parseFloat(
-								(i.match(/(?:Trident\/[0-9]+[.0-9]+;.*rv:)([0-9]+[.0-9]+)/) ||
-									[])[1],
-							)),
-				(t.isOldIE = t.isIE && t.isIE < 9),
-				(t.isGecko = t.isMozilla =
-					(window.Controllers || window.controllers) &&
-					window.navigator.product === "Gecko"),
-				(t.isOldGecko =
-					t.isGecko && parseInt((i.match(/rv:(\d+)/) || [])[1], 10) < 4),
-				(t.isOpera =
-					window.opera &&
-					Object.prototype.toString.call(window.opera) == "[object Opera]"),
-				(t.isWebKit = parseFloat(i.split("WebKit/")[1]) || undefined),
-				(t.isChrome = parseFloat(i.split(" Chrome/")[1]) || undefined),
-				(t.isAIR = i.indexOf("AdobeAIR") >= 0),
-				(t.isIPad = i.indexOf("iPad") >= 0),
-				(t.isTouchPad = i.indexOf("TouchPad") >= 0),
-				(t.isChromeOS = i.indexOf(" CrOS ") >= 0);
-		},
-	),
+	define("ace/lib/useragent", ["require", "exports", "module"], (e, t, n) => {
+		(t.OS = { LINUX: "LINUX", MAC: "MAC", WINDOWS: "WINDOWS" }),
+			(t.getOS = () =>
+				t.isMac ? t.OS.MAC : t.isLinux ? t.OS.LINUX : t.OS.WINDOWS);
+		if (typeof navigator != "object") return;
+		var r = (navigator.platform.match(/mac|win|linux/i) || [
+				"other",
+			])[0].toLowerCase(),
+			i = navigator.userAgent;
+		(t.isWin = r == "win"),
+			(t.isMac = r == "mac"),
+			(t.isLinux = r == "linux"),
+			(t.isIE =
+				navigator.appName == "Microsoft Internet Explorer" ||
+				navigator.appName.indexOf("MSAppHost") >= 0
+					? parseFloat(
+							(i.match(
+								/(?:MSIE |Trident\/[0-9]+[.0-9]+;.*rv:)([0-9]+[.0-9]+)/,
+							) || [])[1],
+						)
+					: parseFloat(
+							(i.match(/(?:Trident\/[0-9]+[.0-9]+;.*rv:)([0-9]+[.0-9]+)/) ||
+								[])[1],
+						)),
+			(t.isOldIE = t.isIE && t.isIE < 9),
+			(t.isGecko = t.isMozilla =
+				(window.Controllers || window.controllers) &&
+				window.navigator.product === "Gecko"),
+			(t.isOldGecko =
+				t.isGecko && parseInt((i.match(/rv:(\d+)/) || [])[1], 10) < 4),
+			(t.isOpera =
+				window.opera &&
+				Object.prototype.toString.call(window.opera) == "[object Opera]"),
+			(t.isWebKit = parseFloat(i.split("WebKit/")[1]) || undefined),
+			(t.isChrome = parseFloat(i.split(" Chrome/")[1]) || undefined),
+			(t.isAIR = i.indexOf("AdobeAIR") >= 0),
+			(t.isIPad = i.indexOf("iPad") >= 0),
+			(t.isTouchPad = i.indexOf("TouchPad") >= 0),
+			(t.isChromeOS = i.indexOf(" CrOS ") >= 0);
+	}),
 	define(
 		"ace/lib/event",
 		["require", "exports", "module", "ace/lib/keys", "ace/lib/useragent"],
 		(e, t, n) => {
-			
 			function a(e, t, n) {
 				var a = u(t);
 				if (!i.isMac && s) {
@@ -1041,7 +1012,8 @@
 				(t.preventDefault = (e) => {
 					e.preventDefault ? e.preventDefault() : (e.returnValue = !1);
 				}),
-				(t.getButton = (e) => e.type == "dblclick"
+				(t.getButton = (e) =>
+					e.type == "dblclick"
 						? 0
 						: e.type == "contextmenu" ||
 								(i.isMac && e.ctrlKey && !e.altKey && !e.shiftKey)
@@ -1163,20 +1135,18 @@
 				});
 			var u =
 				!i.isMac || !i.isOpera || "KeyboardEvent" in window
-					? ((e) => (
-								0 |
-								(e.ctrlKey ? 1 : 0) |
-								(e.altKey ? 2 : 0) |
-								(e.shiftKey ? 4 : 0) |
-								(e.metaKey ? 8 : 0)
-							))
-					: ((e) => (
-								0 |
-								(e.metaKey ? 1 : 0) |
-								(e.altKey ? 2 : 0) |
-								(e.shiftKey ? 4 : 0) |
-								(e.ctrlKey ? 8 : 0)
-							));
+					? (e) =>
+							0 |
+							(e.ctrlKey ? 1 : 0) |
+							(e.altKey ? 2 : 0) |
+							(e.shiftKey ? 4 : 0) |
+							(e.metaKey ? 8 : 0)
+					: (e) =>
+							0 |
+							(e.metaKey ? 1 : 0) |
+							(e.altKey ? 2 : 0) |
+							(e.shiftKey ? 4 : 0) |
+							(e.ctrlKey ? 8 : 0);
 			(t.getModifierString = (e) => r.KEY_MODS[u(e)]),
 				(t.addCommandKeyListener = (e, n) => {
 					var r = t.addListener;
@@ -1231,7 +1201,6 @@
 		},
 	),
 	define("ace/lib/lang", ["require", "exports", "module"], (e, t, n) => {
-		
 		(t.last = (e) => e[e.length - 1]),
 			(t.stringReverse = (e) => e.split("").reverse().join("")),
 			(t.stringRepeat = (e, t) => {
@@ -1286,7 +1255,8 @@
 				for (var n = 0; n <= e.length; n++) t === e[n] && e.splice(n, 1);
 			}),
 			(t.escapeRegExp = (e) => e.replace(/([.*+?^${}()|[\]/\\])/g, "\\$1")),
-			(t.escapeHTML = (e) => e
+			(t.escapeHTML = (e) =>
+				e
 					.replace(/&/g, "&#38;")
 					.replace(/"/g, "&#34;")
 					.replace(/'/g, "&#39;")
@@ -1355,7 +1325,6 @@
 			"ace/lib/lang",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/event"),
 				i = e("../lib/useragent"),
 				s = e("../lib/dom"),
@@ -1443,7 +1412,8 @@
 						}),
 						w(),
 						v && t.onFocus();
-					var E = (e) => e.selectionStart === 0 && e.selectionEnd === e.value.length;
+					var E = (e) =>
+						e.selectionStart === 0 && e.selectionEnd === e.value.length;
 					!n.setSelectionRange &&
 						n.createTextRange &&
 						((n.setSelectionRange = function (e, t) {
@@ -1614,10 +1584,10 @@
 								e == r.lastValue ? w() : !r.lastValue && e && (w(), A(e));
 							});
 							(k = (n) => (
-									s && clearTimeout(s),
-									(n = n.replace(/\x01/g, "")),
-									n == r.lastValue ? "" : (r.lastValue && s && t.undo(), n)
-								)),
+								s && clearTimeout(s),
+								(n = n.replace(/\x01/g, "")),
+								n == r.lastValue ? "" : (r.lastValue && s && t.undo(), n)
+							)),
 								t.onCompositionEnd(),
 								t.removeListener("mousedown", F),
 								e.type == "compositionend" &&
@@ -1699,7 +1669,6 @@
 			"ace/lib/useragent",
 		],
 		(e, t, n) => {
-			
 			function u(e) {
 				e.$clickSelection = null;
 				var t = e.editor;
@@ -1938,7 +1907,6 @@
 		"ace/tooltip",
 		["require", "exports", "module", "ace/lib/oop", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			function s(e) {
 				(this.isOpen = !1), (this.$element = null), (this.$parentNode = e);
 			}
@@ -2003,7 +1971,6 @@
 			"ace/tooltip",
 		],
 		(e, t, n) => {
-			
 			function u(e) {
 				function l() {
 					var r = u.getDocumentPosition().row,
@@ -2106,7 +2073,6 @@
 		"ace/mouse/mouse_event",
 		["require", "exports", "module", "ace/lib/event", "ace/lib/useragent"],
 		(e, t, n) => {
-			
 			var r = e("../lib/event"),
 				i = e("../lib/useragent"),
 				s = (t.MouseEvent = function (e, t) {
@@ -2176,7 +2142,6 @@
 			"ace/lib/useragent",
 		],
 		(e, t, n) => {
-			
 			function f(e) {
 				function T(e, n) {
 					var r = Date.now(),
@@ -2264,7 +2229,10 @@
 					var t = e.types;
 					return (
 						!t ||
-						Array.prototype.some.call(t, (e) => e == "text/plain" || e == "Text")
+						Array.prototype.some.call(
+							t,
+							(e) => e == "text/plain" || e == "Text",
+						)
 					);
 				}
 				function _(e) {
@@ -2498,7 +2466,6 @@
 		"ace/lib/net",
 		["require", "exports", "module", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			var r = e("./dom");
 			(t.get = (e, t) => {
 				var n = new XMLHttpRequest();
@@ -2534,7 +2501,6 @@
 		"ace/lib/event_emitter",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			var r = {},
 				i = function () {
 					this.propagationStopped = !0;
@@ -2856,7 +2822,6 @@
 			"ace/config",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/event"),
 				i = e("../lib/useragent"),
 				s = e("./default_handlers").DefaultHandlers,
@@ -2970,8 +2935,7 @@
 						(this.x = e.x), (this.y = e.y), (this.isMousePressed = !0);
 						var n = this.editor.renderer;
 						n.$keepTextAreaAtCursor && (n.$keepTextAreaAtCursor = null);
-						var 
-							o = (e) => {
+						var o = (e) => {
 								if (!e) return;
 								if (i.isWebKit && !e.which && this.releaseMouse)
 									return this.releaseMouse();
@@ -3027,7 +2991,6 @@
 		"ace/mouse/fold_handler",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			function r(e) {
 				e.on("click", (t) => {
 					var n = t.getDocumentPosition(),
@@ -3076,7 +3039,6 @@
 		"ace/keyboard/keybinding",
 		["require", "exports", "module", "ace/lib/keys", "ace/lib/event"],
 		(e, t, n) => {
-			
 			var r = e("../lib/keys"),
 				i = e("../lib/event"),
 				s = function (e) {
@@ -3170,7 +3132,6 @@
 		},
 	),
 	define("ace/range", ["require", "exports", "module"], (e, t, n) => {
-		
 		var r = (e, t) => e.row - t.row || e.column - t.column,
 			i = function (e, t, n, r) {
 				(this.start = { row: e, column: t }),
@@ -3360,7 +3321,6 @@
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/lang"),
 				s = e("./lib/event_emitter").EventEmitter,
@@ -3866,7 +3826,6 @@
 		"ace/tokenizer",
 		["require", "exports", "module", "ace/config"],
 		(e, t, n) => {
-			
 			var r = e("./config"),
 				i = 2e3,
 				s = function (e) {
@@ -3906,7 +3865,10 @@
 										: (f.onMatch = f.token)),
 								c > 1 &&
 									(/\\\d/.test(f.regex)
-										? (l = f.regex.replace(/\\([0-9]+)/g, (e, t) => "\\" + (parseInt(t, 10) + i + 1)))
+										? (l = f.regex.replace(
+												/\\([0-9]+)/g,
+												(e, t) => "\\" + (parseInt(t, 10) + i + 1),
+											))
 										: ((c = 1), (l = this.removeCapturingGroups(f.regex))),
 									!f.splitRegex && typeof f.token != "string" && u.push(f)),
 								(s[i] = a),
@@ -3947,7 +3909,7 @@
 					(this.removeCapturingGroups = (e) => {
 						var t = e.replace(
 							/\[(?:\\.|[^\]])*?\]|\\.|\(\?[:=!]|(\()/g,
-							(e, t) => t ? "(?:" : e,
+							(e, t) => (t ? "(?:" : e),
 						);
 						return t;
 					}),
@@ -3959,18 +3921,18 @@
 							e.replace(
 								/(\\.)|(\((?:\?[=!])?)|(\))|([[\]])/g,
 								(e, t, s, o, u, a) => (
-										r
-											? (r = u != "]")
-											: u
-												? (r = !0)
-												: o
-													? (n == i.stack && ((i.end = a + 1), (i.stack = -1)),
-														n--)
-													: s &&
-														(n++,
-														s.length != 1 && ((i.stack = n), (i.start = a))),
-										e
-									),
+									r
+										? (r = u != "]")
+										: u
+											? (r = !0)
+											: o
+												? (n == i.stack && ((i.end = a + 1), (i.stack = -1)),
+													n--)
+												: s &&
+													(n++,
+													s.length != 1 && ((i.stack = n), (i.start = a))),
+									e
+								),
 							),
 								i.end != null &&
 									/^\)*$/.test(e.substr(i.end)) &&
@@ -4070,7 +4032,6 @@
 		"ace/mode/text_highlight_rules",
 		["require", "exports", "module", "ace/lib/lang"],
 		(e, t, n) => {
-			
 			var r = e("../lib/lang"),
 				i = function () {
 					this.$rules = {
@@ -4178,8 +4139,7 @@
 							p && (f = r[p]);
 							if (f) {
 								var d = [u, 1].concat(f);
-								a.noEscape &&
-									(d = d.filter((e) => !e.next)),
+								a.noEscape && (d = d.filter((e) => !e.next)),
 									o.splice.apply(o, d),
 									u--;
 							}
@@ -4208,9 +4168,7 @@
 							Object.getPrototypeOf(i) && (i.__proto__ = null),
 							(this.$keywordList = Object.keys(i)),
 							(e = null),
-							n
-								? ((e) => i[e.toLowerCase()] || t)
-								: ((e) => i[e] || t)
+							n ? (e) => i[e.toLowerCase()] || t : (e) => i[e] || t
 						);
 					}),
 					(this.getKeywords = function () {
@@ -4220,104 +4178,90 @@
 				(t.TextHighlightRules = i);
 		},
 	),
-	define(
-		"ace/mode/behaviour",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			var r = function () {
-				this.$behaviours = {};
-			};
-			(function () {
-				(this.add = function (e, t, n) {
-					switch (undefined) {
-						case this.$behaviours:
-							this.$behaviours = {};
-						case this.$behaviours[e]:
-							this.$behaviours[e] = {};
-					}
-					this.$behaviours[e][t] = n;
+	define("ace/mode/behaviour", ["require", "exports", "module"], (e, t, n) => {
+		var r = function () {
+			this.$behaviours = {};
+		};
+		(function () {
+			(this.add = function (e, t, n) {
+				switch (undefined) {
+					case this.$behaviours:
+						this.$behaviours = {};
+					case this.$behaviours[e]:
+						this.$behaviours[e] = {};
+				}
+				this.$behaviours[e][t] = n;
+			}),
+				(this.addBehaviours = function (e) {
+					for (var t in e) for (var n in e[t]) this.add(t, n, e[t][n]);
 				}),
-					(this.addBehaviours = function (e) {
-						for (var t in e) for (var n in e[t]) this.add(t, n, e[t][n]);
-					}),
-					(this.remove = function (e) {
-						this.$behaviours &&
-							this.$behaviours[e] &&
-							delete this.$behaviours[e];
-					}),
-					(this.inherit = function (e, t) {
-						if (typeof e == "function") var n = new e().getBehaviours(t);
-						else var n = e.getBehaviours(t);
-						this.addBehaviours(n);
-					}),
-					(this.getBehaviours = function (e) {
-						if (!e) return this.$behaviours;
-						var t = {};
-						for (var n = 0; n < e.length; n++)
-							this.$behaviours[e[n]] && (t[e[n]] = this.$behaviours[e[n]]);
-						return t;
-					});
-			}).call(r.prototype),
-				(t.Behaviour = r);
-		},
-	),
-	define(
-		"ace/token_iterator",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			var r = function (e, t, n) {
-				(this.$session = e),
-					(this.$row = t),
-					(this.$rowTokens = e.getTokens(t));
-				var r = e.getTokenAt(t, n);
-				this.$tokenIndex = r ? r.index : -1;
-			};
-			(function () {
-				(this.stepBackward = function () {
-					this.$tokenIndex -= 1;
-					while (this.$tokenIndex < 0) {
-						this.$row -= 1;
-						if (this.$row < 0) return (this.$row = 0), null;
+				(this.remove = function (e) {
+					this.$behaviours && this.$behaviours[e] && delete this.$behaviours[e];
+				}),
+				(this.inherit = function (e, t) {
+					if (typeof e == "function") var n = new e().getBehaviours(t);
+					else var n = e.getBehaviours(t);
+					this.addBehaviours(n);
+				}),
+				(this.getBehaviours = function (e) {
+					if (!e) return this.$behaviours;
+					var t = {};
+					for (var n = 0; n < e.length; n++)
+						this.$behaviours[e[n]] && (t[e[n]] = this.$behaviours[e[n]]);
+					return t;
+				});
+		}).call(r.prototype),
+			(t.Behaviour = r);
+	}),
+	define("ace/token_iterator", ["require", "exports", "module"], (e, t, n) => {
+		var r = function (e, t, n) {
+			(this.$session = e), (this.$row = t), (this.$rowTokens = e.getTokens(t));
+			var r = e.getTokenAt(t, n);
+			this.$tokenIndex = r ? r.index : -1;
+		};
+		(function () {
+			(this.stepBackward = function () {
+				this.$tokenIndex -= 1;
+				while (this.$tokenIndex < 0) {
+					this.$row -= 1;
+					if (this.$row < 0) return (this.$row = 0), null;
+					(this.$rowTokens = this.$session.getTokens(this.$row)),
+						(this.$tokenIndex = this.$rowTokens.length - 1);
+				}
+				return this.$rowTokens[this.$tokenIndex];
+			}),
+				(this.stepForward = function () {
+					this.$tokenIndex += 1;
+					var e;
+					while (this.$tokenIndex >= this.$rowTokens.length) {
+						(this.$row += 1), e || (e = this.$session.getLength());
+						if (this.$row >= e) return (this.$row = e - 1), null;
 						(this.$rowTokens = this.$session.getTokens(this.$row)),
-							(this.$tokenIndex = this.$rowTokens.length - 1);
+							(this.$tokenIndex = 0);
 					}
 					return this.$rowTokens[this.$tokenIndex];
 				}),
-					(this.stepForward = function () {
-						this.$tokenIndex += 1;
-						var e;
-						while (this.$tokenIndex >= this.$rowTokens.length) {
-							(this.$row += 1), e || (e = this.$session.getLength());
-							if (this.$row >= e) return (this.$row = e - 1), null;
-							(this.$rowTokens = this.$session.getTokens(this.$row)),
-								(this.$tokenIndex = 0);
-						}
-						return this.$rowTokens[this.$tokenIndex];
-					}),
-					(this.getCurrentToken = function () {
-						return this.$rowTokens[this.$tokenIndex];
-					}),
-					(this.getCurrentTokenRow = function () {
-						return this.$row;
-					}),
-					(this.getCurrentTokenColumn = function () {
-						var e = this.$rowTokens,
-							t = this.$tokenIndex,
-							n = e[t].start;
-						if (n !== undefined) return n;
-						n = 0;
-						while (t > 0) (t -= 1), (n += e[t].value.length);
-						return n;
-					}),
-					(this.getCurrentTokenPosition = function () {
-						return { row: this.$row, column: this.getCurrentTokenColumn() };
-					});
-			}).call(r.prototype),
-				(t.TokenIterator = r);
-		},
-	),
+				(this.getCurrentToken = function () {
+					return this.$rowTokens[this.$tokenIndex];
+				}),
+				(this.getCurrentTokenRow = function () {
+					return this.$row;
+				}),
+				(this.getCurrentTokenColumn = function () {
+					var e = this.$rowTokens,
+						t = this.$tokenIndex,
+						n = e[t].start;
+					if (n !== undefined) return n;
+					n = 0;
+					while (t > 0) (t -= 1), (n += e[t].value.length);
+					return n;
+				}),
+				(this.getCurrentTokenPosition = function () {
+					return { row: this.$row, column: this.getCurrentTokenColumn() };
+				});
+		}).call(r.prototype),
+			(t.TokenIterator = r);
+	}),
 	define(
 		"ace/mode/behaviour/cstyle",
 		[
@@ -4330,7 +4274,6 @@
 			"ace/lib/lang",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../behaviour").Behaviour,
 				s = e("../../token_iterator").TokenIterator,
@@ -4601,18 +4544,16 @@
 						(f.maybeInsertedLineEnd = i.substr(r.column)),
 						f.maybeInsertedBrackets++;
 				}),
-				(p.isAutoInsertedClosing = (e, t, n) => (
-						f.autoInsertedBrackets > 0 &&
-						e.row === f.autoInsertedRow &&
-						n === f.autoInsertedLineEnd[0] &&
-						t.substr(e.column) === f.autoInsertedLineEnd
-					)),
-				(p.isMaybeInsertedClosing = (e, t) => (
-						f.maybeInsertedBrackets > 0 &&
-						e.row === f.maybeInsertedRow &&
-						t.substr(e.column) === f.maybeInsertedLineEnd &&
-						t.substr(0, e.column) == f.maybeInsertedLineStart
-					)),
+				(p.isAutoInsertedClosing = (e, t, n) =>
+					f.autoInsertedBrackets > 0 &&
+					e.row === f.autoInsertedRow &&
+					n === f.autoInsertedLineEnd[0] &&
+					t.substr(e.column) === f.autoInsertedLineEnd),
+				(p.isMaybeInsertedClosing = (e, t) =>
+					f.maybeInsertedBrackets > 0 &&
+					e.row === f.maybeInsertedRow &&
+					t.substr(e.column) === f.maybeInsertedLineEnd &&
+					t.substr(0, e.column) == f.maybeInsertedLineStart),
 				(p.popAutoInsertedClosing = () => {
 					(f.autoInsertedLineEnd = f.autoInsertedLineEnd.substr(1)),
 						f.autoInsertedBrackets--;
@@ -4625,7 +4566,6 @@
 		},
 	),
 	define("ace/unicode", ["require", "exports", "module"], (e, t, n) => {
-		
 		function r(e) {
 			var n = /\w{4}/g;
 			for (var r in e) t.packages[r] = e[r].replace(n, "\\u$&");
@@ -4686,7 +4626,6 @@
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("../tokenizer").Tokenizer,
 				i = e("./text_highlight_rules").TextHighlightRules,
 				s = e("./behaviour/cstyle").CstyleBehaviour,
@@ -4939,79 +4878,78 @@
 					}),
 					(this.getCompletions = function (e, t, n, r) {
 						var i = this.$keywordList || this.$createKeywordList();
-						return i.map((e) => ({ name: e, value: e, score: 0, meta: "keyword" }));
+						return i.map((e) => ({
+							name: e,
+							value: e,
+							score: 0,
+							meta: "keyword",
+						}));
 					}),
 					(this.$id = "ace/mode/text");
 			}).call(l.prototype),
 				(t.Mode = l);
 		},
 	),
-	define(
-		"ace/apply_delta",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			function r(e, t) {
-				throw (console.log("Invalid Delta:", e), "Invalid Delta: " + t);
-			}
-			function i(e, t) {
-				return (
-					t.row >= 0 &&
-					t.row < e.length &&
-					t.column >= 0 &&
-					t.column <= e[t.row].length
-				);
-			}
-			function s(e, t) {
-				t.action != "insert" &&
-					t.action != "remove" &&
-					r(t, "delta.action must be 'insert' or 'remove'"),
-					t.lines instanceof Array || r(t, "delta.lines must be an Array"),
-					(!t.start || !t.end) && r(t, "delta.start/end must be an present");
-				var n = t.start;
-				i(e, t.start) || r(t, "delta.start must be contained in document");
-				var s = t.end;
-				t.action == "remove" &&
-					!i(e, s) &&
-					r(t, "delta.end must contained in document for 'remove' actions");
-				var o = s.row - n.row,
-					u = s.column - (o == 0 ? n.column : 0);
-				(o != t.lines.length - 1 || t.lines[o].length != u) &&
-					r(t, "delta.range must match delta lines");
-			}
-			t.applyDelta = (e, t, n) => {
-				var r = t.start.row,
-					i = t.start.column,
-					s = e[r] || "";
-				switch (t.action) {
-					case "insert": {
-						var o = t.lines;
-						if (o.length === 1)
-							e[r] = s.substring(0, i) + t.lines[0] + s.substring(i);
-						else {
-							var u = [r, 1].concat(t.lines);
-							e.splice.apply(e, u),
-								(e[r] = s.substring(0, i) + e[r]),
-								(e[r + t.lines.length - 1] += s.substring(i));
-						}
-						break;
+	define("ace/apply_delta", ["require", "exports", "module"], (e, t, n) => {
+		function r(e, t) {
+			throw (console.log("Invalid Delta:", e), "Invalid Delta: " + t);
+		}
+		function i(e, t) {
+			return (
+				t.row >= 0 &&
+				t.row < e.length &&
+				t.column >= 0 &&
+				t.column <= e[t.row].length
+			);
+		}
+		function s(e, t) {
+			t.action != "insert" &&
+				t.action != "remove" &&
+				r(t, "delta.action must be 'insert' or 'remove'"),
+				t.lines instanceof Array || r(t, "delta.lines must be an Array"),
+				(!t.start || !t.end) && r(t, "delta.start/end must be an present");
+			var n = t.start;
+			i(e, t.start) || r(t, "delta.start must be contained in document");
+			var s = t.end;
+			t.action == "remove" &&
+				!i(e, s) &&
+				r(t, "delta.end must contained in document for 'remove' actions");
+			var o = s.row - n.row,
+				u = s.column - (o == 0 ? n.column : 0);
+			(o != t.lines.length - 1 || t.lines[o].length != u) &&
+				r(t, "delta.range must match delta lines");
+		}
+		t.applyDelta = (e, t, n) => {
+			var r = t.start.row,
+				i = t.start.column,
+				s = e[r] || "";
+			switch (t.action) {
+				case "insert": {
+					var o = t.lines;
+					if (o.length === 1)
+						e[r] = s.substring(0, i) + t.lines[0] + s.substring(i);
+					else {
+						var u = [r, 1].concat(t.lines);
+						e.splice.apply(e, u),
+							(e[r] = s.substring(0, i) + e[r]),
+							(e[r + t.lines.length - 1] += s.substring(i));
 					}
-					case "remove": {
-						var a = t.end.column,
-							f = t.end.row;
-						r === f
-							? (e[r] = s.substring(0, i) + s.substring(a))
-							: e.splice(r, f - r + 1, s.substring(0, i) + e[f].substring(a));
-					}
+					break;
 				}
-			};
-		},
-	),
+				case "remove": {
+					var a = t.end.column,
+						f = t.end.row;
+					r === f
+						? (e[r] = s.substring(0, i) + s.substring(a))
+						: e.splice(r, f - r + 1, s.substring(0, i) + e[f].substring(a));
+				}
+			}
+		};
+	}),
 	define(
 		"ace/anchor",
 		["require", "exports", "module", "ace/lib/oop", "ace/lib/event_emitter"],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/event_emitter").EventEmitter,
 				s = (t.Anchor = function (e, t, n) {
@@ -5107,7 +5045,6 @@
 			"ace/anchor",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./apply_delta").applyDelta,
 				s = e("./lib/event_emitter").EventEmitter,
@@ -5430,7 +5367,6 @@
 		"ace/background_tokenizer",
 		["require", "exports", "module", "ace/lib/oop", "ace/lib/event_emitter"],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/event_emitter").EventEmitter,
 				s = function (e, t) {
@@ -5552,7 +5488,6 @@
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/lang"),
 				i = e("./lib/oop"),
 				s = e("./range").Range,
@@ -5588,7 +5523,6 @@
 		"ace/edit_session/fold_line",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			function i(e, t) {
 				(this.foldData = e),
 					Array.isArray(t) ? (this.folds = t) : (t = this.folds = [t]);
@@ -5621,7 +5555,9 @@
 									"Can't add a fold to this FoldLine as it has no connection",
 								);
 							this.folds.push(e),
-								this.folds.sort((e, t) => -e.range.compareEnd(t.start.row, t.start.column)),
+								this.folds.sort(
+									(e, t) => -e.range.compareEnd(t.start.row, t.start.column),
+								),
 								this.range.compareEnd(e.start.row, e.start.column) > 0
 									? ((this.end.row = e.end.row),
 										(this.end.column = e.end.column))
@@ -5748,7 +5684,6 @@
 		"ace/range_list",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("./range").Range,
 				i = r.comparePoints,
 				s = function () {
@@ -5897,7 +5832,6 @@
 			"ace/lib/oop",
 		],
 		(e, t, n) => {
-			
 			function u(e, t) {
 				(e.row -= t.row), e.row == 0 && (e.column -= t.column);
 			}
@@ -5995,7 +5929,6 @@
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			function u() {
 				(this.getFoldAt = function (e, t, n) {
 					var r = this.getFoldLine(e);
@@ -6542,7 +6475,6 @@
 		"ace/edit_session/bracket_match",
 		["require", "exports", "module", "ace/token_iterator", "ace/range"],
 		(e, t, n) => {
-			
 			function s() {
 				(this.findMatchingBracket = function (e, t) {
 					if (e.column == 0) return null;
@@ -6693,7 +6625,6 @@
 			"ace/edit_session/bracket_match",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/lang"),
 				s = e("./config"),
@@ -6872,10 +6803,16 @@
 							(this.$syncInformUndoManager = () => {
 								this.$informUndoManager.cancel(),
 									this.$deltasFold.length &&
-										(this.$deltas.push({ group: "fold", deltas: this.$deltasFold }),
+										(this.$deltas.push({
+											group: "fold",
+											deltas: this.$deltasFold,
+										}),
 										(this.$deltasFold = [])),
 									this.$deltasDoc.length &&
-										(this.$deltas.push({ group: "doc", deltas: this.$deltasDoc }),
+										(this.$deltas.push({
+											group: "doc",
+											deltas: this.$deltasDoc,
+										}),
 										(this.$deltasDoc = [])),
 									this.$deltas.length > 0 &&
 										e.execute({
@@ -7332,14 +7269,16 @@
 								o = l.row - a.row,
 								u = l.column - a.column;
 							this.addFolds(
-								i.map((e) => (
+								i.map(
+									(e) => (
 										(e = e.clone()),
 										e.start.row == a.row && (e.start.column += u),
 										e.end.row == a.row && (e.end.column += u),
 										(e.start.row += o),
 										(e.end.row += o),
 										e
-									)),
+									),
+								),
 							);
 						}
 						return s;
@@ -7379,7 +7318,11 @@
 							var i = t - e + 1;
 						}
 						var s = new f(e, 0, t, Number.MAX_VALUE),
-							o = this.getFoldsInRange(s).map((e) => ((e = e.clone()), (e.start.row += i), (e.end.row += i), e)),
+							o = this.getFoldsInRange(s).map(
+								(e) => (
+									(e = e.clone()), (e.start.row += i), (e.end.row += i), e
+								),
+							),
 							u =
 								n == 0
 									? this.doc.getLines(e, t)
@@ -7475,7 +7418,9 @@
 								!0)
 							: !1;
 					}),
-					(this.$constrainWrapLimit = (e, t, n) => (t && (e = Math.max(t, e)), n && (e = Math.min(n, e)), e)),
+					(this.$constrainWrapLimit = (e, t, n) => (
+						t && (e = Math.max(t, e)), n && (e = Math.min(n, e)), e
+					)),
 					(this.getWrapLimit = function () {
 						return this.$wrapLimit;
 					}),
@@ -8031,7 +7976,6 @@
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			function u(e, t) {
 				function n(e) {
 					return /\w/.test(e) || t.regExp ? "\\b" : "";
@@ -8223,7 +8167,7 @@
 						var o = i ? i.start.row : 0,
 							u = i ? i.end.row : e.getLength() - 1,
 							a = n
-								? ((n) => {
+								? (n) => {
 										var r = s.row,
 											i = e.getLine(r).substring(0, s.column);
 										if (n(i, r)) return;
@@ -8231,8 +8175,8 @@
 										if (t.wrap == 0) return;
 										for (r = u, o = s.row; r >= o; r--)
 											if (n(e.getLine(r), r)) return;
-									})
-								: ((n) => {
+									}
+								: (n) => {
 										var r = s.row,
 											i = e.getLine(r).substr(s.column);
 										if (n(i, r, s.column)) return;
@@ -8240,7 +8184,7 @@
 										if (t.wrap == 0) return;
 										for (r = o, u = s.row; r <= u; r++)
 											if (n(e.getLine(r), r)) return;
-									});
+									};
 						return { forEach: a };
 					});
 			}).call(o.prototype),
@@ -8251,7 +8195,6 @@
 		"ace/keyboard/hash_handler",
 		["require", "exports", "module", "ace/lib/keys", "ace/lib/useragent"],
 		(e, t, n) => {
-			
 			function o(e, t) {
 				(this.platform = t || (i.isMac ? "mac" : "win")),
 					(this.commands = {}),
@@ -8426,14 +8369,15 @@
 			"ace/lib/event_emitter",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../keyboard/hash_handler").MultiHashHandler,
 				s = e("../lib/event_emitter").EventEmitter,
 				o = function (e, t) {
 					i.call(this, t, e),
 						(this.byName = this.commands),
-						this.setDefaultHandler("exec", (e) => e.command.exec(e.editor, e.args || {}));
+						this.setDefaultHandler("exec", (e) =>
+							e.command.exec(e.editor, e.args || {}),
+						);
 				};
 			r.inherits(o, i),
 				function () {
@@ -8487,11 +8431,14 @@
 								this.$inReplay = !1;
 							}
 						}),
-						(this.trimMacro = (e) => e.map((e) => (
+						(this.trimMacro = (e) =>
+							e.map(
+								(e) => (
 									typeof e[0] != "string" && (e[0] = e[0].name),
 									e[1] || (e = e[0]),
 									e
-								)));
+								),
+							));
 				}.call(o.prototype),
 				(t.CommandManager = o);
 		},
@@ -8500,7 +8447,6 @@
 		"ace/commands/default_commands",
 		["require", "exports", "module", "ace/lib/lang", "ace/config", "ace/range"],
 		(e, t, n) => {
-			
 			function o(e, t) {
 				return { win: e, mac: t };
 			}
@@ -9432,7 +9378,6 @@
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			e("./lib/fixoldbrowsers");
 			var r = e("./lib/oop"),
 				i = e("./lib/dom"),
@@ -10298,11 +10243,13 @@
 							t = this.session,
 							n = [];
 						for (i = e.first; i <= e.last; i++) n.push(t.getLine(i));
-						n.sort((e, t) => e.toLowerCase() < t.toLowerCase()
+						n.sort((e, t) =>
+							e.toLowerCase() < t.toLowerCase()
 								? -1
 								: e.toLowerCase() > t.toLowerCase()
 									? 1
-									: 0);
+									: 0,
+						);
 						var r = new p(0, 0, 0, 0);
 						for (var i = e.first; i <= e.last; i++) {
 							var s = t.getLine(i);
@@ -10848,7 +10795,8 @@
 								if (
 									r &&
 									t &&
-									(this.isFocused() || (this.searchBox && this.searchBox.isFocused()))
+									(this.isFocused() ||
+										(this.searchBox && this.searchBox.isFocused()))
 								) {
 									var e = this.renderer,
 										s = e.$cursorLayer.$pixelPos,
@@ -10974,101 +10922,96 @@
 				(t.Editor = b);
 		},
 	),
-	define(
-		"ace/undomanager",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			var r = function () {
-				this.reset();
-			};
-			(function () {
-				function e(e) {
-					return {
-						action: e.action,
-						start: e.start,
-						end: e.end,
-						lines: e.lines.length == 1 ? null : e.lines,
-						text: e.lines.length == 1 ? e.lines[0] : null,
-					};
-				}
-				function t(e) {
-					return {
-						action: e.action,
-						start: e.start,
-						end: e.end,
-						lines: e.lines || [e.text],
-					};
-				}
-				function n(e, t) {
-					var n = new Array(e.length);
-					for (var r = 0; r < e.length; r++) {
-						var i = e[r],
-							s = { group: i.group, deltas: new Array(i.length) };
-						for (var o = 0; o < i.deltas.length; o++) {
-							var u = i.deltas[o];
-							s.deltas[o] = t(u);
-						}
-						n[r] = s;
+	define("ace/undomanager", ["require", "exports", "module"], (e, t, n) => {
+		var r = function () {
+			this.reset();
+		};
+		(function () {
+			function e(e) {
+				return {
+					action: e.action,
+					start: e.start,
+					end: e.end,
+					lines: e.lines.length == 1 ? null : e.lines,
+					text: e.lines.length == 1 ? e.lines[0] : null,
+				};
+			}
+			function t(e) {
+				return {
+					action: e.action,
+					start: e.start,
+					end: e.end,
+					lines: e.lines || [e.text],
+				};
+			}
+			function n(e, t) {
+				var n = new Array(e.length);
+				for (var r = 0; r < e.length; r++) {
+					var i = e[r],
+						s = { group: i.group, deltas: new Array(i.length) };
+					for (var o = 0; o < i.deltas.length; o++) {
+						var u = i.deltas[o];
+						s.deltas[o] = t(u);
 					}
-					return n;
+					n[r] = s;
 				}
-				(this.execute = function (e) {
-					var t = e.args[0];
-					(this.$doc = e.args[1]),
-						e.merge &&
-							this.hasUndo() &&
-							(this.dirtyCounter--, (t = this.$undoStack.pop().concat(t))),
-						this.$undoStack.push(t),
-						(this.$redoStack = []),
-						this.dirtyCounter < 0 && (this.dirtyCounter = NaN),
-						this.dirtyCounter++;
+				return n;
+			}
+			(this.execute = function (e) {
+				var t = e.args[0];
+				(this.$doc = e.args[1]),
+					e.merge &&
+						this.hasUndo() &&
+						(this.dirtyCounter--, (t = this.$undoStack.pop().concat(t))),
+					this.$undoStack.push(t),
+					(this.$redoStack = []),
+					this.dirtyCounter < 0 && (this.dirtyCounter = NaN),
+					this.dirtyCounter++;
+			}),
+				(this.undo = function (e) {
+					var t = this.$undoStack.pop(),
+						n = null;
+					return (
+						t &&
+							((n = this.$doc.undoChanges(t, e)),
+							this.$redoStack.push(t),
+							this.dirtyCounter--),
+						n
+					);
 				}),
-					(this.undo = function (e) {
-						var t = this.$undoStack.pop(),
-							n = null;
-						return (
-							t &&
-								((n = this.$doc.undoChanges(t, e)),
-								this.$redoStack.push(t),
-								this.dirtyCounter--),
-							n
-						);
-					}),
-					(this.redo = function (e) {
-						var t = this.$redoStack.pop(),
-							n = null;
-						return (
-							t &&
-								((n = this.$doc.redoChanges(this.$deserializeDeltas(t), e)),
-								this.$undoStack.push(t),
-								this.dirtyCounter++),
-							n
-						);
-					}),
-					(this.reset = function () {
-						(this.$undoStack = []),
-							(this.$redoStack = []),
-							(this.dirtyCounter = 0);
-					}),
-					(this.hasUndo = function () {
-						return this.$undoStack.length > 0;
-					}),
-					(this.hasRedo = function () {
-						return this.$redoStack.length > 0;
-					}),
-					(this.markClean = function () {
-						this.dirtyCounter = 0;
-					}),
-					(this.isClean = function () {
-						return this.dirtyCounter === 0;
-					}),
-					(this.$serializeDeltas = (t) => n(t, e)),
-					(this.$deserializeDeltas = (e) => n(e, t));
-			}).call(r.prototype),
-				(t.UndoManager = r);
-		},
-	),
+				(this.redo = function (e) {
+					var t = this.$redoStack.pop(),
+						n = null;
+					return (
+						t &&
+							((n = this.$doc.redoChanges(this.$deserializeDeltas(t), e)),
+							this.$undoStack.push(t),
+							this.dirtyCounter++),
+						n
+					);
+				}),
+				(this.reset = function () {
+					(this.$undoStack = []),
+						(this.$redoStack = []),
+						(this.dirtyCounter = 0);
+				}),
+				(this.hasUndo = function () {
+					return this.$undoStack.length > 0;
+				}),
+				(this.hasRedo = function () {
+					return this.$redoStack.length > 0;
+				}),
+				(this.markClean = function () {
+					this.dirtyCounter = 0;
+				}),
+				(this.isClean = function () {
+					return this.dirtyCounter === 0;
+				}),
+				(this.$serializeDeltas = (t) => n(t, e)),
+				(this.$deserializeDeltas = (e) => n(e, t));
+		}).call(r.prototype),
+			(t.UndoManager = r);
+	}),
 	define(
 		"ace/layer/gutter",
 		[
@@ -11081,7 +11024,6 @@
 			"ace/lib/event_emitter",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/dom"),
 				i = e("../lib/oop"),
 				s = e("../lib/lang"),
@@ -11273,7 +11215,6 @@
 		"ace/layer/marker",
 		["require", "exports", "module", "ace/range", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = e("../lib/dom"),
 				s = function (e) {
@@ -11517,7 +11458,6 @@
 			"ace/lib/event_emitter",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/dom"),
 				s = e("../lib/lang"),
@@ -11748,8 +11688,7 @@
 					}),
 					(this.$textToken = { text: !0, rparen: !0, lparen: !0 }),
 					(this.$renderToken = function (e, t, n, r) {
-						var 
-							o =
+						var o =
 								/\t|&|<|>|( +)|([\x00-\x1f\x80-\xa0\xad\u1680\u180E\u2000-\u200f\u2028\u2029\u202F\u205F\u3000\uFEFF\uFFF9-\uFFFC])|[\u1100-\u115F\u11A3-\u11A7\u11FA-\u11FF\u2329-\u232A\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u2FF0-\u2FFB\u3000-\u303E\u3041-\u3096\u3099-\u30FF\u3105-\u312D\u3131-\u318E\u3190-\u31BA\u31C0-\u31E3\u31F0-\u321E\u3220-\u3247\u3250-\u32FE\u3300-\u4DBF\u4E00-\uA48C\uA490-\uA4C6\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFAFF\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE66\uFE68-\uFE6B\uFF01-\uFF60\uFFE0-\uFFE6]/g,
 							u = (e, n, r, o, u) => {
 								if (n)
@@ -11950,7 +11889,6 @@
 		"ace/layer/cursor",
 		["require", "exports", "module", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			var r = e("../lib/dom"),
 				i,
 				s = function (e) {
@@ -12111,7 +12049,6 @@
 			"ace/lib/event_emitter",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/dom"),
 				s = e("./lib/event"),
@@ -12227,7 +12164,6 @@
 		"ace/renderloop",
 		["require", "exports", "module", "ace/lib/event"],
 		(e, t, n) => {
-			
 			var r = e("./lib/event"),
 				i = function (e, t) {
 					(this.onRender = e),
@@ -12397,7 +12333,6 @@
 			"ace/lib/event_emitter",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/dom"),
 				s = e("./config"),
@@ -12457,7 +12392,12 @@
 					this.$textLayer.$setFontMetrics(this.$fontMetrics),
 					this.$textLayer.addEventListener("changeCharacterSize", (e) => {
 						this.updateCharacterSize(),
-							this.onResize(!0, this.gutterWidth, this.$size.width, this.$size.height),
+							this.onResize(
+								!0,
+								this.gutterWidth,
+								this.$size.width,
+								this.$size.height,
+							),
 							this._signal("changeCharacterSize", e);
 					}),
 					(this.$size = {
@@ -13389,7 +13329,8 @@
 								n._dispatchEvent("themeLoaded", { theme: r }),
 								t && t();
 						}
-						(this.$themeId = e), this._dispatchEvent("themeChange", { theme: e });
+						(this.$themeId = e),
+							this._dispatchEvent("themeChange", { theme: e });
 						if (!e || typeof e == "string") {
 							var r = e || this.$options.theme.initialValue;
 							s.loadModule(["theme", r], o);
@@ -13580,7 +13521,6 @@
 			"ace/config",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/net"),
 				s = e("../lib/event_emitter").EventEmitter,
@@ -13755,7 +13695,6 @@
 			"ace/lib/oop",
 		],
 		(e, t, n) => {
-			
 			var r = e("./range").Range,
 				i = e("./lib/event_emitter").EventEmitter,
 				s = e("./lib/oop"),
@@ -13783,8 +13722,7 @@
 			(function () {
 				s.implement(this, i),
 					(this.setup = function () {
-						var 
-							t = this.doc,
+						var t = this.doc,
 							n = this.session;
 						(this.selectionBefore = n.selection.toJSON()),
 							n.selection.inMultiSelectMode && n.selection.toSingleRange(),
@@ -13861,8 +13799,7 @@
 					}),
 					(this.updateMarkers = function () {
 						if (this.$updating) return;
-						var 
-							t = this.session,
+						var t = this.session,
 							n = (n, i) => {
 								t.removeMarker(n.markerId),
 									(n.markerId = t.addMarker(
@@ -14829,7 +14766,6 @@
 		"ace/mode/folding/fold_mode",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../../range").Range,
 				i = (t.FoldMode = () => {});
 			(function () {
@@ -14892,7 +14828,6 @@
 		"ace/theme/textmate",
 		["require", "exports", "module", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			(t.isDark = !1),
 				(t.cssClass = "ace-tm"),
 				(t.cssText =
@@ -14905,7 +14840,6 @@
 		"ace/line_widgets",
 		["require", "exports", "module", "ace/lib/oop", "ace/lib/dom", "ace/range"],
 		(e, t, n) => {
-			
 			function o(e) {
 				(this.session = e),
 					(this.session.widgetManager = this),
@@ -15182,7 +15116,6 @@
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			function o(e, t, n) {
 				var r = 0,
 					i = e.length - 1;
@@ -15227,7 +15160,9 @@
 					((n.widgetManager = new r(n)), n.widgetManager.attach(e));
 				var s = e.getCursorPosition(),
 					o = s.row,
-					a = n.widgetManager.getWidgetsAtRow(o).filter((e) => e.type == "errorMarker")[0];
+					a = n.widgetManager
+						.getWidgetsAtRow(o)
+						.filter((e) => e.type == "errorMarker")[0];
 				a ? a.destroy() : (o -= t);
 				var f = u(n, o, t),
 					l;
@@ -15311,7 +15246,6 @@
 			"ace/config",
 		],
 		(e, t, n) => {
-			
 			e("./lib/fixoldbrowsers");
 			var r = e("./lib/dom"),
 				i = e("./lib/event"),

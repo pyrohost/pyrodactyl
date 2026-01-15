@@ -1,7 +1,7 @@
 import http from "@/api/http";
 import {
-	type ServerDatabase,
 	rawDataToServerDatabase,
+	type ServerDatabase,
 } from "@/api/server/databases/getServerDatabases";
 import { getGlobalDaemonType } from "@/api/server/getServer";
 

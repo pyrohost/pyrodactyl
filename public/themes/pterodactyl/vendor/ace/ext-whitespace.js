@@ -1,10 +1,8 @@
-define("ace/ext/whitespace", [
-	"require",
-	"exports",
-	"module",
-	"ace/lib/lang",
-], (e, t, n) => {
-	
+define("ace/ext/whitespace", ["require", "exports", "module", "ace/lib/lang"], (
+	e,
+	t,
+	n,
+) => {
 	var r = e("../lib/lang");
 	(t.$detectIndentation = (e, t) => {
 		function c(e) {
@@ -100,7 +98,8 @@ define("ace/ext/whitespace", [
 			var n = e.match(/\d+/);
 			return n && (t.length = parseInt(n[0], 10)), t;
 		}),
-		(t.$parseArg = (e) => e
+		(t.$parseArg = (e) =>
+			e
 				? typeof e == "string"
 					? t.$parseStringArg(e)
 					: typeof e.text == "string"

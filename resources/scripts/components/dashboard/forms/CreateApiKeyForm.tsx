@@ -1,11 +1,11 @@
 import { Activity02Icon } from "@hugeicons/core-free-icons";
 import { type Actions, useStoreActions } from "easy-peasy";
 import { Field, Form, Formik, type FormikHelpers } from "formik";
-import { useState } from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import createApiKey from "@/api/account/createApiKey";
+import type { ApiKey } from "@/api/account/getApiKeys";
+import { httpErrorToHuman } from "@/api/http";
 import ApiKeyModal from "@/components/dashboard/ApiKeyModal";
 import ActionButton from "@/components/elements/ActionButton";
 import ContentBox from "@/components/elements/ContentBox";
@@ -13,10 +13,7 @@ import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
 import Input from "@/components/elements/Input";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-
-import createApiKey from "@/api/account/createApiKey";
-import type { ApiKey } from "@/api/account/getApiKeys";
-import { httpErrorToHuman } from "@/api/http";
+import FlashMessageRender from "@/components/FlashMessageRender";
 
 import type { ApplicationStore } from "@/state";
 

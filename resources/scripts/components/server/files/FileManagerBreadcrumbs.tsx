@@ -1,6 +1,6 @@
-import { encodePathSegments } from "@/helpers";
 import { Fragment, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
+import { encodePathSegments } from "@/helpers";
 
 import { ServerContext } from "@/state/server";
 

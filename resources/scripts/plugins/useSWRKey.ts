@@ -1,7 +1,6 @@
+import { useDeepCompareMemo } from "@/plugins/useDeepCompareMemo";
 import { useStoreState } from "@/state/hooks";
 import { ServerContext } from "@/state/server";
-
-import { useDeepCompareMemo } from "@/plugins/useDeepCompareMemo";
 
 type Context = string | string[] | (string | number | null | object)[];
 

@@ -1,5 +1,6 @@
 import http from "@/api/http";
 import { getGlobalDaemonType } from "@/api/server/getServer";
+
 // NOTE: This is Specific to wings, it should also work for elytra, but I haven't actually tested
 
 interface ApplyEggChangeData {

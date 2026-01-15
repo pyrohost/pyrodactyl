@@ -12,7 +12,6 @@ define(
 		"ace/lib/dom",
 	],
 	(e, t, n) => {
-		
 		function a() {}
 		var r = e("./lib/oop"),
 			i = e("./range").Range,
@@ -352,12 +351,14 @@ define(
 							e.convertNeedleToRegExp();
 						},
 					},
-				].map((e) => (
+				].map(
+					(e) => (
 						(e.readOnly = !0),
 						(e.isIncrementalSearchCommand = !0),
 						(e.scrollIntoView = "animate-cursor"),
 						e
-					))),
+					),
+				)),
 				i.inherits(u, s),
 				function () {
 					(this.attach = function (e) {
@@ -417,7 +418,6 @@ define(
 			"ace/config",
 		],
 		(e, t, n) => {
-			
 			function f() {
 				(this.$options = { wrap: !1, skipCurrent: !1 }),
 					(this.$keyboardHandler = new a(this));
@@ -564,10 +564,14 @@ define(
 							this.addString(e);
 						}),
 						(this.convertNeedleToRegExp = function () {
-							return this.highlightAndFindWithNeedle(!1, (e) => l(e) ? e : h(e, "ig"));
+							return this.highlightAndFindWithNeedle(!1, (e) =>
+								l(e) ? e : h(e, "ig"),
+							);
 						}),
 						(this.convertNeedleToString = function () {
-							return this.highlightAndFindWithNeedle(!1, (e) => l(e) ? c(e).expression : e);
+							return this.highlightAndFindWithNeedle(!1, (e) =>
+								l(e) ? c(e).expression : e,
+							);
 						}),
 						(this.statusMessage = function (e) {
 							var t = this.$options,
@@ -626,7 +630,6 @@ define(
 			"ace/lib/keys",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/dom");
 			e("../incremental_search");
 			var i = e("../commands/incremental_search_commands"),
@@ -983,7 +986,10 @@ define(
 							}
 							var n = e.emacsMark(),
 								r = e.selection.getAllRanges(),
-								i = r.map((e) => ({ row: e.start.row, column: e.start.column })),
+								i = r.map((e) => ({
+									row: e.start.row,
+									column: e.start.column,
+								})),
 								s = !0,
 								o = r.every((e) => e.isEmpty());
 							if (s && (n || !o)) {

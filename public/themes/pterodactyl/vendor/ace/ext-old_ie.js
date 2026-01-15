@@ -11,7 +11,6 @@ define(
 		"ace/lib/keys",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/dom"),
 			i = e("../lib/lang"),
 			s = e("../lib/event"),
@@ -272,7 +271,6 @@ define(
 			"ace/mode/text",
 		],
 		(require, exports, module) => {
-			
 			function patch(obj, name, regexp, replacement) {
 				eval(
 					"obj['" +
@@ -323,10 +321,9 @@ define(
 					TokenizerModule,
 					"Tokenizer",
 					"ruleRegExps.push(adjustedregex);\n",
-					(e) => (
-							e +
-							'        if (state[i].next && RegExp(adjustedregex).test(""))\n            rule._qre = RegExp(adjustedregex, "g");\n        '
-						),
+					(e) =>
+						e +
+						'        if (state[i].next && RegExp(adjustedregex).test(""))\n            rule._qre = RegExp(adjustedregex, "g");\n        ',
 				),
 				(TokenizerModule.Tokenizer.prototype = proto),
 				patch(

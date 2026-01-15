@@ -1,12 +1,11 @@
-import { useHeader } from "@/contexts/HeaderContext";
-import { useSidebar } from "@/contexts/SidebarContext";
 import { LayoutSideContent } from "@gravity-ui/icons";
 import { Fragment, memo } from "react";
 import { NavLink } from "react-router-dom";
-
 // import ActionButton from '@/components/elements/ActionButton';
 import Logo from "@/components/elements/PyroLogo";
 import { Button } from "@/components/ui/button";
+import { useHeader } from "@/contexts/HeaderContext";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 import "../sidebar/sidebar-modern.css";
 import UserDropdown from "./UserDropdown";

@@ -10,6 +10,6 @@ const Dialog = Object.assign(DialogComponent, {
 });
 
 export { Dialog };
-export * from "./types.d";
 export * from "./context";
 export { default as styles } from "./style.module.css";
+export * from "./types.d";

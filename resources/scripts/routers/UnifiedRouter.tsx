@@ -1,5 +1,3 @@
-import { HeaderProvider } from "@/contexts/HeaderContext";
-import { SidebarProvider } from "@/contexts/SidebarContext";
 import {
 	Activity02Icon,
 	Cardiogram01Icon,
@@ -19,22 +17,22 @@ import {
 import { useStoreState } from "easy-peasy";
 import { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import { Route, Routes, useLocation, useParams } from "react-router-dom";
-
-import routes from "@/routers/routes";
-
 import DashboardContainer from "@/components/dashboard/DashboardContainer";
+import CommandMenu from "@/components/elements/commandk/CmdK";
 import ErrorBoundary from "@/components/elements/ErrorBoundary";
 import MainWrapper from "@/components/elements/MainWrapper";
 import PermissionRoute from "@/components/elements/PermissionRoute";
 import Logo from "@/components/elements/PyroLogo";
 import { NotFound, ServerError } from "@/components/elements/ScreenBlock";
-import CommandMenu from "@/components/elements/commandk/CmdK";
 import AppHeader from "@/components/layout/header/AppHeader";
 import Sidebar from "@/components/layout/sidebar/Sidebar";
 import ConflictStateRenderer from "@/components/server/ConflictStateRenderer";
 import InstallListener from "@/components/server/InstallListener";
 import TransferListener from "@/components/server/TransferListener";
 import WebsocketHandler from "@/components/server/WebsocketHandler";
+import { HeaderProvider } from "@/contexts/HeaderContext";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import routes from "@/routers/routes";
 
 // import PyroLogoMark from '@/components/ui/logos/pyromark';
 

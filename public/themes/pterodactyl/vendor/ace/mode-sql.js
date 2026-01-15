@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -66,7 +65,6 @@ define(
 			"ace/mode/sql_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./sql_highlight_rules").SqlHighlightRules,

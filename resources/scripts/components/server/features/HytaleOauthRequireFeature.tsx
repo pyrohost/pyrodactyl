@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
 import Button from "@/components/elements/ActionButton";
 // assuming this is your styled button
 import Modal from "@/components/elements/Modal";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import { SocketEvent } from "@/components/server/events";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 const HytaleOauthRequireFeature = () => {
 	const [visible, setVisible] = useState(false);

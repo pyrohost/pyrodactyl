@@ -1,4 +1,3 @@
-import ModalContext from "@/context/ModalContext";
 import {
 	Form,
 	Formik,
@@ -9,24 +8,20 @@ import {
 import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { boolean, number, object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { httpErrorToHuman } from "@/api/http";
+import createOrUpdateScheduleTask from "@/api/server/schedules/createOrUpdateScheduleTask";
+import type { Schedule, Task } from "@/api/server/schedules/getServerSchedules";
 import ActionButton from "@/components/elements/ActionButton";
 import Field from "@/components/elements/Field";
 import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
 import FormikSwitchV2 from "@/components/elements/FormikSwitchV2";
 import { Textarea } from "@/components/elements/Input";
 import Select from "@/components/elements/Select";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
+import ModalContext from "@/context/ModalContext";
 import asModal from "@/hoc/asModal";
-
-import { httpErrorToHuman } from "@/api/http";
-import createOrUpdateScheduleTask from "@/api/server/schedules/createOrUpdateScheduleTask";
-import type { Schedule, Task } from "@/api/server/schedules/getServerSchedules";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 // TODO: Port modern dropdowns to Formik and integrate them
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/elements/DropdownMenu';

@@ -1,25 +1,21 @@
-import { encodePathSegments } from "@/helpers";
 import { File, FolderOpenFill } from "@gravity-ui/icons";
 import { differenceInHours, format, formatDistanceToNow } from "date-fns";
 import { join } from "pathe";
-import { type ReactNode, memo } from "react";
+import { memo, type ReactNode } from "react";
 import isEqual from "react-fast-compare";
 import { NavLink } from "react-router-dom";
+import type { FileObject } from "@/api/server/files/loadDirectory";
 
 import {
 	ContextMenu,
 	ContextMenuTrigger,
 } from "@/components/elements/ContextMenu";
 import SelectFileCheckbox from "@/components/server/files/SelectFileCheckbox";
-
+import { encodePathSegments } from "@/helpers";
 import { bytesToString } from "@/lib/formatters";
-
-import type { FileObject } from "@/api/server/files/loadDirectory";
-
+import { usePermissions } from "@/plugins/usePermissions";
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from "@/state/server";
-
-import { usePermissions } from "@/plugins/usePermissions";
 
 import FileDropdownMenu from "./FileDropdownMenu";
 import styles from "./style.module.css";

@@ -1,7 +1,6 @@
-import ModalContext, { type ModalContextValues } from "@/context/ModalContext";
 import { PureComponent } from "react";
-
 import PortaledModal, { type ModalProps } from "@/components/elements/Modal";
+import ModalContext, { type ModalContextValues } from "@/context/ModalContext";
 
 export interface AsModalProps {
 	visible: boolean;

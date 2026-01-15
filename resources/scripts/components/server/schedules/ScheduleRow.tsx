@@ -1,9 +1,7 @@
 import { Calendar } from "@gravity-ui/icons";
 import { format } from "date-fns";
-
-import ScheduleCronRow from "@/components/server/schedules/ScheduleCronRow";
-
 import type { Schedule } from "@/api/server/schedules/getServerSchedules";
+import ScheduleCronRow from "@/components/server/schedules/ScheduleCronRow";
 
 const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
 	<>

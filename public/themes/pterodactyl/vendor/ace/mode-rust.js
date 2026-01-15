@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = /\\(?:[nrt0'"\\]|x[\da-fA-F]{2}|u\{[\da-fA-F]{6}\})/.source,
@@ -162,7 +161,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -278,7 +276,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./rust_highlight_rules").RustHighlightRules,

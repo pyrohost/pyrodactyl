@@ -1,20 +1,17 @@
-import { Cloud, CloudArrowUpIn, Lock, File } from "@gravity-ui/icons";
+import { Cloud, CloudArrowUpIn, File, Lock } from "@gravity-ui/icons";
 
 import { format, formatDistanceToNow } from "date-fns";
-
+import type { ServerBackup } from "@/api/server/types";
+import getServerBackups from "@/api/swr/getServerBackups";
 import Can from "@/components/elements/Can";
 import {
 	ContextMenu,
 	ContextMenuTrigger,
 } from "@/components/elements/ContextMenu";
-import Spinner from "@/components/elements/Spinner";
 import { PageListItem } from "@/components/elements/pages/PageList";
+import Spinner from "@/components/elements/Spinner";
 import { SocketEvent } from "@/components/server/events";
-
 import { bytesToString } from "@/lib/formatters";
-
-import type { ServerBackup } from "@/api/server/types";
-import getServerBackups from "@/api/swr/getServerBackups";
 
 // import Can from '@/components/elements/Can';
 import useWebsocketEvent from "@/plugins/useWebsocketEvent";

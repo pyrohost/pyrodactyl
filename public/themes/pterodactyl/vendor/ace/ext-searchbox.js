@@ -8,7 +8,6 @@ define("ace/ext/searchbox", [
 	"ace/keyboard/hash_handler",
 	"ace/lib/keys",
 ], (e, t, n) => {
-	
 	var r = e("../lib/dom"),
 		i = e("../lib/lang"),
 		s = e("../lib/event"),

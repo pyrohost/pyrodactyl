@@ -7,21 +7,17 @@ import {
 	TrashBin,
 } from "@gravity-ui/icons";
 import { useState } from "react";
-
+import { httpErrorToHuman } from "@/api/http";
+import deleteScheduleTask from "@/api/server/schedules/deleteScheduleTask";
+import type { Schedule, Task } from "@/api/server/schedules/getServerSchedules";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import ConfirmationModal from "@/components/elements/ConfirmationModal";
 import ItemContainer from "@/components/elements/ItemContainer";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
 import TaskDetailsModal from "@/components/server/schedules/TaskDetailsModal";
-
-import { httpErrorToHuman } from "@/api/http";
-import deleteScheduleTask from "@/api/server/schedules/deleteScheduleTask";
-import type { Schedule, Task } from "@/api/server/schedules/getServerSchedules";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 interface Props {
 	schedule: Schedule;

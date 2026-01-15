@@ -9,28 +9,23 @@ import {
 import debounce from "debounce";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
-
-import ActionButton from "@/components/elements/ActionButton";
-import Can from "@/components/elements/Can";
-import Code from "@/components/elements/Code";
-import CopyOnClick from "@/components/elements/CopyOnClick";
-import { Textarea } from "@/components/elements/Input";
-import InputSpinner from "@/components/elements/InputSpinner";
-import Spinner from "@/components/elements/Spinner";
-import { Dialog } from "@/components/elements/dialog";
-import { PageListItem } from "@/components/elements/pages/PageList";
-
-import { ip } from "@/lib/formatters";
-
 import type { Allocation } from "@/api/server/getServer";
 import deleteServerAllocation from "@/api/server/network/deleteServerAllocation";
 import setPrimaryServerAllocation from "@/api/server/network/setPrimaryServerAllocation";
 import setServerAllocationNotes from "@/api/server/network/setServerAllocationNotes";
 import getServerAllocations from "@/api/swr/getServerAllocations";
-
-import { ServerContext } from "@/state/server";
-
+import ActionButton from "@/components/elements/ActionButton";
+import Can from "@/components/elements/Can";
+import Code from "@/components/elements/Code";
+import CopyOnClick from "@/components/elements/CopyOnClick";
+import { Dialog } from "@/components/elements/dialog";
+import { Textarea } from "@/components/elements/Input";
+import InputSpinner from "@/components/elements/InputSpinner";
+import { PageListItem } from "@/components/elements/pages/PageList";
+import Spinner from "@/components/elements/Spinner";
+import { ip } from "@/lib/formatters";
 import { useFlashKey } from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 interface Props {
 	allocation: Allocation;

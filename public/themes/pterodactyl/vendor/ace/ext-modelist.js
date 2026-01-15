@@ -1,9 +1,4 @@
-define("ace/ext/modelist", ["require", "exports", "module"], (
-	e,
-	t,
-	n,
-) => {
-	
+define("ace/ext/modelist", ["require", "exports", "module"], (e, t, n) => {
 	function i(e) {
 		var t = a.text,
 			n = e.split(/[/\\]/).pop();

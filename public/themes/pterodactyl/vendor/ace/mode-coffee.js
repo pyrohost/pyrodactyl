@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		function s() {
 			var e = "[$A-Za-z_\\x7f-\\uffff][$\\w\\x7f-\\uffff]*",
 				t =
@@ -187,11 +186,11 @@ define(
 		"ace/mode/matching_brace_outdent",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = () => {};
 			(function () {
-				(this.checkOutdent = (e, t) => /^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
+				(this.checkOutdent = (e, t) =>
+					/^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
 					(this.autoOutdent = function (e, t) {
 						var n = e.getLine(t),
 							i = n.match(/^(\s*\})/);
@@ -218,7 +217,6 @@ define(
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./fold_mode").FoldMode,
 				s = e("../../range").Range,
@@ -302,7 +300,6 @@ define(
 			"ace/lib/oop",
 		],
 		(e, t, n) => {
-			
 			function l() {
 				(this.HighlightRules = r),
 					(this.$outdent = new i()),

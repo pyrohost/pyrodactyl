@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -563,7 +562,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -679,7 +677,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./kotlin_highlight_rules").KotlinHighlightRules,

@@ -1,8 +1,8 @@
 import http from "@/api/http";
 import { getGlobalDaemonType } from "@/api/server/getServer";
 import {
-	type Schedule,
 	rawDataToServerSchedule,
+	type Schedule,
 } from "@/api/server/schedules/getServerSchedules";
 
 type Data = Pick<Schedule, "cron" | "name" | "onlyWhenOnline" | "isActive"> & {

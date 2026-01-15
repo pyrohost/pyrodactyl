@@ -31,7 +31,7 @@ export const restoreServerBackup = async (
 
 export { default as createServerBackup } from "./createServerBackup";
 export { default as deleteServerBackup } from "./deleteServerBackup";
+export type { BackupJobStatus } from "./getBackupStatus";
 export { default as getServerBackupDownloadUrl } from "./getServerBackupDownloadUrl";
 export { default as renameServerBackup } from "./renameServerBackup";
 export { default as retryBackup } from "./retryBackup";
-export type { BackupJobStatus } from "./getBackupStatus";

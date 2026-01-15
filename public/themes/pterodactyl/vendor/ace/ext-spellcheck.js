@@ -6,7 +6,6 @@ define("ace/ext/spellcheck", [
 	"ace/editor",
 	"ace/config",
 ], (e, t, n) => {
-	
 	var r = e("../lib/event");
 	t.contextMenuHandler = (e) => {
 		var t = e.target,

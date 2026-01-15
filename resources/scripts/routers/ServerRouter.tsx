@@ -4,9 +4,9 @@ import { Ellipsis } from "@gravity-ui/icons";
 import { useStoreState } from "easy-peasy";
 import type { RefObject } from "react";
 import {
+	createRef,
 	Fragment,
 	Suspense,
-	createRef,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -20,12 +20,9 @@ import {
 	useLocation,
 	useParams,
 } from "react-router-dom";
-
-import routes, {
-	type ServerRouteDefinition,
-	getServerNavRoutes,
-} from "@/routers/routes";
-
+import http, { httpErrorToHuman } from "@/api/http";
+import { getSubdomainInfo } from "@/api/server/network/subdomain";
+import CommandMenu from "@/components/elements/commandk/CmdK";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -41,17 +38,16 @@ import MobileTopBar from "@/components/elements/MobileTopBar";
 import PermissionRoute from "@/components/elements/PermissionRoute";
 import Logo from "@/components/elements/PyroLogo";
 import { NotFound, ServerError } from "@/components/elements/ScreenBlock";
-import CommandMenu from "@/components/elements/commandk/CmdK";
 import ConflictStateRenderer from "@/components/server/ConflictStateRenderer";
+import StatBlock from "@/components/server/console/StatBlock";
 import InstallListener from "@/components/server/InstallListener";
 import ServerSidebarNavItem from "@/components/server/ServerSidebarNavItem";
 import TransferListener from "@/components/server/TransferListener";
 import WebsocketHandler from "@/components/server/WebsocketHandler";
-import StatBlock from "@/components/server/console/StatBlock";
-
-import { httpErrorToHuman } from "@/api/http";
-import http from "@/api/http";
-import { getSubdomainInfo } from "@/api/server/network/subdomain";
+import routes, {
+	getServerNavRoutes,
+	type ServerRouteDefinition,
+} from "@/routers/routes";
 
 import { ServerContext } from "@/state/server";
 

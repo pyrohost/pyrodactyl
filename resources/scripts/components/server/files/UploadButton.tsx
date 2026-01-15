@@ -1,17 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-
+import getFileUploadUrl from "@/api/server/files/getFileUploadUrl";
 import ActionButton from "@/components/elements/ActionButton";
 import { ModalMask } from "@/components/elements/Modal";
 import FadeTransition from "@/components/elements/transitions/FadeTransition";
-
-import getFileUploadUrl from "@/api/server/files/getFileUploadUrl";
-
-import { ServerContext } from "@/state/server";
-
 import useEventListener from "@/plugins/useEventListener";
 import useFileManagerSwr from "@/plugins/useFileManagerSwr";
 import { useFlashKey } from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 function isFileOrDirectory(event: DragEvent): boolean {
 	if (!event.dataTransfer?.types) {

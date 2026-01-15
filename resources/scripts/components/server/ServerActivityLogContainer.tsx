@@ -6,19 +6,17 @@ import {
 	Xmark,
 } from "@gravity-ui/icons";
 import { useEffect, useMemo, useState } from "react";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import type { ActivityLogFilters } from "@/api/account/activity";
+import { useActivityLogs } from "@/api/server/activity";
 import ActionButton from "@/components/elements/ActionButton";
+import ActivityLogEntry from "@/components/elements/activity/ActivityLogEntry";
+import { Input } from "@/components/elements/inputs";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
 import Select from "@/components/elements/Select";
 import ServerContentBlock from "@/components/elements/ServerContentBlock";
 import Spinner from "@/components/elements/Spinner";
-import ActivityLogEntry from "@/components/elements/activity/ActivityLogEntry";
-import { Input } from "@/components/elements/inputs";
 import PaginationFooter from "@/components/elements/table/PaginationFooter";
-
-import type { ActivityLogFilters } from "@/api/account/activity";
-import { useActivityLogs } from "@/api/server/activity";
+import FlashMessageRender from "@/components/FlashMessageRender";
 
 import { useFlashKey } from "@/plugins/useFlash";
 import useLocationHash from "@/plugins/useLocationHash";

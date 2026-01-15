@@ -12,7 +12,6 @@ define(
 		"ace/edit_session",
 	],
 	(e, t, n) => {
-		
 		function l(e, t) {
 			(this.$u = e), (this.$doc = t);
 		}
@@ -202,7 +201,6 @@ define(
 		"ace/ext/split",
 		["require", "exports", "module", "ace/split"],
 		(e, t, n) => {
-			
 			n.exports = e("../split");
 		},
 	);

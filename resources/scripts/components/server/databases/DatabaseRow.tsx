@@ -3,25 +3,21 @@ import { Form, Formik, type FormikHelpers } from "formik";
 import { useState } from "react";
 import styled from "styled-components";
 import { object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { httpErrorToHuman } from "@/api/http";
+import deleteServerDatabase from "@/api/server/databases/deleteServerDatabase";
+import type { ServerDatabase } from "@/api/server/databases/getServerDatabases";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import CopyOnClick from "@/components/elements/CopyOnClick";
 import Field from "@/components/elements/Field";
 import Input from "@/components/elements/Input";
 import Modal from "@/components/elements/Modal";
-import Spinner from "@/components/elements/Spinner";
 import { PageListItem } from "@/components/elements/pages/PageList";
+import Spinner from "@/components/elements/Spinner";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import RotatePasswordButton from "@/components/server/databases/RotatePasswordButton";
-
-import { httpErrorToHuman } from "@/api/http";
-import deleteServerDatabase from "@/api/server/databases/deleteServerDatabase";
-import type { ServerDatabase } from "@/api/server/databases/getServerDatabases";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 const Label = styled.label`
     display: inline-block;

@@ -1,12 +1,10 @@
 import { type Actions, useStoreActions } from "easy-peasy";
 import { useState } from "react";
-
-import ActionButton from "@/components/elements/ActionButton";
-import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-import { Dialog } from "@/components/elements/dialog";
-
 import { httpErrorToHuman } from "@/api/http";
 import deleteSchedule from "@/api/server/schedules/deleteSchedule";
+import ActionButton from "@/components/elements/ActionButton";
+import { Dialog } from "@/components/elements/dialog";
+import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
 
 import type { ApplicationStore } from "@/state";
 import { ServerContext } from "@/state/server";

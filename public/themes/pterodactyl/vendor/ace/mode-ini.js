@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = "\\\\(?:[\\\\0abtrn;#=:]|x[a-fA-F\\d]{4})",
@@ -106,7 +105,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -151,7 +149,6 @@ define(
 			"ace/mode/folding/ini",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./ini_highlight_rules").IniHighlightRules,

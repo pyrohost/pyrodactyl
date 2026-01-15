@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -22,11 +21,19 @@ define(
 			};
 		r.inherits(s, i),
 			(s.getTagRule = (e) => ({
-					token: "comment.doc.tag.storage.type",
-					regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
-				})),
-			(s.getStartRule = (e) => ({ token: "comment.doc", regex: "\\/\\*(?=\\*)", next: e })),
-			(s.getEndRule = (e) => ({ token: "comment.doc", regex: "\\*\\/", next: e })),
+				token: "comment.doc.tag.storage.type",
+				regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
+			})),
+			(s.getStartRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\/\\*(?=\\*)",
+				next: e,
+			})),
+			(s.getEndRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\*\\/",
+				next: e,
+			})),
 			(t.DocCommentHighlightRules = s);
 	},
 ),
@@ -41,7 +48,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./doc_comment_highlight_rules").DocCommentHighlightRules,
 				s = e("./text_highlight_rules").TextHighlightRules,
@@ -122,8 +128,7 @@ define(
 							{ token: u, regex: "[a-zA-Z_$][a-zA-Z0-9_$]*" },
 							{
 								token: "keyword.operator",
-								regex:
-									/--|\+\+|<<=|>>=|>>>=|<>|&&|\|\||\?:|[*%/+\-&^|~!<>=]=?/,
+								regex: /--|\+\+|<<=|>>=|>>>=|<>|&&|\|\||\?:|[*%/+\-&^|~!<>=]=?/,
 							},
 							{ token: "punctuation.operator", regex: "\\?|\\:|\\,|\\;|\\." },
 							{ token: "paren.lparen", regex: "[[({]" },
@@ -173,7 +178,6 @@ define(
 			"ace/mode/c_cpp_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./doc_comment_highlight_rules").DocCommentHighlightRules,
 				s = e("./c_cpp_highlight_rules"),
@@ -485,7 +489,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -601,7 +604,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./objectivec_highlight_rules").ObjectiveCHighlightRules,

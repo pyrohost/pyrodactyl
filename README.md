@@ -12,6 +12,10 @@
     <img src="https://github.com/pyrodactyl-oss/pyrodactyl/actions/workflows/dev-build.yaml/badge.svg" alt="Docker">
   </a>
 </p>
+<p align="center">
+    <a href="https://biomejs.dev"><img alt="Formatted with Biome" src="https://img.shields.io/badge/Formatted_with-Biome-60a5fa?style=flat&logo=biome"></a>
+    <a href="https://biomejs.dev"><img alt="Linted with Biome" src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat&logo=biome"></a>
+</p>
 
 <h1 align="center">Pyrodactyl</h1>
 

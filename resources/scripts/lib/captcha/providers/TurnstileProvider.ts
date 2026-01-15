@@ -1,4 +1,7 @@
-import { BaseCaptchaProvider, type CaptchaRenderConfig } from "../CaptchaProvider";
+import {
+	BaseCaptchaProvider,
+	type CaptchaRenderConfig,
+} from "../CaptchaProvider";
 import "../types";
 
 export class TurnstileProvider extends BaseCaptchaProvider {

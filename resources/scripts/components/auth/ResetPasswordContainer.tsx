@@ -2,17 +2,14 @@ import { Formik, type FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { object, ref, string } from "yup";
-
+import performPasswordReset from "@/api/auth/performPasswordReset";
 import LoginFormContainer from "@/components/auth/LoginFormContainer";
 import Button from "@/components/elements/Button";
 import Captcha, { getCaptchaResponse } from "@/components/elements/Captcha";
 import ContentBox from "@/components/elements/ContentBox";
 import Field from "@/components/elements/Field";
 import Input from "@/components/elements/Input";
-
 import CaptchaManager from "@/lib/captcha";
-
-import performPasswordReset from "@/api/auth/performPasswordReset";
 
 import useFlash from "@/plugins/useFlash";
 

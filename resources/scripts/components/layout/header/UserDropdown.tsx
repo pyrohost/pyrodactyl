@@ -9,7 +9,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import http from "@/api/http";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,10 +17,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { sha256Hash } from "@/lib/helpers";
-
-import http from "@/api/http";
 
 import { Button } from "../../ui/button";
 

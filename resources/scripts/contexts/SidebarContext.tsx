@@ -1,5 +1,5 @@
 import type React from "react";
-import { type ReactNode, createContext, useContext, useEffect } from "react"
+import { createContext, type ReactNode, useContext, useEffect } from "react";
 
 import { usePersistedState } from "@/plugins/usePersistedState";
 

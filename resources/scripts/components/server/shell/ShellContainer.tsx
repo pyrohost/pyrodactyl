@@ -2,7 +2,17 @@ import { Box, TriangleExclamation } from "@gravity-ui/icons";
 import { useEffect, useMemo, useState } from "react";
 import isEqual from "react-fast-compare";
 import { toast } from "sonner";
-
+import { httpErrorToHuman } from "@/api/http";
+import getNests from "@/api/nests/getNests";
+import applyEggChange from "@/api/server/applyEggChange";
+import applyEggChangeSync from "@/api/server/applyEggChangeSync";
+import { getGlobalDaemonType } from "@/api/server/getServer";
+import previewEggChange, {
+	type EggPreview,
+} from "@/api/server/previewEggChange";
+import type { ServerOperation } from "@/api/server/serverOperations";
+import getServerBackups from "@/api/swr/getServerBackups";
+import getServerStartup from "@/api/swr/getServerStartup";
 import ActionButton from "@/components/elements/ActionButton";
 import ConfirmationModal from "@/components/elements/ConfirmationModal";
 import {
@@ -19,20 +29,8 @@ import { Switch } from "@/components/elements/SwitchV2";
 import TitledGreyBox from "@/components/elements/TitledGreyBox";
 import OperationProgressModal from "@/components/server/operations/OperationProgressModal";
 import WingsOperationProgressModal from "@/components/server/operations/WingsOperationProgressModal";
-
-import { httpErrorToHuman } from "@/api/http";
-import getNests from "@/api/nests/getNests";
-import applyEggChange from "@/api/server/applyEggChange";
-import applyEggChangeSync from "@/api/server/applyEggChangeSync";
-import { getGlobalDaemonType } from "@/api/server/getServer";
-import previewEggChange, { type EggPreview } from "@/api/server/previewEggChange";
-import type { ServerOperation } from "@/api/server/serverOperations";
-import getServerBackups from "@/api/swr/getServerBackups";
-import getServerStartup from "@/api/swr/getServerStartup";
-
-import { ServerContext } from "@/state/server";
-
 import { useDeepCompareEffect } from "@/plugins/useDeepCompareEffect";
+import { ServerContext } from "@/state/server";
 
 interface Egg {
 	object: string;

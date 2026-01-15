@@ -1,6 +1,6 @@
 import ActionButton from "@/components/elements/ActionButton";
-import CopyOnClick from "@/components/elements/CopyOnClick";
 import { Alert } from "@/components/elements/alert";
+import CopyOnClick from "@/components/elements/CopyOnClick";
 import { Dialog, type DialogProps } from "@/components/elements/dialog";
 
 interface RecoveryTokenDialogProps extends DialogProps {

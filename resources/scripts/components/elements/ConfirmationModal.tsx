@@ -1,7 +1,6 @@
-import ModalContext from "@/context/ModalContext";
 import { useContext } from "react";
-
 import ActionButton from "@/components/elements/ActionButton";
+import ModalContext from "@/context/ModalContext";
 
 import asModal from "@/hoc/asModal";
 

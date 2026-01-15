@@ -1,11 +1,9 @@
 import { forwardRef, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
-import type { FeatureLimitKey, ServerRouteDefinition } from "@/routers/routes";
+import { getSubdomainInfo } from "@/api/server/network/subdomain";
 
 import Can from "@/components/elements/Can";
-
-import { getSubdomainInfo } from "@/api/server/network/subdomain";
+import type { FeatureLimitKey, ServerRouteDefinition } from "@/routers/routes";
 
 import { ServerContext } from "@/state/server";
 

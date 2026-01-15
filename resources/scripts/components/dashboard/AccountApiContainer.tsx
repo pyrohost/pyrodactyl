@@ -4,26 +4,22 @@ import { type Actions, useStoreActions } from "easy-peasy";
 import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { lazy, useEffect, useState } from "react";
 import { object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import createApiKey from "@/api/account/createApiKey";
+import deleteApiKey from "@/api/account/deleteApiKey";
+import getApiKeys, { type ApiKey } from "@/api/account/getApiKeys";
+import { httpErrorToHuman } from "@/api/http";
 import ApiKeyModal from "@/components/dashboard/ApiKeyModal";
 import ActionButton from "@/components/elements/ActionButton";
 import Code from "@/components/elements/Code";
+import { Dialog } from "@/components/elements/dialog";
 import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
 import Input from "@/components/elements/Input";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-import { Dialog } from "@/components/elements/dialog";
-
-import createApiKey from "@/api/account/createApiKey";
-import deleteApiKey from "@/api/account/deleteApiKey";
-import getApiKeys, { type ApiKey } from "@/api/account/getApiKeys";
-import { httpErrorToHuman } from "@/api/http";
-
-import type { ApplicationStore } from "@/state";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
 import { useFlashKey } from "@/plugins/useFlash";
+import type { ApplicationStore } from "@/state";
 
 const CreateApiKeyModal = lazy(() => import("./CreateApiKeyModal"));
 

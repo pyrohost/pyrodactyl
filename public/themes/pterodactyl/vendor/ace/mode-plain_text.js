@@ -7,7 +7,6 @@ define("ace/mode/plain_text", [
 	"ace/mode/text_highlight_rules",
 	"ace/mode/behaviour",
 ], (e, t, n) => {
-	
 	var r = e("../lib/oop"),
 		i = e("./text").Mode,
 		s = e("./text_highlight_rules").TextHighlightRules,

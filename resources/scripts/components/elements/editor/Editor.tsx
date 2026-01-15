@@ -11,14 +11,14 @@ import {
 	indentWithTab,
 } from "@codemirror/commands";
 import {
-	LanguageDescription,
-	type LanguageSupport,
 	bracketMatching,
 	defaultHighlightStyle,
 	foldGutter,
 	foldKeymap,
 	indentOnInput,
 	indentUnit,
+	LanguageDescription,
+	type LanguageSupport,
 	syntaxHighlighting,
 } from "@codemirror/language";
 import { languages } from "@codemirror/language-data";
@@ -27,10 +27,10 @@ import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
 import { Compartment, EditorState } from "@codemirror/state";
 import {
-	EditorView,
 	crosshairCursor,
 	drawSelection,
 	dropCursor,
+	EditorView,
 	highlightActiveLine,
 	highlightActiveLineGutter,
 	highlightSpecialChars,

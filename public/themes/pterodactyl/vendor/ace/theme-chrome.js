@@ -1,9 +1,8 @@
-define("ace/theme/chrome", [
-	"require",
-	"exports",
-	"module",
-	"ace/lib/dom",
-], (e, t, n) => {
+define("ace/theme/chrome", ["require", "exports", "module", "ace/lib/dom"], (
+	e,
+	t,
+	n,
+) => {
 	(t.isDark = !1),
 		(t.cssClass = "ace-chrome"),
 		(t.cssText =

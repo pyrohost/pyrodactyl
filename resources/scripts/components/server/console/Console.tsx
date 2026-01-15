@@ -1,8 +1,8 @@
-import { useSidebar } from "@/contexts/SidebarContext";
 import { FitAddon } from "@xterm/addon-fit";
 import { SearchAddon } from "@xterm/addon-search";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { type ITerminalOptions, Terminal } from "@xterm/xterm";
+import { useSidebar } from "@/contexts/SidebarContext";
 import "@xterm/xterm/css/xterm.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -12,11 +12,9 @@ import { SocketEvent, SocketRequest } from "@/components/server/events";
 import KeyboardShortcut from "@/components/ui/keyboard-shortcut";
 
 import { cn } from "@/lib/utils";
-
-import { ServerContext } from "@/state/server";
-
 import { usePermissions } from "@/plugins/usePermissions";
 import { usePersistedState } from "@/plugins/usePersistedState";
+import { ServerContext } from "@/state/server";
 
 const theme = {
 	// background: 'rgba(0, 0, 0, 0)',

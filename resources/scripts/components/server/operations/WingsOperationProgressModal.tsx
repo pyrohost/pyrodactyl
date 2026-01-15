@@ -1,13 +1,14 @@
 import { TriangleExclamation } from "@gravity-ui/icons";
 import type React from "react";
 import { useEffect, useState } from "react";
-
-import ActionButton from "@/components/elements/ActionButton";
-import Spinner from "@/components/elements/Spinner";
-import { Dialog } from "@/components/elements/dialog";
-
 import {
-	UI_CONFIG,
+	type ServerOperation,
+	useOperationPolling,
+} from "@/api/server/serverOperations";
+import ActionButton from "@/components/elements/ActionButton";
+import { Dialog } from "@/components/elements/dialog";
+import Spinner from "@/components/elements/Spinner";
+import {
 	canCloseOperation,
 	formatOperationId,
 	getStatusIconType,
@@ -15,12 +16,8 @@ import {
 	isActiveStatus,
 	isCompletedStatus,
 	isFailedStatus,
+	UI_CONFIG,
 } from "@/lib/server-operations";
-
-import {
-	type ServerOperation,
-	useOperationPolling,
-} from "@/api/server/serverOperations";
 
 import { ServerContext } from "@/state/server";
 

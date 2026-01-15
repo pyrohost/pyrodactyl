@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -61,11 +60,11 @@ define(
 		"ace/mode/matching_brace_outdent",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = () => {};
 			(function () {
-				(this.checkOutdent = (e, t) => /^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
+				(this.checkOutdent = (e, t) =>
+					/^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
 					(this.autoOutdent = function (e, t) {
 						var n = e.getLine(t),
 							i = n.match(/^(\s*\})/);
@@ -92,7 +91,6 @@ define(
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./fold_mode").FoldMode,
 				s = e("../../range").Range,
@@ -174,7 +172,6 @@ define(
 			"ace/mode/folding/coffee",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./yaml_highlight_rules").YamlHighlightRules,

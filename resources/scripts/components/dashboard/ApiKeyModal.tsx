@@ -1,9 +1,9 @@
-import ModalContext from "@/context/ModalContext";
 import { Activity02Icon } from "@hugeicons/core-free-icons";
 import { useContext } from "react";
+import CopyOnClick from "@/components/elements/CopyOnClick";
 
 import FlashMessageRender from "@/components/FlashMessageRender";
-import CopyOnClick from "@/components/elements/CopyOnClick";
+import ModalContext from "@/context/ModalContext";
 
 import asModal from "@/hoc/asModal";
 

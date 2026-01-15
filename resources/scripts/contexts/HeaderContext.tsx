@@ -1,12 +1,12 @@
 import type React from "react";
-import {type 
-	ReactNode,
+import {
 	createContext,
+	type ReactNode,
 	useCallback,
 	useContext,
 	useMemo,
 	useState,
-} from "react"
+} from "react";
 
 interface HeaderContextType {
 	headerActions: ReactNode;

@@ -9,7 +9,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("../lib/lang"),
 			s = e("./text_highlight_rules").TextHighlightRules,
@@ -110,11 +109,11 @@ define(
 		"ace/mode/matching_brace_outdent",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = () => {};
 			(function () {
-				(this.checkOutdent = (e, t) => /^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
+				(this.checkOutdent = (e, t) =>
+					/^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
 					(this.autoOutdent = function (e, t) {
 						var n = e.getLine(t),
 							i = n.match(/^(\s*\})/);
@@ -134,7 +133,6 @@ define(
 		"ace/mode/css_completions",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			var r = {
 					background: { "#$0": 1 },
 					"background-color": { "#$0": 1, transparent: 1, fixed: 1 },
@@ -358,11 +356,11 @@ define(
 					(this.getPropertyCompletions = (e, t, n, i) => {
 						var s = Object.keys(r);
 						return s.map((e) => ({
-								caption: e,
-								snippet: e + ": $0",
-								meta: "property",
-								score: Number.MAX_VALUE,
-							}));
+							caption: e,
+							snippet: e + ": $0",
+							meta: "property",
+							score: Number.MAX_VALUE,
+						}));
 					}),
 					(this.getPropertyValueCompletions = (e, t, n, i) => {
 						var s = t.getLine(n.row).substr(0, n.column),
@@ -372,11 +370,11 @@ define(
 						return (
 							o in r && typeof r[o] == "object" && (u = Object.keys(r[o])),
 							u.map((e) => ({
-									caption: e,
-									snippet: e,
-									meta: "property value",
-									score: Number.MAX_VALUE,
-								}))
+								caption: e,
+								snippet: e,
+								meta: "property value",
+								score: Number.MAX_VALUE,
+							}))
 						);
 					});
 			}).call(i.prototype),
@@ -395,7 +393,6 @@ define(
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../behaviour").Behaviour,
 				s = e("./cstyle").CstyleBehaviour,
@@ -454,7 +451,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -574,7 +570,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./css_highlight_rules").CssHighlightRules,

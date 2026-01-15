@@ -14,10 +14,8 @@ import {
 
 import { bytesToString, ip } from "@/lib/formatters";
 import { hexToRgba } from "@/lib/helpers";
-
-import { ServerContext } from "@/state/server";
-
 import useWebsocketEvent from "@/plugins/useWebsocketEvent";
+import { ServerContext } from "@/state/server";
 
 import formatUptime from "../UptimeDuration";
 

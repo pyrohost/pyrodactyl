@@ -4,23 +4,19 @@ import { type Actions, useStoreActions } from "easy-peasy";
 import { Field, Form, Formik, type FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import { object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { createSSHKey, deleteSSHKey, useSSHKeys } from "@/api/account/ssh-keys";
+import { httpErrorToHuman } from "@/api/http";
 import ActionButton from "@/components/elements/ActionButton";
 import Code from "@/components/elements/Code";
+import { Dialog } from "@/components/elements/dialog";
 import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
 import Input from "@/components/elements/Input";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-import { Dialog } from "@/components/elements/dialog";
-
-import { createSSHKey, deleteSSHKey, useSSHKeys } from "@/api/account/ssh-keys";
-import { httpErrorToHuman } from "@/api/http";
-
-import type { ApplicationStore } from "@/state";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
 import { useFlashKey } from "@/plugins/useFlash";
+import type { ApplicationStore } from "@/state";
 
 interface CreateValues {
 	name: string;

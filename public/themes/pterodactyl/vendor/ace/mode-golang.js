@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -22,11 +21,19 @@ define(
 			};
 		r.inherits(s, i),
 			(s.getTagRule = (e) => ({
-					token: "comment.doc.tag.storage.type",
-					regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
-				})),
-			(s.getStartRule = (e) => ({ token: "comment.doc", regex: "\\/\\*(?=\\*)", next: e })),
-			(s.getEndRule = (e) => ({ token: "comment.doc", regex: "\\*\\/", next: e })),
+				token: "comment.doc.tag.storage.type",
+				regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
+			})),
+			(s.getStartRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\/\\*(?=\\*)",
+				next: e,
+			})),
+			(s.getEndRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\*\\/",
+				next: e,
+			})),
 			(t.DocCommentHighlightRules = s);
 	},
 ),
@@ -90,7 +97,8 @@ define(
 								regex: "(func)(\\s+)([a-zA-Z_$][a-zA-Z0-9_$]*)\\b",
 							},
 							{
-								token: (e) => e[e.length - 1] == "("
+								token: (e) =>
+									e[e.length - 1] == "("
 										? [
 												{
 													type: s(e.slice(0, -1)) || "support.function",
@@ -129,11 +137,11 @@ define(
 		"ace/mode/matching_brace_outdent",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = () => {};
 			(function () {
-				(this.checkOutdent = (e, t) => /^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
+				(this.checkOutdent = (e, t) =>
+					/^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
 					(this.autoOutdent = function (e, t) {
 						var n = e.getLine(t),
 							i = n.match(/^(\s*\})/);
@@ -160,7 +168,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,

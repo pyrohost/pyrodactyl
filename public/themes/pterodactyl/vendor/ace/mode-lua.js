@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -116,7 +115,6 @@ define(
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./fold_mode").FoldMode,
 				s = e("../../range").Range,
@@ -232,7 +230,6 @@ define(
 			"ace/worker/worker_client",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./lua_highlight_rules").LuaHighlightRules,

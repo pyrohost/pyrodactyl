@@ -8,11 +8,9 @@ import useSWR from "swr";
 import type { PaginatedResult, QueryBuilderParams } from "@/api/http";
 import http, { withQueryBuilderParams } from "@/api/http";
 import { getGlobalDaemonType } from "@/api/server/getServer";
-
-import { ServerContext } from "@/state/server";
-
 import useFilteredObject from "@/plugins/useFilteredObject";
 import { useServerSWRKey } from "@/plugins/useSWRKey";
+import { ServerContext } from "@/state/server";
 
 export type ActivityLogFilters = QueryBuilderParams<
 	"ip" | "event",

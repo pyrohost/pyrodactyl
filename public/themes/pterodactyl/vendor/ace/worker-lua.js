@@ -98,22 +98,21 @@
 			e.require.modules[t] = {
 				exports: {},
 				factory: function () {
-					var 
-						t = r.apply(
-							this,
-							n.map((t) => {
-								switch (t) {
-									case "require":
-										return i;
-									case "exports":
-										return this.exports;
-									case "module":
-										return this;
-									default:
-										return i(t);
-								}
-							}),
-						);
+					var t = r.apply(
+						this,
+						n.map((t) => {
+							switch (t) {
+								case "require":
+									return i;
+								case "exports":
+									return this.exports;
+								case "module":
+									return this;
+								default:
+									return i(t);
+							}
+						}),
+					);
 					return t && (this.exports = t), this;
 				},
 			};
@@ -161,7 +160,6 @@
 	};
 })(this),
 	define("ace/lib/oop", ["require", "exports", "module"], (e, t, n) => {
-		
 		(t.inherits = (e, t) => {
 			(e.super_ = t),
 				(e.prototype = Object.create(t.prototype, {
@@ -182,7 +180,6 @@
 			});
 	}),
 	define("ace/range", ["require", "exports", "module"], (e, t, n) => {
-		
 		var r = (e, t) => e.row - t.row || e.column - t.column,
 			i = function (e, t, n, r) {
 				(this.start = { row: e, column: t }),
@@ -360,72 +357,66 @@
 			(i.comparePoints = (e, t) => e.row - t.row || e.column - t.column),
 			(t.Range = i);
 	}),
-	define(
-		"ace/apply_delta",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			function r(e, t) {
-				throw (console.log("Invalid Delta:", e), "Invalid Delta: " + t);
-			}
-			function i(e, t) {
-				return (
-					t.row >= 0 &&
-					t.row < e.length &&
-					t.column >= 0 &&
-					t.column <= e[t.row].length
-				);
-			}
-			function s(e, t) {
-				t.action != "insert" &&
-					t.action != "remove" &&
-					r(t, "delta.action must be 'insert' or 'remove'"),
-					t.lines instanceof Array || r(t, "delta.lines must be an Array"),
-					(!t.start || !t.end) && r(t, "delta.start/end must be an present");
-				var n = t.start;
-				i(e, t.start) || r(t, "delta.start must be contained in document");
-				var s = t.end;
-				t.action == "remove" &&
-					!i(e, s) &&
-					r(t, "delta.end must contained in document for 'remove' actions");
-				var o = s.row - n.row,
-					u = s.column - (o == 0 ? n.column : 0);
-				(o != t.lines.length - 1 || t.lines[o].length != u) &&
-					r(t, "delta.range must match delta lines");
-			}
-			t.applyDelta = (e, t, n) => {
-				var r = t.start.row,
-					i = t.start.column,
-					s = e[r] || "";
-				switch (t.action) {
-					case "insert": {
-						var o = t.lines;
-						if (o.length === 1)
-							e[r] = s.substring(0, i) + t.lines[0] + s.substring(i);
-						else {
-							var u = [r, 1].concat(t.lines);
-							e.splice.apply(e, u),
-								(e[r] = s.substring(0, i) + e[r]),
-								(e[r + t.lines.length - 1] += s.substring(i));
-						}
-						break;
+	define("ace/apply_delta", ["require", "exports", "module"], (e, t, n) => {
+		function r(e, t) {
+			throw (console.log("Invalid Delta:", e), "Invalid Delta: " + t);
+		}
+		function i(e, t) {
+			return (
+				t.row >= 0 &&
+				t.row < e.length &&
+				t.column >= 0 &&
+				t.column <= e[t.row].length
+			);
+		}
+		function s(e, t) {
+			t.action != "insert" &&
+				t.action != "remove" &&
+				r(t, "delta.action must be 'insert' or 'remove'"),
+				t.lines instanceof Array || r(t, "delta.lines must be an Array"),
+				(!t.start || !t.end) && r(t, "delta.start/end must be an present");
+			var n = t.start;
+			i(e, t.start) || r(t, "delta.start must be contained in document");
+			var s = t.end;
+			t.action == "remove" &&
+				!i(e, s) &&
+				r(t, "delta.end must contained in document for 'remove' actions");
+			var o = s.row - n.row,
+				u = s.column - (o == 0 ? n.column : 0);
+			(o != t.lines.length - 1 || t.lines[o].length != u) &&
+				r(t, "delta.range must match delta lines");
+		}
+		t.applyDelta = (e, t, n) => {
+			var r = t.start.row,
+				i = t.start.column,
+				s = e[r] || "";
+			switch (t.action) {
+				case "insert": {
+					var o = t.lines;
+					if (o.length === 1)
+						e[r] = s.substring(0, i) + t.lines[0] + s.substring(i);
+					else {
+						var u = [r, 1].concat(t.lines);
+						e.splice.apply(e, u),
+							(e[r] = s.substring(0, i) + e[r]),
+							(e[r + t.lines.length - 1] += s.substring(i));
 					}
-					case "remove": {
-						var a = t.end.column,
-							f = t.end.row;
-						r === f
-							? (e[r] = s.substring(0, i) + s.substring(a))
-							: e.splice(r, f - r + 1, s.substring(0, i) + e[f].substring(a));
-					}
+					break;
 				}
-			};
-		},
-	),
+				case "remove": {
+					var a = t.end.column,
+						f = t.end.row;
+					r === f
+						? (e[r] = s.substring(0, i) + s.substring(a))
+						: e.splice(r, f - r + 1, s.substring(0, i) + e[f].substring(a));
+				}
+			}
+		};
+	}),
 	define(
 		"ace/lib/event_emitter",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			var r = {},
 				i = function () {
 					this.propagationStopped = !0;
@@ -518,7 +509,6 @@
 		"ace/anchor",
 		["require", "exports", "module", "ace/lib/oop", "ace/lib/event_emitter"],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./lib/event_emitter").EventEmitter,
 				s = (t.Anchor = function (e, t, n) {
@@ -614,7 +604,6 @@
 			"ace/anchor",
 		],
 		(e, t, n) => {
-			
 			var r = e("./lib/oop"),
 				i = e("./apply_delta").applyDelta,
 				s = e("./lib/event_emitter").EventEmitter,
@@ -934,7 +923,6 @@
 		},
 	),
 	define("ace/lib/lang", ["require", "exports", "module"], (e, t, n) => {
-		
 		(t.last = (e) => e[e.length - 1]),
 			(t.stringReverse = (e) => e.split("").reverse().join("")),
 			(t.stringRepeat = (e, t) => {
@@ -989,7 +977,8 @@
 				for (var n = 0; n <= e.length; n++) t === e[n] && e.splice(n, 1);
 			}),
 			(t.escapeRegExp = (e) => e.replace(/([.*+?^${}()|[\]/\\])/g, "\\$1")),
-			(t.escapeHTML = (e) => e
+			(t.escapeHTML = (e) =>
+				e
 					.replace(/&/g, "&#38;")
 					.replace(/"/g, "&#34;")
 					.replace(/'/g, "&#39;")
@@ -1057,7 +1046,6 @@
 			"ace/lib/lang",
 		],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = e("../document").Document,
 				s = e("../lib/lang"),
@@ -1104,7 +1092,6 @@
 			((e, n, r) => {
 				r(t);
 			})(this, "luaparse", (e) => {
-				
 				function m(e) {
 					if (mt) {
 						var t = vt.pop();
@@ -1120,10 +1107,7 @@
 				}
 				function E(e) {
 					var t = g.call(arguments, 1);
-					return (
-						(e = e.replace(/%(\d)/g, (e, n) => "" + t[n - 1] || "")),
-						e
-					);
+					return (e = e.replace(/%(\d)/g, (e, n) => "" + t[n - 1] || "")), e;
 				}
 				function S() {
 					var e = g.call(arguments),
@@ -2060,54 +2044,81 @@
 						returnStatement: (e) => ({ type: "ReturnStatement", arguments: e }),
 						ifStatement: (e) => ({ type: "IfStatement", clauses: e }),
 						ifClause: (e, t) => ({ type: "IfClause", condition: e, body: t }),
-						elseifClause: (e, t) => ({ type: "ElseifClause", condition: e, body: t }),
+						elseifClause: (e, t) => ({
+							type: "ElseifClause",
+							condition: e,
+							body: t,
+						}),
 						elseClause: (e) => ({ type: "ElseClause", body: e }),
-						whileStatement: (e, t) => ({ type: "WhileStatement", condition: e, body: t }),
+						whileStatement: (e, t) => ({
+							type: "WhileStatement",
+							condition: e,
+							body: t,
+						}),
 						doStatement: (e) => ({ type: "DoStatement", body: e }),
-						repeatStatement: (e, t) => ({ type: "RepeatStatement", condition: e, body: t }),
-						localStatement: (e, t) => ({ type: "LocalStatement", variables: e, init: t }),
-						assignmentStatement: (e, t) => ({ type: "AssignmentStatement", variables: e, init: t }),
+						repeatStatement: (e, t) => ({
+							type: "RepeatStatement",
+							condition: e,
+							body: t,
+						}),
+						localStatement: (e, t) => ({
+							type: "LocalStatement",
+							variables: e,
+							init: t,
+						}),
+						assignmentStatement: (e, t) => ({
+							type: "AssignmentStatement",
+							variables: e,
+							init: t,
+						}),
 						callStatement: (e) => ({ type: "CallStatement", expression: e }),
 						functionStatement: (e, t, n, r) => ({
-								type: "FunctionDeclaration",
-								identifier: e,
-								isLocal: n,
-								parameters: t,
-								body: r,
-							}),
+							type: "FunctionDeclaration",
+							identifier: e,
+							isLocal: n,
+							parameters: t,
+							body: r,
+						}),
 						forNumericStatement: (e, t, n, r, i) => ({
-								type: "ForNumericStatement",
-								variable: e,
-								start: t,
-								end: n,
-								step: r,
-								body: i,
-							}),
+							type: "ForNumericStatement",
+							variable: e,
+							start: t,
+							end: n,
+							step: r,
+							body: i,
+						}),
 						forGenericStatement: (e, t, n) => ({
-								type: "ForGenericStatement",
-								variables: e,
-								iterators: t,
-								body: n,
-							}),
+							type: "ForGenericStatement",
+							variables: e,
+							iterators: t,
+							body: n,
+						}),
 						chunk: (e) => ({ type: "Chunk", body: e }),
 						identifier: (e) => ({ type: "Identifier", name: e }),
 						literal: (e, t, n) => (
-								(e =
-									e === o
-										? "StringLiteral"
-										: e === f
-											? "NumericLiteral"
-											: e === c
-												? "BooleanLiteral"
-												: e === h
-													? "NilLiteral"
-													: "VarargLiteral"),
-								{ type: e, value: t, raw: n }
-							),
+							(e =
+								e === o
+									? "StringLiteral"
+									: e === f
+										? "NumericLiteral"
+										: e === c
+											? "BooleanLiteral"
+											: e === h
+												? "NilLiteral"
+												: "VarargLiteral"),
+							{ type: e, value: t, raw: n }
+						),
 						tableKey: (e, t) => ({ type: "TableKey", key: e, value: t }),
-						tableKeyString: (e, t) => ({ type: "TableKeyString", key: e, value: t }),
+						tableKeyString: (e, t) => ({
+							type: "TableKeyString",
+							key: e,
+							value: t,
+						}),
 						tableValue: (e) => ({ type: "TableValue", value: e }),
-						tableConstructorExpression: (e) => ({ type: "TableConstructorExpression", fields: e }),
+						tableConstructorExpression: (e) => ({
+							type: "TableConstructorExpression",
+							fields: e,
+						}),
 						binaryExpression: (e, t, n) => {
 							var r =
 								"and" === e || "or" === e
@@ -2115,17 +2126,37 @@
 									: "BinaryExpression";
 							return { type: r, operator: e, left: t, right: n };
 						},
-						unaryExpression: (e, t) => ({ type: "UnaryExpression", operator: e, argument: t }),
+						unaryExpression: (e, t) => ({
+							type: "UnaryExpression",
+							operator: e,
+							argument: t,
+						}),
 						memberExpression: (e, t, n) => ({
-								type: "MemberExpression",
-								indexer: t,
-								identifier: n,
-								base: e,
-							}),
-						indexExpression: (e, t) => ({ type: "IndexExpression", base: e, index: t }),
-						callExpression: (e, t) => ({ type: "CallExpression", base: e, arguments: t }),
-						tableCallExpression: (e, t) => ({ type: "TableCallExpression", base: e, arguments: t }),
-						stringCallExpression: (e, t) => ({ type: "StringCallExpression", base: e, argument: t }),
+							type: "MemberExpression",
+							indexer: t,
+							identifier: n,
+							base: e,
+						}),
+						indexExpression: (e, t) => ({
+							type: "IndexExpression",
+							base: e,
+							index: t,
+						}),
+						callExpression: (e, t) => ({
+							type: "CallExpression",
+							base: e,
+							arguments: t,
+						}),
+						tableCallExpression: (e, t) => ({
+							type: "TableCallExpression",
+							base: e,
+							arguments: t,
+						}),
+						stringCallExpression: (e, t) => ({
+							type: "StringCallExpression",
+							base: e,
+							argument: t,
+						}),
 						comment: (e, t) => ({ type: "Comment", value: e, raw: t }),
 					}),
 					g = Array.prototype.slice,
@@ -2171,7 +2202,6 @@
 			"ace/mode/lua/luaparse",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../worker/mirror").Mirror,
 				s = e("../mode/lua/luaparse"),
@@ -2199,456 +2229,442 @@
 				}.call(o.prototype);
 		},
 	),
-	define(
-		"ace/lib/es5-shim",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			function r() {}
-			function w(e) {
-				try {
-					return Object.defineProperty(e, "sentinel", {}), "sentinel" in e;
-				} catch (t) {}
+	define("ace/lib/es5-shim", ["require", "exports", "module"], (e, t, n) => {
+		function r() {}
+		function w(e) {
+			try {
+				return Object.defineProperty(e, "sentinel", {}), "sentinel" in e;
+			} catch (t) {}
+		}
+		function H(e) {
+			return (
+				(e = +e),
+				e !== e
+					? (e = 0)
+					: e !== 0 &&
+						e !== 1 / 0 &&
+						e !== -1 / 0 &&
+						(e = (e > 0 || -1) * Math.floor(Math.abs(e))),
+				e
+			);
+		}
+		function B(e) {
+			var t = typeof e;
+			return (
+				e === null ||
+				t === "undefined" ||
+				t === "boolean" ||
+				t === "number" ||
+				t === "string"
+			);
+		}
+		function j(e) {
+			var t, n, r;
+			if (B(e)) return e;
+			n = e.valueOf;
+			if (typeof n == "function") {
+				t = n.call(e);
+				if (B(t)) return t;
 			}
-			function H(e) {
-				return (
-					(e = +e),
-					e !== e
-						? (e = 0)
-						: e !== 0 &&
-							e !== 1 / 0 &&
-							e !== -1 / 0 &&
-							(e = (e > 0 || -1) * Math.floor(Math.abs(e))),
-					e
-				);
+			r = e.toString;
+			if (typeof r == "function") {
+				t = r.call(e);
+				if (B(t)) return t;
 			}
-			function B(e) {
-				var t = typeof e;
-				return (
-					e === null ||
-					t === "undefined" ||
-					t === "boolean" ||
-					t === "number" ||
-					t === "string"
-				);
-			}
-			function j(e) {
-				var t, n, r;
-				if (B(e)) return e;
-				n = e.valueOf;
-				if (typeof n == "function") {
-					t = n.call(e);
-					if (B(t)) return t;
-				}
-				r = e.toString;
-				if (typeof r == "function") {
-					t = r.call(e);
-					if (B(t)) return t;
-				}
-				throw new TypeError();
-			}
-			Function.prototype.bind ||
-				(Function.prototype.bind = function (t) {
-					var n = this;
-					if (typeof n != "function")
-						throw new TypeError(
-							"Function.prototype.bind called on incompatible " + n,
-						);
-					var i = u.call(arguments, 1),
-						s = function () {
-							if (this instanceof s) {
-								var e = n.apply(this, i.concat(u.call(arguments)));
-								return Object(e) === e ? e : this;
-							}
-							return n.apply(t, i.concat(u.call(arguments)));
-						};
-					return (
-						n.prototype &&
-							((r.prototype = n.prototype),
-							(s.prototype = new r()),
-							(r.prototype = null)),
-						s
+			throw new TypeError();
+		}
+		Function.prototype.bind ||
+			(Function.prototype.bind = function (t) {
+				var n = this;
+				if (typeof n != "function")
+					throw new TypeError(
+						"Function.prototype.bind called on incompatible " + n,
 					);
-				});
-			var i = Function.prototype.call,
-				s = Array.prototype,
-				o = Object.prototype,
-				u = s.slice,
-				a = i.bind(o.toString),
-				f = i.bind(o.hasOwnProperty),
-				l,
-				c,
-				h,
-				p,
-				d;
-			if ((d = f(o, "__defineGetter__")))
-				(l = i.bind(o.__defineGetter__)),
-					(c = i.bind(o.__defineSetter__)),
-					(h = i.bind(o.__lookupGetter__)),
-					(p = i.bind(o.__lookupSetter__));
-			if ([1, 2].splice(0).length != 2)
-				if (
-					!(() => {
-						function e(e) {
-							var t = new Array(e + 2);
-							return (t[0] = t[1] = 0), t;
+				var i = u.call(arguments, 1),
+					s = function () {
+						if (this instanceof s) {
+							var e = n.apply(this, i.concat(u.call(arguments)));
+							return Object(e) === e ? e : this;
 						}
-						var t = [],
-							n;
-						t.splice.apply(t, e(20)),
-							t.splice.apply(t, e(26)),
-							(n = t.length),
-							t.splice(5, 0, "XXX"),
-							n + 1 == t.length;
-						if (n + 1 == t.length) return !0;
-					})()
-				)
-					Array.prototype.splice = function (e, t) {
-						var n = this.length;
-						e > 0
-							? e > n && (e = n)
-							: e == void 0
-								? (e = 0)
-								: e < 0 && (e = Math.max(n + e, 0)),
-							e + t < n || (t = n - e);
-						var r = this.slice(e, e + t),
-							i = u.call(arguments, 2),
-							s = i.length;
-						if (e === n) s && this.push.apply(this, i);
+						return n.apply(t, i.concat(u.call(arguments)));
+					};
+				return (
+					n.prototype &&
+						((r.prototype = n.prototype),
+						(s.prototype = new r()),
+						(r.prototype = null)),
+					s
+				);
+			});
+		var i = Function.prototype.call,
+			s = Array.prototype,
+			o = Object.prototype,
+			u = s.slice,
+			a = i.bind(o.toString),
+			f = i.bind(o.hasOwnProperty),
+			l,
+			c,
+			h,
+			p,
+			d;
+		if ((d = f(o, "__defineGetter__")))
+			(l = i.bind(o.__defineGetter__)),
+				(c = i.bind(o.__defineSetter__)),
+				(h = i.bind(o.__lookupGetter__)),
+				(p = i.bind(o.__lookupSetter__));
+		if ([1, 2].splice(0).length != 2)
+			if (
+				!(() => {
+					function e(e) {
+						var t = new Array(e + 2);
+						return (t[0] = t[1] = 0), t;
+					}
+					var t = [],
+						n;
+					t.splice.apply(t, e(20)),
+						t.splice.apply(t, e(26)),
+						(n = t.length),
+						t.splice(5, 0, "XXX"),
+						n + 1 == t.length;
+					if (n + 1 == t.length) return !0;
+				})()
+			)
+				Array.prototype.splice = function (e, t) {
+					var n = this.length;
+					e > 0
+						? e > n && (e = n)
+						: e == void 0
+							? (e = 0)
+							: e < 0 && (e = Math.max(n + e, 0)),
+						e + t < n || (t = n - e);
+					var r = this.slice(e, e + t),
+						i = u.call(arguments, 2),
+						s = i.length;
+					if (e === n) s && this.push.apply(this, i);
+					else {
+						var o = Math.min(t, n - e),
+							a = e + o,
+							f = a + s - o,
+							l = n - a,
+							c = n - o;
+						if (f < a) for (var h = 0; h < l; ++h) this[f + h] = this[a + h];
+						else if (f > a) for (h = l; h--; ) this[f + h] = this[a + h];
+						if (s && e === c) (this.length = c), this.push.apply(this, i);
 						else {
-							var o = Math.min(t, n - e),
-								a = e + o,
-								f = a + s - o,
-								l = n - a,
-								c = n - o;
-							if (f < a) for (var h = 0; h < l; ++h) this[f + h] = this[a + h];
-							else if (f > a) for (h = l; h--; ) this[f + h] = this[a + h];
-							if (s && e === c) (this.length = c), this.push.apply(this, i);
-							else {
-								this.length = c + s;
-								for (h = 0; h < s; ++h) this[e + h] = i[h];
-							}
+							this.length = c + s;
+							for (h = 0; h < s; ++h) this[e + h] = i[h];
 						}
-						return r;
-					};
-				else {
-					var v = Array.prototype.splice;
-					Array.prototype.splice = function (e, t) {
-						return arguments.length
-							? v.apply(
-									this,
-									[
-										e === void 0 ? 0 : e,
-										t === void 0 ? this.length - e : t,
-									].concat(u.call(arguments, 2)),
-								)
-							: [];
-					};
-				}
-			Array.isArray ||
-				(Array.isArray = (t) => a(t) == "[object Array]");
-			var m = Object("a"),
-				g = m[0] != "a" || !(0 in m);
-			Array.prototype.forEach ||
-				(Array.prototype.forEach = function (t) {
+					}
+					return r;
+				};
+			else {
+				var v = Array.prototype.splice;
+				Array.prototype.splice = function (e, t) {
+					return arguments.length
+						? v.apply(
+								this,
+								[
+									e === void 0 ? 0 : e,
+									t === void 0 ? this.length - e : t,
+								].concat(u.call(arguments, 2)),
+							)
+						: [];
+				};
+			}
+		Array.isArray || (Array.isArray = (t) => a(t) == "[object Array]");
+		var m = Object("a"),
+			g = m[0] != "a" || !(0 in m);
+		Array.prototype.forEach ||
+			(Array.prototype.forEach = function (t) {
+				var n = F(this),
+					r = g && a(this) == "[object String]" ? this.split("") : n,
+					i = arguments[1],
+					s = -1,
+					o = r.length >>> 0;
+				if (a(t) != "[object Function]") throw new TypeError();
+				while (++s < o) s in r && t.call(i, r[s], s, n);
+			}),
+			Array.prototype.map ||
+				(Array.prototype.map = function (t) {
 					var n = F(this),
 						r = g && a(this) == "[object String]" ? this.split("") : n,
-						i = arguments[1],
-						s = -1,
-						o = r.length >>> 0;
-					if (a(t) != "[object Function]") throw new TypeError();
-					while (++s < o) s in r && t.call(i, r[s], s, n);
+						i = r.length >>> 0,
+						s = Array(i),
+						o = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var u = 0; u < i; u++) u in r && (s[u] = t.call(o, r[u], u, n));
+					return s;
 				}),
-				Array.prototype.map ||
-					(Array.prototype.map = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = Array(i),
-							o = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var u = 0; u < i; u++)
-							u in r && (s[u] = t.call(o, r[u], u, n));
-						return s;
-					}),
-				Array.prototype.filter ||
-					(Array.prototype.filter = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = [],
-							o,
-							u = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var f = 0; f < i; f++)
-							f in r && ((o = r[f]), t.call(u, o, f, n) && s.push(o));
-						return s;
-					}),
-				Array.prototype.every ||
-					(Array.prototype.every = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var o = 0; o < i; o++)
-							if (o in r && !t.call(s, r[o], o, n)) return !1;
-						return !0;
-					}),
-				Array.prototype.some ||
-					(Array.prototype.some = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0,
-							s = arguments[1];
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						for (var o = 0; o < i; o++)
-							if (o in r && t.call(s, r[o], o, n)) return !0;
-						return !1;
-					}),
-				Array.prototype.reduce ||
-					(Array.prototype.reduce = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0;
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						if (!i && arguments.length == 1)
-							throw new TypeError(
-								"reduce of empty array with no initial value",
-							);
-						var s = 0,
-							o;
-						if (arguments.length >= 2) o = arguments[1];
-						else
-							do {
-								if (s in r) {
-									o = r[s++];
-									break;
-								}
-								if (++s >= i)
-									throw new TypeError(
-										"reduce of empty array with no initial value",
-									);
-							} while (!0);
-						for (; s < i; s++) s in r && (o = t.call(void 0, o, r[s], s, n));
-						return o;
-					}),
-				Array.prototype.reduceRight ||
-					(Array.prototype.reduceRight = function (t) {
-						var n = F(this),
-							r = g && a(this) == "[object String]" ? this.split("") : n,
-							i = r.length >>> 0;
-						if (a(t) != "[object Function]")
-							throw new TypeError(t + " is not a function");
-						if (!i && arguments.length == 1)
-							throw new TypeError(
-								"reduceRight of empty array with no initial value",
-							);
-						var s,
-							o = i - 1;
-						if (arguments.length >= 2) s = arguments[1];
-						else
-							do {
-								if (o in r) {
-									s = r[o--];
-									break;
-								}
-								if (--o < 0)
-									throw new TypeError(
-										"reduceRight of empty array with no initial value",
-									);
-							} while (!0);
-						do o in this && (s = t.call(void 0, s, r[o], o, n));
-						while (o--);
-						return s;
-					});
-			if (!Array.prototype.indexOf || [0, 1].indexOf(1, 2) != -1)
-				Array.prototype.indexOf = function (t) {
-					var n = g && a(this) == "[object String]" ? this.split("") : F(this),
-						r = n.length >>> 0;
-					if (!r) return -1;
-					var i = 0;
-					arguments.length > 1 && (i = H(arguments[1])),
-						(i = i >= 0 ? i : Math.max(0, r + i));
-					for (; i < r; i++) if (i in n && n[i] === t) return i;
-					return -1;
-				};
-			if (!Array.prototype.lastIndexOf || [0, 1].lastIndexOf(0, -3) != -1)
-				Array.prototype.lastIndexOf = function (t) {
-					var n = g && a(this) == "[object String]" ? this.split("") : F(this),
-						r = n.length >>> 0;
-					if (!r) return -1;
-					var i = r - 1;
-					arguments.length > 1 && (i = Math.min(i, H(arguments[1]))),
-						(i = i >= 0 ? i : r - Math.abs(i));
-					for (; i >= 0; i--) if (i in n && t === n[i]) return i;
-					return -1;
-				};
-			Object.getPrototypeOf ||
-				(Object.getPrototypeOf = (t) => t.__proto__ || (t.constructor ? t.constructor.prototype : o));
-			if (!Object.getOwnPropertyDescriptor) {
-				var y = "Object.getOwnPropertyDescriptor called on a non-object: ";
-				Object.getOwnPropertyDescriptor = (t, n) => {
-					if ((typeof t != "object" && typeof t != "function") || t === null)
-						throw new TypeError(y + t);
-					if (!f(t, n)) return;
-					var r, i, s;
-					r = { enumerable: !0, configurable: !0 };
-					if (d) {
-						var u = t.__proto__;
-						t.__proto__ = o;
-						var i = h(t, n),
-							s = p(t, n);
-						t.__proto__ = u;
-						if (i || s) return i && (r.get = i), s && (r.set = s), r;
-					}
-					return (r.value = t[n]), r;
-				};
-			}
-			Object.getOwnPropertyNames ||
-				(Object.getOwnPropertyNames = (t) => Object.keys(t));
-			if (!Object.create) {
-				var b;
-				Object.prototype.__proto__ === null
-					? (b = () => ({ __proto__: null }))
-					: (b = () => {
-							var e = {};
-							for (var t in e) e[t] = null;
-							return (
-								(e.constructor =
-									e.hasOwnProperty =
-									e.propertyIsEnumerable =
-									e.isPrototypeOf =
-									e.toLocaleString =
-									e.toString =
-									e.valueOf =
-									e.__proto__ =
-										null),
-								e
-							);
-						}),
-					(Object.create = (t, n) => {
-						var r;
-						if (t === null) r = b();
-						else {
-							if (typeof t != "object")
+			Array.prototype.filter ||
+				(Array.prototype.filter = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = [],
+						o,
+						u = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var f = 0; f < i; f++)
+						f in r && ((o = r[f]), t.call(u, o, f, n) && s.push(o));
+					return s;
+				}),
+			Array.prototype.every ||
+				(Array.prototype.every = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var o = 0; o < i; o++)
+						if (o in r && !t.call(s, r[o], o, n)) return !1;
+					return !0;
+				}),
+			Array.prototype.some ||
+				(Array.prototype.some = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0,
+						s = arguments[1];
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					for (var o = 0; o < i; o++)
+						if (o in r && t.call(s, r[o], o, n)) return !0;
+					return !1;
+				}),
+			Array.prototype.reduce ||
+				(Array.prototype.reduce = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0;
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					if (!i && arguments.length == 1)
+						throw new TypeError("reduce of empty array with no initial value");
+					var s = 0,
+						o;
+					if (arguments.length >= 2) o = arguments[1];
+					else
+						do {
+							if (s in r) {
+								o = r[s++];
+								break;
+							}
+							if (++s >= i)
 								throw new TypeError(
-									"typeof prototype[" + typeof t + "] != 'object'",
+									"reduce of empty array with no initial value",
 								);
-							var i = () => {};
-							(i.prototype = t), (r = new i()), (r.__proto__ = t);
-						}
-						return n !== void 0 && Object.defineProperties(r, n), r;
-					});
-			}
-			if (Object.defineProperty) {
-				var E = w({}),
-					S =
-						typeof document == "undefined" || w(document.createElement("div"));
-				if (!E || !S) var x = Object.defineProperty;
-			}
-			if (!Object.defineProperty || x) {
-				var T = "Property description must be an object: ",
-					N = "Object.defineProperty called on non-object: ",
-					C = "getters & setters can not be defined on this javascript engine";
-				Object.defineProperty = (t, n, r) => {
-					if ((typeof t != "object" && typeof t != "function") || t === null)
-						throw new TypeError(N + t);
-					if ((typeof r != "object" && typeof r != "function") || r === null)
-						throw new TypeError(T + r);
-					if (x)
-						try {
-							return x.call(Object, t, n, r);
-						} catch (i) {}
-					if (f(r, "value"))
-						if (d && (h(t, n) || p(t, n))) {
-							var s = t.__proto__;
-							(t.__proto__ = o),
-								delete t[n],
-								(t[n] = r.value),
-								(t.__proto__ = s);
-						} else t[n] = r.value;
-					else {
-						if (!d) throw new TypeError(C);
-						f(r, "get") && l(t, n, r.get), f(r, "set") && c(t, n, r.set);
-					}
-					return t;
-				};
-			}
-			Object.defineProperties ||
-				(Object.defineProperties = (t, n) => {
-					for (var r in n) f(n, r) && Object.defineProperty(t, r, n[r]);
-					return t;
+						} while (!0);
+					for (; s < i; s++) s in r && (o = t.call(void 0, o, r[s], s, n));
+					return o;
 				}),
-				Object.seal ||
-					(Object.seal = (t) => t),
-				Object.freeze ||
-					(Object.freeze = (t) => t);
-			try {
-				Object.freeze(() => {});
-			} catch (k) {
-				Object.freeze = ((t) => (n) => typeof n == "function" ? n : t(n))(Object.freeze);
-			}
-			Object.preventExtensions ||
-				(Object.preventExtensions = (t) => t),
-				Object.isSealed ||
-					(Object.isSealed = (t) => !1),
-				Object.isFrozen ||
-					(Object.isFrozen = (t) => !1),
-				Object.isExtensible ||
-					(Object.isExtensible = (t) => {
-						if (Object(t) === t) throw new TypeError();
-						var n = "";
-						while (f(t, n)) n += "?";
-						t[n] = !0;
-						var r = f(t, n);
-						return delete t[n], r;
-					});
-			if (!Object.keys) {
-				var L = !0,
-					A = [
-						"toString",
-						"toLocaleString",
-						"valueOf",
-						"hasOwnProperty",
-						"isPrototypeOf",
-						"propertyIsEnumerable",
-						"constructor",
-					],
-					O = A.length;
-				for (var M in { toString: null }) L = !1;
-				Object.keys = function I(e) {
-					if ((typeof e != "object" && typeof e != "function") || e === null)
-						throw new TypeError("Object.keys called on a non-object");
-					var I = [];
-					for (var t in e) f(e, t) && I.push(t);
-					if (L)
-						for (var n = 0, r = O; n < r; n++) {
-							var i = A[n];
-							f(e, i) && I.push(i);
-						}
-					return I;
-				};
-			}
-			Date.now ||
-				(Date.now = () => new Date().getTime());
-			var _ =
-				"	\n\f\r \u00a0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\ufeff";
-			if (!String.prototype.trim || _.trim()) {
-				_ = "[" + _ + "]";
-				var D = new RegExp("^" + _ + _ + "*"),
-					P = new RegExp(_ + _ + "*$");
-				String.prototype.trim = function () {
-					return String(this).replace(D, "").replace(P, "");
-				};
-			}
-			var F = (e) => {
-				if (e == null) throw new TypeError("can't convert " + e + " to object");
-				return Object(e);
+			Array.prototype.reduceRight ||
+				(Array.prototype.reduceRight = function (t) {
+					var n = F(this),
+						r = g && a(this) == "[object String]" ? this.split("") : n,
+						i = r.length >>> 0;
+					if (a(t) != "[object Function]")
+						throw new TypeError(t + " is not a function");
+					if (!i && arguments.length == 1)
+						throw new TypeError(
+							"reduceRight of empty array with no initial value",
+						);
+					var s,
+						o = i - 1;
+					if (arguments.length >= 2) s = arguments[1];
+					else
+						do {
+							if (o in r) {
+								s = r[o--];
+								break;
+							}
+							if (--o < 0)
+								throw new TypeError(
+									"reduceRight of empty array with no initial value",
+								);
+						} while (!0);
+					do o in this && (s = t.call(void 0, s, r[o], o, n));
+					while (o--);
+					return s;
+				});
+		if (!Array.prototype.indexOf || [0, 1].indexOf(1, 2) != -1)
+			Array.prototype.indexOf = function (t) {
+				var n = g && a(this) == "[object String]" ? this.split("") : F(this),
+					r = n.length >>> 0;
+				if (!r) return -1;
+				var i = 0;
+				arguments.length > 1 && (i = H(arguments[1])),
+					(i = i >= 0 ? i : Math.max(0, r + i));
+				for (; i < r; i++) if (i in n && n[i] === t) return i;
+				return -1;
 			};
-		},
-	);
+		if (!Array.prototype.lastIndexOf || [0, 1].lastIndexOf(0, -3) != -1)
+			Array.prototype.lastIndexOf = function (t) {
+				var n = g && a(this) == "[object String]" ? this.split("") : F(this),
+					r = n.length >>> 0;
+				if (!r) return -1;
+				var i = r - 1;
+				arguments.length > 1 && (i = Math.min(i, H(arguments[1]))),
+					(i = i >= 0 ? i : r - Math.abs(i));
+				for (; i >= 0; i--) if (i in n && t === n[i]) return i;
+				return -1;
+			};
+		Object.getPrototypeOf ||
+			(Object.getPrototypeOf = (t) =>
+				t.__proto__ || (t.constructor ? t.constructor.prototype : o));
+		if (!Object.getOwnPropertyDescriptor) {
+			var y = "Object.getOwnPropertyDescriptor called on a non-object: ";
+			Object.getOwnPropertyDescriptor = (t, n) => {
+				if ((typeof t != "object" && typeof t != "function") || t === null)
+					throw new TypeError(y + t);
+				if (!f(t, n)) return;
+				var r, i, s;
+				r = { enumerable: !0, configurable: !0 };
+				if (d) {
+					var u = t.__proto__;
+					t.__proto__ = o;
+					var i = h(t, n),
+						s = p(t, n);
+					t.__proto__ = u;
+					if (i || s) return i && (r.get = i), s && (r.set = s), r;
+				}
+				return (r.value = t[n]), r;
+			};
+		}
+		Object.getOwnPropertyNames ||
+			(Object.getOwnPropertyNames = (t) => Object.keys(t));
+		if (!Object.create) {
+			var b;
+			Object.prototype.__proto__ === null
+				? (b = () => ({ __proto__: null }))
+				: (b = () => {
+						var e = {};
+						for (var t in e) e[t] = null;
+						return (
+							(e.constructor =
+								e.hasOwnProperty =
+								e.propertyIsEnumerable =
+								e.isPrototypeOf =
+								e.toLocaleString =
+								e.toString =
+								e.valueOf =
+								e.__proto__ =
+									null),
+							e
+						);
+					}),
+				(Object.create = (t, n) => {
+					var r;
+					if (t === null) r = b();
+					else {
+						if (typeof t != "object")
+							throw new TypeError(
+								"typeof prototype[" + typeof t + "] != 'object'",
+							);
+						var i = () => {};
+						(i.prototype = t), (r = new i()), (r.__proto__ = t);
+					}
+					return n !== void 0 && Object.defineProperties(r, n), r;
+				});
+		}
+		if (Object.defineProperty) {
+			var E = w({}),
+				S = typeof document == "undefined" || w(document.createElement("div"));
+			if (!E || !S) var x = Object.defineProperty;
+		}
+		if (!Object.defineProperty || x) {
+			var T = "Property description must be an object: ",
+				N = "Object.defineProperty called on non-object: ",
+				C = "getters & setters can not be defined on this javascript engine";
+			Object.defineProperty = (t, n, r) => {
+				if ((typeof t != "object" && typeof t != "function") || t === null)
+					throw new TypeError(N + t);
+				if ((typeof r != "object" && typeof r != "function") || r === null)
+					throw new TypeError(T + r);
+				if (x)
+					try {
+						return x.call(Object, t, n, r);
+					} catch (i) {}
+				if (f(r, "value"))
+					if (d && (h(t, n) || p(t, n))) {
+						var s = t.__proto__;
+						(t.__proto__ = o), delete t[n], (t[n] = r.value), (t.__proto__ = s);
+					} else t[n] = r.value;
+				else {
+					if (!d) throw new TypeError(C);
+					f(r, "get") && l(t, n, r.get), f(r, "set") && c(t, n, r.set);
+				}
+				return t;
+			};
+		}
+		Object.defineProperties ||
+			(Object.defineProperties = (t, n) => {
+				for (var r in n) f(n, r) && Object.defineProperty(t, r, n[r]);
+				return t;
+			}),
+			Object.seal || (Object.seal = (t) => t),
+			Object.freeze || (Object.freeze = (t) => t);
+		try {
+			Object.freeze(() => {});
+		} catch (k) {
+			Object.freeze = (
+				(t) => (n) =>
+					typeof n == "function" ? n : t(n)
+			)(Object.freeze);
+		}
+		Object.preventExtensions || (Object.preventExtensions = (t) => t),
+			Object.isSealed || (Object.isSealed = (t) => !1),
+			Object.isFrozen || (Object.isFrozen = (t) => !1),
+			Object.isExtensible ||
+				(Object.isExtensible = (t) => {
+					if (Object(t) === t) throw new TypeError();
+					var n = "";
+					while (f(t, n)) n += "?";
+					t[n] = !0;
+					var r = f(t, n);
+					return delete t[n], r;
+				});
+		if (!Object.keys) {
+			var L = !0,
+				A = [
+					"toString",
+					"toLocaleString",
+					"valueOf",
+					"hasOwnProperty",
+					"isPrototypeOf",
+					"propertyIsEnumerable",
+					"constructor",
+				],
+				O = A.length;
+			for (var M in { toString: null }) L = !1;
+			Object.keys = function I(e) {
+				if ((typeof e != "object" && typeof e != "function") || e === null)
+					throw new TypeError("Object.keys called on a non-object");
+				var I = [];
+				for (var t in e) f(e, t) && I.push(t);
+				if (L)
+					for (var n = 0, r = O; n < r; n++) {
+						var i = A[n];
+						f(e, i) && I.push(i);
+					}
+				return I;
+			};
+		}
+		Date.now || (Date.now = () => new Date().getTime());
+		var _ =
+			"	\n\f\r \u00a0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\ufeff";
+		if (!String.prototype.trim || _.trim()) {
+			_ = "[" + _ + "]";
+			var D = new RegExp("^" + _ + _ + "*"),
+				P = new RegExp(_ + _ + "*$");
+			String.prototype.trim = function () {
+				return String(this).replace(D, "").replace(P, "");
+			};
+		}
+		var F = (e) => {
+			if (e == null) throw new TypeError("can't convert " + e + " to object");
+			return Object(e);
+		};
+	});

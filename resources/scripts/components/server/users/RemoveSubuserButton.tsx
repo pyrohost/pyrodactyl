@@ -1,12 +1,10 @@
 import { TrashBin } from "@gravity-ui/icons";
 import { type Actions, useStoreActions } from "easy-peasy";
 import { useState } from "react";
-
-import ActionButton from "@/components/elements/ActionButton";
-import ConfirmationModal from "@/components/elements/ConfirmationModal";
-
 import { httpErrorToHuman } from "@/api/http";
 import deleteSubuser from "@/api/server/users/deleteSubuser";
+import ActionButton from "@/components/elements/ActionButton";
+import ConfirmationModal from "@/components/elements/ConfirmationModal";
 
 import type { ApplicationStore } from "@/state";
 import { ServerContext } from "@/state/server";

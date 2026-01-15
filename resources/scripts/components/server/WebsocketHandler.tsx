@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-
+import getWebsocketToken from "@/api/server/getWebsocketToken";
 import Spinner from "@/components/elements/Spinner";
 import FadeTransition from "@/components/elements/transitions/FadeTransition";
-
-import getWebsocketToken from "@/api/server/getWebsocketToken";
-
-import { ServerContext } from "@/state/server";
-
 import { Websocket } from "@/plugins/Websocket";
+import { ServerContext } from "@/state/server";
 
 const reconnectErrors = [
 	"jwt: exp claim is invalid",

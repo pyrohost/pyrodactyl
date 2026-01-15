@@ -9,7 +9,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("../lib/lang"),
 			s = e("./text_highlight_rules").TextHighlightRules,
@@ -116,7 +115,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text_highlight_rules").TextHighlightRules,
 				s = function () {
@@ -130,11 +128,19 @@ define(
 				};
 			r.inherits(s, i),
 				(s.getTagRule = (e) => ({
-						token: "comment.doc.tag.storage.type",
-						regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
-					})),
-				(s.getStartRule = (e) => ({ token: "comment.doc", regex: "\\/\\*(?=\\*)", next: e })),
-				(s.getEndRule = (e) => ({ token: "comment.doc", regex: "\\*\\/", next: e })),
+					token: "comment.doc.tag.storage.type",
+					regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
+				})),
+				(s.getStartRule = (e) => ({
+					token: "comment.doc",
+					regex: "\\/\\*(?=\\*)",
+					next: e,
+				})),
+				(s.getEndRule = (e) => ({
+					token: "comment.doc",
+					regex: "\\*\\/",
+					next: e,
+				})),
 				(t.DocCommentHighlightRules = s);
 		},
 	),
@@ -149,7 +155,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			function a() {
 				var e = o.replace("\\d", "\\d\\-"),
 					t = {
@@ -586,7 +591,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text_highlight_rules").TextHighlightRules,
 				s = function (e) {
@@ -843,7 +847,6 @@ define(
 			"ace/mode/xml_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/lang"),
 				s = e("./css_highlight_rules").CssHighlightRules,
@@ -933,7 +936,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text_highlight_rules").TextHighlightRules,
 				s = (t.constantOtherSymbol = {
@@ -1109,9 +1111,8 @@ define(
 							{
 								regex: "$",
 								token: "empty",
-								next: (e, t) => t[0] === "heredoc" || t[0] === "indentedHeredoc"
-										? t[0]
-										: e,
+								next: (e, t) =>
+									t[0] === "heredoc" || t[0] === "indentedHeredoc" ? t[0] : e,
 							},
 							{ token: "string.character", regex: "\\B\\?." },
 							{
@@ -1144,7 +1145,6 @@ define(
 			"ace/mode/ruby_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./html_highlight_rules").HtmlHighlightRules,
 				s = e("./ruby_highlight_rules"),
@@ -1225,7 +1225,6 @@ define(
 			"ace/range",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./fold_mode").FoldMode,
 				s = e("../../range").Range,
@@ -1306,7 +1305,6 @@ define(
 			"ace/mode/folding/coffee",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./haml_highlight_rules").HamlHighlightRules,

@@ -1,11 +1,12 @@
-import { useHeader } from "@/contexts/HeaderContext";
 import { ArrowDown01Icon, FilterIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useStoreState } from "easy-peasy";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useSWR from "swr";
-
+import getServers from "@/api/getServers";
+import type { PaginatedResult } from "@/api/http";
+import type { Server } from "@/api/server/getServer";
 import ServerRow from "@/components/dashboard/ServerRow";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 import Pagination from "@/components/elements/Pagination";
@@ -16,10 +17,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import getServers from "@/api/getServers";
-import type { PaginatedResult } from "@/api/http";
-import type { Server } from "@/api/server/getServer";
+import { useHeader } from "@/contexts/HeaderContext";
 
 import useFlash from "@/plugins/useFlash";
 import { usePersistedState } from "@/plugins/usePersistedState";

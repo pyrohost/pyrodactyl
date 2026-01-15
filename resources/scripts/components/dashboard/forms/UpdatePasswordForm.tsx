@@ -1,15 +1,18 @@
-import { type Actions, type State, useStoreActions, useStoreState } from "easy-peasy";
+import {
+	type Actions,
+	type State,
+	useStoreActions,
+	useStoreState,
+} from "easy-peasy";
 import { Form, Formik, type FormikHelpers } from "formik";
 import { Fragment } from "react";
 import * as Yup from "yup";
-
+import updateAccountPassword from "@/api/account/updateAccountPassword";
+import { httpErrorToHuman } from "@/api/http";
 import ActionButton from "@/components/elements/ActionButton";
 import Field from "@/components/elements/Field";
 import Spinner from "@/components/elements/Spinner";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
-
-import updateAccountPassword from "@/api/account/updateAccountPassword";
-import { httpErrorToHuman } from "@/api/http";
 
 import type { ApplicationStore } from "@/state";
 

@@ -2,8 +2,9 @@ import { ChevronDown, ChevronUp, Lock } from "@gravity-ui/icons";
 import debounce from "debounce";
 import { memo, useState } from "react";
 import isEqual from "react-fast-compare";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import type { ServerEggVariable } from "@/api/server/types";
+import updateStartupVariable from "@/api/server/updateStartupVariable";
+import getServerStartup from "@/api/swr/getServerStartup";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,15 +15,10 @@ import {
 import InputSpinner from "@/components/elements/InputSpinner";
 import { Switch } from "@/components/elements/SwitchV2";
 import { Input } from "@/components/elements/TextInput";
-
-import type { ServerEggVariable } from "@/api/server/types";
-import updateStartupVariable from "@/api/server/updateStartupVariable";
-import getServerStartup from "@/api/swr/getServerStartup";
-
-import { ServerContext } from "@/state/server";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
 import useFlash from "@/plugins/useFlash";
 import { usePermissions } from "@/plugins/usePermissions";
+import { ServerContext } from "@/state/server";
 
 interface Props {
 	variable: ServerEggVariable;

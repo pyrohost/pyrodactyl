@@ -1,4 +1,7 @@
-import http, { type FractalResponseData, type FractalResponseList } from "@/api/http";
+import http, {
+	type FractalResponseData,
+	type FractalResponseList,
+} from "@/api/http";
 import type { ServerEggVariable, ServerStatus } from "@/api/server/types";
 import {
 	rawDataToServerAllocation,

@@ -1,14 +1,12 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-import { bytesToString, ip } from "@/lib/formatters";
-
-import { type Server, getGlobalDaemonType } from "@/api/server/getServer";
+import { getGlobalDaemonType, type Server } from "@/api/server/getServer";
 import getServerResourceUsage, {
 	type ServerPowerState,
 	type ServerStats,
 } from "@/api/server/getServerResourceUsage";
+import { bytesToString, ip } from "@/lib/formatters";
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.

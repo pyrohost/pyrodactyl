@@ -1,7 +1,5 @@
 import { useStoreState } from "easy-peasy";
 import isEqual from "react-fast-compare";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import CopyOnClick from "@/components/elements/CopyOnClick";
@@ -9,6 +7,7 @@ import Label from "@/components/elements/Label";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
 import ServerContentBlock from "@/components/elements/ServerContentBlock";
 import TitledGreyBox from "@/components/elements/TitledGreyBox";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import ReinstallServerBox from "@/components/server/settings/ReinstallServerBox";
 
 import { ip } from "@/lib/formatters";

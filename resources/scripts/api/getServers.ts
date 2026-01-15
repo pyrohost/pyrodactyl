@@ -1,5 +1,5 @@
-import http, { type PaginatedResult, getPaginationSet } from "@/api/http";
-import { type Server, rawDataToServerObject } from "@/api/server/getServer";
+import http, { getPaginationSet, type PaginatedResult } from "@/api/http";
+import { rawDataToServerObject, type Server } from "@/api/server/getServer";
 
 interface QueryParams {
 	query?: string;

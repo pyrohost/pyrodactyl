@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
-
+import login from "@/api/auth/login";
 import LoginFormContainer, {
 	TitleSection,
 } from "@/components/auth/LoginFormContainer";
@@ -12,10 +12,7 @@ import Button from "@/components/elements/Button";
 import Captcha, { getCaptchaResponse } from "@/components/elements/Captcha";
 import Field from "@/components/elements/Field";
 import Logo from "@/components/elements/PyroLogo";
-
 import CaptchaManager from "@/lib/captcha";
-
-import login from "@/api/auth/login";
 
 import useFlash from "@/plugins/useFlash";
 

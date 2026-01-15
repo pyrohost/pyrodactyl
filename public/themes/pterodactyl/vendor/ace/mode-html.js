@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function () {
@@ -22,11 +21,19 @@ define(
 			};
 		r.inherits(s, i),
 			(s.getTagRule = (e) => ({
-					token: "comment.doc.tag.storage.type",
-					regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
-				})),
-			(s.getStartRule = (e) => ({ token: "comment.doc", regex: "\\/\\*(?=\\*)", next: e })),
-			(s.getEndRule = (e) => ({ token: "comment.doc", regex: "\\*\\/", next: e })),
+				token: "comment.doc.tag.storage.type",
+				regex: "\\b(?:TODO|FIXME|XXX|HACK)\\b",
+			})),
+			(s.getStartRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\/\\*(?=\\*)",
+				next: e,
+			})),
+			(s.getEndRule = (e) => ({
+				token: "comment.doc",
+				regex: "\\*\\/",
+				next: e,
+			})),
 			(t.DocCommentHighlightRules = s);
 	},
 ),
@@ -41,7 +48,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			function a() {
 				var e = o.replace("\\d", "\\d\\-"),
 					t = {
@@ -472,11 +478,11 @@ define(
 		"ace/mode/matching_brace_outdent",
 		["require", "exports", "module", "ace/range"],
 		(e, t, n) => {
-			
 			var r = e("../range").Range,
 				i = () => {};
 			(function () {
-				(this.checkOutdent = (e, t) => /^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
+				(this.checkOutdent = (e, t) =>
+					/^\s+$/.test(e) ? /^\s*\}/.test(t) : !1),
 					(this.autoOutdent = function (e, t) {
 						var n = e.getLine(t),
 							i = n.match(/^(\s*\})/);
@@ -503,7 +509,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../../range").Range,
 				s = e("./fold_mode").FoldMode,
@@ -622,7 +627,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./javascript_highlight_rules").JavaScriptHighlightRules,
@@ -695,7 +699,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/lang"),
 				s = e("./text_highlight_rules").TextHighlightRules,
@@ -796,7 +799,6 @@ define(
 		"ace/mode/css_completions",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			var r = {
 					background: { "#$0": 1 },
 					"background-color": { "#$0": 1, transparent: 1, fixed: 1 },
@@ -1020,11 +1022,11 @@ define(
 					(this.getPropertyCompletions = (e, t, n, i) => {
 						var s = Object.keys(r);
 						return s.map((e) => ({
-								caption: e,
-								snippet: e + ": $0",
-								meta: "property",
-								score: Number.MAX_VALUE,
-							}));
+							caption: e,
+							snippet: e + ": $0",
+							meta: "property",
+							score: Number.MAX_VALUE,
+						}));
 					}),
 					(this.getPropertyValueCompletions = (e, t, n, i) => {
 						var s = t.getLine(n.row).substr(0, n.column),
@@ -1034,11 +1036,11 @@ define(
 						return (
 							o in r && typeof r[o] == "object" && (u = Object.keys(r[o])),
 							u.map((e) => ({
-									caption: e,
-									snippet: e,
-									meta: "property value",
-									score: Number.MAX_VALUE,
-								}))
+								caption: e,
+								snippet: e,
+								meta: "property value",
+								score: Number.MAX_VALUE,
+							}))
 						);
 					});
 			}).call(i.prototype),
@@ -1057,7 +1059,6 @@ define(
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("../behaviour").Behaviour,
 				s = e("./cstyle").CstyleBehaviour,
@@ -1121,7 +1122,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text").Mode,
 				s = e("./css_highlight_rules").CssHighlightRules,
@@ -1185,7 +1185,6 @@ define(
 			"ace/mode/text_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("./text_highlight_rules").TextHighlightRules,
 				s = function (e) {
@@ -1442,7 +1441,6 @@ define(
 			"ace/mode/xml_highlight_rules",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/lang"),
 				s = e("./css_highlight_rules").CssHighlightRules,
@@ -1534,7 +1532,6 @@ define(
 			"ace/lib/lang",
 		],
 		(e, t, n) => {
-			
 			function u(e, t) {
 				return e.type.lastIndexOf(t + ".xml") > -1;
 			}
@@ -1666,7 +1663,6 @@ define(
 			"ace/mode/folding/fold_mode",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./fold_mode").FoldMode,
 				s = (t.FoldMode = function (e, t) {
@@ -1714,7 +1710,6 @@ define(
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			function l(e, t) {
 				return e.type.lastIndexOf(t + ".xml") > -1;
 			}
@@ -1915,7 +1910,6 @@ define(
 			"ace/mode/folding/cstyle",
 		],
 		(e, t, n) => {
-			
 			var r = e("../../lib/oop"),
 				i = e("./mixed").FoldMode,
 				s = e("./xml").FoldMode,
@@ -1930,7 +1924,6 @@ define(
 		"ace/mode/html_completions",
 		["require", "exports", "module", "ace/token_iterator"],
 		(e, t, n) => {
-			
 			function f(e, t) {
 				return e.type.lastIndexOf(t + ".xml") > -1;
 			}
@@ -2386,7 +2379,8 @@ define(
 						? this.getHTMLEntityCompletions(e, t, n, r)
 						: [];
 				}),
-					(this.getTagCompletions = (e, t, n, r) => a.map((e) => ({ value: e, meta: "tag", score: Number.MAX_VALUE }))),
+					(this.getTagCompletions = (e, t, n, r) =>
+						a.map((e) => ({ value: e, meta: "tag", score: Number.MAX_VALUE }))),
 					(this.getAttributeCompletions = (e, t, n, r) => {
 						var i = l(t, n);
 						if (!i) return [];
@@ -2394,11 +2388,11 @@ define(
 						return (
 							i in u && (s = s.concat(Object.keys(u[i]))),
 							s.map((e) => ({
-									caption: e,
-									snippet: e + '="$0"',
-									meta: "attribute",
-									score: Number.MAX_VALUE,
-								}))
+								caption: e,
+								snippet: e + '="$0"',
+								meta: "attribute",
+								score: Number.MAX_VALUE,
+							}))
 						);
 					}),
 					(this.getAttributeValueCompletions = (e, t, n, r) => {
@@ -2412,11 +2406,11 @@ define(
 								typeof u[i][s] == "object" &&
 								(o = Object.keys(u[i][s])),
 							o.map((e) => ({
-									caption: e,
-									snippet: e,
-									meta: "attribute value",
-									score: Number.MAX_VALUE,
-								}))
+								caption: e,
+								snippet: e,
+								meta: "attribute value",
+								score: Number.MAX_VALUE,
+							}))
 						);
 					}),
 					(this.getHTMLEntityCompletions = (e, t, n, r) => {
@@ -2675,11 +2669,11 @@ define(
 							"zwnj;",
 						];
 						return i.map((e) => ({
-								caption: e,
-								snippet: e,
-								meta: "html entity",
-								score: Number.MAX_VALUE,
-							}));
+							caption: e,
+							snippet: e,
+							meta: "html entity",
+							score: Number.MAX_VALUE,
+						}));
 					});
 			}).call(h.prototype),
 				(t.HtmlCompletions = h);
@@ -2703,7 +2697,6 @@ define(
 			"ace/worker/worker_client",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/lang"),
 				s = e("./text").Mode,

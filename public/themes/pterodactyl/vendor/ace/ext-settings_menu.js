@@ -2,7 +2,6 @@ define(
 	"ace/ext/menu_tools/element_generator",
 	["require", "exports", "module"],
 	(e, t, n) => {
-		
 		(n.exports.createOption = (t) => {
 			var n,
 				r = document.createElement("option");
@@ -52,204 +51,199 @@ define(
 			});
 	},
 ),
-	define(
-		"ace/ext/modelist",
-		["require", "exports", "module"],
-		(e, t, n) => {
-			
-			function i(e) {
-				var t = a.text,
-					n = e.split(/[/\\]/).pop();
-				for (var i = 0; i < r.length; i++)
-					if (r[i].supportsFile(n)) {
-						t = r[i];
-						break;
-					}
-				return t;
-			}
-			var r = [],
-				s = function (e, t, n) {
-					(this.name = e),
-						(this.caption = t),
-						(this.mode = "ace/mode/" + e),
-						(this.extensions = n);
-					var r;
-					/\^/.test(n)
-						? (r =
-								n.replace(/\|(\^)?/g, (e, t) => "$|" + (t ? "^" : "^.*\\.")) + "$")
-						: (r = "^.*\\.(" + n + ")$"),
-						(this.extRe = new RegExp(r, "gi"));
-				};
-			s.prototype.supportsFile = function (e) {
-				return e.match(this.extRe);
+	define("ace/ext/modelist", ["require", "exports", "module"], (e, t, n) => {
+		function i(e) {
+			var t = a.text,
+				n = e.split(/[/\\]/).pop();
+			for (var i = 0; i < r.length; i++)
+				if (r[i].supportsFile(n)) {
+					t = r[i];
+					break;
+				}
+			return t;
+		}
+		var r = [],
+			s = function (e, t, n) {
+				(this.name = e),
+					(this.caption = t),
+					(this.mode = "ace/mode/" + e),
+					(this.extensions = n);
+				var r;
+				/\^/.test(n)
+					? (r =
+							n.replace(/\|(\^)?/g, (e, t) => "$|" + (t ? "^" : "^.*\\.")) +
+							"$")
+					: (r = "^.*\\.(" + n + ")$"),
+					(this.extRe = new RegExp(r, "gi"));
 			};
-			var o = {
-					ABAP: ["abap"],
-					ABC: ["abc"],
-					ActionScript: ["as"],
-					ADA: ["ada|adb"],
-					Apache_Conf: [
-						"^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd",
-					],
-					AsciiDoc: ["asciidoc|adoc"],
-					Assembly_x86: ["asm|a"],
-					AutoHotKey: ["ahk"],
-					BatchFile: ["bat|cmd"],
-					Bro: ["bro"],
-					C_Cpp: ["cpp|c|cc|cxx|h|hh|hpp|ino"],
-					C9Search: ["c9search_results"],
-					Cirru: ["cirru|cr"],
-					Clojure: ["clj|cljs"],
-					Cobol: ["CBL|COB"],
-					coffee: ["coffee|cf|cson|^Cakefile"],
-					ColdFusion: ["cfm"],
-					CSharp: ["cs"],
-					CSS: ["css"],
-					Curly: ["curly"],
-					D: ["d|di"],
-					Dart: ["dart"],
-					Diff: ["diff|patch"],
-					Dockerfile: ["^Dockerfile"],
-					Dot: ["dot"],
-					Drools: ["drl"],
-					Dummy: ["dummy"],
-					DummySyntax: ["dummy"],
-					Eiffel: ["e|ge"],
-					EJS: ["ejs"],
-					Elixir: ["ex|exs"],
-					Elm: ["elm"],
-					Erlang: ["erl|hrl"],
-					Forth: ["frt|fs|ldr|fth|4th"],
-					Fortran: ["f|f90"],
-					FTL: ["ftl"],
-					Gcode: ["gcode"],
-					Gherkin: ["feature"],
-					Gitignore: ["^.gitignore"],
-					Glsl: ["glsl|frag|vert"],
-					Gobstones: ["gbs"],
-					golang: ["go"],
-					Groovy: ["groovy"],
-					HAML: ["haml"],
-					Handlebars: ["hbs|handlebars|tpl|mustache"],
-					Haskell: ["hs"],
-					Haskell_Cabal: ["cabal"],
-					haXe: ["hx"],
-					Hjson: ["hjson"],
-					HTML: ["html|htm|xhtml"],
-					HTML_Elixir: ["eex|html.eex"],
-					HTML_Ruby: ["erb|rhtml|html.erb"],
-					INI: ["ini|conf|cfg|prefs"],
-					Io: ["io"],
-					Jack: ["jack"],
-					Jade: ["jade|pug"],
-					Java: ["java"],
-					JavaScript: ["js|jsm|jsx"],
-					JSON: ["json"],
-					JSONiq: ["jq"],
-					JSP: ["jsp"],
-					JSX: ["jsx"],
-					Julia: ["jl"],
-					Kotlin: ["kt|kts"],
-					LaTeX: ["tex|latex|ltx|bib"],
-					LESS: ["less"],
-					Liquid: ["liquid"],
-					Lisp: ["lisp"],
-					LiveScript: ["ls"],
-					LogiQL: ["logic|lql"],
-					LSL: ["lsl"],
-					Lua: ["lua"],
-					LuaPage: ["lp"],
-					Lucene: ["lucene"],
-					Makefile: ["^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make"],
-					Markdown: ["md|markdown"],
-					Mask: ["mask"],
-					MATLAB: ["matlab"],
-					Maze: ["mz"],
-					MEL: ["mel"],
-					MUSHCode: ["mc|mush"],
-					MySQL: ["mysql"],
-					Nix: ["nix"],
-					NSIS: ["nsi|nsh"],
-					ObjectiveC: ["m|mm"],
-					OCaml: ["ml|mli"],
-					Pascal: ["pas|p"],
-					Perl: ["pl|pm"],
-					pgSQL: ["pgsql"],
-					PHP: ["php|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
-					Powershell: ["ps1"],
-					Praat: ["praat|praatscript|psc|proc"],
-					Prolog: ["plg|prolog"],
-					Properties: ["properties"],
-					Protobuf: ["proto"],
-					Python: ["py"],
-					R: ["r"],
-					Razor: ["cshtml|asp"],
-					RDoc: ["Rd"],
-					RHTML: ["Rhtml"],
-					RST: ["rst"],
-					Ruby: ["rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile"],
-					Rust: ["rs"],
-					SASS: ["sass"],
-					SCAD: ["scad"],
-					Scala: ["scala"],
-					Scheme: ["scm|sm|rkt|oak|scheme"],
-					SCSS: ["scss"],
-					SH: ["sh|bash|^.bashrc"],
-					SJS: ["sjs"],
-					Smarty: ["smarty|tpl"],
-					snippets: ["snippets"],
-					Soy_Template: ["soy"],
-					Space: ["space"],
-					SQL: ["sql"],
-					SQLServer: ["sqlserver"],
-					Stylus: ["styl|stylus"],
-					SVG: ["svg"],
-					Swift: ["swift"],
-					Tcl: ["tcl"],
-					Tex: ["tex"],
-					Text: ["txt"],
-					Textile: ["textile"],
-					Toml: ["toml"],
-					TSX: ["tsx"],
-					Twig: ["twig|swig"],
-					Typescript: ["ts|typescript|str"],
-					Vala: ["vala"],
-					VBScript: ["vbs|vb"],
-					Velocity: ["vm"],
-					Verilog: ["v|vh|sv|svh"],
-					VHDL: ["vhd|vhdl"],
-					Wollok: ["wlk|wpgm|wtest"],
-					XML: ["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl|xaml"],
-					XQuery: ["xq"],
-					YAML: ["yaml|yml"],
-					Django: ["html"],
-				},
-				u = {
-					ObjectiveC: "Objective-C",
-					CSharp: "C#",
-					golang: "Go",
-					C_Cpp: "C and C++",
-					coffee: "CoffeeScript",
-					HTML_Ruby: "HTML (Ruby)",
-					HTML_Elixir: "HTML (Elixir)",
-					FTL: "FreeMarker",
-				},
-				a = {};
-			for (var f in o) {
-				var l = o[f],
-					c = (u[f] || f).replace(/_/g, " "),
-					h = f.toLowerCase(),
-					p = new s(h, c, l[0]);
-				(a[h] = p), r.push(p);
-			}
-			n.exports = { getModeForPath: i, modes: r, modesByName: a };
-		},
-	),
+		s.prototype.supportsFile = function (e) {
+			return e.match(this.extRe);
+		};
+		var o = {
+				ABAP: ["abap"],
+				ABC: ["abc"],
+				ActionScript: ["as"],
+				ADA: ["ada|adb"],
+				Apache_Conf: [
+					"^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd",
+				],
+				AsciiDoc: ["asciidoc|adoc"],
+				Assembly_x86: ["asm|a"],
+				AutoHotKey: ["ahk"],
+				BatchFile: ["bat|cmd"],
+				Bro: ["bro"],
+				C_Cpp: ["cpp|c|cc|cxx|h|hh|hpp|ino"],
+				C9Search: ["c9search_results"],
+				Cirru: ["cirru|cr"],
+				Clojure: ["clj|cljs"],
+				Cobol: ["CBL|COB"],
+				coffee: ["coffee|cf|cson|^Cakefile"],
+				ColdFusion: ["cfm"],
+				CSharp: ["cs"],
+				CSS: ["css"],
+				Curly: ["curly"],
+				D: ["d|di"],
+				Dart: ["dart"],
+				Diff: ["diff|patch"],
+				Dockerfile: ["^Dockerfile"],
+				Dot: ["dot"],
+				Drools: ["drl"],
+				Dummy: ["dummy"],
+				DummySyntax: ["dummy"],
+				Eiffel: ["e|ge"],
+				EJS: ["ejs"],
+				Elixir: ["ex|exs"],
+				Elm: ["elm"],
+				Erlang: ["erl|hrl"],
+				Forth: ["frt|fs|ldr|fth|4th"],
+				Fortran: ["f|f90"],
+				FTL: ["ftl"],
+				Gcode: ["gcode"],
+				Gherkin: ["feature"],
+				Gitignore: ["^.gitignore"],
+				Glsl: ["glsl|frag|vert"],
+				Gobstones: ["gbs"],
+				golang: ["go"],
+				Groovy: ["groovy"],
+				HAML: ["haml"],
+				Handlebars: ["hbs|handlebars|tpl|mustache"],
+				Haskell: ["hs"],
+				Haskell_Cabal: ["cabal"],
+				haXe: ["hx"],
+				Hjson: ["hjson"],
+				HTML: ["html|htm|xhtml"],
+				HTML_Elixir: ["eex|html.eex"],
+				HTML_Ruby: ["erb|rhtml|html.erb"],
+				INI: ["ini|conf|cfg|prefs"],
+				Io: ["io"],
+				Jack: ["jack"],
+				Jade: ["jade|pug"],
+				Java: ["java"],
+				JavaScript: ["js|jsm|jsx"],
+				JSON: ["json"],
+				JSONiq: ["jq"],
+				JSP: ["jsp"],
+				JSX: ["jsx"],
+				Julia: ["jl"],
+				Kotlin: ["kt|kts"],
+				LaTeX: ["tex|latex|ltx|bib"],
+				LESS: ["less"],
+				Liquid: ["liquid"],
+				Lisp: ["lisp"],
+				LiveScript: ["ls"],
+				LogiQL: ["logic|lql"],
+				LSL: ["lsl"],
+				Lua: ["lua"],
+				LuaPage: ["lp"],
+				Lucene: ["lucene"],
+				Makefile: ["^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make"],
+				Markdown: ["md|markdown"],
+				Mask: ["mask"],
+				MATLAB: ["matlab"],
+				Maze: ["mz"],
+				MEL: ["mel"],
+				MUSHCode: ["mc|mush"],
+				MySQL: ["mysql"],
+				Nix: ["nix"],
+				NSIS: ["nsi|nsh"],
+				ObjectiveC: ["m|mm"],
+				OCaml: ["ml|mli"],
+				Pascal: ["pas|p"],
+				Perl: ["pl|pm"],
+				pgSQL: ["pgsql"],
+				PHP: ["php|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
+				Powershell: ["ps1"],
+				Praat: ["praat|praatscript|psc|proc"],
+				Prolog: ["plg|prolog"],
+				Properties: ["properties"],
+				Protobuf: ["proto"],
+				Python: ["py"],
+				R: ["r"],
+				Razor: ["cshtml|asp"],
+				RDoc: ["Rd"],
+				RHTML: ["Rhtml"],
+				RST: ["rst"],
+				Ruby: ["rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile"],
+				Rust: ["rs"],
+				SASS: ["sass"],
+				SCAD: ["scad"],
+				Scala: ["scala"],
+				Scheme: ["scm|sm|rkt|oak|scheme"],
+				SCSS: ["scss"],
+				SH: ["sh|bash|^.bashrc"],
+				SJS: ["sjs"],
+				Smarty: ["smarty|tpl"],
+				snippets: ["snippets"],
+				Soy_Template: ["soy"],
+				Space: ["space"],
+				SQL: ["sql"],
+				SQLServer: ["sqlserver"],
+				Stylus: ["styl|stylus"],
+				SVG: ["svg"],
+				Swift: ["swift"],
+				Tcl: ["tcl"],
+				Tex: ["tex"],
+				Text: ["txt"],
+				Textile: ["textile"],
+				Toml: ["toml"],
+				TSX: ["tsx"],
+				Twig: ["twig|swig"],
+				Typescript: ["ts|typescript|str"],
+				Vala: ["vala"],
+				VBScript: ["vbs|vb"],
+				Velocity: ["vm"],
+				Verilog: ["v|vh|sv|svh"],
+				VHDL: ["vhd|vhdl"],
+				Wollok: ["wlk|wpgm|wtest"],
+				XML: ["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl|xaml"],
+				XQuery: ["xq"],
+				YAML: ["yaml|yml"],
+				Django: ["html"],
+			},
+			u = {
+				ObjectiveC: "Objective-C",
+				CSharp: "C#",
+				golang: "Go",
+				C_Cpp: "C and C++",
+				coffee: "CoffeeScript",
+				HTML_Ruby: "HTML (Ruby)",
+				HTML_Elixir: "HTML (Elixir)",
+				FTL: "FreeMarker",
+			},
+			a = {};
+		for (var f in o) {
+			var l = o[f],
+				c = (u[f] || f).replace(/_/g, " "),
+				h = f.toLowerCase(),
+				p = new s(h, c, l[0]);
+			(a[h] = p), r.push(p);
+		}
+		n.exports = { getModeForPath: i, modes: r, modesByName: a };
+	}),
 	define(
 		"ace/ext/themelist",
 		["require", "exports", "module", "ace/lib/fixoldbrowsers"],
 		(e, t, n) => {
-			
 			e("ace/lib/fixoldbrowsers");
 			var r = [
 				["Chrome"],
@@ -305,7 +299,6 @@ define(
 		"ace/ext/menu_tools/add_editor_menu_options",
 		["require", "exports", "module", "ace/ext/modelist", "ace/ext/themelist"],
 		(e, t, n) => {
-			
 			n.exports.addEditorMenuOptions = (n) => {
 				var r = e("../modelist"),
 					i = e("../themelist");
@@ -325,8 +318,14 @@ define(
 						{ textContent: "sublime", value: "ace/keyboard/sublime" },
 					],
 				}),
-					(n.menuOptions.setTheme = i.themes.map((e) => ({ textContent: e.caption, value: e.theme }))),
-					(n.menuOptions.setMode = r.modes.map((e) => ({ textContent: e.name, value: e.mode })));
+					(n.menuOptions.setTheme = i.themes.map((e) => ({
+						textContent: e.caption,
+						value: e.theme,
+					}))),
+					(n.menuOptions.setMode = r.modes.map((e) => ({
+						textContent: e.name,
+						value: e.mode,
+					})));
 			};
 		},
 	),
@@ -334,7 +333,6 @@ define(
 		"ace/ext/menu_tools/get_set_functions",
 		["require", "exports", "module"],
 		(e, t, n) => {
-			
 			n.exports.getSetFunctions = (t) => {
 				var n = [],
 					r = { editor: t, session: t.session, renderer: t.renderer },
@@ -378,7 +376,6 @@ define(
 			"ace/ace",
 		],
 		(e, t, n) => {
-			
 			var r = e("./element_generator"),
 				i = e("./add_editor_menu_options").addEditorMenuOptions,
 				s = e("./get_set_functions").getSetFunctions;
@@ -498,7 +495,6 @@ define(
 		"ace/ext/menu_tools/overlay_page",
 		["require", "exports", "module", "ace/lib/dom"],
 		(e, t, n) => {
-			
 			var r = e("../../lib/dom"),
 				i =
 					"#ace_settingsmenu, #kbshortcutmenu {background-color: #F7F7F7;color: black;box-shadow: -5px 4px 5px rgba(126, 126, 126, 0.55);padding: 1em 0.5em 2em 1em;overflow: auto;position: absolute;margin: 0;bottom: 0;right: 0;top: 0;z-index: 9991;cursor: default;}.ace_dark #ace_settingsmenu, .ace_dark #kbshortcutmenu {box-shadow: -20px 10px 25px rgba(126, 126, 126, 0.25);background-color: rgba(255, 255, 255, 0.6);color: black;}.ace_optionsMenuEntry:hover {background-color: rgba(100, 100, 100, 0.1);-webkit-transition: all 0.5s;transition: all 0.3s}.ace_closeButton {background: rgba(245, 146, 146, 0.5);border: 1px solid #F48A8A;border-radius: 50%;padding: 7px;position: absolute;right: -8px;top: -8px;z-index: 1000;}.ace_closeButton{background: rgba(245, 146, 146, 0.9);}.ace_optionsMenuKey {color: darkslateblue;font-weight: bold;}.ace_optionsMenuCommand {color: darkcyan;font-weight: normal;}";
@@ -553,7 +549,6 @@ define(
 			"ace/editor",
 		],
 		(e, t, n) => {
-			
 			function s(e) {
 				var t = document.getElementById("ace_settingsmenu");
 				t || i(e, r(e), "0", "0", "0");

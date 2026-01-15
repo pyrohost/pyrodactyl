@@ -1,11 +1,9 @@
 import { mutate } from "swr";
 
 import { SocketEvent } from "@/components/server/events";
-
-import { ServerContext } from "@/state/server";
-
 import { getDirectorySwrKey } from "@/plugins/useFileManagerSwr";
 import useWebsocketEvent from "@/plugins/useWebsocketEvent";
+import { ServerContext } from "@/state/server";
 
 const InstallListener = () => {
 	const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

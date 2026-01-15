@@ -4,7 +4,6 @@ define("ace/ext/themelist", [
 	"module",
 	"ace/lib/fixoldbrowsers",
 ], (e, t, n) => {
-	
 	e("ace/lib/fixoldbrowsers");
 	var r = [
 		["Chrome"],

@@ -1,5 +1,5 @@
 import type { IconSvgElement } from "@hugeicons/react";
-import { type RefObject, memo, useCallback, useEffect, useMemo } from "react";
+import { memo, type RefObject, useCallback, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
 import { cn } from "@/lib/utils";

@@ -1,23 +1,19 @@
 import { For } from "million/react";
 import { useEffect, useState } from "react";
 import isEqual from "react-fast-compare";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import createServerAllocation from "@/api/server/network/createServerAllocation";
+import getServerAllocations from "@/api/swr/getServerAllocations";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
-import ServerContentBlock from "@/components/elements/ServerContentBlock";
 import { PageListContainer } from "@/components/elements/pages/PageList";
+import ServerContentBlock from "@/components/elements/ServerContentBlock";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import AllocationRow from "@/components/server/network/AllocationRow";
 import SubdomainManagement from "@/components/server/network/SubdomainManagement";
-
-import createServerAllocation from "@/api/server/network/createServerAllocation";
-import getServerAllocations from "@/api/swr/getServerAllocations";
-
-import { ServerContext } from "@/state/server";
-
 import { useDeepCompareEffect } from "@/plugins/useDeepCompareEffect";
 import { useFlashKey } from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 const NetworkContainer = () => {
 	const [_, setLoading] = useState(false);

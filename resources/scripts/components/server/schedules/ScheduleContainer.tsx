@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { httpErrorToHuman } from "@/api/http";
+import getServerSchedules from "@/api/server/schedules/getServerSchedules";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
-import ServerContentBlock from "@/components/elements/ServerContentBlock";
 import {
 	PageListContainer,
 	PageListItem,
 } from "@/components/elements/pages/PageList";
+import ServerContentBlock from "@/components/elements/ServerContentBlock";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import EditScheduleModal from "@/components/server/schedules/EditScheduleModal";
 import ScheduleRow from "@/components/server/schedules/ScheduleRow";
-
-import { httpErrorToHuman } from "@/api/http";
-import getServerSchedules from "@/api/server/schedules/getServerSchedules";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 function ScheduleContainer() {
 	const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

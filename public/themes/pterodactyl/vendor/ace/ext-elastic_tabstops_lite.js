@@ -5,11 +5,9 @@ define("ace/ext/elastic_tabstops_lite", [
 	"ace/editor",
 	"ace/config",
 ], (e, t, n) => {
-	
 	var r = function (e) {
 		this.$editor = e;
-		var 
-			n = [],
+		var n = [],
 			r = !1;
 		(this.onAfterExec = () => {
 			(r = !1), this.processRows(n), (n = []);
@@ -62,9 +60,7 @@ define("ace/ext/elastic_tabstops_lite", [
 			(this.$cellWidthsForRow = function (e) {
 				var t = this.$selectionColumnsForRow(e),
 					n = [-1].concat(this.$tabsForRow(e)),
-					r = n
-						.map((e) => 0)
-						.slice(1),
+					r = n.map((e) => 0).slice(1),
 					i = this.$editor.session.getLine(e);
 				for (var s = 0, o = n.length - 1; s < o; s++) {
 					var u = n[s] + 1,

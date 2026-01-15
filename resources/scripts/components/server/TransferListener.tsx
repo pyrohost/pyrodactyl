@@ -1,8 +1,6 @@
 import { SocketEvent } from "@/components/server/events";
-
-import { ServerContext } from "@/state/server";
-
 import useWebsocketEvent from "@/plugins/useWebsocketEvent";
+import { ServerContext } from "@/state/server";
 
 const TransferListener = () => {
 	const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);

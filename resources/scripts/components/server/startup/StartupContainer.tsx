@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import isEqual from "react-fast-compare";
-
+import { httpErrorToHuman } from "@/api/http";
+import processStartupCommand from "@/api/server/processStartupCommand";
+import resetStartupCommand from "@/api/server/resetStartupCommand";
+import revertDockerImage from "@/api/server/revertDockerImage";
+import setSelectedDockerImage from "@/api/server/setSelectedDockerImage";
+import updateStartupCommand from "@/api/server/updateStartupCommand";
+import getServerStartup from "@/api/swr/getServerStartup";
 import ActionButton from "@/components/elements/ActionButton";
 import CopyOnClick from "@/components/elements/CopyOnClick";
 import {
@@ -10,6 +16,7 @@ import {
 	DropdownMenuRadioItem,
 	DropdownMenuTrigger,
 } from "@/components/elements/DropdownMenu";
+import { Dialog } from "@/components/elements/dialog";
 import InputSpinner from "@/components/elements/InputSpinner";
 import { MainPageHeader } from "@/components/elements/MainPageHeader";
 import Pagination from "@/components/elements/Pagination";
@@ -17,22 +24,11 @@ import { ServerError } from "@/components/elements/ScreenBlock";
 import ServerContentBlock from "@/components/elements/ServerContentBlock";
 import Spinner from "@/components/elements/Spinner";
 import TitledGreyBox from "@/components/elements/TitledGreyBox";
-import { Dialog } from "@/components/elements/dialog";
 import VariableBox from "@/components/server/startup/VariableBox";
-
-import { httpErrorToHuman } from "@/api/http";
-import processStartupCommand from "@/api/server/processStartupCommand";
-import resetStartupCommand from "@/api/server/resetStartupCommand";
-import revertDockerImage from "@/api/server/revertDockerImage";
-import setSelectedDockerImage from "@/api/server/setSelectedDockerImage";
-import updateStartupCommand from "@/api/server/updateStartupCommand";
-import getServerStartup from "@/api/swr/getServerStartup";
-
-import { ServerContext } from "@/state/server";
-
 import { useDeepCompareEffect } from "@/plugins/useDeepCompareEffect";
 import useFlash from "@/plugins/useFlash";
 import { usePermissions } from "@/plugins/usePermissions";
+import { ServerContext } from "@/state/server";
 
 const StartupContainer = () => {
 	const [loading, setLoading] = useState(false);

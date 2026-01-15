@@ -1,19 +1,14 @@
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { useContext, useEffect, useState } from "react";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import disableAccountTwoFactor from "@/api/account/disableAccountTwoFactor";
 import ActionButton from "@/components/elements/ActionButton";
 import { Dialog, DialogWrapperContext } from "@/components/elements/dialog";
 import { Input } from "@/components/elements/inputs";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
 import asDialog from "@/hoc/asDialog";
-
-import disableAccountTwoFactor from "@/api/account/disableAccountTwoFactor";
-
-import { useStoreActions } from "@/state/hooks";
-
 import { useFlashKey } from "@/plugins/useFlash";
+import { useStoreActions } from "@/state/hooks";
 
 const DisableTOTPDialog = () => {
 	const [submitting, setSubmitting] = useState(false);

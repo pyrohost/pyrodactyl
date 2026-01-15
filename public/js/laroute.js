@@ -16,8 +16,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "_debugbar/clockwork/{id}",
 					name: "debugbar.clockwork",
-					action:
-						"BarryvdhDebugbarControllersOpenHandlerController@clockwork",
+					action: "BarryvdhDebugbarControllersOpenHandlerController@clockwork",
 				},
 				{
 					host: null,
@@ -80,8 +79,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "account/api/new",
 					name: "account.api.new",
-					action:
-						"PterodactylHttpControllersBaseClientApiController@create",
+					action: "PterodactylHttpControllersBaseClientApiController@create",
 				},
 				{
 					host: null,
@@ -95,8 +93,7 @@
 					methods: ["DELETE"],
 					uri: "account/api/revoke/{identifier}",
 					name: "account.api.revoke",
-					action:
-						"PterodactylHttpControllersBaseClientApiController@delete",
+					action: "PterodactylHttpControllersBaseClientApiController@delete",
 				},
 				{
 					host: null,
@@ -125,8 +122,7 @@
 					methods: ["POST"],
 					uri: "account/security/totp",
 					name: "account.security.totp.set",
-					action:
-						"PterodactylHttpControllersBaseSecurityController@setTotp",
+					action: "PterodactylHttpControllersBaseSecurityController@setTotp",
 				},
 				{
 					host: null,
@@ -148,8 +144,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/statistics",
 					name: "admin.statistics",
-					action:
-						"PterodactylHttpControllersAdminStatisticsController@index",
+					action: "PterodactylHttpControllersAdminStatisticsController@index",
 				},
 				{
 					host: null,
@@ -198,16 +193,14 @@
 					methods: ["POST"],
 					uri: "admin/locations",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminLocationController@create",
+					action: "PterodactylHttpControllersAdminLocationController@create",
 				},
 				{
 					host: null,
 					methods: ["PATCH"],
 					uri: "admin/locations/view/{location}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminLocationController@update",
+					action: "PterodactylHttpControllersAdminLocationController@update",
 				},
 				{
 					host: null,
@@ -228,24 +221,21 @@
 					methods: ["POST"],
 					uri: "admin/databases",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminDatabaseController@create",
+					action: "PterodactylHttpControllersAdminDatabaseController@create",
 				},
 				{
 					host: null,
 					methods: ["PATCH"],
 					uri: "admin/databases/view/{host}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminDatabaseController@update",
+					action: "PterodactylHttpControllersAdminDatabaseController@update",
 				},
 				{
 					host: null,
 					methods: ["DELETE"],
 					uri: "admin/databases/view/{host}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminDatabaseController@delete",
+					action: "PterodactylHttpControllersAdminDatabaseController@delete",
 				},
 				{
 					host: null,
@@ -260,16 +250,14 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/settings/mail",
 					name: "admin.settings.mail",
-					action:
-						"PterodactylHttpControllersAdminSettingsMailController@index",
+					action: "PterodactylHttpControllersAdminSettingsMailController@index",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/settings/mail/test",
 					name: "admin.settings.mail.test",
-					action:
-						"PterodactylHttpControllersAdminSettingsMailController@test",
+					action: "PterodactylHttpControllersAdminSettingsMailController@test",
 				},
 				{
 					host: null,
@@ -371,8 +359,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/servers/view/{server}",
 					name: "admin.servers.view",
-					action:
-						"PterodactylHttpControllersAdminServersController@viewIndex",
+					action: "PterodactylHttpControllersAdminServersController@viewIndex",
 				},
 				{
 					host: null,
@@ -387,8 +374,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/servers/view/{server}/build",
 					name: "admin.servers.view.build",
-					action:
-						"PterodactylHttpControllersAdminServersController@viewBuild",
+					action: "PterodactylHttpControllersAdminServersController@viewBuild",
 				},
 				{
 					host: null,
@@ -411,16 +397,14 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/servers/view/{server}/manage",
 					name: "admin.servers.view.manage",
-					action:
-						"PterodactylHttpControllersAdminServersController@viewManage",
+					action: "PterodactylHttpControllersAdminServersController@viewManage",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/servers/view/{server}/delete",
 					name: "admin.servers.view.delete",
-					action:
-						"PterodactylHttpControllersAdminServersController@viewDelete",
+					action: "PterodactylHttpControllersAdminServersController@viewDelete",
 				},
 				{
 					host: null,
@@ -497,8 +481,7 @@
 					methods: ["PATCH"],
 					uri: "admin/servers/view/{server}/details",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminServersController@setDetails",
+					action: "PterodactylHttpControllersAdminServersController@setDetails",
 				},
 				{
 					host: null,
@@ -535,16 +518,14 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/nodes/view/{node}",
 					name: "admin.nodes.view",
-					action:
-						"PterodactylHttpControllersAdminNodesController@viewIndex",
+					action: "PterodactylHttpControllersAdminNodesController@viewIndex",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/nodes/view/{node}/settings",
 					name: "admin.nodes.view.settings",
-					action:
-						"PterodactylHttpControllersAdminNodesController@viewSettings",
+					action: "PterodactylHttpControllersAdminNodesController@viewSettings",
 				},
 				{
 					host: null,
@@ -567,8 +548,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/nodes/view/{node}/servers",
 					name: "admin.nodes.view.servers",
-					action:
-						"PterodactylHttpControllersAdminNodesController@viewServers",
+					action: "PterodactylHttpControllersAdminNodesController@viewServers",
 				},
 				{
 					host: null,
@@ -644,32 +624,28 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/nests",
 					name: "admin.nests",
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@index",
+					action: "PterodactylHttpControllersAdminNestsNestController@index",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/nests/new",
 					name: "admin.nests.new",
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@create",
+					action: "PterodactylHttpControllersAdminNestsNestController@create",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/nests/view/{nest}",
 					name: "admin.nests.view",
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@view",
+					action: "PterodactylHttpControllersAdminNestsNestController@view",
 				},
 				{
 					host: null,
 					methods: ["GET", "HEAD"],
 					uri: "admin/nests/egg/new",
 					name: "admin.nests.egg.new",
-					action:
-						"PterodactylHttpControllersAdminNestsEggController@create",
+					action: "PterodactylHttpControllersAdminNestsEggController@create",
 				},
 				{
 					host: null,
@@ -707,8 +683,7 @@
 					methods: ["POST"],
 					uri: "admin/nests/new",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@store",
+					action: "PterodactylHttpControllersAdminNestsNestController@store",
 				},
 				{
 					host: null,
@@ -723,8 +698,7 @@
 					methods: ["POST"],
 					uri: "admin/nests/egg/new",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsEggController@store",
+					action: "PterodactylHttpControllersAdminNestsEggController@store",
 				},
 				{
 					host: null,
@@ -747,16 +721,14 @@
 					methods: ["PATCH"],
 					uri: "admin/nests/view/{nest}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@update",
+					action: "PterodactylHttpControllersAdminNestsNestController@update",
 				},
 				{
 					host: null,
 					methods: ["PATCH"],
 					uri: "admin/nests/egg/{egg}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsEggController@update",
+					action: "PterodactylHttpControllersAdminNestsEggController@update",
 				},
 				{
 					host: null,
@@ -779,16 +751,14 @@
 					methods: ["DELETE"],
 					uri: "admin/nests/view/{nest}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsNestController@destroy",
+					action: "PterodactylHttpControllersAdminNestsNestController@destroy",
 				},
 				{
 					host: null,
 					methods: ["DELETE"],
 					uri: "admin/nests/egg/{egg}",
 					name: null,
-					action:
-						"PterodactylHttpControllersAdminNestsEggController@destroy",
+					action: "PterodactylHttpControllersAdminNestsEggController@destroy",
 				},
 				{
 					host: null,
@@ -817,8 +787,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "admin/packs/new/template",
 					name: "admin.packs.new.template",
-					action:
-						"PterodactylHttpControllersAdminPackController@newTemplate",
+					action: "PterodactylHttpControllersAdminPackController@newTemplate",
 				},
 				{
 					host: null,
@@ -860,8 +829,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "auth/login",
 					name: "auth.login",
-					action:
-						"PterodactylHttpControllersAuthLoginController@showLoginForm",
+					action: "PterodactylHttpControllersAuthLoginController@showLoginForm",
 				},
 				{
 					host: null,
@@ -914,8 +882,7 @@
 					methods: ["POST"],
 					uri: "auth/password/reset",
 					name: "auth.reset.post",
-					action:
-						"PterodactylHttpControllersAuthResetPasswordController@reset",
+					action: "PterodactylHttpControllersAuthResetPasswordController@reset",
 				},
 				{
 					host: null,
@@ -944,8 +911,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "server/{server}/console",
 					name: "server.console",
-					action:
-						"PterodactylHttpControllersServerConsoleController@console",
+					action: "PterodactylHttpControllersServerConsoleController@console",
 				},
 				{
 					host: null,
@@ -1008,32 +974,28 @@
 					methods: ["GET", "HEAD"],
 					uri: "server/{server}/databases",
 					name: "server.databases.index",
-					action:
-						"PterodactylHttpControllersServerDatabaseController@index",
+					action: "PterodactylHttpControllersServerDatabaseController@index",
 				},
 				{
 					host: null,
 					methods: ["POST"],
 					uri: "server/{server}/databases/new",
 					name: "server.databases.new",
-					action:
-						"PterodactylHttpControllersServerDatabaseController@store",
+					action: "PterodactylHttpControllersServerDatabaseController@store",
 				},
 				{
 					host: null,
 					methods: ["PATCH"],
 					uri: "server/{server}/databases/password",
 					name: "server.databases.password",
-					action:
-						"PterodactylHttpControllersServerDatabaseController@update",
+					action: "PterodactylHttpControllersServerDatabaseController@update",
 				},
 				{
 					host: null,
 					methods: ["DELETE"],
 					uri: "server/{server}/databases/delete/{database}",
 					name: "server.databases.delete",
-					action:
-						"PterodactylHttpControllersServerDatabaseController@delete",
+					action: "PterodactylHttpControllersServerDatabaseController@delete",
 				},
 				{
 					host: null,
@@ -1095,8 +1057,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "server/{server}/users/new",
 					name: "server.subusers.new",
-					action:
-						"PterodactylHttpControllersServerSubuserController@create",
+					action: "PterodactylHttpControllersServerSubuserController@create",
 				},
 				{
 					host: null,
@@ -1117,16 +1078,14 @@
 					methods: ["PATCH"],
 					uri: "server/{server}/users/view/{subuser}",
 					name: null,
-					action:
-						"PterodactylHttpControllersServerSubuserController@update",
+					action: "PterodactylHttpControllersServerSubuserController@update",
 				},
 				{
 					host: null,
 					methods: ["DELETE"],
 					uri: "server/{server}/users/view/{subuser}",
 					name: null,
-					action:
-						"PterodactylHttpControllersServerSubuserController@delete",
+					action: "PterodactylHttpControllersServerSubuserController@delete",
 				},
 				{
 					host: null,
@@ -1525,8 +1484,7 @@
 					methods: ["GET", "HEAD"],
 					uri: "api/client",
 					name: "api.client.index",
-					action:
-						"PterodactylHttpControllersApiClientClientController@index",
+					action: "PterodactylHttpControllersApiClientClientController@index",
 				},
 				{
 					host: null,
@@ -1605,8 +1563,7 @@
 					methods: ["POST"],
 					uri: "api/remote/sftp",
 					name: "api.remote.sftp",
-					action:
-						"PterodactylHttpControllersApiRemoteSftpController@index",
+					action: "PterodactylHttpControllersApiRemoteSftpController@index",
 				},
 				{
 					host: null,
@@ -1670,7 +1627,8 @@
 				return this.getCorrectUrl(uri + qs);
 			},
 
-			isOtherHost: (route) => route.host && route.host != window.location.hostname,
+			isOtherHost: (route) =>
+				route.host && route.host != window.location.hostname,
 
 			replaceNamedParameters: (uri, parameters) => {
 				uri = uri.replace(/\{(.*?)\??\}/g, (match, key) => {

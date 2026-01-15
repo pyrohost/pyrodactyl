@@ -1,7 +1,8 @@
-import { cleanDirectoryPath } from "@/helpers";
 import useSWR from "swr";
-
-import loadDirectory, { type FileObject } from "@/api/server/files/loadDirectory";
+import loadDirectory, {
+	type FileObject,
+} from "@/api/server/files/loadDirectory";
+import { cleanDirectoryPath } from "@/helpers";
 
 import { ServerContext } from "@/state/server";
 

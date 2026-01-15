@@ -2,13 +2,10 @@ import { AbbrApi, Gear, House, Key, Xmark } from "@gravity-ui/icons";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { getSubdomainInfo } from "@/api/server/network/subdomain";
+import Can from "@/components/elements/Can";
 import type { FeatureLimitKey, ServerRouteDefinition } from "@/routers/routes";
 import { getServerNavRoutes } from "@/routers/routes";
-
-import Can from "@/components/elements/Can";
-
-import { getSubdomainInfo } from "@/api/server/network/subdomain";
 
 import { ServerContext } from "@/state/server";
 

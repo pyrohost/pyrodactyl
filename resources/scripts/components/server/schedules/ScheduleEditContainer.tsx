@@ -2,25 +2,21 @@ import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import isEqual from "react-fast-compare";
 import { useNavigate, useParams } from "react-router-dom";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import getServerSchedule from "@/api/server/schedules/getServerSchedule";
+import triggerScheduleExecution from "@/api/server/schedules/triggerScheduleExecution";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import ItemContainer from "@/components/elements/ItemContainer";
 import PageContentBlock from "@/components/elements/PageContentBlock";
 import Spinner from "@/components/elements/Spinner";
 import SpinnerOverlay from "@/components/elements/SpinnerOverlay";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import DeleteScheduleButton from "@/components/server/schedules/DeleteScheduleButton";
 import EditScheduleModal from "@/components/server/schedules/EditScheduleModal";
 import ScheduleTaskRow from "@/components/server/schedules/ScheduleTaskRow";
 import TaskDetailsModal from "@/components/server/schedules/TaskDetailsModal";
-
-import getServerSchedule from "@/api/server/schedules/getServerSchedule";
-import triggerScheduleExecution from "@/api/server/schedules/triggerScheduleExecution";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 const CronBox = ({ title, value }: { title: string; value: string }) => (
 	<ItemContainer title={title} description={value} />

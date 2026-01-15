@@ -3,7 +3,12 @@ import { Dialog as HDialog } from "@headlessui/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 
-import { DialogContext, type IconPosition, type RenderDialogProps, styles } from "./";
+import {
+	DialogContext,
+	type IconPosition,
+	type RenderDialogProps,
+	styles,
+} from "./";
 
 const variants = {
 	open: {

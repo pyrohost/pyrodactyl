@@ -5,12 +5,12 @@ import { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import ActionButton from "@/components/elements/ActionButton";
-import Spinner from "@/components/elements/Spinner";
 import {
 	DialogContext,
 	type IconPosition,
 	styles,
 } from "@/components/elements/dialog";
+import Spinner from "@/components/elements/Spinner";
 
 const variants = {
 	open: {

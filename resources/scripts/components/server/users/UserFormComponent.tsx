@@ -13,21 +13,17 @@ import { type Actions, useStoreActions, useStoreState } from "easy-peasy";
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { array, object, string } from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import createOrUpdateSubuser from "@/api/server/users/createOrUpdateSubuser";
 import ActionButton from "@/components/elements/ActionButton";
 import Can from "@/components/elements/Can";
 import Field from "@/components/elements/Field";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import PermissionRow from "@/components/server/users/PermissionRow";
-
-import createOrUpdateSubuser from "@/api/server/users/createOrUpdateSubuser";
-
+import { useDeepCompareMemo } from "@/plugins/useDeepCompareMemo";
+import { usePermissions } from "@/plugins/usePermissions";
 import type { ApplicationStore } from "@/state";
 import { ServerContext } from "@/state/server";
 import type { Subuser } from "@/state/server/subusers";
-
-import { useDeepCompareMemo } from "@/plugins/useDeepCompareMemo";
-import { usePermissions } from "@/plugins/usePermissions";
 
 interface Values {
 	email: string;

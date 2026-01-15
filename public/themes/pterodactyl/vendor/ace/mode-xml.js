@@ -8,7 +8,6 @@ define(
 		"ace/mode/text_highlight_rules",
 	],
 	(e, t, n) => {
-		
 		var r = e("../lib/oop"),
 			i = e("./text_highlight_rules").TextHighlightRules,
 			s = function (e) {
@@ -249,7 +248,6 @@ define(
 			"ace/lib/lang",
 		],
 		(e, t, n) => {
-			
 			function u(e, t) {
 				return e.type.lastIndexOf(t + ".xml") > -1;
 			}
@@ -384,7 +382,6 @@ define(
 			"ace/token_iterator",
 		],
 		(e, t, n) => {
-			
 			function l(e, t) {
 				return e.type.lastIndexOf(t + ".xml") > -1;
 			}
@@ -588,7 +585,6 @@ define(
 			"ace/worker/worker_client",
 		],
 		(e, t, n) => {
-			
 			var r = e("../lib/oop"),
 				i = e("../lib/lang"),
 				s = e("./text").Mode,

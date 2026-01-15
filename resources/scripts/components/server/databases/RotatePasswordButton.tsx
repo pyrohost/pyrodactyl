@@ -1,13 +1,11 @@
 import { ArrowsRotateRight } from "@gravity-ui/icons";
 import { type Actions, useStoreActions } from "easy-peasy";
 import { useState } from "react";
-
-import ActionButton from "@/components/elements/ActionButton";
-import Spinner from "@/components/elements/Spinner";
-
 import { httpErrorToHuman } from "@/api/http";
 import type { ServerDatabase } from "@/api/server/databases/getServerDatabases";
 import rotateDatabasePassword from "@/api/server/databases/rotateDatabasePassword";
+import ActionButton from "@/components/elements/ActionButton";
+import Spinner from "@/components/elements/Spinner";
 
 import type { ApplicationStore } from "@/state";
 import { ServerContext } from "@/state/server";

@@ -5,10 +5,8 @@ import DisableTOTPDialog from "@/components/dashboard/forms/DisableTOTPDialog";
 import RecoveryTokensDialog from "@/components/dashboard/forms/RecoveryTokensDialog";
 import SetupTOTPDialog from "@/components/dashboard/forms/SetupTOTPDialog";
 import ActionButton from "@/components/elements/ActionButton";
-
-import type { ApplicationStore } from "@/state";
-
 import useFlash from "@/plugins/useFlash";
+import type { ApplicationStore } from "@/state";
 
 const ConfigureTwoFactorForm = () => {
 	const [tokens, setTokens] = useState<string[]>([]);

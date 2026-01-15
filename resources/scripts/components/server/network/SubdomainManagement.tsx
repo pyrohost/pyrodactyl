@@ -2,22 +2,18 @@ import { Link } from "@gravity-ui/icons";
 import { Field, Form, Formik, type FormikHelpers } from "formik";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as yup from "yup";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
-import ActionButton from "@/components/elements/ActionButton";
-import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
-
 import {
-	type SubdomainInfo,
 	checkSubdomainAvailability,
 	deleteSubdomain,
 	getSubdomainInfo,
+	type SubdomainInfo,
 	setSubdomain,
 } from "@/api/server/network/subdomain";
-
-import { ServerContext } from "@/state/server";
-
+import ActionButton from "@/components/elements/ActionButton";
+import FormikFieldWrapper from "@/components/elements/FormikFieldWrapper";
+import FlashMessageRender from "@/components/FlashMessageRender";
 import { useFlashKey } from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 interface AvailableDomain {
 	id: number;

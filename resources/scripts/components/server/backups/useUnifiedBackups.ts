@@ -1,12 +1,9 @@
 import { useCallback, useContext } from "react";
-
+import { getGlobalDaemonType } from "@/api/server/getServer";
 import getServerBackups from "@/api/swr/getServerBackups";
-
 import { ServerContext } from "@/state/server";
-
 import { LiveProgressContext } from "./BackupContainer";
 import type { UnifiedBackup } from "./BackupItem";
-import { getGlobalDaemonType } from "@/api/server/getServer";
 
 export const useUnifiedBackups = () => {
 	const { data: backups, error, isValidating, mutate } = getServerBackups();

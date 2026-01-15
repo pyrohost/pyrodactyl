@@ -1,4 +1,3 @@
-import ModalContext from "@/context/ModalContext";
 import { TZDate } from "@date-fns/tz";
 import { Link, TriangleExclamation } from "@gravity-ui/icons";
 import { toString } from "cronstrue";
@@ -6,22 +5,18 @@ import { format } from "date-fns";
 import { useStoreState } from "easy-peasy";
 import { Form, Formik, type FormikHelpers } from "formik";
 import { useContext, useEffect, useMemo } from "react";
-
-import FlashMessageRender from "@/components/FlashMessageRender";
+import { httpErrorToHuman } from "@/api/http";
+import createOrUpdateSchedule from "@/api/server/schedules/createOrUpdateSchedule";
+import type { Schedule } from "@/api/server/schedules/getServerSchedules";
 import ActionButton from "@/components/elements/ActionButton";
 import Field from "@/components/elements/Field";
 import FormikSwitchV2 from "@/components/elements/FormikSwitchV2";
 import ItemContainer from "@/components/elements/ItemContainer";
-
+import FlashMessageRender from "@/components/FlashMessageRender";
+import ModalContext from "@/context/ModalContext";
 import asModal from "@/hoc/asModal";
-
-import { httpErrorToHuman } from "@/api/http";
-import createOrUpdateSchedule from "@/api/server/schedules/createOrUpdateSchedule";
-import type { Schedule } from "@/api/server/schedules/getServerSchedules";
-
-import { ServerContext } from "@/state/server";
-
 import useFlash from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 interface Props {
 	schedule?: Schedule;

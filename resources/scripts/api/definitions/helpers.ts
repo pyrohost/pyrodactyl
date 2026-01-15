@@ -4,8 +4,8 @@ import {
 	type FractalPaginatedResponse,
 	type FractalResponseData,
 	type FractalResponseList,
-	type PaginatedResult,
 	getPaginationSet,
+	type PaginatedResult,
 } from "@/api/http";
 
 type TransformerFunc<T> = (callback: FractalResponseData) => T;

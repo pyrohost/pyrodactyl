@@ -1,15 +1,11 @@
 import { TrashBin } from "@gravity-ui/icons";
 import { useState } from "react";
-
-import ActionButton from "@/components/elements/ActionButton";
-import { Dialog } from "@/components/elements/dialog";
-
 import deleteServerAllocation from "@/api/server/network/deleteServerAllocation";
 import getServerAllocations from "@/api/swr/getServerAllocations";
-
-import { ServerContext } from "@/state/server";
-
+import ActionButton from "@/components/elements/ActionButton";
+import { Dialog } from "@/components/elements/dialog";
 import { useFlashKey } from "@/plugins/useFlash";
+import { ServerContext } from "@/state/server";
 
 interface Props {
 	allocation: number;

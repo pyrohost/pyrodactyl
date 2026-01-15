@@ -2,13 +2,11 @@ import { type Actions, useStoreActions } from "easy-peasy";
 import { Form, Formik } from "formik";
 import { toast } from "sonner";
 import { object, string } from "yup";
-
+import { httpErrorToHuman } from "@/api/http";
+import renameServer from "@/api/server/renameServer";
 import ActionButton from "@/components/elements/ActionButton";
 import Field from "@/components/elements/Field";
 import TitledGreyBox from "@/components/elements/TitledGreyBox";
-
-import { httpErrorToHuman } from "@/api/http";
-import renameServer from "@/api/server/renameServer";
 
 import type { ApplicationStore } from "@/state";
 import { ServerContext } from "@/state/server";

@@ -3,9 +3,8 @@ import { toast } from "sonner";
 
 import ActionButton from "@/components/elements/ActionButton";
 import ContentBox from "@/components/elements/ContentBox";
-
-import { ModCard } from "./ModCard";
 import { ModrinthService, useGlobalStateContext } from "./config";
+import { ModCard } from "./ModCard";
 
 interface ModListProps {
 	showInstalled?: boolean;

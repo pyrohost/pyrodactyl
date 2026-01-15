@@ -80,9 +80,9 @@ $("#pNestId").on("change", function (event) {
 			data: $.map(
 				_.get(Pyrodactyl.nests, $(this).val() + ".eggs", []),
 				(item) => ({
-						id: item.id,
-						text: item.name,
-					}),
+					id: item.id,
+					text: item.name,
+				}),
 			),
 		})
 		.change();
@@ -115,9 +115,9 @@ $("#pEggId").on("change", function (event) {
 		.select2({
 			data: [{ id: 0, text: "No Service Pack" }].concat(
 				$.map(_.get(objectChain, "packs", []), (item, i) => ({
-						id: item.id,
-						text: item.name + " (" + item.version + ")",
-					})),
+					id: item.id,
+					text: item.name + " (" + item.version + ")",
+				})),
 			),
 		});
 
@@ -213,9 +213,9 @@ function initUserIdSelect(data) {
 			delay: 250,
 
 			data: (params) => ({
-					filter: { email: params.term },
-					page: params.page,
-				}),
+				filter: { email: params.term },
+				page: params.page,
+			}),
 
 			processResults: (data, params) => ({ results: data }),
 
@@ -248,23 +248,22 @@ function initUserIdSelect(data) {
             </div>"
 			);
 		},
-		templateSelection: (data) => (
-				'<div> \
+		templateSelection: (data) =>
+			'<div> \
                 <span> \
                     <img class="img-rounded img-bordered-xs" src="https://www.gravatar.com/avatar/' +
-				escapeHtml(data.md5) +
-				'?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \
+			escapeHtml(data.md5) +
+			'?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \
                 </span> \
                 <span style="padding-left:5px;"> \
                     ' +
-				escapeHtml(data.name_first) +
-				" " +
-				escapeHtml(data.name_last) +
-				" (<strong>" +
-				escapeHtml(data.email) +
-				"</strong>) \
+			escapeHtml(data.name_first) +
+			" " +
+			escapeHtml(data.name_last) +
+			" (<strong>" +
+			escapeHtml(data.email) +
+			"</strong>) \
                 </span> \
-            </div>"
-			),
+            </div>",
 	});
 }

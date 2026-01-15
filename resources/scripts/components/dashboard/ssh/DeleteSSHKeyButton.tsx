@@ -1,11 +1,9 @@
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-
+import { deleteSSHKey, useSSHKeys } from "@/api/account/ssh-keys";
 import Code from "@/components/elements/Code";
 import { Dialog } from "@/components/elements/dialog";
-
-import { deleteSSHKey, useSSHKeys } from "@/api/account/ssh-keys";
 
 import { useFlashKey } from "@/plugins/useFlash";
 

@@ -17,7 +17,6 @@
 		window.AnsiUp = exp.default;
 	}
 })((require, exports) => {
-	
 	function rgx(tmplObj) {
 		var subst = [];
 		for (var _i = 1; _i < arguments.length; _i++) {
@@ -153,13 +152,19 @@
 				this.palette_256.push(gry);
 			}
 		};
-		AnsiUp.prototype.old_escape_for_html = (txt) => txt.replace(/[&<>]/gm, (str) => {
+		AnsiUp.prototype.old_escape_for_html = (txt) =>
+			txt.replace(/[&<>]/gm, (str) => {
 				if (str === "&") return "&amp;";
 				if (str === "<") return "&lt;";
 				if (str === ">") return "&gt;";
 			});
-		AnsiUp.prototype.old_linkify = (txt) => txt.replace(/(https?:\/\/[^\s]+)/gm, (str) => '<a href="' + str + '">' + str + "</a>");
-		AnsiUp.prototype.detect_incomplete_ansi = (txt) => !/.*?[\x40-\x7e]/.test(txt);
+		AnsiUp.prototype.old_linkify = (txt) =>
+			txt.replace(
+				/(https?:\/\/[^\s]+)/gm,
+				(str) => '<a href="' + str + '">' + str + "</a>",
+			);
+		AnsiUp.prototype.detect_incomplete_ansi = (txt) =>
+			!/.*?[\x40-\x7e]/.test(txt);
 		AnsiUp.prototype.detect_incomplete_link = (txt) => {
 			var found = false;
 			for (var i = txt.length - 1; i > 0; i--) {

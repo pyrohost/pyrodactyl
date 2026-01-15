@@ -1,9 +1,7 @@
 import { ChevronLeft, ChevronRight } from "@gravity-ui/icons";
 import clsx from "clsx";
-
-import ActionButton from "@/components/elements/ActionButton";
-
 import type { PaginationDataSet } from "@/api/http";
+import ActionButton from "@/components/elements/ActionButton";
 
 interface Props {
 	className?: string;
