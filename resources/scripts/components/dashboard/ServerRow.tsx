@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { bytesToString, ip } from '@/lib/formatters';
 
-import { Server } from '@/api/server/getServer';
+import { Server, getGlobalDaemonType } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
@@ -43,9 +43,9 @@ position: relative;
         } else if ($status === 'running') {
             return '0 0 12px 1px #43C760';
         } else if ($status === 'installing') {
-            return '0 0 12px 1px #4381c7'; // Blue color for installing
+            return '0 0 12px 1px #4381c7';
         } else {
-            return '0 0 12px 1px #c7aa43'; // Default for other statuses
+            return '0 0 12px 1px #c7aa43';
         }
     }};
 

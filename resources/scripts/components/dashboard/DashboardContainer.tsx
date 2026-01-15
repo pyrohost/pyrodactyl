@@ -37,6 +37,11 @@ const DashboardContainer = () => {
     const uuid = useStoreState((state) => state.user.data!.uuid);
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
+    const [serverViewMode, setServerViewMode] = usePersistedState<'owner' | 'admin-all' | 'all'>(
+        `${uuid}:server_view_mode`,
+        'owner',
+    );
+
     const { setHeaderActions, clearHeaderActions } = useHeader();
 
     const [dashboardDisplayOption, setDashboardDisplayOption] = usePersistedState(
@@ -44,9 +49,17 @@ const DashboardContainer = () => {
         'list',
     );
 
+    const getApiType = (): string | undefined => {
+        if (serverViewMode === 'owner') return 'owner'; // Servers the User owns
+        if (serverViewMode === 'admin-all') return 'admin-all'; // All servers(Admin only)
+        if (serverViewMode === 'all') return 'all'; // All servers user has Access too. (Subusers and owned)
+        return undefined;
+    };
+
     const { data: servers, error } = useSWR<PaginatedResult<Server>>(
-        ['/api/client/servers', showOnlyAdmin && rootAdmin, page],
-        () => getServers({ page, type: showOnlyAdmin && rootAdmin ? 'admin' : undefined }),
+        ['/api/client/servers', serverViewMode, page],
+        () => getServers({ page, type: getApiType() }),
+        { revalidateOnFocus: false },
     );
 
     const handleFilterToggle = useCallback(() => {
@@ -56,7 +69,7 @@ const DashboardContainer = () => {
     const searchSection = useMemo(
         () => (
             <HeaderCentered>
-                <SearchSection className='max-w-128 xl:w-[30vw]' />
+                <SearchSection className='max-w-128 xl:w-[30vw] hidden md:flex ' />
             </HeaderCentered>
         ),
         [],
@@ -103,16 +116,33 @@ const DashboardContainer = () => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
-                    <div className='text-xs opacity-50 text-center'>More filters coming soon!</div>
+                    <DropdownMenuItem
+                        onSelect={() => setServerViewMode('owner')}
+                        className={serverViewMode === 'owner' ? 'bg-accent/20' : ''}
+                    >
+                        Your Servers Only
+                    </DropdownMenuItem>
+
                     {rootAdmin && (
-                        <DropdownMenuItem onSelect={handleFilterToggle}>
-                            {showOnlyAdmin ? 'Show personal servers' : 'Show other servers'}
-                        </DropdownMenuItem>
+                        <>
+                            <DropdownMenuItem
+                                onSelect={() => setServerViewMode('admin-all')}
+                                className={serverViewMode === 'admin-all' ? 'bg-accent/20' : ''}
+                            >
+                                All Servers (Admin)
+                            </DropdownMenuItem>
+                        </>
                     )}
+                    <DropdownMenuItem
+                        onSelect={() => setServerViewMode('all')}
+                        className={serverViewMode === 'all' ? 'bg-accent/20' : ''}
+                    >
+                        All Servers
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [rootAdmin, showOnlyAdmin, handleFilterToggle],
+        [rootAdmin, showOnlyAdmin],
     );
 
     useEffect(() => {
@@ -182,13 +212,20 @@ const DashboardContainer = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p
+                            <div
                                 className={`text-center text-sm text-zinc-400 absolute w-full left-1/2 -translate-x-1/2`}
                             >
-                                {showOnlyAdmin
-                                    ? 'There are no other servers to display.'
-                                    : 'There are no servers associated with your account.'}
-                            </p>
+                                <p className='max-w-sm mx-auto mb-5'>
+                                    {serverViewMode === 'admin-all'
+                                        ? 'There are no other servers to display.'
+                                        : serverViewMode === 'all'
+                                            ? 'No Server Shared With your Account'
+                                            : 'There are no servers associated with your account.'}
+                                </p>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                                    {serverViewMode === 'admin-all' ? 'No other servers found' : 'No servers found'}
+                                </h3>
+                            </div>
                         )
                     }
                 </Pagination>

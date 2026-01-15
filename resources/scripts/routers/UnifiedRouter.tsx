@@ -2,7 +2,6 @@ import { HeaderProvider } from '@/contexts/HeaderContext';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import {
     Activity02Icon,
-    AiNetworkIcon,
     Cardiogram01Icon,
     ClockIcon,
     CloudUploadIcon,
@@ -11,13 +10,11 @@ import {
     Database02Icon,
     FolderIcon,
     GameControllerIcon,
-    Home03Icon,
     NoteIcon,
     ServerStack02Icon,
     Settings02Icon,
     Settings04Icon,
     UserMultiple02Icon,
-    WorkflowSquare01Icon,
 } from '@hugeicons/core-free-icons';
 import { useStoreState } from 'easy-peasy';
 import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
@@ -187,6 +184,7 @@ const UnifiedRouter = () => {
                             end: false,
                             permission: 'file.*',
                         },
+
                         {
                             to: `/server/${id}/databases`,
                             icon: Database02Icon,
