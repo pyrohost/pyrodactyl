@@ -13,9 +13,7 @@ import PowerButtons from '@/components/server/console/PowerButtons';
 import StatGraphs from '@/components/server/console/StatGraphs';
 import { useHeader } from '@/contexts/HeaderContext';
 import { ServerContext } from '@/state/server';
-
-import ServerDetailsHeader from './ServerDetailsHeader';
-import { StatusPillHeader } from './StatusPillHeader';
+import ServerHeader from '../header/ServerHeader';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -25,33 +23,11 @@ const ServerConsoleContainer = () => {
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
-    const { setHeaderActions, clearHeaderActions } = useHeader();
-
-    const statusSection = useMemo(
-        () => (
-            <HeaderCentered className='flex items-center gap-6'>
-                <div className='flex items-center gap-3'>
-                    <StatusPillHeader />
-                    <span className='xl:max-w-[20vw] min-w-0 truncate'>{name}</span>
-                </div>
-
-                <div className='border-l border-gray-200 h-6' />
-                <ServerDetailsHeader />
-            </HeaderCentered>
-        ),
-        [name],
-    );
-
-    const buttonsSection = useMemo(() => <PowerButtons className='flex gap-2 items-center justify-center' />, []);
-
-    useEffect(() => {
-        setHeaderActions([statusSection, buttonsSection]);
-        return () => clearHeaderActions();
-    }, [setHeaderActions, clearHeaderActions, statusSection, buttonsSection]);
 
     return (
         <PageContentBlock title={'Console'} background={false} className='overflow-y-visible'>
             <div className='w-full h-full flex gap-4'>
+                <ServerHeader powerButtons={true} />
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance

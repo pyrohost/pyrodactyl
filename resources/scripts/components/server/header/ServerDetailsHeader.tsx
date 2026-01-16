@@ -25,25 +25,25 @@ const ServerDetailsHeader = ({ className }: { className?: string }) => {
     });
     const [loading, setLoading] = useState(true); // Added loading state
 
-    const status = ServerContext.useStoreState((state) => state.status.value);
+    // const status = ServerContext.useStoreState((state) => state.status.value);
     const connected = ServerContext.useStoreState((state) => state.socket.connected);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
 
-    const textLimits = useMemo(
-        () => ({
-            cpu: limits?.cpu ? `${limits.cpu}%` : null,
-            memory: limits?.memory ? bytesToString(mbToBytes(limits.memory)) : null,
-            disk: limits?.disk ? bytesToString(mbToBytes(limits.disk)) : null,
-        }),
-        [limits],
-    );
+    // const textLimits = useMemo(
+    //     () => ({
+    //         cpu: limits?.cpu ? `${limits.cpu}%` : null,
+    //         memory: limits?.memory ? bytesToString(mbToBytes(limits.memory)) : null,
+    //         disk: limits?.disk ? bytesToString(mbToBytes(limits.disk)) : null,
+    //     }),
+    //     [limits],
+    // );
 
-    const allocation = ServerContext.useStoreState((state) => {
-        const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
-
-        return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
-    });
+    // const allocation = ServerContext.useStoreState((state) => {
+    //     const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
+    //
+    //     return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
+    // });
 
     useEffect(() => {
         if (!connected || !instance) {
@@ -69,7 +69,7 @@ const ServerDetailsHeader = ({ className }: { className?: string }) => {
             rx: stats.network.rx_bytes,
             uptime: stats.uptime || 0,
         });
-        setLoading(false); // Set loading to false once stats are received
+        setLoading(false);
     });
 
     interface DetailProps {
@@ -94,7 +94,7 @@ const ServerDetailsHeader = ({ className }: { className?: string }) => {
                 {`${stats.cpu.toFixed(2)}%`}
             </Detail>
             <Detail label={'RAM'} className='w-14' loading={loading}>
-                {bytesToString(stats.memory, undefined, 'GiB')}
+                {bytesToString(stats.memory, 0)}
             </Detail>
             <Detail label={'Disk'} className='w-20' loading={loading}>
                 {bytesToString(stats.disk)}
