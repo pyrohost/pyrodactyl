@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 
 interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'danger';
-    size?: 'start' | 'sm' | 'md' | 'lg';
+    size?: 'start' | 'sm' | 'smCompact' | 'md' | 'mdCompact' | 'lg' | 'lgCompact';
     children: React.ReactNode;
 }
 
@@ -21,8 +21,11 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         const sizeClasses = {
             start: 'h-8 px-2 py-1.5 text-xs',
             sm: 'h-8 px-3 py-1.5 text-xs',
+            smCompact: 'h-8 px-3 text-xs',
             md: 'h-10 px-4 py-2 text-sm',
+            mdCompact: 'h-10 px-4 text-sm',
             lg: 'h-12 px-6 py-3 text-base',
+            lgCompact: 'h-12 px-6 text-sm',
         };
 
         return (

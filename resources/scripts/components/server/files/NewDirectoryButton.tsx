@@ -103,7 +103,11 @@ const NewDirectoryButton = () => {
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
-            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)}>
+            <ActionButton
+                variant='secondary'
+                onClick={setOpen.bind(this, true)}
+                className='border-r-cream-600 rounded-r-none'
+            >
                 New Folder
             </ActionButton>
         </>
