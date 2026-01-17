@@ -10,7 +10,7 @@ x-common:
         APP_TIMEZONE: 'UTC'
         APP_SERVICE_AUTHOR: 'noreply@example.com'
         DB_USERNAME: 'pterodactyl'
-        # DB_PASSWORD: "Uncomment this to user your own password"
+        DB_PASSWORD: "password"
 
         # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
         # to generate an SSL certificate for the Panel.
@@ -45,6 +45,30 @@ services:
             MYSQL_USER: 'pterodactyl'
         ports:
             - '3306:3306'
+    postgres:
+      image: postgres:18
+      restart: always
+      ports:
+        - '5433:5432'
+      environment:
+        POSTGRES_USER: pterodactyl
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: panel
+      volumes:
+        - './srv/database_pgsql:/var/lib/postgresql'
+
+
+
+    database-host:
+        image: mariadb:10.5
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - './srv/database-host:/var/lib/mysql'
+        environment:
+            <<: *db-environment
+            MYSQL_USER: 'pterodactyl'
+
     cache:
         image: redis:alpine
         restart: always
@@ -57,6 +81,7 @@ services:
         links:
             - database
             - cache
+            - postgres
         volumes:
             - '.:/app'
             - './srv/var:/app/var'
@@ -84,27 +109,30 @@ services:
             SESSION_DRIVER: 'redis'
             QUEUE_DRIVER: 'redis'
             REDIS_HOST: 'cache'
-            DB_CONNECTION: 'mariadb'
-            DB_HOST: 'database'
-            DB_PORT: '3306'
+            DB_CONNECTION: 'pgsql'
+            DB_HOST: 'postgres'
+            DB_PORT: '5432'
             HASHIDS_LENGTH: 8
-            WINGS_INTERNAL_IP: 'elytra'
-            WINGS_DIR: '${PWD}/srv/'
+            ELYTRA_INTERNAL_IP: 'elytra'
+            ELYTRA_DIR: '${PWD}'
             PYRODACTYL_DOCKER_DEV: 'true'
-            MAIL_HOST: 'mailhog'
+            DEV_SETUP: 'false'
+            MAIL_HOST: 'mailpit'
             MAIL_PORT: 1025
             MAIL_DRIVER: 'smtp'
-            APP_BACKUP_DRIVER: 's3'
-            AWS_DEFAULT_REGION: 'us-west-2'
+            APP_BACKUP_DRIVER: 'rustic_s3'
+            RUSTIC_S3_REGION: 'us-west-2'
+            S3_REGION: 'us-west-2'
             AWS_ACCESS_KEY_ID: 'minioadmin'
             AWS_SECRET_ACCESS_KEY: 'minioadmin'
-            AWS_BACKUPS_BUCKET: 'pyrodactyl'
-            AWS_ENDPOINT: 'http://minio:9000'
+            RUSTIC_S3_BUCKET: 'pyrodactyl'
+            RUSTIC_S3_ENDPOINT: 'http://minio:9000'
             AWS_USE_PATH_STYLE_ENDPOINT: 'true'
 
     minio:
         image: quay.io/minio/minio:latest
         hostname: minio
+        restart: always
         expose:
             - '9000'
             - '9001'
@@ -131,10 +159,6 @@ services:
             "
 
     elytra:
-        # The default Wings image doesn't work on macOS Docker
-        # This fork simply removes the incompatible `io.priority` cgroup v2 flag
-        # For Linux users, you can use the default image by uncommenting the line below
-        # image: ghcr.io/pterodactyl/wings:latest
         image: ghcr.io/pyrohost/elytra:dev
         restart: always
         ports:
@@ -145,7 +169,7 @@ services:
             TZ: 'UTC'
             ELYTRA_UID: 988
             ELYTRA_GID: 988
-            ELYTRA_USERNAME: elytra
+            ELYTRA_USERNAME: pterodactyl
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - '/etc/ssl/certs:/etc/ssl/certs:ro'
@@ -156,7 +180,7 @@ services:
             # The paths are currently hardcoded in the container on first run, meaning if you move
             # this repo on your host, you'll need to delete "srv" folder so the paths can be recreated.
             #
-            # If you change these from $PWD, make sure to update `WINGS_DIR` in the panel service too.
+            # If you change these from $PWD, make sure to update `ELYTRA_DIR` in the panel service too.
             # Do not change anything but the $PWD part as this is also hardcoded in the container.
 
             - './srv/elytra/tmp/:${PWD}/srv/elytra/tmp/'
@@ -164,11 +188,35 @@ services:
             - './srv/elytra/:${PWD}/srv/elytra/'
             - './srv/elytra/logs/:${PWD}/srv/elytra/logs/'
 
+    wings:
+        image: ghcr.io/pterodactyl/wings:latest
+        restart: always
+        ports:
+            - '8081:8081'
+            - '2023:2023'
+        tty: true
+        environment:
+            TZ: 'UTC'
+            WINGS_UID: 988
+            WINGS_GID: 988
+            WINGS_USERNAME: pterodactyl
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            - '/etc/ssl/certs:/etc/ssl/certs:ro'
+            - './srv/wings/config/:/etc/elytra/'
+
+            - './srv/wings/tmp/:${PWD}/srv/wings/tmp/'
+            - './srv/wings/docker/containers/:${PWD}/srv/wings/docker/containers/'
+            - './srv/wings/:${PWD}/srv/wings/'
+            - './srv/wings/volumes:${PWD}/srv/wings/volumes'
+            - './srv/wings/config:/etc/pterodactyl/'
+            - './srv/wings/logs/:${PWD}/srv/wings/logs/'
 
     mailpit:
         image: axllent/mailpit
+        restart: always
         volumes:
-            - ./data/mailpit/:/data
+            - ./srv/mailpit/:/data
         ports:
             - '1025:1025'
             - '8025:8025'
@@ -182,10 +230,11 @@ networks:
     default:
         ipam:
             config:
-                - subnet: 172.20.0.0/16
+                - subnet: 172.21.0.0/16
 
 volumes:
     panel_vendor:
     panel_storage:
     panel_bootstrap_cache:
     mailpit_data:
+    postgres_data:

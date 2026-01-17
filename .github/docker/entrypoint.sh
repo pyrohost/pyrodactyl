@@ -127,8 +127,8 @@ fi
 
   if [ "$PYRODACTYL_DOCKER_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
     echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
-    export POSTGRES_PASSWORD=$(grep "POSTGRES_PASSWORD" docker-compose.yml | awk '{print $2}')
-    export POSTGRES_USER=$(grep "POSTGRES_USER" docker-compose.yml | awk '{print $2}')
+    export POSTGRES_PASSWORD=$(grep "POSTGRES_PASSWORD" docker-compose.develop.yml | awk '{print $2}')
+    export POSTGRES_USER=$(grep "POSTGRES_USER" docker-compose.develop.yml | awk '{print $2}')
 
     php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password dev
     # Create a developer user
