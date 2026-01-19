@@ -1,24 +1,19 @@
 import Features from '@feature/Features';
-import { memo, useEffect, useMemo } from 'react';
+import { memo } from 'react';
 import isEqual from 'react-fast-compare';
 
-import HeaderCentered from '@/components/dashboard/header/HeaderCentered';
 import { Alert } from '@/components/elements/alert';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-// import Can from '@/components/elements/Can';
 import Spinner from '@/components/elements/Spinner';
 import Console from '@/components/server/console/Console';
-import PowerButtons from '@/components/server/console/PowerButtons';
 import StatGraphs from '@/components/server/console/StatGraphs';
-import { useHeader } from '@/contexts/HeaderContext';
 import { ServerContext } from '@/state/server';
 import ServerHeader from '../header/ServerHeader';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
-    const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
@@ -33,8 +28,8 @@ const ServerConsoleContainer = () => {
                         {isNodeUnderMaintenance
                             ? 'The node of this server is currently under maintenance and all actions are unavailable.'
                             : isInstalling
-                              ? 'This server is currently running its installation process and most actions are unavailable.'
-                              : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                                ? 'This server is currently running its installation process and most actions are unavailable.'
+                                : 'This server is currently being transferred to another node and all actions are unavailable.'}
                     </Alert>
                 )}
                 <Console />

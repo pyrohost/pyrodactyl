@@ -25,6 +25,7 @@ const ReturnToLogin = () => {
 const LoginFormContainer = forwardRef<HTMLFormElement, PropsWithChildren<Props>>(
     ({ children, className, ...props }, ref) => (
         <Form {...props} ref={ref} noValidate className={`w-full text-sm ${className || ''}`}>
+            <FlashMessageRender />
             {children}
         </Form>
     ),

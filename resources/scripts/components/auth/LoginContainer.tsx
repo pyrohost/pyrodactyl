@@ -9,7 +9,6 @@ import LoginFormContainer, { TitleSection } from '@/components/auth/LoginFormCon
 import Button from '@/components/elements/Button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import Field from '@/components/elements/Field';
-import Logo from '@/components/elements/PyroLogo';
 import CaptchaManager from '@/lib/captcha';
 
 import useFlash from '@/plugins/useFlash';
@@ -21,29 +20,33 @@ interface Values {
     password: string;
 }
 
+interface ErrorResponse {
+    response: string;
+    message: string;
+    detail: string;
+    code: string;
+}
+
+
 function LoginContainer() {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        clearFlashes();
-    }, []);
+    // useEffect(() => {
+    //     clearFlashes();
+    // }, []);
 
     const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-        clearFlashes();
+        // clearFlashes();
 
-        // Get captcha response if enabled
-        let loginData: any = values;
+        let loginData: Values = values;
         if (CaptchaManager.isEnabled()) {
             const captchaResponse = getCaptchaResponse();
             const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
 
-            // console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
-
             if (fieldName) {
                 if (captchaResponse) {
                     loginData = { ...values, [fieldName]: captchaResponse };
-                    // console.log('Adding captcha to login data:', loginData);
                 } else {
                     console.error('Captcha enabled but no response available');
                     clearAndAddHttpError({
@@ -53,13 +56,12 @@ function LoginContainer() {
                     return;
                 }
             }
-        } else {
-            console.log('Captcha not enabled');
-        }
+        } else { }
 
         login(loginData)
             .then((response) => {
                 if (response.complete) {
+                    clearFlashes();
                     window.location.href = response.intended || '/';
                     return;
                 }
@@ -67,7 +69,7 @@ function LoginContainer() {
                     state: { token: response.confirmationToken },
                 });
             })
-            .catch((error: any) => {
+            .catch((error: ErrorResponse) => {
                 setSubmitting(false);
 
                 if (error.code === 'InvalidCredentials') {
