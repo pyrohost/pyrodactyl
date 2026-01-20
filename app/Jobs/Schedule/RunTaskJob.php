@@ -3,6 +3,7 @@
 namespace Pterodactyl\Jobs\Schedule;
 
 use Exception;
+use Pterodactyl\Exceptions\Service\Backup\BackupFailedException;
 use Pterodactyl\Jobs\Job;
 use Carbon\CarbonImmutable;
 use Pterodactyl\Models\Task;
@@ -66,6 +67,22 @@ class RunTaskJob extends Job implements ShouldQueue
                     $commandRepository->setServer($server)->send($this->task->payload);
                     break;
                 case Task::ACTION_BACKUP:
+                    // A pre-check stage has been added because transactions are sent directly to Elytra without verification.
+                    // This can be considered a temporary solution for now. In future processes, offering Elytra with better integration will play a role in removing this pre-check stage, and such transactions will be better controlled before they go to the server.
+                    if ($server->hasBackupCountLimit() && $server->backup_limit < ($server->backups_count + 1)) {
+                        Log::warning('Scheduled backup blocked due to backup limit', [
+                            'task_id' => $this->task->id,
+                            'schedule_id' => $this->task->schedule_id,
+                            'server_id' => $server->id
+                        ]);
+
+                        // TooManyBackupsException is currently scoped to daemon-level backup services,
+                        // therefore BackupFailedException is used here to properly fail the scheduled task.
+                        throw new BackupFailedException(
+                            'The permitted backup limit has been exceeded.'
+                        );
+                    }
+
                     $affectedRows = Task::where('id', $this->task->id)
                         ->where('is_processing', false)
                         ->update(['is_processing' => true]);
