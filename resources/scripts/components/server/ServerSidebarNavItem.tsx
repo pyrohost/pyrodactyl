@@ -51,9 +51,11 @@ const ServerSidebarNavItem = forwardRef<HTMLAnchorElement, ServerSidebarNavItemP
         // Check if the item should be visible based on feature limits
         const isVisible = (): boolean => {
             if (!featureLimit) return true;
-
+            if (featureLimits?.[featureLimit] === null) return true;
             if (featureLimit === 'network') {
                 // Network is visible if allocations > 0 OR subdomain is supported
+                if (featureLimits?.allocations === null) return true;
+
                 const allocationLimit = featureLimits?.allocations ?? 0;
                 return allocationLimit > 0 || subdomainSupported;
             }
