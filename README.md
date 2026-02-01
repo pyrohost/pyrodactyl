@@ -16,7 +16,7 @@
 <h1 align="center">Pyrodactyl</h1>
 
 > [!NOTE]
-> All Issues and Pr's should be made in the [Pyrodactyl-oss Repo](https://github.com/pyrodactyl-oss/pyrodactyl)
+> All Issues and PRs should be made in the [pyrodactyl-oss repo](https://github.com/pyrodactyl-oss/pyrodactyl).
 
 > [!WARNING]
 > Pyrodactyl is under development and pre-release. Some UI elements may appear broken, and there might be some bugs.
