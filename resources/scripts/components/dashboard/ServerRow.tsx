@@ -9,7 +9,6 @@ import { bytesToString, ip } from '@/lib/formatters';
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
 const StatusIndicatorBox = styled.div<{ $status: ServerPowerState }>`
-background: #ffffff11;
 transition: all 250ms ease-in-out;
 padding: 1.75rem 2rem;
 cursor: pointer;
@@ -21,7 +20,6 @@ position: relative;
 
     &:hover {
     border: 1px solid #ffffff11;
-    background: #ffffff18;
 }
 
     & .status-bar {
@@ -105,7 +103,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
         <StatusIndicatorBox
             as={Link}
             to={`/server/${server.id}`}
-            className={className}
+            className={`{className} bg-mocha-500 hover:bg-mocha-400 border border-[1px] border-mocha-400 hover:border-mocha-400`}
             $status={stats?.status || 'offline'}
         >
             <div className={`flex items - center`}>
@@ -128,7 +126,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 </div>
             </div>
             <div
-                className={`h-full hidden sm:flex items-center justify-center bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
+                className={`h-full hidden sm:flex items-center justify-center bg-mocha-500 border-[1px] border-[#ffffff11] shadow-xs rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
             >
                 {!stats || isSuspended || isInstalling ? (
                     isSuspended ? (
