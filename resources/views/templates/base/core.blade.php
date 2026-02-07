@@ -1,5 +1,5 @@
 @extends('templates/wrapper', [
-    'css' => ['body' => 'bg-black'],
+    'css' => ['body' => 'bg-mocha-600'],
 ])
 
 @section('container')

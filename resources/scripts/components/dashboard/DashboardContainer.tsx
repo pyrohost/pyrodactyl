@@ -67,7 +67,7 @@ const DashboardContainer = () => {
     const searchSection = useMemo(
         () => (
             <HeaderCentered>
-                <SearchSection className='max-w-128 xl:w-[30vw] hidden md:flex ' />
+                <SearchSection className='max-w-240 xl:w-[30vw] hidden md:flex ' />
             </HeaderCentered>
         ),
         [],
@@ -103,8 +103,12 @@ const DashboardContainer = () => {
         () => (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button size={'sm'} variant={'secondary'} className='px-1 pl-3 gap-1 rounded-full'>
-                        <div className='flex flex-row items-center gap-1'>
+                    <Button
+                        size={'sm'}
+                        variant={'secondary'}
+                        className='px-1 pl-3 gap-1 rounded-full hover:cursor-pointer'
+                    >
+                        <div className='flex flex-row items-center gap-1 '>
                             <div className='flex flex-row items-center gap-1.5'>
                                 <HugeiconsIcon size={16} strokeWidth={2} icon={FilterIcon} className='size-4' />
                                 Filter
@@ -113,7 +117,7 @@ const DashboardContainer = () => {
                         </div>
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='flex flex-col gap-1 z-99999' sideOffset={8}>
+                <DropdownMenuContent className='flex flex-col gap-1 z-99999 hover:cursor-pointer' sideOffset={8}>
                     <DropdownMenuItem
                         onSelect={() => setServerViewMode('owner')}
                         className={serverViewMode === 'owner' ? 'bg-accent/20' : ''}
@@ -185,13 +189,12 @@ const DashboardContainer = () => {
                                 {items.map((server, index) => (
                                     <div
                                         key={`${server.uuid}-${dashboardDisplayOption}`}
-                                        className={`transform-gpu skeleton-anim-2 ${
-                                            dashboardDisplayOption === 'grid'
+                                        className={`transform-gpu skeleton-anim-2 ${dashboardDisplayOption === 'grid'
                                                 ? items.length === 1
                                                     ? 'w-[calc(50%-0.5rem)] max-lg:w-full'
                                                     : 'w-[calc(50%-0.5rem)] max-lg:w-full'
                                                 : 'mb-4'
-                                        } max-lg:mb-4`}
+                                            } max-lg:mb-4`}
                                         style={{
                                             animationDelay: `${index * 50 + 50}ms`,
                                             animationTimingFunction:
@@ -218,8 +221,8 @@ const DashboardContainer = () => {
                                     {serverViewMode === 'admin-all'
                                         ? 'There are no other servers to display.'
                                         : serverViewMode === 'all'
-                                          ? 'No Server Shared With your Account'
-                                          : 'There are no servers associated with your account.'}
+                                            ? 'No Server Shared With your Account'
+                                            : 'There are no servers associated with your account.'}
                                 </p>
                                 <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                                     {serverViewMode === 'admin-all' ? 'No other servers found' : 'No servers found'}

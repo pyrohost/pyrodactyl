@@ -2,7 +2,7 @@ import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
 import { format } from 'date-fns';
 import { type Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, type FormikHelpers } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { object, string } from 'yup';
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
@@ -17,6 +17,8 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { useFlashKey } from '@/plugins/useFlash';
 import type { ApplicationStore } from '@/state';
+
+import ServerHeader from '@/components/HeaderManger';
 
 interface CreateValues {
     name: string;
@@ -85,6 +87,7 @@ const AccountSSHContainer = () => {
     return (
         <PageContentBlock title={'SSH Keys'}>
             <FlashMessageRender byKey='account:ssh-keys' />
+            <ServerHeader title='SSH Keys' />
 
             {/* Create SSH Key Modal */}
             {showCreateModal && (
@@ -145,19 +148,14 @@ const AccountSSHContainer = () => {
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <MainPageHeader
-                        title='SSH Keys'
-                        titleChildren={
-                            <ActionButton
-                                variant='primary'
-                                onClick={() => setShowCreateModal(true)}
-                                className='flex items-center gap-2'
-                            >
-                                <Plus width={22} height={22} fill='currentColor' />
-                                Add SSH Key
-                            </ActionButton>
-                        }
-                    />
+                    <ActionButton
+                        variant='secondary'
+                        onClick={() => setShowCreateModal(true)}
+                        className='flex items-center gap-2'
+                    >
+                        <Plus width={22} height={22} fill='currentColor' />
+                        Add SSH Key
+                    </ActionButton>
                 </div>
 
                 <div
@@ -168,7 +166,7 @@ const AccountSSHContainer = () => {
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
+                    <div className='bg-mocha-500 border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={!data && isValidating} />
                         <Dialog.Confirm
                             title={'Delete SSH Key'}
@@ -205,7 +203,7 @@ const AccountSSHContainer = () => {
                                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                                         }}
                                     >
-                                        <div className='bg-[#ffffff05] border-[1px] border-[#ffffff08] rounded-lg p-4 hover:border-[#ffffff15] transition-all duration-150'>
+                                        <div className=' rounded-lg transition-all duration-150'>
                                             <div className='flex items-center justify-between'>
                                                 <div className='flex-1 min-w-0'>
                                                     <div className='flex items-center gap-3 mb-2'>
@@ -217,7 +215,7 @@ const AccountSSHContainer = () => {
                                                         <span>Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
                                                         <div className='flex items-center gap-2'>
                                                             <span>Fingerprint:</span>
-                                                            <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
+                                                            <code className='font-mono px-2 py-1 bg-mocha-400 border border-mocha-200 rounded text-zinc-300'>
                                                                 {showKeys[key.fingerprint]
                                                                     ? `SHA256:${key.fingerprint}`
                                                                     : 'SHA256:••••••••••••••••'}
