@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Copyright (c) 2023-2026 Pyro Inc., parent collaborators, and contributors -->
-<html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
+<html data-pyro-html lang="en" style="background-color: #11100E; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
         <title>{{ config('app.name', 'Panel') }}</title>
 
@@ -45,7 +45,7 @@
         @viteReactRefresh
         @vite('resources/scripts/index.tsx')
     </head>
-    <body data-pyro-body class="{{ $css['body'] }}" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
+    <body data-pyro-body class="{{ $css['body'] }}" style="background-color: #11100E; height: 100%; width: 100%; margin: 0; padding: 0;">
         @section('content')
             @yield('above-container')
             @yield('container')
