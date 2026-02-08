@@ -41,7 +41,7 @@ const ConfigureTwoFactorForm = () => {
                         Remove Authenticator App
                     </ActionButton>
                 ) : (
-                    <ActionButton variant='primary' onClick={() => setVisible('enable')}>
+                    <ActionButton variant='secondary' onClick={() => setVisible('enable')}>
                         Enable Authenticator App
                     </ActionButton>
                 )}

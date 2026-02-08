@@ -23,7 +23,7 @@ const schema = Yup.object().shape({
     confirmPassword: Yup.string().test(
         'password',
         'Password confirmation does not match the password you entered.',
-        function (value) {
+        function(value) {
             return value === this.parent.password;
         },
     ),
@@ -92,7 +92,7 @@ const UpdatePasswordForm = () => {
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                <ActionButton variant='secondary' disabled={isSubmitting || !isValid}>
                                     {isSubmitting && <Spinner size='small' />}
                                     {isSubmitting ? 'Updating...' : 'Update Password'}
                                 </ActionButton>
