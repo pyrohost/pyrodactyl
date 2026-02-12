@@ -11,8 +11,8 @@ elytra
 
 *.DS_Store*
 !.env.ci
-!.env.example
 .env*
+!.env.example
 .vagrant/
 storage/framework/*
 /.idea
