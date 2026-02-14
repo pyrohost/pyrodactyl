@@ -34,6 +34,8 @@ class StoreNodeRequest extends ApplicationApiRequest
             'daemonListen',
             'daemonSFTP',
             'daemonBase',
+            'daemonType',
+            'daemonDisk'
         ])->mapWithKeys(function ($value, $key) {
             $key = ($key === 'daemonSFTP') ? 'daemonSftp' : $key;
 
