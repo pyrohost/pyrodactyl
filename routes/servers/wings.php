@@ -104,6 +104,9 @@ Route::group([
     Route::group(['prefix' => '/startup'], function () {
         Route::get('/', [Wings\StartupController::class, 'index']);
         Route::put('/variable', [Wings\StartupController::class, 'update']);
+        Route::put('/command', [Wings\StartupController::class, 'updateCommand']);
+        Route::get('/command/default', [Wings\StartupController::class, 'getDefaultCommand']);
+        Route::post('/command/process', [Wings\StartupController::class, 'processCommand']);
     });
 
     Route::group(['prefix' => '/settings'], function () {
