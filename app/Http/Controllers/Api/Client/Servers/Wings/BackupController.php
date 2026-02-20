@@ -216,7 +216,7 @@ class BackupController extends ClientApiController
             // actions against it via the Panel API.
             $server->update(['status' => Server::STATUS_RESTORING_BACKUP]);
 
-            $this->daemonRepository->setServer($server)->restore($backup, $url ?? null, $request->input('truncate'));
+            $this->daemonRepository->setServer($server)->restore($backup, $url ?? null, $request->boolean('truncate'));
         });
 
         return new JsonResponse([], JsonResponse::HTTP_NO_CONTENT);

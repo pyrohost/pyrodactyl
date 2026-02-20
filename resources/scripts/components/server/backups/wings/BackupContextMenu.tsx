@@ -131,7 +131,7 @@ const BackupContextMenu = ({ backup }: Props) => {
         clearFlashes('backup:restore');
 
         try {
-            await http.post(`/api/client/servers/${daemonType}/backups/${backup.uuid}/restore`, {
+            await http.post(`/api/client/servers/${daemonType}/${uuid}/backups/${backup.uuid}/restore`, {
                 password: restorePassword,
                 ...(hasTwoFactor ? { totp_code: restoreTotpCode } : {}),
             });
@@ -338,8 +338,8 @@ const BackupContextMenu = ({ backup }: Props) => {
                         {loading
                             ? 'Restoring...'
                             : countdown > 0
-                              ? `Delete All & Restore (${countdown}s)`
-                              : 'Delete All & Restore Backup'}
+                                ? `Delete All & Restore (${countdown}s)`
+                                : 'Delete All & Restore Backup'}
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>
