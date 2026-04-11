@@ -8,10 +8,9 @@ import deleteApiKey from '@/api/account/deleteApiKey';
 import getApiKeys, { type ApiKey } from '@/api/account/getApiKeys';
 import { httpErrorToHuman } from '@/api/http';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
 import { Dialog } from '@/components/elements/dialog';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -19,7 +18,7 @@ import { useFlashKey } from '@/plugins/useFlash';
 import type { ApplicationStore } from '@/state';
 
 import ServerHeader from '../HeaderManger';
-
+import CopyOnClick from '@/components/elements/CopyOnClick';
 
 const CreateApiKeyModal = lazy(() => import('./CreateApiKeyModal'));
 
@@ -96,24 +95,6 @@ const AccountApiContainer = () => {
 
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4 w-full'
-                    style={{
-                        animationDelay: '50ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setShowCreateModal(true)}
-                        className='flex items-center gap-2'
-                    >
-                        <Plus width={22} height={22} fill='currentColor' />
-                        Create API Key
-                    </ActionButton>
-                </div>
-
-                <div
                     className='transform-gpu skeleton-anim-2'
                     style={{
                         animationDelay: '75ms',
@@ -121,7 +102,7 @@ const AccountApiContainer = () => {
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <div className='bg-mocha-500 border-[1px] border-[#ffffff12] hover:border-[#ffffff15] rounded-xl p-4 sm:p-6 shadow-sm'>
+                    <div className='rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={loading} />
                         <Dialog.Confirm
                             title={'Delete API Key'}
@@ -132,6 +113,16 @@ const AccountApiContainer = () => {
                         >
                             All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
                         </Dialog.Confirm>
+                        <div className='mb-4'>
+                            <Button
+                                variant='secondary'
+                                onClick={() => setShowCreateModal(true)}
+                                className='flex items-center gap-2'
+                            >
+                                <Plus width={22} height={22} fill='currentColor' />
+                                Create API Key
+                            </Button>
+                        </div>
 
                         {keys.length === 0 ? (
                             <div className='text-center py-12'>
@@ -157,55 +148,72 @@ const AccountApiContainer = () => {
                                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                                         }}
                                     >
-                                        <div className='rounded-lg transition-all duration-150'>
+                                        <div className='bg-mocha-500 border-mocha-300 border-[1px] rounded-lg transition-all duration-150 p-4'>
                                             <div className='flex items-center justify-between'>
                                                 <div className='flex-1 min-w-0'>
                                                     <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>
+                                                        <h4 className='text-sm font-medium text-text truncate'>
                                                             {key.description}
                                                         </h4>
                                                     </div>
-                                                    <div className='flex items-center gap-4 text-xs text-zinc-400'>
+                                                    <div className='flex items-center gap-4 text-xs font-large text-text/20'>
                                                         <span>
                                                             Last used:{' '}
                                                             {key.lastUsedAt
                                                                 ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
                                                                 : 'Never'}
                                                         </span>
-                                                        <div className='flex items-center gap-2'>
+                                                        <div className='flex items-center gap-2 hover:cursor-pointer'>
                                                             <span>Key:</span>
-                                                            <code className='font-mono px-2 py-1 bg-mocha-400 border border-mocha-200 rounded text-zinc-300'>
-                                                                {showKeys[key.identifier]
-                                                                    ? key.identifier
-                                                                    : '••••••••••••••••'}
+
+                                                            <code className='font-mono px-2 py-1 bg-mocha-400 border border-mocha-200 rounded text-zinc-300 flex'>
+                                                                <span className='flex items-center gap-1'>
+                                                                    {showKeys[key.identifier] ? (
+                                                                        <EyeSlash
+                                                                            onClick={() =>
+                                                                                toggleKeyVisibility(key.identifier)
+                                                                            }
+                                                                            width={18}
+                                                                            height={18}
+                                                                            fill='currentColor'
+                                                                        />
+                                                                    ) : (
+                                                                        <Eye
+                                                                            onClick={() =>
+                                                                                toggleKeyVisibility(key.identifier)
+                                                                            }
+                                                                            width={18}
+                                                                            height={18}
+                                                                            fill='currentColor'
+                                                                        />
+                                                                    )}
+                                                                    {showKeys[key.identifier] ? (
+                                                                        <CopyOnClick text={key.identifier}>
+                                                                            <pre>{key.identifier}</pre>
+                                                                        </CopyOnClick>
+                                                                    ) : (
+                                                                        <span
+                                                                            onClick={() =>
+                                                                                toggleKeyVisibility(key.identifier)
+                                                                            }
+                                                                        >
+                                                                            ••••••••••••••••
+                                                                        </span>
+                                                                    )}
+                                                                </span>
                                                             </code>
-                                                            <ActionButton
-                                                                variant='secondary'
-                                                                size='sm'
-                                                                onClick={() => toggleKeyVisibility(key.identifier)}
-                                                                className='p-1 text-zinc-400 hover:text-zinc-300'
-                                                            >
-                                                                {showKeys[key.identifier] ? (
-                                                                    <EyeSlash
-                                                                        width={18}
-                                                                        height={18}
-                                                                        fill='currentColor'
-                                                                    />
-                                                                ) : (
-                                                                    <Eye width={18} height={18} fill='currentColor' />
-                                                                )}
-                                                            </ActionButton>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <ActionButton
-                                                    variant='danger'
+
+                                                <Button
+                                                    variant='attention'
                                                     size='sm'
                                                     className='ml-4'
                                                     onClick={() => setDeleteIdentifier(key.identifier)}
                                                 >
                                                     <TrashBin width={20} height={20} fill='currentColor' />
-                                                </ActionButton>
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>

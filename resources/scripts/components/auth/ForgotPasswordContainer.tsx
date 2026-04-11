@@ -12,9 +12,9 @@ import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 import CaptchaManager from '@/lib/captcha';
 
+import SecondaryLink from '../ui/secondary-link';
 import useFlash from '@/plugins/useFlash';
 
-import Logo from '../elements/PyroLogo';
 
 interface Values {
     email: string;
@@ -60,67 +60,50 @@ const ForgotPasswordContainer = () => {
     };
 
     return (
-        <ContentBox>
-            <Formik
-                onSubmit={handleSubmission}
-                initialValues={{ email: '' }}
-                validationSchema={object().shape({
-                    email: string().email('Enter a valid email address.').required('Email is required.'),
-                })}
-            >
-                {({ isSubmitting }) => (
-                    <LoginFormContainer className={`w-full flex`}>
-                        <Link to='/'>
-                            <div className='flex h-12 mb-4 items-center w-full'>
-                                <Logo />
-                            </div>
-                        </Link>
-                        <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                        <h2 className='text-xl font-extrabold mb-2'>Reset Password</h2>
-                        <div className='text-sm mb-6'>
-                            We&apos;ll send you an email with a link to reset your password.
-                        </div>
-                        <Field id='email' label={'Email'} name={'email'} type={'email'} />
+        <Formik
+            onSubmit={handleSubmission}
+            initialValues={{ email: '' }}
+            validationSchema={object().shape({
+                email: string().email('Enter a valid email address.').required('Email is required.'),
+            })}
+        >
+            {({ isSubmitting }) => (
+                <LoginFormContainer className={`w-full flex flex-col`}>
+                    <TitleSection title='Forgot Password' />
+                    <div className='text-sm mb-6'>
+                        We&apos;ll send you an email with a link to reset your password.
+                    </div>
+                    <Field id='email' label={'Email'} name={'email'} type={'email'} />
 
-                        <Captcha
-                            className='mt-6'
-                            onError={(error) => {
-                                console.error('Captcha error:', error);
-                                addFlash({
-                                    type: 'error',
-                                    title: 'Error',
-                                    message: 'Captcha verification failed. Please try again.',
-                                });
-                            }}
-                        />
-
-                        <div className='mt-6'>
-                            <Button
-                                className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2`}
-                                type='submit'
-                                size='xlarge'
-                                isLoading={isSubmitting}
-                                disabled={isSubmitting}
-                            >
-                                Send Email
-                            </Button>
-                        </div>
-
-                        <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                        <div
-                            className={`text-center w-full rounded-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
+                    <div className='flex w-full justify-between items-center'>
+                        <Button
+                            className={`bg-mocha-100 text-black p-2 px-4 mt-4 rounded-full border-0 ring-0 outline-hidden capitalize`}
+                            type='submit'
+                            size='xlarge'
+                            isLoading={isSubmitting}
+                            disabled={isSubmitting}
                         >
-                            <Link
-                                to='/auth/login'
-                                className='block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                            >
-                                Return to Login
-                            </Link>
-                        </div>
-                    </LoginFormContainer>
-                )}
-            </Formik>
-        </ContentBox>
+                            Send Email
+                        </Button>
+
+                        <SecondaryLink to='/auth/password'>Forgot your password?</SecondaryLink>
+                    </div>
+
+                    <Captcha
+                        className='mt-6'
+                        onError={(error) => {
+                            console.error('Captcha error:', error);
+                            addFlash({
+                                type: 'error',
+                                title: 'Error',
+                                message: 'Captcha verification failed. Please try again.',
+                            });
+                        }}
+                    />
+
+                </LoginFormContainer>
+            )}
+        </Formik>
     );
 };
 
