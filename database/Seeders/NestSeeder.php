@@ -41,6 +41,7 @@ class NestSeeder extends Seeder
         ])->keyBy('name')->toArray();
 
         $this->createMinecraftNest(array_get($items, 'Minecraft'));
+        $this->createHytaleNest(array_get($items, 'Hytale'));
         $this->createSourceEngineNest(array_get($items, 'Source Engine'));
         $this->createVoiceServersNest(array_get($items, 'Voice Servers'));
         $this->createRustNest(array_get($items, 'Rust'));
@@ -58,6 +59,21 @@ class NestSeeder extends Seeder
             $this->creationService->handle([
                 'name' => 'Minecraft',
                 'description' => 'Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!',
+            ], 'support@pterodactyl.io');
+        }
+    }
+
+    /**
+     * Create the Hytale nest to be used later on.
+     *
+     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+     */
+    private function createHytaleNest(?array $nest = null)
+    {
+        if (is_null($nest)) {
+            $this->creationService->handle([
+                'name' => 'Hytale',
+                'description' => 'Hytale - A new sandbox game from Hypixel Studios.',
             ], 'support@pterodactyl.io');
         }
     }
