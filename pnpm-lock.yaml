@@ -96,7 +96,7 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0
       axios:
-        specifier: ^1.11.0
+        specifier: 1.11.0
         version: 1.11.0
       browserslist:
         specifier: ^4.25.1
