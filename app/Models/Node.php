@@ -158,6 +158,8 @@ class Node extends Model
         'daemonListen' => 8080,
         'maintenance_mode' => false,
         'use_separate_fqdns' => false,
+        'daemonType' => 'elytra',
+        'backupDisk' => 'rustic_local',
     ];
 
 
