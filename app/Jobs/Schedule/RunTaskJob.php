@@ -93,7 +93,7 @@ class RunTaskJob extends Job implements ShouldQueue
                             'schedule_id' => $this->task->schedule_id,
                             'server_id' => $server->id,
                         ]);
-                        return;
+                        break;
                     }
 
                     try {
