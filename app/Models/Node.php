@@ -140,8 +140,8 @@ class Node extends Model
         'daemonListen' => 'required|numeric|between:1,65535',
         'maintenance_mode' => 'boolean',
         'upload_size' => 'int|between:1,1024',
-        'daemonType' => 'required|string',
-        'backupDisk' => 'required|string'
+        'daemonType' => 'nullable|string',
+        'backupDisk' => 'nullable|string'
     ];
 
     /**
