@@ -30,7 +30,7 @@ WORKDIR /app
 
 # Build-time deps & PHP extensions
 RUN apk add --no-cache --virtual .build-deps \
-    libpng-dev libxml2-dev libzip-dev postgresql-dev \
+    libpng-dev libxml2-dev libzip-dev postgresql18-dev \
     && docker-php-ext-configure zip \
     && docker-php-ext-install bcmath gd pdo pdo_mysql pdo_pgsql zip \
     && apk del .build-deps \
@@ -40,7 +40,7 @@ RUN apk add --no-cache --virtual .build-deps \
 # Runtime packages
 RUN apk add --no-cache \
     ca-certificates curl git supervisor nginx dcron \
-    tar unzip certbot certbot-nginx mysql-client postgresql17-client \
+    tar unzip certbot certbot-nginx mysql-client postgresql18-client \
     && ln -s /bin/ash /bin/bash
 
 # Copy frontend build
