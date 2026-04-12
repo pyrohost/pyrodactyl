@@ -1,9 +1,9 @@
 # Just a list of To-do's for the Pyrodactyl Redesign
 
-- [ ] Auth Pages
+- [x] Auth Pages
   - [x] Login Page
-  - [ ] Password Reset
-  - [ ] 2fa
+  - [x] Password Reset
+  - [x] 2fa
 - [ ] Homepage
   - [ ] Search Bar
     - [x] Design
@@ -82,4 +82,8 @@
   - [ ] Software/Shell page
   - [ ] Startup Page
 
+## Future Plans
 
+- [ ] Admin panel Redesign
+  - [ ] Convert Admin panel to React using Interia
+  - [ ] Redesign admin panel to match Client side Better
