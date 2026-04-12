@@ -6,12 +6,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import loginCheckpoint from '@/api/auth/loginCheckpoint';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
-import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 import useFlash from '@/plugins/useFlash';
 import type { FlashStore } from '@/state/flashes';
 
-import Logo from '../elements/PyroLogo';
+import SecondaryLink from '../ui/secondary-link';
 
 interface Values {
     code: string;
@@ -29,76 +28,54 @@ function LoginCheckpointForm() {
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl'>
-            <LoginFormContainer className={`w-full flex`}>
-                <Link to='/'>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        <Logo />
-                    </div>
-                </Link>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
+        <LoginFormContainer className={`w-full flex flex-col`}>
+            <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
 
-                <div className={`mt-6`}>
-                    <Field
-                        name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
-                        placeholder='000000'
-                        description={
-                            isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
-                        }
-                        type={'text'}
-                        autoComplete={'one-time-code'}
-                        autoFocus
-                    />
-                </div>
-                <div className={`mt-6`}>
-                    <Button
-                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                        size={'xlarge'}
-                        type={'submit'}
-                        disabled={isSubmitting}
-                        isLoading={isSubmitting}
-                    >
-                        Login
-                    </Button>
-                </div>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
+            <div className={`mt-6`}>
+                <Field
+                    name={isMissingDevice ? 'recoveryCode' : 'code'}
+                    title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
+                    placeholder='000000'
+                    description={
+                        isMissingDevice
+                            ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
+                            : 'Enter the two-factor token displayed by your device.'
+                    }
+                    type={'text'}
+                    autoComplete={'one-time-code'}
+                    autoFocus
+                />
+            </div>
 
-                <div
-                    className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}
+            <div className='flex w-full justify-between items-center'>
+                <Button
+                    className={`bg-mocha-100 rounded-full p-2 px-4 text-black hover:cursor-pointer hover:bg-mocha-200 hover:scale-102 ease-in-out`}
+                    size={'xlarge'}
+                    type={'submit'}
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
                 >
-                    <span
-                        onClick={() => {
-                            setFieldValue('code', '');
-                            setFieldValue('recoveryCode', '');
-                            setIsMissingDevice((s) => !s);
-                        }}
-                        // className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
-                    >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
-                    </span>
-                </div>
-                <div
-                    className={`text-center w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
+                    Sign in
+                </Button>
+                <span
+                    onClick={() => {
+                        setFieldValue('code', '');
+                        setFieldValue('recoveryCode', '');
+                        setIsMissingDevice((s) => !s);
+                    }}
+                    className={
+                        'block text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
+                    }
                 >
-                    <Link
-                        to={'/auth/login'}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
-                    >
-                        Return to Login
-                    </Link>
-                </div>
-            </LoginFormContainer>
-        </ContentBox>
+                    {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                </span>
+            </div>
+            <div
+                className={`text-right w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
+            >
+                <SecondaryLink to='/auth/'>Return to Login</SecondaryLink>
+            </div>
+        </LoginFormContainer>
     );
 }
 
