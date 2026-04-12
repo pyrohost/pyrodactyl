@@ -86,7 +86,7 @@ const ForgotPasswordContainer = () => {
                             Send Email
                         </Button>
 
-                        <SecondaryLink to='/auth/password'>Forgot your password?</SecondaryLink>
+                        <SecondaryLink to='/auth/login'>Return to Login?</SecondaryLink>
                     </div>
 
                     <Captcha
