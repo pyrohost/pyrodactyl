@@ -4,6 +4,7 @@ namespace Pterodactyl\Services\Dns\Providers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Pterodactyl\Contracts\Dns\DnsProviderInterface;
 use Pterodactyl\Exceptions\Dns\DnsProviderException;
 use Illuminate\Support\Facades\Log;
@@ -62,6 +63,8 @@ class CloudflareProvider implements DnsProviderInterface
     public function createRecord(string $domain, string $name, string $type, $content, int $ttl = 300): string
     {
         $zoneId = $this->getZoneId($domain);
+        $displayName = $name;
+        $name = $this->normalizeRecordName($domain, $name);
 
 
         try {
@@ -102,8 +105,14 @@ class CloudflareProvider implements DnsProviderInterface
             /* ]); */
 
             return $data['result']['id'];
+        } catch (RequestException $e) {
+            throw DnsProviderException::recordCreationFailed(
+                $domain,
+                $displayName,
+                $this->getRequestExceptionMessage($e)
+            );
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordCreationFailed($domain, $name, 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordCreationFailed($domain, $displayName, 'DNS service temporarily unavailable.');
         }
     }
 
@@ -199,7 +208,7 @@ class CloudflareProvider implements DnsProviderInterface
         try {
             $params = [];
             if ($name) {
-                $params['name'] = $name;
+                $params['name'] = $this->normalizeRecordName($domain, $name);
             }
             if ($type) {
                 $params['type'] = strtoupper($type);
@@ -219,6 +228,44 @@ class CloudflareProvider implements DnsProviderInterface
         } catch (GuzzleException $e) {
             throw DnsProviderException::connectionFailed('cloudflare', 'DNS service temporarily unavailable.');
         }
+    }
+
+    private function normalizeRecordName(string $domain, string $name): string
+    {
+        $domain = rtrim($domain, '.');
+        $name = rtrim($name, '.');
+
+        if ($name === '' || $name === '@') {
+            return $domain;
+        }
+
+        if ($name === $domain || str_ends_with($name, '.' . $domain)) {
+            return $name;
+        }
+
+        return $name . '.' . $domain;
+    }
+
+    private function getRequestExceptionMessage(RequestException $e): string
+    {
+        $response = $e->getResponse();
+        if (!$response) {
+            return 'DNS service temporarily unavailable.';
+        }
+
+        $data = json_decode((string) $response->getBody(), true);
+        if (!is_array($data)) {
+            return 'DNS provider rejected the record creation request.';
+        }
+
+        $messages = [];
+        foreach ($data['errors'] ?? [] as $error) {
+            if (!empty($error['message'])) {
+                $messages[] = $error['message'];
+            }
+        }
+
+        return empty($messages) ? 'DNS provider rejected the record creation request.' : implode(' ', $messages);
     }
 
     /**
