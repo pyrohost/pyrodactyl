@@ -22,8 +22,7 @@ class ServerDeletionService
         private ConnectionInterface $connection,
         private DaemonServerRepository $daemonServerRepository,
         private DatabaseManagementService $databaseManagementService,
-    ) {
-    }
+    ) {}
 
     /**
      * Set if the server should be forcibly deleted from the panel (ignoring daemon errors) or not.
@@ -64,7 +63,7 @@ class ServerDeletionService
                     // Simply delete the backup record
                     // note: this used to be more complex but Elytra's changes have made a lot of logic here redundant
                     // so this whole thing really needs a refactor now. THAT BEING SAID I HAVE NOT TESTED LOCAL IN A MINUTE!
-                    // - ellie 
+                    // - ellie
                     $backup->delete();
                 } catch (\Exception $exception) {
                     if (!$this->force) {
@@ -103,7 +102,7 @@ class ServerDeletionService
                     Log::warning($exception);
                 }
             }
-
+            $server->allocations()->update(['notes' => null]);
             $server->delete();
         });
     }
